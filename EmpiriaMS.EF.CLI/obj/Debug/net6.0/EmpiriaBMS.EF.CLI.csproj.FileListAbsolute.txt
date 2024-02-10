@@ -1,0 +1,6 @@
+D:\Working Projects\MicrosoftTeams-Empireia\EmpiriaMS\EmpiriaMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.csproj.AssemblyReference.cache
+D:\Working Projects\MicrosoftTeams-Empireia\EmpiriaMS\EmpiriaMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.GeneratedMSBuildEditorConfig.editorconfig
+D:\Working Projects\MicrosoftTeams-Empireia\EmpiriaMS\EmpiriaMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.AssemblyInfoInputs.cache
+D:\Working Projects\MicrosoftTeams-Empireia\EmpiriaMS\EmpiriaMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.AssemblyInfo.cs
+D:\Working Projects\MicrosoftTeams-Empireia\EmpiriaMS\EmpiriaMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.csproj.CoreCompileInputs.cache
+D:\Working Projects\MicrosoftTeams-Empireia\EmpiriaMS\EmpiriaMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.sourcelink.json

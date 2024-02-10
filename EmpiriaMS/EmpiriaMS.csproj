@@ -23,4 +23,8 @@
     <PackageReference Include="Microsoft.TeamsFx" Version="2.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\MyComponents\" />
+  </ItemGroup>
+
 </Project>

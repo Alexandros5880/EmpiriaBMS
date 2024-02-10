@@ -50,7 +50,8 @@ else
     string userName;
     string errorMessage;
     bool isInTeams;
-    bool isLoading = true; 
+    bool isLoading = true;
+    UserInfo user;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -62,7 +63,7 @@ else
 
             if (isInTeams)
             { 
-               var user = await teamsUserCredential.GetUserInfoAsync();
+               user = await teamsUserCredential.GetUserInfoAsync();
                userName = user.DisplayName;
             }
             else
