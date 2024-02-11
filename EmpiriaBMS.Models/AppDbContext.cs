@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EmpiriaMS.Models;
 public class AppDbContext : DbContext
 {
-    const string SmarterASPNetDB = "Data Source=SQL5110.site4now.net;Initial Catalog=db_a8c181_empiriamteemsapp;User Id=db_a8c181_empiriamteemsapp_admin;Password=empiriamteemsapp123456";
+    const string SmarterASPNetDB = "Data Source=SQL5110.site4now.net;Initial Catalog=db_a8c181_empiriamteemsapp;User Id=db_a8c181_empiriamteemsapp_admin;Password=admin1234567";
 
     public DbSet<Role>? Roles { get; set; }
     public DbSet<Project>? Projects { get; set; }

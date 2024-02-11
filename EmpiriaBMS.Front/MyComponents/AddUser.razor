@@ -1,13 +1,21 @@
-﻿@using Microsoft.Extensions.Configuration
+﻿@using EmpiriaMS.Models.Models
+@using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
 @using Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Core
+@using System.Diagnostics
+@using EmpiriaBMS.Front.ViewModels
+@using AutoMapper
+
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
 @inject IWebHostEnvironment HostEnvironment
 @inject IConfiguration Configuration
 @inject NavigationManager MyNavigationManager
+@inject IDataProvider DataProvider
+@inject IMapper Mapper
 
 
 @if (isLoading)
@@ -18,25 +26,57 @@
 }
 else
 {
-    <fast-card style="width: 300px;">
-        <div style="padding: 0 10px 10px;">
+    if (error != null)
+    {
+        <p>@error</p>
+    }
+    else
+    {
 
-            <fluent-select title="Select a section">
-                <fluent-option value="1">Beginning</fluent-option>
-                <fluent-option value="2">Middle</fluent-option>
-                <fluent-option value="3">End</fluent-option>
-            </fluent-select>
-            
-            <fast-button>Button</fast-button>
+        <div class="card d-flex">
+            <div class="card-body">
+                <h5 class="card-title">Add User</h5>
+
+                
+                <div class="d-flex p-2">                
+
+                    <!-- Selected Roles -->
+                    <div class="form-floating ms-4">
+                        <FluentLabel class="mb-3"><h6>Select Roles</h6></FluentLabel>
+                        <ul class="list-group"
+                            id="selectrolesselection">
+                            @foreach (var role in roles)
+                            {
+                                <li class="list-group-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               @bind=role.IsChecked>
+                                        <label class="form-check-label" for="flexCheckChecked">
+                                            @role.Name
+                                        </label>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+           
+            </div>
         </div>
-    </fast-card>
+
+       
+    }
 }
 
 
 
 @code {
+    string error = null;
     bool isLoading = true;
     bool runInTeams = false;
+    List<RoleDto> roles;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -50,6 +90,16 @@ else
 
             }
 
+            try
+            {
+                roles = (await DataProvider.Roles.GetAll())
+                        .Select(r => Mapper.Map<RoleDto>(r)).ToList();
+            }
+            catch (Exception ex)
+            {
+                error = $"Get Roles Exception: {ex.Message}";
+            }
+
             isLoading = false;
             
             // Update UI
@@ -57,6 +107,5 @@ else
         }
 
     }
-
 
 }

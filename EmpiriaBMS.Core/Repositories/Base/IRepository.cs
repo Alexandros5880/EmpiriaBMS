@@ -11,6 +11,7 @@ public interface IRepository<T>
     where T : class, IEntity
 {
     Task<T?> Get(string id);
+    Task<ICollection<T>> GetAll();
     Task<ICollection<T>> GetAll(Expression<Func<T, bool>> expresion);
     Task<bool> Any(Expression<System.Func<T, bool>> expresion);
     Task<T> Add(T model);

@@ -24,16 +24,16 @@ public class InvoiceRepo : Repository<Invoice>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public new async Task<ICollection<Invoice>> GetAll(Expression<Func<Invoice, bool>> expresion)
-    {
-        if (expresion == null)
-            throw new ArgumentNullException(nameof(expresion));
+    public new async Task<ICollection<Invoice>> GetAll() =>
+        await _context.Set<Invoice>()
+                        .Include(r => r.Project)
+                        .ToListAsync();
 
-        return await _context.Set<Invoice>()
+    public new async Task<ICollection<Invoice>> GetAll(Expression<Func<Invoice, bool>> expresion) =>
+        await _context.Set<Invoice>()
                         .Where(expresion)
                         .Include(r => r.Project)
                         .ToListAsync();
-    }
 
     protected virtual void Dispose(bool disposing)
     {

@@ -25,16 +25,16 @@ public class RolesRepo : Repository<Role>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public new async Task<ICollection<Role>> GetAll(Expression<Func<Role, bool>> expresion)
-    {
-        if (expresion == null)
-            throw new ArgumentNullException(nameof(expresion));
+    public new async Task<ICollection<Role>> GetAll() =>
+        await _context.Set<Role>()
+                        .Include(r => r.Employees)
+                        .ToListAsync();
 
-        return await _context.Set<Role>()
+    public new async Task<ICollection<Role>> GetAll(Expression<Func<Role, bool>> expresion) =>
+        await _context.Set<Role>()
                         .Where(expresion)
                         .Include(r => r.Employees)
                         .ToListAsync();
-    }
 
     protected virtual void Dispose(bool disposing)
     {

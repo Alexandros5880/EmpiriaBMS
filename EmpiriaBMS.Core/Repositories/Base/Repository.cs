@@ -78,13 +78,11 @@ public class Repository<T> : IRepository<T>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<ICollection<T>> GetAll(Expression<Func<T, bool>> expresion)
-    {
-        if (expresion == null)
-            throw new ArgumentNullException(nameof(expresion));
+    public async Task<ICollection<T>> GetAll() =>
+        await _context.Set<T>().ToListAsync();
 
-        return await _context.Set<T>().Where(expresion).ToListAsync();
-    }
+    public async Task<ICollection<T>> GetAll(Expression<Func<T, bool>> expresion) =>
+        await _context.Set<T>().Where(expresion).ToListAsync();
 
     public async Task<bool> Any(Expression<System.Func<T, bool>> expresion)
     {

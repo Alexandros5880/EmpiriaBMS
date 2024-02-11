@@ -25,17 +25,18 @@ public class EmployeeRepo : Repository<Employee>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public new async Task<ICollection<Employee>> GetAll(Expression<Func<Employee, bool>> expresion)
-    {
-        if (expresion == null)
-            throw new ArgumentNullException(nameof(expresion));
+    public new async Task<ICollection<Employee>> GetAll() =>
+        await _context.Set<Employee>()
+                        .Include(r => r.Projects)
+                        .Include(r => r.Roles)
+                        .ToListAsync();
 
-        return await _context.Set<Employee>()
+    public new async Task<ICollection<Employee>> GetAll(Expression<Func<Employee, bool>> expresion) =>
+        await _context.Set<Employee>()
                         .Where(expresion)
                         .Include(r => r.Projects)
                         .Include(r => r.Roles)
                         .ToListAsync();
-    }
 
     protected virtual void Dispose(bool disposing)
     {

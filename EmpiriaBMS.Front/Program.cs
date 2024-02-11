@@ -1,5 +1,9 @@
+using AutoMapper;
+using EmpiriaBMS.Core;
 using EmpiriaBMS.Front;
+using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +14,16 @@ builder.Services.AddServerSideBlazor();
 var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
+builder.Services.AddScoped<IDataProvider, DataProvider>();
+
+// TODO: AutoMapper
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient("WebClient", client => client.Timeout = TimeSpan.FromSeconds(600));

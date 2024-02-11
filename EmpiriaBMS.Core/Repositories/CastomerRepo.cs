@@ -24,16 +24,16 @@ public class CastomerRepo : Repository<Customer>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public new async Task<ICollection<Customer>> GetAll(Expression<Func<Customer, bool>> expresion)
-    {
-        if (expresion == null)
-            throw new ArgumentNullException(nameof(expresion));
+    public new async Task<ICollection<Customer>> GetAll() =>
+        await _context.Set<Customer>()
+                        .Include(r => r.Projects)
+                        .ToListAsync();
 
-        return await _context.Set<Customer>()
+    public new async Task<ICollection<Customer>> GetAll(Expression<Func<Customer, bool>> expresion) =>
+        await _context.Set<Customer>()
                         .Where(expresion)
                         .Include(r => r.Projects)
                         .ToListAsync();
-    }
 
     protected virtual void Dispose(bool disposing)
     {
