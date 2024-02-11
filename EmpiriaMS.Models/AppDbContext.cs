@@ -1,21 +1,10 @@
 ﻿using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaMS.Models;
 public class AppDbContext : DbContext
 {
-
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options)
-    {
-
-    }
+    const string SmarterASPNetDB = "Data Source=SQL5110.site4now.net;Initial Catalog=db_a8c181_empiriamteemsapp;User Id=db_a8c181_empiriamteemsapp_admin;Password=empiriamteemsapp123456";
 
     public DbSet<Role>? Roles { get; set; }
     public DbSet<Project>? Projects { get; set; }
@@ -23,10 +12,8 @@ public class AppDbContext : DbContext
     public DbSet<Employee>? Employees { get; set; }
     public DbSet<Customer>? Customers { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-
-    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
+        optionsBuilder.UseSqlServer(SmarterASPNetDB);
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

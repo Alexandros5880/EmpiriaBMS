@@ -5,11 +5,14 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpiriaMS", "EmpiriaMS\EmpiriaMS.csproj", "{C7330892-EACE-4B86-A171-2EAC39E8B62B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpiriaBMS.Models", "EmpiriaMS.Models\EmpiriaBMS.Models.csproj", "{7680E8C4-9135-46AB-A233-5BFE7673822E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpiriaBMS.Models", "EmpiriaMS.Models\EmpiriaBMS.Models.csproj", "{7680E8C4-9135-46AB-A233-5BFE7673822E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpiriaBMS.EF.CLI", "EmpiriaMS.EF.CLI\EmpiriaBMS.EF.CLI.csproj", "{9F308BBE-7BF6-4A5B-AFD5-C32BD45BC999}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpiriaBMS.EF.CLI", "EmpiriaMS.EF.CLI\EmpiriaBMS.EF.CLI.csproj", "{9F308BBE-7BF6-4A5B-AFD5-C32BD45BC999}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7680E8C4-9135-46AB-A233-5BFE7673822E} = {7680E8C4-9135-46AB-A233-5BFE7673822E}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpiriaBMS.Core", "EmpiriaMS.Core\EmpiriaBMS.Core.csproj", "{1A6D5BBF-E646-47A2-B73D-D144149BE448}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpiriaBMS.Core", "EmpiriaMS.Core\EmpiriaBMS.Core.csproj", "{1A6D5BBF-E646-47A2-B73D-D144149BE448}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

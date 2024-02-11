@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,8 @@ using EmpiriaMS.Models.Models.Base;
 namespace EmpiriaMS.Models.Models;
 public class Role : Entity
 {
-    public required string Name { get; set; }
+    [Required]
+    public string? Name { get; set; }
 
     public IEnumerable<Employee>? Employees { get; set; }
 

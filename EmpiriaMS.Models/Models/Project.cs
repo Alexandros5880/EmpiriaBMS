@@ -11,7 +11,8 @@ using EmpiriaMS.Models.Enums;
 namespace EmpiriaMS.Models.Models;
 public class Project : Entity
 {
-    public required string Name { get; set; }
+    [Required]
+    public string? Name { get; set; }
 
     public string? Description { get; set; }
 
@@ -19,6 +20,7 @@ public class Project : Entity
 
     public string? Drawing { get; set; }
 
+    [Required]
     public PlanType PlanType { get; set; }
 
     public int? WorkingDays { get; set; }
@@ -51,17 +53,20 @@ public class Project : Entity
 
     public int? CalculationDaly { get; set; }
 
-    public int Completed { get; set; }
+    [Required]
+    [Range(0, 100)]
+    public int? Completed { get; set; }
 
-    public int ManHours { get; set; }
+    public int? ManHours { get; set; }
 
+    [Required]
     [ForeignKey("Customer")]
-    public required string CustomerId { get; set; }
-    public required Customer Customer { get; set; }
+    public string? CustomerId { get; set; }
+    public Customer? Customer { get; set; }
 
     [ForeignKey("Invoice")]
     public string? InvoiceId { get; set; }
     public Invoice? Invoice { get; set; }
 
-    public required IEnumerable<Employee> Employees { get; set; }
+    public IEnumerable<Employee>? Employees { get; set; }
 }

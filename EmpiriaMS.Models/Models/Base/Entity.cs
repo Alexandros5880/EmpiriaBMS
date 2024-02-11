@@ -9,13 +9,16 @@ using System.Threading.Tasks;
 namespace EmpiriaMS.Models.Models.Base;
 public class Entity
 {
+    [Required]
     [Key]
     public string Id { get; set; } = "";
 
+    [Required]
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime CreatedDate { get; set; }
 
+    [Required]
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime LastUpdatedDate { get; set; }

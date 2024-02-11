@@ -10,13 +10,13 @@ using EmpiriaMS.Models.Models.Base;
 namespace EmpiriaMS.Models.Models;
 public class Invoice : Entity
 {
-    public double Total { get; set; }
+    public double? Total { get; set; }
 
-    public double Vat { get; set; }
+    public double? Vat { get; set; }
 
-    public double Fee { get; set; }
+    public double? Fee { get; set; }
 
-    public int Number { get; set; }
+    public int? Number { get; set; }
 
     public string? Mark { get; set; }
 
@@ -24,8 +24,9 @@ public class Invoice : Entity
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
+    [Required]
     [ForeignKey("Project")]
-    public required string ProjectId { get; set; }
-    public required Project Project { get; set; }
+    public string? ProjectId { get; set; }
+    public Project? Project { get; set; }
 
 }
