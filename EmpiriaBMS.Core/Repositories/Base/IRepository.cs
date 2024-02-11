@@ -16,4 +16,5 @@ public interface IRepository<T>
     Task<T> Add(T model);
     Task<T> Update(T model);
     Task<T> Delete(string id);
+    void Dispose();
 }

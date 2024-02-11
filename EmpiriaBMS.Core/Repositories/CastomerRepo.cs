@@ -9,8 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
-public class CastomerRepo : Repository<Customer>
+public class CastomerRepo : Repository<Customer>, IDisposable
 {
+    private bool disposedValue;
 
     public new async Task<Customer?> Get(string id)
     {
@@ -34,4 +35,22 @@ public class CastomerRepo : Repository<Customer>
                         .ToListAsync();
     }
 
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
 }

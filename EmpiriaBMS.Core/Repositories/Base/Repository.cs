@@ -7,10 +7,11 @@ using System.Xml.Linq;
 
 
 namespace EmpiriaBMS.Core.Repositories.Base;
-public class Repository<T> : IRepository<T>
+public class Repository<T> : IRepository<T>, IDisposable
     where T : class, IEntity
 {
     protected readonly AppDbContext _context;
+    private bool disposedValue;
 
     public Repository() =>
         _context = new AppDbContext();
@@ -93,4 +94,21 @@ public class Repository<T> : IRepository<T>
         return await _context.Set<T>().AnyAsync(expresion);
     }
 
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
 }

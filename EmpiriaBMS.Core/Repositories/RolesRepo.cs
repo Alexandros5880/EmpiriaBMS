@@ -10,8 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
-public class RolesRepo : Repository<Role>
+public class RolesRepo : Repository<Role>, IDisposable
 {
+    private bool disposedValue;
 
     public new async Task<Role?> Get(string id)
     {
@@ -33,5 +34,23 @@ public class RolesRepo : Repository<Role>
                         .Where(expresion)
                         .Include(r => r.Employees)
                         .ToListAsync();
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }
