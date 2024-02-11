@@ -23,4 +23,9 @@
     <PackageReference Include="Microsoft.TeamsFx" Version="2.1.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EmpiriaBMS.Core\EmpiriaBMS.Core.csproj" />
+    <ProjectReference Include="..\EmpiriaBMS.Models\EmpiriaBMS.Models.csproj" />
+  </ItemGroup>
+
 </Project>
