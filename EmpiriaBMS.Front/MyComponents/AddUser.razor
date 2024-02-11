@@ -1,0 +1,62 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Hosting
+@using Microsoft.Fast.Components.FluentUI
+@inject TeamsFx teamsfx
+@inject TeamsUserCredential teamsUserCredential
+@inject MicrosoftTeams MicrosoftTeams
+@inject IWebHostEnvironment HostEnvironment
+@inject IConfiguration Configuration
+@inject NavigationManager MyNavigationManager
+
+
+@if (isLoading)
+{
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <FluentProgressRing />
+    </div>
+}
+else
+{
+    <fast-card style="width: 300px;">
+        <div style="padding: 0 10px 10px;">
+
+            <fluent-select title="Select a section">
+                <fluent-option value="1">Beginning</fluent-option>
+                <fluent-option value="2">Middle</fluent-option>
+                <fluent-option value="3">End</fluent-option>
+            </fluent-select>
+            
+            <fast-button>Button</fast-button>
+        </div>
+    </fast-card>
+}
+
+
+
+@code {
+    bool isLoading = true;
+    bool runInTeams = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            runInTeams = await MicrosoftTeams.IsInTeams();
+            if (runInTeams)
+            {
+
+            }
+
+            isLoading = false;
+            
+            // Update UI
+            StateHasChanged();
+        }
+
+    }
+
+
+}

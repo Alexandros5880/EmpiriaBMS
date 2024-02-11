@@ -1,6 +1,7 @@
 ﻿@using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
+@using Microsoft.Fast.Components.FluentUI
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
@@ -14,6 +15,10 @@
     <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
         <FluentProgressRing />
     </div>
+}
+else if (isNewUser)
+{
+    <AddUser />
 }
 else
 {
@@ -40,14 +45,14 @@ else
 
 @code {
     bool isLoading = true;
-    bool runInTeams;
-
+    bool runInTeams = false;
     UserInfo user;
     string email;
     string userName;
     TeamsContext microsoftTeamsContext;
     TeamsTeamContext teamContext;
     UserTeamRole? UserRole;
+    bool isNewUser = false;
     TeamType? teamType;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -66,14 +71,14 @@ else
                 teamContext = microsoftTeamsContext?.Team;
                 UserRole = teamContext?.UserRole;
                 teamType = teamContext?.Type;
+                isNewUser = UserRole == null;
             }
 
-
             isLoading = false;
+            
             // Update UI
             StateHasChanged();
         }
-
 
     }
 

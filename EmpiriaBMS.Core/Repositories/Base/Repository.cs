@@ -10,7 +10,7 @@ namespace EmpiriaBMS.Core.Repositories.Base;
 public class Repository<T> : IRepository<T>
     where T : class, IEntity
 {
-    private readonly AppDbContext _context;
+    protected readonly AppDbContext _context;
 
     public Repository() =>
         _context = new AppDbContext();
