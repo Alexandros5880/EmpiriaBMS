@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EmpiriaMS.Models\EmpiriaBMS.Models.csproj" />
+  </ItemGroup>
+
 </Project>

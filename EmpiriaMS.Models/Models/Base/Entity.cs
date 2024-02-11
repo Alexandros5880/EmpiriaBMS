@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EmpiriaMS.Models.Models.Base;
-public class Entity
+public class Entity : IEntity
 {
     [Required]
     [Key]
