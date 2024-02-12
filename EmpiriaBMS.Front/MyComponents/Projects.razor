@@ -16,29 +16,13 @@
         <FluentProgressRing />
     </div>
 }
-else if (isNewUser)
-{
-    <AddUser />
-}
 else
 {
+    @* <AddUser /> *@
+
     <h3>Projects</h3>
 
-    <div style="display:block; width:100%;">
-        @if (runInTeams)
-        {
-            <div>
-                <label>Username: </label><b>@userName</b>
-                <br />
-                <label>Email: </label><b>@email</b>
-                <br />
-                <label>User Role: </label><b>@UserRole</b>
-                <br />
-                <label>Team Type: </label><b>@teamType</b>
-                <br />
-            </div>
-        }
-    </div>
+    
     
 }
 
@@ -46,14 +30,6 @@ else
 @code {
     bool isLoading = true;
     bool runInTeams = false;
-    UserInfo user;
-    string email;
-    string userName;
-    TeamsContext microsoftTeamsContext;
-    TeamsTeamContext teamContext;
-    UserTeamRole? UserRole;
-    bool isNewUser = false;
-    TeamType? teamType;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -64,14 +40,7 @@ else
             runInTeams = await MicrosoftTeams.IsInTeams();
             if (runInTeams)
             {
-                user = await teamsUserCredential.GetUserInfoAsync();
-                email = user?.PreferredUserName;
-                userName = user?.DisplayName;
-                microsoftTeamsContext = await MicrosoftTeams.GetTeamsContextAsync();
-                teamContext = microsoftTeamsContext?.Team;
-                UserRole = teamContext?.UserRole;
-                teamType = teamContext?.Type;
-                isNewUser = UserRole == null;
+
             }
 
             isLoading = false;

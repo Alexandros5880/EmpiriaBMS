@@ -1,12 +1,32 @@
 ﻿@page "/"
 @page "/tab"
-@* @using EmpiriaBMS.Front.Components; *@
 @using EmpiriaBMS.Front.MyComponents;
+@using System.Collections.ObjectModel;
+@using System.ComponentModel;
+@using EmpiriaBMS.Front.ViewModel.Components
 
 <div>
-    @* <Welcome /> *@
     <Projects />
 </div>
 
 
+@code {
 
+    public ObservableCollection<ProjectVM> ObservableData { get; set; }
+    
+
+    protected override void OnInitialized()
+    {
+       //  List<ProjectVM> Tasks = Enumerable.Range(1, 20).Select(x => new ProjectVM()
+       //      {
+       //          Id = "Task 1000" + x,
+       //          Status = (new string[] { "Open", "In Progress", "Testing", "Close" })[new Random().Next(4)],
+       //          Summary = (new string[] { "Analyze the new requirements gathered from the customer.", "Improve application performance", "Fix the issues reported in the IE browser.", "Validate new requirements", "Test the application in the IE browser." })[new Random().Next(5)],
+       //          Assignee = (new string[] { "Nancy Davloio", "Andrew Fuller", "Janet Leverling", "Steven walker", "Margaret hamilt", "Michael Suyama", "Robert King" })[new Random().Next(7)],
+       //      }
+       // ).ToList();
+
+       //  ObservableData = new ObservableCollection<ProjectVM>(Tasks);
+    }
+
+}
