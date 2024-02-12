@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class RoleVM : BNotifyPropertyChanged
 {
-    private bool? _isChecked;
-    public bool? IsChecked
+    private bool _isChecked;
+    public bool IsChecked
     {
         get => _isChecked;
         set

@@ -8,6 +8,17 @@ using System.Collections.ObjectModel;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class ProjectVM : BNotifyPropertyChanged
 {
+    private bool _isChecked;
+    public bool IsChecked
+    {
+        get => _isChecked;
+        set
+        {
+            _isChecked = value;
+            NotifyPropertyChanged(nameof(IsChecked));
+        }
+    }
+
     private string? _name;
     public string? Name
     {

@@ -2,34 +2,137 @@
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
 @using Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Front.ViewModel.Components
+@using AutoMapper
+@using EmpiriaBMS.Core
+@using System.Collections.ObjectModel;
+@using System.Reflection;
+@using EmpiriaMS.Models.Enums
+@using System.ComponentModel
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
 @inject IWebHostEnvironment HostEnvironment
 @inject IConfiguration Configuration
 @inject NavigationManager MyNavigationManager
+@inject IDataProvider DataProvider
+@inject IMapper Mapper
 
-
-@if (isLoading)
-{
-    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-        <FluentProgressRing />
-    </div>
-}
-else
-{
-    @* <AddUser /> *@
-
-    <h3>Projects</h3>
-
+<div class="container">
+    @if (isLoading)
+    {
+        <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+            <FluentProgressRing />
+        </div>
+    }
+    else
+    {
+        <h3 class="ms-4 mt-4">Projects</h3>
     
+        @* <AddUser /> *@
     
-}
+        if (error != null)
+        {
+            <p>@error</p>
+        }
+        else
+        {
+            <div class="card mt-2 p-4" style="padding: 4px; border-radius: 4px;">
+
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <input type="checkbox"
+                                       class="big-checkbox"
+                                       @bind="IsAllChecked"
+                                       @onclick="SelectionChanged" />
+                            </th>
+                            <th scope="col">Name</th>
+                            <th scope="col">PlanType</th>
+                            <th scope="col">Drawing</th>
+                            <th scope="col">Completed</th>
+                            <th scope="col">ManHours</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var project in projects)
+                        {
+                            <tr>
+                                <th scope="row">
+                                    <div class="col">
+                                        <input type="checkbox"
+                                               class="mt-2 big-checkbox"
+                                               @bind="project.IsChecked" />
+                                    </div>
+                                </th>
+                                <td>
+                                    <input type="text" class="form-control" @bind="project.Name">
+                                </td>
+                                <td>
+                                    <select class="form-select"
+                                            style="width:150px;"
+                                            @bind="project.PlanType">
+                                        @foreach (var opt in projectPlanTypes)
+                                        {
+                                            <option value="@opt">@opt</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           class="form-control"
+                                           style="width:200px;"
+                                           @bind="project.Drawing">
+                                </td>
+                                <td>
+                                    <div class="input-group mb-3" style="width:150px;">
+                                        <input type="number" class="form-control" @bind="project.Completed">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2">%</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group mb-3" style="width:150px;">
+                                        <input type="number" class="form-control" @bind="project.ManHours">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2">h</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+    
+    }
+</div>
 
 
 @code {
+    string error = null;
     bool isLoading = true;
     bool runInTeams = false;
+    bool IsAllChecked = false;
+    ObservableCollection<ProjectVM> projects = new ObservableCollection<ProjectVM>();
+    List<PlanType> projectPlanTypes = Enum.GetValues(typeof(PlanType)).OfType<PlanType>().ToList();
+
+    protected override async void OnInitialized()
+    {
+        await GetProjects();
+
+        base.OnInitialized();
+
+        // Update UI
+        StateHasChanged();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -43,12 +146,34 @@ else
 
             }
 
-            isLoading = false;
-            
             // Update UI
-            StateHasChanged();
+            //StateHasChanged();
         }
 
+    }
+
+    private void SelectionChanged()
+    {
+        foreach (var p in projects)
+            p.IsChecked = !IsAllChecked;
+        
+    }
+
+    private async Task GetProjects()
+    {
+        isLoading = true;
+        try
+        {
+            var data = (await DataProvider.Projects.GetAll())
+                    .Select(p => Mapper.Map<ProjectVM>(p))
+                    .ToList();
+            data.ForEach(projects.Add);
+        }
+        catch (Exception ex)
+        {
+            error = $"Get Projects Exception: {ex.Message}";
+        }
+        isLoading = false;
     }
 
 }

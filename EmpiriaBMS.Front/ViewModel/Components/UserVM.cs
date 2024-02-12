@@ -1,6 +1,17 @@
 ﻿namespace EmpiriaBMS.Front.ViewModel.Components;
 public class UserVM : BNotifyPropertyChanged
 {
+    private bool _isChecked;
+    public bool IsChecked
+    {
+        get => _isChecked;
+        set
+        {
+            _isChecked = value;
+            NotifyPropertyChanged(nameof(IsChecked));
+        }
+    }
+
     private string? _email;
     public string? Email
     {

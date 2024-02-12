@@ -5,6 +5,17 @@ using System.ComponentModel.DataAnnotations;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BNotifyPropertyChanged
 {
+    private bool _isChecked;
+    public bool IsChecked
+    {
+        get => _isChecked;
+        set
+        {
+            _isChecked = value;
+            NotifyPropertyChanged(nameof(IsChecked));
+        }
+    }
+
     private double? _total;
     public double? Total
     {
