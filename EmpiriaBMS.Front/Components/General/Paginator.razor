@@ -1,0 +1,40 @@
+﻿@using EmpiriaBMS.Front.ViewModel.DefaultComponents;
+
+<div class="mt-3" style="float: right !important;">
+    <ul class="pagination">
+        <li class="@((SetPeginator.IsFirstPage() ? "page-item disabled" : "page-item"))">
+            <a class="page-link"
+               href="#"
+               tabindex="-1"
+               @onclick="async () => await PeginatorPrevius()">Previous</a>
+        </li>
+        @for (int i = 1; i < SetPeginator.CountPages(); i++)
+        {
+            <li class="@((SetPeginator.IsSelected(i) ? "page-item active" : "page-item"))">
+                <a class="page-link"
+                   href="#"
+                   @onclick="async () => await PeginatorSetIndex(i)">@i</a>
+            </li>
+        }
+        <li class="@((SetPeginator.IsLastPage() ? "page-item disabled" : "page-item"))">
+            <a class="page-link"
+               href="#"
+               @onclick="async () => await PeginatorNext()">Next</a>
+        </li>
+    </ul>
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback Renderer { get; set; }
+
+    [Parameter]
+    public PaginatorVM SetPeginator { get; set; }
+
+    private async Task PeginatorNext() => await SetPeginator.Next(Renderer);
+    private async Task PeginatorPrevius() => await SetPeginator.Previus(Renderer);
+    private async Task PeginatorSetIndex(int pageIndex) =>
+        await SetPeginator.SetPageIndex(pageIndex, Renderer);
+
+}

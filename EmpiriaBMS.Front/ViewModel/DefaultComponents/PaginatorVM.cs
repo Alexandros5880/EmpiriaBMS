@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Front.DefaultComponents;
+using Microsoft.AspNetCore.Components;
 using System.Linq.Expressions;
 
 namespace EmpiriaBMS.Front.ViewModel.DefaultComponents;
@@ -65,26 +66,26 @@ public class PaginatorVM : BNotifyPropertyChanged
         PagesCounter = model.PagesCounter;
     }
 
-    public async Task Next(Func<Task> func)
+    public async Task Next(EventCallback func)
     {
         if(PageIndex == PagesCounter) return;
         ++PageIndex;
-        await func();
+        await func.InvokeAsync();
     }
 
-    public async Task Previus(Func<Task> func)
+    public async Task Previus(EventCallback func)
     {
         if (PageIndex == 0) return;
         --PageIndex;
-        await func();
+        await func.InvokeAsync();
     }
 
-    public async Task SetPageIndex(int pageIndex, Func<Task> func)
+    public async Task SetPageIndex(int pageIndex, EventCallback func)
     {
         if (PageIndex >= 0 && PageIndex <= PagesCounter)
         {
             PageIndex = pageIndex;
-            await func();
+            await func.InvokeAsync();
         }
     }
 
@@ -94,5 +95,5 @@ public class PaginatorVM : BNotifyPropertyChanged
 
     public bool IsSelected(int pageIndex) => PageIndex == pageIndex;
 
-    public int CountPages() => PagesCounter;
+    public int CountPages() => PagesCounter + 1;
 }
