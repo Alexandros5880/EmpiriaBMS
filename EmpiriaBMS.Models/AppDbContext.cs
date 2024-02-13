@@ -105,7 +105,7 @@ public class AppDbContext : DbContext
 
             Employee employee = new Employee()
             {
-                Id = "14234" + Convert.ToString(i+2),
+                Id = "14234" + Convert.ToString(i + 2),
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Email = $"alexpl_{i + 2}@gmail.com",
@@ -157,7 +157,7 @@ public class AppDbContext : DbContext
                 Description = "Test Description Project_" + Convert.ToString(i),
                 Drawing = "KL-" + Convert.ToString(i),
                 PlanType = i % 2 == 0 ? PlanType.ELEC : PlanType.HVAC,
-                WorkingDays = i + 200 - (i *3) + (i * 5),
+                WorkingDays = i + 200 - (i * 3) + (i * 5),
                 DurationDate = createdDate.AddDays(f1),
                 EstPaymentDate = createdDate.AddDays(f2),
                 PaymentDate = createdDate.AddDays(f3),
@@ -183,7 +183,7 @@ public class AppDbContext : DbContext
 
             builder.Entity<Project>().HasData(pjk);
         }
-        
+
     }
 
 }

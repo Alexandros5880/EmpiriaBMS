@@ -3,6 +3,7 @@ using EmpiriaBMS.Core;
 using EmpiriaBMS.Front;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
+using EmpiriaMS.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,8 @@ builder.Services.AddServerSideBlazor();
 var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
-builder.Services.AddScoped<IDataProvider, DataProvider>();
+builder.Services.AddTransient<AppDbContext>();
+builder.Services.AddTransient<IDataProvider, DataProvider>();
 
 // TODO: AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>

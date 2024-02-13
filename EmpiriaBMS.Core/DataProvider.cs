@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Core.Repositories;
 using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,13 @@ public class DataProvider : IDataProvider, IDisposable
     public IRepository<Employee> Employees { get; set; }
     public IRepository<Customer> Customers { get; set; }
 
-    public DataProvider()
+    public DataProvider(AppDbContext context)
     {
-        Roles = new RolesRepo();
-        Projects = new ProjectsRepo();
-        Invoices = new InvoiceRepo();
-        Employees = new EmployeeRepo();
-        Customers = new CastomerRepo();
+        Roles = new RolesRepo(context);
+        Projects = new ProjectsRepo(context);
+        Invoices = new InvoiceRepo(context);
+        Employees = new EmployeeRepo(context);
+        Customers = new CastomerRepo(context);
     }
 
     protected virtual void Dispose(bool disposing)

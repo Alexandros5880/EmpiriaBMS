@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,6 +13,8 @@ namespace EmpiriaBMS.Core.Repositories;
 public class CastomerRepo : Repository<Customer>, IDisposable
 {
     private bool disposedValue;
+
+    public CastomerRepo(AppDbContext context) : base(context) { }
 
     public new async Task<Customer?> Get(string id)
     {
@@ -35,7 +38,6 @@ public class CastomerRepo : Repository<Customer>, IDisposable
                              .Include(r => r.Projects)
                              .ToListAsync();
     }
-
 
     public new async Task<ICollection<Customer>> GetAll(
         Expression<Func<Customer, bool>> expresion,

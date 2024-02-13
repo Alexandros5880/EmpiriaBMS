@@ -13,9 +13,6 @@ public class Repository<T> : IRepository<T>, IDisposable
     protected readonly AppDbContext _context;
     private bool disposedValue;
 
-    public Repository() =>
-        _context = new AppDbContext();
-
     public Repository(AppDbContext context) =>
         _context = context;
 

@@ -14,6 +14,8 @@ public class RolesRepo : Repository<Role>, IDisposable
 {
     private bool disposedValue;
 
+    public RolesRepo(AppDbContext context) : base(context) { }
+
     public new async Task<Role?> Get(string id)
     {
         if (id == null)

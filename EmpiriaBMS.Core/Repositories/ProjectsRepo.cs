@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,6 +13,8 @@ namespace EmpiriaBMS.Core.Repositories;
 public class ProjectsRepo : Repository<Project>, IDisposable
 {
     private bool disposedValue;
+
+    public ProjectsRepo(AppDbContext context) : base(context) { }
 
     public new async Task<Project?> Get(string id)
     {

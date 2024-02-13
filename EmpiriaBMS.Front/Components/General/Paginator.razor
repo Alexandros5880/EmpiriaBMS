@@ -1,27 +1,45 @@
 ﻿@using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 
 <div class="mt-3" style="float: right !important;">
-    <ul class="pagination">
-        <li class="@((SetPeginator.IsFirstPage() ? "page-item disabled" : "page-item"))">
-            <a class="page-link"
-               href="#"
-               tabindex="-1"
-               @onclick="async () => await PeginatorPrevius()">Previous</a>
-        </li>
-        @for (int i = 1; i < SetPeginator.CountPages(); i++)
-        {
-            <li class="@((SetPeginator.IsSelected(i) ? "page-item active" : "page-item"))">
+    
+    @SetPeginator.PageIndex / @SetPeginator.PagesCounter
+    
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+
+            <li class="@((SetPeginator.IsFirstPage() ? "page-item disabled" : "page-item"))">
                 <a class="page-link"
                    href="#"
-                   @onclick="async () => await PeginatorSetIndex(i)">@i</a>
+                   tabindex="-1"
+                   @onclick="async () => await PeginatorPrevius()">Previous</a>
             </li>
-        }
-        <li class="@((SetPeginator.IsLastPage() ? "page-item disabled" : "page-item"))">
-            <a class="page-link"
-               href="#"
-               @onclick="async () => await PeginatorNext()">Next</a>
-        </li>
-    </ul>
+
+            <li class="@((SetPeginator.IsSelected(SetPeginator.FirstDisplayed) ? "page-item active" : "page-item"))">
+                <a class="page-link"
+                   href="#"
+                   @onclick="async () => await PeginatorSetIndex(1)">@SetPeginator.FirstDisplayed</a>
+            </li>
+
+            <li class="@((SetPeginator.IsSelected(@SetPeginator.MiddleDisplayed) ? "page-item active" : "page-item"))">
+                <a class="page-link"
+                   href="#"
+                   @onclick="async () => await PeginatorSetIndex(1)">@SetPeginator.MiddleDisplayed</a>
+            </li>
+
+            <li class="@((SetPeginator.IsSelected(@SetPeginator.LastDisplayed) ? "page-item active" : "page-item"))">
+                <a class="page-link"
+                   href="#"
+                   @onclick="async () => await PeginatorSetIndex(1)">@SetPeginator.LastDisplayed</a>
+            </li>
+
+            <li class="@((SetPeginator.IsLastPage() ? "page-item disabled" : "page-item"))">
+                <a class="page-link"
+                   href="#"
+                   @onclick="async () => await PeginatorNext()">Next</a>
+            </li>
+
+        </ul>
+    </nav>
 </div>
 
 @code {
@@ -32,8 +50,12 @@
     [Parameter]
     public PaginatorVM SetPeginator { get; set; }
 
-    private async Task PeginatorNext() => await SetPeginator.Next(Renderer);
-    private async Task PeginatorPrevius() => await SetPeginator.Previus(Renderer);
+    private async Task PeginatorNext() =>
+        await SetPeginator.Next(Renderer);
+
+    private async Task PeginatorPrevius() =>
+        await SetPeginator.Previus(Renderer);
+
     private async Task PeginatorSetIndex(int pageIndex) =>
         await SetPeginator.SetPageIndex(pageIndex, Renderer);
 

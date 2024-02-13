@@ -50,9 +50,21 @@ public class PaginatorVM : BNotifyPropertyChanged
         }
     }
 
+    public int FirstDisplayed => PageIndex == 1 ? 1 : PageIndex - 1;
+
+    public int MiddleDisplayed => 
+        PageIndex == 1 ? 2 : PageIndex < PagesCounter - 1 ? PageIndex : PagesCounter - 1;
+
+    public int LastDisplayed =>
+        PageIndex == 1
+            ? PageIndex + 2
+            : PageIndex < PagesCounter - 1
+                ? PageIndex + 1
+                : PagesCounter;
+
     public PaginatorVM()
     {
-        PageSize = 5;
+        PageSize = 1;
         PageIndex = 1;
         RecordsCount = 0;
         PagesCounter = 0;
@@ -94,6 +106,5 @@ public class PaginatorVM : BNotifyPropertyChanged
     public bool IsLastPage() => PageIndex == PagesCounter;
 
     public bool IsSelected(int pageIndex) => PageIndex == pageIndex;
-
-    public int CountPages() => PagesCounter + 1;
+        
 }

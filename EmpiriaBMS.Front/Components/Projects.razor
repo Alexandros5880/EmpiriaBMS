@@ -27,10 +27,6 @@
 <!-- card shadow bg-white rounded container text-center align-middle -->
 <div class="row justify-content-center mt-5">
     <div class="col-auto" style="width: 100%; height: 100%;">
-        @if (error != null)
-        {
-            <p>@error</p>
-        }
         @if (isLoading)
         {
             <div class="mb-5 mt-5" style="display: flex; justify-content: center; align-items: center;">
@@ -113,7 +109,6 @@
 </div>
 
 @code {
-    string error = null;
     bool isLoading = true;
     bool runInTeams = false;
     bool IsAllChecked = false;
@@ -172,7 +167,7 @@
         }
         catch (Exception ex)
         {
-            error = $"Get Projects Exception: {ex.Message}";
+            // TODO: Log Error
         }
     }
 }
