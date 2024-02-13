@@ -36,15 +36,15 @@
         }
     ],
     "staticTabs": [
-        {
-            "entityId": "index",
-            "name": "Projects",
-            "contentUrl": "${{TAB_ENDPOINT}}/tab",
-            "websiteUrl": "${{TAB_ENDPOINT}}/tab",
-            "scopes": [
-                "personal"
-            ]
-        }
+      {
+        "entityId": "index",
+        "name": "Projects",
+        "contentUrl": "${{TAB_ENDPOINT}}/projects",
+        "websiteUrl": "${{TAB_ENDPOINT}}/projects",
+        "scopes": [
+          "personal"
+        ]
+      }
     ],
     "permissions": [
         "identity",

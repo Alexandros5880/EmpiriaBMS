@@ -6,8 +6,10 @@
 
 html, body {
     margin: 0;
-    width: 100vw;
+    /*width: 100vw;*/
     height: 100vh;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -46,12 +48,12 @@ canvas {
     z-index: 1000;
 }
 
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
 
 pre,
 div.error {
@@ -63,10 +65,10 @@ div.error {
     max-height: 250px;
 }
 
-    pre.fixed,
-    div.error.fixed {
-        height: 200px;
-    }
+pre.fixed,
+div.error.fixed {
+    height: 200px;
+}
 
 code {
     background-color: #e5e5e5;

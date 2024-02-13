@@ -20,10 +20,10 @@
         {
             var settings = new TeamsInstanceSettings
             {
-                SuggestedDisplayName = "My Tab",
+                SuggestedDisplayName = "Projects",
                 EntityId = _entityId.ToString(),
-                ContentUrl = $"{NavigationManager.BaseUri}/tab",
-                WebsiteUrl = $"{NavigationManager.BaseUri}/tab"
+                    ContentUrl = $"{NavigationManager.BaseUri}/projects",
+                    WebsiteUrl = $"{NavigationManager.BaseUri}/projects"
             };
 
             await MicrosoftTeams.InitializeAsync();

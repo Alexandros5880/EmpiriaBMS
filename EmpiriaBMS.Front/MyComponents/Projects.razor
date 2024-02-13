@@ -1,4 +1,6 @@
-﻿@using Microsoft.Extensions.Configuration
+﻿@page "/"
+@page "/projects"
+@using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
 @using Microsoft.Fast.Components.FluentUI
@@ -18,10 +20,10 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 
-<div class="container">
+<div>
     @if (isLoading)
     {
-        <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <div style="display: flex; justify-content: center; align-items: center;">
             <FluentProgressRing />
         </div>
     }
@@ -37,9 +39,9 @@
         }
         else
         {
-            <div class="card mt-2 p-4" style="padding: 4px; border-radius: 4px;">
+            <div class="card mt-2 p-4 shadow p-3 mb-5 bg-white rounded" style="border-radius: 4px;">
 
-                <table class="table">
+                <table class="table container" style="overflow-x:hidden; max-width: 1000px;">
 
                     <thead>
                         <tr>
