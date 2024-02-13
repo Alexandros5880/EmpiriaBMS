@@ -22,10 +22,8 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 
-<h3 class="ms-4 mt-4">Projects</h3>
-
 <!-- card shadow bg-white rounded container text-center align-middle -->
-<div class="row justify-content-center mt-5">
+<div class="row justify-content-center mt-3">
     <div class="col-auto" style="width: 100%; height: 100%;">
         @if (startLoading)
         {
@@ -119,7 +117,7 @@
 
     private ObservableCollection<ProjectVM> _data = new ObservableCollection<ProjectVM>();
     List<PlanType> projectPlanTypes = Enum.GetValues(typeof(PlanType)).OfType<PlanType>().ToList();
-    private PaginatorVM _paginator = new PaginatorVM();
+    private PaginatorVM _paginator = new PaginatorVM(7);
 
     protected override async void OnInitialized()
     {
@@ -162,8 +160,12 @@
         filterLoading = !startLoading ? true : filterLoading;
         try
         {
+            // Todo: Find a way to add this in to PaginatorVM
             _paginator.RecordsCount = await DataProvider.Projects.Count();
-            _paginator.PagesCounter = _paginator.RecordsCount / _paginator.PageSize; ;
+            var divide = _paginator.RecordsCount / _paginator.PageSize;
+            var quotient = _paginator.RecordsCount % _paginator.PageSize;
+            _paginator.PagesCounter = quotient == 0 ? divide : divide + 1;
+
             var data = (await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex))
                         .Select(p => Mapper.Map<ProjectVM>(p))
                         .ToList();

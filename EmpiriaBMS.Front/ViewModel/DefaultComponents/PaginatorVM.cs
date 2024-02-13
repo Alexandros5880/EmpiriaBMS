@@ -70,6 +70,14 @@ public class PaginatorVM : BNotifyPropertyChanged
         PagesCounter = 0;
     }
 
+    public PaginatorVM(int pageSize)
+    {
+        PageSize = pageSize;
+        PageIndex = 1;
+        RecordsCount = 0;
+        PagesCounter = 0;
+    }
+
     public PaginatorVM(PaginatorVM model)
     {
         PageSize = model.PageSize;
