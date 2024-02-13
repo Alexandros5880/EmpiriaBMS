@@ -64,7 +64,7 @@ public class PaginatorVM : BNotifyPropertyChanged
 
     public PaginatorVM()
     {
-        PageSize = 1;
+        PageSize = 5;
         PageIndex = 1;
         RecordsCount = 0;
         PagesCounter = 0;
