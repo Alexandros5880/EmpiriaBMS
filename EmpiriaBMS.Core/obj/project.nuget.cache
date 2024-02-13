@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "v9+isQ5EjXByERBge0uPzhdEdyd6bSNsrJXka6ozRGJNgcaNFTqGHeCED2EIIWUgkpSClM6UaOHk9ulZSK9AwA==",
+  "dgSpecHash": "mdrEJfFHohxO034GQ5K8Il+zPRMAoZ47mJvfg0xUvCL7wE1E9wVb5H7les7KTuozRFaweDWchrb3r7K6cpnd5w==",
   "success": true,
-  "projectFilePath": "D:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Core\\EmpiriaBMS.Core.csproj",
+  "projectFilePath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Core\\EmpiriaBMS.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Alexp\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Alexp\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",

@@ -2002,11 +2002,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
+      "projectUniqueName": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
       "projectName": "EmpiriaBMS.EF.CLI",
-      "projectPath": "D:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
+      "projectPath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
       "packagesPath": "C:\\Users\\Alexp\\.nuget\\packages\\",
-      "outputPath": "D:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\obj\\",
+      "outputPath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2029,8 +2029,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj": {
-              "projectPath": "D:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj"
+            "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj": {
+              "projectPath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj"
             }
           }
         }
