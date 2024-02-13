@@ -25,16 +25,33 @@ public class RolesRepo : Repository<Role>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public new async Task<ICollection<Role>> GetAll() =>
-        await _context.Set<Role>()
-                        .Include(r => r.Employees)
-                        .ToListAsync();
+    public new async Task<ICollection<Role>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<Role>().ToListAsync();
 
-    public new async Task<ICollection<Role>> GetAll(Expression<Func<Role, bool>> expresion) =>
-        await _context.Set<Role>()
-                        .Where(expresion)
-                        .Include(r => r.Employees)
-                        .ToListAsync();
+        return await _context.Set<Role>()
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .Include(r => r.Employees)
+                             .ToListAsync();
+    }
+
+    public new async Task<ICollection<Role>> GetAll(
+        Expression<Func<Role, bool>> expresion,
+        int pageSize = 0,
+        int pageIndex = 0
+    ) {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<Role>().Where(expresion).ToListAsync();
+
+        return await _context.Set<Role>()
+                             .Where(expresion)
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .Include(r => r.Employees)
+                             .ToListAsync();
+    }
 
     protected virtual void Dispose(bool disposing)
     {

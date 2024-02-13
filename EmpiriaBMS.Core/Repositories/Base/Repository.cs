@@ -78,11 +78,41 @@ public class Repository<T> : IRepository<T>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<ICollection<T>> GetAll() =>
-        await _context.Set<T>().ToListAsync();
+    public async Task<ICollection<T>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<T>().ToListAsync();
 
-    public async Task<ICollection<T>> GetAll(Expression<Func<T, bool>> expresion) =>
-        await _context.Set<T>().Where(expresion).ToListAsync();
+        return await _context.Set<T>()
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToListAsync();
+    }
+
+    public async Task<ICollection<T>> GetAll(
+        Expression<Func<T, bool>> expresion,
+        int pageSize = 0,
+        int pageIndex = 0
+    ) {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<T>().Where(expresion).ToListAsync();
+
+        return await _context.Set<T>()
+                             .Where(expresion)
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToListAsync();
+    }
+
+    public async Task<int> Count()
+    {
+        return await _context.Set<T>().CountAsync();
+    }
+
+    public async Task<int> Count(Expression<Func<T, bool>> expresion)
+    {
+        return await _context.Set<T>().Where(expresion).CountAsync();
+    }
 
     public async Task<bool> Any(Expression<System.Func<T, bool>> expresion)
     {

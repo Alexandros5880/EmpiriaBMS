@@ -42,7 +42,6 @@
             <div class="card mt-2 p-4 shadow p-3 mb-5 bg-white rounded" style="border-radius: 4px;">
 
                 <table class="table container" style="overflow-x:hidden; max-width: 1000px;">
-
                     <thead>
                         <tr>
                             <th scope="col">
@@ -58,9 +57,8 @@
                             <th scope="col">ManHours</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        @foreach (var project in projects)
+                        @foreach (var project in _data)
                         {
                             <tr>
                                 <th scope="row">
@@ -108,8 +106,31 @@
                             </tr>
                         }
                     </tbody>
-
                 </table>
+
+                <nav>
+                    <ul class="pagination">
+                        <li class="@((_pageIndex == 0 ? "page-item disabled" : "page-item"))">
+                            <a class="page-link"
+                               href="#"
+                               tabindex="-1"
+                               @onclick="async () => {--_pageIndex; await GetData();}">Previous</a>
+                        </li>
+                        @for(int i = 0; i < _pagesCounter; i++)
+                        {
+                            <li class="page-item">
+                                <a class="@((_pageIndex == i ? "page-item active" : "page-item"))"
+                                   href="#"
+                                   @onclick="async () => {_pageIndex = i; await GetData();}">@i</a>
+                            </li>
+                        }
+                        <li class="@((_pageIndex == _pagesCounter ? "page-item disabled" : "page-item"))">
+                            <a class="page-link"
+                               href="#"
+                               @onclick="async () => {++_pageIndex; await GetData();}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
 
             </div>
         }
@@ -123,12 +144,18 @@
     bool isLoading = true;
     bool runInTeams = false;
     bool IsAllChecked = false;
-    ObservableCollection<ProjectVM> projects = new ObservableCollection<ProjectVM>();
+
+    private ObservableCollection<ProjectVM> _data = new ObservableCollection<ProjectVM>();
     List<PlanType> projectPlanTypes = Enum.GetValues(typeof(PlanType)).OfType<PlanType>().ToList();
+    private int _pageSize = 5;
+    private int _pageIndex = 1;
+    private int _recordsCount = 0;
+    private int _pagesCounter = 0;
+
 
     protected override async void OnInitialized()
     {
-        await GetProjects();
+        await GetData();
 
         base.OnInitialized();
 
@@ -156,20 +183,22 @@
 
     private void SelectionChanged()
     {
-        foreach (var p in projects)
+        foreach (var p in _data)
             p.IsChecked = !IsAllChecked;
-        
     }
 
-    private async Task GetProjects()
+    private async Task GetData()
     {
         isLoading = true;
         try
         {
-            var data = (await DataProvider.Projects.GetAll())
-                    .Select(p => Mapper.Map<ProjectVM>(p))
-                    .ToList();
-            data.ForEach(projects.Add);
+            _recordsCount = await DataProvider.Projects.Count();
+            _pagesCounter = _recordsCount / _pageSize; ;
+            var data = (await DataProvider.Projects.GetAll(_pageSize, _pageIndex))
+                        .Select(p => Mapper.Map<ProjectVM>(p))
+                        .ToList();
+            _data.Clear();
+            data.ForEach(_data.Add);
         }
         catch (Exception ex)
         {

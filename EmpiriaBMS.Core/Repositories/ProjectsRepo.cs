@@ -24,16 +24,33 @@ public class ProjectsRepo : Repository<Project>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public new async Task<ICollection<Project>> GetAll() =>
-        await _context.Set<Project>()
-                        .Include(r => r.Employees)
-                        .ToListAsync();
+    public new async Task<ICollection<Project>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<Project>().ToListAsync();
 
-    public new async Task<ICollection<Project>> GetAll(Expression<Func<Project, bool>> expresion) =>
-        await _context.Set<Project>()
-                        .Where(expresion)
-                        .Include(r => r.Employees)
-                        .ToListAsync();
+        return await _context.Set<Project>()
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .Include(r => r.Employees)
+                             .ToListAsync();
+    }
+
+    public new async Task<ICollection<Project>> GetAll(
+        Expression<Func<Project, bool>> expresion,
+        int pageSize = 0,
+        int pageIndex = 0
+    ) {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<Project>().Where(expresion).ToListAsync();
+
+        return await _context.Set<Project>()
+                             .Where(expresion)
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .Include(r => r.Employees)
+                             .ToListAsync();
+    }
 
     protected virtual void Dispose(bool disposing)
     {

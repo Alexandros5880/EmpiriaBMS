@@ -24,16 +24,31 @@ public class InvoiceRepo : Repository<Invoice>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public new async Task<ICollection<Invoice>> GetAll() =>
-        await _context.Set<Invoice>()
-                        .Include(r => r.Project)
-                        .ToListAsync();
+    public new async Task<ICollection<Invoice>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<Invoice>().ToListAsync();
 
-    public new async Task<ICollection<Invoice>> GetAll(Expression<Func<Invoice, bool>> expresion) =>
-        await _context.Set<Invoice>()
-                        .Where(expresion)
-                        .Include(r => r.Project)
-                        .ToListAsync();
+        return await _context.Set<Invoice>()
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToListAsync();
+    }
+
+    public new async Task<ICollection<Invoice>> GetAll(
+        Expression<Func<Invoice, bool>> expresion,
+        int pageSize = 0,
+        int pageIndex = 0
+    ) {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<Invoice>().Where(expresion).ToListAsync();
+
+        return await _context.Set<Invoice>()
+                             .Where(expresion)
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToListAsync();
+    }
 
     protected virtual void Dispose(bool disposing)
     {

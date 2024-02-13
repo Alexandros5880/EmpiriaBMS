@@ -24,16 +24,34 @@ public class CastomerRepo : Repository<Customer>, IDisposable
                          .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public new async Task<ICollection<Customer>> GetAll() =>
-        await _context.Set<Customer>()
-                        .Include(r => r.Projects)
-                        .ToListAsync();
+    public new async Task<ICollection<Customer>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<Customer>().ToListAsync();
 
-    public new async Task<ICollection<Customer>> GetAll(Expression<Func<Customer, bool>> expresion) =>
-        await _context.Set<Customer>()
-                        .Where(expresion)
-                        .Include(r => r.Projects)
-                        .ToListAsync();
+        return await _context.Set<Customer>()
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .Include(r => r.Projects)
+                             .ToListAsync();
+    }
+
+
+    public new async Task<ICollection<Customer>> GetAll(
+        Expression<Func<Customer, bool>> expresion,
+        int pageSize = 0,
+        int pageIndex = 0
+    ) {
+        if (pageSize == 0 || pageIndex == 0)
+            return await _context.Set<Customer>().Where(expresion).ToListAsync();
+
+        return await _context.Set<Customer>()
+                             .Where(expresion)
+                             .Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize)
+                             .Include(r => r.Projects)
+                             .ToListAsync();
+    }
 
     protected virtual void Dispose(bool disposing)
     {
