@@ -36,8 +36,4 @@ public class User : Entity
     [ForeignKey("Project")]
     public string? ProjectId { get; set; }
     public Project? Project { get; set; }
-
-    public ICollection<Role> Roles { get; set; }
-    public ICollection<User> Employees { get; set; }
-    public ICollection<Project> Projects { get; set; }
 }

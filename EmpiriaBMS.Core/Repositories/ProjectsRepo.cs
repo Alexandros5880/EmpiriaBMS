@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,6 @@ public class ProjectsRepo : Repository<Project>
 
         return await _context
                          .Set<Project>()
-                         .Include(r => r.Employees)
                          .Include(r => r.Customer)
                          .Include(r => r.Invoice)
                          .FirstOrDefaultAsync(r => r.Id.Equals(id));
@@ -35,7 +35,6 @@ public class ProjectsRepo : Repository<Project>
         return await _context.Set<Project>()
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
-                             .Include(r => r.Employees)
                              .Include(r => r.Customer)
                              .Include(r => r.Invoice)
                              .ToListAsync();
@@ -53,9 +52,19 @@ public class ProjectsRepo : Repository<Project>
                              .Where(expresion)
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
-                             .Include(r => r.Employees)
                              .Include(r => r.Customer)
                              .Include(r => r.Invoice)
+                             .ToListAsync();
+    }
+
+    public async Task<ICollection<User>> GetUsers(string projectId)
+    {
+        if (projectId == null)
+            throw new NullReferenceException($"No Project Id Specified!");
+
+        return await _context.Set<ProjectEmployee>()
+                             .Where(r => r.ProjectId.Equals(projectId))
+                             .Select(r => r.Employee)
                              .ToListAsync();
     }
 }

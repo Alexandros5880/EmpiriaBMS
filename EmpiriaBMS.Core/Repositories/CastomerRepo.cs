@@ -23,7 +23,6 @@ public class CastomerRepo : Repository<User>
         return await _context
                          .Set<User>()
                          .Include(r => r.Project)
-                         .Include(r => r.Roles)
                          .FirstOrDefaultAsync(r => r.Id.Equals(id));
     }
 
@@ -36,7 +35,6 @@ public class CastomerRepo : Repository<User>
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
                              .Include(r => r.Project)
-                             .Include(r => r.Roles)
                              .ToListAsync();
     }
 
@@ -53,7 +51,17 @@ public class CastomerRepo : Repository<User>
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
                              .Include(r => r.Project)
-                             .Include(r => r.Roles)
+                             .ToListAsync();
+    }
+
+    public async Task<ICollection<Role>> GetRoles(string userId)
+    {
+        if (userId == null)
+            throw new NullReferenceException($"No User Id Specified!");
+
+        return await _context.Set<UserRole>()
+                             .Where(r => r.UserId.Equals(userId))
+                             .Select(r => r.Role)
                              .ToListAsync();
     }
 }

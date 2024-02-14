@@ -14,11 +14,11 @@ public class DataProvider : IDataProvider, IDisposable
 {
     private bool disposedValue;
 
-    public IRepository<Role> Roles { get; set; }
-    public IRepository<Project> Projects { get; set; }
-    public IRepository<Invoice> Invoices { get; set; }
-    public IRepository<User> Employees { get; set; }
-    public IRepository<User> Customers { get; set; }
+    public RolesRepo Roles { get; set; }
+    public ProjectsRepo Projects { get; set; }
+    public InvoiceRepo Invoices { get; set; }
+    public EmployeeRepo Employees { get; set; }
+    public CastomerRepo Customers { get; set; }
 
     public DataProvider(AppDbContext context)
     {

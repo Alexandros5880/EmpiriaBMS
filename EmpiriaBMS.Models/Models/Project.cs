@@ -66,6 +66,4 @@ public class Project : Entity
     [ForeignKey("Invoice")]
     public string? InvoiceId { get; set; }
     public Invoice? Invoice { get; set; }
-
-    public ICollection<User> Employees { get; set; }
 }
