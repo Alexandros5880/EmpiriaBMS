@@ -1,0 +1,72 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Components
+
+<div class="shadow rounded p-2">
+
+    <h3 class="mt-1 mb-1">Invoice Details</h3>
+
+    <form>
+
+        <!-- Date -->
+        <div class="form-group">
+            <label for="invoiceDate">Date</label>
+            <input type="date"
+                   class="form-control"
+                   id="invoiceDate"
+                   @bind="@Invoice.Date">
+        </div>
+
+        <!-- Number -->
+        <div class="form-group">
+            <label for="invoiceNumber">Number</label>
+            <input type="number"
+                   class="form-control"
+                   id="invoiceNumber"
+                   @bind="@Invoice.Number">
+        </div>
+
+        <!-- Mark -->
+        <div class="form-group">
+            <label for="invoiceMark">Mark</label>
+            <input type="text"
+                   class="form-control"
+                   id="invoiceMark"
+                   @bind="@Invoice.Mark">
+        </div>
+
+        <!-- Total -->
+        <div class="form-group">
+            <label for="invoiceTotal">Total</label>
+            <input type="number"
+                   class="form-control"
+                   id="invoiceTotal"
+                   @bind="@Invoice.Total">
+        </div>
+
+        <!-- Vat -->
+        <div class="form-group">
+            <label for="invoiceVat">Vat</label>
+            <input type="number"
+                   class="form-control"
+                   id="invoiceVat"
+                   @bind="@Invoice.Vat">
+        </div>
+
+        <!-- Fee -->
+        <div class="form-group">
+            <label for="invoiceFee">Fee</label>
+            <input type="number"
+                   class="form-control"
+                   id="invoiceFee"
+                   @bind="@Invoice.Fee">
+        </div>
+
+    </form>
+</div>
+
+@code {
+
+    [Parameter]
+    public InvoiceVM Invoice { get; set; }
+
+
+}

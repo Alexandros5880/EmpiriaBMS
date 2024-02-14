@@ -30,5 +30,5 @@ public class EmployeeVM : UserVM
     public virtual ICollection<ProjectVM>? Projects { get; set; }
 
     [Required]
-    public virtual ICollection<Role>? Roles { get; set; }
+    public virtual ICollection<RoleVM>? Roles { get; set; }
 }

@@ -258,15 +258,15 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                 columns: new[] { "Id", "CreatedDate", "Date", "Fee", "LastUpdatedDate", "Mark", "Number", "ProjectId", "Total", "Vat" },
                 values: new object[,]
                 {
-                    { "15dd7f1d03644ef6b360988f1af57b0e0", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4731), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3001.0, new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4733), "Signature 142340", 66944, null, 0.0, 24.0 },
-                    { "5137cd724f344bde9f5c64c02f799bcb12", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8814), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 4000.0, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8815), "Signature 1423415", 36030, null, 3.0, 17.0 },
-                    { "517f07b05efd4bc99be8e357dd3602b815", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9025), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 103000.0, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9027), "Signature 1423420", 42760, null, 5.0, 17.0 },
-                    { "5774428bb08340b69fd0986b4aaa88574", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8660), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3100.0, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8662), "Signature 1423410", 11741, null, 2.0, 24.0 },
-                    { "9fc86101f26d4da3b67a18ddcac9632d21", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9241), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 10003000.0, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9242), "Signature 1423435", 54343, null, 7.0, 17.0 },
-                    { "ad90f2110a2640aaa2665e2736f63d794", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4861), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3010.0, new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4862), "Signature 142343", 12306, null, 1.0, 17.0 },
-                    { "b832c99d26bb46c6a55e8e2ab63f711218", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9139), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1003000.0, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9141), "Signature 1423436", 28154, null, 6.0, 24.0 },
-                    { "c0e18213870843b2997c84c71582b36024", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8909), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 13000.0, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8910), "Signature 1423420", 68872, null, 4.0, 24.0 },
-                    { "f69de571cc2f45e6aeb3af326af7ac3e8", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9356), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 100003000.0, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9358), "Signature 1423440", 68175, null, 8.0, 24.0 }
+                    { "0183f142f9394ceeaff3682507fbbc1225", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7557), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7560), 103000.0, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7559), "Signature 142345", 78418, null, 5.0, 17.0 },
+                    { "1f9dbdb56c8e42dbbcf7d071c012f8d718", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7339), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7341), 4000.0, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7340), "Signature 1423412", 58489, null, 3.0, 17.0 },
+                    { "5498e196998a4be78abc67b09f1560bc16", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7904), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7906), 100003000.0, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7905), "Signature 1423416", 20940, null, 8.0, 24.0 },
+                    { "75319d6811f74e3a8eb663e5685538ab6", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1530), new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1533), 3010.0, new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1532), "Signature 142345", 26717, null, 1.0, 17.0 },
+                    { "93416e719808414a9e07f8a1ab7609686", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7694), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7697), 1003000.0, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7696), "Signature 1423424", 66598, null, 6.0, 24.0 },
+                    { "c0188ac33b4242bc9583d4e5057fe4ac0", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1366), new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1371), 3001.0, new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1369), "Signature 142340", 54623, null, 0.0, 24.0 },
+                    { "c86130e1dceb487aa349b1897972949642", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7774), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7776), 10003000.0, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7775), "Signature 1423421", 76739, null, 7.0, 17.0 },
+                    { "eaec53673e4a42338d204b25e19571af2", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7192), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7195), 3100.0, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7194), "Signature 142348", 70554, null, 2.0, 24.0 },
+                    { "f45eb3e03ac941c1acdf5f03e1b1972b16", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7461), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7464), 13000.0, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7463), "Signature 142344", 70511, null, 4.0, 24.0 }
                 });
 
             migrationBuilder.InsertData(
@@ -274,14 +274,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                 columns: new[] { "Id", "CreatedDate", "LastUpdatedDate", "Name" },
                 values: new object[,]
                 {
-                    { "25454319af094a1789c5cba7b941eff52", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8532), new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8533), "Engineers" },
-                    { "405967561a5b4f69b1b2081197d440978", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8551), new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8552), "Customer" },
-                    { "5f6436bcd1a04d7a9396a357de46ede44", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8538), new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8539), "COO" },
-                    { "6986138359c844e18784e8d50af63f095", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8541), new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8543), "CTO" },
-                    { "75b56dab6c684255adc042bd3fbf9ddc6", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8544), new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8546), "CEO" },
-                    { "86f906d6397c4316bdc4bf86618034071", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8490), new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8529), "Draftsmen" },
-                    { "9759edecf3ba410a91fc51006b7c96d97", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8548), new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8549), "Guest" },
-                    { "f8fc14df442a40e2939220c33753a2173", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8535), new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8536), "Project Managers" }
+                    { "044504834bc84990952a504492137dad4", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6340), new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6342), "COO" },
+                    { "199cff7579c441759e9d5f302e7653982", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6331), new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6333), "Engineers" },
+                    { "1f0214cc3aa24defb53943da5ebae1ca5", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6344), new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6346), "CTO" },
+                    { "34c451ab47e84ea7829898620e3311cd7", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6353), new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6355), "Guest" },
+                    { "51eaf6c4be074d20ae35a2a0c649042c8", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6357), new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6359), "Customer" },
+                    { "67914ad2d834457db47aa56110ed40736", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6349), new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6350), "CEO" },
+                    { "8797d29f91074dc18807d2021332a0d31", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6280), new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6327), "Draftsmen" },
+                    { "e08a94595b9741febc3d7698225f45833", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6336), new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6338), "Project Managers" }
                 });
 
             migrationBuilder.InsertData(
@@ -289,24 +289,24 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                 columns: new[] { "Id", "CreatedDate", "Description", "Email", "FirstName", "Hours", "LastName", "LastUpdatedDate", "MidName", "Phone1", "Phone2", "Phone3", "ProjectId" },
                 values: new object[,]
                 {
-                    { "02dd7b18c61c4054bca678b0a5d99d1e2", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8630), "Test Description Employee 4", "alexpl_4@gmail.com", "Platanios_Employee_4", 16.0, "Alexandros_4", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8631), null, "6949277784", null, null, null },
-                    { "05725b0ca22b41b7b5c6c41b60180cdd6", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4806), "Test Description Client 1", "alexpl_1@gmail.com", "Platanios_Customer_1", null, "Alexandros_1", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4807), null, "6949277781", null, null, null },
-                    { "15cb24f7122845638a9a5bc3989d827d35", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9217), "Test Description Employee 9", "alexpl_9@gmail.com", "Platanios_Employee_9", 56.0, "Alexandros_9", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9218), null, "6949277789", null, null, null },
-                    { "1976b05bf1b4419c97b589185f402a3f9", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8714), "Test Description Client 3", "alexpl_3@gmail.com", "Platanios_Customer_3", null, "Alexandros_3", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8716), null, "6949277783", null, null, null },
-                    { "2a1c5437a0d8465fa7359c97c1bf0ee348", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9278), "Test Description Client 8", "alexpl_8@gmail.com", "Platanios_Customer_8", null, "Alexandros_8", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9280), null, "6949277788", null, null, null },
-                    { "43fd666581044b659918e6a7b3bd2b6925", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8987), "Test Description Employee 7", "alexpl_7@gmail.com", "Platanios_Employee_7", 40.0, "Alexandros_7", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8989), null, "6949277787", null, null, null },
-                    { "4c15ffc0aefb4030943de3c8535e063e10", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8526), "Test Description Client 2", "alexpl_2@gmail.com", "Platanios_Customer_2", null, "Alexandros_2", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8540), null, "6949277782", null, null, null },
-                    { "528a782cc2f94bf1ad316d3d74de26ac4", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8856), "Test Description Client 4", "alexpl_4@gmail.com", "Platanios_Customer_4", null, "Alexandros_4", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8858), null, "6949277784", null, null, null },
-                    { "6f15941d4cea48c5a085edc24bd03f5615", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8767), "Test Description Employee 5", "alexpl_5@gmail.com", "Platanios_Employee_5", 24.0, "Alexandros_5", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8768), null, "6949277785", null, null, null },
-                    { "7e17222e86ce488d9c9ce6983d147bf624", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9067), "Test Description Client 6", "alexpl_6@gmail.com", "Platanios_Customer_6", null, "Alexandros_6", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9069), null, "6949277786", null, null, null },
-                    { "9b877c06d0554980ae4e0a814ad57ba76", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4836), "Test Description Employee 3", "alexpl_3@gmail.com", "Platanios_Employee_3", 8.0, "Alexandros_3", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4837), null, "6949277783", null, null, null },
-                    { "abb138184fc147a8893a4a5bb22b3cbc0", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4591), "Test Description Employee 2", "alexpl_2@gmail.com", "Platanios_Employee_2", 0.0, "Alexandros_2", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4622), null, "6949277782", null, null, null },
-                    { "b2a9ac6a4c2a4d41811cf3989f674d5210", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8961), "Test Description Client 5", "alexpl_5@gmail.com", "Platanios_Customer_5", null, "Alexandros_5", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8963), null, "6949277785", null, null, null },
-                    { "b7316bd5c98f41c9beba92409130faaa16", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8882), "Test Description Employee 6", "alexpl_6@gmail.com", "Platanios_Employee_6", 32.0, "Alexandros_6", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8884), null, "6949277786", null, null, null },
-                    { "bd227fed9fe24c6b9c77444dc2451ac542", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9190), "Test Description Client 7", "alexpl_7@gmail.com", "Platanios_Customer_7", null, "Alexandros_7", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9191), null, "6949277787", null, null, null },
-                    { "cc2c38b5d8844cf695519dd51f0fb0b724", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9305), "Test Description Employee 10", "alexpl_10@gmail.com", "Platanios_Employee_10", 64.0, "Alexandros_10", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9307), null, "69492777810", null, null, null },
-                    { "cc71da774225492093e3cc418569f1a524", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9090), "Test Description Employee 8", "alexpl_8@gmail.com", "Platanios_Employee_8", 48.0, "Alexandros_8", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9092), null, "6949277788", null, null, null },
-                    { "de89925234214a54a36f510dd7720c9c0", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8663), "Test Description Client 0", "alexpl_0@gmail.com", "Platanios_Customer_0", null, "Alexandros_0", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8665), null, "6949277780", null, null, null }
+                    { "0531045becd74b80aceae99f39a7e3a818", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7252), "Test Description Client 3", "alexpl_3@gmail.com", "Platanios_Customer_3", null, "Alexandros_3", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7253), null, "6949277783", null, null, null },
+                    { "062f3450d21e44b6b19eebb3c4b9cd3120", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7519), "Test Description Employee 7", "alexpl_7@gmail.com", "Platanios_Employee_7", 40.0, "Alexandros_7", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7520), null, "6949277787", null, null, null },
+                    { "1fb3db35af094a4ab20dff2b358b48da4", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1503), "Test Description Employee 3", "alexpl_3@gmail.com", "Platanios_Employee_3", 8.0, "Alexandros_3", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1505), null, "6949277783", null, null, null },
+                    { "3e56537ac23a47c5af18886e77be13b510", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7492), "Test Description Client 5", "alexpl_5@gmail.com", "Platanios_Customer_5", null, "Alexandros_5", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7494), null, "6949277785", null, null, null },
+                    { "409953d966714a61a00a1e3cfaaead388", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7132), "Test Description Employee 4", "alexpl_4@gmail.com", "Platanios_Employee_4", 16.0, "Alexandros_4", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7134), null, "6949277784", null, null, null },
+                    { "42a2ac582a19415489879364f0b027f316", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7382), "Test Description Client 4", "alexpl_4@gmail.com", "Platanios_Customer_4", null, "Alexandros_4", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7384), null, "6949277784", null, null, null },
+                    { "472c8df2ec964fa8b5f0767373f1b1f52", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7013), "Test Description Client 2", "alexpl_2@gmail.com", "Platanios_Customer_2", null, "Alexandros_2", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7039), null, "6949277782", null, null, null },
+                    { "57a76c4e892e47fe83ea629bb25db7b140", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7878), "Test Description Employee 10", "alexpl_10@gmail.com", "Platanios_Employee_10", 64.0, "Alexandros_10", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7879), null, "69492777810", null, null, null },
+                    { "580ae02d42294dab809cc7a937986d467", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7726), "Test Description Client 7", "alexpl_7@gmail.com", "Platanios_Customer_7", null, "Alexandros_7", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7727), null, "6949277787", null, null, null },
+                    { "7b346e68b33f4556a8da5a2ceb9e1eba6", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1469), "Test Description Client 1", "alexpl_1@gmail.com", "Platanios_Customer_1", null, "Alexandros_1", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1471), null, "6949277781", null, null, null },
+                    { "83fb1a217d174f1bad3496b382bf6d9d0", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1129), "Test Description Employee 2", "alexpl_2@gmail.com", "Platanios_Employee_2", 0.0, "Alexandros_2", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1173), null, "6949277782", null, null, null },
+                    { "8ade01f19db74764b2447ac0e66eaee730", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7647), "Test Description Employee 8", "alexpl_8@gmail.com", "Platanios_Employee_8", 48.0, "Alexandros_8", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7648), null, "6949277788", null, null, null },
+                    { "909b76febf0c4abe9a9e62522737769635", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7750), "Test Description Employee 9", "alexpl_9@gmail.com", "Platanios_Employee_9", 56.0, "Alexandros_9", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7751), null, "6949277789", null, null, null },
+                    { "a530fa25ea7547d8b869f43bc0de87718", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7411), "Test Description Employee 6", "alexpl_6@gmail.com", "Platanios_Employee_6", 32.0, "Alexandros_6", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7413), null, "6949277786", null, null, null },
+                    { "ad943df8ec214497844658f517dc1de40", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6487), "Test Description Client 0", "alexpl_0@gmail.com", "Platanios_Customer_0", null, "Alexandros_0", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6489), null, "6949277780", null, null, null },
+                    { "bfa82f3c9a42476c9d5c73a7c18168e312", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7289), "Test Description Employee 5", "alexpl_5@gmail.com", "Platanios_Employee_5", 24.0, "Alexandros_5", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7290), null, "6949277785", null, null, null },
+                    { "e0e4b13e78b745039fd54cab988f5f2a6", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7597), "Test Description Client 6", "alexpl_6@gmail.com", "Platanios_Customer_6", null, "Alexandros_6", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7598), null, "6949277786", null, null, null },
+                    { "e439e5c9aae64cdfb58e834370f2e1fb8", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7813), "Test Description Client 8", "alexpl_8@gmail.com", "Platanios_Customer_8", null, "Alexandros_8", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7815), null, "6949277788", null, null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -314,15 +314,15 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                 columns: new[] { "Id", "Bank", "CalculationDaly", "Code", "Completed", "CreatedDate", "CustomerId", "DayCost", "DaysUntilPayment", "DelayInPayment", "Description", "Drawing", "DurationDate", "EstPaymentDate", "InvoiceId", "LastUpdatedDate", "ManHours", "Name", "PaidFee", "PaymentDate", "PaymentDetailes", "PendingPayments", "PlanType", "WorkingDays" },
                 values: new object[,]
                 {
-                    { "1b54dcbe96c64361a718956eccef080a1", "NBG_IBANK", 1, "D-22-161", 10, new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4874), null, 6.0, -54, 8, "Test Description Project_4", "KL-1", new DateTime(2024, 4, 7, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4874), new DateTime(2024, 4, 6, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4874), "ad90f2110a2640aaa2665e2736f63d794", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4874), 4, "Project_1", 5.0, new DateTime(2024, 4, 8, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4874), "Payment Detailes For Project_4", 1.0, 0, 203 },
-                    { "4bb547b87ba842f18602ad0b8e6d7f986", "NBG_IBANK", 3, "D-22-163", 30, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8827), null, 8.0, -60, 18, "Test Description Project_6", "KL-3", new DateTime(2024, 4, 13, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8827), new DateTime(2024, 4, 10, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8827), "5137cd724f344bde9f5c64c02f799bcb12", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8827), 12, "Project_3", 5.0, new DateTime(2024, 4, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8827), "Payment Detailes For Project_18", 3.0, 0, 209 },
-                    { "561e9a21b8744191b4a1233251c54a410", "ALPHA", 0, "D-22-160", 0, new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4765), "de89925234214a54a36f510dd7720c9c0", 5.0, -51, 3, "Test Description Project_0", "KL-0", new DateTime(2024, 4, 4, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4765), new DateTime(2024, 4, 4, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4765), "15dd7f1d03644ef6b360988f1af57b0e0", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4765), 0, "Project_0", 5.0, new DateTime(2024, 4, 5, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4765), "Payment Detailes For Project_0", 0.0, 1, 200 },
-                    { "61b9b2df246249d5b2b3aee91b1e20c424", "ALPHA", 1, "D-22-166", 60, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9174), "7e17222e86ce488d9c9ce6983d147bf624", 11.0, -69, 33, "Test Description Project_24", "KL-6", new DateTime(2024, 4, 22, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9174), new DateTime(2024, 4, 16, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9174), "b832c99d26bb46c6a55e8e2ab63f711218", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9174), 24, "Project_6", 5.0, new DateTime(2024, 4, 23, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9174), "Payment Detailes For Project_12", 6.0, 1, 218 },
-                    { "88762e4f800c469bb1358456d17031f830", "NBG_IBANK", 1, "D-22-165", 50, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9039), null, 10.0, -66, 28, "Test Description Project_5", "KL-5", new DateTime(2024, 4, 19, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9039), new DateTime(2024, 4, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9039), "517f07b05efd4bc99be8e357dd3602b815", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9039), 20, "Project_5", 5.0, new DateTime(2024, 4, 20, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9039), "Payment Detailes For Project_30", 5.0, 0, 215 },
-                    { "aa2a3ea203ba45739f63cf507baf4ac720", "ALPHA", 4, "D-22-164", 40, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8924), "528a782cc2f94bf1ad316d3d74de26ac4", 9.0, -63, 23, "Test Description Project_24", "KL-4", new DateTime(2024, 4, 16, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8924), new DateTime(2024, 4, 12, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8924), "c0e18213870843b2997c84c71582b36024", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8924), 16, "Project_4", 5.0, new DateTime(2024, 4, 17, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8924), "Payment Detailes For Project_20", 4.0, 1, 212 },
-                    { "ae34fef437944246aa0ea1ea00ce14ac28", "NBG_IBANK", 1, "D-22-167", 70, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9253), null, 12.0, -72, 38, "Test Description Project_28", "KL-7", new DateTime(2024, 4, 25, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9253), new DateTime(2024, 4, 18, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9253), "9fc86101f26d4da3b67a18ddcac9632d21", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9253), 28, "Project_7", 5.0, new DateTime(2024, 4, 26, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9253), "Payment Detailes For Project_35", 7.0, 0, 221 },
-                    { "bb896a1d6d3f48e8821115afdca806604", "ALPHA", 2, "D-22-162", 20, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8686), "4c15ffc0aefb4030943de3c8535e063e10", 7.0, -57, 13, "Test Description Project_6", "KL-2", new DateTime(2024, 4, 10, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8686), new DateTime(2024, 4, 8, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8686), "5774428bb08340b69fd0986b4aaa88574", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8686), 8, "Project_2", 5.0, new DateTime(2024, 4, 11, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8686), "Payment Detailes For Project_10", 2.0, 1, 206 },
-                    { "cb1453d8cef64f41be885f6b1aff39b240", "ALPHA", 1, "D-22-168", 80, new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9370), "2a1c5437a0d8465fa7359c97c1bf0ee348", 13.0, -75, 43, "Test Description Project_8", "KL-8", new DateTime(2024, 4, 28, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9370), new DateTime(2024, 4, 20, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9370), "f69de571cc2f45e6aeb3af326af7ac3e8", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9370), 32, "Project_8", 5.0, new DateTime(2024, 4, 29, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9370), "Payment Detailes For Project_48", 8.0, 1, 224 }
+                    { "0586586a5e334df198c7df759897c0a16", "NBG_IBANK", 1, "D-22-161", 10, new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1576), null, 6.0, -54, 8, "Test Description Project_1", "KL-1", new DateTime(2024, 4, 7, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1576), new DateTime(2024, 4, 6, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1576), "75319d6811f74e3a8eb663e5685538ab6", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1576), 4, "Project_1", 5.0, new DateTime(2024, 4, 8, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1576), "Payment Detailes For Project_5", 1.0, 0, 203 },
+                    { "18c421622fb149a08e9932f6c5b20ee420", "NBG_IBANK", 1, "D-22-165", 50, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7572), null, 10.0, -66, 28, "Test Description Project_25", "KL-5", new DateTime(2024, 4, 19, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7572), new DateTime(2024, 4, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7572), "0183f142f9394ceeaff3682507fbbc1225", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7572), 20, "Project_5", 5.0, new DateTime(2024, 4, 20, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7572), "Payment Detailes For Project_20", 5.0, 0, 215 },
+                    { "51564267688a4dacad0946efda85efbf42", "NBG_IBANK", 1, "D-22-167", 70, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7787), null, 12.0, -72, 38, "Test Description Project_28", "KL-7", new DateTime(2024, 4, 25, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7787), new DateTime(2024, 4, 18, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7787), "c86130e1dceb487aa349b1897972949642", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7787), 28, "Project_7", 5.0, new DateTime(2024, 4, 26, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7787), "Payment Detailes For Project_35", 7.0, 0, 221 },
+                    { "59d8d6ca953949579831c4abd7e200588", "ALPHA", 1, "D-22-168", 80, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7918), "e439e5c9aae64cdfb58e834370f2e1fb8", 13.0, -75, 43, "Test Description Project_32", "KL-8", new DateTime(2024, 4, 28, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7918), new DateTime(2024, 4, 20, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7918), "5498e196998a4be78abc67b09f1560bc16", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7918), 32, "Project_8", 5.0, new DateTime(2024, 4, 29, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7918), "Payment Detailes For Project_48", 8.0, 1, 224 },
+                    { "6a8323232feb4cb38a8afae729e6efc320", "ALPHA", 4, "D-22-164", 40, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7477), "42a2ac582a19415489879364f0b027f316", 9.0, -63, 23, "Test Description Project_12", "KL-4", new DateTime(2024, 4, 16, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7477), new DateTime(2024, 4, 12, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7477), "f45eb3e03ac941c1acdf5f03e1b1972b16", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7477), 16, "Project_4", 5.0, new DateTime(2024, 4, 17, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7477), "Payment Detailes For Project_8", 4.0, 1, 212 },
+                    { "b2f2e031026e404e94c786c3caf7690430", "ALPHA", 1, "D-22-166", 60, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7711), "e0e4b13e78b745039fd54cab988f5f2a6", 11.0, -69, 33, "Test Description Project_30", "KL-6", new DateTime(2024, 4, 22, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7711), new DateTime(2024, 4, 16, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7711), "93416e719808414a9e07f8a1ab7609686", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7711), 24, "Project_6", 5.0, new DateTime(2024, 4, 23, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7711), "Payment Detailes For Project_36", 6.0, 1, 218 },
+                    { "c651ede0301f47e7b604093deb79806412", "NBG_IBANK", 3, "D-22-163", 30, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7354), null, 8.0, -60, 18, "Test Description Project_3", "KL-3", new DateTime(2024, 4, 13, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7354), new DateTime(2024, 4, 10, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7354), "1f9dbdb56c8e42dbbcf7d071c012f8d718", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7354), 12, "Project_3", 5.0, new DateTime(2024, 4, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7354), "Payment Detailes For Project_6", 3.0, 0, 209 },
+                    { "d07f6517e84c4b03bae7c52c5f43d0282", "ALPHA", 2, "D-22-162", 20, new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7228), "472c8df2ec964fa8b5f0767373f1b1f52", 7.0, -57, 13, "Test Description Project_12", "KL-2", new DateTime(2024, 4, 10, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7228), new DateTime(2024, 4, 8, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7228), "eaec53673e4a42338d204b25e19571af2", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7228), 8, "Project_2", 5.0, new DateTime(2024, 4, 11, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7228), "Payment Detailes For Project_2", 2.0, 1, 206 },
+                    { "dcb24617c90f4dea87b64a9e9d4d4b280", "ALPHA", 0, "D-22-160", 0, new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1429), "ad943df8ec214497844658f517dc1de40", 5.0, -51, 3, "Test Description Project_0", "KL-0", new DateTime(2024, 4, 4, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1429), new DateTime(2024, 4, 4, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1429), "c0188ac33b4242bc9583d4e5057fe4ac0", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1429), 0, "Project_0", 5.0, new DateTime(2024, 4, 5, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1429), "Payment Detailes For Project_0", 0.0, 1, 200 }
                 });
 
             migrationBuilder.InsertData(
@@ -330,24 +330,24 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                 columns: new[] { "Id", "CreatedDate", "LastUpdatedDate", "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "0a31dc2ca9c54eafbb7cd283923c2175", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8755), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8757), "405967561a5b4f69b1b2081197d440978", "1976b05bf1b4419c97b589185f402a3f9" },
-                    { "2f72054d8645432885a2951ad741ab8f", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8871), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8872), "405967561a5b4f69b1b2081197d440978", "528a782cc2f94bf1ad316d3d74de26ac4" },
-                    { "42449c252d594868a73ba0332165778d", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9230), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9231), "6986138359c844e18784e8d50af63f095", "15cb24f7122845638a9a5bc3989d827d35" },
-                    { "47b57f67ae8e44bfaa4cee78547d9d53", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9292), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9294), "405967561a5b4f69b1b2081197d440978", "2a1c5437a0d8465fa7359c97c1bf0ee348" },
-                    { "5316ee87520f4fbfbad7e1ef123007b3", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4714), new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4716), "25454319af094a1789c5cba7b941eff52", "abb138184fc147a8893a4a5bb22b3cbc0" },
-                    { "577ce51086c84b99a455d0d1a68d576a", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9206), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9207), "405967561a5b4f69b1b2081197d440978", "bd227fed9fe24c6b9c77444dc2451ac542" },
-                    { "61964f8170504e8096dcb3d0bb7ca7cc", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4849), new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4851), "25454319af094a1789c5cba7b941eff52", "9b877c06d0554980ae4e0a814ad57ba76" },
-                    { "6dfb4699bd78429aa20c943255afe0be", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9080), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9082), "405967561a5b4f69b1b2081197d440978", "7e17222e86ce488d9c9ce6983d147bf624" },
-                    { "98778000406a4fc79a3c1ffcbbf1d58b", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9103), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9105), "f8fc14df442a40e2939220c33753a2173", "cc71da774225492093e3cc418569f1a524" },
-                    { "9927ca4774c846e6bbec683bf4554907", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4824), new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4825), "405967561a5b4f69b1b2081197d440978", "05725b0ca22b41b7b5c6c41b60180cdd6" },
-                    { "a15c84eae92f4086b6066a831e0afda1", new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8722), new DateTime(2024, 2, 14, 15, 48, 45, 990, DateTimeKind.Local).AddTicks(8724), "405967561a5b4f69b1b2081197d440978", "de89925234214a54a36f510dd7720c9c0" },
-                    { "abe5f54cf25848f8a546dcaecbacceac", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8976), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8977), "405967561a5b4f69b1b2081197d440978", "b2a9ac6a4c2a4d41811cf3989f674d5210" },
-                    { "b285fe59e3ac40bab29d5d8db0111559", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8647), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8649), "6986138359c844e18784e8d50af63f095", "02dd7b18c61c4054bca678b0a5d99d1e2" },
-                    { "c61d61b9adb94f17b11720e519b7abff", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8803), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8804), "6986138359c844e18784e8d50af63f095", "6f15941d4cea48c5a085edc24bd03f5615" },
-                    { "d01f1c1805c74762852e619618b4dc5c", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9015), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9016), "5f6436bcd1a04d7a9396a357de46ede44", "43fd666581044b659918e6a7b3bd2b6925" },
-                    { "eb1cb229248a4baba93a32206696b2f1", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9343), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9345), "5f6436bcd1a04d7a9396a357de46ede44", "cc2c38b5d8844cf695519dd51f0fb0b724" },
-                    { "fcf840375af8420cb780c814fb9a8084", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8896), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8897), "6986138359c844e18784e8d50af63f095", "b7316bd5c98f41c9beba92409130faaa16" },
-                    { "fe4fdcfcba964e7391488f2ec301c973", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8612), new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8613), "405967561a5b4f69b1b2081197d440978", "4c15ffc0aefb4030943de3c8535e063e10" }
+                    { "0a45946825554831852575be65105dad", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7865), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7867), "51eaf6c4be074d20ae35a2a0c649042c8", "e439e5c9aae64cdfb58e834370f2e1fb8" },
+                    { "28c5e934b1f64622a94c4ec3238364ae", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7177), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7179), "67914ad2d834457db47aa56110ed40736", "409953d966714a61a00a1e3cfaaead388" },
+                    { "28c5ed9bfa4742d6b5b5b1bd680a36fa", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7327), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7328), "67914ad2d834457db47aa56110ed40736", "bfa82f3c9a42476c9d5c73a7c18168e312" },
+                    { "4b37f04337ce474fad761d9b2a55d56a", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7450), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7451), "1f0214cc3aa24defb53943da5ebae1ca5", "a530fa25ea7547d8b869f43bc0de87718" },
+                    { "666e54b5de5b4cda9e11e6f8d6dde8ed", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7545), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7546), "044504834bc84990952a504492137dad4", "062f3450d21e44b6b19eebb3c4b9cd3120" },
+                    { "7613f30ec6dc49d9838e1d03685eaa25", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1316), new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1320), "199cff7579c441759e9d5f302e7653982", "83fb1a217d174f1bad3496b382bf6d9d0" },
+                    { "8ac8b50f4db34944bc238f92a1882124", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7610), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7612), "51eaf6c4be074d20ae35a2a0c649042c8", "e0e4b13e78b745039fd54cab988f5f2a6" },
+                    { "8e54827ee84f441a88e015afcf33912c", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7114), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7116), "51eaf6c4be074d20ae35a2a0c649042c8", "472c8df2ec964fa8b5f0767373f1b1f52" },
+                    { "9257216f45b34eac83f60778d7e628ee", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7661), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7662), "e08a94595b9741febc3d7698225f45833", "8ade01f19db74764b2447ac0e66eaee730" },
+                    { "9f1475cb25034420a1e38196b4854389", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1489), new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1491), "51eaf6c4be074d20ae35a2a0c649042c8", "7b346e68b33f4556a8da5a2ceb9e1eba6" },
+                    { "c24237847fb848ba815484870b7b62be", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7763), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7765), "199cff7579c441759e9d5f302e7653982", "909b76febf0c4abe9a9e62522737769635" },
+                    { "c3570a681cad4213a016d6647ba8efb0", new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6565), new DateTime(2024, 2, 14, 17, 1, 56, 747, DateTimeKind.Local).AddTicks(6567), "51eaf6c4be074d20ae35a2a0c649042c8", "ad943df8ec214497844658f517dc1de40" },
+                    { "c445380836bd4708ba5f4ea2504c47e2", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7397), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7398), "51eaf6c4be074d20ae35a2a0c649042c8", "42a2ac582a19415489879364f0b027f316" },
+                    { "c9624166dbaa491595ab55a4046b0c97", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7739), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7740), "51eaf6c4be074d20ae35a2a0c649042c8", "580ae02d42294dab809cc7a937986d467" },
+                    { "cf044f966b9a4632be0d042dee485bd0", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7506), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7508), "51eaf6c4be074d20ae35a2a0c649042c8", "3e56537ac23a47c5af18886e77be13b510" },
+                    { "d872bd6540114461b8b308e958fea9ef", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1518), new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1520), "e08a94595b9741febc3d7698225f45833", "1fb3db35af094a4ab20dff2b358b48da4" },
+                    { "ea75e7f611544ab5b4b256d2a79f318b", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7277), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7278), "51eaf6c4be074d20ae35a2a0c649042c8", "0531045becd74b80aceae99f39a7e3a818" },
+                    { "fa2a0b9350c24af692d4e6d7245a601e", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7893), new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7895), "044504834bc84990952a504492137dad4", "57a76c4e892e47fe83ea629bb25db7b140" }
                 });
 
             migrationBuilder.InsertData(
@@ -355,10 +355,10 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                 columns: new[] { "Id", "CreatedDate", "EmployeeId", "LastUpdatedDate", "ProjectId" },
                 values: new object[,]
                 {
-                    { "126d2e1f4b354eafac528948b7b27aeb42", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9267), "15cb24f7122845638a9a5bc3989d827d35", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9268), "ae34fef437944246aa0ea1ea00ce14ac28" },
-                    { "1d594772bf38497e8526e2542eb5dce69", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8841), "6f15941d4cea48c5a085edc24bd03f5615", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(8843), "4bb547b87ba842f18602ad0b8e6d7f986" },
-                    { "b108e29a782a4dddaa1a6fa7a160867c6", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4888), "9b877c06d0554980ae4e0a814ad57ba76", new DateTime(2024, 2, 14, 15, 48, 45, 992, DateTimeKind.Local).AddTicks(4890), "1b54dcbe96c64361a718956eccef080a1" },
-                    { "ec51ad5865664e20bd60bd34671161c325", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9056), "43fd666581044b659918e6a7b3bd2b6925", new DateTime(2024, 2, 14, 15, 48, 45, 993, DateTimeKind.Local).AddTicks(9057), "88762e4f800c469bb1358456d17031f830" }
+                    { "0570df552f424cacbf5bd3c6bc1837cb2", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1596), "1fb3db35af094a4ab20dff2b358b48da4", new DateTime(2024, 2, 14, 17, 1, 56, 750, DateTimeKind.Local).AddTicks(1598), "0586586a5e334df198c7df759897c0a16" },
+                    { "743722ad5a2643cabb9ac83d0a3e56ad25", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7586), "062f3450d21e44b6b19eebb3c4b9cd3120", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7587), "18c421622fb149a08e9932f6c5b20ee420" },
+                    { "8d07aa4fe6474ea893964d2127ec12e814", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7800), "909b76febf0c4abe9a9e62522737769635", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7802), "51564267688a4dacad0946efda85efbf42" },
+                    { "c671262517da41ec94bf7792399b66bd3", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7370), "bfa82f3c9a42476c9d5c73a7c18168e312", new DateTime(2024, 2, 14, 17, 1, 56, 751, DateTimeKind.Local).AddTicks(7371), "c651ede0301f47e7b604093deb79806412" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -418,132 +418,132 @@ namespace EmpiriaBMS.EF.CLI.Migrations
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: "561e9a21b8744191b4a1233251c54a410");
+                keyValue: "59d8d6ca953949579831c4abd7e200588");
 
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: "61b9b2df246249d5b2b3aee91b1e20c424");
+                keyValue: "6a8323232feb4cb38a8afae729e6efc320");
 
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: "aa2a3ea203ba45739f63cf507baf4ac720");
+                keyValue: "b2f2e031026e404e94c786c3caf7690430");
 
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: "bb896a1d6d3f48e8821115afdca806604");
+                keyValue: "d07f6517e84c4b03bae7c52c5f43d0282");
 
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: "cb1453d8cef64f41be885f6b1aff39b240");
+                keyValue: "dcb24617c90f4dea87b64a9e9d4d4b280");
 
             migrationBuilder.DeleteData(
                 table: "Roles",
                 keyColumn: "Id",
-                keyValue: "75b56dab6c684255adc042bd3fbf9ddc6");
+                keyValue: "34c451ab47e84ea7829898620e3311cd7");
 
             migrationBuilder.DeleteData(
                 table: "Roles",
                 keyColumn: "Id",
-                keyValue: "86f906d6397c4316bdc4bf86618034071");
-
-            migrationBuilder.DeleteData(
-                table: "Roles",
-                keyColumn: "Id",
-                keyValue: "9759edecf3ba410a91fc51006b7c96d97");
+                keyValue: "8797d29f91074dc18807d2021332a0d31");
 
             migrationBuilder.DeleteData(
                 table: "Invoices",
                 keyColumn: "Id",
-                keyValue: "15dd7f1d03644ef6b360988f1af57b0e0");
+                keyValue: "5498e196998a4be78abc67b09f1560bc16");
 
             migrationBuilder.DeleteData(
                 table: "Invoices",
                 keyColumn: "Id",
-                keyValue: "5774428bb08340b69fd0986b4aaa88574");
+                keyValue: "93416e719808414a9e07f8a1ab7609686");
 
             migrationBuilder.DeleteData(
                 table: "Invoices",
                 keyColumn: "Id",
-                keyValue: "b832c99d26bb46c6a55e8e2ab63f711218");
+                keyValue: "c0188ac33b4242bc9583d4e5057fe4ac0");
 
             migrationBuilder.DeleteData(
                 table: "Invoices",
                 keyColumn: "Id",
-                keyValue: "c0e18213870843b2997c84c71582b36024");
+                keyValue: "eaec53673e4a42338d204b25e19571af2");
 
             migrationBuilder.DeleteData(
                 table: "Invoices",
                 keyColumn: "Id",
-                keyValue: "f69de571cc2f45e6aeb3af326af7ac3e8");
+                keyValue: "f45eb3e03ac941c1acdf5f03e1b1972b16");
 
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: "1b54dcbe96c64361a718956eccef080a1");
+                keyValue: "0586586a5e334df198c7df759897c0a16");
 
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: "4bb547b87ba842f18602ad0b8e6d7f986");
+                keyValue: "18c421622fb149a08e9932f6c5b20ee420");
 
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: "88762e4f800c469bb1358456d17031f830");
+                keyValue: "51564267688a4dacad0946efda85efbf42");
 
             migrationBuilder.DeleteData(
                 table: "Projects",
                 keyColumn: "Id",
-                keyValue: "ae34fef437944246aa0ea1ea00ce14ac28");
+                keyValue: "c651ede0301f47e7b604093deb79806412");
 
             migrationBuilder.DeleteData(
                 table: "Roles",
                 keyColumn: "Id",
-                keyValue: "25454319af094a1789c5cba7b941eff52");
+                keyValue: "044504834bc84990952a504492137dad4");
 
             migrationBuilder.DeleteData(
                 table: "Roles",
                 keyColumn: "Id",
-                keyValue: "405967561a5b4f69b1b2081197d440978");
+                keyValue: "199cff7579c441759e9d5f302e7653982");
 
             migrationBuilder.DeleteData(
                 table: "Roles",
                 keyColumn: "Id",
-                keyValue: "5f6436bcd1a04d7a9396a357de46ede44");
+                keyValue: "1f0214cc3aa24defb53943da5ebae1ca5");
 
             migrationBuilder.DeleteData(
                 table: "Roles",
                 keyColumn: "Id",
-                keyValue: "6986138359c844e18784e8d50af63f095");
+                keyValue: "51eaf6c4be074d20ae35a2a0c649042c8");
 
             migrationBuilder.DeleteData(
                 table: "Roles",
                 keyColumn: "Id",
-                keyValue: "f8fc14df442a40e2939220c33753a2173");
+                keyValue: "67914ad2d834457db47aa56110ed40736");
+
+            migrationBuilder.DeleteData(
+                table: "Roles",
+                keyColumn: "Id",
+                keyValue: "e08a94595b9741febc3d7698225f45833");
 
             migrationBuilder.DeleteData(
                 table: "Invoices",
                 keyColumn: "Id",
-                keyValue: "5137cd724f344bde9f5c64c02f799bcb12");
+                keyValue: "0183f142f9394ceeaff3682507fbbc1225");
 
             migrationBuilder.DeleteData(
                 table: "Invoices",
                 keyColumn: "Id",
-                keyValue: "517f07b05efd4bc99be8e357dd3602b815");
+                keyValue: "1f9dbdb56c8e42dbbcf7d071c012f8d718");
 
             migrationBuilder.DeleteData(
                 table: "Invoices",
                 keyColumn: "Id",
-                keyValue: "9fc86101f26d4da3b67a18ddcac9632d21");
+                keyValue: "75319d6811f74e3a8eb663e5685538ab6");
 
             migrationBuilder.DeleteData(
                 table: "Invoices",
                 keyColumn: "Id",
-                keyValue: "ad90f2110a2640aaa2665e2736f63d794");
+                keyValue: "c86130e1dceb487aa349b1897972949642");
 
             migrationBuilder.DropColumn(
                 name: "ProjectId",

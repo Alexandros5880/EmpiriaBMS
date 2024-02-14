@@ -240,8 +240,8 @@ public class ProjectVM : BNotifyPropertyChanged
         }
     }
 
-    private User _customer;
-    public User Customer
+    private UserVM _customer;
+    public UserVM Customer
     {
         get => _customer;
         set
@@ -262,8 +262,8 @@ public class ProjectVM : BNotifyPropertyChanged
         }
     }
 
-    private Invoice? _invoice;
-    public Invoice? Invoice
+    private InvoiceVM? _invoice;
+    public InvoiceVM? Invoice
     {
         get => _invoice;
         set

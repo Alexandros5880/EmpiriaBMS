@@ -176,6 +176,7 @@ public class AppDbContext : DbContext
                 Id = invoiceId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
                 Total = i * Math.Pow(1, 3),
                 Vat = i % 2 == 0 ? 24 : 17,
                 Fee = 3000 + Math.Pow(10, i),
