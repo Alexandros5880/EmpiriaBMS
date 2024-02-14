@@ -1,5 +1,8 @@
-﻿namespace EmpiriaBMS.Front.ViewModel.Components;
-public class UserVM : BNotifyPropertyChanged
+﻿using System.ComponentModel.DataAnnotations;
+using EmpiriaBMS.Front.ViewModel.Components.Base;
+
+namespace EmpiriaBMS.Front.ViewModel.Components;
+public class UserVM : BaseVM
 {
     private bool _isChecked;
     public bool IsChecked
@@ -99,4 +102,30 @@ public class UserVM : BNotifyPropertyChanged
             NotifyPropertyChanged(nameof(Description));
         }
     }
+
+    private double? _hours;
+    public double? Hours
+    {
+        get => _hours;
+        set
+        {
+            _hours = value;
+            NotifyPropertyChanged(nameof(Hours));
+        }
+    }
+
+    private ProjectVM? _project;
+    public ProjectVM? Project
+    {
+        get => _project;
+        set
+        {
+            _project = value;
+            NotifyPropertyChanged(nameof(Project));
+        }
+    }
+
+    public virtual ICollection<ProjectVM>? Projects { get; set; }
+
+    public virtual ICollection<RoleVM>? Roles { get; set; }
 }

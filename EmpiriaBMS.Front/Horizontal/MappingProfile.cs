@@ -11,12 +11,6 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<User, CustomerVM>();
-        CreateMap<CustomerVM, User>();
-
-        CreateMap<User, EmployeeVM>();
-        CreateMap<EmployeeVM, User>();
-
         CreateMap<Invoice, InvoiceVM>();
         CreateMap<InvoiceVM, Invoice>();
 

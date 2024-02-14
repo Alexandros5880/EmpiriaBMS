@@ -5,9 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.ObjectModel;
 using EmpiriaBMS.Models.Models;
+using EmpiriaBMS.Front.ViewModel.Components.Base;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
-public class ProjectVM : BNotifyPropertyChanged
+public class ProjectVM : BaseVM
 {
     private bool _isChecked;
     public bool IsChecked
@@ -273,6 +274,6 @@ public class ProjectVM : BNotifyPropertyChanged
         }
     }
 
-    public ICollection<EmployeeVM>? Employees { get; set; }
+    public ICollection<UserVM>? Employees { get; set; }
 
 }

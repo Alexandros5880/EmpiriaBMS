@@ -1,8 +1,9 @@
-﻿using EmpiriaMS.Models.Models;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaMS.Models.Models;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
-public class RoleVM : BNotifyPropertyChanged
+public class RoleVM : BaseVM
 {
     private bool _isChecked;
     public bool IsChecked
@@ -26,6 +27,6 @@ public class RoleVM : BNotifyPropertyChanged
         }
     }
 
-    public ICollection<EmployeeVM>? Employees { get; set; }
+    public ICollection<UserVM>? Employees { get; set; }
 
 }
