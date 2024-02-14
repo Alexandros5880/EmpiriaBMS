@@ -19,6 +19,7 @@ public class DataProvider : IDataProvider, IDisposable
     public InvoiceRepo Invoices { get; set; }
     public EmployeeRepo Employees { get; set; }
     public CastomerRepo Customers { get; set; }
+    public UsersRepo Users { get; set; }
 
     public DataProvider(AppDbContext context)
     {
@@ -27,6 +28,7 @@ public class DataProvider : IDataProvider, IDisposable
         Invoices = new InvoiceRepo(context);
         Employees = new EmployeeRepo(context);
         Customers = new CastomerRepo(context);
+        Users = new UsersRepo(context);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -40,6 +42,7 @@ public class DataProvider : IDataProvider, IDisposable
                 Invoices.Dispose();
                 Employees.Dispose();
                 Customers.Dispose();
+                Users.Dispose();
             }
             disposedValue = true;
         }

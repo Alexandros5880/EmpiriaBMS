@@ -7,6 +7,7 @@ namespace EmpiriaBMS.Core
 {
     public interface IDataProvider
     {
+        UsersRepo Users { get; set; }
         CastomerRepo Customers { get; set; }
         EmployeeRepo Employees { get; set; }
         InvoiceRepo Invoices { get; set; }

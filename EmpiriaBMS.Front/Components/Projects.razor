@@ -150,6 +150,8 @@
 
     private EmployeeVM _logedUser;
 
+    private readonly string defaultUserId = "cc71da774225492093e3cc418569f1a524";
+
     protected override async void OnInitialized()
     {
         startLoading = true;
@@ -214,7 +216,7 @@
         try
         {
             // TODO: Get Teams Loged User And Mach him With Oure Users
-            var dbUser = await DataProvider.Employees.Get("cc71da774225492093e3cc418569f1a524");
+            var dbUser = await DataProvider.Employees.Get(defaultUserId);
             _logedUser = Mapper.Map<EmployeeVM>(dbUser);
             _logedUser.Roles = await DataProvider.Employees.GetRoles(dbUser.Id);
         }
