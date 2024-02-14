@@ -33,74 +33,94 @@
         }
         else
         {
-            <div style="overflow-x:hidden; max-width: 1000px; margin: 0 auto;">
-                <table class="table table-responsive shadow bg-white rounded">
-                    <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox"
-                                       class="big-checkbox"
-                                       @bind="IsAllChecked"
-                                       @onclick="SelectionChanged" />
-                            </th>
-                            <th scope="col">Name</th>
-                            <th scope="col">PlanType</th>
-                            <th scope="col">Drawing</th>
-                            <th scope="col">Completed</th>
-                            <th scope="col">ManHours</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var project in _data)
-                        {
+            <div class="row m-4">
+                <div class="col-md-9" style="overflow-x:hidden; margin: 0 auto;">
+                    <!-- Headder -->
+                    <div class="mb-3 table-responsive">
+                        <table class="table shadow">
                             <tr>
-                                <th scope="row">
-                                    <div class="col">
-                                        <input type="checkbox"
-                                               class="mt-2 big-checkbox"
-                                               @bind="project.IsChecked" />
-                                    </div>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control" @bind="project.Name">
-                                </td>
-                                <td>
-                                    <select class="form-select"
-                                            style="width:150px;"
-                                            @bind="project.PlanType">
-                                        @foreach (var opt in projectPlanTypes)
-                                        {
-                                            <option value="@opt">@opt</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="text"
-                                           class="form-control"
-                                           style="width:200px;"
-                                           @bind="project.Drawing">
-                                </td>
-                                <td>
-                                    <div class="input-group mb-3" style="width:150px;">
-                                        <input type="number" class="form-control" @bind="project.Completed">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" id="basic-addon2">%</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-group mb-3" style="width:150px;">
-                                        <input type="number" class="form-control" @bind="project.ManHours">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" id="basic-addon2">h</span>
-                                        </div>
-                                    </div>
-                                </td>
+                                <td>Current User Name</td>
+                                <td><div class="text-center">77h</div></td>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-                <Paginator Renderer="@_getData" SetPeginator="@_paginator" />
+                        </table>
+                    </div>
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table class="table shadow bg-white rounded table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        <input type="checkbox"
+                                               class="big-checkbox"
+                                               @bind="IsAllChecked"
+                                               @onclick="SelectionChanged" />
+                                    </th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">PlanType</th>
+                                    <th scope="col">Drawing</th>
+                                    <th scope="col">Completed</th>
+                                    <th scope="col">ManHours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var project in _data)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="col">
+                                                <input type="checkbox"
+                                                       class="mt-2 big-checkbox"
+                                                       @bind="project.IsChecked" />
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <input type="text" class="form-control" @bind="project.Name">
+                                        </td>
+                                        <td>
+                                            <select class="form-select"
+                                                    style="width:150px;"
+                                                    @bind="project.PlanType">
+                                                @foreach (var opt in projectPlanTypes)
+                                                {
+                                                    <option value="@opt">@opt</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   style="width:200px;"
+                                                   @bind="project.Drawing">
+                                        </td>
+                                        <td>
+                                            <div class="input-group mb-3" style="width:150px;">
+                                                <input type="number" class="form-control" @bind="project.Completed">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group mb-3" style="width:150px;">
+                                                <input type="number" class="form-control" @bind="project.ManHours">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="basic-addon2">h</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <Paginator Renderer="@_getData" SetPeginator="@_paginator" />
+                </div>
+                <!-- Selected Invoice -->
+                <div class="col-md-3 mt-md-5">
+                    <div class="card">
+                        <p>Invoice Info</p>
+                    </div>
+                </div>
             </div>
         }
     </div>

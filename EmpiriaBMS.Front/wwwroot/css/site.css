@@ -84,3 +84,8 @@ code {
     accent-color: #5A5C91 !important;
     border-radius: 4px !important;
 }
+
+/* Change Hover Row On Bootstrap Tables*/
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: rgba(90, 92, 145, 0.5) !important;
+}
