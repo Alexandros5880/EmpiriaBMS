@@ -4,18 +4,18 @@ using EmpiriaMS.Models.Models;
 using System;
 using System.Linq;
 using System.Reflection;
-using EmpiriaMS.Models.Models.Base;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.Horizontal;
 public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Customer, CustomerVM>();
-        CreateMap<CustomerVM, Customer>();
+        CreateMap<User, CustomerVM>();
+        CreateMap<CustomerVM, User>();
 
-        CreateMap<Employee, EmployeeVM>();
-        CreateMap<EmployeeVM, Employee>();
+        CreateMap<User, EmployeeVM>();
+        CreateMap<EmployeeVM, User>();
 
         CreateMap<Invoice, InvoiceVM>();
         CreateMap<InvoiceVM, Invoice>();

@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Core.Repositories;
 using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using System;
@@ -16,8 +17,8 @@ public class DataProvider : IDataProvider, IDisposable
     public IRepository<Role> Roles { get; set; }
     public IRepository<Project> Projects { get; set; }
     public IRepository<Invoice> Invoices { get; set; }
-    public IRepository<Employee> Employees { get; set; }
-    public IRepository<Customer> Customers { get; set; }
+    public IRepository<User> Employees { get; set; }
+    public IRepository<User> Customers { get; set; }
 
     public DataProvider(AppDbContext context)
     {

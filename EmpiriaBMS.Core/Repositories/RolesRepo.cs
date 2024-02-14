@@ -21,7 +21,7 @@ public class RolesRepo : Repository<Role>
 
         return await _context
                          .Set<Role>()
-                         .Include(r => r.Employees)
+                         .Include(r => r.Users)
                          .FirstOrDefaultAsync(r => r.Id.Equals(id));
     }
 
@@ -33,7 +33,7 @@ public class RolesRepo : Repository<Role>
         return await _context.Set<Role>()
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
-                             .Include(r => r.Employees)
+                             .Include(r => r.Users)
                              .ToListAsync();
     }
 
@@ -49,7 +49,7 @@ public class RolesRepo : Repository<Role>
                              .Where(expresion)
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
-                             .Include(r => r.Employees)
+                             .Include(r => r.Users)
                              .ToListAsync();
     }
 }

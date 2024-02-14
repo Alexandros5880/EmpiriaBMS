@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models.Base;
 
 namespace EmpiriaMS.Models.Models;
@@ -13,6 +14,5 @@ public class Role : Entity
     [Required]
     public string? Name { get; set; }
 
-    public IEnumerable<Employee>? Employees { get; set; }
-
+    public ICollection<User> Users { get; set; }
 }

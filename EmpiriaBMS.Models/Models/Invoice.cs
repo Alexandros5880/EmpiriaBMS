@@ -24,7 +24,6 @@ public class Invoice : Entity
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
-    [NotMapped]
     [ForeignKey("Project")]
     public string? ProjectId { get; set; }
     public Project? Project { get; set; }

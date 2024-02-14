@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EmpiriaMS.Models.Models.Base;
 using EmpiriaMS.Models.Enums;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaMS.Models.Models;
 public class Project : Entity
@@ -53,20 +54,18 @@ public class Project : Entity
 
     public int? CalculationDaly { get; set; }
 
-    [Required]
     [Range(0, 100)]
     public int? Completed { get; set; }
 
     public int? ManHours { get; set; }
 
-    [Required]
     [ForeignKey("Customer")]
     public string? CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public User? Customer { get; set; }
 
     [ForeignKey("Invoice")]
     public string? InvoiceId { get; set; }
     public Invoice? Invoice { get; set; }
 
-    public IEnumerable<Employee>? Employees { get; set; }
+    public ICollection<User> Employees { get; set; }
 }

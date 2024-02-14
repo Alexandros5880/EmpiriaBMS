@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.ObjectModel;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class ProjectVM : BNotifyPropertyChanged
@@ -239,8 +240,8 @@ public class ProjectVM : BNotifyPropertyChanged
         }
     }
 
-    private Customer? _customer;
-    public Customer? Customer
+    private User _customer;
+    public User Customer
     {
         get => _customer;
         set

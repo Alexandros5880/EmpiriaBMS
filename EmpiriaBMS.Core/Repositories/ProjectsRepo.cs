@@ -22,6 +22,8 @@ public class ProjectsRepo : Repository<Project>
         return await _context
                          .Set<Project>()
                          .Include(r => r.Employees)
+                         .Include(r => r.Customer)
+                         .Include(r => r.Invoice)
                          .FirstOrDefaultAsync(r => r.Id.Equals(id));
     }
 
@@ -34,6 +36,8 @@ public class ProjectsRepo : Repository<Project>
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
                              .Include(r => r.Employees)
+                             .Include(r => r.Customer)
+                             .Include(r => r.Invoice)
                              .ToListAsync();
     }
 
@@ -50,6 +54,8 @@ public class ProjectsRepo : Repository<Project>
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
                              .Include(r => r.Employees)
+                             .Include(r => r.Customer)
+                             .Include(r => r.Invoice)
                              .ToListAsync();
     }
 }
