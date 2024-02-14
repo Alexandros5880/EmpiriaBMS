@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 namespace EmpiriaBMS.Core.Repositories;
 public class InvoiceRepo : Repository<Invoice>, IDisposable
 {
-    private bool disposedValue;
-
     public InvoiceRepo(AppDbContext context) : base(context) { }
 
     public new async Task<Invoice?> Get(string id)
@@ -24,7 +22,7 @@ public class InvoiceRepo : Repository<Invoice>, IDisposable
         return await _context
                          .Set<Invoice>()
                          .Include(r => r.Project)
-                         .FirstOrDefaultAsync(r => r.Id == id);
+                         .FirstOrDefaultAsync(r => r.Id.Equals(id));
     }
 
     public new async Task<ICollection<Invoice>> GetAll(int pageSize = 0, int pageIndex = 0)
@@ -51,23 +49,5 @@ public class InvoiceRepo : Repository<Invoice>, IDisposable
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
                              .ToListAsync();
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            disposedValue = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }

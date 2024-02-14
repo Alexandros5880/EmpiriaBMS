@@ -10,10 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
-public class EmployeeRepo : Repository<Employee>, IDisposable
+public class EmployeeRepo : Repository<Employee>
 {
-    private bool disposedValue;
-
     public EmployeeRepo(AppDbContext context) : base(context) { }
 
     public new async Task<Employee?> Get(string id)
@@ -25,7 +23,7 @@ public class EmployeeRepo : Repository<Employee>, IDisposable
                          .Set<Employee>()
                          .Include(r => r.Projects)
                          .Include(r => r.Roles)
-                         .FirstOrDefaultAsync(r => r.Id == id);
+                         .FirstOrDefaultAsync(r => r.Id.Equals(id));
     }
 
     public new async Task<ICollection<Employee>> GetAll(int pageSize = 0, int pageIndex = 0)
@@ -56,23 +54,5 @@ public class EmployeeRepo : Repository<Employee>, IDisposable
                              .Include(r => r.Projects)
                              .Include(r => r.Roles)
                              .ToListAsync();
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            disposedValue = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }

@@ -13,6 +13,7 @@
 @using System.ComponentModel
 @using EmpiriaBMS.Front.ViewModel.DefaultComponents
 @using EmpiriaBMS.Front.Components.General
+@using System.Diagnostics
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
@@ -37,12 +38,20 @@
                 <div class="col-md-9" style="overflow-x:hidden; margin: 0 auto;">
                     <!-- Headder -->
                     <div class="mb-3 table-responsive">
-                        <table class="table shadow">
-                            <tr>
-                                <td>Current User Name</td>
-                                <td><div class="text-center">77h</div></td>
-                            </tr>
-                        </table>
+                        @if (_logedUser != null)
+                        {
+                            <table class="table shadow">
+                                <tr>
+                                    <td>
+                                        @foreach (var role in _logedUser.Roles)
+                                        {
+                                            <span>@role  </span>
+                                        }
+                                    </td>
+                                    <td><div class="text-center">@(_logedUser.Hours)h</div></td>
+                                </tr>
+                            </table>
+                        }
                     </div>
                     <!-- Table -->
                     <div class="table-responsive">
@@ -139,15 +148,16 @@
     List<PlanType> projectPlanTypes = Enum.GetValues(typeof(PlanType)).OfType<PlanType>().ToList();
     private PaginatorVM _paginator = new PaginatorVM(7);
 
+    private EmployeeVM _logedUser;
+
+
     protected override async void OnInitialized()
     {
         startLoading = true;
+        await _getLogedUser();
         await _getData();
-
-        base.OnInitialized();
-
         startLoading = false;
-        // Update UI
+        base.OnInitialized();
         StateHasChanged();
     }
 
@@ -186,6 +196,7 @@
             var quotient = _paginator.RecordsCount % _paginator.PageSize;
             _paginator.PagesCounter = quotient == 0 ? divide : divide + 1;
 
+            // TODO: Get My Project And Down
             var data = (await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex))
                         .Select(p => Mapper.Map<ProjectVM>(p))
                         .ToList();
@@ -197,5 +208,20 @@
             // TODO: Log Error
         }
         filterLoading = !startLoading ? false : filterLoading;
+    }
+
+    private async Task _getLogedUser()
+    {
+        try
+        {
+            // TODO: Get Teams Loged User And Mach him With Oure Users
+            var dbUser = await DataProvider.Employees.Get("1423410");
+            _logedUser = Mapper.Map<EmployeeVM>(dbUser);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
     }
 }

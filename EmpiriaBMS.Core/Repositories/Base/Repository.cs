@@ -72,7 +72,7 @@ public class Repository<T> : IRepository<T>, IDisposable
 
         return await _context
                          .Set<T>()
-                         .FirstOrDefaultAsync(r => r.Id == id);
+                         .FirstOrDefaultAsync(r => r.Id.Equals(id));
     }
 
     public async Task<ICollection<T>> GetAll(int pageSize = 0, int pageIndex = 0)
