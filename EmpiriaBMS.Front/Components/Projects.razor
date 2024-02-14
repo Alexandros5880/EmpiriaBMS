@@ -74,7 +74,7 @@
                             <tbody>
                                 @foreach (var project in _data)
                                 {
-                                    <tr>
+                                    <tr @onclick="@(() => OnSelectProject(project))">
                                         <th scope="row">
                                             <div class="col">
                                                 <input type="checkbox"
@@ -126,9 +126,12 @@
                 </div>
                 <!-- Selected Invoice -->
                 <div class="col-md-3 mt-md-5">
-                    <div class="card">
-                        <p>Invoice Info</p>
-                    </div>
+                    @if (_selectedInvoice != null)
+                    {
+                        <div class="card">
+                            @_selectedInvoice.Number
+                        </div>
+                    }
                 </div>
             </div>
         }
@@ -150,7 +153,10 @@
 
     private EmployeeVM _logedUser;
 
-    private readonly string defaultUserId = "cc71da774225492093e3cc418569f1a524";
+    private readonly string _defaultUserId = "cc71da774225492093e3cc418569f1a524";
+
+    private ProjectVM _selectedProject;
+    private InvoiceVM _selectedInvoice;
 
     protected override async void OnInitialized()
     {
@@ -178,6 +184,12 @@
             //StateHasChanged();
         }
 
+    }
+
+    private void OnSelectProject(ProjectVM project)
+    {
+        _selectedProject = project;
+        _selectedInvoice = Mapper.Map<InvoiceVM>(project.Invoice);
     }
 
     private void SelectionChanged()
@@ -216,7 +228,7 @@
         try
         {
             // TODO: Get Teams Loged User And Mach him With Oure Users
-            var dbUser = await DataProvider.Employees.Get(defaultUserId);
+            var dbUser = await DataProvider.Employees.Get(_defaultUserId);
             _logedUser = Mapper.Map<EmployeeVM>(dbUser);
             _logedUser.Roles = await DataProvider.Employees.GetRoles(dbUser.Id);
         }
