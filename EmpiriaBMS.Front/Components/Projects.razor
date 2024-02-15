@@ -182,30 +182,4 @@
 
 </FluentDialog>
 
-<!-- Accept Dialog -->
-<FluentDialog @ref="_acceptDialog"
-              Hidden="@(startLoading || !isAcceptDialogOdepened)"
-              Modal="false">
-
-    <h3 class="text-warning">@_acceptDialogMsg</h3>
-
-    @if (deleteLoading)
-    {
-        <div style="display: flex; justify-content: center; align-items: center; margin-top: 5%;">
-            <FluentProgressRing />
-        </div>
-    }
-
-    @if (_acceptButtons)
-    {
-        <div class="mt-2 row">
-            <FluentButton class="col-6" OnClick="@(async () => await _acceptDialogOnAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => ToogleAcceptDialog(false))">
-                Cancel
-            </FluentButton>
-        </div>
-    }
-
-</FluentDialog>
+<AcceptDialog @ref="_acceptDialog" IsAcceptDialogOdepened="@(startLoading || !_isAcceptDialogOppend)"/>

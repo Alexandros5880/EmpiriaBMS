@@ -1,7 +1,9 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaMS.Models.Enums;
 using EmpiriaMS.Models.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -12,20 +14,13 @@ public partial class Projects
 {
     bool startLoading = true;
     bool filterLoading = false;
-    bool deleteLoading = false;
 
     bool runInTeams = false;
     bool IsAllChecked = false;
 
-    private FluentDialog? _editHoursDialog;
+    private FluentDialog _editHoursDialog;
     private bool isEditDialogOdepened = false;
     private double _hoursToChange = 0.0;
-
-    private bool _acceptButtons = true;
-    private string _acceptDialogMsg = string.Empty;
-    private Func<Task> _acceptDialogOnAccept = null;
-    private FluentDialog? _acceptDialog;
-    private bool isAcceptDialogOdepened = false;
 
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
@@ -36,6 +31,9 @@ public partial class Projects
     private ProjectVM _selectedProject = new ProjectVM();
     private InvoiceVM _selectedInvoice = new InvoiceVM();
 
+    private AcceptDialog _acceptDialog;
+    private bool _isAcceptDialogOppend = false;
+
     protected override async void OnInitialized()
     {
         startLoading = true;
@@ -45,7 +43,7 @@ public partial class Projects
         base.OnInitialized();
         StateHasChanged();
         ToogleEditHoursDialog(false);
-        ToogleAcceptDialog(false);
+        _acceptDialog?.Close();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -70,7 +68,7 @@ public partial class Projects
     {
         if (_projects.Any(p => p.IsChecked))
         {
-            ToogleAcceptDialog(true, "Are you sure you want to delete the record ?");
+            //ToogleAcceptDialog(true, "Are you sure you want to delete the record ?");
         }
     }
 
@@ -78,25 +76,29 @@ public partial class Projects
     {
         if (_projects.Any(p => p.IsChecked))
         {
-            ToogleAcceptDialog(
-                open:true,
-                msg:"Are you sure you want to delete the record ?",
-                acceptButtons:true,
-                acceptDialogOnAccept: _deleteSelected);
+            _acceptDialog?.ToogleAcceptDialog(
+                                open:true,
+                                acceptDialogOnAccept: _deleteSelected,
+                                msg:"Are you sure you want to delete the record ?",
+                                acceptButtons:true);
         }
     }
 
     private async Task _deleteSelected()
     {
-        deleteLoading = true;
+        _acceptDialog.IsLoading = true;
         var deleted = _projects.Where(p => p.IsChecked).ToList();
         foreach (var item in deleted)
         {
-            await DataProvider.Projects.Delete(item.Id);
+            if (await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
+            {
+                await DataProvider.Projects.Delete(item.Id);
+            }
             _projects.Remove(item);
         }
-        deleteLoading = false;
-        ToogleAcceptDialog(false);
+        _acceptDialog.IsLoading = false;
+        _acceptDialog?.Close();
+        StateHasChanged();
     }
 
     private void _addRecord()
@@ -123,22 +125,6 @@ public partial class Projects
             _editHoursDialog.Show();
         else
             _editHoursDialog.Hide();
-    }
-
-    private void ToogleAcceptDialog(
-        bool open,
-        string msg = "",
-        bool acceptButtons = true,
-        Func<Task> acceptDialogOnAccept = null
-    ) {
-        _acceptButtons = acceptButtons;
-        _acceptDialogMsg = msg;
-        isAcceptDialogOdepened = open;
-        _acceptDialogOnAccept = acceptDialogOnAccept;
-        if (open)
-            _acceptDialog.Show();
-        else
-            _acceptDialog.Hide();
     }
 
     private void UpdateHours()
