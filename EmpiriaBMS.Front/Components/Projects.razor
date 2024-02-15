@@ -37,7 +37,7 @@
                                     }
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-1 me-2">
-                                    <span class="icon-park--add-web"
+                                    <span class="grommet-icons--add add-hover"
                                           style="margin-top: 14%;"
                                           @onclick="@_addRecord"></span>
                                 </div>
@@ -54,7 +54,7 @@
                     </div>
 
                     <!-- Table -->
-                    <div class="table-responsive" style="min-height: 50vh;">
+                    <div class="table-responsive" style="min-height: 50vh; max-height: 55vh;">
                         <table class="table table-hover thead-light text-center">
                             <thead>
                                 <tr>
@@ -74,7 +74,8 @@
                             <tbody>
                                 @foreach (var project in _projects)
                                 {
-                                    <tr clss="align-middle d-flex" @onclick="@(() => OnSelectProject(project))">
+                                    <tr clss="align-middle d-flex"
+                                        @onclick="@(() => OnSelectProject(project))">
                                         <th scope="row"
                                             class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
                                             style="min-width: 60px;">

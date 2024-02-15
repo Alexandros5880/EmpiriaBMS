@@ -67,17 +67,22 @@ public partial class Projects
     }
 
     // TODO: Find a way to detect changes on records.
-    private void _onTableRecordChange(ProjectVM project, string fieldname, object? args)
+    //private void _onTableRecordChange(ProjectVM project, string fieldname, object? args)
+    //{
+    //    var value = args.GetType().GetProperty("Value").GetValue(project, null);
+    //    project.GetType().GetProperty(fieldname).SetValue(project, value);
+    //    if (!_changedProjectIds.Contains(project.Id) && !project.Id.Equals(string.Empty))
+    //        _changedProjectIds.Add(project.Id);
+    //}
+    private void _onTableRecordChange(string id)
     {
-        var value = args.GetType().GetProperty("Value").GetValue(project, null);
-        project.GetType().GetProperty(fieldname).SetValue(project, value);
-        if (!_changedProjectIds.Contains(project.Id) && !project.Id.Equals(string.Empty))
-            _changedProjectIds.Add(project.Id);
+        if (!_changedProjectIds.Contains(id) && !id.Equals(string.Empty))
+            _changedProjectIds.Add(id);
     }
 
     private async Task _onSaveClicked()
     {
-        var hasNewRecords = await DataProvider.Projects.Any(p => string.IsNullOrEmpty(p.Id));
+        var hasNewRecords = _projects.Any(p => string.IsNullOrEmpty(p.Id));
         var hasAnyChange = _changedProjectIds.Count > 0;
         if (hasNewRecords || hasAnyChange)
         {
@@ -109,12 +114,13 @@ public partial class Projects
         var updated = _projects.Where(p => _changedProjectIds.Contains(p.Id)).ToList();
         foreach (var item in updated)
         {
-            if (!await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
+            if (await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
                 await DataProvider.Projects.Update(Mapper.Map<Project>(item));
         }
 
         _changedProjectIds.Clear();
         _acceptDialog.IsLoading = false;
+
         _acceptDialog?.Close();
 
         await _acceptDialog?.ToogleAcceptDialog(
@@ -196,6 +202,8 @@ public partial class Projects
     {
         _selectedProject = project;
         _selectedInvoice = Mapper.Map<InvoiceVM>(project.Invoice);
+        // TODO: FIND A BETTER WAYT TO DETECT CHANGES
+        _onTableRecordChange(project.Id);
     }
 
     private void SelectionChanged()
