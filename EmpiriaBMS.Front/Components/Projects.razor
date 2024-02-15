@@ -20,7 +20,7 @@
         }
         else
         {
-            <div class="row m-4">
+            <div class="row m-5">
                 <div class="p-2 col-md-9 card shadow"
                      style="overflow-x:hidden; margin: 0 auto;">
                     <!-- Headder -->
@@ -122,11 +122,20 @@
                         <Paginator Renderer="@_getProjects" SetPeginator="@_paginator" />
                     </div>
                 </div>
-                <!-- Selected Invoice -->
-                <div class="col-md-3 mt-md-0 mt-sm-4 rounded"
+                <div class="col-md-3 mt-md-0 mt-sm-4 rounded row"
                      style="overflow-x:hidden; margin: 0 auto;">
+
+                    <!-- Selected Invoice -->
                     <InvoiceDetails Invoice="@_selectedInvoice" />
+
+                    <!-- Controlls Buttons -->
+                    <div class="mt-4 d-flex justify-content-evenly">
+                        <span class="fluent--delete-28-regular shadow"></span>
+                        <span class="fluent--save-28-regular shadow"></span>
+                    </div>
+
                 </div>
+                
             </div>
         }
     </div>
