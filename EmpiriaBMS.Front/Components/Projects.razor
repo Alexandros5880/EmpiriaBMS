@@ -20,7 +20,8 @@
         }
         else
         {
-            <div class="row m-5">
+            <div class="row m-5" style="min-height: 70vh;">
+
                 <div class="p-2 col-lg-9 card shadow"
                      style="overflow-x:hidden; margin: 0 auto;">
                     
@@ -130,15 +131,19 @@
                 
                 </div>
 
-                <div class="col-lg-3 mt-md-0 mt-sm-4 rounded row"
-                     style="overflow-x:hidden; margin: 0 auto;">
+                <div class="col-lg-3 mt-md-0 mt-sm-4 p-0 overflow-hidden">
 
                     <!-- Selected Invoice -->
-                    <InvoiceDetails Invoice="@_selectedInvoice" />
+                    <div class="w-xl-90 w-lg-90 w-md-100 w-sm-100
+                                mt-xl-0 mt-lg-0 mt-md-4 mt-sm-4
+                                me-lg-1 me-md-1 me-md-0 me-sm-0
+                                ms-xl-3 ms-lg-3 ms-md-0 ms-sm-0">
+                        <InvoiceDetails Invoice="@_selectedInvoice" />
+                    </div>
 
                     <!-- Controlls Buttons -->
-                    <div class="mt-5 d-flex justify-content-evenly">
-                        <span class="fluent--delete-28-regular shadow" @onclick=@_deleteSelected></span>
+                    <div class="mt-5 mb-3 d-flex justify-content-evenly">
+                        <span class="fluent--delete-28-regular shadow" @onclick=@_onDeleteBtnClcked></span>
                         <span class="fluent--save-28-regular shadow" @onclick=@(async () => await _save())></span>
                     </div>
 
@@ -152,9 +157,9 @@
 <FilterProgressRing FilterLoading="@filterLoading"/>
 
 <!-- Edit Hours Dialos -->
-<FluentDialog @ref="EditHoursDialog"
+<FluentDialog @ref="_editHoursDialog"
               Hidden=@(startLoading || !isEditDialogOdepened)
-              Modal="true"
+              Modal="false"
               Style="--dialog-width: 200px; --dialog-height: 150px;">
 
     <h3>Edit Hours:</h3>
@@ -171,6 +176,31 @@
             Ok
         </FluentButton>
         <FluentButton class="col-6" OnClick=@(() => ToogleEditHoursDialog(false))>
+            Cancel
+        </FluentButton>
+    </div>
+
+</FluentDialog>
+
+<!-- Delete Dialog -->
+<FluentDialog @ref="_deleteDialog"
+              Hidden="@(startLoading || !isDeleteDialogOdepened)"
+              Modal="false">
+
+    <h3 class="text-warning">Are you sure you want to delete the record?</h3>
+
+    @if (deleteLoading)
+    {
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 5%;">
+            <FluentProgressRing />
+        </div>
+    }
+
+    <div class="mt-2 row">
+        <FluentButton class="col-6" OnClick="@(async () => await _deleteSelected())">
+            Ok
+        </FluentButton>
+        <FluentButton class="col-6" OnClick="@(() => ToogleDeleteDialog(false))">
             Cancel
         </FluentButton>
     </div>

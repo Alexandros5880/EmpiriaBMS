@@ -11,13 +11,17 @@ public partial class Projects
 {
     bool startLoading = true;
     bool filterLoading = false;
+    bool deleteLoading = false;
 
     bool runInTeams = false;
     bool IsAllChecked = false;
 
-    private FluentDialog? EditHoursDialog;
+    private FluentDialog? _editHoursDialog;
     private bool isEditDialogOdepened = false;
     private double _hoursToChange = 0.0;
+
+    private FluentDialog? _deleteDialog;
+    private bool isDeleteDialogOdepened = false;
 
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
@@ -37,6 +41,7 @@ public partial class Projects
         base.OnInitialized();
         StateHasChanged();
         ToogleEditHoursDialog(false);
+        ToogleDeleteDialog(false);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -62,9 +67,25 @@ public partial class Projects
 
     }
 
-    private void _deleteSelected()
+    private void _onDeleteBtnClcked()
     {
+        if (_projects.Any(p => p.IsChecked))
+        {
+            ToogleDeleteDialog(true);
+        }
+    }
 
+    private async Task _deleteSelected()
+    {
+        deleteLoading = true;
+        var deleted = _projects.Where(p => p.IsChecked).ToList();
+        foreach (var item in deleted)
+        {
+            await DataProvider.Projects.Delete(item.Id);
+            _projects.Remove(item);
+        }
+        deleteLoading = false;
+        ToogleDeleteDialog(false);
     }
 
     private void _addRecord()
@@ -88,9 +109,18 @@ public partial class Projects
     {
         isEditDialogOdepened = open;
         if (open)
-            EditHoursDialog.Show();
+            _editHoursDialog.Show();
         else
-            EditHoursDialog.Hide();
+            _editHoursDialog.Hide();
+    }
+
+    private void ToogleDeleteDialog(bool open)
+    {
+        isDeleteDialogOdepened = open;
+        if (open)
+            _deleteDialog.Show();
+        else
+            _deleteDialog.Hide();
     }
 
     private void UpdateHours()

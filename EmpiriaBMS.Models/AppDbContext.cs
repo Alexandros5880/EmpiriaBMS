@@ -10,8 +10,6 @@ public class AppDbContext : DbContext
 {
     const string SmarterASPNetDB = "Data Source=SQL5110.site4now.net;Initial Catalog=db_a8c181_empiriam;User Id=db_a8c181_empiriam_admin;Password=admin1234567";
     const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
-    
-
 
     public DbSet<Role>? Roles { get; set; }
     public DbSet<Project>? Projects { get; set; }
