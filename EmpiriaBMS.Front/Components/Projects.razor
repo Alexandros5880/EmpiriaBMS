@@ -10,34 +10,35 @@
 @inject IMapper Mapper
 
 <!-- card shadow bg-white rounded container text-center align-middle -->
-<div class="row justify-content-center mt-3">
+<div class="row justify-content-center mt-1 mb-1">
     <div class="col-auto" style="width: 100%; height: 100%;">
         @if (startLoading)
         {
-            <div class="mb-5 mt-5" style="display: flex; justify-content: center; align-items: center;">
+            <div style="display: flex; justify-content: center; align-items: center; margin-top: 28%;">
                 <FluentProgressRing />
             </div>
         }
         else
         {
             <div class="row m-4">
-                <div class="col-md-9" style="overflow-x:hidden; margin: 0 auto;">
+                <div class="p-2 col-md-9 card shadow"
+                     style="overflow-x:hidden; margin: 0 auto;">
                     <!-- Headder -->
-                    <div class="mb-3">
+                    <div>
                         @if (_logedUser != null)
                         {
-                            <div class="row default-background shadow" style="overflow-x:hidden;">
-                                <div class="col-sm-10">
+                            <div class="row ms-2 me-2" style="overflow-x:hidden;">
+                                <div class="col-lg-10 col-md-8 col-sm-8">
                                     @foreach (var role in _logedUser.Roles)
                                     {
-                                        <div>@role.Name</div>
+                                        <h4><b>@role.Name</b></h4>
                                     }
                                 </div>
-                                <div class="col-sm-2 row primary-bg-color">
+                                <div class="col-lg-2 col-md-4 col-sm-4 row primary-bg-color rounded-1">
                                     <FluentButton BackgroundColor="Transparent"
                                                   Appearance="Appearance.Lightweight"
                                                   @onclick="@(() => ToogleEditHoursDialog(true))">
-                                        <span class="mt-2">@(_logedUser.Hours)h</span>
+                                        <span class="mt-2">@(_logedUser.Hours) Hours</span>
                                         <FluentIcon Icon="Edit" />
                                     </FluentButton>
                                 </div>
@@ -46,39 +47,41 @@
                     </div>
                     <!-- Table -->
                     <div class="table-responsive">
-                        <table class="table shadow rounded table-hover">
+                        <table class="table table-hover thead-light text-center caption-top">
+                            <caption>Projects</caption>
                             <thead>
                                 <tr>
-                                    <th scope="col" class="table-header">
+                                    <th scope="col">
                                         <input type="checkbox"
                                                class="big-checkbox"
                                                @bind="IsAllChecked"
                                                @onclick="SelectionChanged" />
                                     </th>
-                                    <th scope="col" class="table-header">Name</th>
-                                    <th scope="col" class="table-header">PlanType</th>
-                                    <th scope="col" class="table-header">Drawing</th>
-                                    <th scope="col" class="table-header">Completed</th>
-                                    <th scope="col" class="table-header">ManHours</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">PlanType</th>
+                                    <th scope="col">Drawing</th>
+                                    <th scope="col">Completed</th>
+                                    <th scope="col">ManHours</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var project in _data)
                                 {
-                                    <tr clss="align-middle" @onclick="@(() => OnSelectProject(project))">
-                                        <th scope="row" class="@((_selectedProject.Id.Equals(project.Id) ? "highlight" : ""))">
-                                            <div class="col">
-                                                <input type="checkbox"
-                                                       class="mt-2 big-checkbox"
-                                                       @bind="project.IsChecked" />
-                                            </div>
+                                    <tr clss="align-middle d-flex" @onclick="@(() => OnSelectProject(project))">
+                                        <th scope="row"
+                                            class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
+                                            style="min-width: 60px;">
+                                            <input type="checkbox"
+                                                   class="mt-2 big-checkbox"
+                                                   @bind="project.IsChecked" />
                                         </th>
-                                        <td class="@((_selectedProject.Id.Equals(project.Id) ? "highlight" : ""))">
+                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
+                                            style="min-width: 110px;">
                                             <input type="text" class="form-control" @bind="project.Name">
                                         </td>
-                                        <td class="@((_selectedProject.Id.Equals(project.Id) ? "highlight" : ""))">
+                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
+                                            style="min-width: 110px;">
                                             <select class="form-select"
-                                                    style="width:150px;"
                                                     @bind="project.PlanType">
                                                 @foreach (var opt in projectPlanTypes)
                                                 {
@@ -86,22 +89,24 @@
                                                 }
                                             </select>
                                         </td>
-                                        <td class="@((_selectedProject.Id.Equals(project.Id) ? "highlight" : ""))">
+                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
+                                            style="min-width: 110px;">
                                             <input type="text"
                                                    class="form-control"
-                                                   style="width:200px;"
                                                    @bind="project.Drawing">
                                         </td>
-                                        <td class="@((_selectedProject.Id.Equals(project.Id) ? "highlight" : ""))">
-                                            <div class="input-group mb-3" style="width:150px;">
+                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
+                                            style="min-width: 120px;">
+                                            <div class="input-group">
                                                 <input type="number" class="form-control" @bind="project.Completed">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="basic-addon2">%</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="@((_selectedProject.Id.Equals(project.Id) ? "highlight" : ""))">
-                                            <div class="input-group mb-3" style="width:150px;">
+                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
+                                            style="min-width: 120px;">
+                                            <div class="input-group">
                                                 <input type="number" class="form-control" @bind="project.ManHours">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="basic-addon2">h</span>
@@ -113,10 +118,13 @@
                             </tbody>
                         </table>
                     </div>
-                    <Paginator Renderer="@_getData" SetPeginator="@_paginator" />
+                    <div style="text-align: right;">
+                        <Paginator Renderer="@_getProjects" SetPeginator="@_paginator" />
+                    </div>
                 </div>
                 <!-- Selected Invoice -->
-                <div class="col-md-3 mt-md-5">
+                <div class="col-md-3 mt-md-0 mt-sm-4 rounded"
+                     style="overflow-x:hidden; margin: 0 auto;">
                     <InvoiceDetails Invoice="@_selectedInvoice" />
                 </div>
             </div>
@@ -127,24 +135,30 @@
 <FilterProgressRing FilterLoading="@filterLoading"/>
 
 <!-- Edit Hours Dialos -->
-<FluentDialog @ref="EditHoursDialog" Hidden=@(startLoading || !isEditDialogOdepened)>
+<FluentDialog @ref="EditHoursDialog"
+              Hidden=@(startLoading || !isEditDialogOdepened)
+              Modal="true"
+              Style="--dialog-width: 200px; --dialog-height: 150px;">
 
-    <FluentDialogHeader>
-        Edit Hours:
-    </FluentDialogHeader>
+    <h3>Edit Hours:</h3>
 
-    <FluentDialogBody>
-        Dialog Body
-    </FluentDialogBody>
-
-    <FluentDialogFooter>
-        <FluentButton Text="OK" OnClick=@(() => ToogleEditHoursDialog(false)) />
-        <FluentButton Text="Cancel" OnClick=@(() => ToogleEditHoursDialog(false)) />
-    </FluentDialogFooter>
+    <input type="number"
+           min="-24"
+           max="24"
+           class="form-control"
+           id="invoiceNumber"
+           @bind="@_hoursToChange"/>
+    
+    <div class="mt-2 row">
+        <FluentButton class="col-6" OnClick=@UpdateHours>
+            Ok
+        </FluentButton>
+        <FluentButton class="col-6" OnClick=@(() => ToogleEditHoursDialog(false))>
+            Cancel
+        </FluentButton>
+    </div>
 
 </FluentDialog>
-
-
 
 @code {
     bool startLoading = true;
@@ -155,6 +169,7 @@
 
     private FluentDialog? EditHoursDialog;
     private bool isEditDialogOdepened = false;
+    private double _hoursToChange = 0.0;
 
     private ObservableCollection<ProjectVM> _data = new ObservableCollection<ProjectVM>();
     List<PlanType> projectPlanTypes = Enum.GetValues(typeof(PlanType)).OfType<PlanType>().ToList();
@@ -169,7 +184,7 @@
     {
         startLoading = true;
         await _getLogedUser();
-        await _getData();
+        await _getProjects();
         startLoading = false;
         base.OnInitialized();
         StateHasChanged();
@@ -203,6 +218,13 @@
             EditHoursDialog.Hide();
     }
 
+    private void UpdateHours()
+    {
+        _logedUser.Hours += _hoursToChange;
+        _hoursToChange = 0.0;
+        ToogleEditHoursDialog(false);
+    }
+
     private void OnSelectProject(ProjectVM project)
     {
         _selectedProject = project;
@@ -215,7 +237,7 @@
             p.IsChecked = !IsAllChecked;
     }
 
-    private async Task _getData()
+    private async Task _getProjects()
     {
         filterLoading = !startLoading ? true : filterLoading;
         try

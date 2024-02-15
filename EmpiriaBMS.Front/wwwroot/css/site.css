@@ -93,11 +93,6 @@ code {
     border-radius: 4px !important;
 }
 
-/* Change Hover Row On Bootstrap Tables*/
-.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-    background-color: var(--hover-row-bg-color) !important;
-}
-
 /* Selected Table Row */
 .highlight {
     background-color: var(--selected-row-bg-color) !important;
@@ -105,10 +100,6 @@ code {
 
 .default-background {
     background-color: var(--main-bg-color) !important;
-}
-
-.table-header {
-    background-color: var(--primary-bg-color) !important;
 }
 
 .primary-bg-color {
