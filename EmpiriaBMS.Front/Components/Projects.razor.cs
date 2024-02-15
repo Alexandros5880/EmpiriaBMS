@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using static Microsoft.Fast.Components.FluentUI.Emojis.Objects.Color.Default;
 
 namespace EmpiriaBMS.Front.Components;
@@ -22,6 +23,7 @@ public partial class Projects
     private bool isEditDialogOdepened = false;
     private double _hoursToChange = 0.0;
 
+    private List<string> _changedProjectIds = new List<string>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
     private PaginatorVM _paginator = new PaginatorVM(7);
@@ -64,13 +66,19 @@ public partial class Projects
 
     }
 
+    // TODO: Find a way to detect changes on records.
+    private void _onTableRecordChange(ProjectVM project, string fieldname, object? args)
+    {
+        var value = args.GetType().GetProperty("Value").GetValue(project, null);
+        project.GetType().GetProperty(fieldname).SetValue(project, value);
+        if (!_changedProjectIds.Contains(project.Id) && !project.Id.Equals(string.Empty))
+            _changedProjectIds.Add(project.Id);
+    }
+
     private async Task _onSaveClicked()
     {
         var hasNewRecords = await DataProvider.Projects.Any(p => string.IsNullOrEmpty(p.Id));
-        
-        // TODO: Detected Changed Records
-        var hasAnyChange = false;
-
+        var hasAnyChange = _changedProjectIds.Count > 0;
         if (hasNewRecords || hasAnyChange)
         {
             await _acceptDialog?.ToogleAcceptDialog(
@@ -98,14 +106,14 @@ public partial class Projects
                 await DataProvider.Projects.Add(Mapper.Map<Project>(item));
         }
 
-        // TODO: Find All Changed Records
-        var updated = _projects.Where(p => string.IsNullOrEmpty(p.Id)).ToList();
+        var updated = _projects.Where(p => _changedProjectIds.Contains(p.Id)).ToList();
         foreach (var item in updated)
         {
             if (!await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
                 await DataProvider.Projects.Update(Mapper.Map<Project>(item));
         }
 
+        _changedProjectIds.Clear();
         _acceptDialog.IsLoading = false;
         _acceptDialog?.Close();
 
