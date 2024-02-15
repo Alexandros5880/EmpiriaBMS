@@ -143,7 +143,7 @@
 
                     <!-- Controlls Buttons -->
                     <div class="mt-5 mb-3 d-flex justify-content-evenly">
-                        <span class="fluent--delete-28-regular shadow" @onclick=@_onDeleteBtnClcked></span>
+                        <span class="fluent--delete-28-regular shadow" @onclick=@(async () => await _onDeleteBtnClcked())></span>
                         <span class="fluent--save-28-regular shadow" @onclick=@(async () => await _onSaveClicked())></span>
                     </div>
 

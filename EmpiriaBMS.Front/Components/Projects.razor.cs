@@ -66,21 +66,73 @@ public partial class Projects
 
     private async Task _onSaveClicked()
     {
-        if (_projects.Any(p => p.IsChecked))
+        var hasNewRecords = await DataProvider.Projects.Any(p => string.IsNullOrEmpty(p.Id));
+        
+        // TODO: Detected Changed Records
+        var hasAnyChange = false;
+
+        if (hasNewRecords || hasAnyChange)
         {
-            //ToogleAcceptDialog(true, "Are you sure you want to delete the record ?");
+            await _acceptDialog?.ToogleAcceptDialog(
+                                open: true,
+                                acceptDialogOnAccept: _updateRecords,
+                                msg: "Are you sure you want to save the changes?",
+                                acceptButtons: true);
+        }
+        else
+        {
+            await _acceptDialog?.ToogleAcceptDialog(
+                                open: true,
+                                msg: "There is no changed records to Update!",
+                                acceptButtons: false);
         }
     }
 
-    private void _onDeleteBtnClcked()
+    private async Task _updateRecords()
+    {
+        _acceptDialog.IsLoading = true;
+        var newRecords = _projects.Where(p => string.IsNullOrEmpty(p.Id)).ToList();
+        foreach (var item in newRecords)
+        {
+            if (!await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
+                await DataProvider.Projects.Add(Mapper.Map<Project>(item));
+        }
+
+        // TODO: Find All Changed Records
+        var updated = _projects.Where(p => string.IsNullOrEmpty(p.Id)).ToList();
+        foreach (var item in updated)
+        {
+            if (!await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
+                await DataProvider.Projects.Update(Mapper.Map<Project>(item));
+        }
+
+        _acceptDialog.IsLoading = false;
+        _acceptDialog?.Close();
+
+        await _acceptDialog?.ToogleAcceptDialog(
+                                open: true,
+                                msg: "Updated successfully!",
+                                acceptButtons: false);
+
+        StateHasChanged();
+    }
+
+    private async Task _onDeleteBtnClcked()
     {
         if (_projects.Any(p => p.IsChecked))
         {
-            _acceptDialog?.ToogleAcceptDialog(
+            await _acceptDialog?.ToogleAcceptDialog(
                                 open:true,
                                 acceptDialogOnAccept: _deleteSelected,
                                 msg:"Are you sure you want to delete the record ?",
                                 acceptButtons:true);
+        }
+        else
+        {
+            await _acceptDialog?.ToogleAcceptDialog(
+                                open: true,
+                                msg: "Please select some records to delete!",
+                                acceptButtons: false);
         }
     }
 
@@ -91,9 +143,7 @@ public partial class Projects
         foreach (var item in deleted)
         {
             if (await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
-            {
                 await DataProvider.Projects.Delete(item.Id);
-            }
             _projects.Remove(item);
         }
         _acceptDialog.IsLoading = false;
