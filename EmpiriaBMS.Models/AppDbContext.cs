@@ -201,7 +201,7 @@ public class AppDbContext : DbContext
                 Name = "Project_" + Convert.ToString(i),
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 Drawing = "KL-" + Convert.ToString(i),
-                PlanType = i % 2 == 0 ? PlanType.ELEC : PlanType.HVAC,
+                PlanType = i % 2 == 0 ? PlanTypes.ELEC : PlanTypes.HVAC,
                 WorkingDays = i + 200 - (i * 3) + (i * 5),
                 DurationDate = createdDate.AddDays(f1),
                 EstPaymentDate = createdDate.AddDays(f2),

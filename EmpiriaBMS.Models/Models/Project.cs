@@ -22,7 +22,7 @@ public class Project : Entity
     public string? Drawing { get; set; }
 
     [Required]
-    public PlanType PlanType { get; set; }
+    public PlanTypes PlanType { get; set; }
 
     public int? WorkingDays { get; set; }
 

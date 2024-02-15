@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaMS.Models.Enums;
+using EmpiriaMS.Models.Models;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -18,8 +19,8 @@ public partial class Projects
     private bool isEditDialogOdepened = false;
     private double _hoursToChange = 0.0;
 
-    private ObservableCollection<ProjectVM> _data = new ObservableCollection<ProjectVM>();
-    List<PlanType> projectPlanTypes = Enum.GetValues(typeof(PlanType)).OfType<PlanType>().ToList();
+    private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
+    List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
     private PaginatorVM _paginator = new PaginatorVM(7);
 
     private UserVM _logedUser;
@@ -56,6 +57,33 @@ public partial class Projects
 
     }
 
+    private async Task _save()
+    {
+
+    }
+
+    private void _deleteSelected()
+    {
+
+    }
+
+    private void _addRecord()
+    {
+        try {
+            var newProject = new ProjectVM();
+            newProject.Invoice = new InvoiceVM();
+            _projects.Insert(0, newProject);
+            _selectedProject = newProject;
+            _selectedInvoice = _selectedProject.Invoice;
+            //StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     private void ToogleEditHoursDialog(bool open)
     {
         isEditDialogOdepened = open;
@@ -80,7 +108,7 @@ public partial class Projects
 
     private void SelectionChanged()
     {
-        foreach (var p in _data)
+        foreach (var p in _projects)
             p.IsChecked = !IsAllChecked;
     }
 
@@ -99,13 +127,14 @@ public partial class Projects
             var data = (await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex))
                         .Select(p => Mapper.Map<ProjectVM>(p))
                         .ToList();
-            _data.Clear();
-            data.ForEach(_data.Add);
-            _selectedProject = _data.FirstOrDefault();
+            _projects.Clear();
+            data.ForEach(_projects.Add);
+            _selectedProject = _projects.FirstOrDefault();
             _selectedInvoice = _selectedProject.Invoice;
         }
         catch (Exception ex)
         {
+            Debug.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
         filterLoading = !startLoading ? false : filterLoading;
@@ -146,6 +175,7 @@ public partial class Projects
         }
         catch (Exception ex)
         {
+            // TODO: Log Error
             return null;
         }
     }

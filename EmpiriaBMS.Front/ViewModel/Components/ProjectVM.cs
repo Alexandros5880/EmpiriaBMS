@@ -65,8 +65,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private PlanType _planType;
-    public PlanType PlanType
+    private PlanTypes _planType;
+    public PlanTypes PlanType
     {
         get => _planType;
         set
@@ -276,4 +276,30 @@ public class ProjectVM : BaseVM
 
     public ICollection<UserVM>? Employees { get; set; }
 
+    public ProjectVM()
+    {
+        IsChecked = false;
+        Name = string.Empty;
+        Description = string.Empty;
+        Code = string.Empty;
+        Drawing = string.Empty;
+        PlanType = PlanTypes.ELEC;
+        WorkingDays = null;
+        DurationDate = DateTime.Now.AddYears(1);
+        EstPaymentDate = DateTime.Now.AddYears(1);
+        PaymentDate = DateTime.Now.AddYears(1);
+        DelayInPayment = 0;
+        PaymentDetailes = string.Empty;
+        DayCost = 0.0;
+        Bank = string.Empty;
+        PaidFee = 0.0;
+        DaysUntilPayment = 0;
+        PendingPayments = 0;
+        CalculationDaly = 0;
+        Completed = 0;
+        ManHours = 0;
+        CustomerId = null;
+        Invoice = new InvoiceVM();
+        Employees = new List<UserVM>();
+    }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EmpiriaMS.Models.Enums;
-public enum PlanType
+public enum PlanTypes
 {
     HVAC,
     ELEC

@@ -36,4 +36,11 @@ public class BaseVM : BNotifyPropertyChanged
             NotifyPropertyChanged(nameof(LastUpdatedDate));
         }
     }
+
+    public BaseVM()
+    {
+        Id = String.Empty;
+        CreatedDate = DateTime.Now;
+        LastUpdatedDate = DateTime.Now;
+    }
 }

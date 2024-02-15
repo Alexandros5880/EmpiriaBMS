@@ -104,4 +104,15 @@ public class InvoiceVM : BaseVM
             NotifyPropertyChanged(nameof(Project));
         }
     }
+
+    public InvoiceVM()
+    {
+        IsChecked = false;
+        Total = 0.0;
+        Vat = 0.0;
+        Fee = 0.0;
+        Number = 0;
+        Mark = string.Empty;
+        Date = DateTime.Now;
+    }
 }
