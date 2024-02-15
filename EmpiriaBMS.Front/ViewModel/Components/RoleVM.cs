@@ -29,4 +29,10 @@ public class RoleVM : BaseVM
 
     public ICollection<UserVM>? Employees { get; set; }
 
+    public RoleVM()
+    {
+        IsChecked = false;
+        Name = string.Empty;
+        Employees = new List<UserVM>();
+    }
 }

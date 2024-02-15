@@ -128,4 +128,21 @@ public class UserVM : BaseVM
     public virtual ICollection<ProjectVM>? Projects { get; set; }
 
     public virtual ICollection<RoleVM>? Roles { get; set; }
+
+    public UserVM()
+    {
+        IsChecked = true;
+        Email = string.Empty;
+        LastName = string.Empty;
+        FirstName = string.Empty;
+        MidName = string.Empty;
+        Phone1 = string.Empty;
+        Phone2 = string.Empty;
+        Phone3 = string.Empty;
+        Description = string.Empty;
+        Hours = 0;
+        Project = new ProjectVM();
+        Projects = new List<ProjectVM>();
+        Roles = new List<RoleVM>();
+    }
 }
