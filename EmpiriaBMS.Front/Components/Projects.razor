@@ -20,7 +20,7 @@
         }
         else
         {
-            <div class="row m-5" style="min-height: 70vh;">
+            <div class="row m-5">
 
                 <div class="p-2 col-lg-9 card shadow"
                      style="overflow-x:hidden; margin: 0 auto;">
@@ -54,7 +54,7 @@
                     </div>
 
                     <!-- Table -->
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="min-height: 50vh;">
                         <table class="table table-hover thead-light text-center">
                             <thead>
                                 <tr>
@@ -144,7 +144,7 @@
                     <!-- Controlls Buttons -->
                     <div class="mt-5 mb-3 d-flex justify-content-evenly">
                         <span class="fluent--delete-28-regular shadow" @onclick=@_onDeleteBtnClcked></span>
-                        <span class="fluent--save-28-regular shadow" @onclick=@(async () => await _save())></span>
+                        <span class="fluent--save-28-regular shadow" @onclick=@(async () => await _onSaveClicked())></span>
                     </div>
 
                 </div>
@@ -182,12 +182,12 @@
 
 </FluentDialog>
 
-<!-- Delete Dialog -->
-<FluentDialog @ref="_deleteDialog"
-              Hidden="@(startLoading || !isDeleteDialogOdepened)"
+<!-- Accept Dialog -->
+<FluentDialog @ref="_acceptDialog"
+              Hidden="@(startLoading || !isAcceptDialogOdepened)"
               Modal="false">
 
-    <h3 class="text-warning">Are you sure you want to delete the record?</h3>
+    <h3 class="text-warning">@_acceptDialogMsg</h3>
 
     @if (deleteLoading)
     {
@@ -196,13 +196,16 @@
         </div>
     }
 
-    <div class="mt-2 row">
-        <FluentButton class="col-6" OnClick="@(async () => await _deleteSelected())">
-            Ok
-        </FluentButton>
-        <FluentButton class="col-6" OnClick="@(() => ToogleDeleteDialog(false))">
-            Cancel
-        </FluentButton>
-    </div>
+    @if (_acceptButtons)
+    {
+        <div class="mt-2 row">
+            <FluentButton class="col-6" OnClick="@(async () => await _acceptDialogOnAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => ToogleAcceptDialog(false))">
+                Cancel
+            </FluentButton>
+        </div>
+    }
 
 </FluentDialog>

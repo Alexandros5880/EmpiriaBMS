@@ -5,6 +5,7 @@ using EmpiriaMS.Models.Models;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using static Microsoft.Fast.Components.FluentUI.Emojis.Objects.Color.Default;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Projects
@@ -20,8 +21,11 @@ public partial class Projects
     private bool isEditDialogOdepened = false;
     private double _hoursToChange = 0.0;
 
-    private FluentDialog? _deleteDialog;
-    private bool isDeleteDialogOdepened = false;
+    private bool _acceptButtons = true;
+    private string _acceptDialogMsg = string.Empty;
+    private Func<Task> _acceptDialogOnAccept = null;
+    private FluentDialog? _acceptDialog;
+    private bool isAcceptDialogOdepened = false;
 
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
@@ -41,7 +45,7 @@ public partial class Projects
         base.OnInitialized();
         StateHasChanged();
         ToogleEditHoursDialog(false);
-        ToogleDeleteDialog(false);
+        ToogleAcceptDialog(false);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -62,16 +66,23 @@ public partial class Projects
 
     }
 
-    private async Task _save()
+    private async Task _onSaveClicked()
     {
-
+        if (_projects.Any(p => p.IsChecked))
+        {
+            ToogleAcceptDialog(true, "Are you sure you want to delete the record ?");
+        }
     }
 
     private void _onDeleteBtnClcked()
     {
         if (_projects.Any(p => p.IsChecked))
         {
-            ToogleDeleteDialog(true);
+            ToogleAcceptDialog(
+                open:true,
+                msg:"Are you sure you want to delete the record ?",
+                acceptButtons:true,
+                acceptDialogOnAccept: _deleteSelected);
         }
     }
 
@@ -85,7 +96,7 @@ public partial class Projects
             _projects.Remove(item);
         }
         deleteLoading = false;
-        ToogleDeleteDialog(false);
+        ToogleAcceptDialog(false);
     }
 
     private void _addRecord()
@@ -114,13 +125,20 @@ public partial class Projects
             _editHoursDialog.Hide();
     }
 
-    private void ToogleDeleteDialog(bool open)
-    {
-        isDeleteDialogOdepened = open;
+    private void ToogleAcceptDialog(
+        bool open,
+        string msg = "",
+        bool acceptButtons = true,
+        Func<Task> acceptDialogOnAccept = null
+    ) {
+        _acceptButtons = acceptButtons;
+        _acceptDialogMsg = msg;
+        isAcceptDialogOdepened = open;
+        _acceptDialogOnAccept = acceptDialogOnAccept;
         if (open)
-            _deleteDialog.Show();
+            _acceptDialog.Show();
         else
-            _deleteDialog.Hide();
+            _acceptDialog.Hide();
     }
 
     private void UpdateHours()
