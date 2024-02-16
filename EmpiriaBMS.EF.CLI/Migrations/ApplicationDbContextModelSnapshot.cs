@@ -52,35 +52,35 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9310f3e26fa84881b34e52a2359160282",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9816),
-                            EmployeeId = "b180dee3c7fa4d798730e7a49dfc192c6",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9818),
-                            ProjectId = "25f03947ca1642638fe21c0ac672f20a4"
+                            Id = "e452eb67e75642d2bdaccc34e2652a302",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(881),
+                            EmployeeId = "15e4b6be16b74a118a022c3b164d633c3",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(884),
+                            ProjectId = "89e662dabb6b4fcd9b7e7cdaa4515e0f2"
                         },
                         new
                         {
-                            Id = "098538174bba408398bf748795c0a6c818",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6305),
-                            EmployeeId = "a52e403472ae4d7097e9b4e9d19ad94b6",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6307),
-                            ProjectId = "8e6d8a06a6c74e9f86da4cb3b480d83b18"
+                            Id = "288e8b61038b4d35acf7f544c76b50f012",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6328),
+                            EmployeeId = "efa6ab5269b84548a086df2c3eafc77f3",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6331),
+                            ProjectId = "ed806da02b214ac99ee69a926e3e200b12"
                         },
                         new
                         {
-                            Id = "ed1833c8bea34a5a81fe7b0146e9f61330",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6718),
-                            EmployeeId = "5d41925d76ee4b26a1d9c0038a208f9830",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6721),
-                            ProjectId = "d3625be49a4b45838c90eb52f163610520"
+                            Id = "c5845efd787e49a4b568f5e7a477fa7730",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6864),
+                            EmployeeId = "23b1d57c0eb94a33ab775967f1932fa220",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6867),
+                            ProjectId = "3a2355f25ed9452c9d149f5936b4133e15"
                         },
                         new
                         {
-                            Id = "7789d8fd6fd54d2092e0f04294dfe49a35",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7257),
-                            EmployeeId = "5fe90d67d062443b8da1dc01b1b769bb7",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7258),
-                            ProjectId = "bdd732004bd147838166eb96b9ac4da614"
+                            Id = "a43496e8d48b4d7a87bd7a95cc39de3242",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7415),
+                            EmployeeId = "54372827b7a34f1ea001ff75984ab27835",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7417),
+                            ProjectId = "7d298cd1bf2541c28ccd212ce82b6f3921"
                         });
                 });
 
@@ -136,14 +136,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6954ce88536a4099bfa948c908e94cf00",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1579),
+                            Id = "7c14c7cf53594a268a05171c4b95f58c0",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4162),
                             Description = "Test Description Client 0",
                             Email = "alexpl_0@gmail.com",
                             FirstName = "Platanios_Customer_0",
                             Hours = 0.0,
                             LastName = "Alexandros_0",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1580),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4163),
                             MidName = "",
                             Phone1 = "6949277780",
                             Phone2 = "",
@@ -151,14 +151,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "cfef668022ed4bc8a874cc0992fe83ab0",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9129),
+                            Id = "c264d703db4044dba25760fc75db6c640",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(228),
                             Description = "Test Description Employee 2",
                             Email = "alexpl_2@gmail.com",
                             FirstName = "Platanios_Employee_2",
                             Hours = 0.0,
                             LastName = "Alexandros_2",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9130),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(230),
                             MidName = "",
                             Phone1 = "6949277782",
                             Phone2 = "",
@@ -166,14 +166,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "4265411c156049a0af887992143f215f2",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9371),
+                            Id = "66cbfdc07a484756bf5ad6ff67f0bbe91",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(626),
                             Description = "Test Description Client 1",
                             Email = "alexpl_1@gmail.com",
                             FirstName = "Platanios_Customer_1",
                             Hours = 0.0,
                             LastName = "Alexandros_1",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9373),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(628),
                             MidName = "",
                             Phone1 = "6949277781",
                             Phone2 = "",
@@ -181,14 +181,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "b180dee3c7fa4d798730e7a49dfc192c6",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9417),
+                            Id = "15e4b6be16b74a118a022c3b164d633c3",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(710),
                             Description = "Test Description Employee 3",
                             Email = "alexpl_3@gmail.com",
                             FirstName = "Platanios_Employee_3",
                             Hours = 8.0,
                             LastName = "Alexandros_3",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9418),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(712),
                             MidName = "",
                             Phone1 = "6949277783",
                             Phone2 = "",
@@ -196,14 +196,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "846f59b1a8664de5bcbdc98bfab24b2f10",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(5825),
+                            Id = "937c8bb4c6074a29bc5ad1ab13a1453e6",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5653),
                             Description = "Test Description Client 2",
                             Email = "alexpl_2@gmail.com",
                             FirstName = "Platanios_Customer_2",
                             Hours = 0.0,
                             LastName = "Alexandros_2",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(5827),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5655),
                             MidName = "",
                             Phone1 = "6949277782",
                             Phone2 = "",
@@ -211,14 +211,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "77fdc61739bc40a796ca6d5c5d5118fc4",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(5969),
+                            Id = "a7708b03480a465aa4e3cec37bd2f6eb2",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5857),
                             Description = "Test Description Employee 4",
                             Email = "alexpl_4@gmail.com",
                             FirstName = "Platanios_Employee_4",
                             Hours = 16.0,
                             LastName = "Alexandros_4",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(5971),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5859),
                             MidName = "",
                             Phone1 = "6949277784",
                             Phone2 = "",
@@ -226,14 +226,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "e0777d0b7a84470298806745537ee6a83",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6155),
+                            Id = "52ec5f7e6722467cb28ae5eceac4e50a6",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6082),
                             Description = "Test Description Client 3",
                             Email = "alexpl_3@gmail.com",
                             FirstName = "Platanios_Customer_3",
                             Hours = 0.0,
                             LastName = "Alexandros_3",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6156),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6084),
                             MidName = "",
                             Phone1 = "6949277783",
                             Phone2 = "",
@@ -241,14 +241,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "a52e403472ae4d7097e9b4e9d19ad94b6",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6200),
+                            Id = "efa6ab5269b84548a086df2c3eafc77f3",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6159),
                             Description = "Test Description Employee 5",
                             Email = "alexpl_5@gmail.com",
                             FirstName = "Platanios_Employee_5",
                             Hours = 24.0,
                             LastName = "Alexandros_5",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6202),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6161),
                             MidName = "",
                             Phone1 = "6949277785",
                             Phone2 = "",
@@ -256,14 +256,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "250e21d5b7514e99badd0b75efd52e4f4",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6331),
+                            Id = "92eb2e1cbcc444ebac70bb310eb45aed24",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6374),
                             Description = "Test Description Client 4",
                             Email = "alexpl_4@gmail.com",
                             FirstName = "Platanios_Customer_4",
                             Hours = 0.0,
                             LastName = "Alexandros_4",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6333),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6376),
                             MidName = "",
                             Phone1 = "6949277784",
                             Phone2 = "",
@@ -271,14 +271,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "6f774794eea440c7acd5f76095736b2224",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6383),
+                            Id = "95b5fd89a4564f288b8c8bf3446e447524",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6456),
                             Description = "Test Description Employee 6",
                             Email = "alexpl_6@gmail.com",
                             FirstName = "Platanios_Employee_6",
                             Hours = 32.0,
                             LastName = "Alexandros_6",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6385),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6458),
                             MidName = "",
                             Phone1 = "6949277786",
                             Phone2 = "",
@@ -286,14 +286,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "8290a668526045afb2035f9c265c9fab5",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6523),
+                            Id = "ea2780db62934fffb97ad359f219ea7d10",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6623),
                             Description = "Test Description Client 5",
                             Email = "alexpl_5@gmail.com",
                             FirstName = "Platanios_Customer_5",
                             Hours = 0.0,
                             LastName = "Alexandros_5",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6524),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6624),
                             MidName = "",
                             Phone1 = "6949277785",
                             Phone2 = "",
@@ -301,14 +301,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "5d41925d76ee4b26a1d9c0038a208f9830",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6569),
+                            Id = "23b1d57c0eb94a33ab775967f1932fa220",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6695),
                             Description = "Test Description Employee 7",
                             Email = "alexpl_7@gmail.com",
                             FirstName = "Platanios_Employee_7",
                             Hours = 40.0,
                             LastName = "Alexandros_7",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6570),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6697),
                             MidName = "",
                             Phone1 = "6949277787",
                             Phone2 = "",
@@ -316,14 +316,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "db8ff30ad9664722b0ff2c11b9dfe77030",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6759),
+                            Id = "dabaab45f5c54a179d71bbf23610fd3018",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6903),
                             Description = "Test Description Client 6",
                             Email = "alexpl_6@gmail.com",
                             FirstName = "Platanios_Customer_6",
                             Hours = 0.0,
                             LastName = "Alexandros_6",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6761),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6906),
                             MidName = "",
                             Phone1 = "6949277786",
                             Phone2 = "",
@@ -331,14 +331,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "0bcfa7ce9eec4a669a8f63d6e42752126",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6896),
+                            Id = "adb8eef101f44b67906d5ea7aa2401cd30",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6978),
                             Description = "Test Description Employee 8",
                             Email = "alexpl_8@gmail.com",
                             FirstName = "Platanios_Employee_8",
                             Hours = 48.0,
                             LastName = "Alexandros_8",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6899),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6980),
                             MidName = "",
                             Phone1 = "6949277788",
                             Phone2 = "",
@@ -346,14 +346,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "469f1aca44a74c8cb084fb9f3dbd9e127",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7078),
+                            Id = "c962de3d929d46a9b7117ab76b56fe8235",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7166),
                             Description = "Test Description Client 7",
                             Email = "alexpl_7@gmail.com",
                             FirstName = "Platanios_Customer_7",
                             Hours = 0.0,
                             LastName = "Alexandros_7",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7080),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7168),
                             MidName = "",
                             Phone1 = "6949277787",
                             Phone2 = "",
@@ -361,14 +361,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "5fe90d67d062443b8da1dc01b1b769bb7",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7126),
+                            Id = "54372827b7a34f1ea001ff75984ab27835",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7259),
                             Description = "Test Description Employee 9",
                             Email = "alexpl_9@gmail.com",
                             FirstName = "Platanios_Employee_9",
                             Hours = 56.0,
                             LastName = "Alexandros_9",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7128),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7261),
                             MidName = "",
                             Phone1 = "6949277789",
                             Phone2 = "",
@@ -376,14 +376,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "ea19ea732058451b99328ae26169d4fa48",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7279),
+                            Id = "b9775773fe664aca8ebc6fd686af600324",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7449),
                             Description = "Test Description Client 8",
                             Email = "alexpl_8@gmail.com",
                             FirstName = "Platanios_Customer_8",
                             Hours = 0.0,
                             LastName = "Alexandros_8",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7281),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7450),
                             MidName = "",
                             Phone1 = "6949277788",
                             Phone2 = "",
@@ -391,14 +391,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "0b758c30b39b428f84deb20303103e5b48",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7329),
+                            Id = "a56a675260c34e15b3b625eea269de848",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7533),
                             Description = "Test Description Employee 10",
                             Email = "alexpl_10@gmail.com",
                             FirstName = "Platanios_Employee_10",
                             Hours = 64.0,
                             LastName = "Alexandros_10",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7331),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7535),
                             MidName = "",
                             Phone1 = "69492777810",
                             Phone2 = "",
@@ -436,147 +436,147 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3660633bd7db4b9b87e4223aa8dda726",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1657),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1659),
-                            RoleId = "ae5a22419c3d486cb713f22e9685320d8",
-                            UserId = "6954ce88536a4099bfa948c908e94cf00"
+                            Id = "9cd997bebc5e46dfa4edfa61c215d591",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4278),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4280),
+                            RoleId = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            UserId = "7c14c7cf53594a268a05171c4b95f58c0"
                         },
                         new
                         {
-                            Id = "b88eddd761a24b959955b6f8949775e9",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9236),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9238),
-                            RoleId = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            UserId = "cfef668022ed4bc8a874cc0992fe83ab0"
+                            Id = "5f1dee0feca3455fb4b1472c69fe7b9a",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(433),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(435),
+                            RoleId = "1f4e205b776f410787811bd1645b61e53",
+                            UserId = "c264d703db4044dba25760fc75db6c640"
                         },
                         new
                         {
-                            Id = "1e9a0590f0d0468285e429d12d232d10",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9395),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9397),
-                            RoleId = "ae5a22419c3d486cb713f22e9685320d8",
-                            UserId = "4265411c156049a0af887992143f215f2"
+                            Id = "d8d67d0f50114b959c2428cb958d7005",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(672),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(674),
+                            RoleId = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            UserId = "66cbfdc07a484756bf5ad6ff67f0bbe91"
                         },
                         new
                         {
-                            Id = "5a1785acdc124b74a68d90c50a16236e",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9740),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9742),
-                            RoleId = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            UserId = "b180dee3c7fa4d798730e7a49dfc192c6"
+                            Id = "88531c69364543faabd7da026ae16c7f",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(748),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(750),
+                            RoleId = "1f4e205b776f410787811bd1645b61e53",
+                            UserId = "15e4b6be16b74a118a022c3b164d633c3"
                         },
                         new
                         {
-                            Id = "aff445667d264457842562d3d3799bf1",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(5928),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(5929),
-                            RoleId = "ae5a22419c3d486cb713f22e9685320d8",
-                            UserId = "846f59b1a8664de5bcbdc98bfab24b2f10"
+                            Id = "4a595895ddb94dd2842ab9831b2cc012",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5802),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5805),
+                            RoleId = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            UserId = "937c8bb4c6074a29bc5ad1ab13a1453e6"
                         },
                         new
                         {
-                            Id = "455abc2607204eb9947d4a63d5315379",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(5997),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(5999),
-                            RoleId = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            UserId = "77fdc61739bc40a796ca6d5c5d5118fc4"
+                            Id = "fd4aa88b07304d568624b2bd37ab8b1f",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5902),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5905),
+                            RoleId = "1f4e205b776f410787811bd1645b61e53",
+                            UserId = "a7708b03480a465aa4e3cec37bd2f6eb2"
                         },
                         new
                         {
-                            Id = "aba2c272fcfd4f6781644309ddca0604",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6179),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6180),
-                            RoleId = "ae5a22419c3d486cb713f22e9685320d8",
-                            UserId = "e0777d0b7a84470298806745537ee6a83"
+                            Id = "6311739398c14190a2429b66450095be",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6124),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6126),
+                            RoleId = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            UserId = "52ec5f7e6722467cb28ae5eceac4e50a6"
                         },
                         new
                         {
-                            Id = "bd4aeb9d1e624258a0246ab360620fcc",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6223),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6225),
-                            RoleId = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            UserId = "a52e403472ae4d7097e9b4e9d19ad94b6"
+                            Id = "a3d659a1fb8b49398e6f6ee6861cba45",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6201),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6203),
+                            RoleId = "1f4e205b776f410787811bd1645b61e53",
+                            UserId = "efa6ab5269b84548a086df2c3eafc77f3"
                         },
                         new
                         {
-                            Id = "888f3db2e8ef4d098923a16f254d90fe",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6359),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6361),
-                            RoleId = "ae5a22419c3d486cb713f22e9685320d8",
-                            UserId = "250e21d5b7514e99badd0b75efd52e4f4"
+                            Id = "48ef0a0dc94746b1851d49cd2254dec3",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6417),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6419),
+                            RoleId = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            UserId = "92eb2e1cbcc444ebac70bb310eb45aed24"
                         },
                         new
                         {
-                            Id = "ddefa22fa8c040bd85ad6107fb154939",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6434),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6436),
-                            RoleId = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            UserId = "6f774794eea440c7acd5f76095736b2224"
+                            Id = "116cd3dd191f4d59961fc5eab7ef0712",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6492),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6494),
+                            RoleId = "1f4e205b776f410787811bd1645b61e53",
+                            UserId = "95b5fd89a4564f288b8c8bf3446e447524"
                         },
                         new
                         {
-                            Id = "602add4077d54c44933ba3929959bbcf",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6547),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6549),
-                            RoleId = "ae5a22419c3d486cb713f22e9685320d8",
-                            UserId = "8290a668526045afb2035f9c265c9fab5"
+                            Id = "aaf16553a9d7439e90f4b00787c067fa",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6661),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6662),
+                            RoleId = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            UserId = "ea2780db62934fffb97ad359f219ea7d10"
                         },
                         new
                         {
-                            Id = "f350625118d04d339451b5c27e8fa0d0",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6594),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6596),
-                            RoleId = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            UserId = "5d41925d76ee4b26a1d9c0038a208f9830"
+                            Id = "e93b4c7c8ba845b2b5ab6a8d25c7c2a3",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6732),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6734),
+                            RoleId = "1f4e205b776f410787811bd1645b61e53",
+                            UserId = "23b1d57c0eb94a33ab775967f1932fa220"
                         },
                         new
                         {
-                            Id = "f02ea41ec36247768e9d2b90cd8cf204",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6860),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6862),
-                            RoleId = "ae5a22419c3d486cb713f22e9685320d8",
-                            UserId = "db8ff30ad9664722b0ff2c11b9dfe77030"
+                            Id = "b71a29b283d24cbf9716bb1adfd45c1e",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6944),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6947),
+                            RoleId = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            UserId = "dabaab45f5c54a179d71bbf23610fd3018"
                         },
                         new
                         {
-                            Id = "f243abe2fc77400d88c918e59a94be46",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6940),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6942),
-                            RoleId = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            UserId = "0bcfa7ce9eec4a669a8f63d6e42752126"
+                            Id = "2caf6fb6f2f6475b8bdb997aafab2dca",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7016),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7018),
+                            RoleId = "1f4e205b776f410787811bd1645b61e53",
+                            UserId = "adb8eef101f44b67906d5ea7aa2401cd30"
                         },
                         new
                         {
-                            Id = "d451dd6990e74043b4fccc0f5d0e0472",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7103),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7104),
-                            RoleId = "ae5a22419c3d486cb713f22e9685320d8",
-                            UserId = "469f1aca44a74c8cb084fb9f3dbd9e127"
+                            Id = "5bc8e6237a0d40e6839bc481d89b894b",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7219),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7222),
+                            RoleId = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            UserId = "c962de3d929d46a9b7117ab76b56fe8235"
                         },
                         new
                         {
-                            Id = "5169b912f6634693af583c0c5649ed44",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7149),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7150),
-                            RoleId = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            UserId = "5fe90d67d062443b8da1dc01b1b769bb7"
+                            Id = "4a67296b8cb04af4ba8a72d11ffd3f65",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7295),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7297),
+                            RoleId = "1f4e205b776f410787811bd1645b61e53",
+                            UserId = "54372827b7a34f1ea001ff75984ab27835"
                         },
                         new
                         {
-                            Id = "134606fb661d450e9a3ed03982cc566c",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7307),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7309),
-                            RoleId = "ae5a22419c3d486cb713f22e9685320d8",
-                            UserId = "ea19ea732058451b99328ae26169d4fa48"
+                            Id = "7e38c45ca62340c8ad12a37bd19dbde8",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7492),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7494),
+                            RoleId = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            UserId = "b9775773fe664aca8ebc6fd686af600324"
                         },
                         new
                         {
-                            Id = "d03f37ce2a614d1da542afb7fd041dd4",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7357),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7358),
-                            RoleId = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            UserId = "0b758c30b39b428f84deb20303103e5b48"
+                            Id = "a9b62697d1c747c8ad343574b89fd024",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7569),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7571),
+                            RoleId = "1f4e205b776f410787811bd1645b61e53",
+                            UserId = "a56a675260c34e15b3b625eea269de848"
                         });
                 });
 
@@ -619,109 +619,109 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cd381961d4414dd689ed26064f6174320",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9282),
-                            Date = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9285),
+                            Id = "d9a81a1b34984201b0ccd969d39e40840",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(483),
+                            Date = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(487),
                             Fee = 3001.0,
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9284),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(485),
                             Mark = "Signature 142340",
-                            Number = 62656,
+                            Number = 34352,
                             Total = 0.0,
                             Vat = 24.0
                         },
                         new
                         {
-                            Id = "86c24b4a2db6406f9f49cb3b70fc458f5",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9762),
-                            Date = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9765),
+                            Id = "d9ff65bb34c843818d7c919cc6b7cda64",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(789),
+                            Date = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(793),
                             Fee = 3010.0,
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9763),
-                            Mark = "Signature 142346",
-                            Number = 41950,
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(791),
+                            Mark = "Signature 142344",
+                            Number = 67069,
                             Total = 1.0,
                             Vat = 17.0
                         },
                         new
                         {
-                            Id = "246095b27d024b4aaa1437f6f2373c896",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6025),
-                            Date = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6028),
+                            Id = "f30e8045a0a94202b518730c009e2e8d6",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5948),
+                            Date = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5953),
                             Fee = 3100.0,
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6027),
-                            Mark = "Signature 142348",
-                            Number = 32590,
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5950),
+                            Mark = "Signature 1423410",
+                            Number = 32787,
                             Total = 2.0,
                             Vat = 24.0
                         },
                         new
                         {
-                            Id = "39ccbb514a3949b08b48b74ae5b27b019",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6248),
-                            Date = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6251),
+                            Id = "92f77aff998f4d2788514786829706f018",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6241),
+                            Date = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6246),
                             Fee = 4000.0,
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6250),
-                            Mark = "Signature 1423412",
-                            Number = 13463,
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6244),
+                            Mark = "Signature 142349",
+                            Number = 77707,
                             Total = 3.0,
                             Vat = 17.0
                         },
                         new
                         {
-                            Id = "d978af407a6e4a7d8775d109c2b36efe24",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6460),
-                            Date = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6463),
+                            Id = "f894e813df084e4c84d8766d59b082c44",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6532),
+                            Date = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6536),
                             Fee = 13000.0,
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6462),
-                            Mark = "Signature 1423416",
-                            Number = 44948,
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6534),
+                            Mark = "Signature 1423412",
+                            Number = 84478,
                             Total = 4.0,
                             Vat = 24.0
                         },
                         new
                         {
-                            Id = "f02773df93b04b5f9fdbb7d48e5325ce15",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6631),
-                            Date = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6634),
+                            Id = "b43a0986a2094260a6bd86dbe92460f430",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6771),
+                            Date = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6775),
                             Fee = 103000.0,
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6632),
-                            Mark = "Signature 1423430",
-                            Number = 48350,
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6773),
+                            Mark = "Signature 1423425",
+                            Number = 31627,
                             Total = 5.0,
                             Vat = 17.0
                         },
                         new
                         {
-                            Id = "a0f4571106f54ebbb80306d028f1dfbe24",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7019),
-                            Date = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7021),
+                            Id = "aff896df68bf433896798f5a89fc7e1124",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7084),
+                            Date = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7088),
                             Fee = 1003000.0,
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7020),
-                            Mark = "Signature 1423412",
-                            Number = 87747,
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7086),
+                            Mark = "Signature 1423424",
+                            Number = 60680,
                             Total = 6.0,
                             Vat = 24.0
                         },
                         new
                         {
-                            Id = "adbb386e991145738107440f198a33497",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7171),
-                            Date = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7174),
+                            Id = "9e346ec32c264cdbb884bc365327d46a21",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7330),
+                            Date = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7333),
                             Fee = 10003000.0,
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7173),
-                            Mark = "Signature 1423414",
-                            Number = 60263,
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7332),
+                            Mark = "Signature 1423442",
+                            Number = 32626,
                             Total = 7.0,
                             Vat = 17.0
                         },
                         new
                         {
-                            Id = "16af4f820c8641ea9d8b0db63dc735988",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7380),
-                            Date = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7382),
+                            Id = "a4d046a2afd24388a7aac253ff6de20324",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7604),
+                            Date = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7608),
                             Fee = 100003000.0,
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7381),
-                            Mark = "Signature 1423432",
-                            Number = 40145,
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7607),
+                            Mark = "Signature 1423448",
+                            Number = 13898,
                             Total = 8.0,
                             Vat = 24.0
                         });
@@ -817,26 +817,26 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f008454064df440ca661fe07d268b9cc0",
+                            Id = "54c45f06029f42f6ac551ca2049f7e970",
                             Bank = "ALPHA",
                             CalculationDaly = 0,
                             Code = "D-22-160",
                             Completed = 0,
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9314),
-                            CustomerId = "6954ce88536a4099bfa948c908e94cf00",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(540),
+                            CustomerId = "7c14c7cf53594a268a05171c4b95f58c0",
                             DayCost = 5.0,
                             DaysUntilPayment = -51,
                             DelayInPayment = 3,
                             Description = "Test Description Project_0",
                             Drawing = "KL-0",
-                            DurationDate = new DateTime(2024, 4, 6, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9314),
-                            EstPaymentDate = new DateTime(2024, 4, 6, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9314),
-                            InvoiceId = "cd381961d4414dd689ed26064f6174320",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9314),
+                            DurationDate = new DateTime(2024, 4, 6, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(540),
+                            EstPaymentDate = new DateTime(2024, 4, 6, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(540),
+                            InvoiceId = "d9a81a1b34984201b0ccd969d39e40840",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(540),
                             ManHours = 0,
                             Name = "Project_0",
                             PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 4, 7, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9314),
+                            PaymentDate = new DateTime(2024, 4, 7, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(540),
                             PaymentDetailes = "Payment Detailes For Project_0",
                             PendingPayments = 0.0,
                             PlanType = 1,
@@ -844,25 +844,25 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "25f03947ca1642638fe21c0ac672f20a4",
+                            Id = "89e662dabb6b4fcd9b7e7cdaa4515e0f2",
                             Bank = "NBG_IBANK",
                             CalculationDaly = 1,
                             Code = "D-22-161",
                             Completed = 10,
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9776),
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(817),
                             DayCost = 6.0,
                             DaysUntilPayment = -54,
                             DelayInPayment = 8,
-                            Description = "Test Description Project_4",
+                            Description = "Test Description Project_3",
                             Drawing = "KL-1",
-                            DurationDate = new DateTime(2024, 4, 9, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9776),
-                            EstPaymentDate = new DateTime(2024, 4, 8, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9776),
-                            InvoiceId = "86c24b4a2db6406f9f49cb3b70fc458f5",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9776),
+                            DurationDate = new DateTime(2024, 4, 9, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(817),
+                            EstPaymentDate = new DateTime(2024, 4, 8, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(817),
+                            InvoiceId = "d9ff65bb34c843818d7c919cc6b7cda64",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(817),
                             ManHours = 4,
                             Name = "Project_1",
                             PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 4, 10, 16, 15, 31, 600, DateTimeKind.Local).AddTicks(9776),
+                            PaymentDate = new DateTime(2024, 4, 10, 17, 33, 54, 953, DateTimeKind.Local).AddTicks(817),
                             PaymentDetailes = "Payment Detailes For Project_6",
                             PendingPayments = 1.0,
                             PlanType = 0,
@@ -870,186 +870,186 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         },
                         new
                         {
-                            Id = "71d650d6dbeb424ea9a62de38dfe8ebe8",
+                            Id = "114678bcb64d43489ede83373a645c1c4",
                             Bank = "ALPHA",
                             CalculationDaly = 2,
                             Code = "D-22-162",
                             Completed = 20,
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6058),
-                            CustomerId = "846f59b1a8664de5bcbdc98bfab24b2f10",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5996),
+                            CustomerId = "937c8bb4c6074a29bc5ad1ab13a1453e6",
                             DayCost = 7.0,
                             DaysUntilPayment = -57,
                             DelayInPayment = 13,
-                            Description = "Test Description Project_2",
+                            Description = "Test Description Project_6",
                             Drawing = "KL-2",
-                            DurationDate = new DateTime(2024, 4, 12, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6058),
-                            EstPaymentDate = new DateTime(2024, 4, 10, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6058),
-                            InvoiceId = "246095b27d024b4aaa1437f6f2373c896",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6058),
+                            DurationDate = new DateTime(2024, 4, 12, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5996),
+                            EstPaymentDate = new DateTime(2024, 4, 10, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5996),
+                            InvoiceId = "f30e8045a0a94202b518730c009e2e8d6",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5996),
                             ManHours = 8,
                             Name = "Project_2",
                             PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 4, 13, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6058),
-                            PaymentDetailes = "Payment Detailes For Project_8",
+                            PaymentDate = new DateTime(2024, 4, 13, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(5996),
+                            PaymentDetailes = "Payment Detailes For Project_10",
                             PendingPayments = 2.0,
                             PlanType = 1,
                             WorkingDays = 206
                         },
                         new
                         {
-                            Id = "8e6d8a06a6c74e9f86da4cb3b480d83b18",
+                            Id = "ed806da02b214ac99ee69a926e3e200b12",
                             Bank = "NBG_IBANK",
                             CalculationDaly = 3,
                             Code = "D-22-163",
                             Completed = 30,
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6265),
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6269),
                             DayCost = 8.0,
                             DaysUntilPayment = -60,
                             DelayInPayment = 18,
-                            Description = "Test Description Project_18",
+                            Description = "Test Description Project_15",
                             Drawing = "KL-3",
-                            DurationDate = new DateTime(2024, 4, 15, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6265),
-                            EstPaymentDate = new DateTime(2024, 4, 12, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6265),
-                            InvoiceId = "39ccbb514a3949b08b48b74ae5b27b019",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6265),
+                            DurationDate = new DateTime(2024, 4, 15, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6269),
+                            EstPaymentDate = new DateTime(2024, 4, 12, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6269),
+                            InvoiceId = "92f77aff998f4d2788514786829706f018",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6269),
                             ManHours = 12,
                             Name = "Project_3",
                             PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 4, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6265),
-                            PaymentDetailes = "Payment Detailes For Project_9",
+                            PaymentDate = new DateTime(2024, 4, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6269),
+                            PaymentDetailes = "Payment Detailes For Project_18",
                             PendingPayments = 3.0,
                             PlanType = 0,
                             WorkingDays = 209
                         },
                         new
                         {
-                            Id = "95ac63b1756a4da59c0796f6cb5337c924",
+                            Id = "99d55ebb451f498cb551f29a0822cbdf20",
                             Bank = "ALPHA",
                             CalculationDaly = 4,
                             Code = "D-22-164",
                             Completed = 40,
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6479),
-                            CustomerId = "250e21d5b7514e99badd0b75efd52e4f4",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6560),
+                            CustomerId = "92eb2e1cbcc444ebac70bb310eb45aed24",
                             DayCost = 9.0,
                             DaysUntilPayment = -63,
                             DelayInPayment = 23,
                             Description = "Test Description Project_24",
                             Drawing = "KL-4",
-                            DurationDate = new DateTime(2024, 4, 18, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6479),
-                            EstPaymentDate = new DateTime(2024, 4, 14, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6479),
-                            InvoiceId = "d978af407a6e4a7d8775d109c2b36efe24",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6479),
+                            DurationDate = new DateTime(2024, 4, 18, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6560),
+                            EstPaymentDate = new DateTime(2024, 4, 14, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6560),
+                            InvoiceId = "f894e813df084e4c84d8766d59b082c44",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6560),
                             ManHours = 16,
                             Name = "Project_4",
                             PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 4, 19, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6479),
-                            PaymentDetailes = "Payment Detailes For Project_12",
+                            PaymentDate = new DateTime(2024, 4, 19, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6560),
+                            PaymentDetailes = "Payment Detailes For Project_16",
                             PendingPayments = 4.0,
                             PlanType = 1,
                             WorkingDays = 212
                         },
                         new
                         {
-                            Id = "d3625be49a4b45838c90eb52f163610520",
+                            Id = "3a2355f25ed9452c9d149f5936b4133e15",
                             Bank = "NBG_IBANK",
                             CalculationDaly = 1,
                             Code = "D-22-165",
                             Completed = 50,
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6657),
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6796),
                             DayCost = 10.0,
                             DaysUntilPayment = -66,
                             DelayInPayment = 28,
-                            Description = "Test Description Project_5",
+                            Description = "Test Description Project_10",
                             Drawing = "KL-5",
-                            DurationDate = new DateTime(2024, 4, 21, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6657),
-                            EstPaymentDate = new DateTime(2024, 4, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6657),
-                            InvoiceId = "f02773df93b04b5f9fdbb7d48e5325ce15",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6657),
+                            DurationDate = new DateTime(2024, 4, 21, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6796),
+                            EstPaymentDate = new DateTime(2024, 4, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6796),
+                            InvoiceId = "b43a0986a2094260a6bd86dbe92460f430",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6796),
                             ManHours = 20,
                             Name = "Project_5",
                             PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 4, 22, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(6657),
-                            PaymentDetailes = "Payment Detailes For Project_25",
+                            PaymentDate = new DateTime(2024, 4, 22, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(6796),
+                            PaymentDetailes = "Payment Detailes For Project_5",
                             PendingPayments = 5.0,
                             PlanType = 0,
                             WorkingDays = 215
                         },
                         new
                         {
-                            Id = "b4a01ee468214a9ba7f279ea48188c6924",
+                            Id = "67cb0f8c40244ea3a03101f762f6e5806",
                             Bank = "ALPHA",
                             CalculationDaly = 1,
                             Code = "D-22-166",
                             Completed = 60,
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7037),
-                            CustomerId = "db8ff30ad9664722b0ff2c11b9dfe77030",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7108),
+                            CustomerId = "dabaab45f5c54a179d71bbf23610fd3018",
                             DayCost = 11.0,
                             DaysUntilPayment = -69,
                             DelayInPayment = 33,
-                            Description = "Test Description Project_24",
+                            Description = "Test Description Project_36",
                             Drawing = "KL-6",
-                            DurationDate = new DateTime(2024, 4, 24, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7037),
-                            EstPaymentDate = new DateTime(2024, 4, 18, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7037),
-                            InvoiceId = "a0f4571106f54ebbb80306d028f1dfbe24",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7037),
+                            DurationDate = new DateTime(2024, 4, 24, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7108),
+                            EstPaymentDate = new DateTime(2024, 4, 18, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7108),
+                            InvoiceId = "aff896df68bf433896798f5a89fc7e1124",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7108),
                             ManHours = 24,
                             Name = "Project_6",
                             PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 4, 25, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7037),
-                            PaymentDetailes = "Payment Detailes For Project_12",
+                            PaymentDate = new DateTime(2024, 4, 25, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7108),
+                            PaymentDetailes = "Payment Detailes For Project_6",
                             PendingPayments = 6.0,
                             PlanType = 1,
                             WorkingDays = 218
                         },
                         new
                         {
-                            Id = "bdd732004bd147838166eb96b9ac4da614",
+                            Id = "7d298cd1bf2541c28ccd212ce82b6f3921",
                             Bank = "NBG_IBANK",
                             CalculationDaly = 1,
                             Code = "D-22-167",
                             Completed = 70,
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7187),
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7354),
                             DayCost = 12.0,
                             DaysUntilPayment = -72,
                             DelayInPayment = 38,
                             Description = "Test Description Project_7",
                             Drawing = "KL-7",
-                            DurationDate = new DateTime(2024, 4, 27, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7187),
-                            EstPaymentDate = new DateTime(2024, 4, 20, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7187),
-                            InvoiceId = "adbb386e991145738107440f198a33497",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7187),
+                            DurationDate = new DateTime(2024, 4, 27, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7354),
+                            EstPaymentDate = new DateTime(2024, 4, 20, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7354),
+                            InvoiceId = "9e346ec32c264cdbb884bc365327d46a21",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7354),
                             ManHours = 28,
                             Name = "Project_7",
                             PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 4, 28, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7187),
-                            PaymentDetailes = "Payment Detailes For Project_7",
+                            PaymentDate = new DateTime(2024, 4, 28, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7354),
+                            PaymentDetailes = "Payment Detailes For Project_14",
                             PendingPayments = 7.0,
                             PlanType = 0,
                             WorkingDays = 221
                         },
                         new
                         {
-                            Id = "d46ec5d3b5c84f759b0660c14f48125024",
+                            Id = "aee08190bbc0497ba3e5fc94eeee4fe748",
                             Bank = "ALPHA",
                             CalculationDaly = 1,
                             Code = "D-22-168",
                             Completed = 80,
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7396),
-                            CustomerId = "ea19ea732058451b99328ae26169d4fa48",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7634),
+                            CustomerId = "b9775773fe664aca8ebc6fd686af600324",
                             DayCost = 13.0,
                             DaysUntilPayment = -75,
                             DelayInPayment = 43,
-                            Description = "Test Description Project_40",
+                            Description = "Test Description Project_24",
                             Drawing = "KL-8",
-                            DurationDate = new DateTime(2024, 4, 30, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7396),
-                            EstPaymentDate = new DateTime(2024, 4, 22, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7396),
-                            InvoiceId = "16af4f820c8641ea9d8b0db63dc735988",
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7396),
+                            DurationDate = new DateTime(2024, 4, 30, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7634),
+                            EstPaymentDate = new DateTime(2024, 4, 22, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7634),
+                            InvoiceId = "a4d046a2afd24388a7aac253ff6de20324",
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7634),
                             ManHours = 32,
                             Name = "Project_8",
                             PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 5, 1, 16, 15, 31, 602, DateTimeKind.Local).AddTicks(7396),
-                            PaymentDetailes = "Payment Detailes For Project_40",
+                            PaymentDate = new DateTime(2024, 5, 1, 17, 33, 54, 955, DateTimeKind.Local).AddTicks(7634),
+                            PaymentDetailes = "Payment Detailes For Project_32",
                             PendingPayments = 8.0,
                             PlanType = 1,
                             WorkingDays = 224
@@ -1078,58 +1078,58 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6ef759a8c2534fe1a7a74f82f6bb43b51",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1239),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1241),
+                            Id = "01311616906f4a25b935a9cb63ff305b1",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(3968),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(3969),
                             Name = "Draftsmen"
                         },
                         new
                         {
-                            Id = "7a45b1fd0b594822bc35411234807b072",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1258),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1260),
+                            Id = "5a758191fb6549ed9786a39526d47d012",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(3980),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(3981),
                             Name = "Engineers"
                         },
                         new
                         {
-                            Id = "d69bd6b40d7343eca44dc6cf3b5095f63",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1274),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1276),
+                            Id = "1f4e205b776f410787811bd1645b61e53",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(3991),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(3992),
                             Name = "Project Managers"
                         },
                         new
                         {
-                            Id = "aa667da11b514452b6e9942763da0d074",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1292),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1294),
+                            Id = "2ce4f04aed99485b92280233d0c3bf204",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4001),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4003),
                             Name = "COO"
                         },
                         new
                         {
-                            Id = "8c1e3d5544cd4d26b759350d0df433425",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1311),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1314),
+                            Id = "a3d534b59a79415db352f8a99a45351d5",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4012),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4013),
                             Name = "CTO"
                         },
                         new
                         {
-                            Id = "8fedba7fdc124e2780ae994b302d9a966",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1330),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1332),
+                            Id = "be7fc92f5c6343c285b6d9900ce6f3206",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4025),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4027),
                             Name = "CEO"
                         },
                         new
                         {
-                            Id = "eba98ffc9950444dbcde9283f74386597",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1350),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1353),
+                            Id = "b002beadadef4f52b973da02ef9ff2ff7",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4036),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4038),
                             Name = "Guest"
                         },
                         new
                         {
-                            Id = "ae5a22419c3d486cb713f22e9685320d8",
-                            CreatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1368),
-                            LastUpdatedDate = new DateTime(2024, 2, 16, 16, 15, 31, 599, DateTimeKind.Local).AddTicks(1370),
+                            Id = "f04a7f19044b47c8a1c3837c1bd0df1d8",
+                            CreatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4046),
+                            LastUpdatedDate = new DateTime(2024, 2, 16, 17, 33, 54, 946, DateTimeKind.Local).AddTicks(4048),
                             Name = "Customer"
                         });
                 });

@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using EmpiriaMS.Models.Models.Base;
@@ -61,9 +62,12 @@ public class Repository<T> : IRepository<T>, IDisposable
 
         entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-        var oldEntity = _context.Set<T>().FirstOrDefaultAsync(i => i.Id.Equals(entity.Id));
-        _context.Entry(oldEntity).CurrentValues.SetValues(oldEntity);
-        await _context.SaveChangesAsync();
+        var updated = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+        if (updated != null)
+        {
+            ModelsHellper.SetValues(updated, entity);
+            await _context.SaveChangesAsync();
+        }
 
         return entity;
     }

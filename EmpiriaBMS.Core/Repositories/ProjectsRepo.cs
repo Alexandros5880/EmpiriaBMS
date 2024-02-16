@@ -99,39 +99,4 @@ public class ProjectsRepo : Repository<Project>
 
         return entity;
     }
-
-    public async Task<Project> Update(Project entity)
-    {
-        if (entity == null)
-            throw new ArgumentNullException(nameof(entity));
-
-        entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
-
-        Invoice invoice = entity?.Invoice ?? new Invoice();
-        if (invoice != null)
-        {
-            invoice.ProjectId = entity.Id;
-            invoice.Project = entity;
-            invoice.LastUpdatedDate = entity.LastUpdatedDate;
-
-            var updatedInvoice = await _context.Invoices.FirstOrDefaultAsync(x => x.Id == invoice.Id);
-            if (updatedInvoice != null)
-            {
-                updatedInvoice.SetValues(invoice);
-                await _context.SaveChangesAsync();
-            }
-
-            entity.Invoice = invoice;
-            entity.InvoiceId = invoice.Id;
-        }
-
-        var updatedProject = await _context.Projects.FirstOrDefaultAsync(x => x.Id == entity.Id);
-        if (updatedProject != null)
-        {
-            updatedProject.SetValues(entity);
-            await _context.SaveChangesAsync();
-        }
-
-        return entity;
-    }
 }
