@@ -21,14 +21,20 @@ public class DataProvider : IDataProvider, IDisposable
     public CastomerRepo Customers { get; set; }
     public UsersRepo Users { get; set; }
 
-    public DataProvider(AppDbContext context)
-    {
-        Roles = new RolesRepo(context);
-        Projects = new ProjectsRepo(context);
-        Invoices = new InvoiceRepo(context);
-        Employees = new EmployeeRepo(context);
-        Customers = new CastomerRepo(context);
-        Users = new UsersRepo(context);
+    public DataProvider(
+        RolesRepo roles,
+        ProjectsRepo projects,
+        InvoiceRepo invoices,
+        UsersRepo users,
+        EmployeeRepo employees,
+        CastomerRepo customers
+    ) {
+        Roles = roles;
+        Projects = projects;
+        Invoices = invoices;
+        Users = users;
+        Employees = employees;
+        Customers = customers;
     }
 
     protected virtual void Dispose(bool disposing)

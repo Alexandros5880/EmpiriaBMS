@@ -13,17 +13,19 @@
             <FluentProgressRing />
         </div>
     }
-
-    @if (AcceptButtons)
+    else
     {
-        <div class="mt-2 row">
-            <FluentButton class="col-6" OnClick="@(async () => await AcceptDialogOnAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => Close())">
-                Cancel
-            </FluentButton>
-        </div>
+        @if (AcceptButtons)
+        {
+            <div class="mt-2 row">
+                <FluentButton class="col-6" OnClick="@(async () => await AcceptDialogOnAccept())">
+                    Ok
+                </FluentButton>
+                <FluentButton class="col-6" OnClick="@(() => Close())">
+                    Cancel
+                </FluentButton>
+            </div>
+        }
     }
 
 </FluentDialog>

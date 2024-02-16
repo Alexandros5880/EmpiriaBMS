@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Update.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,4 +23,18 @@ public class Entity : IEntity
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime LastUpdatedDate { get; set; }
+
+    public Entity()
+    {
+        Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
+        CreatedDate = DateTime.Now.ToUniversalTime();
+        LastUpdatedDate = DateTime.Now.ToUniversalTime();
+    }
+
+    public void SetValues(Entity entity)
+    {
+        Id = entity.Id;
+        CreatedDate = entity.CreatedDate;
+        LastUpdatedDate = DateTime.Now.ToUniversalTime();
+    }
 }

@@ -18,8 +18,11 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.EnableSensitiveDataLogging();
+        //optionsBuilder.EnableSensitiveDataLogging(false);
+        //optionsBuilder.EnableServiceProviderCaching(false);
         optionsBuilder.UseSqlServer(localhostDB);
+        //ChangeTracker.AutoDetectChangesEnabled = false;
+        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -163,7 +166,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 UserId = employeeId,
-                RoleId = employes_roles_ids[random.Next(1, 6)]
+                RoleId = employes_roles_ids[random.Next(2, 3)]
             };
             builder.Entity<UserRole>().HasData(userRole_em);
 

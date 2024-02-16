@@ -1,6 +1,11 @@
-﻿using EmpiriaMS.Models;
+﻿using EmpiriaBMS.Models.Models;
+using EmpiriaMS.Models;
+using EmpiriaMS.Models.Models;
 using EmpiriaMS.Models.Models.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Xml.Linq;
@@ -26,6 +31,7 @@ public class Repository<T> : IRepository<T>, IDisposable
         entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
         await _context.Set<T>().AddAsync(entity);
+
         await _context.SaveChangesAsync();
 
         return entity;
@@ -42,6 +48,7 @@ public class Repository<T> : IRepository<T>, IDisposable
             throw new ArgumentNullException(nameof(entity));
 
         _context.Set<T>().Remove(entity);
+
         await _context.SaveChangesAsync();
 
         return entity;
@@ -54,12 +61,8 @@ public class Repository<T> : IRepository<T>, IDisposable
 
         entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-        //_context.Set<T>().Attach(entity);
-        _context.Set<T>().Update(entity);
-
-        //_context.Entry<T>(entity).State = EntityState.Detached;
-        //_context.Entry<T>(entity).State = EntityState.Modified;
-
+        var oldEntity = _context.Set<T>().FirstOrDefaultAsync(i => i.Id.Equals(entity.Id));
+        _context.Entry(oldEntity).CurrentValues.SetValues(oldEntity);
         await _context.SaveChangesAsync();
 
         return entity;
@@ -118,6 +121,8 @@ public class Repository<T> : IRepository<T>, IDisposable
 
         return await _context.Set<T>().AnyAsync(expresion);
     }
+
+    public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
 
     protected virtual void Dispose(bool disposing)
     {

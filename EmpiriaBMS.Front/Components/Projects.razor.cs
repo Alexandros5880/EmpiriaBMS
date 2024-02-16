@@ -86,7 +86,7 @@ public partial class Projects: IDisposable
         foreach (var item in updated)
         {
             if (await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
-                await DataProvider.Projects.Update(Mapper.Map<Project>(item));
+                DataProvider.Projects.Update(Mapper.Map<Project>(item));
         }
 
         _changedProjectIds.Clear();
@@ -157,9 +157,9 @@ public partial class Projects: IDisposable
     {
         isEditDialogOdepened = open;
         if (open)
-            _editHoursDialog.Show();
+            _editHoursDialog?.Show();
         else
-            _editHoursDialog.Hide();
+            _editHoursDialog?.Hide();
     }
 
     private void UpdateHours()
@@ -222,7 +222,8 @@ public partial class Projects: IDisposable
             if (defaultRoleId == null)
                 throw new Exception("Exception `Project Managers` role not exists!");
 
-            var dbUser = (await DataProvider.Roles.GetUsers(defaultRoleId)).FirstOrDefault();
+            var users = await DataProvider.Roles.GetUsers(defaultRoleId);
+            var dbUser = users.FirstOrDefault();
             //string defaultUserId = "cc71da774225492093e3cc418569f1a524";
             // var dbUser = await DataProvider.Employees.Get(defaultUserId);
             _logedUser = Mapper.Map<UserVM>(dbUser);

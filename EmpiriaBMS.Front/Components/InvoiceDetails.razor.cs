@@ -15,13 +15,19 @@ public partial class InvoiceDetails : IDisposable
 
     protected override void OnParametersSet()
     {
-        Invoice.PropertyChanged -= _onInvoiceChanged;
-        Invoice.PropertyChanged += _onInvoiceChanged;
+        if (Invoice != null)
+        {
+            Invoice.PropertyChanged -= _onInvoiceChanged;
+            Invoice.PropertyChanged += _onInvoiceChanged;
+        }
     }
 
     private void _onInvoiceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         var project = (ProjectVM)sender.GetType().GetProperty(nameof(InvoiceVM.Project)).GetValue(sender);
+        if (project != null || project?.Id == null)
+            return;
+
         var id = Convert.ToString(project.Id);
         PropertyChanged(id);
     }

@@ -106,7 +106,7 @@
                                         <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
                                             style="min-width: 120px;">
                                             <div class="input-group">
-                                                <input type="number" class="form-control" @bind="project.Completed">
+                                                <input min="0" max="100" type="number" class="form-control" @bind="project.Completed">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">%</span>
                                                 </div>
@@ -126,6 +126,8 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Paginator -->
                     <div style="text-align: right;">
                         <Paginator Renderer="@_getProjects" Peginator="@_paginator" />
                     </div>
@@ -145,7 +147,7 @@
                     <!-- Controlls Buttons -->
                     <div class="mt-5 mb-3 d-flex justify-content-evenly">
                         <span class="fluent--delete-28-regular shadow" @onclick=@(async () => await _onDeleteBtnClcked())></span>
-                        <span class="fluent--save-28-regular shadow" @onclick=@(async () => await _onSaveClicked())></span>
+                        <span class="fluent--save-28-regular shadow" @onclick=@(() => _onSaveClicked())></span>
                     </div>
 
                 </div>

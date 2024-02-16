@@ -2,6 +2,7 @@
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
+using EmpiriaMS.Models.Models.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -66,5 +67,71 @@ public class ProjectsRepo : Repository<Project>
                              .Where(r => r.ProjectId.Equals(projectId))
                              .Select(r => r.Employee)
                              .ToListAsync();
+    }
+
+    public async Task<Project> Add(Project entity)
+    {
+        if (entity == null)
+            throw new ArgumentNullException(nameof(entity));
+
+        entity.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
+        entity.CreatedDate = DateTime.Now.ToUniversalTime();
+        entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+        Invoice invoice = entity?.Invoice ?? new Invoice();
+        if (invoice != null)
+        {
+            invoice.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
+            invoice.CreatedDate = DateTime.Now.ToUniversalTime();
+            invoice.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+            invoice.ProjectId = entity.Id;
+            invoice.Project = null;
+            invoice.LastUpdatedDate = entity.LastUpdatedDate;
+            await _context.Set<Invoice>().AddAsync(invoice);
+            entity.Invoice = null;
+            entity.InvoiceId = invoice.Id;
+        }
+
+
+        await _context.Set<Project>().AddAsync(entity);
+
+        await _context.SaveChangesAsync();
+
+        return entity;
+    }
+
+    public async Task<Project> Update(Project entity)
+    {
+        if (entity == null)
+            throw new ArgumentNullException(nameof(entity));
+
+        entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+        Invoice invoice = entity?.Invoice ?? new Invoice();
+        if (invoice != null)
+        {
+            invoice.ProjectId = entity.Id;
+            invoice.Project = entity;
+            invoice.LastUpdatedDate = entity.LastUpdatedDate;
+
+            var updatedInvoice = await _context.Invoices.FirstOrDefaultAsync(x => x.Id == invoice.Id);
+            if (updatedInvoice != null)
+            {
+                updatedInvoice.SetValues(invoice);
+                await _context.SaveChangesAsync();
+            }
+
+            entity.Invoice = invoice;
+            entity.InvoiceId = invoice.Id;
+        }
+
+        var updatedProject = await _context.Projects.FirstOrDefaultAsync(x => x.Id == entity.Id);
+        if (updatedProject != null)
+        {
+            updatedProject.SetValues(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        return entity;
     }
 }
