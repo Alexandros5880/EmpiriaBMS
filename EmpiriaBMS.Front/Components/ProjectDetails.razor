@@ -1,0 +1,65 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Components;
+@using Microsoft.AspNetCore.Components;
+
+<div class="card bg-white rounded p-2 w-100">
+
+    <h3 class="mt-1 mb-1">Project</h3>
+
+    <form class="mb-2">
+
+        <!-- Name -->
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text"
+                   class="form-control"
+                   id="name"
+                   @bind="@Project.Name">
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text"
+                   class="form-control"
+                   id="description"
+                   @bind="@Project.Description">
+        </div>
+
+        <!-- Code -->
+        <div class="form-group">
+            <label for="code">Code</label>
+            <input type="text"
+                   class="form-control"
+                   id="code"
+                   @bind="@Project.Code">
+        </div>
+
+        <!-- Drawing -->
+        <div class="form-group">
+            <label for="drawing">Drawing</label>
+            <input type="number"
+                   class="form-control"
+                   id="drawing"
+                   @bind="@Project.Drawing">
+        </div>
+
+        <!-- PlanType -->
+        <div class="form-group">
+            <label for="planType">PlanType</label>
+            <input type="number"
+                   class="form-control"
+                   id="planType"
+                   @bind="@Project.PlanType">
+        </div>
+
+        <!-- WorkingDays -->
+        <div class="form-group">
+            <label for="workingDays">WorkingDays</label>
+            <input type="number"
+                   class="form-control"
+                   id="workingDays"
+                   @bind="@Project.WorkingDays">
+        </div>
+
+    </form>
+</div>

@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using static Microsoft.Fast.Components.FluentUI.Emojis.Objects.Color.Default;
+using EmpiriaBMS.Front.Components;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Projects: IDisposable
@@ -22,9 +23,14 @@ public partial class Projects: IDisposable
     bool runInTeams = false;
     bool IsAllChecked = false;
 
+    // Hours Dialog
     private FluentDialog _editHoursDialog;
     private bool isEditDialogOdepened = false;
     private double _hoursToChange = 0.0;
+
+    // Project Deyailes Dialog
+    private FluentDialog _projectDetailesDialog;
+    private bool isProjectDetailesDialogOdepened = false;
 
     private List<string> _changedProjectIds = new List<string>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
@@ -33,6 +39,8 @@ public partial class Projects: IDisposable
 
     private UserVM _logedUser;
 
+    // Accept Dialog
+    private ProjectVM _selectedProjectSaved = null;
     private ProjectVM _selectedProject = new ProjectVM();
     private InvoiceVM _selectedInvoice = new InvoiceVM();
 
@@ -48,6 +56,7 @@ public partial class Projects: IDisposable
         base.OnInitialized();
         StateHasChanged();
         ToogleEditHoursDialog(false);
+        ToogleProjectDetailesDialog(false);
         _acceptDialog?.Close();
     }
 
@@ -153,7 +162,8 @@ public partial class Projects: IDisposable
             // TODO: Log Error
         }
     }
-
+    
+    #region HoursDialog
     private void ToogleEditHoursDialog(bool open)
     {
         isEditDialogOdepened = open;
@@ -169,6 +179,34 @@ public partial class Projects: IDisposable
         _hoursToChange = 0.0;
         ToogleEditHoursDialog(false);
     }
+    #endregion
+
+    #region Project Detailes Dialog
+    private void ToogleProjectDetailesDialog(bool open)
+    {
+        isProjectDetailesDialogOdepened = open;
+        if (open)
+            _projectDetailesDialog?.Show();
+        else
+            _projectDetailesDialog?.Hide();
+    }
+    
+    private void _openPorjectDetailsClick()
+    {
+        _selectedProjectSaved = _selectedProject;
+        ToogleProjectDetailesDialog(true);
+    }
+
+    private void _updateProject(bool cancel = true)
+    {
+        if (cancel)
+        {
+            _selectedProject = _selectedProjectSaved;
+        }
+        _selectedProjectSaved = null;
+        ToogleProjectDetailesDialog(false);
+    }
+    #endregion
 
     private void OnSelectProject(ProjectVM project)
     {
@@ -263,6 +301,12 @@ public partial class Projects: IDisposable
     }
 
     private void _invoice_PropertyChanged(string id)
+    {
+        if (!_changedProjectIds.Contains(_selectedProject.Id) && !_selectedProject.Id.Equals(string.Empty))
+            _changedProjectIds.Add(_selectedProject.Id);
+    }
+
+    private void _project_PropertyChanged(string id)
     {
         if (!_changedProjectIds.Contains(_selectedProject.Id) && !_selectedProject.Id.Equals(string.Empty))
             _changedProjectIds.Add(_selectedProject.Id);
