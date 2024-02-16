@@ -96,7 +96,7 @@ public class ProjectsRepo : Repository<Project>
         catch (Exception ex)
         {
             Debug.WriteLine(
-                $"Exception On Repository.Update({entity.GetType()}): " +
+                $"Exception On ProjectsRepo.Update({entity.GetType()}): " +
                 $"{ex.Message}\n ex.InnerException.Message: {ex.InnerException?.Message}"
             );
             return null;

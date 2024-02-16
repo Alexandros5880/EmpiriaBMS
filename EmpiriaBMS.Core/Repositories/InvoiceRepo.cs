@@ -4,6 +4,7 @@ using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -49,5 +50,35 @@ public class InvoiceRepo : Repository<Invoice>, IDisposable
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
                              .ToListAsync();
+    }
+
+    public async Task<Invoice> Update(Invoice entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+
+            var entry = await _context.Set<Invoice>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+            if (entry != null)
+            {
+                _context.Entry(entry.Project).CurrentValues.SetValues(entity.Project);
+                _context.Entry(entry).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+            }
+
+            return entity;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(
+                $"Exception On InvoiceRepo.Update({entity.GetType()}): " +
+                $"{ex.Message}\n ex.InnerException.Message: {ex.InnerException?.Message}"
+            );
+            return null;
+        }
     }
 }
