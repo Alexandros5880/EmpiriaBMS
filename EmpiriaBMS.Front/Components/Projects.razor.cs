@@ -141,6 +141,7 @@ public partial class Projects: IDisposable
         try {
             var newProject = new ProjectVM();
             newProject.Invoice = new InvoiceVM();
+            newProject.Invoice.Project = newProject;
             _projects.Insert(0, newProject);
             _selectedProject = newProject;
             _selectedInvoice = _selectedProject.Invoice;

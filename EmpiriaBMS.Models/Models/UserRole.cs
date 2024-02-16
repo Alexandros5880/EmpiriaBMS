@@ -11,13 +11,9 @@ using System.Threading.Tasks;
 namespace EmpiriaBMS.Models.Models;
 public class UserRole : Entity
 {
-    [Required]
-    [ForeignKey("User")]
     public string UserId { get; set; }
     public User User { get; set; }
 
-    [Required]
-    [ForeignKey("Role")]
     public string RoleId { get; set; }
     public Role Role { get; set; }
 }

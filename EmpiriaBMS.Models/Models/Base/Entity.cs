@@ -30,11 +30,4 @@ public class Entity : IEntity
         CreatedDate = DateTime.Now.ToUniversalTime();
         LastUpdatedDate = DateTime.Now.ToUniversalTime();
     }
-
-    public void SetValues<T>(T entity) where T : IEntity
-    {
-        Id = entity.Id;
-        CreatedDate = entity.CreatedDate;
-        LastUpdatedDate = DateTime.Now.ToUniversalTime();
-    }
 }

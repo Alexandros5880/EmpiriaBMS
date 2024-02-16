@@ -24,27 +24,6 @@ public class Invoice : Entity
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
-    [ForeignKey("Project")]
     public string? ProjectId { get; set; }
     public Project? Project { get; set; }
-
-    public Invoice()
-    {
-        Total = 0.0;
-        Vat = 0.0;
-        Fee = 0.0;
-        Number = 0;
-        Mark = string.Empty;
-        Date = DateTime.Now;
-    }
-
-    public void SetValues(Invoice entity)
-    {
-        Total = entity.Total;
-        Vat = entity.Vat;
-        Fee = entity.Fee;
-        Number = entity.Number;
-        Mark = entity.Mark;
-        Date = entity.Date;
-    }
 }

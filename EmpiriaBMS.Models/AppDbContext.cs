@@ -121,30 +121,6 @@ public class AppDbContext : DbContext
 
         for (var i = 0; i < 9; i++)
         {
-            // Customers
-            var customerId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7));
-            User customer = new User()
-            {
-                Id = Convert.ToString(customerId),
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Email = $"alexpl_{i}@gmail.com",
-                LastName = "Alexandros_" + Convert.ToString(i),
-                FirstName = "Platanios_Customer_" + Convert.ToString(i),
-                Phone1 = "694927778" + Convert.ToString(i),
-                Description = "Test Description Client " + Convert.ToString(i),
-            };
-            builder.Entity<User>().HasData(customer);
-            UserRole userRole_c = new UserRole()
-            {
-                Id = Guid.NewGuid().ToString("N"),
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = customerId,
-                RoleId = role_8_id
-            };
-            builder.Entity<UserRole>().HasData(userRole_c);
-
             // Employees
             var employeeId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7));
             User employee = new User()
@@ -169,22 +145,6 @@ public class AppDbContext : DbContext
                 RoleId = employes_roles_ids[random.Next(2, 3)]
             };
             builder.Entity<UserRole>().HasData(userRole_em);
-
-            // Invoices
-            var invoiceId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1,7));
-            Invoice invoice = new Invoice()
-            {
-                Id = invoiceId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Date = DateTime.Now,
-                Total = i * Math.Pow(1, 3),
-                Vat = i % 2 == 0 ? 24 : 17,
-                Fee = 3000 + Math.Pow(10, i),
-                Number = random.Next(10000, 90000),
-                Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7))
-            };
-            builder.Entity<Invoice>().HasData(invoice);
 
             // Projects
             var projectId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7));
@@ -217,8 +177,6 @@ public class AppDbContext : DbContext
                 CalculationDaly = i < 5 ? i : i - (i - 1),
                 Completed = i * 10 < 100 ? i * 10 : 100 - (i * 10),
                 ManHours = 4 * i,
-                CustomerId = i % 2 == 0 ? customerId : null,
-                InvoiceId = invoiceId,
             };
             builder.Entity<Project>().HasData(pjk);
 
@@ -235,6 +193,48 @@ public class AppDbContext : DbContext
                 };
                 builder.Entity<ProjectEmployee>().HasData(projectEmployee);
             }
+
+            // Customers
+            var customerId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7));
+            User customer = new User()
+            {
+                Id = Convert.ToString(customerId),
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Email = $"alexpl_{i}@gmail.com",
+                LastName = "Alexandros_" + Convert.ToString(i),
+                FirstName = "Platanios_Customer_" + Convert.ToString(i),
+                Phone1 = "694927778" + Convert.ToString(i),
+                Description = "Test Description Client " + Convert.ToString(i),
+                ProjectId = projectId,
+            };
+            builder.Entity<User>().HasData(customer);
+            UserRole userRole_c = new UserRole()
+            {
+                Id = Guid.NewGuid().ToString("N"),
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                UserId = customerId,
+                RoleId = role_8_id
+            };
+            builder.Entity<UserRole>().HasData(userRole_c);
+
+            // Invoices
+            var invoiceId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7));
+            Invoice invoice = new Invoice()
+            {
+                Id = invoiceId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Total = i * Math.Pow(1, 3),
+                Vat = i % 2 == 0 ? 24 : 17,
+                Fee = 3000 + Math.Pow(10, i),
+                Number = random.Next(10000, 90000),
+                Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
+                ProjectId = projectId,
+            };
+            builder.Entity<Invoice>().HasData(invoice);
         }
 
     }

@@ -69,34 +69,4 @@ public class ProjectsRepo : Repository<Project>
                              .ToListAsync();
     }
 
-    public async Task<Project> Add(Project entity)
-    {
-        if (entity == null)
-            throw new ArgumentNullException(nameof(entity));
-
-        entity.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
-        entity.CreatedDate = DateTime.Now.ToUniversalTime();
-        entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
-
-        Invoice invoice = entity?.Invoice ?? new Invoice();
-        if (invoice != null)
-        {
-            invoice.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
-            invoice.CreatedDate = DateTime.Now.ToUniversalTime();
-            invoice.LastUpdatedDate = DateTime.Now.ToUniversalTime();
-            invoice.ProjectId = entity.Id;
-            invoice.Project = null;
-            invoice.LastUpdatedDate = entity.LastUpdatedDate;
-            await _context.Set<Invoice>().AddAsync(invoice);
-            entity.Invoice = null;
-            entity.InvoiceId = invoice.Id;
-        }
-
-
-        await _context.Set<Project>().AddAsync(entity);
-
-        await _context.SaveChangesAsync();
-
-        return entity;
-    }
 }

@@ -15,13 +15,5 @@ public class Role : Entity
     [Required]
     public string? Name { get; set; }
 
-    public Role()
-    {
-        Name = string.Empty;
-    }
-
-    public void SetValues(Role entity)
-    {
-        Name = entity.Name;
-    }
+    public ICollection<UserRole> UserRoles { get; set; }
 }

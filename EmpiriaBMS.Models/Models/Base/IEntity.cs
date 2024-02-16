@@ -6,6 +6,5 @@ namespace EmpiriaMS.Models.Models.Base
         DateTime CreatedDate { get; set; }
         string Id { get; set; }
         DateTime LastUpdatedDate { get; set; }
-        void SetValues<T>(T entity) where T : IEntity;
     }
 }
