@@ -22,13 +22,13 @@ public class Repository<T> : IRepository<T>, IDisposable
     public Repository(AppDbContext context) =>
         _context = context;
 
-    public async Task<T> Add(T entity)
+    public async Task<T> Add(T entity, bool update = false)
     {
         if (entity == null)
             throw new ArgumentNullException(nameof(entity));
 
         entity.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
-        entity.CreatedDate = DateTime.Now.ToUniversalTime();
+        entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
         entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
         await _context.Set<T>().AddAsync(entity);
@@ -64,10 +64,11 @@ public class Repository<T> : IRepository<T>, IDisposable
 
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-            var updated = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == entity.Id);
-            if (updated != null)
+            var entry = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+            if (entry != null)
             {
-                ModelsHellper.SetValues(updated, entity);
+                //ModelsHellper.SetValues(updated, entity);
+                _context.Entry(entry).CurrentValues.SetValues(entity);
                 await _context.SaveChangesAsync();
             }
 

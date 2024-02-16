@@ -20,7 +20,7 @@ public interface IRepository<T>
     Task<int> Count();
     Task<int> Count(Expression<Func<T, bool>> expresion);
     Task<bool> Any(Expression<System.Func<T, bool>> expresion);
-    Task<T> Add(T model);
+    Task<T> Add(T model, bool update);
     Task<T> Update(T model);
     Task<T> Delete(string id);
     Task SaveChangesAsync();

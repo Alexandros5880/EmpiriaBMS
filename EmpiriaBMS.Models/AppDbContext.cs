@@ -20,6 +20,9 @@ public class AppDbContext : DbContext
     {
         //optionsBuilder.EnableSensitiveDataLogging(false);
         //optionsBuilder.EnableServiceProviderCaching(false);
+        optionsBuilder.EnableSensitiveDataLogging(true);
+        optionsBuilder.EnableServiceProviderCaching(true);
+        optionsBuilder.EnableThreadSafetyChecks(true);
         optionsBuilder.UseSqlServer(localhostDB);
         //ChangeTracker.AutoDetectChangesEnabled = false;
         base.OnConfiguring(optionsBuilder);

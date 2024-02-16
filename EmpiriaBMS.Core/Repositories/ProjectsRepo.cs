@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
@@ -6,10 +7,12 @@ using EmpiriaMS.Models.Models.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class ProjectsRepo : Repository<Project>
@@ -67,6 +70,37 @@ public class ProjectsRepo : Repository<Project>
                              .Where(r => r.ProjectId.Equals(projectId))
                              .Select(r => r.Employee)
                              .ToListAsync();
+    }
+
+    public async Task<Project> Update(Project entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+
+            var entry = await _context.Set<Project>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+            if (entry != null)
+            {
+                _context.Entry(entry.Customer).CurrentValues.SetValues(entity.Customer);
+                _context.Entry(entry.Invoice).CurrentValues.SetValues(entity.Invoice);
+                _context.Entry(entry).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+            }
+
+            return entity;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(
+                $"Exception On Repository.Update({entity.GetType()}): " +
+                $"{ex.Message}\n ex.InnerException.Message: {ex.InnerException?.Message}"
+            );
+            return null;
+        }
     }
 
 }
