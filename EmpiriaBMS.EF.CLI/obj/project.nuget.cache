@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "irm9gcNWo60TG0m6S7M3G4Mw3TV8f3kUHwnuKZ8zLi+cEa4iejOaF4Mq/lmdQ+jut3QZ4TIkD0yiFNmCTTASmg==",
+  "dgSpecHash": "z7NlUhutkAx4yevafG9g2Y74amm8CKG1xFJ2KTx9ofaEvkcPleqz8hgfEFOXyD6DnLxQDh4jrkGaExNlmzwm9Q==",
   "success": true,
-  "projectFilePath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
+  "projectFilePath": "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Alexp\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Alexp\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

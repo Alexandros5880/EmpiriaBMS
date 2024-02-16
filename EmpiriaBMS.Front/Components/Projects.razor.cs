@@ -5,14 +5,17 @@ using EmpiriaMS.Models.Enums;
 using EmpiriaMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.Kiota.Abstractions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using static Microsoft.Fast.Components.FluentUI.Emojis.Objects.Color.Default;
 
 namespace EmpiriaBMS.Front.Components;
-public partial class Projects
+public partial class Projects: IDisposable
 {
+    private bool disposedValue;
+
     bool startLoading = true;
     bool filterLoading = false;
 
@@ -46,38 +49,6 @@ public partial class Projects
         StateHasChanged();
         ToogleEditHoursDialog(false);
         _acceptDialog?.Close();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            runInTeams = await MicrosoftTeams.IsInTeams();
-            if (runInTeams)
-            {
-
-            }
-
-            // Update UI
-            //StateHasChanged();
-        }
-
-    }
-
-    // TODO: Find a way to detect changes on records.
-    //private void _onTableRecordChange(ProjectVM project, string fieldname, object? args)
-    //{
-    //    var value = args.GetType().GetProperty("Value").GetValue(project, null);
-    //    project.GetType().GetProperty(fieldname).SetValue(project, value);
-    //    if (!_changedProjectIds.Contains(project.Id) && !project.Id.Equals(string.Empty))
-    //        _changedProjectIds.Add(project.Id);
-    //}
-    private void _onTableRecordChange(string id)
-    {
-        if (!_changedProjectIds.Contains(id) && !id.Equals(string.Empty))
-            _changedProjectIds.Add(id);
     }
 
     private async Task _onSaveClicked()
@@ -202,8 +173,6 @@ public partial class Projects
     {
         _selectedProject = project;
         _selectedInvoice = Mapper.Map<InvoiceVM>(project.Invoice);
-        // TODO: FIND A BETTER WAYT TO DETECT CHANGES
-        _onTableRecordChange(project.Id);
     }
 
     private void SelectionChanged()
@@ -228,7 +197,10 @@ public partial class Projects
                         .Select(p => Mapper.Map<ProjectVM>(p))
                         .ToList();
             _projects.Clear();
-            data.ForEach(_projects.Add);
+            data.ForEach(p => {
+                p.PropertyChanged += P_PropertyChanged;
+                _projects.Add(p);
+            });
             _selectedProject = _projects.FirstOrDefault();
             _selectedInvoice = _selectedProject.Invoice;
         }
@@ -278,5 +250,40 @@ public partial class Projects
             // TODO: Log Error
             return null;
         }
+    }
+
+    #region Properties Changed Venets
+    private void P_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        var id = sender.GetType().GetProperty(nameof(ProjectVM.Id)).GetValue(sender);
+        if (!_changedProjectIds.Contains(_selectedProject.Id) && !_selectedProject.Id.Equals(string.Empty))
+            _changedProjectIds.Add(_selectedProject.Id);
+    }
+
+    private void _invoice_PropertyChanged(string id)
+    {
+        if (!_changedProjectIds.Contains(_selectedProject.Id) && !_selectedProject.Id.Equals(string.Empty))
+            _changedProjectIds.Add(_selectedProject.Id);
+    }
+    #endregion
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                _projects.ToList().ForEach(p => {
+                    p.PropertyChanged -= P_PropertyChanged;
+                });
+            }
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

@@ -46,3 +46,19 @@ E:\Working Projects\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug
 E:\Working Projects\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\refint\EmpiriaBMS.Core.dll
 E:\Working Projects\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.pdb
 E:\Working Projects\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\ref\EmpiriaBMS.Core.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\bin\Debug\net6.0\EmpiriaBMS.Core.deps.json
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\bin\Debug\net6.0\EmpiriaBMS.Core.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\bin\Debug\net6.0\EmpiriaBMS.Core.pdb
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\bin\Debug\net6.0\EmpiriaBMS.Models.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\bin\Debug\net6.0\EmpiriaBMS.Models.pdb
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.csproj.AssemblyReference.cache
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.AssemblyInfoInputs.cache
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.AssemblyInfo.cs
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.csproj.CoreCompileInputs.cache
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.sourcelink.json
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.csproj.CopyComplete
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\refint\EmpiriaBMS.Core.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.pdb
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\ref\EmpiriaBMS.Core.dll

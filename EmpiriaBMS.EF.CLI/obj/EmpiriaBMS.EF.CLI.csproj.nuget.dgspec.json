@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj": {}
+    "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj": {}
   },
   "projects": {
-    "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj": {
+    "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
+        "projectUniqueName": "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
         "projectName": "EmpiriaBMS.EF.CLI",
-        "projectPath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
+        "projectPath": "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\EmpiriaBMS.EF.CLI.csproj",
         "packagesPath": "C:\\Users\\Alexp\\.nuget\\packages\\",
-        "outputPath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\obj\\",
+        "outputPath": "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.EF.CLI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -34,8 +34,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj": {
-                "projectPath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj"
+              "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj": {
+                "projectPath": "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj"
               }
             }
           }
@@ -85,14 +85,14 @@
         }
       }
     },
-    "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj": {
+    "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj",
+        "projectUniqueName": "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj",
         "projectName": "EmpiriaBMS.Models",
-        "projectPath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj",
+        "projectPath": "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\EmpiriaBMS.Models.csproj",
         "packagesPath": "C:\\Users\\Alexp\\.nuget\\packages\\",
-        "outputPath": "E:\\Working Projects\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\obj\\",
+        "outputPath": "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
