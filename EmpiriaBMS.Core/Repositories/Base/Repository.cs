@@ -64,39 +64,12 @@ public class Repository<T> : IRepository<T>, IDisposable
 
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-
-
-
-            var entry = _context.ChangeTracker.Entries<T>().FirstOrDefault(e => 
-                                    _context.Entry(e.Entity).Properties.Select(p => p.CurrentValue)
-                                            .SequenceEqual(_context.Entry(entity).Properties.Select(p => p.CurrentValue)));
-
-            if (entry != null)
+            var updated = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+            if (updated != null)
             {
-                entry.State = EntityState.Detached;
-            }
-
-            _context.Set<T>().Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
-
-            try
-            {
+                ModelsHellper.SetValues(updated, entity);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                // Handle exception if needed
-                throw;
-            }
-
-
-
-            //var updated = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == entity.Id);
-            //if (updated != null)
-            //{
-            //    ModelsHellper.SetValues(updated, entity);
-            //    await _context.SaveChangesAsync();
-            //}
 
             return entity;
         }

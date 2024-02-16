@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EmpiriaBMS.EF.CLI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f2d6d7324a5fdf8d0a52e906889598edaae35ae")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c096f2bc1bf77f7b4b1f1d61ab24e9c4580fbd94")]
 [assembly: System.Reflection.AssemblyProductAttribute("EmpiriaBMS.EF.CLI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EmpiriaBMS.EF.CLI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
