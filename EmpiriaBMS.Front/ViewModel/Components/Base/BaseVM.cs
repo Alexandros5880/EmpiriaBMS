@@ -10,6 +10,8 @@ public class BaseVM : BNotifyPropertyChanged
         get => _id;
         set
         {
+            if (value == _id)
+                return;
             _id = value;
             NotifyPropertyChanged(nameof(Id));
         }
@@ -21,6 +23,8 @@ public class BaseVM : BNotifyPropertyChanged
         get => _createdDate;
         set
         {
+            if (value == _createdDate)
+                return;
             _createdDate = value;
             NotifyPropertyChanged(nameof(CreatedDate));
         }
@@ -32,6 +36,8 @@ public class BaseVM : BNotifyPropertyChanged
         get => _lastUpdatedDate;
         set
         {
+            if (value == _lastUpdatedDate)
+                return;
             _lastUpdatedDate = value;
             NotifyPropertyChanged(nameof(LastUpdatedDate));
         }

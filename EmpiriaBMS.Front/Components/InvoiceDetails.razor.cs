@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.Components.Projects;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
 

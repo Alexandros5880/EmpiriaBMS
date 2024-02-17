@@ -44,7 +44,7 @@
                                 <div class="col-lg-2 col-md-4 col-sm-4 row primary-bg-color rounded-1">
                                     <FluentButton BackgroundColor="Transparent"
                                                   Appearance="Appearance.Lightweight"
-                                                  @onclick="@(() => ToogleEditHoursDialog(true))">
+                                                  @onclick="@(() => _toogleEditHoursDialog(true))">
                                         <span class="mt-2">@(_logedUser.Hours) Hours</span>
                                         <FluentIcon Icon="Edit" />
                                     </FluentButton>
@@ -62,7 +62,7 @@
                                         <input type="checkbox"
                                                class="big-checkbox"
                                                @bind="IsAllChecked"
-                                               @onclick="SelectionChanged" />
+                                               @onclick="_isCheckedChanged" />
                                     </th>
                                     <th scope="col">Name</th>
                                     <th scope="col">PlanType</th>
@@ -105,7 +105,7 @@
                                         </td>
                                         <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
                                             style="min-width: 120px;">
-                                            <div class="input-group">
+                                            <div class="input-group ">
                                                 <input min="0" max="100" type="number" class="form-control" @bind="project.Completed">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">%</span>
@@ -191,7 +191,7 @@
         <FluentButton class="col-6" OnClick=@UpdateHours>
             Ok
         </FluentButton>
-        <FluentButton class="col-6" OnClick=@(() => ToogleEditHoursDialog(false))>
+        <FluentButton class="col-6" OnClick=@(() => _toogleEditHoursDialog(false))>
             Cancel
         </FluentButton>
     </div>
@@ -211,11 +211,11 @@
 
     <div class="mt-2 row">
         <FluentButton class="col-6 mw-10"
-                      OnClick=@(() => ToogleProjectDetailesDialog(false))>
+                      OnClick=@(() => _updateProject(false))>
             Ok
         </FluentButton>
         <FluentButton class="col-6 mw-10"
-                      OnClick=@(() => ToogleProjectDetailesDialog(false))>
+                      OnClick=@(() => _updateProject())>
             Cancel
         </FluentButton>
     </div>

@@ -11,6 +11,8 @@ public class RoleVM : BaseVM
         get => _isChecked;
         set
         {
+            if (value == _isChecked)
+                return;
             _isChecked = value;
             NotifyPropertyChanged(nameof(IsChecked));
         }
@@ -22,6 +24,8 @@ public class RoleVM : BaseVM
         get => _name;
         set
         {
+            if (value == _name)
+                return;
             _name = value;
             NotifyPropertyChanged(nameof(Name));
         }

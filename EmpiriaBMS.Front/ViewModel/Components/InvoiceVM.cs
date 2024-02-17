@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Front.ViewModel.Components.Projects;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
@@ -12,6 +13,8 @@ public class InvoiceVM : BaseVM
         get => _isChecked;
         set
         {
+            if (value == _isChecked)
+                return;
             _isChecked = value;
             NotifyPropertyChanged(nameof(IsChecked));
         }
@@ -23,6 +26,8 @@ public class InvoiceVM : BaseVM
         get => _total;
         set
         {
+            if (value == _total)
+                return;
             _total = value;
             NotifyPropertyChanged(nameof(Total));
         }
@@ -34,6 +39,8 @@ public class InvoiceVM : BaseVM
         get => _vat;
         set
         {
+            if (value == _vat)
+                return;
             _vat = value;
             NotifyPropertyChanged(nameof(Vat));
         }
@@ -45,6 +52,8 @@ public class InvoiceVM : BaseVM
         get => _fee;
         set
         {
+            if (value == _fee)
+                return;
             _fee = value;
             NotifyPropertyChanged(nameof(Fee));
         }
@@ -56,6 +65,8 @@ public class InvoiceVM : BaseVM
         get => _number;
         set
         {
+            if (value == _number)
+                return;
             _number = value;
             NotifyPropertyChanged(nameof(Number));
         }
@@ -67,6 +78,8 @@ public class InvoiceVM : BaseVM
         get => _mark;
         set
         {
+            if (value == _mark)
+                return;
             _mark = value;
             NotifyPropertyChanged(nameof(Mark));
         }
@@ -78,6 +91,8 @@ public class InvoiceVM : BaseVM
         get => _date;
         set
         {
+            if (value == _date)
+                return;
             _date = value;
             NotifyPropertyChanged(nameof(Date));
         }
@@ -89,6 +104,8 @@ public class InvoiceVM : BaseVM
         get => _projectId;
         set
         {
+            if (value == _projectId)
+                return;
             _projectId = value;
             NotifyPropertyChanged(nameof(ProjectId));
         }
@@ -100,6 +117,8 @@ public class InvoiceVM : BaseVM
         get => _project;
         set
         {
+            if (value == _project)
+                return;
             _project = value;
             NotifyPropertyChanged(nameof(Project));
         }
