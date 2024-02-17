@@ -19,9 +19,9 @@ public class ProjectsRepo : Repository<Project>
 {
     public ProjectsRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public new async Task<Project?> Get(string id)
+    public new async Task<Project?> Get(int id)
     {
-        if (id == null)
+        if (id == 0)
             throw new ArgumentNullException(nameof(id));
 
         var _context = _dbContextFactory.CreateDbContext();
@@ -29,7 +29,7 @@ public class ProjectsRepo : Repository<Project>
                          .Set<Project>()
                          .Include(r => r.Customer)
                          .Include(r => r.Invoice)
-                         .FirstOrDefaultAsync(r => r.Id.Equals(id));
+                         .FirstOrDefaultAsync(r => r.Id == id);
     }
 
     public new async Task<ICollection<Project>> GetAll(int pageSize = 0, int pageIndex = 0)
@@ -64,43 +64,40 @@ public class ProjectsRepo : Repository<Project>
                              .ToListAsync();
     }
 
-    public async Task<ICollection<User>> GetUsers(string projectId)
+    public async Task<ICollection<User>> GetUsers(int projectId)
     {
-        if (projectId == null)
+        if (projectId == 0)
             throw new NullReferenceException($"No Project Id Specified!");
 
         var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<ProjectEmployee>()
-                             .Where(r => r.ProjectId.Equals(projectId))
+                             .Where(r => r.ProjectId == projectId)
                              .Select(r => r.Employee)
                              .ToListAsync();
     }
 
-    public async Task<Project> Add(Project entity, bool update = false)
-    {
-        if (entity == null)
-            throw new ArgumentNullException(nameof(entity));
+    //public async Task<Project> Add(Project entity, bool update = false)
+    //{
+    //    if (entity == null)
+    //        throw new ArgumentNullException(nameof(entity));
 
-        entity.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
-        entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
-        entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+    //    entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+    //    entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-        entity.Invoice = entity.Invoice ?? new Invoice();
-        entity.Invoice.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
-        entity.Invoice.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
-        entity.Invoice.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+    //    entity.Invoice = entity.Invoice ?? new Invoice();
+    //    entity.Invoice.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+    //    entity.Invoice.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-        entity.Customer = entity.Customer ?? new User();
-        entity.Customer.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
-        entity.Customer.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
-        entity.Customer.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+    //    entity.Customer = entity.Customer ?? new User();
+    //    entity.Customer.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+    //    entity.Customer.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-        var _context = _dbContextFactory.CreateDbContext();
-        await _context.Set<Project>().AddAsync(entity);
-        await _context.SaveChangesAsync();
+    //    var _context = _dbContextFactory.CreateDbContext();
+    //    await _context.Set<Project>().AddAsync(entity);
+    //    await _context.SaveChangesAsync();
 
-        return entity;
-    }
+    //    return entity;
+    //}
 
     //public async Task<Project> Update(Project entity)
     //{

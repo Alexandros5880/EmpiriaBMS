@@ -98,8 +98,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private string? _projectId;
-    public string? ProjectId
+    private int? _projectId;
+    public int? ProjectId
     {
         get => _projectId;
         set

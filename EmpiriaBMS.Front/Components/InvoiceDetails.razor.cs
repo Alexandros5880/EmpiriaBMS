@@ -12,7 +12,7 @@ public partial class InvoiceDetails : IDisposable
     public InvoiceVM Invoice { get; set; }
 
     [Parameter]
-    public Action<string> PropertyChanged { get; set; }
+    public Action<int> PropertyChanged { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -25,7 +25,7 @@ public partial class InvoiceDetails : IDisposable
 
     private void _onInvoiceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        var id = (string)sender.GetType().GetProperty(nameof(InvoiceVM.Id)).GetValue(sender);
+        var id = (int)sender.GetType().GetProperty(nameof(InvoiceVM.Id)).GetValue(sender);
         if (id == null)
             return;
 

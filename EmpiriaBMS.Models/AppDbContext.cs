@@ -3,6 +3,7 @@ using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Enums;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Reflection.Emit;
 
 namespace EmpiriaMS.Models;
@@ -32,16 +33,16 @@ public class AppDbContext : DbContext
         ModelRelations.CreateRelations(builder);
 
         // Roles
-        var role_1_id = Guid.NewGuid().ToString("N") + Convert.ToString(1);
-        var role_2_id = Guid.NewGuid().ToString("N") + Convert.ToString(2);
-        var role_3_id = Guid.NewGuid().ToString("N") + Convert.ToString(3);
-        var role_4_id = Guid.NewGuid().ToString("N") + Convert.ToString(4);
-        var role_5_id = Guid.NewGuid().ToString("N") + Convert.ToString(5);
-        var role_6_id = Guid.NewGuid().ToString("N") + Convert.ToString(6);
-        var role_7_id = Guid.NewGuid().ToString("N") + Convert.ToString(7);
-        var role_8_id = Guid.NewGuid().ToString("N") + Convert.ToString(8);
+        var role_1_id = random.Next(123456789, 999999999);
+        var role_2_id = random.Next(123456789, 999999999);
+        var role_3_id = random.Next(123456789, 999999999);
+        var role_4_id = random.Next(123456789, 999999999);
+        var role_5_id = random.Next(123456789, 999999999);
+        var role_6_id = random.Next(123456789, 999999999);
+        var role_7_id = random.Next(123456789, 999999999);
+        var role_8_id = random.Next(123456789, 999999999);
 
-        var employes_roles_ids = (new List<string>(){role_1_id, role_2_id, role_3_id, role_4_id, role_5_id, role_6_id}).ToArray();
+        var employes_roles_ids = (new List<int>(){role_1_id, role_2_id, role_3_id, role_4_id, role_5_id, role_6_id}).ToArray();
         
         Role role_1 = new()
         {
@@ -119,10 +120,10 @@ public class AppDbContext : DbContext
         for (var i = 0; i < 9; i++)
         {
             // Employees
-            var employeeId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7));
+            var employeeId = random.Next(123456789, 999999999) + i * 2;
             User employee = new User()
             {
-                Id = Convert.ToString(employeeId),
+                Id = employeeId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Email = $"alexpl_{i + 2}@gmail.com",
@@ -135,8 +136,8 @@ public class AppDbContext : DbContext
             builder.Entity<User>().HasData(employee);
             UserRole userRole_em = new UserRole()
             {
-                Id = Guid.NewGuid().ToString("N"),
-                CreatedDate = DateTime.Now,
+                Id = random.Next(123456789, 999999999) + i * 2,
+            CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 UserId = employeeId,
                 RoleId = employes_roles_ids[random.Next(2, 3)]
@@ -144,7 +145,7 @@ public class AppDbContext : DbContext
             builder.Entity<UserRole>().HasData(userRole_em);
 
             // Projects
-            var projectId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7));
+            var projectId = random.Next(123456789, 999999999) + i * 2;
             var f1 = i + 50 - (i * 3) + (i * 5);
             var f2 = i + 50 - (i * 3) + (i * 4);
             var f3 = i + 50 - (i * 3) + (i * 5) + 1;
@@ -152,7 +153,7 @@ public class AppDbContext : DbContext
             var createdDate = DateTime.Now;
             Project pjk = new Project()
             {
-                Id = Convert.ToString(projectId),
+                Id = projectId,
                 CreatedDate = createdDate,
                 LastUpdatedDate = createdDate,
                 Code = "D-22-16" + Convert.ToString(i),
@@ -182,8 +183,8 @@ public class AppDbContext : DbContext
             {
                 ProjectEmployee projectEmployee = new ProjectEmployee()
                 {
-                    Id = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7)),
-                    CreatedDate = DateTime.Now,
+                    Id = random.Next(123456789, 999999999) + i * 2,
+                CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     ProjectId = projectId,
                     EmployeeId = employeeId
@@ -192,10 +193,10 @@ public class AppDbContext : DbContext
             }
 
             // Customers
-            var customerId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7));
+            var customerId = random.Next(123456789, 999999999) + i * 2;
             User customer = new User()
             {
-                Id = Convert.ToString(customerId),
+                Id = customerId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Email = $"alexpl_{i}@gmail.com",
@@ -208,8 +209,8 @@ public class AppDbContext : DbContext
             builder.Entity<User>().HasData(customer);
             UserRole userRole_c = new UserRole()
             {
-                Id = Guid.NewGuid().ToString("N"),
-                CreatedDate = DateTime.Now,
+                Id = random.Next(123456789, 999999999) + i * 2,
+            CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 UserId = customerId,
                 RoleId = role_8_id
@@ -217,7 +218,7 @@ public class AppDbContext : DbContext
             builder.Entity<UserRole>().HasData(userRole_c);
 
             // Invoices
-            var invoiceId = Guid.NewGuid().ToString("N") + Convert.ToString(i * random.Next(1, 7));
+            var invoiceId = random.Next(123456789, 999999999) + i*2;
             Invoice invoice = new Invoice()
             {
                 Id = invoiceId,

@@ -10,10 +10,8 @@ using System.Threading.Tasks;
 namespace EmpiriaMS.Models.Models.Base;
 public class Entity : IEntity
 {
-    [Required]
     [Key]
-    [MinLength(5)]
-    public string Id { get; set; } = "";
+    public int Id { get; set; }
 
     [Required]
     [DataType(DataType.DateTime)]
@@ -27,7 +25,6 @@ public class Entity : IEntity
 
     public Entity()
     {
-        Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
         CreatedDate = DateTime.Now.ToUniversalTime();
         LastUpdatedDate = DateTime.Now.ToUniversalTime();
     }

@@ -16,13 +16,13 @@ public class RolesRepo : Repository<Role>
 {
     public RolesRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async Task<ICollection<User>> GetUsers(string roleId)
+    public async Task<ICollection<User>> GetUsers(int roleId)
     {
-        if (roleId == null)
+        if (roleId == 0)
             throw new NullReferenceException($"No Role Id Specified!");
         var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
-                             .Where(r => r.RoleId.Equals(roleId))
+                             .Where(r => r.RoleId == roleId)
                              .Select(r => r.User)
                              .ToListAsync();
     }

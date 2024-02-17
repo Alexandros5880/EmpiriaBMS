@@ -26,8 +26,8 @@ public partial class Projects: IDisposable
     bool runInTeams = false;
     bool IsAllChecked = false;
 
-    private List<string> _changedInvoicesIds = new List<string>();
-    private List<string> _changedProjectIds = new List<string>();
+    private List<int> _changedInvoicesIds = new List<int>();
+    private List<int> _changedProjectIds = new List<int>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
     
@@ -78,7 +78,7 @@ public partial class Projects: IDisposable
     #region Buttons Clicked
     private async Task _onSaveClicked()
     {
-        var hasNewRecords = _projects.Any(p => string.IsNullOrEmpty(p.Id));
+        var hasNewRecords = _projects.Any(p => p.Id == 0);
         var hasAnyProjectChanged = _changedProjectIds.Count > 0;
         var hasAnyInvoiceCganed = _changedInvoicesIds.Count > 0;
         if (hasNewRecords || hasAnyProjectChanged || hasAnyInvoiceCganed)
@@ -160,7 +160,7 @@ public partial class Projects: IDisposable
         _acceptDialog.IsLoading = true;
 
         // New Projects
-        var newRecords = _projects.Where(p => string.IsNullOrEmpty(p.Id));
+        var newRecords = _projects.Where(p => p.Id == 0);
         foreach (var item in newRecords) // Add
         {
             if (!await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
@@ -355,7 +355,7 @@ public partial class Projects: IDisposable
         }
     }
 
-    private async Task<String> GetProjectManagersRoleId(string roleName)
+    private async Task<int> GetProjectManagersRoleId(string roleName)
     {
         try
         {
@@ -366,7 +366,7 @@ public partial class Projects: IDisposable
         catch (Exception ex)
         {
             // TODO: Log Error
-            return null;
+            return 0;
         }
     }
     #endregion
@@ -392,19 +392,19 @@ public partial class Projects: IDisposable
 
         // Pass Changed Project Id To Update List
         var id = project.Id;
-        if (!_changedProjectIds.Contains(_selectedProject.Id) && !_selectedProject.Id.Equals(string.Empty))
+        if (!_changedProjectIds.Contains(_selectedProject.Id) && _selectedProject.Id != 0)
             _changedProjectIds.Add(_selectedProject.Id);
     }
 
-    private void _invoice_PropertyChanged(string invoiceId)
+    private void _invoice_PropertyChanged(int invoiceId)
     {
-        if (!_changedInvoicesIds.Contains(invoiceId) && !invoiceId.Equals(string.Empty))
+        if (!_changedInvoicesIds.Contains(invoiceId) && invoiceId != 0)
             _changedInvoicesIds.Add(invoiceId);
     }
 
-    private void _project_PropertyChanged(string id)
+    private void _project_PropertyChanged(int id)
     {
-        if (!_changedProjectIds.Contains(_selectedProject.Id) && !_selectedProject.Id.Equals(string.Empty))
+        if (!_changedProjectIds.Contains(_selectedProject.Id) && _selectedProject.Id != 0)
             _changedProjectIds.Add(_selectedProject.Id);
     }
     #endregion

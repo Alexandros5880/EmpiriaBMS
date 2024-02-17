@@ -16,16 +16,16 @@ public class InvoiceRepo : Repository<Invoice>, IDisposable
 {
     public InvoiceRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public new async Task<Invoice?> Get(string id)
+    public new async Task<Invoice?> Get(int id)
     {
-        if (id == null)
+        if (id == 0)
             throw new ArgumentNullException(nameof(id));
 
         var _context = _dbContextFactory.CreateDbContext();
         return await _context
                          .Set<Invoice>()
                          .Include(r => r.Project)
-                         .FirstOrDefaultAsync(r => r.Id.Equals(id));
+                         .FirstOrDefaultAsync(r => r.Id == id);
     }
 
     public new async Task<ICollection<Invoice>> GetAll(int pageSize = 0, int pageIndex = 0)

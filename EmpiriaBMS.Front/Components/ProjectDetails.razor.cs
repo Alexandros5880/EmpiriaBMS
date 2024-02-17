@@ -11,7 +11,7 @@ public partial class ProjectDetails : IDisposable
     public ProjectVM Project { get; set; }
 
     [Parameter]
-    public Action<string> PropertyChanged { get; set; }
+    public Action<int> PropertyChanged { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -24,7 +24,7 @@ public partial class ProjectDetails : IDisposable
 
     private void _projectChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        var id = (string)sender.GetType().GetProperty(nameof(ProjectVM.Id)).GetValue(sender);
+        var id = (int)sender.GetType().GetProperty(nameof(ProjectVM.Id)).GetValue(sender);
         if (id == null)
             return;
         PropertyChanged(id);

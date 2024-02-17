@@ -24,6 +24,6 @@ public class Invoice : Entity
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
-    public string? ProjectId { get; set; }
+    public int? ProjectId { get; set; }
     public Project? Project { get; set; }
 }

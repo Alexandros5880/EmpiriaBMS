@@ -27,7 +27,6 @@ public class Repository<T> : IRepository<T>, IDisposable
         if (entity == null)
             throw new ArgumentNullException(nameof(entity));
 
-        entity.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
         entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
         entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
@@ -38,9 +37,9 @@ public class Repository<T> : IRepository<T>, IDisposable
         return entity;
     }
 
-    public async Task<T> Delete(string id)
+    public async Task<T> Delete(int id)
     {
-        if (id == null)
+        if (id == 0)
             throw new ArgumentNullException(nameof(id));
         
         var entity = await Get(id);
@@ -83,15 +82,15 @@ public class Repository<T> : IRepository<T>, IDisposable
         }
     }
 
-    public async Task<T?> Get(string id)
+    public async Task<T?> Get(int id)
     {
-        if (id == null)
+        if (id == 0)
             throw new ArgumentNullException(nameof(id));
 
         var _context = _dbContextFactory.CreateDbContext();
         return await _context
                          .Set<T>()
-                         .FirstOrDefaultAsync(r => r.Id.Equals(id));
+                         .FirstOrDefaultAsync(r => r.Id == id);
     }
 
     public async Task<ICollection<T>> GetAll(int pageSize = 0, int pageIndex = 0)

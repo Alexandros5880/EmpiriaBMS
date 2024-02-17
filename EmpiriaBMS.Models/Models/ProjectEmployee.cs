@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace EmpiriaBMS.Models.Models;
 public class ProjectEmployee : Entity
 {
-    public string ProjectId { get; set; }
+    public int ProjectId { get; set; }
     public Project Project { get; set; }
 
-    public string EmployeeId { get; set; }
+    public int EmployeeId { get; set; }
     public User Employee { get; set; }
 }

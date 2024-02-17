@@ -16,38 +16,38 @@ public class EmployeeRepo : Repository<User>
 {
     public EmployeeRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async Task<ICollection<Role>> GetUsers(string userId)
+    public async Task<ICollection<Role>> GetUsers(int userId)
     {
-        if (userId == null)
+        if (userId == 0)
             throw new NullReferenceException($"No User Id Specified!");
 
         var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
-                             .Where(r => r.UserId.Equals(userId))
+                             .Where(r => r.UserId == userId)
                              .Select(r => r.Role)
                              .ToListAsync();
     }
 
-    public async Task<ICollection<Project>> GetProjects(string userId)
+    public async Task<ICollection<Project>> GetProjects(int userId)
     {
-        if (userId == null)
+        if (userId == 0)
             throw new NullReferenceException($"No User Id Specified!");
 
         var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<ProjectEmployee>()
-                             .Where(r => r.EmployeeId.Equals(userId))
+                             .Where(r => r.EmployeeId == userId)
                              .Select(r => r.Project)
                              .ToListAsync();
     }
 
-    public async Task<ICollection<Role>> GetRoles(string userId)
+    public async Task<ICollection<Role>> GetRoles(int userId)
     {
-        if (userId == null)
+        if (userId == 0)
             throw new NullReferenceException($"No User Id Specified!");
 
         var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
-                             .Where(r => r.UserId.Equals(userId))
+                             .Where(r => r.UserId == userId)
                              .Select(r => r.Role)
                              .ToListAsync();
     }

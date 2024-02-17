@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace EmpiriaBMS.Front.ViewModel.Components.Base;
 public class BaseVM : BNotifyPropertyChanged
 {
-    private string _id;
-    public string Id
+    private int _id;
+    public int Id
     {
         get => _id;
         set
@@ -45,7 +45,6 @@ public class BaseVM : BNotifyPropertyChanged
 
     public BaseVM()
     {
-        Id = String.Empty;
         CreatedDate = DateTime.Now;
         LastUpdatedDate = DateTime.Now;
     }

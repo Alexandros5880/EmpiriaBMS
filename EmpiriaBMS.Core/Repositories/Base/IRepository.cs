@@ -10,7 +10,7 @@ namespace EmpiriaBMS.Core.Repositories.Base;
 public interface IRepository<T>
     where T : class, IEntity
 {
-    Task<T?> Get(string id);
+    Task<T?> Get(int id);
     Task<ICollection<T>> GetAll(int pageSize = 0, int pageIndex = 0);
     Task<ICollection<T>> GetAll(
         Expression<Func<T, bool>> expresion,
@@ -22,7 +22,7 @@ public interface IRepository<T>
     Task<bool> Any(Expression<System.Func<T, bool>> expresion);
     Task<T> Add(T model, bool update);
     Task<T> Update(T model);
-    Task<T> Delete(string id);
+    Task<T> Delete(int id);
     Task SaveChangesAsync();
     void Dispose();
 }

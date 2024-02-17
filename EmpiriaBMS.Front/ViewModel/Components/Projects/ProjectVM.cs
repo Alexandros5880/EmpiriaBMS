@@ -270,8 +270,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string _customerId;
-    public string CustomerId
+    private int _customerId;
+    public int CustomerId
     {
         get => _customerId;
         set
@@ -296,8 +296,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string _invoiceId;
-    public string InvoiceId
+    private int _invoiceId;
+    public int InvoiceId
     {
         get => _invoiceId;
         set
@@ -346,7 +346,7 @@ public class ProjectVM : BaseVM
         CalculationDaly = 0;
         Completed = 0;
         ManHours = 0;
-        CustomerId = null;
+        CustomerId = 0;
         Invoice = new InvoiceVM();
         Employees = new List<UserVM>();
     }
