@@ -146,9 +146,19 @@
 
                     <!-- Controlls Buttons -->
                     <div class="mt-5 mb-3 d-flex justify-content-evenly">
-                        <span class="fluent--delete-28-regular shadow" @onclick=@(async () => await _onDeleteBtnClcked())></span>
-                        <span class="fluent--save-28-regular shadow" @onclick=@(() => _onSaveClicked())></span>
-                        <span class="clarity--details-line shadow" @onclick=@(() => _openPorjectDetailsClick())>></span>
+
+                        <span class="fluent--delete-28-regular shadow"
+                              @onclick=@(async () => await _onDeleteBtnClcked())>
+                        </span>
+
+                        <span class="fluent--save-28-regular shadow"
+                              @onclick=@(() => _onSaveClicked())></span>
+
+                        <span class="clarity--details-line shadow"
+                              @onclick=@(() => _openPorjectDetailsClick())>></span>
+
+                        <span class="clarity--employee-group-line shadow"></span>
+
                     </div>
 
                 </div>
@@ -189,21 +199,21 @@
 <!-- Project Details Dialog -->
 <FluentDialog @ref="_projectDetailesDialog"
               Hidden=@(startLoading || !isProjectDetailesDialogOdepened)
-              Modal="false">
+              Modal="false"
+              Style="--dialog-width: 64vw;">
 
     <!-- Selected Project -->
-    <div class="w-xl-90 w-lg-90 w-md-100 w-sm-100
-                    mt-xl-0 mt-lg-0 mt-md-4 mt-sm-4
-                    me-lg-1 me-md-1 me-md-0 me-sm-0
-                    ms-xl-3 ms-lg-3 ms-md-0 ms-sm-0">
+    <div class="w-xl-90 w-lg-90 w-md-98 w-sm-98">
         <ProjectDetails Project="@_selectedProject" PropertyChanged=@_project_PropertyChanged />
     </div>
 
     <div class="mt-2 row">
-        <FluentButton class="col-6" OnClick=@(() => ToogleProjectDetailesDialog(false))>
+        <FluentButton class="col-6 mw-10"
+                      OnClick=@(() => ToogleProjectDetailesDialog(false))>
             Ok
         </FluentButton>
-        <FluentButton class="col-6" OnClick=@(() => ToogleProjectDetailesDialog(false))>
+        <FluentButton class="col-6 mw-10"
+                      OnClick=@(() => ToogleProjectDetailesDialog(false))>
             Cancel
         </FluentButton>
     </div>

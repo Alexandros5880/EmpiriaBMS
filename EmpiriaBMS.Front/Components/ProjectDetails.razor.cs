@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaMS.Models.Enums;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components;

@@ -23,6 +23,13 @@ public partial class Projects: IDisposable
     bool runInTeams = false;
     bool IsAllChecked = false;
 
+    private List<string> _changedProjectIds = new List<string>();
+    private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
+    List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
+    private PaginatorVM _paginator = new PaginatorVM(7);
+
+    private UserVM _logedUser;
+
     // Hours Dialog
     private FluentDialog _editHoursDialog;
     private bool isEditDialogOdepened = false;
@@ -31,13 +38,6 @@ public partial class Projects: IDisposable
     // Project Deyailes Dialog
     private FluentDialog _projectDetailesDialog;
     private bool isProjectDetailesDialogOdepened = false;
-
-    private List<string> _changedProjectIds = new List<string>();
-    private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
-    List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
-    private PaginatorVM _paginator = new PaginatorVM(7);
-
-    private UserVM _logedUser;
 
     // Accept Dialog
     private ProjectVM _selectedProjectSaved = null;
@@ -208,18 +208,7 @@ public partial class Projects: IDisposable
     }
     #endregion
 
-    private void OnSelectProject(ProjectVM project)
-    {
-        _selectedProject = project;
-        _selectedInvoice = Mapper.Map<InvoiceVM>(project.Invoice);
-    }
-
-    private void SelectionChanged()
-    {
-        foreach (var p in _projects)
-            p.IsChecked = !IsAllChecked;
-    }
-
+    #region Get Records
     private async Task _getProjects()
     {
         filterLoading = !startLoading ? true : filterLoading;
@@ -237,7 +226,7 @@ public partial class Projects: IDisposable
                         .ToList();
             _projects.Clear();
             data.ForEach(p => {
-                p.PropertyChanged += P_PropertyChanged;
+                p.PropertyChanged += _propertyChanged;
                 _projects.Add(p);
             });
             _selectedProject = _projects.FirstOrDefault();
@@ -291,9 +280,22 @@ public partial class Projects: IDisposable
             return null;
         }
     }
+    #endregion
 
     #region Properties Changed Venets
-    private void P_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void OnSelectProject(ProjectVM project)
+    {
+        _selectedProject = project;
+        _selectedInvoice = Mapper.Map<InvoiceVM>(project.Invoice);
+    }
+
+    private void SelectionChanged()
+    {
+        foreach (var p in _projects)
+            p.IsChecked = !IsAllChecked;
+    }
+
+    private void _propertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         var id = sender.GetType().GetProperty(nameof(ProjectVM.Id)).GetValue(sender);
         if (!_changedProjectIds.Contains(_selectedProject.Id) && !_selectedProject.Id.Equals(string.Empty))
@@ -320,7 +322,7 @@ public partial class Projects: IDisposable
             if (disposing)
             {
                 _projects.ToList().ForEach(p => {
-                    p.PropertyChanged -= P_PropertyChanged;
+                    p.PropertyChanged -= _propertyChanged;
                 });
             }
             disposedValue = true;
