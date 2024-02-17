@@ -5,6 +5,7 @@ using EmpiriaBMS.Front;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaMS.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Fast.Components.FluentUI;
 using System.Reflection;
 
@@ -17,13 +18,9 @@ builder.Services.AddServerSideBlazor();
 var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
-builder.Services.AddScoped<AppDbContext>();
-builder.Services.AddScoped<RolesRepo>();
-builder.Services.AddScoped<ProjectsRepo>();
-builder.Services.AddScoped<InvoiceRepo>();
-builder.Services.AddScoped<UsersRepo>();
-builder.Services.AddScoped<EmployeeRepo>();
-builder.Services.AddScoped<CastomerRepo>();
+
+// Data Providing Dependency Injection
+builder.Services.AddDbContextFactory<AppDbContext>();
 builder.Services.AddScoped<IDataProvider, DataProvider>();
 
 // TODO: AutoMapper

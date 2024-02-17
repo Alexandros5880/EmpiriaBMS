@@ -14,13 +14,13 @@ using System.Threading.Tasks;
 namespace EmpiriaBMS.Core.Repositories;
 public class RolesRepo : Repository<Role>
 {
-    public RolesRepo(AppDbContext context) : base(context) { }
+    public RolesRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
     public async Task<ICollection<User>> GetUsers(string roleId)
     {
         if (roleId == null)
             throw new NullReferenceException($"No Role Id Specified!");
-
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
                              .Where(r => r.RoleId.Equals(roleId))
                              .Select(r => r.User)

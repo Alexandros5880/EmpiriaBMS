@@ -18,13 +18,7 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        //optionsBuilder.EnableSensitiveDataLogging(false);
-        //optionsBuilder.EnableServiceProviderCaching(false);
-        optionsBuilder.EnableSensitiveDataLogging(true);
-        optionsBuilder.EnableServiceProviderCaching(true);
-        optionsBuilder.EnableThreadSafetyChecks(true);
         optionsBuilder.UseSqlServer(localhostDB);
-        //ChangeTracker.AutoDetectChangesEnabled = false;
         base.OnConfiguring(optionsBuilder);
     }
 

@@ -13,13 +13,13 @@ using System.Linq.Expressions;
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<User>
 {
-    public UsersRepo(AppDbContext context) : base(context) { }
+    public UsersRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
     public new async Task<User?> Get(string id)
     {
         if (id == null)
             throw new ArgumentNullException(nameof(id));
-
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context
                          .Set<User>()
                          .Include(r => r.Project)
@@ -28,6 +28,7 @@ public class UsersRepo : Repository<User>
 
     public new async Task<ICollection<User>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<User>().ToListAsync();
 
@@ -44,6 +45,7 @@ public class UsersRepo : Repository<User>
         int pageIndex = 0
     )
     {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<User>().Where(expresion).ToListAsync();
 
@@ -59,7 +61,7 @@ public class UsersRepo : Repository<User>
     {
         if (userId == null)
             throw new NullReferenceException($"No User Id Specified!");
-
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
                              .Where(r => r.UserId.Equals(userId))
                              .Select(r => r.Role)
@@ -70,7 +72,7 @@ public class UsersRepo : Repository<User>
     {
         if (userId == null)
             throw new NullReferenceException($"No User Id Specified!");
-
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<ProjectEmployee>()
                              .Where(r => r.EmployeeId.Equals(userId))
                              .Select(r => r.Project)
@@ -81,7 +83,7 @@ public class UsersRepo : Repository<User>
     {
         if (userId == null)
             throw new NullReferenceException($"No User Id Specified!");
-
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
                              .Where(r => r.UserId.Equals(userId))
                              .Select(r => r.Role)

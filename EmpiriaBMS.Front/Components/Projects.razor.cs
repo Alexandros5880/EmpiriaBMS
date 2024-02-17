@@ -13,6 +13,7 @@ using static Microsoft.Fast.Components.FluentUI.Emojis.Objects.Color.Default;
 using EmpiriaBMS.Front.Components;
 using EmpiriaBMS.Front.ViewModel.Components.Projects;
 using System.Diagnostics.Eventing.Reader;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Projects: IDisposable
@@ -25,6 +26,7 @@ public partial class Projects: IDisposable
     bool runInTeams = false;
     bool IsAllChecked = false;
 
+    private List<string> _changedInvoicesIds = new List<string>();
     private List<string> _changedProjectIds = new List<string>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
@@ -77,8 +79,9 @@ public partial class Projects: IDisposable
     private async Task _onSaveClicked()
     {
         var hasNewRecords = _projects.Any(p => string.IsNullOrEmpty(p.Id));
-        var hasAnyChange = _changedProjectIds.Count > 0;
-        if (hasNewRecords || hasAnyChange)
+        var hasAnyProjectChanged = _changedProjectIds.Count > 0;
+        var hasAnyInvoiceCganed = _changedInvoicesIds.Count > 0;
+        if (hasNewRecords || hasAnyProjectChanged || hasAnyInvoiceCganed)
         {
             await _acceptDialog?.ToogleAcceptDialog(
                                 open: true,
@@ -155,21 +158,35 @@ public partial class Projects: IDisposable
     private async Task _updateExec()
     {
         _acceptDialog.IsLoading = true;
-        var newRecords = _projects.Where(p => string.IsNullOrEmpty(p.Id)).ToList();
+
+        // New Projects
+        var newRecords = _projects.Where(p => string.IsNullOrEmpty(p.Id));
         foreach (var item in newRecords) // Add
         {
             if (!await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
+            {
                 await DataProvider.Projects.Add(Mapper.Map<Project>(item));
+            }
         }
 
-        var updated = _projects.Where(p => _changedProjectIds.Contains(p.Id)).ToList();
+        // Updated Projects
+        var updated = _projects.Where(p => _changedProjectIds.Contains(p.Id));
         foreach (var item in updated) // Update
         {
             if (await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
                 DataProvider.Projects.Update(Mapper.Map<Project>(item));
         }
 
+        // Updated Invoices
+        var updatedInvoice = _projects.Select(p => p.Invoice).Where(i => _changedInvoicesIds.Contains(i.Id));
+        foreach (var item in updatedInvoice) // Update
+        {
+            if (await DataProvider.Invoices.Any(i => i.Id.Equals(item.Id)))
+                DataProvider.Invoices.Update(Mapper.Map<Invoice>(item));
+        }
+
         _changedProjectIds.Clear();
+        _changedInvoicesIds.Clear();
         _acceptDialog.IsLoading = false;
 
         _acceptDialog?.Close();
@@ -354,7 +371,7 @@ public partial class Projects: IDisposable
     }
     #endregion
 
-    #region Properties Changed Venets
+    #region Properties Changed Evenets
     private void OnSelectProject(ProjectVM project)
     {
         _selectedProject = project;
@@ -379,10 +396,10 @@ public partial class Projects: IDisposable
             _changedProjectIds.Add(_selectedProject.Id);
     }
 
-    private void _invoice_PropertyChanged(string id)
+    private void _invoice_PropertyChanged(string invoiceId)
     {
-        if (!_changedProjectIds.Contains(_selectedProject.Id) && !_selectedProject.Id.Equals(string.Empty))
-            _changedProjectIds.Add(_selectedProject.Id);
+        if (!_changedInvoicesIds.Contains(invoiceId) && !invoiceId.Equals(string.Empty))
+            _changedInvoicesIds.Add(invoiceId);
     }
 
     private void _project_PropertyChanged(string id)

@@ -2,6 +2,7 @@
 using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,13 +14,14 @@ using System.Threading.Tasks;
 namespace EmpiriaBMS.Core.Repositories;
 public class InvoiceRepo : Repository<Invoice>, IDisposable
 {
-    public InvoiceRepo(AppDbContext context) : base(context) { }
+    public InvoiceRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
     public new async Task<Invoice?> Get(string id)
     {
         if (id == null)
             throw new ArgumentNullException(nameof(id));
 
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context
                          .Set<Invoice>()
                          .Include(r => r.Project)
@@ -28,6 +30,7 @@ public class InvoiceRepo : Repository<Invoice>, IDisposable
 
     public new async Task<ICollection<Invoice>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<Invoice>().ToListAsync();
 
@@ -42,6 +45,7 @@ public class InvoiceRepo : Repository<Invoice>, IDisposable
         int pageSize = 0,
         int pageIndex = 0
     ) {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<Invoice>().Where(expresion).ToListAsync();
 
@@ -50,35 +54,5 @@ public class InvoiceRepo : Repository<Invoice>, IDisposable
                              .Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize)
                              .ToListAsync();
-    }
-
-    public async Task<Invoice> Update(Invoice entity)
-    {
-        try
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
-
-
-            var entry = await _context.Set<Invoice>().FirstOrDefaultAsync(x => x.Id == entity.Id);
-            if (entry != null)
-            {
-                _context.Entry(entry.Project).CurrentValues.SetValues(entity.Project);
-                _context.Entry(entry).CurrentValues.SetValues(entity);
-                await _context.SaveChangesAsync();
-            }
-
-            return entity;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(
-                $"Exception On InvoiceRepo.Update({entity.GetType()}): " +
-                $"{ex.Message}\n ex.InnerException.Message: {ex.InnerException?.Message}"
-            );
-            return null;
-        }
     }
 }

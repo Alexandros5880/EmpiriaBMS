@@ -3,6 +3,7 @@ using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,14 @@ using System.Threading.Tasks;
 namespace EmpiriaBMS.Core.Repositories;
 public class EmployeeRepo : Repository<User>
 {
-    public EmployeeRepo(AppDbContext context) : base(context) { }
+    public EmployeeRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
     public async Task<ICollection<Role>> GetUsers(string userId)
     {
         if (userId == null)
             throw new NullReferenceException($"No User Id Specified!");
 
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
                              .Where(r => r.UserId.Equals(userId))
                              .Select(r => r.Role)
@@ -31,6 +33,7 @@ public class EmployeeRepo : Repository<User>
         if (userId == null)
             throw new NullReferenceException($"No User Id Specified!");
 
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<ProjectEmployee>()
                              .Where(r => r.EmployeeId.Equals(userId))
                              .Select(r => r.Project)
@@ -42,6 +45,7 @@ public class EmployeeRepo : Repository<User>
         if (userId == null)
             throw new NullReferenceException($"No User Id Specified!");
 
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
                              .Where(r => r.UserId.Equals(userId))
                              .Select(r => r.Role)

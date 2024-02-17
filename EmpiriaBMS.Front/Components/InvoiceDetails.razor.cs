@@ -25,11 +25,10 @@ public partial class InvoiceDetails : IDisposable
 
     private void _onInvoiceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        var project = (ProjectVM)sender.GetType().GetProperty(nameof(InvoiceVM.Project)).GetValue(sender);
-        if (project != null || project?.Id == null)
+        var id = (string)sender.GetType().GetProperty(nameof(InvoiceVM.Id)).GetValue(sender);
+        if (id == null)
             return;
 
-        var id = Convert.ToString(project.Id);
         PropertyChanged(id);
     }
 

@@ -189,7 +189,12 @@ C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\EmpiriaBMS.EF.CLI.runtimeconfig.json
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\EmpiriaBMS.EF.CLI.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\EmpiriaBMS.EF.CLI.pdb
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Humanizer.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
@@ -201,6 +206,8 @@ C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Logging.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
@@ -213,7 +220,6 @@ C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\System.Drawing.Common.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\System.Runtime.Caching.dll

@@ -3,6 +3,7 @@ using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,14 @@ using System.Threading.Tasks;
 namespace EmpiriaBMS.Core.Repositories;
 public class CastomerRepo : Repository<User>
 {
-    public CastomerRepo(AppDbContext context) : base(context) { }
+    public CastomerRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
     public new async Task<User?> Get(string id)
     {
         if (id == null)
             throw new ArgumentNullException(nameof(id));
 
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context
                          .Set<User>()
                          .Include(r => r.Project)
@@ -28,6 +30,7 @@ public class CastomerRepo : Repository<User>
 
     public new async Task<ICollection<User>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<User>().ToListAsync();
 
@@ -43,6 +46,7 @@ public class CastomerRepo : Repository<User>
         int pageSize = 0,
         int pageIndex = 0
     ) {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<User>().Where(expresion).ToListAsync();
 
@@ -59,6 +63,7 @@ public class CastomerRepo : Repository<User>
         if (userId == null)
             throw new NullReferenceException($"No User Id Specified!");
 
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
                              .Where(r => r.UserId.Equals(userId))
                              .Select(r => r.Role)

@@ -12,6 +12,7 @@ public class Entity : IEntity
 {
     [Required]
     [Key]
+    [MinLength(5)]
     public string Id { get; set; } = "";
 
     [Required]

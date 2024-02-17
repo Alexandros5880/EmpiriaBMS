@@ -17,13 +17,14 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace EmpiriaBMS.Core.Repositories;
 public class ProjectsRepo : Repository<Project>
 {
-    public ProjectsRepo(AppDbContext context) : base(context) { }
+    public ProjectsRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
     public new async Task<Project?> Get(string id)
     {
         if (id == null)
             throw new ArgumentNullException(nameof(id));
 
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context
                          .Set<Project>()
                          .Include(r => r.Customer)
@@ -33,6 +34,7 @@ public class ProjectsRepo : Repository<Project>
 
     public new async Task<ICollection<Project>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<Project>().ToListAsync();
 
@@ -49,6 +51,7 @@ public class ProjectsRepo : Repository<Project>
         int pageSize = 0,
         int pageIndex = 0
     ) {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<Project>().Where(expresion).ToListAsync();
 
@@ -66,41 +69,68 @@ public class ProjectsRepo : Repository<Project>
         if (projectId == null)
             throw new NullReferenceException($"No Project Id Specified!");
 
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<ProjectEmployee>()
                              .Where(r => r.ProjectId.Equals(projectId))
                              .Select(r => r.Employee)
                              .ToListAsync();
     }
 
-    public async Task<Project> Update(Project entity)
+    public async Task<Project> Add(Project entity, bool update = false)
     {
-        try
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
+        if (entity == null)
+            throw new ArgumentNullException(nameof(entity));
 
-            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+        entity.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
+        entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+        entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
+        entity.Invoice = entity.Invoice ?? new Invoice();
+        entity.Invoice.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
+        entity.Invoice.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+        entity.Invoice.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-            var entry = await _context.Set<Project>().FirstOrDefaultAsync(x => x.Id == entity.Id);
-            if (entry != null)
-            {
-                _context.Entry(entry.Customer).CurrentValues.SetValues(entity.Customer);
-                _context.Entry(entry.Invoice).CurrentValues.SetValues(entity.Invoice);
-                _context.Entry(entry).CurrentValues.SetValues(entity);
-                await _context.SaveChangesAsync();
-            }
+        entity.Customer = entity.Customer ?? new User();
+        entity.Customer.Id = Guid.NewGuid().ToString().Replace("\\", string.Empty).Replace("/", string.Empty);
+        entity.Customer.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+        entity.Customer.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-            return entity;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(
-                $"Exception On ProjectsRepo.Update({entity.GetType()}): " +
-                $"{ex.Message}\n ex.InnerException.Message: {ex.InnerException?.Message}"
-            );
-            return null;
-        }
+        var _context = _dbContextFactory.CreateDbContext();
+        await _context.Set<Project>().AddAsync(entity);
+        await _context.SaveChangesAsync();
+
+        return entity;
     }
+
+    //public async Task<Project> Update(Project entity)
+    //{
+    //    try
+    //    {
+    //        if (entity == null)
+    //            throw new ArgumentNullException(nameof(entity));
+
+    //        entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+    //        using (var _context = _dbContextFactory.CreateDbContext())
+    //        {
+    //            var entry = await _context.Set<Project>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+    //            if (entry != null)
+    //            {
+    //                _context.Entry(entry).CurrentValues.SetValues(entity);
+    //                await _context.SaveChangesAsync();
+    //            }
+    //        }
+
+    //        return entity;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Debug.WriteLine(
+    //            $"Exception On ProjectsRepo.Update({entity.GetType()}): " +
+    //            $"{ex.Message}\n ex.InnerException.Message: {ex.InnerException?.Message}"
+    //        );
+    //        return null;
+    //    }
+    //}
 
 }

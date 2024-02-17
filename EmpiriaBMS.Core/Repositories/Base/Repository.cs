@@ -16,11 +16,11 @@ namespace EmpiriaBMS.Core.Repositories.Base;
 public class Repository<T> : IRepository<T>, IDisposable
     where T : class, IEntity
 {
-    protected readonly AppDbContext _context;
     private bool disposedValue;
+    protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
-    public Repository(AppDbContext context) =>
-        _context = context;
+    public Repository(IDbContextFactory<AppDbContext> dbFactory) =>
+        _dbContextFactory = dbFactory;
 
     public async Task<T> Add(T entity, bool update = false)
     {
@@ -31,8 +31,8 @@ public class Repository<T> : IRepository<T>, IDisposable
         entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
         entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
+        var _context = _dbContextFactory.CreateDbContext();
         await _context.Set<T>().AddAsync(entity);
-
         await _context.SaveChangesAsync();
 
         return entity;
@@ -47,6 +47,8 @@ public class Repository<T> : IRepository<T>, IDisposable
         
         if (entity == null)
             throw new ArgumentNullException(nameof(entity));
+
+        var _context = _dbContextFactory.CreateDbContext();
 
         _context.Set<T>().Remove(entity);
 
@@ -64,10 +66,10 @@ public class Repository<T> : IRepository<T>, IDisposable
 
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
+            var _context = _dbContextFactory.CreateDbContext();
             var entry = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == entity.Id);
             if (entry != null)
             {
-                //ModelsHellper.SetValues(updated, entity);
                 _context.Entry(entry).CurrentValues.SetValues(entity);
                 await _context.SaveChangesAsync();
             }
@@ -86,6 +88,7 @@ public class Repository<T> : IRepository<T>, IDisposable
         if (id == null)
             throw new ArgumentNullException(nameof(id));
 
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context
                          .Set<T>()
                          .FirstOrDefaultAsync(r => r.Id.Equals(id));
@@ -93,6 +96,7 @@ public class Repository<T> : IRepository<T>, IDisposable
 
     public async Task<ICollection<T>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<T>().ToListAsync();
 
@@ -107,6 +111,7 @@ public class Repository<T> : IRepository<T>, IDisposable
         int pageSize = 0,
         int pageIndex = 0
     ) {
+        var _context = _dbContextFactory.CreateDbContext();
         if (pageSize == 0 || pageIndex == 0)
             return await _context.Set<T>().Where(expresion).ToListAsync();
 
@@ -119,23 +124,30 @@ public class Repository<T> : IRepository<T>, IDisposable
 
     public async Task<int> Count()
     {
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<T>().CountAsync();
     }
 
     public async Task<int> Count(Expression<Func<T, bool>> expresion)
     {
+        var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<T>().Where(expresion).CountAsync();
     }
 
     public async Task<bool> Any(Expression<System.Func<T, bool>> expresion)
     {
+        var _context = _dbContextFactory.CreateDbContext();
         if (expresion == null)
             throw new ArgumentNullException(nameof(expresion));
 
         return await _context.Set<T>().AnyAsync(expresion);
     }
 
-    public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+    public async Task SaveChangesAsync()
+    {
+        var _context = _dbContextFactory.CreateDbContext();
+        await _context.SaveChangesAsync();
+    }
 
     protected virtual void Dispose(bool disposing)
     {
@@ -143,7 +155,7 @@ public class Repository<T> : IRepository<T>, IDisposable
         {
             if (disposing)
             {
-                _context.Dispose();
+
             }
             disposedValue = true;
         }
