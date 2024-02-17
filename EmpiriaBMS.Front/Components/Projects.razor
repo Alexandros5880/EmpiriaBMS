@@ -39,7 +39,7 @@
                                 <div class="col-lg-1 col-md-1 col-sm-1 me-2">
                                     <span class="grommet-icons--add add-hover"
                                           style="margin-top: 14%;"
-                                          @onclick="@_addRecord"></span>
+                                          @onclick="@_addRecordClicked"></span>
                                 </div>
                                 <div class="col-lg-2 col-md-4 col-sm-4 row primary-bg-color rounded-1">
                                     <FluentButton BackgroundColor="Transparent"
@@ -155,11 +155,13 @@
                               @onclick=@(() => _onSaveClicked())></span>
 
                         <span class="clarity--details-line shadow"
-                              @onclick=@(() => _openPorjectDetailsClick())>></span>
+                              @onclick=@(() => _openPorjectDetailsClick())></span>
 
-                        <span class="clarity--employee-group-line shadow"></span>
+                        <span class="clarity--employee-group-line shadow"
+                              @onclick=@(() => _openPorjectEmployeesClick())></span>
 
-                        <span class="icon-park-outline--customer shadow"></span>
+                        <span class="icon-park-outline--customer shadow"
+                              @onclick=@(() => _openPorjectCustomerClick())></span>
 
                     </div>
 
@@ -222,6 +224,55 @@
 
 </FluentDialog>
 
+<!-- Project Employees Dialog -->
+<FluentDialog @ref="_projectEmployeesDialog"
+              Hidden=@(startLoading || !isProjectEmployeesDialogOdepened)
+              Modal="false"
+              Style="--dialog-width: 64vw;">
+
+    <!-- Selected Project Employees -->
+    <div class="w-xl-90 w-lg-90 w-md-98 w-sm-98">
+        @* <ProjectDetails Project="@_selectedProject" PropertyChanged=@_project_PropertyChanged /> *@
+        <h3>Edit Employees</h3>
+    </div>
+
+    <div class="mt-2 row">
+        <FluentButton class="col-6 mw-10"
+                      OnClick=@(() => _updateEmployees(false))>
+            Ok
+        </FluentButton>
+        <FluentButton class="col-6 mw-10"
+                      OnClick=@(() => _updateEmployees())>
+            Cancel
+        </FluentButton>
+    </div>
+
+</FluentDialog>
+
+<!-- Project Customer Dialog -->
+<FluentDialog @ref="_projectCustomerDialog"
+              Hidden=@(startLoading || !isProjectCustomerDialogOdepened)
+              Modal="false"
+              Style="--dialog-width: 64vw;">
+
+    <!-- Selected Project Customer -->
+    <div class="w-xl-90 w-lg-90 w-md-98 w-sm-98">
+        @* <ProjectDetails Project="@_selectedProject" PropertyChanged=@_project_PropertyChanged /> *@
+        <h3>Edit Customer</h3>
+    </div>
+
+    <div class="mt-2 row">
+        <FluentButton class="col-6 mw-10"
+                      OnClick=@(() => _updateCustomer(false))>
+            Ok
+        </FluentButton>
+        <FluentButton class="col-6 mw-10"
+                      OnClick=@(() => _updateCustomer())>
+            Cancel
+        </FluentButton>
+    </div>
+
+</FluentDialog>
 
 
 <AcceptDialog @ref="_acceptDialog" IsAcceptDialogOdepened="@(startLoading || !_isAcceptDialogOppend)"/>

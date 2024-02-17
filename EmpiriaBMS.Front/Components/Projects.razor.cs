@@ -28,13 +28,15 @@ public partial class Projects: IDisposable
     private List<string> _changedProjectIds = new List<string>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
+    
+    // Paginator
     private PaginatorVM _paginator = new PaginatorVM(7);
 
+    // Basic Models
     private ProjectValidModel _validationModel = new ProjectValidModel();
     private ProjectVM _selectedProjectBackUp = null;
     private ProjectVM _selectedProject = new ProjectVM();
     private InvoiceVM _selectedInvoice = new InvoiceVM();
-
     private UserVM _logedUser;
 
     // Hours Dialog
@@ -42,9 +44,17 @@ public partial class Projects: IDisposable
     private bool isEditDialogOdepened = false;
     private double _hoursToChange = 0.0;
 
-    // Project Deyailes Dialog
+    // Project Details Dialog
     private FluentDialog _projectDetailesDialog;
     private bool isProjectDetailesDialogOdepened = false;
+
+    // Project Employees Dialog
+    private FluentDialog _projectEmployeesDialog;
+    private bool isProjectEmployeesDialogOdepened = false;
+
+    // Project Customer Dialog
+    private FluentDialog _projectCustomerDialog;
+    private bool isProjectCustomerDialogOdepened = false;
 
     // Accept Dialog
     private AcceptDialog _acceptDialog;
@@ -63,6 +73,7 @@ public partial class Projects: IDisposable
         _acceptDialog?.Close();
     }
 
+    #region Buttons Clicked
     private async Task _onSaveClicked()
     {
         var hasNewRecords = _projects.Any(p => string.IsNullOrEmpty(p.Id));
@@ -71,7 +82,7 @@ public partial class Projects: IDisposable
         {
             await _acceptDialog?.ToogleAcceptDialog(
                                 open: true,
-                                acceptDialogOnAccept: _updateRecords,
+                                acceptDialogOnAccept: _updateExec,
                                 msg: "Are you sure you want to save the changes?",
                                 acceptButtons: true);
         }
@@ -84,18 +95,75 @@ public partial class Projects: IDisposable
         }
     }
 
-    private async Task _updateRecords()
+    private async Task _onDeleteBtnClcked()
+    {
+        if (_projects.Any(p => p.IsChecked))
+        {
+            await _acceptDialog?.ToogleAcceptDialog(
+                                open: true,
+                                acceptDialogOnAccept: _deleteExec,
+                                msg: "Are you sure you want to delete the record ?",
+                                acceptButtons: true);
+        }
+        else
+        {
+            await _acceptDialog?.ToogleAcceptDialog(
+                                open: true,
+                                msg: "Please select some records to delete!",
+                                acceptButtons: false);
+        }
+    }
+
+    private void _addRecordClicked()
+    {
+        try {
+            var newProject = new ProjectVM();
+            newProject.Invoice = new InvoiceVM();
+            newProject.Invoice.Project = newProject;
+            _projects.Insert(0, newProject);
+            _selectedProject = newProject;
+            _selectedInvoice = _selectedProject.Invoice;
+            //StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private void _openPorjectDetailsClick()
+    {
+        _selectedProjectBackUp = _selectedProject;
+        _toogleProjectDetailesDialog(true);
+    }
+
+    private void _openPorjectEmployeesClick()
+    {
+        _selectedProjectBackUp = _selectedProject;
+        _toogleProjectEmployeesDialog(true);
+    }
+
+    private void _openPorjectCustomerClick()
+    {
+        _selectedProjectBackUp = _selectedProject;
+        _toogleProjectCustomerDialog(true);
+    }
+    #endregion
+
+    #region Excecute To DB
+    private async Task _updateExec()
     {
         _acceptDialog.IsLoading = true;
         var newRecords = _projects.Where(p => string.IsNullOrEmpty(p.Id)).ToList();
-        foreach (var item in newRecords)
+        foreach (var item in newRecords) // Add
         {
             if (!await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
                 await DataProvider.Projects.Add(Mapper.Map<Project>(item));
         }
 
         var updated = _projects.Where(p => _changedProjectIds.Contains(p.Id)).ToList();
-        foreach (var item in updated)
+        foreach (var item in updated) // Update
         {
             if (await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
                 DataProvider.Projects.Update(Mapper.Map<Project>(item));
@@ -114,26 +182,7 @@ public partial class Projects: IDisposable
         StateHasChanged();
     }
 
-    private async Task _onDeleteBtnClcked()
-    {
-        if (_projects.Any(p => p.IsChecked))
-        {
-            await _acceptDialog?.ToogleAcceptDialog(
-                                open:true,
-                                acceptDialogOnAccept: _deleteSelected,
-                                msg:"Are you sure you want to delete the record ?",
-                                acceptButtons:true);
-        }
-        else
-        {
-            await _acceptDialog?.ToogleAcceptDialog(
-                                open: true,
-                                msg: "Please select some records to delete!",
-                                acceptButtons: false);
-        }
-    }
-
-    private async Task _deleteSelected()
+    private async Task _deleteExec()
     {
         _acceptDialog.IsLoading = true;
         var deleted = _projects.Where(p => p.IsChecked).ToList();
@@ -147,26 +196,9 @@ public partial class Projects: IDisposable
         _acceptDialog?.Close();
         StateHasChanged();
     }
+    #endregion
 
-    private void _addRecord()
-    {
-        try {
-            var newProject = new ProjectVM();
-            newProject.Invoice = new InvoiceVM();
-            newProject.Invoice.Project = newProject;
-            _projects.Insert(0, newProject);
-            _selectedProject = newProject;
-            _selectedInvoice = _selectedProject.Invoice;
-            //StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-    
-    #region HoursDialog
+    #region Hours Dialog
     private void _toogleEditHoursDialog(bool open)
     {
         isEditDialogOdepened = open;
@@ -193,12 +225,6 @@ public partial class Projects: IDisposable
         else
             _projectDetailesDialog?.Hide();
     }
-    
-    private void _openPorjectDetailsClick()
-    {
-        _selectedProjectBackUp = _selectedProject;
-        _toogleProjectDetailesDialog(true);
-    }
 
     private void _updateProject(bool cancel = true)
     {
@@ -208,6 +234,49 @@ public partial class Projects: IDisposable
         }
         _selectedProjectBackUp = null;
         _toogleProjectDetailesDialog(false);
+    }
+    #endregion
+
+    #region Project Employees Dialog
+    private void _toogleProjectEmployeesDialog(bool open)
+    {
+        isProjectEmployeesDialogOdepened = open;
+        if (open)
+            _projectEmployeesDialog?.Show();
+        else
+            _projectEmployeesDialog?.Hide();
+    }
+
+    private void _updateEmployees(bool cancel = true)
+    {
+        if (cancel)
+        {
+            _selectedProject.Employees = _selectedProjectBackUp.Employees;
+        }
+        _selectedProjectBackUp = null;
+        _toogleProjectEmployeesDialog(false);
+    }
+    #endregion
+
+    #region Project Customer Dialog
+    private void _toogleProjectCustomerDialog(bool open)
+    {
+        isProjectCustomerDialogOdepened = open;
+        if (open)
+            _projectCustomerDialog?.Show();
+        else
+            _projectCustomerDialog?.Hide();
+    }
+
+    private void _updateCustomer(bool cancel = true)
+    {
+        if (cancel)
+        {
+            _selectedProject.Customer = _selectedProjectBackUp.Customer;
+            _selectedProject.CustomerId = _selectedProjectBackUp.CustomerId;
+        }
+        _selectedProjectBackUp = null;
+        _toogleProjectCustomerDialog(false);
     }
     #endregion
 
