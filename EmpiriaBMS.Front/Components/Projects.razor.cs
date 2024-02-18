@@ -174,7 +174,7 @@ public partial class Projects: IDisposable
         foreach (var item in updated) // Update
         {
             if (await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
-                DataProvider.Projects.Update(Mapper.Map<Project>(item));
+                await DataProvider.Projects.Update(Mapper.Map<Project>(item));
         }
 
         // Updated Invoices
@@ -182,7 +182,7 @@ public partial class Projects: IDisposable
         foreach (var item in updatedInvoice) // Update
         {
             if (await DataProvider.Invoices.Any(i => i.Id.Equals(item.Id)))
-                DataProvider.Invoices.Update(Mapper.Map<Invoice>(item));
+                await DataProvider.Invoices.Update(Mapper.Map<Invoice>(item));
         }
 
         _changedProjectIds.Clear();
