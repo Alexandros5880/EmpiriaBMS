@@ -1,5 +1,9 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
+using EmpiriaMS.Models.Models;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -47,11 +51,19 @@ public partial class Projects: IDisposable
             _paginator.PagesCounter = quotient == 0 ? divide : divide + 1;
 
             // TODO: Get My Project And Down
-            var data = (await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex))
-                        .Select(p => Mapper.Map<ProjectVM>(p))
-                        .ToList();
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex))
+                                                                       .ToList<ProjectDto>();
+
+
+            var projectsVm = Mapping.Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
+            // Exception: Error mapping types.
+            //System.Collections.Generic.List`1 [EmpiriaBMS.Core.Dtos.ProjectDto] ->
+            //      System.Collections.Generic.List`1 [EmpiriaBMS.Front.ViewModel.Components.ProjectVM]
+
+
+
             _projects.Clear();
-            data.ForEach(_projects.Add);
+            projectsVm.ForEach(_projects.Add);
             _selectedProject = _projects.FirstOrDefault();
         }
         catch (Exception ex)
@@ -68,7 +80,7 @@ public partial class Projects: IDisposable
         {
             // TODO: Get Teams Loged User And Mach him With Oure Users
 
-            var defaultRoleId = await GetProjectManagersRoleId("Project Managers");
+            var defaultRoleId = await GetProjectManagersRoleId("Project Manager");
             if (defaultRoleId == 0)
                 throw new Exception("Exception `Project Managers` role not exists!");
 
@@ -95,13 +107,12 @@ public partial class Projects: IDisposable
     {
         try
         {
-            return (await DataProvider.Roles
-                                .GetAll(r => r.Name.Equals(roleName)))
-                                .FirstOrDefault().Id;
+            return (await DataProvider.Roles.Get(roleName)).Id;
         }
         catch (Exception ex)
         {
             // TODO: Log Error
+            Debug.WriteLine($"Exception: {ex.Message}");
             return 0;
         }
     }

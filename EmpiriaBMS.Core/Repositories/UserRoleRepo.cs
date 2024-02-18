@@ -10,10 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
+using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class UserRoleRepo : Repository<UserRoleDto>, IDisposable
+public class UserRoleRepo : Repository<UserRoleDto, UserRole>, IDisposable
 {
     public UserRoleRepo(IDbContextFactory<AppDbContext> dbFactory) : base(dbFactory) { }
 
@@ -24,12 +25,13 @@ public class UserRoleRepo : Repository<UserRoleDto>, IDisposable
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context
+            var ur = await _context
                              .Set<UserRole>()
                              .Include(r => r.Role)
                              .Include(r => r.User)
-                             .Select(r => Mapping.Mapper.Map<UserRoleDto>(r))
                              .FirstOrDefaultAsync(r => r.Id == id);
+
+            return Mapping.Mapper.Map<UserRoleDto>(ur);
         }  
     }
 
@@ -37,42 +39,51 @@ public class UserRoleRepo : Repository<UserRoleDto>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<UserRole>()
-                                     .Select(r => Mapping.Mapper.Map<UserRoleDto>(r))
-                                     .ToListAsync();
+            List<UserRole> ur;
 
-            return await _context.Set<UserRole>()
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                ur = await _context.Set<UserRole>().ToListAsync();
+
+                return Mapping.Mapper.Map<List<UserRole>, List<UserRoleDto>>(ur);
+            }
+
+            ur = await _context.Set<UserRole>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(r => r.Role)
                                  .Include(r => r.User)
-                                 .Select(r => Mapping.Mapper.Map<UserRoleDto>(r))
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<UserRole>, List<UserRoleDto>>(ur);
         }  
     }
 
     public new async Task<ICollection<UserRoleDto>> GetAll(
-        Expression<Func<UserRoleDto, bool>> expresion,
+        Expression<Func<UserRole, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<UserRole>()
-                                     .Select(r => Mapping.Mapper.Map<UserRoleDto>(r))
-                                     .Where(expresion)
-                                     .ToListAsync();
+            List<UserRole> ur;
 
-            return await _context.Set<UserRole>()
-                                 .Include(r => r.Role)
-                                 .Include(r => r.User)
-                                 .Select(r => Mapping.Mapper.Map<UserRoleDto>(r))
-                                 .Where(expresion)
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                ur = await _context.Set<UserRole>().Where(expresion).ToListAsync();
+
+                return Mapping.Mapper.Map<List<UserRole>, List<UserRoleDto>>(ur);
+            }
+
+            ur = await _context.Set<UserRole>()
+                               .Where(expresion)
+                               .Skip((pageIndex - 1) * pageSize)
+                               .Take(pageSize)
+                               .Include(r => r.Role)
+                               .Include(r => r.User)
+                               .ToListAsync();
+
+            return Mapping.Mapper.Map<List<UserRole>, List<UserRoleDto>>(ur);
         }
     }
 }

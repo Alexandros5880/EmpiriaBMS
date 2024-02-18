@@ -3,6 +3,7 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;
+using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class DisciplineEngineerRepo : Repository<DisciplineEngineerDto>, IDisposable
+public class DisciplineEngineerRepo : Repository<DisciplineEngineerDto, DisciplineEngineer>, IDisposable
 {
     public DisciplineEngineerRepo(IDbContextFactory<AppDbContext> dbFactory) : base(dbFactory) { }
 
@@ -24,12 +25,13 @@ public class DisciplineEngineerRepo : Repository<DisciplineEngineerDto>, IDispos
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context
+            var de =  await _context
                              .Set<DisciplineEngineer>()
                              .Include(r => r.Discipline)
                              .Include(r => r.Engineer)
-                             .Select(r => Mapping.Mapper.Map<DisciplineEngineerDto>(r))
                              .FirstOrDefaultAsync(r => r.Id == id);
+
+            return Mapping.Mapper.Map<DisciplineEngineer, DisciplineEngineerDto>(de);
         }
     }
 
@@ -37,42 +39,49 @@ public class DisciplineEngineerRepo : Repository<DisciplineEngineerDto>, IDispos
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<DisciplineEngineer>()
-                                     .Select(r => Mapping.Mapper.Map<DisciplineEngineerDto>(r))
-                                     .ToListAsync();
+            List<DisciplineEngineer> des;
 
-            return await _context.Set<DisciplineEngineer>()
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                des = await _context.Set<DisciplineEngineer>().ToListAsync();
+                return Mapping.Mapper.Map<List<DisciplineEngineer>, List<DisciplineEngineerDto>>(des);
+            }
+
+            des =  await _context.Set<DisciplineEngineer>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(r => r.Discipline)
                                  .Include(r => r.Engineer)
-                                 .Select(r => Mapping.Mapper.Map<DisciplineEngineerDto>(r))
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<DisciplineEngineer>, List<DisciplineEngineerDto>>(des);
         }  
     }
 
     public new async Task<ICollection<DisciplineEngineerDto>> GetAll(
-        Expression<Func<DisciplineEngineerDto, bool>> expresion,
+        Expression<Func<DisciplineEngineer, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<DisciplineEngineer>()
-                                     .Select(r => Mapping.Mapper.Map<DisciplineEngineerDto>(r))
-                                     .Where(expresion)
-                                     .ToListAsync();
+            List<DisciplineEngineer> des;
 
-            return await _context.Set<DisciplineEngineer>()
-                                 .Include(r => r.Discipline)
-                                 .Include(r => r.Engineer)
-                                 .Select(r => Mapping.Mapper.Map<DisciplineEngineerDto>(r))
-                                 .Where(expresion)
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                des = await _context.Set<DisciplineEngineer>().Where(expresion).ToListAsync();
+                return Mapping.Mapper.Map<List<DisciplineEngineer>, List<DisciplineEngineerDto>>(des);
+            }
+
+            des = await _context.Set<DisciplineEngineer>()
+                                .Where(expresion)
+                                .Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize)
+                                .Include(r => r.Discipline)
+                                .Include(r => r.Engineer)
+                                .ToListAsync();
+
+            return Mapping.Mapper.Map<List<DisciplineEngineer>, List<DisciplineEngineerDto>>(des);
         } 
     }
 }

@@ -15,7 +15,7 @@ using EmpiriaBMS.Core.Config;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class DrawRepo : Repository<DrawDto>, IDisposable
+public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
 {
     public DrawRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
@@ -26,11 +26,12 @@ public class DrawRepo : Repository<DrawDto>, IDisposable
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context
+            var dr = await _context
                              .Set<Draw>()
                              .Include(r => r.Discipline)
-                             .Select(r => Mapping.Mapper.Map<DrawDto>(r))
                              .FirstOrDefaultAsync(r => r.Id == id);
+
+            return Mapping.Mapper.Map<DrawDto>(dr);
         }
     }
 
@@ -38,41 +39,56 @@ public class DrawRepo : Repository<DrawDto>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            List<Draw> drs;
+
             if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<Draw>()
+            {
+                drs = await _context.Set<Draw>()
                                      .Include(r => r.Discipline)
-                                     .Select(r => Mapping.Mapper.Map<DrawDto>(r))
                                      .ToListAsync();
 
-            return await _context.Set<Draw>()
+                return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(drs);
+            }
+
+
+            drs = await _context.Set<Draw>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(r => r.Discipline)
-                                 .Select(r => Mapping.Mapper.Map<DrawDto>(r))
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(drs);
         }
     }
 
     public new async Task<ICollection<DrawDto>> GetAll(
-        Expression<Func<DrawDto, bool>> expresion,
+        Expression<Func<Draw, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<Draw>()
-                                     .Select(r => Mapping.Mapper.Map<DrawDto>(r))
-                                     .Where(expresion)
-                                     .ToListAsync();
+            List<Draw> drs;
 
-            return await _context.Set<Draw>()
-                                 .Include(r => r.Discipline)
-                                 .Select(r => Mapping.Mapper.Map<DrawDto>(r))
-                                 .Where(expresion)
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                drs = await _context.Set<Draw>()
+                                    .Where(expresion)
+                                    .Include(r => r.Discipline)
+                                    .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(drs);
+            }
+
+
+            drs = await _context.Set<Draw>()
+                                .Where(expresion)
+                                .Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize)
+                                .Include(r => r.Discipline)
+                                .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(drs);
         }
     }
 }

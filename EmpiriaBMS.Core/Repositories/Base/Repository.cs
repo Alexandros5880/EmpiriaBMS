@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;
@@ -14,8 +15,9 @@ using System.Xml.Linq;
 
 
 namespace EmpiriaBMS.Core.Repositories.Base;
-public class Repository<T> : IRepository<T>, IDisposable
+public class Repository<T, U> : IRepository<T, U>, IDisposable
     where T : class, IEntityDto
+    where U : class, IEntity
 {
     private bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
@@ -33,7 +35,7 @@ public class Repository<T> : IRepository<T>, IDisposable
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            await _context.Set<T>().AddAsync(entity);
+            await _context.Set<U>().AddAsync(Mapping.Mapper.Map<U>(entity));
             await _context.SaveChangesAsync();
 
             return entity;
@@ -52,7 +54,7 @@ public class Repository<T> : IRepository<T>, IDisposable
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            _context.Set<T>().Remove(entity);
+            _context.Set<U>().Remove(Mapping.Mapper.Map<U>(entity));
             await _context.SaveChangesAsync();
         }
 
@@ -70,10 +72,10 @@ public class Repository<T> : IRepository<T>, IDisposable
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var entry = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                var entry = await _context.Set<U>().FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (entry != null)
                 {
-                    _context.Entry(entry).CurrentValues.SetValues(entity);
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<U>(entity));
                     await _context.SaveChangesAsync();
                 }
             }
@@ -82,7 +84,7 @@ public class Repository<T> : IRepository<T>, IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception On Repository.Update({entity.GetType()}): {ex.Message}");
+            Debug.WriteLine($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}");
             return null;
         }
     }
@@ -94,9 +96,11 @@ public class Repository<T> : IRepository<T>, IDisposable
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context
-                             .Set<T>()
+            var i = await _context
+                             .Set<U>()
                              .FirstOrDefaultAsync(r => r.Id == id);
+
+            return Mapping.Mapper.Map<T>(i);
         }
     }
 
@@ -104,31 +108,44 @@ public class Repository<T> : IRepository<T>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            List<U> items;
             if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<T>().ToListAsync();
+            {
+                items =  await _context.Set<U>().ToListAsync();
+                return Mapping.Mapper.Map<List<T>>(items);
+            }
 
-            return await _context.Set<T>()
+            items = await _context.Set<U>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<T>>(items);
         }
     }
 
     public async Task<ICollection<T>> GetAll(
-        Expression<Func<T, bool>> expresion,
+        Expression<Func<U, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<T>().Where(expresion).ToListAsync();
+            List<U> items;
 
-            return await _context.Set<T>()
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                items = await _context.Set<U>().Where(expresion).ToListAsync();
+                return Mapping.Mapper.Map<List<T>>(items);
+            }
+
+            items = await _context.Set<U>()
                                  .Where(expresion)
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<T>>(items);
         }
     }
 
@@ -136,26 +153,24 @@ public class Repository<T> : IRepository<T>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<T>().CountAsync();
+            return await _context.Set<U>().CountAsync();
         }
     }
 
-    public async Task<int> Count(Expression<Func<T, bool>> expresion)
+    public async Task<int> Count(Expression<Func<U, bool>> expresion)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            return await _context.Set<T>().Where(expresion).CountAsync();
-        }
+            return await _context.Set<U>().Where(expresion).CountAsync();
     }
 
-    public async Task<bool> Any(Expression<System.Func<T, bool>> expresion)
+    public async Task<bool> Any(Expression<System.Func<U, bool>> expresion)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             if (expresion == null)
                 throw new ArgumentNullException(nameof(expresion));
 
-            return await _context.Set<T>().AnyAsync(expresion);
+            return await _context.Set<U>().AnyAsync(expresion);
         }
     }
 

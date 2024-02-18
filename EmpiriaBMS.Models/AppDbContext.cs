@@ -65,7 +65,7 @@ public class AppDbContext : DbContext
             Id = role_2_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Engineers",
+            Name = "Engineer",
             IsEmployee = true,
         };
 
@@ -74,7 +74,7 @@ public class AppDbContext : DbContext
             Id = role_3_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Project Managers",
+            Name = "Project Manager",
             IsEmployee = true,
         };
 

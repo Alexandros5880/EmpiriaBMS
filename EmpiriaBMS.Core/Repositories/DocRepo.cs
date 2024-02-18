@@ -11,10 +11,11 @@ using System.Threading.Tasks;
 using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
+using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class DocRepo : Repository<DocDto>, IDisposable
+public class DocRepo : Repository<DocDto, Doc>, IDisposable
 {
     public DocRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
@@ -25,11 +26,12 @@ public class DocRepo : Repository<DocDto>, IDisposable
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context
+            var doc = await _context
                              .Set<Doc>()
                              .Include(r => r.Discipline)
-                             .Select(r => Mapping.Mapper.Map<DocDto>(r))
                              .FirstOrDefaultAsync(r => r.Id == id);
+            
+            return Mapping.Mapper.Map<DocDto>(doc);
         }
     }
 
@@ -37,41 +39,54 @@ public class DocRepo : Repository<DocDto>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            List<Doc> ds;
+
             if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<Doc>()
+            {
+                ds =  await _context.Set<Doc>()
                                      .Include(r => r.Discipline)
-                                     .Select(r => Mapping.Mapper.Map<DocDto>(r))
                                      .ToListAsync();
 
-            return await _context.Set<Doc>()
+                return Mapping.Mapper.Map<List<Doc>, List<DocDto>>(ds);
+            }
+
+            ds = await _context.Set<Doc>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(r => r.Discipline)
-                                 .Select(r => Mapping.Mapper.Map<DocDto>(r))
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Doc>, List<DocDto>>(ds);
         } 
     }
 
     public new async Task<ICollection<DocDto>> GetAll(
-        Expression<Func<DocDto, bool>> expresion,
+        Expression<Func<Doc, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<Doc>()
-                                     .Select(r => Mapping.Mapper.Map<DocDto>(r))
-                                     .Where(expresion)
-                                     .ToListAsync();
+            List<Doc> ds;
 
-            return await _context.Set<Doc>()
-                                 .Include(r => r.Discipline)
-                                 .Select(r => Mapping.Mapper.Map<DocDto>(r))
-                                 .Where(expresion)
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                ds = await _context.Set<Doc>()
+                                   .Where(expresion)
+                                   .Include(r => r.Discipline)
+                                   .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Doc>, List<DocDto>>(ds);
+            }
+
+            ds = await _context.Set<Doc>()
+                               .Where(expresion)
+                               .Skip((pageIndex - 1) * pageSize)
+                               .Take(pageSize)
+                               .Include(r => r.Discipline)
+                               .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Doc>, List<DocDto>>(ds);
         }
     }
 }

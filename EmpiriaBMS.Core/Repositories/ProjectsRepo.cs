@@ -15,9 +15,10 @@ using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
+using AutoMapper;
 
 namespace EmpiriaBMS.Core.Repositories;
-public class ProjectsRepo : Repository<ProjectDto>
+public class ProjectsRepo : Repository<ProjectDto, Project>
 {
     public ProjectsRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
@@ -39,44 +40,49 @@ public class ProjectsRepo : Repository<ProjectDto>
 
     public new async Task<ICollection<ProjectDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
+        List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<Project>()
-                                     .Select(r => Mapping.Mapper.Map<ProjectDto>(r))
-                                     .ToListAsync();
+            {
+                projects = await _context.Set<Project>().ToListAsync();
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+            }
 
-            return await _context.Set<Project>()
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .Include(r => r.Customer)
-                                 .Include(r => r.Invoice)
-                                 .Select(r => Mapping.Mapper.Map<ProjectDto>(r))
-                                 .ToListAsync();
+            projects =  await _context.Set<Project>()
+                                      .Skip((pageIndex - 1) * pageSize)
+                                      .Take(pageSize)
+                                      .Include(r => r.Customer)
+                                      .Include(r => r.Invoice)
+                                      .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
         }
     }
 
     public new async Task<ICollection<ProjectDto>> GetAll(
-        Expression<Func<ProjectDto, bool>> expresion,
+        Expression<Func<Project, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            List<Project> projects;
             if (pageSize == 0 || pageIndex == 0)
-                return await _context.Set<Project>()
-                                     .Select(r => Mapping.Mapper.Map<ProjectDto>(r))
+            {
+                projects = await _context.Set<Project>().Where(expresion).ToListAsync();
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+            }
+
+            projects = await _context.Set<Project>()
                                      .Where(expresion)
+                                     .Skip((pageIndex - 1) * pageSize)
+                                     .Take(pageSize)
+                                     .Include(r => r.Customer)
+                                     .Include(r => r.Invoice)
                                      .ToListAsync();
 
-            return await _context.Set<Project>()
-                                 .Include(r => r.Customer)
-                                 .Include(r => r.Invoice)
-                                 .Select(r => Mapping.Mapper.Map<ProjectDto>(r))
-                                 .Where(expresion)
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
         }
     }
 

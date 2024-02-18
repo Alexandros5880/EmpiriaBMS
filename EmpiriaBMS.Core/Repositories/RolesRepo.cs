@@ -15,10 +15,23 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
 
 namespace EmpiriaBMS.Core.Repositories;
-public class RolesRepo : Repository<RoleDto>
+public class RolesRepo : Repository<RoleDto, Role>
 {
     public RolesRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<RoleDto?> Get(string name)
+    {
+        if (name == null)
+            throw new ArgumentNullException(nameof(name));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name.Equals(name));
+
+            return Mapping.Mapper.Map<RoleDto>(role);
+        }
+    }
+    
     public async Task<ICollection<UserDto>> GetUsers(int roleId)
     {
         if (roleId == 0)
@@ -26,11 +39,15 @@ public class RolesRepo : Repository<RoleDto>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<UserRole>()
-                                 .Where(r => r.RoleId == roleId)
-                                 .Select(r => r.User)
-                                 .Select(r => Mapping.Mapper.Map<UserDto>(r))
-                                 .ToListAsync();
+            var userIds = await _context.Set<UserRole>()
+                                        .Where(r => r.RoleId == roleId)
+                                        .Select(r => r.UserId)
+                                        .ToListAsync();
+            
+            var users = await _context.Users.Where(u => userIds.Contains(u.Id))
+                                            .ToListAsync();
+
+            return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
         }
     }
 
@@ -38,10 +55,11 @@ public class RolesRepo : Repository<RoleDto>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<Role>()
+            var roles = await _context.Set<Role>()
                                  .Where(r => r.IsEmployee)
-                                 .Select(r => Mapping.Mapper.Map<RoleDto>(r))
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
         }
     }
 
@@ -49,10 +67,11 @@ public class RolesRepo : Repository<RoleDto>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<Role>()
+            var roles = await _context.Set<Role>()
                                  .Where(r => !r.IsEmployee)
-                                 .Select(r => Mapping.Mapper.Map<RoleDto>(r))
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
         }
     }
 
@@ -60,11 +79,12 @@ public class RolesRepo : Repository<RoleDto>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<Role>()
+            var roles =  await _context.Set<Role>()
                                  .Where(r => r.IsEmployee)
                                  .Where(r => r.UserRoles.Select(ur => ur.UserId).Contains(userId))
-                                 .Select(r => Mapping.Mapper.Map<RoleDto>(r))
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
         }
     }
 
@@ -72,11 +92,12 @@ public class RolesRepo : Repository<RoleDto>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<Role>()
+            var roles =  await _context.Set<Role>()
                                  .Where(r => !r.IsEmployee)
                                  .Where(r => r.UserRoles.Select(ur => ur.UserId).Contains(userId))
-                                 .Select(r => Mapping.Mapper.Map<RoleDto>(r))
                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
         }
     }
 }

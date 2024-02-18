@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EmpiriaBMS.Core\EmpiriaBMS.Core.csproj" />
-    <ProjectReference Include="..\EmpiriaBMS.Models\EmpiriaBMS.Models.csproj" />
   </ItemGroup>
 
 </Project>
