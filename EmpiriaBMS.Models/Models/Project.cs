@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EmpiriaMS.Models.Models.Base;
-using EmpiriaMS.Models.Enums;
 using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaMS.Models.Models;
@@ -21,10 +20,9 @@ public class Project : Entity
 
     public string? Drawing { get; set; }
 
-    [Required]
-    public PlanTypes PlanType { get; set; }
+    public int? EstimatedMandays { get; set; }
 
-    public int? WorkingDays { get; set; }
+    public int? EstimatedHours { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]

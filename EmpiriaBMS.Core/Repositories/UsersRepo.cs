@@ -9,201 +9,245 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Config;
 
 namespace EmpiriaBMS.Core.Repositories;
-public class UsersRepo : Repository<User>
+public class UsersRepo : Repository<UserDto>
 {
     public UsersRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public new async Task<User?> Get(int id)
+    public new async Task<UserDto?> Get(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
-        var _context = _dbContextFactory.CreateDbContext();
-        return await _context
-                         .Set<User>()
-                         .Include(r => r.Disciplines)
-                         .Include(r => r.UserRoles)
-                         .Include(r => r.DisciplineEngineers)
-                         .FirstOrDefaultAsync(r => r.Id == id);
-    }
-
-    public new async Task<ICollection<User>> GetAll(int pageSize = 0, int pageIndex = 0)
-    {
-        var _context = _dbContextFactory.CreateDbContext();
-        if (pageSize == 0 || pageIndex == 0)
-            return await _context.Set<User>().ToListAsync();
-
-        return await _context.Set<User>()
-                             .Skip((pageIndex - 1) * pageSize)
-                             .Take(pageSize)
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context
+                             .Set<User>()
                              .Include(r => r.Disciplines)
                              .Include(r => r.UserRoles)
                              .Include(r => r.DisciplineEngineers)
-                             .ToListAsync();
+                             .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                             .FirstOrDefaultAsync(r => r.Id == id);
+        }
     }
 
-    public new async Task<ICollection<User>> GetAll(
-        Expression<Func<User, bool>> expresion,
+    public new async Task<ICollection<UserDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            if (pageSize == 0 || pageIndex == 0)
+                return await _context.Set<User>()
+                                     .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                     .ToListAsync();
+
+            return await _context.Set<User>()
+                                 .Skip((pageIndex - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .Include(r => r.Disciplines)
+                                 .Include(r => r.UserRoles)
+                                 .Include(r => r.DisciplineEngineers)
+                                 .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                 .ToListAsync();
+        }
+    }
+
+    public new async Task<ICollection<UserDto>> GetAll(
+        Expression<Func<UserDto, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    )
-    {
-        var _context = _dbContextFactory.CreateDbContext();
-        if (pageSize == 0 || pageIndex == 0)
-            return await _context.Set<User>().Where(expresion).ToListAsync();
+    ) {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            if (pageSize == 0 || pageIndex == 0)
+                return await _context.Set<User>()
+                                     .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                     .Where(expresion)
+                                     .ToListAsync();
 
-        return await _context.Set<User>()
-                             .Where(expresion)
-                             .Skip((pageIndex - 1) * pageSize)
-                             .Take(pageSize)
-                             .Include(r => r.Disciplines)
-                             .Include(r => r.UserRoles)
-                             .Include(r => r.DisciplineEngineers)
-                             .ToListAsync();
+            return await _context.Set<User>()
+                                 .Include(r => r.Disciplines)
+                                 .Include(r => r.UserRoles)
+                                 .Include(r => r.DisciplineEngineers)
+                                 .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                 .Where(expresion)
+                                 .Skip((pageIndex - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .ToListAsync();
+        }
     }
 
-    public async Task<ICollection<Role>> GetRoles(int userId)
+    public async Task<ICollection<RoleDto>> GetRoles(int userId)
     {
         if (userId == 0)
             throw new NullReferenceException($"No User Id Specified!");
-        var _context = _dbContextFactory.CreateDbContext();
-        return await _context.Set<UserRole>()
-                             .Where(r => r.UserId == userId)
-                             .Select(r => r.Role)
-                             .ToListAsync();
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<UserRole>()
+                                 .Where(r => r.UserId == userId)
+                                 .Select(r => r.Role)
+                                 .Select(r => Mapping.Mapper.Map<RoleDto>(r))
+                                 .ToListAsync();
+        }
     }
 
-    public async Task<ICollection<User>> GetEmployees()
+    public async Task<ICollection<UserDto>> GetEmployees()
     {
-        var _context = _dbContextFactory.CreateDbContext();
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var emplyeeRolesIds = await _context.Set<Role>()
+                                                .Where(r => r.IsEmployee)
+                                                .Select(r => r.Id)
+                                                .ToListAsync();
 
-        var emplyeeRolesIds = await _context.Set<Role>()
-                                            .Where(r => r.IsEmployee)
-                                            .Select(r => r.Id)
-                                            .ToListAsync();
-
-        return await _context.Set<UserRole>()
-                             .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
-                             .Select(ur => ur.User)
-                             .Include(r => r.Disciplines)
-                             .Include(r => r.UserRoles)
-                             .Include(r => r.DisciplineEngineers)
-                             .ToListAsync();
+            return await _context.Set<UserRole>()
+                                 .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
+                                 .Select(ur => ur.User)
+                                 .Include(r => r.Disciplines)
+                                 .Include(r => r.UserRoles)
+                                 .Include(r => r.DisciplineEngineers)
+                                 .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                 .ToListAsync();
+        }
     }
 
-    public async Task<ICollection<User>> GetEmployees(int pageSize = 0, int pageIndex = 0)
+    public async Task<ICollection<UserDto>> GetEmployees(int pageSize = 0, int pageIndex = 0)
     {
-        var _context = _dbContextFactory.CreateDbContext();
-        if (pageSize == 0 || pageIndex == 0)
-            return await _context.Set<User>().ToListAsync();
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            if (pageSize == 0 || pageIndex == 0)
+                return await _context.Set<User>()
+                                     .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                     .ToListAsync();
 
-        var emplyeeRolesIds = await _context.Set<Role>()
-                                            .Where(r => r.IsEmployee)
-                                            .Select(r => r.Id)
-                                            .ToListAsync();
-        
-        return await _context.Set<UserRole>()
-                             .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
-                             .Select(ur => ur.User)
-                             .Include(r => r.Disciplines)
-                             .Include(r => r.UserRoles)
-                             .Include(r => r.DisciplineEngineers)
-                             .Skip((pageIndex - 1) * pageSize)
-                             .Take(pageSize)
-                             .ToListAsync();
+            var emplyeeRolesIds = await _context.Set<Role>()
+                                                .Where(r => r.IsEmployee)
+                                                .Select(r => r.Id)
+                                                .ToListAsync();
+
+            return await _context.Set<UserRole>()
+                                 .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
+                                 .Select(ur => ur.User)
+                                 .Include(r => r.Disciplines)
+                                 .Include(r => r.UserRoles)
+                                 .Include(r => r.DisciplineEngineers)
+                                 .Skip((pageIndex - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                 .ToListAsync();
+        } 
     }
 
-    public async Task<ICollection<User>> GetEmployees(
-        Expression<Func<User, bool>> expresion,
+    public async Task<ICollection<UserDto>> GetEmployees(
+        Expression<Func<UserDto, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
-        var _context = _dbContextFactory.CreateDbContext();
-        if (pageSize == 0 || pageIndex == 0)
-            return await _context.Set<User>().Where(expresion).ToListAsync();
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            if (pageSize == 0 || pageIndex == 0)
+                return await _context.Set<User>()
+                                     .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                     .Where(expresion)
+                                     .ToListAsync();
 
-        var emplyeeRolesIds = await _context.Set<Role>()
-                                            .Where(r => r.IsEmployee)
-                                            .Select(r => r.Id)
-                                            .ToListAsync();
+            var emplyeeRolesIds = await _context.Set<Role>()
+                                                .Where(r => r.IsEmployee)
+                                                .Select(r => r.Id)
+                                                .ToListAsync();
 
-        return await _context.Set<UserRole>()
-                             .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
-                             .Select(ur => ur.User)
-                             .Include(r => r.Disciplines)
-                             .Include(r => r.UserRoles)
-                             .Include(r => r.DisciplineEngineers)
-                             .Where(expresion)
-                             .Skip((pageIndex - 1) * pageSize)
-                             .Take(pageSize)
-                             .ToListAsync();
+            return await _context.Set<UserRole>()
+                                 .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
+                                 .Select(ur => ur.User)
+                                 .Include(r => r.Disciplines)
+                                 .Include(r => r.UserRoles)
+                                 .Include(r => r.DisciplineEngineers)
+                                 .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                 .Where(expresion)
+                                 .Skip((pageIndex - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .ToListAsync();
+        }
     }
 
-    public async Task<ICollection<User>> GetCustomers()
+    public async Task<ICollection<UserDto>> GetCustomers()
     {
-        var _context = _dbContextFactory.CreateDbContext();
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var emplyeeRolesIds = await _context.Set<Role>()
+                                                .Where(r => !r.IsEmployee)
+                                                .Select(r => r.Id)
+                                                .ToListAsync();
 
-        var emplyeeRolesIds = await _context.Set<Role>()
-                                            .Where(r => !r.IsEmployee)
-                                            .Select(r => r.Id)
-                                            .ToListAsync();
-
-        return await _context.Set<UserRole>()
-                             .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
-                             .Select(ur => ur.User)
-                             .Include(r => r.Disciplines)
-                             .Include(r => r.UserRoles)
-                             .Include(r => r.DisciplineEngineers)
-                             .ToListAsync();
+            return await _context.Set<UserRole>()
+                                 .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
+                                 .Select(ur => ur.User)
+                                 .Include(r => r.Disciplines)
+                                 .Include(r => r.UserRoles)
+                                 .Include(r => r.DisciplineEngineers)
+                                 .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                 .ToListAsync();
+        }
     }
 
-    public async Task<ICollection<User>> GetCustomers(int pageSize = 0, int pageIndex = 0)
+    public async Task<ICollection<UserDto>> GetCustomers(int pageSize = 0, int pageIndex = 0)
     {
-        var _context = _dbContextFactory.CreateDbContext();
-        if (pageSize == 0 || pageIndex == 0)
-            return await _context.Set<User>().ToListAsync();
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            if (pageSize == 0 || pageIndex == 0)
+                return await _context.Set<User>()
+                                     .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                     .ToListAsync();
 
-        var emplyeeRolesIds = await _context.Set<Role>()
-                                            .Where(r => !r.IsEmployee)
-                                            .Select(r => r.Id)
-                                            .ToListAsync();
+            var emplyeeRolesIds = await _context.Set<Role>()
+                                                .Where(r => !r.IsEmployee)
+                                                .Select(r => r.Id)
+                                                .ToListAsync();
 
-        return await _context.Set<UserRole>()
-                             .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
-                             .Select(ur => ur.User)
-                             .Include(r => r.Disciplines)
-                             .Include(r => r.UserRoles)
-                             .Include(r => r.DisciplineEngineers)
-                             .Skip((pageIndex - 1) * pageSize)
-                             .Take(pageSize)
-                             .ToListAsync();
+            return await _context.Set<UserRole>()
+                                 .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
+                                 .Select(ur => ur.User)
+                                 .Include(r => r.Disciplines)
+                                 .Include(r => r.UserRoles)
+                                 .Include(r => r.DisciplineEngineers)
+                                 .Skip((pageIndex - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                 .ToListAsync();
+        }
     }
 
-    public async Task<ICollection<User>> GetCustomers(
-        Expression<Func<User, bool>> expresion,
+    public async Task<ICollection<UserDto>> GetCustomers(
+        Expression<Func<UserDto, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
-        var _context = _dbContextFactory.CreateDbContext();
-        if (pageSize == 0 || pageIndex == 0)
-            return await _context.Set<User>().Where(expresion).ToListAsync();
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            if (pageSize == 0 || pageIndex == 0)
+                return await _context.Set<User>()
+                                     .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                     .Where(expresion)
+                                     .ToListAsync();
 
-        var emplyeeRolesIds = await _context.Set<Role>()
-                                            .Where(r => !r.IsEmployee)
-                                            .Select(r => r.Id)
-                                            .ToListAsync();
+            var emplyeeRolesIds = await _context.Set<Role>()
+                                                .Where(r => !r.IsEmployee)
+                                                .Select(r => r.Id)
+                                                .ToListAsync();
 
-        return await _context.Set<UserRole>()
-                             .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
-                             .Select(ur => ur.User)
-                             .Include(r => r.Disciplines)
-                             .Include(r => r.UserRoles)
-                             .Include(r => r.DisciplineEngineers)
-                             .Where(expresion)
-                             .Skip((pageIndex - 1) * pageSize)
-                             .Take(pageSize)
-                             .ToListAsync();
+            return await _context.Set<UserRole>()
+                                 .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
+                                 .Select(ur => ur.User)
+                                 .Include(r => r.Disciplines)
+                                 .Include(r => r.UserRoles)
+                                 .Include(r => r.DisciplineEngineers)
+                                 .Select(r => Mapping.Mapper.Map<UserDto>(r))
+                                 .Where(expresion)
+                                 .Skip((pageIndex - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .ToListAsync();
+        }
     }
 
 }

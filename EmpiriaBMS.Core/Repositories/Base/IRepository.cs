@@ -1,4 +1,5 @@
-﻿using EmpiriaMS.Models.Models.Base;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaMS.Models.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories.Base;
 public interface IRepository<T>
-    where T : class, IEntity
+    where T : class, IEntityDto
 {
     Task<T?> Get(int id);
     Task<ICollection<T>> GetAll(int pageSize = 0, int pageIndex = 0);

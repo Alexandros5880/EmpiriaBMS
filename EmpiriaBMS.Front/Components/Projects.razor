@@ -30,21 +30,15 @@
                         @if (_logedUser != null)
                         {
                             <div class="row ms-2 me-2" style="overflow:hidden;">
-                                <div class="col-lg-9 col-md-7 col-sm-7">
+                                <div class="col-lg-10 col-md-8 col-sm-8">
                                     @foreach (var role in _loggedUserRoles)
                                     {
                                         <h4><b>@role.Name</b></h4>
                                     }
                                 </div>
-                                <div class="col-lg-1 col-md-1 col-sm-1 me-2">
-                                    <span class="grommet-icons--add add-hover"
-                                          style="margin-top: 14%;"
-                                          @onclick="@_addRecordClicked"></span>
-                                </div>
                                 <div class="col-lg-2 col-md-4 col-sm-4 row primary-bg-color rounded-1">
                                     <FluentButton BackgroundColor="Transparent"
-                                                  Appearance="Appearance.Lightweight"
-                                                  @onclick="@(() => _toogleEditHoursDialog(true))">
+                                                  Appearance="Appearance.Lightweight">
                                         <span class="mt-2 h6"><strong>@(_logedUser.Hours)</strong>h</span>
                                         <FluentIcon Icon="Edit" />
                                     </FluentButton>
@@ -58,12 +52,6 @@
                         <table class="table table-hover thead-light text-center">
                             <thead>
                                 <tr>
-                                    <th scope="col">
-                                        <input type="checkbox"
-                                               class="big-checkbox"
-                                               @bind="IsAllChecked"
-                                               @onclick="_isCheckedChanged" />
-                                    </th>
                                     <th scope="col">Name</th>
                                     <th scope="col">PlanType</th>
                                     <th scope="col">Drawing</th>
@@ -76,26 +64,19 @@
                                 {
                                     <tr clss="align-middle d-flex"
                                         @onclick="@(() => OnSelectProject(project))">
-                                        <th scope="row"
-                                            class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
-                                            style="min-width: 60px;">
-                                            <input type="checkbox"
-                                                   class="mt-2 big-checkbox"
-                                                   @bind="project.IsChecked" />
-                                        </th>
                                         <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
                                             style="min-width: 110px;">
                                             <input type="text" class="form-control" @bind="project.Name">
                                         </td>
                                         <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
                                             style="min-width: 110px;">
-                                            <select class="form-select"
+                                            @* <select class="form-select"
                                                     @bind="project.PlanType">
                                                 @foreach (var opt in projectPlanTypes)
                                                 {
                                                     <option value="@opt">@opt</option>
                                                 }
-                                            </select>
+                                            </select> *@
                                         </td>
                                         <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
                                             style="min-width: 110px;">
@@ -133,36 +114,6 @@
                     </div>
                 
                 </div>
-
-                <div class="col-lg-3 mt-md-0 mt-sm-4 p-0 overflow-hidden">
-
-                    <!-- Selected Invoice -->
-                    <div class="w-xl-90 w-lg-90 w-md-100 w-sm-100
-                                mt-xl-0 mt-lg-0 mt-md-4 mt-sm-4
-                                me-lg-1 me-md-1 me-md-0 me-sm-0
-                                ms-xl-3 ms-lg-3 ms-md-0 ms-sm-0">
-                        <InvoiceDetails Invoice="@_selectedInvoice" PropertyChanged=@_invoice_PropertyChanged />
-                    </div>
-
-                    <!-- Controlls Buttons -->
-                    <div class="mt-5 mb-3 d-flex justify-content-evenly">
-
-                        <span class="fluent--delete-28-regular shadow"
-                              @onclick=@(async () => await _onDeleteBtnClcked())>
-                        </span>
-
-                        <span class="fluent--save-28-regular shadow"
-                              @onclick=@(() => _onSaveClicked())></span>
-
-                        <span class="clarity--details-line shadow"
-                              @onclick=@(() => _openPorjectDetailsClick())></span>
-
-                        <span class="icon-park-outline--customer shadow"
-                              @onclick=@(() => _openPorjectCustomerClick())></span>
-
-                    </div>
-
-                </div>
                 
             </div>
         }
@@ -170,81 +121,3 @@
 </div>
 
 <FilterProgressRing FilterLoading="@filterLoading"/>
-
-<!-- Edit Hours Dialos -->
-<FluentDialog @ref="_editHoursDialog"
-              Hidden=@(startLoading || !isEditDialogOdepened)
-              Modal="false"
-              Style="--dialog-width: 200px; --dialog-height: 150px;">
-
-    <h3>Edit Hours:</h3>
-
-    <input type="number"
-           min="-24"
-           max="24"
-           class="form-control"
-           id="invoiceNumber"
-           @bind="@_hoursToChange"/>
-    
-    <div class="mt-2 row">
-        <FluentButton class="col-6" OnClick=@UpdateHours>
-            Ok
-        </FluentButton>
-        <FluentButton class="col-6" OnClick=@(() => _toogleEditHoursDialog(false))>
-            Cancel
-        </FluentButton>
-    </div>
-
-</FluentDialog>
-
-<!-- Project Details Dialog -->
-<FluentDialog @ref="_projectDetailesDialog"
-              Hidden=@(startLoading || !isProjectDetailesDialogOdepened)
-              Modal="false"
-              Style="--dialog-width: 64vw;">
-
-    <!-- Selected Project -->
-    <div class="w-xl-90 w-lg-90 w-md-98 w-sm-98">
-        <ProjectDetails Project="@_selectedProject" PropertyChanged=@_project_PropertyChanged />
-    </div>
-
-    <div class="mt-2 row">
-        <FluentButton class="col-6 mw-10"
-                      OnClick=@(() => _updateProject(false))>
-            Ok
-        </FluentButton>
-        <FluentButton class="col-6 mw-10"
-                      OnClick=@(() => _updateProject())>
-            Cancel
-        </FluentButton>
-    </div>
-
-</FluentDialog>
-
-<!-- Project Customer Dialog -->
-<FluentDialog @ref="_projectCustomerDialog"
-              Hidden=@(startLoading || !isProjectCustomerDialogOdepened)
-              Modal="false"
-              Style="--dialog-width: 64vw;">
-
-    <!-- Selected Project Customer -->
-    <div class="w-xl-90 w-lg-90 w-md-98 w-sm-98">
-        @* <ProjectDetails Project="@_selectedProject" PropertyChanged=@_project_PropertyChanged /> *@
-        <h3>Edit Customer</h3>
-    </div>
-
-    <div class="mt-2 row">
-        <FluentButton class="col-6 mw-10"
-                      OnClick=@(() => _updateCustomer(false))>
-            Ok
-        </FluentButton>
-        <FluentButton class="col-6 mw-10"
-                      OnClick=@(() => _updateCustomer())>
-            Cancel
-        </FluentButton>
-    </div>
-
-</FluentDialog>
-
-
-<AcceptDialog @ref="_acceptDialog" IsAcceptDialogOdepened="@(startLoading || !_isAcceptDialogOppend)"/>

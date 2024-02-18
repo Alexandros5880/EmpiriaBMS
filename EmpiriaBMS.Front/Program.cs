@@ -1,5 +1,6 @@
 using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Repositories;
 using EmpiriaBMS.Front;
 using EmpiriaBMS.Front.Horizontal;

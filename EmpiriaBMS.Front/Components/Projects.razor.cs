@@ -1,19 +1,7 @@
-﻿using EmpiriaBMS.Front.Components.General;
-using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
-using EmpiriaMS.Models.Enums;
-using EmpiriaMS.Models.Models;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Fast.Components.FluentUI;
-using Microsoft.Kiota.Abstractions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using static Microsoft.Fast.Components.FluentUI.Emojis.Objects.Color.Default;
-using EmpiriaBMS.Front.Components;
-using EmpiriaBMS.Front.ViewModel.Components.Projects;
-using System.Diagnostics.Eventing.Reader;
-using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Projects: IDisposable
@@ -26,256 +14,25 @@ public partial class Projects: IDisposable
     bool runInTeams = false;
     bool IsAllChecked = false;
 
-    private List<int> _changedInvoicesIds = new List<int>();
-    private List<int> _changedProjectIds = new List<int>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
-    List<PlanTypes> projectPlanTypes = Enum.GetValues(typeof(PlanTypes)).OfType<PlanTypes>().ToList();
     
     // Paginator
     private PaginatorVM _paginator = new PaginatorVM(7);
 
     // Basic Models
-    private ProjectValidModel _validationModel = new ProjectValidModel();
-    private ProjectVM _selectedProjectBackUp = null;
     private ProjectVM _selectedProject = new ProjectVM();
-    private InvoiceVM _selectedInvoice = new InvoiceVM();
     private UserVM _logedUser;
     private ICollection<RoleVM> _loggedUserRoles = new List<RoleVM>();
     private bool _logesUserChanged = false;
 
-    // Hours Dialog
-    private FluentDialog _editHoursDialog;
-    private bool isEditDialogOdepened = false;
-    private double _hoursToChange = 0.0;
-
-    // Project Details Dialog
-    private FluentDialog _projectDetailesDialog;
-    private bool isProjectDetailesDialogOdepened = false;
-
-    // Project Customer Dialog
-    private FluentDialog _projectCustomerDialog;
-    private bool isProjectCustomerDialogOdepened = false;
-
-    // Accept Dialog
-    private AcceptDialog _acceptDialog;
-    private bool _isAcceptDialogOppend = false;
-
     protected override async void OnInitialized()
     {
-        //startLoading = true;
-        //await _getLogedUser();
-        //await _getProjects();
-        //startLoading = false;
-        //base.OnInitialized();
-        //StateHasChanged();
-        //_toogleEditHoursDialog(false);
-        //_toogleProjectDetailesDialog(false);
-        //_logedUser.PropertyChanged += _logedUser_PropertyChanged;
-        //_acceptDialog?.Close();
-
+        await _getLogedUser();
+        await _getProjects();
         startLoading = false;
+        base.OnInitialized();
+        //StateHasChanged();
     }
-
-    #region Buttons Clicked
-    private async Task _onSaveClicked()
-    {
-        var hasNewRecords = _projects.Any(p => p.Id == 0);
-        var hasAnyProjectChanged = _changedProjectIds.Count > 0;
-        var hasAnyInvoiceCganed = _changedInvoicesIds.Count > 0;
-        if (_logesUserChanged || hasNewRecords || hasAnyProjectChanged || hasAnyInvoiceCganed)
-        {
-            await _acceptDialog?.ToogleAcceptDialog(
-                                open: true,
-                                acceptDialogOnAccept: _updateExec,
-                                msg: "Are you sure you want to save the changes?",
-                                acceptButtons: true);
-        }
-        else
-        {
-            await _acceptDialog?.ToogleAcceptDialog(
-                                open: true,
-                                msg: "There is no changed records to Update!",
-                                acceptButtons: false);
-        }
-    }
-
-    private async Task _onDeleteBtnClcked()
-    {
-        if (_projects.Any(p => p.IsChecked))
-        {
-            await _acceptDialog?.ToogleAcceptDialog(
-                                open: true,
-                                acceptDialogOnAccept: _deleteExec,
-                                msg: "Are you sure you want to delete the record ?",
-                                acceptButtons: true);
-        }
-        else
-        {
-            await _acceptDialog?.ToogleAcceptDialog(
-                                open: true,
-                                msg: "Please select some records to delete!",
-                                acceptButtons: false);
-        }
-    }
-
-    private void _addRecordClicked()
-    {
-        try {
-            var newProject = new ProjectVM();
-            newProject.Invoice = new InvoiceVM();
-            newProject.Invoice.Project = newProject;
-            _projects.Insert(0, newProject);
-            _selectedProject = newProject;
-            _selectedInvoice = _selectedProject.Invoice;
-            //StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private void _openPorjectDetailsClick()
-    {
-        _selectedProjectBackUp = _selectedProject;
-        _toogleProjectDetailesDialog(true);
-    }
-
-    private void _openPorjectCustomerClick()
-    {
-        _selectedProjectBackUp = _selectedProject;
-        _toogleProjectCustomerDialog(true);
-    }
-    #endregion
-
-    #region Excecute To DB
-    private async Task _updateExec()
-    {
-        _acceptDialog.IsLoading = true;
-
-        // If Loged User Changed
-        if (_logesUserChanged)
-        {
-            await DataProvider.Users.Update(Mapper.Map<User>(_logedUser));
-        }
-
-        // New Projects
-        var newRecords = _projects.Where(p => p.Id == 0);
-        foreach (var item in newRecords) // Add
-        {
-            if (!await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
-            {
-                await DataProvider.Projects.Add(Mapper.Map<Project>(item));
-            }
-        }
-
-        // Updated Projects
-        var updated = _projects.Where(p => _changedProjectIds.Contains(p.Id));
-        foreach (var item in updated) // Update
-        {
-            if (await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
-                await DataProvider.Projects.Update(Mapper.Map<Project>(item));
-        }
-
-        // Updated Invoices
-        var updatedInvoice = _projects.Select(p => p.Invoice).Where(i => _changedInvoicesIds.Contains(i.Id));
-        foreach (var item in updatedInvoice) // Update
-        {
-            if (await DataProvider.Invoices.Any(i => i.Id.Equals(item.Id)))
-                await DataProvider.Invoices.Update(Mapper.Map<Invoice>(item));
-        }
-
-        _changedProjectIds.Clear();
-        _changedInvoicesIds.Clear();
-        _acceptDialog.IsLoading = false;
-
-        _acceptDialog?.Close();
-
-        await _acceptDialog?.ToogleAcceptDialog(
-                                open: true,
-                                msg: "Updated successfully!",
-                                acceptButtons: false);
-
-        StateHasChanged();
-    }
-
-    private async Task _deleteExec()
-    {
-        _acceptDialog.IsLoading = true;
-        var deleted = _projects.Where(p => p.IsChecked).ToList();
-        foreach (var item in deleted)
-        {
-            if (await DataProvider.Projects.Any(p => p.Id.Equals(item.Id)))
-                await DataProvider.Projects.Delete(item.Id);
-            _projects.Remove(item);
-        }
-        _acceptDialog.IsLoading = false;
-        _acceptDialog?.Close();
-        StateHasChanged();
-    }
-    #endregion
-
-    #region Hours Dialog
-    private void _toogleEditHoursDialog(bool open)
-    {
-        isEditDialogOdepened = open;
-        if (open)
-            _editHoursDialog?.Show();
-        else
-            _editHoursDialog?.Hide();
-    }
-
-    private void UpdateHours()
-    {
-        _logedUser.Hours += _hoursToChange;
-        _hoursToChange = 0.0;
-        _toogleEditHoursDialog(false);
-    }
-    #endregion
-
-    #region Project Detailes Dialog
-    private void _toogleProjectDetailesDialog(bool open)
-    {
-        isProjectDetailesDialogOdepened = open;
-        if (open)
-            _projectDetailesDialog?.Show();
-        else
-            _projectDetailesDialog?.Hide();
-    }
-
-    private void _updateProject(bool cancel = true)
-    {
-        if (cancel)
-        {
-            _selectedProject = _selectedProjectBackUp;
-        }
-        _selectedProjectBackUp = null;
-        _toogleProjectDetailesDialog(false);
-    }
-    #endregion
-
-    #region Project Customer Dialog
-    private void _toogleProjectCustomerDialog(bool open)
-    {
-        isProjectCustomerDialogOdepened = open;
-        if (open)
-            _projectCustomerDialog?.Show();
-        else
-            _projectCustomerDialog?.Hide();
-    }
-
-    private void _updateCustomer(bool cancel = true)
-    {
-        if (cancel)
-        {
-            _selectedProject.Customer = _selectedProjectBackUp.Customer;
-            _selectedProject.CustomerId = _selectedProjectBackUp.CustomerId;
-        }
-        _selectedProjectBackUp = null;
-        _toogleProjectCustomerDialog(false);
-    }
-    #endregion
 
     #region Get Records
     private async Task _getProjects()
@@ -294,12 +51,8 @@ public partial class Projects: IDisposable
                         .Select(p => Mapper.Map<ProjectVM>(p))
                         .ToList();
             _projects.Clear();
-            data.ForEach(p => {
-                p.PropertyChanged += _projectsPropertyChanged;
-                _projects.Add(p);
-            });
+            data.ForEach(_projects.Add);
             _selectedProject = _projects.FirstOrDefault();
-            _selectedInvoice = _selectedProject.Invoice;
         }
         catch (Exception ex)
         {
@@ -316,7 +69,7 @@ public partial class Projects: IDisposable
             // TODO: Get Teams Loged User And Mach him With Oure Users
 
             var defaultRoleId = await GetProjectManagersRoleId("Project Managers");
-            if (defaultRoleId == null)
+            if (defaultRoleId == 0)
                 throw new Exception("Exception `Project Managers` role not exists!");
 
             var users = await DataProvider.Roles.GetUsers(defaultRoleId);
@@ -328,8 +81,8 @@ public partial class Projects: IDisposable
             _logedUser = Mapper.Map<UserVM>(dbUser);
 
             _loggedUserRoles = (await DataProvider.Roles.GetEmplyeeRoles(dbUser.Id))
-                                        .Select(r => Mapper.Map<RoleVM>(r))
-                                        .ToList();
+                                                        .Select(r => Mapper.Map<RoleVM>(r))
+                                                        .ToList();
         }
         catch (Exception ex)
         {
@@ -358,67 +111,7 @@ public partial class Projects: IDisposable
     private void OnSelectProject(ProjectVM project)
     {
         _selectedProject = project;
-        _selectedInvoice = Mapper.Map<InvoiceVM>(project.Invoice);
         StateHasChanged();
-    }
-
-    private void _isCheckedChanged()
-    {
-        foreach (var p in _projects)
-            p.IsChecked = !IsAllChecked;
-    }
-
-    private void _projectsPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        var project = sender as ProjectVM;
-
-        _projectValidate(project, nameof(ProjectVM.Completed));
-
-        // Pass Changed Project Id To Update List
-        var id = project.Id;
-        if (!_changedProjectIds.Contains(_selectedProject.Id) && _selectedProject.Id != 0)
-            _changedProjectIds.Add(_selectedProject.Id);
-    }
-
-    private void _invoice_PropertyChanged(int invoiceId)
-    {
-        if (!_changedInvoicesIds.Contains(invoiceId) && invoiceId != 0)
-            _changedInvoicesIds.Add(invoiceId);
-    }
-
-    private void _project_PropertyChanged(int id)
-    {
-        if (!_changedProjectIds.Contains(_selectedProject.Id) && _selectedProject.Id != 0)
-            _changedProjectIds.Add(_selectedProject.Id);
-    }
-
-    private void _logedUser_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        _logesUserChanged = true;
-    }
-
-    private void _employees_PropertyChanged(int id)
-    {
-        if (!_changedProjectIds.Contains(_selectedProject.Id) && _selectedProject.Id != 0)
-            _changedProjectIds.Add(_selectedProject.Id);
-    }
-    #endregion
-
-    #region Validation
-    private void _projectValidate(ProjectVM project, string propertyName) {
-        // Validate
-        switch (propertyName)
-        {
-            case nameof(ProjectVM.Completed):
-                var valid = _validationModel.Validate(project, nameof(ProjectVM.Completed));
-                project.Completed = valid
-                    ? project.Completed
-                    : project.Completed < 0 ? 0 : 100;
-                break;
-
-            default:
-                break;
-        }
     }
     #endregion
 
@@ -428,9 +121,7 @@ public partial class Projects: IDisposable
         {
             if (disposing)
             {
-                _projects.ToList().ForEach(p => {
-                    p.PropertyChanged -= _projectsPropertyChanged;
-                });
+
             }
             disposedValue = true;
         }

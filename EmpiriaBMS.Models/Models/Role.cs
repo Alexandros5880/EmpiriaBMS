@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Enums;
 using EmpiriaMS.Models.Models.Base;
 
 namespace EmpiriaMS.Models.Models;

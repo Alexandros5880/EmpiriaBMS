@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
-using EmpiriaBMS.Front.ViewModel.Components.Projects;
 using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;

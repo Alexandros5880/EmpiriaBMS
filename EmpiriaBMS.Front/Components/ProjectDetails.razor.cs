@@ -1,5 +1,4 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components.Projects;
-using EmpiriaMS.Models.Enums;
+﻿using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components;

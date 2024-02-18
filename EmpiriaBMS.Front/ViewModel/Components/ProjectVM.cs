@@ -1,5 +1,4 @@
-﻿using EmpiriaMS.Models.Enums;
-using EmpiriaMS.Models.Models;
+﻿using EmpiriaMS.Models.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +6,7 @@ using System.Collections.ObjectModel;
 using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
 
-namespace EmpiriaBMS.Front.ViewModel.Components.Projects;
+namespace EmpiriaBMS.Front.ViewModel.Components;
 public class ProjectVM : BaseVM
 {
     private bool _isChecked;
@@ -72,19 +71,6 @@ public class ProjectVM : BaseVM
                 return;
             _drawing = value;
             NotifyPropertyChanged(nameof(Drawing));
-        }
-    }
-
-    private PlanTypes _planType;
-    public PlanTypes PlanType
-    {
-        get => _planType;
-        set
-        {
-            if (value == _planType)
-                return;
-            _planType = value;
-            NotifyPropertyChanged(nameof(PlanType));
         }
     }
 
@@ -329,7 +315,6 @@ public class ProjectVM : BaseVM
         Description = string.Empty;
         Code = string.Empty;
         Drawing = string.Empty;
-        PlanType = PlanTypes.ELEC;
         WorkingDays = null;
         DurationDate = DateTime.Now.AddYears(1);
         EstPaymentDate = DateTime.Now.AddYears(1);

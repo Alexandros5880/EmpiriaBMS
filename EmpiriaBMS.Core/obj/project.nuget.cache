@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "GgtQi2EUCj4H8rkHpfG2OuCwtWKyKEbhbRYJIVpw39f61na2dTUn4yvQrMGXuwrJq33S+JCSSN+pfZupdSQCkw==",
+  "dgSpecHash": "mQvrTC+qb6z8gP8Ek+kaQN9XHxFpuuLt8yJJ2mCUWARqmdQOwc+PgWhEBVsFF3q8ON+GCWY8e7THGcQiiYbNCQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Alexp\\Desktop\\MicrosoftTeams-Empireia\\EmpiriaBMS\\EmpiriaBMS.Core\\EmpiriaBMS.Core.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Alexp\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\Alexp\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
+    "C:\\Users\\Alexp\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
+    "C:\\Users\\Alexp\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Alexp\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",
     "C:\\Users\\Alexp\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.1.1\\microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512",
     "C:\\Users\\Alexp\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.0\\microsoft.entityframeworkcore.6.0.0.nupkg.sha512",
