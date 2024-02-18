@@ -40,6 +40,7 @@ public partial class Projects: IDisposable
     private ProjectVM _selectedProject = new ProjectVM();
     private InvoiceVM _selectedInvoice = new InvoiceVM();
     private UserVM _logedUser;
+    private bool _logesUserChanged = false;
 
     // Hours Dialog
     private FluentDialog _editHoursDialog;
@@ -72,6 +73,7 @@ public partial class Projects: IDisposable
         StateHasChanged();
         _toogleEditHoursDialog(false);
         _toogleProjectDetailesDialog(false);
+        _logedUser.PropertyChanged += _logedUser_PropertyChanged;
         _acceptDialog?.Close();
     }
 
@@ -81,7 +83,7 @@ public partial class Projects: IDisposable
         var hasNewRecords = _projects.Any(p => p.Id == 0);
         var hasAnyProjectChanged = _changedProjectIds.Count > 0;
         var hasAnyInvoiceCganed = _changedInvoicesIds.Count > 0;
-        if (hasNewRecords || hasAnyProjectChanged || hasAnyInvoiceCganed)
+        if (_logesUserChanged || hasNewRecords || hasAnyProjectChanged || hasAnyInvoiceCganed)
         {
             await _acceptDialog?.ToogleAcceptDialog(
                                 open: true,
@@ -158,6 +160,12 @@ public partial class Projects: IDisposable
     private async Task _updateExec()
     {
         _acceptDialog.IsLoading = true;
+
+        // If Loged User Changed
+        if (_logesUserChanged)
+        {
+            await DataProvider.Users.Update(Mapper.Map<User>(_logedUser));
+        }
 
         // New Projects
         var newRecords = _projects.Where(p => p.Id == 0);
@@ -406,6 +414,11 @@ public partial class Projects: IDisposable
     {
         if (!_changedProjectIds.Contains(_selectedProject.Id) && _selectedProject.Id != 0)
             _changedProjectIds.Add(_selectedProject.Id);
+    }
+
+    private void _logedUser_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        _logesUserChanged = true;
     }
     #endregion
 
