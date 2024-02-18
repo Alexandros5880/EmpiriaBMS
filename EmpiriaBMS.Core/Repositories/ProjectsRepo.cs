@@ -64,16 +64,4 @@ public class ProjectsRepo : Repository<Project>
                              .ToListAsync();
     }
 
-    public async Task<ICollection<User>> GetUsers(int projectId)
-    {
-        if (projectId == 0)
-            throw new NullReferenceException($"No Project Id Specified!");
-
-        var _context = _dbContextFactory.CreateDbContext();
-        return await _context.Set<ProjectEmployee>()
-                             .Where(r => r.ProjectId == projectId)
-                             .Select(r => r.Employee)
-                             .ToListAsync();
-    }
-
 }

@@ -31,7 +31,7 @@
                         {
                             <div class="row ms-2 me-2" style="overflow:hidden;">
                                 <div class="col-lg-9 col-md-7 col-sm-7">
-                                    @foreach (var role in _logedUser.Roles)
+                                    @foreach (var role in _loggedUserRoles)
                                     {
                                         <h4><b>@role.Name</b></h4>
                                     }
@@ -157,9 +157,6 @@
                         <span class="clarity--details-line shadow"
                               @onclick=@(() => _openPorjectDetailsClick())></span>
 
-                        <span class="clarity--employee-group-line shadow"
-                              @onclick=@(() => _openPorjectEmployeesClick())></span>
-
                         <span class="icon-park-outline--customer shadow"
                               @onclick=@(() => _openPorjectCustomerClick())></span>
 
@@ -218,31 +215,6 @@
         </FluentButton>
         <FluentButton class="col-6 mw-10"
                       OnClick=@(() => _updateProject())>
-            Cancel
-        </FluentButton>
-    </div>
-
-</FluentDialog>
-
-<!-- Project Employees Dialog -->
-<FluentDialog @ref="_projectEmployeesDialog"
-              Hidden=@(startLoading || !isProjectEmployeesDialogOdepened)
-              Modal="false"
-              Style="--dialog-width: 64vw;">
-
-    <!-- Selected Project Employees -->
-    <div class="w-xl-90 w-lg-90 w-md-98 w-sm-98">
-        @* <ProjectDetails Project="@_selectedProject" PropertyChanged=@_project_PropertyChanged /> *@
-        <h3>Edit Employees</h3>
-    </div>
-
-    <div class="mt-2 row">
-        <FluentButton class="col-6 mw-10"
-                      OnClick=@(() => _updateEmployees(false))>
-            Ok
-        </FluentButton>
-        <FluentButton class="col-6 mw-10"
-                      OnClick=@(() => _updateEmployees())>
             Cancel
         </FluentButton>
     </div>

@@ -40,6 +40,7 @@ public partial class Projects: IDisposable
     private ProjectVM _selectedProject = new ProjectVM();
     private InvoiceVM _selectedInvoice = new InvoiceVM();
     private UserVM _logedUser;
+    private ICollection<RoleVM> _loggedUserRoles = new List<RoleVM>();
     private bool _logesUserChanged = false;
 
     // Hours Dialog
@@ -51,10 +52,6 @@ public partial class Projects: IDisposable
     private FluentDialog _projectDetailesDialog;
     private bool isProjectDetailesDialogOdepened = false;
 
-    // Project Employees Dialog
-    private FluentDialog _projectEmployeesDialog;
-    private bool isProjectEmployeesDialogOdepened = false;
-
     // Project Customer Dialog
     private FluentDialog _projectCustomerDialog;
     private bool isProjectCustomerDialogOdepened = false;
@@ -65,16 +62,18 @@ public partial class Projects: IDisposable
 
     protected override async void OnInitialized()
     {
-        startLoading = true;
-        await _getLogedUser();
-        await _getProjects();
+        //startLoading = true;
+        //await _getLogedUser();
+        //await _getProjects();
+        //startLoading = false;
+        //base.OnInitialized();
+        //StateHasChanged();
+        //_toogleEditHoursDialog(false);
+        //_toogleProjectDetailesDialog(false);
+        //_logedUser.PropertyChanged += _logedUser_PropertyChanged;
+        //_acceptDialog?.Close();
+
         startLoading = false;
-        base.OnInitialized();
-        StateHasChanged();
-        _toogleEditHoursDialog(false);
-        _toogleProjectDetailesDialog(false);
-        _logedUser.PropertyChanged += _logedUser_PropertyChanged;
-        _acceptDialog?.Close();
     }
 
     #region Buttons Clicked
@@ -141,12 +140,6 @@ public partial class Projects: IDisposable
     {
         _selectedProjectBackUp = _selectedProject;
         _toogleProjectDetailesDialog(true);
-    }
-
-    private void _openPorjectEmployeesClick()
-    {
-        _selectedProjectBackUp = _selectedProject;
-        _toogleProjectEmployeesDialog(true);
     }
 
     private void _openPorjectCustomerClick()
@@ -262,27 +255,6 @@ public partial class Projects: IDisposable
     }
     #endregion
 
-    #region Project Employees Dialog
-    private void _toogleProjectEmployeesDialog(bool open)
-    {
-        isProjectEmployeesDialogOdepened = open;
-        if (open)
-            _projectEmployeesDialog?.Show();
-        else
-            _projectEmployeesDialog?.Hide();
-    }
-
-    private void _updateEmployees(bool cancel = true)
-    {
-        if (cancel)
-        {
-            _selectedProject.Employees = _selectedProjectBackUp.Employees;
-        }
-        _selectedProjectBackUp = null;
-        _toogleProjectEmployeesDialog(false);
-    }
-    #endregion
-
     #region Project Customer Dialog
     private void _toogleProjectCustomerDialog(bool open)
     {
@@ -349,10 +321,13 @@ public partial class Projects: IDisposable
 
             var users = await DataProvider.Roles.GetUsers(defaultRoleId);
             var dbUser = users.FirstOrDefault();
-            //string defaultUserId = "cc71da774225492093e3cc418569f1a524";
-            // var dbUser = await DataProvider.Employees.Get(defaultUserId);
+
+            if (dbUser == null)
+                throw new Exception("Exception user with `Project Managers` role not exists!");
+
             _logedUser = Mapper.Map<UserVM>(dbUser);
-            _logedUser.Roles = (await DataProvider.Employees.GetRoles(dbUser.Id))
+
+            _loggedUserRoles = (await DataProvider.Roles.GetEmplyeeRoles(dbUser.Id))
                                         .Select(r => Mapper.Map<RoleVM>(r))
                                         .ToList();
         }
@@ -384,6 +359,7 @@ public partial class Projects: IDisposable
     {
         _selectedProject = project;
         _selectedInvoice = Mapper.Map<InvoiceVM>(project.Invoice);
+        StateHasChanged();
     }
 
     private void _isCheckedChanged()
@@ -419,6 +395,12 @@ public partial class Projects: IDisposable
     private void _logedUser_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         _logesUserChanged = true;
+    }
+
+    private void _employees_PropertyChanged(int id)
+    {
+        if (!_changedProjectIds.Contains(_selectedProject.Id) && _selectedProject.Id != 0)
+            _changedProjectIds.Add(_selectedProject.Id);
     }
     #endregion
 

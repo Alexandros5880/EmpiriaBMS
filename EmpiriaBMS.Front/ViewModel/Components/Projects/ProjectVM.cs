@@ -322,8 +322,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    public ICollection<UserVM> Employees { get; set; }
-
     public ProjectVM()
     {
         IsChecked = false;
@@ -348,6 +346,5 @@ public class ProjectVM : BaseVM
         ManHours = 0;
         CustomerId = 0;
         Invoice = new InvoiceVM();
-        Employees = new List<UserVM>();
     }
 }

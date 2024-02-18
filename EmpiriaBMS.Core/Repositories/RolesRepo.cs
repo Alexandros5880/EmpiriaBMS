@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -20,6 +21,7 @@ public class RolesRepo : Repository<Role>
     {
         if (roleId == 0)
             throw new NullReferenceException($"No Role Id Specified!");
+
         var _context = _dbContextFactory.CreateDbContext();
         return await _context.Set<UserRole>()
                              .Where(r => r.RoleId == roleId)
@@ -27,4 +29,45 @@ public class RolesRepo : Repository<Role>
                              .ToListAsync();
     }
 
+    public async Task<ICollection<Role>> GetEmployeeRoles()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<Role>()
+                                 .Where(r => r.IsEmployee)
+                                 .ToListAsync();
+        }
+    }
+
+    public async Task<ICollection<Role>> GetCustomerRoles()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<Role>()
+                                 .Where(r => !r.IsEmployee)
+                                 .ToListAsync();
+        }
+    }
+
+    public async Task<ICollection<Role>> GetEmplyeeRoles(int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<Role>()
+                                 .Where(r => r.IsEmployee)
+                                 .Where(r => r.UserRoles.Select(ur => ur.UserId).Contains(userId))
+                                 .ToListAsync();
+        }
+    }
+
+    public async Task<ICollection<Role>> GetCustomerRoles(int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<Role>()
+                                 .Where(r => !r.IsEmployee)
+                                 .Where(r => r.UserRoles.Select(ur => ur.UserId).Contains(userId))
+                                 .ToListAsync();
+        }
+    }
 }

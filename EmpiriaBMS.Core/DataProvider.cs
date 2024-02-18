@@ -16,19 +16,25 @@ public class DataProvider : IDataProvider, IDisposable
     private bool disposedValue;
 
     public RolesRepo Roles { get; set; }
-    public ProjectsRepo Projects { get; set; }
-    public InvoiceRepo Invoices { get; set; }
-    public EmployeeRepo Employees { get; set; }
-    public CastomerRepo Customers { get; set; }
     public UsersRepo Users { get; set; }
+    public UserRoleRepo UsersRoles { get; set; }
+    public ProjectsRepo Projects { get; set; }
+    public DisciplineRepo Disciplines { get; set; }
+    public DrawRepo Draws { get; set; }
+    public DocRepo Docs { get; set; }
+    public DisciplineEngineerRepo DisciplinesEngineers { get; set; }
+    public InvoiceRepo Invoices { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
         Roles = new RolesRepo(dbFactory);
-        Projects = new ProjectsRepo(dbFactory);
-        Invoices = new InvoiceRepo(dbFactory);
         Users = new UsersRepo(dbFactory);
-        Employees = new EmployeeRepo(dbFactory);
-        Customers = new CastomerRepo(dbFactory);
+        UsersRoles = new UserRoleRepo(dbFactory);
+        Projects = new ProjectsRepo(dbFactory);
+        Disciplines = new DisciplineRepo(dbFactory);
+        Draws = new DrawRepo(dbFactory);
+        Docs = new DocRepo(dbFactory);
+        DisciplinesEngineers = new DisciplineEngineerRepo(dbFactory);
+        Invoices = new InvoiceRepo(dbFactory);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -38,11 +44,14 @@ public class DataProvider : IDataProvider, IDisposable
             if (disposing)
             {
                 Roles.Dispose();
-                Projects.Dispose();
-                Invoices.Dispose();
-                Employees.Dispose();
-                Customers.Dispose();
                 Users.Dispose();
+                UsersRoles.Dispose();
+                Projects.Dispose();
+                Disciplines.Dispose();
+                Draws.Dispose();
+                Docs.Dispose();
+                DisciplinesEngineers.Dispose();
+                Invoices.Dispose();
             }
             disposedValue = true;
         }

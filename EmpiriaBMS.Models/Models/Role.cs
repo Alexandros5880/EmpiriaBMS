@@ -15,5 +15,8 @@ public class Role : Entity
     [Required]
     public string? Name { get; set; }
 
+    [Required]
+    public bool IsEmployee { get; set; }
+
     public ICollection<UserRole> UserRoles { get; set; }
 }

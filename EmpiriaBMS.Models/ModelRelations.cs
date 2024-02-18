@@ -3,6 +3,7 @@ using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -25,23 +26,36 @@ public static class ModelRelations
                .WithMany(c => c.UserRoles)
                .HasForeignKey(sc => sc.RoleId);
 
-        // Project Employees
-        builder.Entity<ProjectEmployee>()
-               .HasKey(sc => new { sc.ProjectId, sc.EmployeeId });
-        builder.Entity<ProjectEmployee>()
-               .HasOne(sc => sc.Project)
-               .WithMany(s => s.ProjectEmployees)
-               .HasForeignKey(sc => sc.ProjectId);
-        builder.Entity<ProjectEmployee>()
-               .HasOne(sc => sc.Employee)
-               .WithMany(c => c.ProjectEmployees)
-               .HasForeignKey(sc => sc.EmployeeId);
 
-        // Project Customer
+        // Project Disciplines
         builder.Entity<Project>()
-               .HasOne(p => p.Customer)
-               .WithOne(c => c.Project)
-               .HasForeignKey<User>(c => c.ProjectId);
+                    .HasMany(p => p.Disciplines)
+                    .WithOne(c => c.Project)
+                    .HasForeignKey(c => c.ProjectId);
+
+        // Discipline Draw
+        builder.Entity<Project>()
+                    .HasMany(p => p.Disciplines)
+                    .WithOne(c => c.Project)
+                    .HasForeignKey(c => c.ProjectId);
+
+        // Projects Employees
+        builder.Entity<DisciplineEngineer>()
+               .HasKey(de => new { de.DisciplineId, de.EngineerId });
+        builder.Entity<DisciplineEngineer>()
+               .HasOne(de => de.Discipline)
+               .WithMany(de => de.DisciplineEngineers)
+               .HasForeignKey(de => de.DisciplineId);
+        builder.Entity<DisciplineEngineer>()
+               .HasOne(de => de.Engineer)
+               .WithMany(de => de.DisciplineEngineers)
+               .HasForeignKey(de => de.EngineerId);
+
+        // ProjectManager Discipline
+        builder.Entity<User>()
+                    .HasMany(p => p.Disciplines)
+                    .WithOne(c => c.ProjectManager)
+                    .HasForeignKey(c => c.ProjectManagerId);
 
         // Project Invoice
         builder.Entity<Project>()

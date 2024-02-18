@@ -1,6 +1,8 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class RoleVM : BaseVM
@@ -31,12 +33,11 @@ public class RoleVM : BaseVM
         }
     }
 
-    public ICollection<UserVM>? Employees { get; set; }
+    public bool IsEmployee { get; set; }
 
     public RoleVM()
     {
         IsChecked = false;
         Name = string.Empty;
-        Employees = new List<UserVM>();
     }
 }

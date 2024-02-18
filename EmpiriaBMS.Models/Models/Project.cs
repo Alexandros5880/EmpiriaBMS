@@ -54,7 +54,6 @@ public class Project : Entity
 
     public int? CalculationDaly { get; set; }
 
-    [Range(0, 100)]
     public int? Completed { get; set; }
 
     public int? ManHours { get; set; }
@@ -63,5 +62,5 @@ public class Project : Entity
 
     public Invoice? Invoice { get; set; }
 
-    public ICollection<ProjectEmployee> ProjectEmployees { get; set; }
+    public ICollection<Discipline> Disciplines { get; set; }
 }

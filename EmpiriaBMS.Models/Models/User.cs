@@ -14,18 +14,18 @@ namespace EmpiriaBMS.Models.Models;
 public class User : Entity
 {
     [Required]
-    public string? Email { get; set; }
+    public string Email { get; set; }
 
     [Required]
-    public string? LastName { get; set; }
+    public string LastName { get; set; }
 
     [Required]
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; }
 
     public string? MidName { get; set; }
 
     [Required]
-    public string? Phone1 { get; set; }
+    public string Phone1 { get; set; }
 
     public string? Phone2 { get; set; }
 
@@ -38,6 +38,9 @@ public class User : Entity
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
 
+    public ICollection<Discipline> Disciplines { get; set; }
+
     public ICollection<UserRole> UserRoles { get; set; }
-    public ICollection<ProjectEmployee> ProjectEmployees { get; set; }
+    
+    public ICollection<DisciplineEngineer> DisciplineEngineers { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Front.ViewModel.Components.Projects;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class UserVM : BaseVM
@@ -148,10 +149,6 @@ public class UserVM : BaseVM
         }
     }
 
-    public virtual ICollection<ProjectVM>? Projects { get; set; }
-
-    public virtual ICollection<RoleVM>? Roles { get; set; }
-
     public UserVM()
     {
         IsChecked = true;
@@ -165,7 +162,5 @@ public class UserVM : BaseVM
         Description = string.Empty;
         Hours = 0;
         Project = new ProjectVM();
-        Projects = new List<ProjectVM>();
-        Roles = new List<RoleVM>();
     }
 }
