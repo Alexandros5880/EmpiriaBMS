@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.LocalServices;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
@@ -17,7 +18,6 @@ public partial class Projects: IDisposable
     bool filterLoading = false;
 
     bool runInTeams = false;
-    bool IsAllChecked = false;
 
     // List
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
@@ -28,6 +28,8 @@ public partial class Projects: IDisposable
     // Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
+    private DrawVM _selectedDraw = new DrawVM();
+    private DocVM _selectedDoc = new DocVM();
 
     // Paginator
     private PaginatorVM _paginator = new PaginatorVM(7);
@@ -51,6 +53,8 @@ public partial class Projects: IDisposable
     {
         _selectedProject = null;
         _selectedDiscipline = null;
+        _selectedDraw = null;
+        _selectedDoc = null;
         filterLoading = !startLoading ? true : filterLoading;
         try
         {
@@ -135,10 +139,11 @@ public partial class Projects: IDisposable
         _disciplines.Clear();
         foreach (var di in disciplines)
             _disciplines.Add(Mapper.Map<DisciplineVM>(di));
+        
         StateHasChanged();
     }
 
-    private async Task OnSelectdiscipline(DisciplineVM discipline)
+    private async Task OnSelectDiscipline(DisciplineVM discipline)
     {
         _selectedDiscipline = discipline;
 
@@ -155,6 +160,40 @@ public partial class Projects: IDisposable
 
 
         StateHasChanged();
+    }
+
+    private async Task OnSelectDraw(DrawVM draw)
+    {
+        _selectedDraw = draw;
+        
+        StateHasChanged();
+    }
+
+    private async Task OnSelectDoc(DocVM doc)
+    {
+        _selectedDoc = doc;
+        
+        StateHasChanged();
+    }
+    
+    private void _onDrawCompleteChanged(DrawVM draw, object val)
+    {
+        draw.Completed = Convert.ToInt16(val);
+        _selectedDraw = draw;
+        int complete = Calculator.CalcProjectComplete(
+                                    Mapper.Map<ProjectDto>(_selectedProject), 
+                                    Mapper.Map<DrawDto>(_selectedDraw));
+        _selectedProject.Completed = complete;
+    }
+
+    private void _onDocCompleteChanged(DocVM doc, object val)
+    {
+        doc.Completed = Convert.ToInt16(val);
+        _selectedDoc = doc;
+        int complete = Calculator.CalcProjectComplete(
+                                    Mapper.Map<ProjectDto>(_selectedProject),
+                                    Mapper.Map<DocDto>(_selectedDoc));
+        _selectedProject.Completed = complete;
     }
     #endregion
 

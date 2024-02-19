@@ -6,7 +6,9 @@
 
 :root {
     --main-bg-color: #f5f5f5;
-    --selected-row-bg-color: rgb(208, 211, 212);
+    --selected_1-row-bg-color: rgb(208, 211, 212);
+    --selected_2-row-bg-color: rgb(68,71,145, 0.3);
+    --selected_3-row-bg-color: rgb(109, 112, 179);
     --hover-row-bg-color: rgb(251, 252, 252);
     --primary-accent-color: #5A5C91;
     --primary-bg-color: rgb(68,71,145, 0.3);
@@ -94,8 +96,16 @@ code {
 }
 
 /* Selected Table Row */
-.highlight {
-    background-color: var(--selected-row-bg-color) !important;
+.highlight_1 {
+    background-color: var(--selected_1-row-bg-color) !important;
+}
+
+.highlight_2 {
+    background-color: var(--selected_2-row-bg-color) !important;
+}
+
+.highlight_3 {
+    background-color: var(--selected_3-row-bg-color) !important;
 }
 
 .default-background {
