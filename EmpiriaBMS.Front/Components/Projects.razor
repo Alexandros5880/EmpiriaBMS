@@ -115,7 +115,7 @@
                                     @foreach (var draw in _draws)
                                     {
                                         <tr clss="align-middle d-flex"
-                                            @onclick="@(async () => await OnSelectDraw(draw))">
+                                            @onclick="@(() => OnSelectDraw(draw))">
                                             <td class="align-middle @(((_selectedDraw?.Id.Equals(draw.Id)) ?? false ? "highlight_3" : ""))"
                                                 style="min-width: 110px;">
                                                 <labe>@draw.Name</labe>
@@ -150,7 +150,7 @@
                                     @foreach (var doc in _docs)
                                     {
                                         <tr clss="align-middle d-flex"
-                                            @onclick="@(async () => await OnSelectDoc(doc))">
+                                            @onclick="@(() => OnSelectDoc(doc))">
                                             <td class="align-middle @(((_selectedDoc?.Id.Equals(doc.Id)) ?? false ? "highlight_3" : ""))"
                                                 style="min-width: 110px;">
                                                 <labe>@doc.Name</labe>

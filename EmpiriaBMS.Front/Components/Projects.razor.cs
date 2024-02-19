@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.LocalServices;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
@@ -162,14 +161,14 @@ public partial class Projects: IDisposable
         StateHasChanged();
     }
 
-    private async Task OnSelectDraw(DrawVM draw)
+    private void OnSelectDraw(DrawVM draw)
     {
         _selectedDraw = draw;
         
         StateHasChanged();
     }
 
-    private async Task OnSelectDoc(DocVM doc)
+    private void OnSelectDoc(DocVM doc)
     {
         _selectedDoc = doc;
         
@@ -178,22 +177,26 @@ public partial class Projects: IDisposable
     
     private async Task _onDrawCompleteChanged(DrawVM draw, object val)
     {
-        draw.Completed = Convert.ToInt16(val);
+        draw.Completed = Convert.ToInt32(val);
         _selectedDraw = draw;
         int complete = await DataProvider.Projects.CalcProjectComplete(
                                     Mapper.Map<ProjectDto>(_selectedProject), 
                                     Mapper.Map<DrawDto>(_selectedDraw));
         _selectedProject.Completed = complete;
+        _logedUser.Hours += draw.Completed;
+        StateHasChanged();
     }
 
     private async Task _onDocCompleteChanged(DocVM doc, object val)
     {
-        doc.Completed = Convert.ToInt16(val);
+        doc.Completed = Convert.ToInt32(val);
         _selectedDoc = doc;
         int complete = await DataProvider.Projects.CalcProjectComplete(
                                     Mapper.Map<ProjectDto>(_selectedProject),
                                     Mapper.Map<DocDto>(_selectedDoc));
         _selectedProject.Completed = complete;
+        _logedUser.Hours += doc.Completed;
+        StateHasChanged();
     }
     #endregion
 

@@ -112,15 +112,37 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplinesCount = await CountDiscipline(project.Id);
-        }
+            var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
+            int count = disciplinesIds.Count();
 
-        return 0;
+            List<int> completeds  = await _context
+                                    .Set<Draw>()
+                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
+                                    .Select(d => (int?)d.Completed)
+                                    .Where(c => c != null)
+                                    .Select(c => Convert.ToInt32(c))
+                                    .ToListAsync();
+
+            return  completeds.Sum() / count;
+        }
     }
 
     public async Task<int> CalcProjectComplete(ProjectDto project, DocDto doc)
     {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
+            int count = disciplinesIds.Count();
 
-        return 0;
+            List<int> completeds = await _context
+                                    .Set<Doc>()
+                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
+                                    .Select(d => (int?)d.Completed)
+                                    .Where(c => c != null)
+                                    .Select(c => Convert.ToInt32(c))
+                                    .ToListAsync();
+            
+            return completeds.Sum() / count;
+        }
     }
 }

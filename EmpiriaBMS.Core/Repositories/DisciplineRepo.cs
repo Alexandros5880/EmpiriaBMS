@@ -100,7 +100,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public new async Task<List<DrawDto>> GetDraws(int id)
+    public async Task<List<DrawDto>> GetDraws(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -116,7 +116,23 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public new async Task<List<DocDto>> GetDocs(int id)
+    public async Task<List<DrawDto>> GetDraws(int[] ids)
+    {
+        if (ids == null)
+            throw new ArgumentNullException(nameof(ids));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var draws = await _context
+                             .Set<Draw>()
+                             .Where(d => ids.Contains(d.DisciplineId))
+                             .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(draws);
+        }
+    }
+
+    public async Task<List<DocDto>> GetDocs(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -131,5 +147,22 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             return Mapping.Mapper.Map<List<Doc>, List<DocDto>>(docs);
         }
     }
+
+    public async Task<List<DocDto>> GetDocs(int[] ids)
+    {
+        if (ids == null)
+            throw new ArgumentNullException(nameof(ids));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var docs = await _context
+                             .Set<Doc>()
+                             .Where(d => ids.Contains(d.DisciplineId))
+                             .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Doc>, List<DocDto>>(docs);
+        }
+    }
+
 }
 
