@@ -148,6 +148,7 @@ public partial class Projects: IDisposable
 
         var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
         var docs = await DataProvider.Disciplines.GetDocs(discipline.Id);
+        await _getLogedUser();
 
         _draws.Clear();
         foreach (var di in draws)
@@ -164,38 +165,42 @@ public partial class Projects: IDisposable
     private void OnSelectDraw(DrawVM draw)
     {
         _selectedDraw = draw;
-        
         StateHasChanged();
     }
 
     private void OnSelectDoc(DocVM doc)
     {
         _selectedDoc = doc;
-        
         StateHasChanged();
     }
     
-    private async Task _onDrawCompleteChanged(DrawVM draw, object val)
+    private async Task _onDrawHoursChanged(DrawVM draw, object val)
     {
-        draw.Completed = Convert.ToInt32(val);
+        var previusValue = draw.ManHours;
+        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        draw.ManHours = Convert.ToInt32(val);
+        _logedUser.Hours += value;
         _selectedDraw = draw;
+
         int complete = await DataProvider.Projects.CalcProjectComplete(
                                     Mapper.Map<ProjectDto>(_selectedProject), 
                                     Mapper.Map<DrawDto>(_selectedDraw));
         _selectedProject.Completed = complete;
-        _logedUser.Hours += draw.Completed;
         StateHasChanged();
     }
 
-    private async Task _onDocCompleteChanged(DocVM doc, object val)
+    private async Task _onDocHoursChanged(DocVM doc, object val)
     {
-        doc.Completed = Convert.ToInt32(val);
+        var previusValue = doc.ManHours;
+        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        doc.ManHours = Convert.ToInt32(val);
+        _logedUser.Hours += value;
         _selectedDoc = doc;
+
         int complete = await DataProvider.Projects.CalcProjectComplete(
                                     Mapper.Map<ProjectDto>(_selectedProject),
                                     Mapper.Map<DocDto>(_selectedDoc));
         _selectedProject.Completed = complete;
-        _logedUser.Hours += doc.Completed;
         StateHasChanged();
     }
     #endregion

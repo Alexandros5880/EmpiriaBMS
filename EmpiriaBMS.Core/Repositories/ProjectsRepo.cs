@@ -112,18 +112,35 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var estimatedHours = project.EstimatedHours;
+
             var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
             int count = disciplinesIds.Count();
 
-            List<int> completeds  = await _context
+            // Calculate Draws Complete Percent
+            List<int> drawsCompleteds  = await _context
                                     .Set<Draw>()
+                                    .Where(d => d.Id != draw.Id)
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
                                     .Select(d => (int?)d.Completed)
                                     .Where(c => c != null)
                                     .Select(c => Convert.ToInt32(c))
                                     .ToListAsync();
 
-            return  completeds.Sum() / count;
+            drawsCompleteds.Add(Convert.ToInt32(draw.Completed));
+            var halphDrawsPercent = drawsCompleteds.Sum() / count;
+
+            // Calculate Docs Complete Percent
+            List<int> docsCompleteds = await _context
+                                    .Set<Doc>()
+                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
+                                    .Select(d => (int?)d.Completed)
+                                    .Where(c => c != null)
+                                    .Select(c => Convert.ToInt32(c))
+                                    .ToListAsync();
+            var halphDocsPercent = docsCompleteds.Sum() / count;
+
+            return halphDrawsPercent + halphDocsPercent;
         }
     }
 
@@ -131,18 +148,35 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var estimatedHours = project.EstimatedHours;
+
             var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
             int count = disciplinesIds.Count();
 
-            List<int> completeds = await _context
+            // Calculate Docs Complete Percent
+            List<int> docsCompleteds = await _context
                                     .Set<Doc>()
+                                    .Where(d => d.Id != doc.Id)
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
                                     .Select(d => (int?)d.Completed)
                                     .Where(c => c != null)
                                     .Select(c => Convert.ToInt32(c))
                                     .ToListAsync();
-            
-            return completeds.Sum() / count;
+
+            docsCompleteds.Add(Convert.ToInt32(doc.Completed));
+            var halphDocsPercent = docsCompleteds.Sum() / count;
+
+            // Calculate Draws Complete Percent
+            List<int> drawsCompleteds = await _context
+                                    .Set<Draw>()
+                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
+                                    .Select(d => (int?)d.Completed)
+                                    .Where(c => c != null)
+                                    .Select(c => Convert.ToInt32(c))
+                                    .ToListAsync();
+            var halphDrawsPercent = drawsCompleteds.Sum() / count;
+
+            return halphDrawsPercent + halphDocsPercent;
         }
     }
 }
