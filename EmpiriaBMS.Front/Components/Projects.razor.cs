@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
@@ -179,13 +180,18 @@ public partial class Projects: IDisposable
         var previusValue = draw.ManHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
         draw.ManHours = Convert.ToInt32(val);
+        _selectedProject.ManHours += (int?)value;
         _logedUser.Hours += value;
         _selectedDraw = draw;
 
-        int complete = await DataProvider.Projects.CalcProjectComplete(
+        CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
                                     Mapper.Map<ProjectDto>(_selectedProject), 
                                     Mapper.Map<DrawDto>(_selectedDraw));
-        _selectedProject.Completed = complete;
+
+        _selectedDraw.Completed = complete.DrawsCompleted;
+        _selectedDoc.Completed = complete.DrawsCompleted;
+        _selectedProject.Completed = complete.ProjectCompleted;
+
         StateHasChanged();
     }
 
@@ -194,13 +200,18 @@ public partial class Projects: IDisposable
         var previusValue = doc.ManHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
         doc.ManHours = Convert.ToInt32(val);
+        _selectedProject.ManHours += (int?)value;
         _logedUser.Hours += value;
         _selectedDoc = doc;
 
-        int complete = await DataProvider.Projects.CalcProjectComplete(
+        CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
                                     Mapper.Map<ProjectDto>(_selectedProject),
                                     Mapper.Map<DocDto>(_selectedDoc));
-        _selectedProject.Completed = complete;
+
+        _selectedDraw.Completed = complete.DrawsCompleted;
+        _selectedDoc.Completed = complete.DrawsCompleted;
+        _selectedProject.Completed = complete.ProjectCompleted;
+
         StateHasChanged();
     }
     #endregion

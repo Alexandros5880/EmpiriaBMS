@@ -16,6 +16,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
 using AutoMapper;
+using EmpiriaBMS.Core.ReturnModels;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class ProjectsRepo : Repository<ProjectDto, Project>
@@ -108,75 +109,93 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return await _context.Disciplines.Where(d => d.ProjectId == id).CountAsync();
     }
 
-    public async Task<int> CalcProjectComplete(ProjectDto project, DrawDto draw)
+    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DrawDto draw)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var estimatedHours = project.EstimatedHours;
+            var projectHours = project.ManHours;
 
             var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
             int count = disciplinesIds.Count();
 
-            // Calculate Draws Complete Percent
-            List<int> drawsCompleteds  = await _context
+            // Get Draws Sum Hours
+            List<Draw> draws  = await _context
                                     .Set<Draw>()
                                     .Where(d => d.Id != draw.Id)
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
-                                    .Select(d => (int?)d.Completed)
-                                    .Where(c => c != null)
-                                    .Select(c => Convert.ToInt32(c))
                                     .ToListAsync();
+            draws.Add(Mapping.Mapper.Map<Draw>(draws));
+            var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
 
-            drawsCompleteds.Add(Convert.ToInt32(draw.Completed));
-            var halphDrawsPercent = drawsCompleteds.Sum() / count;
-
-            // Calculate Docs Complete Percent
-            List<int> docsCompleteds = await _context
+            // Get Docs Sum Hourse
+            List<Doc> docs = await _context
                                     .Set<Doc>()
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
-                                    .Select(d => (int?)d.Completed)
-                                    .Where(c => c != null)
-                                    .Select(c => Convert.ToInt32(c))
                                     .ToListAsync();
-            var halphDocsPercent = docsCompleteds.Sum() / count;
+            var sumDocsHourse = docs.Select(m => m.ManHours).Sum();
 
-            return halphDrawsPercent + halphDocsPercent;
+            // Some Project Hours
+            var sumProjectsHours = sumDrawsHourse + sumDocsHourse;
+
+            // Project Completed
+            var projectCompleted = Convert.ToInt32((sumProjectsHours / estimatedHours) * 100);
+
+            //TODO: Calculate Draws Completed
+
+            //TODO:  Calculate Doc Completed
+
+            return new CompletedResult()
+            {
+                ProjectCompleted = projectCompleted,
+                DrawsCompleted = 0,
+                DocsCompleted = 0
+            };
         }
     }
 
-    public async Task<int> CalcProjectComplete(ProjectDto project, DocDto doc)
+    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DocDto doc)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var estimatedHours = project.EstimatedHours;
+            var projectHours = project.ManHours;
 
             var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
             int count = disciplinesIds.Count();
 
-            // Calculate Docs Complete Percent
-            List<int> docsCompleteds = await _context
+            // Get Draws Sum Hours
+            List<Draw> draws = await _context
+                                    .Set<Draw>()
+                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
+                                    .ToListAsync();
+            draws.Add(Mapping.Mapper.Map<Draw>(draws));
+            var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
+
+            // Get Docs Sum Hourse
+            List<Doc> docs = await _context
                                     .Set<Doc>()
                                     .Where(d => d.Id != doc.Id)
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
-                                    .Select(d => (int?)d.Completed)
-                                    .Where(c => c != null)
-                                    .Select(c => Convert.ToInt32(c))
                                     .ToListAsync();
+            var sumDocsHourse = docs.Select(m => m.ManHours).Sum();
 
-            docsCompleteds.Add(Convert.ToInt32(doc.Completed));
-            var halphDocsPercent = docsCompleteds.Sum() / count;
+            // Some Project Hours
+            var sumProjectsHours = sumDrawsHourse + sumDocsHourse;
 
-            // Calculate Draws Complete Percent
-            List<int> drawsCompleteds = await _context
-                                    .Set<Draw>()
-                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
-                                    .Select(d => (int?)d.Completed)
-                                    .Where(c => c != null)
-                                    .Select(c => Convert.ToInt32(c))
-                                    .ToListAsync();
-            var halphDrawsPercent = drawsCompleteds.Sum() / count;
+            // Project Completed
+            var projectCompleted = Convert.ToInt32((sumProjectsHours / estimatedHours) * 100);
 
-            return halphDrawsPercent + halphDocsPercent;
+            //TODO:  Calculate Draws Completed
+
+            //TODO:  Calculate Doc Completed
+
+            return new CompletedResult()
+            {
+                ProjectCompleted = projectCompleted,
+                DrawsCompleted = 0,
+                DocsCompleted = 0
+            };
         }
     }
 }
