@@ -13,6 +13,8 @@ public class DisciplineDto : EntityDto
 {
     public string Name { get; set; }
 
+    public int? Completed { get; set; }
+
     public int ProjectId { get; set; }
     public ProjectDto Project { get; set; }
 

@@ -9,7 +9,6 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 
-<!-- card shadow bg-white rounded container text-center align-middle -->
 <div class="row justify-content-center mt-1 mb-1">
     <div class="col-auto" style="width: 100%; height: 100%;">
         @if (startLoading)
@@ -22,11 +21,11 @@
         {
             <div class="m-1 row justify-content-center">
 
-                <div class="col-12 p-2 card shadow"
+                <div class="col-12 p-2"
                      style="overflow-x:hidden; margin: 0 auto;">
                     
                      <!-- Headder -->
-                    <div class="mt-2">
+                    <div class="mt-2 shadow p-2">
                         @if (_logedUser != null)
                         {
                             <div class="row ms-2 me-2" style="overflow:hidden;">
@@ -43,11 +42,15 @@
                         }
                     </div>
 
-                    <div class="row">
+                    <div class="row mt-3
+                                gx-xl-3 gx-lg-3 gx-md-3 gx-sm-3
+                                gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
 
                         <!-- Table Projects -->
-                        <div class="col table-responsive" style="min-height: 50vh; max-height: 57vh; overflow-x:hidden">
-                            <table class="table table-hover thead-light text-center">
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
+                                    table-responsive shadow"
+                             style="height: 70vh; overflow-x:hidden">
+                            <table class="table table-hover table-success text-center">
                                 <thead>
                                     <tr>
                                         <th scope="col">Project</th>
@@ -59,11 +62,17 @@
                                     {
                                         <tr clss="align-middle d-flex"
                                             @onclick="@(async () => await OnSelectProject(project))">
-                                            <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight_1" : ""))"
+                                            <td class="align-middle
+                                                @((_selectedProject == null || 
+                                                        !_selectedProject.Id.Equals(project.Id)
+                                                                        ? "" : "highlight_1"))"
                                                 style="min-width: 110px;">
                                                 <labe>@project.Name</labe>
                                             </td>
-                                            <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight_1" : ""))"
+                                            <td class="align-middle
+                                                @((_selectedProject == null ||
+                                                        !_selectedProject.Id.Equals(project.Id)
+                                                                        ? "" : "highlight_1"))"
                                                 style="min-width: 120px;">
                                                 <label>@project.Completed %</label>
                                             </td>
@@ -74,8 +83,10 @@
                         </div>
 
                         <!-- Table Disciplines -->
-                        <div class="col table-responsive" style="min-height: 50vh; max-height: 55vh; overflow-x:hidden">
-                            <table class="table table-hover thead-light text-center">
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
+                                    table-responsive shadow"
+                             style="height: 70vh; overflow-x:hidden">
+                            <table class="table table-hover table-info text-center">
                                 <thead>
                                     <tr>
                                         <th scope="col">Discipline</th>
@@ -87,11 +98,17 @@
                                     {
                                         <tr clss="align-middle d-flex"
                                             @onclick="@(async () => await OnSelectDiscipline(discipline))">
-                                            <td class="align-middle @(((_selectedDiscipline?.Id.Equals(discipline.Id)) ?? false ? "highlight_2" : ""))"
+                                            <td class="align-middle 
+                                                    @(((_selectedDiscipline == null 
+                                                            || !_selectedDiscipline.Id.Equals(discipline.Id))
+                                                                ? "" : "highlight_2"))"
                                                 style="min-width: 110px;">
                                                 <labe>@discipline.Name</labe>
                                             </td>
-                                            <td class="align-middle @(((_selectedDiscipline?.Id.Equals(discipline.Id)) ?? false ? "highlight_2" : ""))"
+                                            <td class="align-middle
+                                                    @(((_selectedDiscipline == null
+                                                            || !_selectedDiscipline.Id.Equals(discipline.Id))
+                                                                ? "" : "highlight_2"))"
                                                 style="min-width: 110px;">
                                                 <labe>@discipline.ProjectManager.LastName @discipline.ProjectManager.FirstName</labe>
                                             </td>
@@ -102,8 +119,10 @@
                         </div>
 
                         <!-- Table Draws -->
-                        <div class="col table-responsive" style="min-height: 50vh; max-height: 55vh; overflow-x:hidden">
-                            <table class="table table-hover thead-light text-center">
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
+                                    table-responsive shadow"
+                             style="height: 70vh; overflow-x:hidden">
+                            <table class="table table-hover table-primary text-center">
                                 <thead>
                                     <tr>
                                         <th scope="col">Draw</th>
@@ -114,13 +133,20 @@
                                 <tbody>
                                     @foreach (var draw in _draws)
                                     {
-                                        <tr class="align-middle d-flex"
-                                            @onclick="@(() => OnSelectDraw(draw))">
-                                            <td class="align-middle @(((_selectedDraw?.Id.Equals(draw.Id)) ?? false ? "highlight_3" : ""))"
+                                        <tr class="align-middle" @onclick="@(() => OnSelectDraw(draw))">
+                                            
+                                            <td class="align-middle 
+                                                    @(((_selectedDraw == null || 
+                                                            !_selectedDraw.Id.Equals(draw.Id))
+                                                                ? "" : "highlight_3"))"
                                                 style="min-width: 110px;">
                                                 <div class="align-middle h-100"><labe>@draw.Name</labe></div>
                                             </td>
-                                            <td class="align-middle @(((_selectedDraw?.Id.Equals(draw.Id)) ?? false ? "highlight_3" : ""))"
+
+                                            <td class="align-middle
+                                                    @(((_selectedDraw == null ||
+                                                            !_selectedDraw.Id.Equals(draw.Id))
+                                                                ? "" : "highlight_3"))"
                                                 style="min-width: 110px;">
                                                 <div class="input-group">
                                                     <input type="number"
@@ -132,7 +158,11 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="align-middle @(((_selectedDraw?.Id.Equals(draw.Id)) ?? false ? "highlight_3" : ""))"
+
+                                            <td class="align-middle
+                                                    @(((_selectedDraw == null ||
+                                                            !_selectedDraw.Id.Equals(draw.Id))
+                                                                ? "" : "highlight_3"))"
                                                 style="min-width: 110px;">
                                                 <div class="input-group">
                                                     <input type="number"
@@ -144,6 +174,7 @@
                                                     </div>
                                                 </div>
                                             </td>
+
                                         </tr>
                                     }
                                 </tbody>
@@ -151,8 +182,10 @@
                         </div>
 
                         <!-- Table Docs -->
-                        <div class="col table-responsive" style="min-height: 50vh; max-height: 55vh; overflow-x:hidden">
-                            <table class="table table-hover thead-light text-center">
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
+                                    table-responsive shadow"
+                             style="height: 70vh; overflow-x:hidden">
+                            <table class="table table-hover table-primary text-center">
                                 <thead>
                                     <tr>
                                         <th scope="col">Docs</th>
@@ -163,13 +196,20 @@
                                 <tbody>
                                     @foreach (var doc in _docs)
                                     {
-                                        <tr class="align-middle d-flex"
-                                            @onclick="@(() => OnSelectDoc(doc))">
-                                            <td class="align-middle @(((_selectedDoc?.Id.Equals(doc.Id)) ?? false ? "highlight_3" : ""))"
+                                        <tr class="align-middle" @onclick="@(() => OnSelectDoc(doc))">
+                                            
+                                            <td class="align-middle
+                                                    @(((_selectedDoc == null || 
+                                                            !_selectedDoc.Id.Equals(doc.Id))
+                                                                ? "" : "highlight_4"))"
                                                 style="min-width: 110px;">
                                                 <div class="align-middle h-100"><labe>@doc.Name</labe></div>
                                             </td>
-                                            <td class="align-middle @(((_selectedDoc?.Id.Equals(doc.Id)) ?? false ? "highlight_3" : ""))"
+
+                                            <td class="align-middle
+                                                    @(((_selectedDoc == null ||
+                                                            !_selectedDoc.Id.Equals(doc.Id))
+                                                                ? "" : "highlight_4"))"
                                                 style="min-width: 110px;">
                                                 <div class="input-group">
                                                     <input type="number"
@@ -181,7 +221,11 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="align-middle @(((_selectedDoc?.Id.Equals(doc.Id)) ?? false ? "highlight_3" : ""))"
+
+                                            <td class="align-middle
+                                                    @(((_selectedDoc == null ||
+                                                            !_selectedDoc.Id.Equals(doc.Id))
+                                                                ? "" : "highlight_4"))"
                                                 style="min-width: 110px;">
                                                 <div class="input-group">
                                                     <input type="number"
@@ -193,6 +237,7 @@
                                                     </div>
                                                 </div>
                                             </td>
+
                                         </tr>
                                     }
                                 </tbody>

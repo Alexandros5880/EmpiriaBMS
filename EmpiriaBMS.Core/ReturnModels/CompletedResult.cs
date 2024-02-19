@@ -9,6 +9,7 @@ namespace EmpiriaBMS.Core.ReturnModels;
 public class CompletedResult
 {
     public int ProjectCompleted { get; set; }
-    public int DrawsCompleted { get; set; }
-    public int DocsCompleted { get; set; }
+    public int DisciplineCompleted { get; set; }
+    public int DrawCompleted { get; set; }
+    public int DocCompleted { get; set; }
 }

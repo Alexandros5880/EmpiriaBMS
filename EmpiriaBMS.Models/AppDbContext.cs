@@ -132,8 +132,15 @@ public class AppDbContext : DbContext
         builder.Entity<Role>().HasData(role_7);
         builder.Entity<Role>().HasData(role_8);
 
-        for (var i = 0; i < 9; i++)
+        for (var i = 1; i < 10; i++)
         {
+            int drawManHours = i * 3; // 3
+            int docManHours = i * 2; // 2
+            int estimatedHours = 10 * Convert.ToInt32(Math.Pow(i, 2)); // 10
+            int dicliplineHours = drawManHours + docManHours; // 5
+            int projectHours = dicliplineHours; // 5
+            var projectCompleted = (Convert.ToDecimal(projectHours) / Convert.ToDecimal(estimatedHours)) * 100; // 50%
+
             // Projects
             var projectId = random.Next(123456789, 999999999) + i * 2;
             var f1 = i + 50 - (i * 3) + (i * 5);
@@ -150,8 +157,8 @@ public class AppDbContext : DbContext
                 Name = "Project_" + Convert.ToString(i),
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 Drawing = "KL-" + Convert.ToString(i),
-                EstimatedMandays = i + 200 - (i * 3) + (i * 5),
-                EstimatedHours = (i + 200 - (i * 3) + (i * 5)) * 8,
+                EstimatedMandays = estimatedHours / 8,
+                EstimatedHours = estimatedHours,
                 DurationDate = createdDate.AddDays(f1),
                 EstPaymentDate = createdDate.AddDays(f2),
                 PaymentDate = createdDate.AddDays(f3),
@@ -163,8 +170,8 @@ public class AppDbContext : DbContext
                 DaysUntilPayment = (createdDate - createdDate.AddDays(f3)).Days,
                 PendingPayments = i,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
-                Completed = i * 10 < 100 ? i + 1 * 10 : 100 - (i * 10),
-                ManHours = 4 * i
+                Completed = Convert.ToInt32(projectCompleted),
+                ManHours = projectHours
             };
             builder.Entity<Project>().HasData(pjk);
 
@@ -294,7 +301,8 @@ public class AppDbContext : DbContext
                 LastUpdatedDate = DateTime.Now,
                 Name = i % 2 == 0 ? "HVAC" : "ELEC",
                 ProjectId = projectId,
-                ProjectManagerId = pmId
+                ProjectManagerId = pmId,
+                Completed = Convert.ToInt32(projectCompleted)
             };
             builder.Entity<Discipline>().HasData(discipline);
 
@@ -328,9 +336,9 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = $"Draw_{i}",
-                ManHours = i * random.Next(1,5),
+                ManHours = drawManHours,
                 DisciplineId = disciplineId,
-                Completed = pjk.Completed / 2
+                Completed = Convert.ToInt32(projectCompleted / 2)
             };
             builder.Entity<Draw>().HasData(draw);
 
@@ -342,9 +350,9 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = $"Doc_{i}",
-                ManHours = i * random.Next(1, 5),
+                ManHours = docManHours,
                 DisciplineId = disciplineId,
-                Completed = pjk.Completed / 2
+                Completed = Convert.ToInt32(projectCompleted / 2)
             };
             builder.Entity<Doc>().HasData(doc);
         }

@@ -55,6 +55,10 @@ public partial class Projects: IDisposable
         _selectedDiscipline = null;
         _selectedDraw = null;
         _selectedDoc = null;
+        _disciplines.Clear();
+        _draws.Clear();
+        _docs.Clear();
+
         filterLoading = !startLoading ? true : filterLoading;
         try
         {
@@ -73,7 +77,6 @@ public partial class Projects: IDisposable
 
             _projects.Clear();
             projectsVm.ForEach(_projects.Add);
-            _selectedProject = _projects.FirstOrDefault();
         }
         catch (Exception ex)
         {
@@ -188,8 +191,9 @@ public partial class Projects: IDisposable
                                     Mapper.Map<ProjectDto>(_selectedProject), 
                                     Mapper.Map<DrawDto>(_selectedDraw));
 
-        _selectedDraw.Completed = complete.DrawsCompleted;
-        _selectedDoc.Completed = complete.DrawsCompleted;
+        _selectedDraw.Completed = complete.DrawCompleted;
+        //_selectedDoc.Completed = complete.DrawCompleted;
+        _selectedDiscipline.Completed = complete.DisciplineCompleted;
         _selectedProject.Completed = complete.ProjectCompleted;
 
         StateHasChanged();
@@ -208,8 +212,9 @@ public partial class Projects: IDisposable
                                     Mapper.Map<ProjectDto>(_selectedProject),
                                     Mapper.Map<DocDto>(_selectedDoc));
 
-        _selectedDraw.Completed = complete.DrawsCompleted;
-        _selectedDoc.Completed = complete.DrawsCompleted;
+        //_selectedDraw.Completed = complete.DrawCompleted;
+        _selectedDoc.Completed = complete.DrawCompleted;
+        _selectedDiscipline.Completed = complete.DisciplineCompleted;
         _selectedProject.Completed = complete.ProjectCompleted;
 
         StateHasChanged();

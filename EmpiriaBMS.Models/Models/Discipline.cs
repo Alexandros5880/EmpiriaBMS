@@ -17,6 +17,8 @@ public class Discipline : Entity
     public int ProjectId { get; set; }
     public Project Project { get; set; }
 
+    public int? Completed { get; set; }
+
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 

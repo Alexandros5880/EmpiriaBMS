@@ -117,7 +117,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var projectHours = project.ManHours;
 
             var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
-            int count = disciplinesIds.Count();
+            int disciplinesCount = disciplinesIds.Count();
 
             // Get Draws Sum Hours
             List<Draw> draws  = await _context
@@ -125,7 +125,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                     .Where(d => d.Id != draw.Id)
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
                                     .ToListAsync();
-            draws.Add(Mapping.Mapper.Map<Draw>(draws));
+            draws.Add(Mapping.Mapper.Map<Draw>(draw));
             var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
 
             // Get Docs Sum Hourse
@@ -136,21 +136,20 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var sumDocsHourse = docs.Select(m => m.ManHours).Sum();
 
             // Some Project Hours
-            var sumProjectsHours = sumDrawsHourse + sumDocsHourse;
+            var sumProjectHours = sumDrawsHourse + sumDocsHourse;
 
             // Project Completed
-            var projectCompleted = Convert.ToInt32((sumProjectsHours / estimatedHours) * 100);
+            var projectCompleted = Convert.ToInt32((sumProjectHours / estimatedHours) * 100);
 
-            //TODO: Calculate Draws Completed
-
-            //TODO:  Calculate Doc Completed
-
-            return new CompletedResult()
+            CompletedResult result =  new CompletedResult()
             {
                 ProjectCompleted = projectCompleted,
-                DrawsCompleted = 0,
-                DocsCompleted = 0
+                DisciplineCompleted = projectCompleted / disciplinesCount,
+                DrawCompleted = (projectCompleted / 2) / draws.Count,
+                DocCompleted = (projectCompleted / 2) / docs.Count
             };
+
+            return result;
         }
     }
 
@@ -162,14 +161,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var projectHours = project.ManHours;
 
             var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
-            int count = disciplinesIds.Count();
+            int disciplinesCount = disciplinesIds.Count();
 
             // Get Draws Sum Hours
             List<Draw> draws = await _context
                                     .Set<Draw>()
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
                                     .ToListAsync();
-            draws.Add(Mapping.Mapper.Map<Draw>(draws));
             var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
 
             // Get Docs Sum Hourse
@@ -178,24 +176,24 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                     .Where(d => d.Id != doc.Id)
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
                                     .ToListAsync();
+            docs.Add(Mapping.Mapper.Map<Doc>(doc));
             var sumDocsHourse = docs.Select(m => m.ManHours).Sum();
 
             // Some Project Hours
-            var sumProjectsHours = sumDrawsHourse + sumDocsHourse;
+            var sumProjectHours = sumDrawsHourse + sumDocsHourse;
 
             // Project Completed
-            var projectCompleted = Convert.ToInt32((sumProjectsHours / estimatedHours) * 100);
+            var projectCompleted = Convert.ToInt32((sumProjectHours / estimatedHours) * 100);
 
-            //TODO:  Calculate Draws Completed
-
-            //TODO:  Calculate Doc Completed
-
-            return new CompletedResult()
+            CompletedResult result = new CompletedResult()
             {
                 ProjectCompleted = projectCompleted,
-                DrawsCompleted = 0,
-                DocsCompleted = 0
+                DisciplineCompleted = projectCompleted / disciplinesCount,
+                DrawCompleted = (projectCompleted / 2) / draws.Count,
+                DocCompleted = (projectCompleted / 2) / docs.Count
             };
+
+            return result;
         }
     }
 }

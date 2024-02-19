@@ -19,6 +19,19 @@ public class DisciplineVM : BaseVM
         }
     }
 
+    private int? _completed;
+    public int? Completed
+    {
+        get => _completed;
+        set
+        {
+            if (value == _completed)
+                return;
+            _completed = value;
+            NotifyPropertyChanged(nameof(Completed));
+        }
+    }
+
     private Project _project;
     public Project Project
     {
