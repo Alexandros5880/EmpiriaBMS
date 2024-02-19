@@ -125,7 +125,7 @@
                                                 <div class="input-group">
                                                     <input type="number"
                                                            class="form-control"
-                                                           @onchange="((e) => _onDrawCompleteChanged(draw, e.Value))">
+                                                           @onchange="(async (e) => await _onDrawCompleteChanged(draw, e.Value))">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">%</span>
                                                     </div>
@@ -160,7 +160,7 @@
                                                 <div class="input-group">
                                                     <input type="number"
                                                            class="form-control"
-                                                           @onchange="((e) => _onDocCompleteChanged(doc, e.Value))">
+                                                           @onchange="(async (e) => await _onDocCompleteChanged(doc, e.Value))">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">%</span>
                                                     </div>

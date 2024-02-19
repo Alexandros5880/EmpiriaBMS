@@ -176,21 +176,21 @@ public partial class Projects: IDisposable
         StateHasChanged();
     }
     
-    private void _onDrawCompleteChanged(DrawVM draw, object val)
+    private async Task _onDrawCompleteChanged(DrawVM draw, object val)
     {
         draw.Completed = Convert.ToInt16(val);
         _selectedDraw = draw;
-        int complete = Calculator.CalcProjectComplete(
+        int complete = await DataProvider.Projects.CalcProjectComplete(
                                     Mapper.Map<ProjectDto>(_selectedProject), 
                                     Mapper.Map<DrawDto>(_selectedDraw));
         _selectedProject.Completed = complete;
     }
 
-    private void _onDocCompleteChanged(DocVM doc, object val)
+    private async Task _onDocCompleteChanged(DocVM doc, object val)
     {
         doc.Completed = Convert.ToInt16(val);
         _selectedDoc = doc;
-        int complete = Calculator.CalcProjectComplete(
+        int complete = await DataProvider.Projects.CalcProjectComplete(
                                     Mapper.Map<ProjectDto>(_selectedProject),
                                     Mapper.Map<DocDto>(_selectedDoc));
         _selectedProject.Completed = complete;

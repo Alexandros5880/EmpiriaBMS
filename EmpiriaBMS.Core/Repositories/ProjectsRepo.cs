@@ -101,4 +101,26 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(disciplines);
         }
     }
+
+    public async Task<int> CountDiscipline(int id)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+            return await _context.Disciplines.Where(d => d.ProjectId == id).CountAsync();
+    }
+
+    public async Task<int> CalcProjectComplete(ProjectDto project, DrawDto draw)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var disciplinesCount = await CountDiscipline(project.Id);
+        }
+
+        return 0;
+    }
+
+    public async Task<int> CalcProjectComplete(ProjectDto project, DocDto doc)
+    {
+
+        return 0;
+    }
 }
