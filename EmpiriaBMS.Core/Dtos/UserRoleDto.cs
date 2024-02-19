@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using System;
 using System.Collections.Generic;

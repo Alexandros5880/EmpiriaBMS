@@ -36,76 +36,126 @@
                                         <h4><b>@role.Name</b></h4>
                                     }
                                 </div>
-                                <div class="col-lg-2 col-md-4 col-sm-4 row primary-bg-color rounded-1">
-                                    <FluentButton BackgroundColor="Transparent"
-                                                  Appearance="Appearance.Lightweight">
-                                        <span class="mt-2 h6"><strong>@(_logedUser.Hours)</strong>h</span>
-                                        <FluentIcon Icon="Edit" />
-                                    </FluentButton>
+                                <div class="col-lg-2 col-md-4 col-sm-4 row primary-bg-color rounded-1 text-center">
+                                    <span class="mt-2 h6"><strong>@(_logedUser.Hours)</strong>h</span>
                                 </div>
                             </div>
                         }
                     </div>
 
-                    <!-- Table -->
-                    <div class="table-responsive" style="min-height: 50vh; max-height: 55vh;">
-                        <table class="table table-hover thead-light text-center">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">PlanType</th>
-                                    <th scope="col">Drawing</th>
-                                    <th scope="col">Completed</th>
-                                    <th scope="col">ManHours</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var project in _projects)
-                                {
-                                    <tr clss="align-middle d-flex"
-                                        @onclick="@(() => OnSelectProject(project))">
-                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
-                                            style="min-width: 110px;">
-                                            <input type="text" class="form-control" @bind="project.Name">
-                                        </td>
-                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
-                                            style="min-width: 110px;">
-                                            @* <select class="form-select"
-                                                    @bind="project.PlanType">
-                                                @foreach (var opt in projectPlanTypes)
-                                                {
-                                                    <option value="@opt">@opt</option>
-                                                }
-                                            </select> *@
-                                        </td>
-                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
-                                            style="min-width: 110px;">
-                                            <input type="text"
-                                                   class="form-control"
-                                                   @bind="project.Drawing">
-                                        </td>
-                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
-                                            style="min-width: 120px;">
-                                            <div class="input-group ">
-                                                <input min="0" max="100" type="number" class="form-control" @bind="project.Completed">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">%</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
-                                            style="min-width: 120px;">
-                                            <div class="input-group">
-                                                <input type="number" class="form-control" @bind="project.ManHours">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">h</span>
-                                                </div>
-                                            </div>
-                                        </td>
+
+                    <div class="row">
+
+                        <!-- Table Projects -->
+                        <div class="col table-responsive" style="min-height: 50vh; max-height: 57vh;">
+                            <table class="table table-hover thead-light text-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Project</th>
+                                        <th scope="col">Completed</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var project in _projects)
+                                    {
+                                        <tr clss="align-middle d-flex"
+                                            @onclick="@(async () => await OnSelectProject(project))">
+                                            <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
+                                                style="min-width: 110px;">
+                                                <labe>@project.Name</labe>
+                                            </td>
+                                            <td class="align-middle @((_selectedProject.Id.Equals(project.Id)? "highlight" : ""))"
+                                                style="min-width: 120px;">
+                                                <label>@project.Completed %</label>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table Disciplines -->
+                        <div class="col table-responsive" style="min-height: 50vh; max-height: 55vh;">
+                            <table class="table table-hover thead-light text-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Discipline</th>
+                                        <th scope="col">PM</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var discipline in _disciplines)
+                                    {
+                                        <tr clss="align-middle d-flex"
+                                            @onclick="@(async () => await OnSelectdiscipline(discipline))">
+                                            <td class="align-middle @((_selectedProject.Id.Equals(discipline.Id)? "highlight" : ""))"
+                                                style="min-width: 110px;">
+                                                <labe>@discipline.Name</labe>
+                                            </td>
+                                            <td class="align-middle @((_selectedProject.Id.Equals(discipline.Id)? "highlight" : ""))"
+                                                style="min-width: 110px;">
+                                                <labe>@discipline.ProjectManager.LastName @discipline.ProjectManager.FirstName</labe>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table Draws -->
+                        <div class="col table-responsive" style="min-height: 50vh; max-height: 55vh;">
+                            <table class="table table-hover thead-light text-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Draw</th>
+                                        <th scope="col">Cmpleted</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var draw in _draws)
+                                    {
+                                        <tr clss="align-middle d-flex">
+                                            <td class="align-middle @((_selectedProject.Id.Equals(draw.Id)? "highlight" : ""))"
+                                                style="min-width: 110px;">
+                                                <labe>@draw.Name</labe>
+                                            </td>
+                                            <td class="align-middle @((_selectedProject.Id.Equals(draw.Id)? "highlight" : ""))"
+                                                style="min-width: 110px;">
+                                                <labe>@draw.Completed</labe>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table Docs -->
+                        <div class="col table-responsive" style="min-height: 50vh; max-height: 55vh;">
+                            <table class="table table-hover thead-light text-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Doc</th>
+                                        <th scope="col">Cmpleted</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var doc in _docs)
+                                    {
+                                        <tr clss="align-middle d-flex">
+                                            <td class="align-middle @((_selectedProject.Id.Equals(doc.Id)? "highlight" : ""))"
+                                                style="min-width: 110px;">
+                                                <labe>@doc.Name</labe>
+                                            </td>
+                                            <td class="align-middle @((_selectedProject.Id.Equals(doc.Id)? "highlight" : ""))"
+                                                style="min-width: 110px;">
+                                                <labe>@doc.Completed</labe>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
 
                     <!-- Paginator -->

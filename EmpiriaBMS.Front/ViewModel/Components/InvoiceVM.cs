@@ -6,19 +6,6 @@ using EmpiriaBMS.Front.ViewModel.Components.Base;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
 {
-    private bool _isChecked;
-    public bool IsChecked
-    {
-        get => _isChecked;
-        set
-        {
-            if (value == _isChecked)
-                return;
-            _isChecked = value;
-            NotifyPropertyChanged(nameof(IsChecked));
-        }
-    }
-
     private double? _total;
     public double? Total
     {
@@ -97,21 +84,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private int? _projectId;
-    public int? ProjectId
-    {
-        get => _projectId;
-        set
-        {
-            if (value == _projectId)
-                return;
-            _projectId = value;
-            NotifyPropertyChanged(nameof(ProjectId));
-        }
-    }
-
-    private ProjectVM? _project;
-    public ProjectVM? Project
+    private Project? _project;
+    public Project? Project
     {
         get => _project;
         set
@@ -125,12 +99,6 @@ public class InvoiceVM : BaseVM
 
     public InvoiceVM()
     {
-        IsChecked = false;
-        Total = 0.0;
-        Vat = 0.0;
-        Fee = 0.0;
-        Number = 0;
-        Mark = string.Empty;
         Date = DateTime.Now;
     }
 }

@@ -29,10 +29,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                              .Set<Discipline>()
                              .Include(r => r.Project)
                              .Include(r => r.ProjectManager)
-                             .Include(r => r.Draws)
-                             .Include(r => r.Docs)
-                             .Include(r => r.Engineers)
-                             .Include(r => r.DisciplineEngineers)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<DisciplineDto>(disclipline);
@@ -49,10 +45,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                 ds = await _context.Set<Discipline>()
                                      .Include(r => r.Project)
                                      .Include(r => r.ProjectManager)
-                                     .Include(r => r.Draws)
-                                     .Include(r => r.Docs)
-                                     .Include(r => r.Engineers)
-                                     .Include(r => r.DisciplineEngineers)
                                      .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -63,10 +55,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                  .Take(pageSize)
                                  .Include(r => r.Project)
                                  .Include(r => r.ProjectManager)
-                                 .Include(r => r.Draws)
-                                 .Include(r => r.Docs)
-                                 .Include(r => r.Engineers)
-                                 .Include(r => r.DisciplineEngineers)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -90,7 +78,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                      .Include(r => r.Draws)
                                      .Include(r => r.Docs)
                                      .Include(r => r.Engineers)
-                                     .Include(r => r.DisciplineEngineers)
+                                     .Include(r => r.DisciplineEmployees)
                                      .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -105,10 +93,42 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                .Include(r => r.Draws)
                                .Include(r => r.Docs)
                                .Include(r => r.Engineers)
-                               .Include(r => r.DisciplineEngineers)
+                               .Include(r => r.DisciplineEmployees)
                                .ToListAsync();
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
+        }
+    }
+
+    public new async Task<List<DrawDto>> GetDraws(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var draws = await _context
+                             .Set<Draw>()
+                             .Where(d => d.DisciplineId == id)
+                             .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(draws);
+        }
+    }
+
+    public new async Task<List<DocDto>> GetDocs(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var docs = await _context
+                             .Set<Doc>()
+                             .Where(d => d.DisciplineId == id)
+                             .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Doc>, List<DocDto>>(docs);
         }
     }
 }

@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmpiriaBMS.Core.Dtos.Base;
 
 namespace EmpiriaBMS.Core.Dtos;
 
@@ -53,6 +54,4 @@ public class ProjectDto : EntityDto
     public User? Customer { get; set; }
 
     public Invoice? Invoice { get; set; }
-
-    public ICollection<Discipline> Disciplines { get; set; }
 }

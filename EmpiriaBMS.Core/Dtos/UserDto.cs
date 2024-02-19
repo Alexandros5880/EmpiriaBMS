@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using System;
 using System.Collections.Generic;
@@ -32,10 +33,4 @@ public class UserDto : EntityDto
 
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
-
-    public ICollection<Discipline> Disciplines { get; set; }
-
-    public ICollection<UserRole> UserRoles { get; set; }
-
-    public ICollection<DisciplineEngineer> DisciplineEngineers { get; set; }
 }

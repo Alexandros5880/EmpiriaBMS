@@ -9,21 +9,8 @@ using EmpiriaBMS.Front.ViewModel.Components.Base;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class ProjectVM : BaseVM
 {
-    private bool _isChecked;
-    public bool IsChecked
-    {
-        get => _isChecked;
-        set
-        {
-            if (value == _isChecked)
-                return;
-            _isChecked = value;
-            NotifyPropertyChanged(nameof(IsChecked));
-        }
-    }
-
-    private string _name;
-    public string Name
+    private string? _name;
+    public string? Name
     {
         get => _name;
         set
@@ -35,8 +22,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string _description;
-    public string Description
+    private string? _description;
+    public string? Description
     {
         get => _description;
         set
@@ -48,8 +35,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string _code;
-    public string Code
+    private string? _code;
+    public string? Code
     {
         get => _code;
         set
@@ -61,8 +48,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string _drawing;
-    public string Drawing
+    private string? _drawing;
+    public string? Drawing
     {
         get => _drawing;
         set
@@ -74,16 +61,29 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _workingDays;
-    public int? WorkingDays
+    private int? _estimatedMandays;
+    public int? EstimatedMandays
     {
-        get => _workingDays;
+        get => _estimatedMandays;
         set
         {
-            if (value == _workingDays)
+            if (value == _estimatedMandays)
                 return;
-            _workingDays = value;
-            NotifyPropertyChanged(nameof(WorkingDays));
+            _estimatedMandays = value;
+            NotifyPropertyChanged(nameof(EstimatedMandays));
+        }
+    }
+
+    private int? _estimatedHours;
+    public int? EstimatedHours
+    {
+        get => _estimatedHours;
+        set
+        {
+            if (value == _estimatedHours)
+                return;
+            _estimatedHours = value;
+            NotifyPropertyChanged(nameof(_estimatedHours));
         }
     }
 
@@ -139,8 +139,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string _paymentDetailes;
-    public string PaymentDetailes
+    private string? _paymentDetailes;
+    public string? PaymentDetailes
     {
         get => _paymentDetailes;
         set
@@ -165,8 +165,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string _bank;
-    public string Bank
+    private string? _bank;
+    public string? Bank
     {
         get => _bank;
         set
@@ -256,21 +256,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int _customerId;
-    public int CustomerId
-    {
-        get => _customerId;
-        set
-        {
-            if (value == _customerId)
-                return;
-            _customerId = value;
-            NotifyPropertyChanged(nameof(CustomerId));
-        }
-    }
-
-    private UserVM _customer;
-    public UserVM Customer
+    private User? _customer;
+    public User? Customer
     {
         get => _customer;
         set
@@ -282,21 +269,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int _invoiceId;
-    public int InvoiceId
-    {
-        get => _invoiceId;
-        set
-        {
-            if (value == _invoiceId)
-                return;
-            _invoiceId = value;
-            NotifyPropertyChanged(nameof(InvoiceId));
-        }
-    }
-
-    private InvoiceVM _invoice;
-    public InvoiceVM Invoice
+    private Invoice? _invoice;
+    public Invoice? Invoice
     {
         get => _invoice;
         set
@@ -310,26 +284,8 @@ public class ProjectVM : BaseVM
 
     public ProjectVM()
     {
-        IsChecked = false;
-        Name = string.Empty;
-        Description = string.Empty;
-        Code = string.Empty;
-        Drawing = string.Empty;
-        WorkingDays = null;
         DurationDate = DateTime.Now.AddYears(1);
         EstPaymentDate = DateTime.Now.AddYears(1);
         PaymentDate = DateTime.Now.AddYears(1);
-        DelayInPayment = 0;
-        PaymentDetailes = string.Empty;
-        DayCost = 0.0;
-        Bank = string.Empty;
-        PaidFee = 0.0;
-        DaysUntilPayment = 0;
-        PendingPayments = 0;
-        CalculationDaly = 0;
-        Completed = 0;
-        ManHours = 0;
-        CustomerId = 0;
-        Invoice = new InvoiceVM();
     }
 }

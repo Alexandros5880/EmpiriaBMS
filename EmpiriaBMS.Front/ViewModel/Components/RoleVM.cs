@@ -7,19 +7,6 @@ using System.ComponentModel.DataAnnotations;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class RoleVM : BaseVM
 {
-    private bool _isChecked;
-    public bool IsChecked
-    {
-        get => _isChecked;
-        set
-        {
-            if (value == _isChecked)
-                return;
-            _isChecked = value;
-            NotifyPropertyChanged(nameof(IsChecked));
-        }
-    }
-
     private string? _name;
     public string? Name
     {
@@ -32,12 +19,5 @@ public class RoleVM : BaseVM
             NotifyPropertyChanged(nameof(Name));
         }
     }
-
     public bool IsEmployee { get; set; }
-
-    public RoleVM()
-    {
-        IsChecked = false;
-        Name = string.Empty;
-    }
 }

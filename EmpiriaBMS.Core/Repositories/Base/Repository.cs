@@ -1,5 +1,5 @@
 ﻿using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Dtos.Base;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models;

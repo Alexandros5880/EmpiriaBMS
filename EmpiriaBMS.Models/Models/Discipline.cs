@@ -26,5 +26,5 @@ public class Discipline : Entity
 
     public ICollection<User> Engineers { get; set; }
 
-    public ICollection<DisciplineEngineer> DisciplineEngineers { get; set; }
+    public ICollection<DisciplineEmployee> DisciplineEmployees { get; set; }
 }

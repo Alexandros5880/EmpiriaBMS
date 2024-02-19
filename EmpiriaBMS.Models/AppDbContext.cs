@@ -19,7 +19,7 @@ public class AppDbContext : DbContext
     public DbSet<Discipline> Disciplines { get; set; }
     public DbSet<Draw> Draws { get; set; }
     public DbSet<Doc> Docs { get; set; }
-    public DbSet<DisciplineEngineer> DisciplinesEngineer { get; set; }
+    public DbSet<DisciplineEmployee> DisciplinesEngineer { get; set; }
 
     public DbSet<Invoice>? Invoices { get; set; }
     
@@ -163,7 +163,7 @@ public class AppDbContext : DbContext
                 DaysUntilPayment = (createdDate - createdDate.AddDays(f3)).Days,
                 PendingPayments = i,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
-                Completed = i * 10 < 100 ? i * 10 : 100 - (i * 10),
+                Completed = i * 10 < 100 ? i + 1 * 10 : 100 - (i * 10),
                 ManHours = 4 * i
             };
             builder.Entity<Project>().HasData(pjk);
@@ -179,7 +179,7 @@ public class AppDbContext : DbContext
                 LastName = "Alexandros_" + Convert.ToString(i),
                 FirstName = "Platanios_Customer_" + Convert.ToString(i),
                 Phone1 = "694927778" + Convert.ToString(i),
-                Description = "Test Description Client " + Convert.ToString(i),
+                Description = "Test Description Customer " + Convert.ToString(i),
                 ProjectId = projectId,
             };
             builder.Entity<User>().HasData(customer);
@@ -219,9 +219,9 @@ public class AppDbContext : DbContext
                 LastUpdatedDate = DateTime.Now,
                 Email = $"alexpl_{i + 2_1}@gmail.com",
                 LastName = "Alexandros_" + Convert.ToString(i + 2),
-                FirstName = "Platanios_Employee_" + Convert.ToString(i + 2),
+                FirstName = "Platanios_PM_" + Convert.ToString(i + 2),
                 Phone1 = "694927778" + Convert.ToString(i + 2),
-                Description = "Test Description Employee " + Convert.ToString(i + 2),
+                Description = "Test Description PM " + Convert.ToString(i + 2),
                 Hours = i * 8
             };
             builder.Entity<User>().HasData(pm);
@@ -244,9 +244,9 @@ public class AppDbContext : DbContext
                 LastUpdatedDate = DateTime.Now,
                 Email = $"alexpl_{i + 2}@gmail.com",
                 LastName = "Alexandros_" + Convert.ToString(i + 2),
-                FirstName = "Platanios_Employee_" + Convert.ToString(i + 2),
+                FirstName = "Platanios_Engineer_" + Convert.ToString(i + 2),
                 Phone1 = "694927778" + Convert.ToString(i + 2),
-                Description = "Test Description Employee " + Convert.ToString(i + 2),
+                Description = "Test Description Engineer " + Convert.ToString(i + 2),
                 Hours = i * 8
             };
             builder.Entity<User>().HasData(engineer);
@@ -259,6 +259,31 @@ public class AppDbContext : DbContext
                 RoleId = role_2_id
             };
             builder.Entity<UserRole>().HasData(engineerRole_em);
+
+            // Draftsmen
+            var draftsmenId = random.Next(123456789, 999999999) + i * 13;
+            User draftsmen = new User()
+            {
+                Id = draftsmenId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Email = $"alexpl_{i + 2}@gmail.com",
+                LastName = "Alexandros_" + Convert.ToString(i + 2),
+                FirstName = "Platanios_Draftsman_" + Convert.ToString(i + 2),
+                Phone1 = "694927778" + Convert.ToString(i + 2),
+                Description = "Test Description Draftsman " + Convert.ToString(i + 2),
+                Hours = i * 8
+            };
+            builder.Entity<User>().HasData(draftsmen);
+            UserRole DraftsmanRole_em = new UserRole()
+            {
+                Id = random.Next(123456789, 999999999) + i * 7,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                UserId = draftsmenId,
+                RoleId = role_1_id
+            };
+            builder.Entity<UserRole>().HasData(DraftsmanRole_em);
 
             // Discipline
             var disciplineId = random.Next(123456789, 999999999) + i * 8;
@@ -273,16 +298,27 @@ public class AppDbContext : DbContext
             };
             builder.Entity<Discipline>().HasData(discipline);
 
-            // DisciplineEngineer
-            DisciplineEngineer disciplineEngineer_em = new DisciplineEngineer()
+            // Discipline Engineer
+            DisciplineEmployee disciplineEngineer_em = new DisciplineEmployee()
             {
                 Id = random.Next(123456789, 999999999) + i * 9,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 DisciplineId = disciplineId,
-                EngineerId = engineerId
+                EmployeeId = engineerId
             };
-            builder.Entity<DisciplineEngineer>().HasData(disciplineEngineer_em);
+            builder.Entity<DisciplineEmployee>().HasData(disciplineEngineer_em);
+
+            // Discipline Draftsmen
+            DisciplineEmployee disciplineDraftsmen_em = new DisciplineEmployee()
+            {
+                Id = random.Next(123456789, 999999999) + i * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                DisciplineId = disciplineId,
+                EmployeeId = draftsmenId
+            };
+            builder.Entity<DisciplineEmployee>().HasData(disciplineDraftsmen_em);
 
             // Draw
             var dawId = random.Next(123456789, 999999999) + i * 11;
@@ -291,9 +327,10 @@ public class AppDbContext : DbContext
                 Id = dawId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = $"Draw_{1}",
+                Name = $"Draw_{i}",
                 ManHours = i * random.Next(1,5),
-                DisciplineId = disciplineId
+                DisciplineId = disciplineId,
+                Completed = pjk.Completed / 2
             };
             builder.Entity<Draw>().HasData(draw);
 
@@ -304,9 +341,10 @@ public class AppDbContext : DbContext
                 Id = docId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = $"Draw_{1}",
+                Name = $"Doc_{i}",
                 ManHours = i * random.Next(1, 5),
-                DisciplineId = disciplineId
+                DisciplineId = disciplineId,
+                Completed = pjk.Completed / 2
             };
             builder.Entity<Doc>().HasData(doc);
         }

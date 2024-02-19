@@ -86,4 +86,19 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
+    public new async Task<ICollection<DisciplineDto>> GetDisciplines(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var disciplines =  await _context.Set<Discipline>()
+                                             .Where(d => d.ProjectId == id)
+                                             .Include(r => r.ProjectManager)
+                                             .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(disciplines);
+        }
+    }
 }

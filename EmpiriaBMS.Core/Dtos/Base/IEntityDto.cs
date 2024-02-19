@@ -1,10 +1,9 @@
-﻿
-namespace EmpiriaBMS.Core.Dtos
+﻿namespace EmpiriaBMS.Core.Dtos.Base
 {
     public interface IEntityDto
     {
+        public int Id { get; set; }
         DateTime CreatedDate { get; set; }
-        int Id { get; set; }
         DateTime LastUpdatedDate { get; set; }
     }
 }

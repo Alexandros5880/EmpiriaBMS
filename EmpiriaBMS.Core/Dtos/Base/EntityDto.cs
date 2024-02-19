@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmpiriaBMS.Core.Dtos;
+namespace EmpiriaBMS.Core.Dtos.Base;
 
 public class EntityDto : IEntityDto
 {

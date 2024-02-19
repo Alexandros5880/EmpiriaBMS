@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
+using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,29 +19,38 @@ public partial class Projects: IDisposable
     bool runInTeams = false;
     bool IsAllChecked = false;
 
+    // List
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
-    
+    private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
+    private ObservableCollection<DrawVM> _draws = new ObservableCollection<DrawVM>();
+    private ObservableCollection<DocVM> _docs = new ObservableCollection<DocVM>();
+
+    // Selected Models
+    private ProjectVM _selectedProject = new ProjectVM();
+    private DisciplineVM _selectedDiscipline = new DisciplineVM();
+
     // Paginator
     private PaginatorVM _paginator = new PaginatorVM(7);
 
     // Basic Models
-    private ProjectVM _selectedProject = new ProjectVM();
     private UserVM _logedUser;
     private ICollection<RoleVM> _loggedUserRoles = new List<RoleVM>();
     private bool _logesUserChanged = false;
 
     protected override async void OnInitialized()
     {
+        base.OnInitialized();
         await _getLogedUser();
         await _getProjects();
         startLoading = false;
-        base.OnInitialized();
-        //StateHasChanged();
+        StateHasChanged();
     }
 
     #region Get Records
     private async Task _getProjects()
     {
+        _selectedProject = null;
+        _selectedDiscipline = null;
         filterLoading = !startLoading ? true : filterLoading;
         try
         {
@@ -55,12 +65,7 @@ public partial class Projects: IDisposable
                                                                        .ToList<ProjectDto>();
 
 
-            var projectsVm = Mapping.Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
-            // Exception: Error mapping types.
-            //System.Collections.Generic.List`1 [EmpiriaBMS.Core.Dtos.ProjectDto] ->
-            //      System.Collections.Generic.List`1 [EmpiriaBMS.Front.ViewModel.Components.ProjectVM]
-
-
+            var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
 
             _projects.Clear();
             projectsVm.ForEach(_projects.Add);
@@ -71,6 +76,7 @@ public partial class Projects: IDisposable
             Debug.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
+        startLoading = false;
         filterLoading = !startLoading ? false : filterLoading;
     }
 
@@ -80,7 +86,7 @@ public partial class Projects: IDisposable
         {
             // TODO: Get Teams Loged User And Mach him With Oure Users
 
-            var defaultRoleId = await GetProjectManagersRoleId("Project Manager");
+            var defaultRoleId = await GetProjectManagersRoleId("Draftsmen");
             if (defaultRoleId == 0)
                 throw new Exception("Exception `Project Managers` role not exists!");
 
@@ -88,7 +94,7 @@ public partial class Projects: IDisposable
             var dbUser = users.FirstOrDefault();
 
             if (dbUser == null)
-                throw new Exception("Exception user with `Project Managers` role not exists!");
+                throw new Exception("Exception user with `Draftsmen` role not exists!");
 
             _logedUser = Mapper.Map<UserVM>(dbUser);
 
@@ -119,9 +125,35 @@ public partial class Projects: IDisposable
     #endregion
 
     #region Properties Changed Evenets
-    private void OnSelectProject(ProjectVM project)
+    private async Task OnSelectProject(ProjectVM project)
     {
+        _draws.Clear();
+        _docs.Clear();
         _selectedProject = project;
+        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id);
+
+        _disciplines.Clear();
+        foreach (var di in disciplines)
+            _disciplines.Add(Mapper.Map<DisciplineVM>(di));
+        StateHasChanged();
+    }
+
+    private async Task OnSelectdiscipline(DisciplineVM discipline)
+    {
+        _selectedDiscipline = discipline;
+
+        var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
+        var docs = await DataProvider.Disciplines.GetDocs(discipline.Id);
+
+        _draws.Clear();
+        foreach (var di in draws)
+            _draws.Add(Mapper.Map<DrawVM>(di));
+
+        _docs.Clear();
+        foreach (var di in docs)
+            _docs.Add(Mapper.Map<DocVM>(di));
+
+
         StateHasChanged();
     }
     #endregion

@@ -42,5 +42,5 @@ public class User : Entity
 
     public ICollection<UserRole> UserRoles { get; set; }
     
-    public ICollection<DisciplineEngineer> DisciplineEngineers { get; set; }
+    public ICollection<DisciplineEmployee> DisciplineEmployees { get; set; }
 }

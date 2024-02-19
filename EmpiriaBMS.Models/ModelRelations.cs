@@ -40,16 +40,16 @@ public static class ModelRelations
                     .HasForeignKey(c => c.ProjectId);
 
         // Projects Employees
-        builder.Entity<DisciplineEngineer>()
-               .HasKey(de => new { de.DisciplineId, de.EngineerId });
-        builder.Entity<DisciplineEngineer>()
+        builder.Entity<DisciplineEmployee>()
+               .HasKey(de => new { de.DisciplineId, de.EmployeeId });
+        builder.Entity<DisciplineEmployee>()
                .HasOne(de => de.Discipline)
-               .WithMany(de => de.DisciplineEngineers)
+               .WithMany(de => de.DisciplineEmployees)
                .HasForeignKey(de => de.DisciplineId);
-        builder.Entity<DisciplineEngineer>()
-               .HasOne(de => de.Engineer)
-               .WithMany(de => de.DisciplineEngineers)
-               .HasForeignKey(de => de.EngineerId);
+        builder.Entity<DisciplineEmployee>()
+               .HasOne(de => de.Employee)
+               .WithMany(de => de.DisciplineEmployees)
+               .HasForeignKey(de => de.EmployeeId);
 
         // ProjectManager Discipline
         builder.Entity<User>()

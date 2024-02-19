@@ -1,23 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
+using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class UserVM : BaseVM
 {
-    private bool _isChecked;
-    public bool IsChecked
-    {
-        get => _isChecked;
-        set
-        {
-            if (value == _isChecked)
-                return;
-            _isChecked = value;
-            NotifyPropertyChanged(nameof(IsChecked));
-        }
-    }
-
     private string? _email;
     public string? Email
     {
@@ -135,8 +124,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private ProjectVM? _project;
-    public ProjectVM? Project
+    private Project? _project;
+    public Project? Project
     {
         get => _project;
         set
@@ -148,18 +137,11 @@ public class UserVM : BaseVM
         }
     }
 
+    [NotMapped]
+    public string FullName => LastName + FullName;
+
     public UserVM()
     {
-        IsChecked = true;
-        Email = string.Empty;
-        LastName = string.Empty;
-        FirstName = string.Empty;
-        MidName = string.Empty;
-        Phone1 = string.Empty;
-        Phone2 = string.Empty;
-        Phone3 = string.Empty;
-        Description = string.Empty;
         Hours = 0;
-        Project = new ProjectVM();
     }
 }
