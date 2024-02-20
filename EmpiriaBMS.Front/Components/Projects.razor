@@ -54,7 +54,12 @@
                                     }
                                 </div>
                                 <div class="col-lg-2 col-md-4 col-sm-4 row primary-bg-color rounded-1 text-center">
-                                    <span class="mt-2 h5"><strong>@(_logedUser.Hours)</strong>h</span>
+                                    <span class="mt-2 h5">
+                                        @if (hoursPassed != null)
+                                        {
+                                            <span>@hoursPassed / </span>
+                                        }
+                                        <strong>@(_logedUser.Hours)</strong>h</span>
                                 </div>
                             </div>
                         }

@@ -35,6 +35,8 @@ public class User : Entity
 
     public double? Hours { get; set; }
 
+    public double? DailyHours { get; set; }
+
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
 

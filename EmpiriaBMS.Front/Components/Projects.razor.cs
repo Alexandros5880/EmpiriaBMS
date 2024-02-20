@@ -8,6 +8,7 @@ using EmpiriaMS.Models.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Projects: IDisposable
@@ -18,7 +19,9 @@ public partial class Projects: IDisposable
     bool startLoading = true;
     bool filterLoading = false;
     bool workStarted = false;
+    Timer timer; 
     DateTime StartWorkTime = DateTime.Now;
+    double? hoursPassed = null;
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
@@ -133,12 +136,17 @@ public partial class Projects: IDisposable
     #endregion
 
     #region Properties Changed Evenets
-    private void ToogleWorkStatus()
+    private async void ToogleWorkStatus()
     {
         workStarted = !workStarted;
 
         if (workStarted)
-            StartWorkTime = DateTime.Now;
+        {
+            StartTimer();
+        } else
+        {
+            StopTimer();
+        }
     }
 
     private async Task OnSelectProject(ProjectVM project)
@@ -188,15 +196,21 @@ public partial class Projects: IDisposable
     
     private async Task _onDrawHoursChanged(DrawVM draw, object val)
     {
-        //var previusValue = draw.ManHours;
-        //var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        //draw.ManHours = Convert.ToInt32(val);
-        //_selectedProject.ManHours += (int?)value;
-        //_logedUser.Hours += value;
-        //_selectedDraw = draw;
+        var previusValue = draw.ManHours;
+        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        if (hoursPassed < value)
+        {
+            // TODO: Display a Msg
+            return;
+        }
+        draw.ManHours = Convert.ToInt32(val);
+        _selectedProject.ManHours += (int?)value;
+        _logedUser.Hours += value;
+        hoursPassed -= value;
+        _selectedDraw = draw;
 
         //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
-        //                            Mapper.Map<ProjectDto>(_selectedProject), 
+        //                            Mapper.Map<ProjectDto>(_selectedProject),
         //                            Mapper.Map<DrawDto>(_selectedDraw));
 
         //_selectedDraw.CompletionEstimation = complete.DrawCompleted;
@@ -209,12 +223,18 @@ public partial class Projects: IDisposable
 
     private async Task _onDocHoursChanged(OtherVM doc, object val)
     {
-        //var previusValue = doc.ManHours;
-        //var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        //doc.ManHours = Convert.ToInt32(val);
-        //_selectedProject.ManHours += (int?)value;
-        //_logedUser.Hours += value;
-        //_selectedOther = doc;
+        var previusValue = doc.ManHours;
+        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        if (hoursPassed < value)
+        {
+            // TODO: Display a Msg
+            return;
+        }
+        doc.ManHours = Convert.ToInt32(val);
+        _selectedProject.ManHours += (int?)value;
+        _logedUser.Hours += value;
+        hoursPassed -= value;
+        _selectedOther = doc;
 
         //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
         //                            Mapper.Map<ProjectDto>(_selectedProject),
@@ -226,6 +246,29 @@ public partial class Projects: IDisposable
         //_selectedProject.Completed = complete.ProjectCompleted;
 
         //StateHasChanged();
+    }
+    #endregion
+
+    #region Async Jobs
+    private async Task StartTimer()
+    {
+        StartWorkTime = DateTime.Now;
+        timer = new System.Threading.Timer((_) =>
+        {
+            var chrono = DateTime.Now - StartWorkTime;
+            hoursPassed = chrono.Hours;
+
+            InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }, null, 0, 1000);
+    }
+
+    private void StopTimer()
+    {
+        hoursPassed = null;
+        timer.Dispose();
     }
     #endregion
 

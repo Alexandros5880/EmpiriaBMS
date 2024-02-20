@@ -124,6 +124,19 @@ public class UserVM : BaseVM
         }
     }
 
+    private double? _dailyHours;
+    public double? DailyHours
+    {
+        get => _dailyHours;
+        set
+        {
+            if (value == _dailyHours)
+                return;
+            _dailyHours = value;
+            NotifyPropertyChanged(nameof(DailyHours));
+        }
+    }
+
     private Project? _project;
     public Project? Project
     {
