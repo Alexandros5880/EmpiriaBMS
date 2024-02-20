@@ -19,16 +19,16 @@ public class Discipline : Entity
 
     public long? EstimatedHours { get; set; }
 
-    public long? EstimatedManHours { get; set; }
+    public long? EstimatedMenHours { get; set; }
 
     public int? Completed { get; set; }
 
     public int? EngineerId { get; set; }
     public User? Engineer { get; set; }
 
-    public ICollection<Draw> Draws { get; set; }
-
-    public ICollection<Other> Others { get; set; }
-
     public ICollection<DisciplineEmployee> DisciplineEmployees { get; set; }
+
+    public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
+
+    public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
 }

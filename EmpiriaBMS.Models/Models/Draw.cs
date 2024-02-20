@@ -18,6 +18,5 @@ public class Draw : Entity
 
     public int? CompletionEstimation { get; set; }
 
-    public int DisciplineId { get; set; }
-    public Discipline Discipline { get; set; }
+    public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
 }

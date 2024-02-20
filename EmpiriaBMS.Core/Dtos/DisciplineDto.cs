@@ -15,7 +15,7 @@ public class DisciplineDto : EntityDto
 
     public long? EstimatedHours { get; set; }
 
-    public long? EstimatedManHours { get; set; }
+    public long? EstimatedMenHours { get; set; }
 
     public int? Completed { get; set; }
 

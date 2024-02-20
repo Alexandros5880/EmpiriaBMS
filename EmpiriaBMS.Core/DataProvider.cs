@@ -17,23 +17,19 @@ public class DataProvider : IDataProvider, IDisposable
 
     public RolesRepo Roles { get; set; }
     public UsersRepo Users { get; set; }
-    public UserRoleRepo UsersRoles { get; set; }
     public ProjectsRepo Projects { get; set; }
     public DisciplineRepo Disciplines { get; set; }
     public DrawRepo Draws { get; set; }
     public OtherRepo Others { get; set; }
-    public DisciplineEngineerRepo DisciplinesEngineers { get; set; }
     public InvoiceRepo Invoices { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
         Roles = new RolesRepo(dbFactory);
         Users = new UsersRepo(dbFactory);
-        UsersRoles = new UserRoleRepo(dbFactory);
         Projects = new ProjectsRepo(dbFactory);
         Disciplines = new DisciplineRepo(dbFactory);
         Draws = new DrawRepo(dbFactory);
         Others = new OtherRepo(dbFactory);
-        DisciplinesEngineers = new DisciplineEngineerRepo(dbFactory);
         Invoices = new InvoiceRepo(dbFactory);
     }
 
@@ -45,12 +41,10 @@ public class DataProvider : IDataProvider, IDisposable
             {
                 Roles.Dispose();
                 Users.Dispose();
-                UsersRoles.Dispose();
                 Projects.Dispose();
                 Disciplines.Dispose();
                 Draws.Dispose();
                 Others.Dispose();
-                DisciplinesEngineers.Dispose();
                 Invoices.Dispose();
             }
             disposedValue = true;

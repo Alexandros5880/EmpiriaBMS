@@ -32,16 +32,16 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private long? _estimatedManHours;
-    public long? EstimatedManHours
+    private long? _estimatedMenHours;
+    public long? EstimatedMenHours
     {
-        get => _estimatedManHours;
+        get => _estimatedMenHours;
         set
         {
-            if (value == _estimatedManHours)
+            if (value == _estimatedMenHours)
                 return;
-            _estimatedManHours = value;
-            NotifyPropertyChanged(nameof(EstimatedManHours));
+            _estimatedMenHours = value;
+            NotifyPropertyChanged(nameof(EstimatedMenHours));
         }
     }
 

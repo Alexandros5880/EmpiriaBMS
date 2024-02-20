@@ -17,6 +17,5 @@ public class Other : Entity
 
     public int? Completed { get; set; }
 
-    public int DisciplineId { get; set; }
-    public Discipline Discipline { get; set; }
+    public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
 }

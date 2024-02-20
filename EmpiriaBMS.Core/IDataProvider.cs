@@ -13,7 +13,6 @@ namespace EmpiriaBMS.Core
         public DisciplineRepo Disciplines { get; set; }
         public DrawRepo Draws { get; set; }
         public OtherRepo Others { get; set; }
-        public DisciplineEngineerRepo DisciplinesEngineers { get; set; }
         public InvoiceRepo Invoices { get; set; }
     }
 }

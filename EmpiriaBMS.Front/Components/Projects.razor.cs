@@ -152,22 +152,22 @@ public partial class Projects: IDisposable
 
     private async Task OnSelectDiscipline(DisciplineVM discipline)
     {
-        _selectedDiscipline = discipline;
+        //_selectedDiscipline = discipline;
 
-        var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
-        var docs = await DataProvider.Disciplines.GetOthers(discipline.Id);
-        await _getLogedUser();
+        //var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
+        //var docs = await DataProvider.Disciplines.GetOthers(discipline.Id);
+        //await _getLogedUser();
 
-        _draws.Clear();
-        foreach (var di in draws)
-            _draws.Add(Mapper.Map<DrawVM>(di));
+        //_draws.Clear();
+        //foreach (var di in draws)
+        //    _draws.Add(Mapper.Map<DrawVM>(di));
 
-        _docs.Clear();
-        foreach (var di in docs)
-            _docs.Add(Mapper.Map<OtherVM>(di));
+        //_docs.Clear();
+        //foreach (var di in docs)
+        //    _docs.Add(Mapper.Map<OtherVM>(di));
 
 
-        StateHasChanged();
+        //StateHasChanged();
     }
 
     private void OnSelectDraw(DrawVM draw)
@@ -184,44 +184,44 @@ public partial class Projects: IDisposable
     
     private async Task _onDrawHoursChanged(DrawVM draw, object val)
     {
-        var previusValue = draw.ManHours;
-        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        draw.ManHours = Convert.ToInt32(val);
-        _selectedProject.ManHours += (int?)value;
-        _logedUser.Hours += value;
-        _selectedDraw = draw;
+        //var previusValue = draw.ManHours;
+        //var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        //draw.ManHours = Convert.ToInt32(val);
+        //_selectedProject.ManHours += (int?)value;
+        //_logedUser.Hours += value;
+        //_selectedDraw = draw;
 
-        CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
-                                    Mapper.Map<ProjectDto>(_selectedProject), 
-                                    Mapper.Map<DrawDto>(_selectedDraw));
+        //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
+        //                            Mapper.Map<ProjectDto>(_selectedProject), 
+        //                            Mapper.Map<DrawDto>(_selectedDraw));
 
-        _selectedDraw.CompletionEstimation = complete.DrawCompleted;
-        //_selectedOther.Completed = complete.DrawCompleted;
-        _selectedDiscipline.Completed = complete.DisciplineCompleted;
-        _selectedProject.Completed = complete.ProjectCompleted;
+        //_selectedDraw.CompletionEstimation = complete.DrawCompleted;
+        ////_selectedOther.Completed = complete.DrawCompleted;
+        //_selectedDiscipline.Completed = complete.DisciplineCompleted;
+        //_selectedProject.Completed = complete.ProjectCompleted;
 
-        StateHasChanged();
+        //StateHasChanged();
     }
 
     private async Task _onDocHoursChanged(OtherVM doc, object val)
     {
-        var previusValue = doc.ManHours;
-        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        doc.ManHours = Convert.ToInt32(val);
-        _selectedProject.ManHours += (int?)value;
-        _logedUser.Hours += value;
-        _selectedOther = doc;
+        //var previusValue = doc.ManHours;
+        //var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        //doc.ManHours = Convert.ToInt32(val);
+        //_selectedProject.ManHours += (int?)value;
+        //_logedUser.Hours += value;
+        //_selectedOther = doc;
 
-        CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
-                                    Mapper.Map<ProjectDto>(_selectedProject),
-                                    Mapper.Map<OtherDto>(_selectedOther));
+        //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
+        //                            Mapper.Map<ProjectDto>(_selectedProject),
+        //                            Mapper.Map<OtherDto>(_selectedOther));
 
-        //_selectedDraw.Completed = complete.DrawCompleted;
-        _selectedOther.Completed = complete.DrawCompleted;
-        _selectedDiscipline.Completed = complete.DisciplineCompleted;
-        _selectedProject.Completed = complete.ProjectCompleted;
+        ////_selectedDraw.Completed = complete.DrawCompleted;
+        //_selectedOther.Completed = complete.DrawCompleted;
+        //_selectedDiscipline.Completed = complete.DisciplineCompleted;
+        //_selectedProject.Completed = complete.ProjectCompleted;
 
-        StateHasChanged();
+        //StateHasChanged();
     }
     #endregion
 

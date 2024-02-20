@@ -186,91 +186,91 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return await _context.Disciplines.Where(d => d.ProjectId == id).CountAsync();
     }
 
-    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DrawDto draw)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var estimatedHours = project.EstimatedHours;
-            var projectHours = project.ManHours;
+    //public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DrawDto draw)
+    //{
+    //    using (var _context = _dbContextFactory.CreateDbContext())
+    //    {
+    //        var estimatedHours = project.EstimatedHours;
+    //        var projectHours = project.ManHours;
 
-            var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
-            int disciplinesCount = disciplinesIds.Count();
+    //        var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
+    //        int disciplinesCount = disciplinesIds.Count();
 
-            // Get Draws Sum Hours
-            List<Draw> draws  = await _context
-                                    .Set<Draw>()
-                                    .Where(d => d.Id != draw.Id)
-                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
-                                    .ToListAsync();
-            draws.Add(Mapping.Mapper.Map<Draw>(draw));
-            var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
+    //        // Get Draws Sum Hours
+    //        List<Draw> draws  = await _context
+    //                                .Set<Draw>()
+    //                                .Where(d => d.Id != draw.Id)
+    //                                .Where(d => disciplinesIds.Contains(d.DisciplineId))
+    //                                .ToListAsync();
+    //        draws.Add(Mapping.Mapper.Map<Draw>(draw));
+    //        var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
 
-            // Get Others Sum Hourse
-            List<Other> others = await _context
-                                    .Set<Other>()
-                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
-                                    .ToListAsync();
-            var sumOthersHourse = others.Select(m => m.ManHours).Sum();
+    //        // Get Others Sum Hourse
+    //        List<Other> others = await _context
+    //                                .Set<Other>()
+    //                                .Where(d => disciplinesIds.Contains(d.DisciplineId))
+    //                                .ToListAsync();
+    //        var sumOthersHourse = others.Select(m => m.ManHours).Sum();
 
-            // Some Project Hours
-            var sumProjectHours = sumDrawsHourse + sumOthersHourse;
+    //        // Some Project Hours
+    //        var sumProjectHours = sumDrawsHourse + sumOthersHourse;
 
-            // Project Completed
-            var projectCompleted = Convert.ToInt32((sumProjectHours / estimatedHours) * 100);
+    //        // Project Completed
+    //        var projectCompleted = Convert.ToInt32((sumProjectHours / estimatedHours) * 100);
 
-            CompletedResult result =  new CompletedResult()
-            {
-                ProjectCompleted = projectCompleted,
-                DisciplineCompleted = projectCompleted / disciplinesCount,
-                DrawCompleted = (projectCompleted / 2) / draws.Count,
-                OtherCompleted = (projectCompleted / 2) / others.Count
-            };
+    //        CompletedResult result =  new CompletedResult()
+    //        {
+    //            ProjectCompleted = projectCompleted,
+    //            DisciplineCompleted = projectCompleted / disciplinesCount,
+    //            DrawCompleted = (projectCompleted / 2) / draws.Count,
+    //            OtherCompleted = (projectCompleted / 2) / others.Count
+    //        };
 
-            return result;
-        }
-    }
+    //        return result;
+    //    }
+    //}
 
-    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, OtherDto Other)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var estimatedHours = project.EstimatedHours;
-            var projectHours = project.ManHours;
+    //public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, OtherDto Other)
+    //{
+    //    using (var _context = _dbContextFactory.CreateDbContext())
+    //    {
+    //        var estimatedHours = project.EstimatedHours;
+    //        var projectHours = project.ManHours;
 
-            var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
-            int disciplinesCount = disciplinesIds.Count();
+    //        var disciplinesIds = (await GetDisciplines(project.Id)).Select(d => d.Id);
+    //        int disciplinesCount = disciplinesIds.Count();
 
-            // Get Draws Sum Hours
-            List<Draw> draws = await _context
-                                    .Set<Draw>()
-                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
-                                    .ToListAsync();
-            var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
+    //        // Get Draws Sum Hours
+    //        List<Draw> draws = await _context
+    //                                .Set<Draw>()
+    //                                .Where(d => disciplinesIds.Contains(d.DisciplineId))
+    //                                .ToListAsync();
+    //        var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
 
-            // Get Others Sum Hourse
-            List<Other> Others = await _context
-                                    .Set<Other>()
-                                    .Where(d => d.Id != Other.Id)
-                                    .Where(d => disciplinesIds.Contains(d.DisciplineId))
-                                    .ToListAsync();
-            Others.Add(Mapping.Mapper.Map<Other>(Other));
-            var sumOthersHourse = Others.Select(m => m.ManHours).Sum();
+    //        // Get Others Sum Hourse
+    //        List<Other> Others = await _context
+    //                                .Set<Other>()
+    //                                .Where(d => d.Id != Other.Id)
+    //                                .Where(d => disciplinesIds.Contains(d.DisciplineId))
+    //                                .ToListAsync();
+    //        Others.Add(Mapping.Mapper.Map<Other>(Other));
+    //        var sumOthersHourse = Others.Select(m => m.ManHours).Sum();
 
-            // Some Project Hours
-            var sumProjectHours = sumDrawsHourse + sumOthersHourse;
+    //        // Some Project Hours
+    //        var sumProjectHours = sumDrawsHourse + sumOthersHourse;
 
-            // Project Completed
-            var projectCompleted = Convert.ToInt32((sumProjectHours / estimatedHours) * 100);
+    //        // Project Completed
+    //        var projectCompleted = Convert.ToInt32((sumProjectHours / estimatedHours) * 100);
 
-            CompletedResult result = new CompletedResult()
-            {
-                ProjectCompleted = projectCompleted,
-                DisciplineCompleted = projectCompleted / disciplinesCount,
-                DrawCompleted = (projectCompleted / 2) / draws.Count,
-                OtherCompleted = (projectCompleted / 2) / Others.Count
-            };
+    //        CompletedResult result = new CompletedResult()
+    //        {
+    //            ProjectCompleted = projectCompleted,
+    //            DisciplineCompleted = projectCompleted / disciplinesCount,
+    //            DrawCompleted = (projectCompleted / 2) / draws.Count,
+    //            OtherCompleted = (projectCompleted / 2) / Others.Count
+    //        };
 
-            return result;
-        }
-    }
+    //        return result;
+    //    }
+    //}
 }
