@@ -187,7 +187,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-
     public new async Task<ICollection<DisciplineDto>> GetDisciplines(int id)
     {
         if (id == 0)
@@ -208,6 +207,29 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
             return await _context.Disciplines.Where(d => d.ProjectId == id).CountAsync();
+    }
+
+    public async Task<int> GetUsersWorkPackegedCompleted(int userId)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var disciplines = await _context.Set<DisciplineEmployee>()
+                                              .Where(de => de.EmployeeId == userId)
+                                              .Select(de => de.Discipline)
+                                              .ToListAsync();
+
+            var Draws2D = disciplines.Select(d => d.DisciplinesDraws.Select(dd => dd.Draw));
+            List<int?> drawsCompleteds = new List<int?>();
+
+            foreach (var d1 in Draws2D)
+                foreach (var d2 in d1)
+                    drawsCompleteds.Add(d2.CompletionEstimation);
+
+            return drawsCompleteds.Sum() ?? 0;
+        }
     }
 
     //public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DrawDto draw)
