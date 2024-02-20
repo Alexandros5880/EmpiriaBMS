@@ -31,19 +31,6 @@ public class OtherVM : BaseVM
         }
     }
 
-    private int? _completed;
-    public int? Completed
-    {
-        get => _completed;
-        set
-        {
-            if (value == _completed)
-                return;
-            _completed = value;
-            NotifyPropertyChanged(nameof(Completed));
-        }
-    }
-
     private Discipline _discipline;
     public Discipline Discipline
     {

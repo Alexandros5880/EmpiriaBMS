@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.DefaultComponents;
+﻿using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Front.DefaultComponents;
 using Microsoft.AspNetCore.Components;
 using System.Linq.Expressions;
 
@@ -35,6 +36,9 @@ public class PaginatorVM : BNotifyPropertyChanged
         set
         {
             _recordsCount = value;
+            var divide = value / PageSize;
+            var quotient = value % PageSize;
+            PagesCounter = quotient == 0 ? divide : divide + 1;
             NotifyPropertyChanged(nameof(RecordsCount));
         }
     }
@@ -84,6 +88,11 @@ public class PaginatorVM : BNotifyPropertyChanged
         PageIndex = model.PageIndex;
         RecordsCount = model.RecordsCount;
         PagesCounter = model.PagesCounter;
+    }
+
+    public void SetRecordsLength(int length)
+    {
+        RecordsCount = length;
     }
 
     public async Task Next(EventCallback func)

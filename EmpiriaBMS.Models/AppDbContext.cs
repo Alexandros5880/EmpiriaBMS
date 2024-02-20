@@ -139,7 +139,7 @@ public class AppDbContext : DbContext
             double dicliplineHours = (drawManHours * 10) + (OtherManHours * 10);
             long projectHours = Convert.ToInt64(dicliplineHours * 10);
             var projectCompleted = (Convert.ToDouble(projectHours) / Convert.ToDouble(estimatedHours)) * 100; // 50%
-            double othersDrawsCompleted = projectCompleted / 2;
+            double disciplineCompleted = projectCompleted / 10;
 
             // Project Manager
             var pmId = random.Next(123456789, 999999999) + i * 4;
@@ -198,6 +198,7 @@ public class AppDbContext : DbContext
                 PendingPayments = i,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
                 Completed = Convert.ToInt32(projectCompleted),
+                WorkPackegedCompleted = Convert.ToInt32(projectCompleted),
                 ManHours = projectHours,
                 ProjectManagerId = pm.Id
             };
@@ -259,7 +260,7 @@ public class AppDbContext : DbContext
                     EngineerId = pmId,
                     EstimatedHours = 2345,
                     EstimatedMenHours = 3425,
-                    Completed = Convert.ToInt32(projectCompleted)
+                    Completed = Convert.ToInt32(disciplineCompleted)
                 };
                 builder.Entity<Discipline>().HasData(discipline);
 
@@ -271,8 +272,7 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     Name = $"Comm",
-                    ManHours = OtherManHours,
-                    Completed = Convert.ToInt32(othersDrawsCompleted)
+                    ManHours = OtherManHours
                 };
                 builder.Entity<Other>().HasData(otherComm);
                 DisciplineOther dq_comm = new DisciplineOther()
@@ -293,8 +293,7 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     Name = $"Printing",
-                    ManHours = OtherManHours,
-                    Completed = Convert.ToInt32(othersDrawsCompleted)
+                    ManHours = OtherManHours
                 };
                 builder.Entity<Other>().HasData(otherPrinting);
                 DisciplineOther dq_priting = new DisciplineOther()
@@ -315,8 +314,7 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     Name = $"Outside",
-                    ManHours = OtherManHours,
-                    Completed = Convert.ToInt32(othersDrawsCompleted)
+                    ManHours = OtherManHours
                 };
                 builder.Entity<Other>().HasData(otherOutside);
                 DisciplineOther dq_outside = new DisciplineOther()
@@ -337,8 +335,7 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     Name = $"Meeting",
-                    ManHours = OtherManHours,
-                    Completed = Convert.ToInt32(othersDrawsCompleted)
+                    ManHours = OtherManHours
                 };
                 builder.Entity<Other>().HasData(otherMeeting);
                 DisciplineOther dq_meeting = new DisciplineOther()
@@ -359,8 +356,7 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     Name = $"Administration",
-                    ManHours = OtherManHours,
-                    Completed = Convert.ToInt32(othersDrawsCompleted)
+                    ManHours = OtherManHours
                 };
                 builder.Entity<Other>().HasData(otherAdministration);
                 DisciplineOther dq_admin = new DisciplineOther()
@@ -372,6 +368,8 @@ public class AppDbContext : DbContext
                     OtherId = otherAdministrationId
                 };
                 builder.Entity<DisciplineOther>().HasData(dq_admin);
+
+                double drawsCompleted = projectCompleted / 10;
 
                 for (var e = 1; e <= 10; e++)
                 {
@@ -456,7 +454,7 @@ public class AppDbContext : DbContext
                         LastUpdatedDate = DateTime.Now,
                         Name = $"Draw_{i + j + e}",
                         ManHours = drawManHours,
-                        CompletionEstimation = Convert.ToInt32(othersDrawsCompleted)
+                        CompletionEstimation = Convert.ToInt32(drawsCompleted)
                     };
                     builder.Entity<Draw>().HasData(draw);
                     DisciplineDraw dd = new DisciplineDraw()

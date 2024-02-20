@@ -65,16 +65,12 @@ public partial class Projects: IDisposable
         try
         {
             // Todo: Find a way to add this in to PaginatorVM
-            _paginator.RecordsCount = await DataProvider.Projects.Count();
-            var divide = _paginator.RecordsCount / _paginator.PageSize;
-            var quotient = _paginator.RecordsCount % _paginator.PageSize;
-            _paginator.PagesCounter = quotient == 0 ? divide : divide + 1;
+            //_paginator.SetRecordsLength(await DataProvider.Projects.Count());
 
             // TODO: Get My Project And Down
             //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_logedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex))
-                                                                       .ToList<ProjectDto>();
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll()).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);

@@ -61,6 +61,8 @@ public class Project : Entity
     public int? CalculationDaly { get; set; }
 
     public int? Completed { get; set; }
+    
+    public int? WorkPackegedCompleted { get; set; }
 
     public long? ManHours { get; set; }
 

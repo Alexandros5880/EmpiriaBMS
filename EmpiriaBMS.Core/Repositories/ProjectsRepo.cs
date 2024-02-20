@@ -39,6 +39,21 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
+    public new async Task<ICollection<ProjectDto>> GetAll()
+    {
+        List<Project> projects;
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            projects = await _context.Set<Project>()
+                                      .Include(r => r.Customer)
+                                      .Include(r => r.Invoice)
+                                      .OrderBy(e => e.DeadLine)
+                                      .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+        }
+    }
+
     public new async Task<ICollection<ProjectDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         List<Project> projects;
@@ -49,6 +64,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 projects = await _context.Set<Project>()
                                          .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
+                                         .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
             }
@@ -58,6 +74,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Take(pageSize)
                                       .Include(r => r.Customer)
                                       .Include(r => r.Invoice)
+                                      .OrderBy(e => e.DeadLine)
                                       .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
@@ -78,6 +95,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Where(expresion)
                                          .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
+                                         .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
             }
@@ -88,6 +106,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Take(pageSize)
                                      .Include(r => r.Customer)
                                      .Include(r => r.Invoice)
+                                     .OrderBy(e => e.DeadLine)
                                      .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
@@ -101,6 +120,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var projects = await _context.Disciplines
                                             .Where(d => d.DisciplineEmployees.Select(de => de.EmployeeId).Contains(userId))
                                             .Select(d => d.Project)
+                                            .OrderBy(e => e.DeadLine)
                                             .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
@@ -117,6 +137,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 projects = await _context.Disciplines
                                             .Where(d => d.DisciplineEmployees.Select(de => de.EmployeeId).Contains(userId))
                                             .Select(d => d.Project)
+                                            .OrderBy(e => e.DeadLine)
                                             .ToListAsync();
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
             }
@@ -126,6 +147,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                             .Skip((pageIndex - 1) * pageSize)
                                             .Take(pageSize)
                                             .Select(d => d.Project)
+                                            .OrderBy(e => e.DeadLine)
                                             .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
@@ -147,6 +169,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                             .Where(d => d.DisciplineEmployees.Select(de => de.EmployeeId).Contains(userId))
                                             .Select(d => d.Project)
                                             .Where(expresion)
+                                            .OrderBy(e => e.DeadLine)
                                             .ToListAsync();
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
             }
@@ -157,6 +180,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                             .Take(pageSize)
                                             .Select(d => d.Project)
                                             .Where(expresion)
+                                            .OrderBy(e => e.DeadLine)
                                             .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);

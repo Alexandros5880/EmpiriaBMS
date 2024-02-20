@@ -15,7 +15,5 @@ public class Other : Entity
 
     public double ManHours { get; set; }
 
-    public int? Completed { get; set; }
-
     public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
 }

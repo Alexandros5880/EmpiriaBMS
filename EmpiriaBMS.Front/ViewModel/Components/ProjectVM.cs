@@ -269,6 +269,19 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private int? _workPackegedCompleted;
+    public int? WorkPackegedCompleted
+    {
+        get => _workPackegedCompleted;
+        set
+        {
+            if (value == _workPackegedCompleted)
+                return;
+            _workPackegedCompleted = value;
+            NotifyPropertyChanged(nameof(WorkPackegedCompleted));
+        }
+    }
+
     private long? _manHours;
     public long? ManHours
     {
@@ -320,6 +333,9 @@ public class ProjectVM : BaseVM
             NotifyPropertyChanged(nameof(Invoice));
         }
     }
+
+    [NotMapped]
+    public string DeadlineDisplay => $"{DeadLine.Value.Day}/{DeadLine.Value.Month}/{DeadLine.Value.Year}";
 
     public ProjectVM()
     {

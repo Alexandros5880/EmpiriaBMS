@@ -53,6 +53,8 @@ public class ProjectDto : EntityDto
 
     public int? Completed { get; set; }
 
+    public int? WorkPackegedCompleted { get; set; }
+
     public long? ManHours { get; set; }
 
     public int? ProjectManagerId { get; set; }

@@ -42,19 +42,21 @@
                         }
                     </div>
 
-                    <div class="row mt-3
+                    <div class="row mt-3 p-3 m2 
                                 gx-xl-3 gx-lg-3 gx-md-3 gx-sm-3
-                                gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
+                                gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5"
+                                style="max-height: 77vh;">
 
                         <!-- Table Projects -->
                         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
                                     table-responsive shadow"
-                             style="height: 70vh; overflow-x:hidden">
+                             style="min-height: 75vh; max-height: 75vh; overflow-x:hidden">
                             <table class="table table-hover table-success text-center">
                                 <thead>
                                     <tr>
                                         <th scope="col">Project</th>
-                                        <th scope="col">Completed</th>
+                                        <th scope="col">W.P.Completed</th>
+                                        <th scope="col">Deadline</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,7 +76,14 @@
                                                         !_selectedProject.Id.Equals(project.Id)
                                                                         ? "" : "highlight_1"))"
                                                 style="min-width: 120px;">
-                                                <label>@project.Completed %</label>
+                                                <label>@project.WorkPackegedCompleted %</label>
+                                            </td>
+                                            <td class="align-middle
+                                                @((_selectedProject == null ||
+                                                        !_selectedProject.Id.Equals(project.Id)
+                                                                        ? "" : "highlight_1"))"
+                                                style="min-width: 120px;">
+                                                <label>@project.DeadlineDisplay</label>
                                             </td>
                                         </tr>
                                     }
@@ -83,11 +92,11 @@
                         </div>
 
                         <!-- Table Disciplines -->
-                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
+                        @if (_selectedProject != null)
+                        {
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
                                     table-responsive shadow"
-                             style="height: 70vh; overflow-x:hidden">
-                            @if (_selectedProject != null)
-                            {
+                                 style="min-height: 75vh; max-height: 75vh; overflow-x:hidden">
                                 <table class="table table-hover table-info text-center">
                                     <thead>
                                         <tr>
@@ -99,24 +108,24 @@
                                         @foreach (var discipline in _disciplines)
                                         {
                                             <tr clss="align-middle d-flex"
-                                                @onclick="@(async () => await OnSelectDiscipline(discipline))">
+                                            @onclick="@(async () => await OnSelectDiscipline(discipline))">
                                                 <td class="align-middle
-                                                    @(((_selectedDiscipline == null
-                                                            || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                ? "" : "highlight_2"))"
-                                                    style="min-width: 110px;">
+                                                @(((_selectedDiscipline == null
+                                                        || !_selectedDiscipline.Id.Equals(discipline.Id))
+                                                            ? "" : "highlight_2"))"
+                                                style="min-width: 110px;">
                                                     <labe>@discipline.Name</labe>
                                                 </td>
                                                 <td class="align-middle text-center
-                                                    @(((_selectedDiscipline == null
-                                                            || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                ? "" : "highlight_2"))">
+                                                @(((_selectedDiscipline == null
+                                                        || !_selectedDiscipline.Id.Equals(discipline.Id))
+                                                            ? "" : "highlight_2"))">
                                                     <div class="input-group"
-                                                         style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                                    style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                         <input type="number"
-                                                               class="form-control"
-                                                               value="@discipline.EstimatedMenHours"
-                                                               disabled>
+                                                        class="form-control"
+                                                        value="@discipline.EstimatedMenHours"
+                                                        disabled>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">h</span>
                                                         </div>
@@ -126,15 +135,15 @@
                                         }
                                     </tbody>
                                 </table>
-                            }
-                        </div>
+                            </div>
+                        }
 
                         <!-- Table Draws -->
-                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
+                        @if (_selectedDiscipline != null)
+                        {
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
                                     table-responsive shadow"
-                             style="height: 70vh; overflow-x:hidden">
-                             @if (_selectedDiscipline != null)
-                            {
+                                 style="min-height: 75vh; max-height: 75vh; overflow-x:hidden">
                                 <table class="table table-hover table-primary text-center">
                                     <thead>
                                         <tr>
@@ -149,24 +158,24 @@
                                             <tr class="align-middle" @onclick="@(() => OnSelectDraw(draw))">
 
                                                 <td class="align-middle
-                                                    @(((_selectedDraw == null ||
-                                                            !_selectedDraw.Id.Equals(draw.Id))
-                                                                ? "" : "highlight_3"))"
-                                                    style="min-width: 110px;">
+                                                @(((_selectedDraw == null ||
+                                                        !_selectedDraw.Id.Equals(draw.Id))
+                                                            ? "" : "highlight_3"))"
+                                                style="min-width: 110px;">
                                                     <div class="align-middle h-100"><labe>@draw.Name</labe></div>
                                                 </td>
 
                                                 <td class="align-middle
-                                                    @(((_selectedDraw == null ||
-                                                            !_selectedDraw.Id.Equals(draw.Id))
-                                                                ? "" : "highlight_3"))"
-                                                    style="min-width: 90px;max-width: 90px;">
+                                                @(((_selectedDraw == null ||
+                                                        !_selectedDraw.Id.Equals(draw.Id))
+                                                            ? "" : "highlight_3"))"
+                                                style="min-width: 90px;max-width: 90px;">
                                                     @CurentDate
                                                     <div class="input-group">
                                                         <input type="number"
-                                                               class="form-control"
-                                                               value="@draw.ManHours"
-                                                               @onchange="(async (e) => await _onDrawHoursChanged(draw, e.Value))">
+                                                        class="form-control"
+                                                        value="@draw.ManHours"
+                                                        @onchange="(async (e) => await _onDrawHoursChanged(draw, e.Value))">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">h</span>
                                                         </div>
@@ -174,15 +183,15 @@
                                                 </td>
 
                                                 <td class="align-middle
-                                                    @(((_selectedDraw == null ||
-                                                            !_selectedDraw.Id.Equals(draw.Id))
-                                                                ? "" : "highlight_3"))"
+                                                @(((_selectedDraw == null ||
+                                                        !_selectedDraw.Id.Equals(draw.Id))
+                                                            ? "" : "highlight_3"))"
                                                     style="min-width: 90px;max-width: 90px;">
-                                                    <div class="input-group">
+                                                    <div class="input-group mt-3">
                                                         <input type="number"
-                                                               class="form-control"
-                                                               disabled
-                                                               @bind-value="@draw.CompletionEstimation">
+                                                                class="form-control"
+                                                                disabled
+                                                                @bind-value="@draw.CompletionEstimation">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -193,21 +202,20 @@
                                         }
                                     </tbody>
                                 </table>
-                            }
-                        </div>
+                            </div>
+                        }
 
                         <!-- Table Docs -->
-                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
+                        @if (_selectedDiscipline != null)
+                        {
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
                                     table-responsive shadow"
-                             style="height: 70vh; overflow-x:hidden">
-                            @if (_selectedDiscipline != null)
-                            {
+                                 style="min-height: 75vh; max-height: 75vh; overflow-x:hidden">
                                 <table class="table table-hover table-primary text-center">
                                     <thead>
                                         <tr>
                                             <th scope="col">Docs</th>
                                             <th scope="col">Hours</th>
-                                            <th scope="col">Completed</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -216,42 +224,27 @@
                                             <tr class="align-middle" @onclick="@(() => OnSelectDoc(doc))">
 
                                                 <td class="align-middle
-                                                    @(((_selectedOther == null ||
-                                                            !_selectedOther.Id.Equals(doc.Id))
-                                                                ? "" : "highlight_4"))"
-                                                    style="min-width: 110px;">
+                                                @(((_selectedOther == null ||
+                                                        !_selectedOther.Id.Equals(doc.Id))
+                                                            ? "" : "highlight_4"))"
+                                                style="min-width: 110px;">
                                                     <div class="align-middle h-100"><labe>@doc.Name</labe></div>
                                                 </td>
 
                                                 <td class="align-middle
-                                                    @(((_selectedOther == null ||
-                                                            !_selectedOther.Id.Equals(doc.Id))
-                                                                ? "" : "highlight_4"))"
-                                                    style="min-width: 90px;max-width: 90px;">
+                                                @(((_selectedOther == null ||
+                                                        !_selectedOther.Id.Equals(doc.Id))
+                                                            ? "" : "highlight_4"))"
+                                                style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                     @CurentDate
-                                                    <div class="input-group">
+                                                    <div class="input-group"
+                                                    style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                         <input type="number"
-                                                               class="form-control"
-                                                               value="@doc.ManHours"
-                                                               @onchange="(async (e) => await _onDocHoursChanged(doc, e.Value))">
+                                                        class="form-control"
+                                                        value="@doc.ManHours"
+                                                        @onchange="(async (e) => await _onDocHoursChanged(doc, e.Value))">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">h</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-
-                                                <td class="align-middle
-                                                    @(((_selectedOther == null ||
-                                                            !_selectedOther.Id.Equals(doc.Id))
-                                                                ? "" : "highlight_4"))"
-                                                    style="min-width: 90px;max-width: 90px;">
-                                                    <div class="input-group">
-                                                        <input type="number"
-                                                               class="form-control"
-                                                               disabled
-                                                               @bind-value="@doc.Completed">
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">%</span>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -260,15 +253,15 @@
                                         }
                                     </tbody>
                                 </table>
-                            }
-                        </div>
+                            </div>
+                        }
 
                     </div>
 
                     <!-- Paginator -->
-                    <div style="text-align: right;">
+                    @* <div style="text-align: right;">
                         <Paginator Renderer="@_getProjects" Peginator="@_paginator" />
-                    </div>
+                    </div> *@
                 
                 </div>
                 
