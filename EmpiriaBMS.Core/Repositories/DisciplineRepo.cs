@@ -94,69 +94,37 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    //public async Task<List<DrawDto>> GetDraws(int id)
-    //{
-    //    if (id == 0)
-    //        throw new ArgumentNullException(nameof(id));
+    public async Task<List<DrawDto>> GetDraws(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
 
-    //    using (var _context = _dbContextFactory.CreateDbContext())
-    //    {
-    //        var draws = await _context
-    //                         .Set<Draw>()
-    //                         .Where(d => d.DisciplineId == id)
-    //                         .ToListAsync();
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var draws = await _context
+                             .Set<Draw>()
+                             .Where(d => d.DisciplinesDraws.Select(o => o.DisciplineId).Contains(id))
+                             .ToListAsync();
 
-    //        return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(draws);
-    //    }
-    //}
+            return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(draws);
+        }
+    }
 
-    //public async Task<List<DrawDto>> GetDraws(int[] ids)
-    //{
-    //    if (ids == null)
-    //        throw new ArgumentNullException(nameof(ids));
+    public async Task<List<OtherDto>> GetOthers(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
 
-    //    using (var _context = _dbContextFactory.CreateDbContext())
-    //    {
-    //        var draws = await _context
-    //                         .Set<Draw>()
-    //                         .Where(d => ids.Contains(d.DisciplineId))
-    //                         .ToListAsync();
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var others = await _context
+                             .Set<Other>()
+                             .Where(d => d.DisciplinesOthers.Select(o => o.DisciplineId).Contains(id))
+                             .ToListAsync();
 
-    //        return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(draws);
-    //    }
-    //}
-
-    //public async Task<List<OtherDto>> GetOthers(int id)
-    //{
-    //    if (id == 0)
-    //        throw new ArgumentNullException(nameof(id));
-
-    //    using (var _context = _dbContextFactory.CreateDbContext())
-    //    {
-    //        var Others = await _context
-    //                         .Set<Other>()
-    //                         .Where(d => d.DisciplineId == id)
-    //                         .ToListAsync();
-
-    //        return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(Others);
-    //    }
-    //}
-
-    //public async Task<List<OtherDto>> GetOthers(int[] ids)
-    //{
-    //    if (ids == null)
-    //        throw new ArgumentNullException(nameof(ids));
-
-    //    using (var _context = _dbContextFactory.CreateDbContext())
-    //    {
-    //        var Others = await _context
-    //                         .Set<Other>()
-    //                         .Where(d => ids.Contains(d.DisciplineId))
-    //                         .ToListAsync();
-
-    //        return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(Others);
-    //    }
-    //}
+            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+        }
+    }
 
 }
 

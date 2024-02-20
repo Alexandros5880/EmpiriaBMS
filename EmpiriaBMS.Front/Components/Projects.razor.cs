@@ -152,22 +152,21 @@ public partial class Projects: IDisposable
 
     private async Task OnSelectDiscipline(DisciplineVM discipline)
     {
-        //_selectedDiscipline = discipline;
+        _selectedDiscipline = discipline;
 
-        //var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
-        //var docs = await DataProvider.Disciplines.GetOthers(discipline.Id);
-        //await _getLogedUser();
+        var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
+        var others = await DataProvider.Disciplines.GetOthers(discipline.Id);
+        await _getLogedUser();
 
-        //_draws.Clear();
-        //foreach (var di in draws)
-        //    _draws.Add(Mapper.Map<DrawVM>(di));
+        _draws.Clear();
+        foreach (var di in draws)
+            _draws.Add(Mapper.Map<DrawVM>(di));
 
-        //_docs.Clear();
-        //foreach (var di in docs)
-        //    _docs.Add(Mapper.Map<OtherVM>(di));
+        _docs.Clear();
+        foreach (var di in others)
+            _docs.Add(Mapper.Map<OtherVM>(di));
 
-
-        //StateHasChanged();
+        StateHasChanged();
     }
 
     private void OnSelectDraw(DrawVM draw)
