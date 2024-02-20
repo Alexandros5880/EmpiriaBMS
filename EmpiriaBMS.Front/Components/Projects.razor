@@ -1,5 +1,7 @@
 ﻿@page "/"
 @page "/projects"
+@using Microsoft.Fast.Components.FluentUI
+
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
@@ -28,26 +30,42 @@
                     <div class="mt-2 shadow p-2">
                         @if (_logedUser != null)
                         {
-                            <div class="row ms-2 me-2" style="overflow:hidden;">
-                                <div class="col-lg-10 col-md-8 col-sm-8">
+                            <div class="row ms-2 me-8" style="overflow:hidden;">
+                                <div class="col-lg-8 col-md-8 col-sm-8">
                                     @foreach (var role in _loggedUserRoles)
                                     {
                                         <h4><b>@_logedUser.LastName @_logedUser.FirstName</b></h4>
                                     }
                                 </div>
+                                <div class="col-lg-2 col-md-8 col-sm-8">
+                                    @if (workStarted)
+                                    {
+                                        <button type="button" class="btn btn-secondary btn-lg"
+                                                @onclick="@ToogleWorkStatus">
+                                            End Work
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-primary btn-lg"
+                                                @onclick="@ToogleWorkStatus">
+                                            Start Work
+                                        </button>
+                                    }
+                                </div>
                                 <div class="col-lg-2 col-md-4 col-sm-4 row primary-bg-color rounded-1 text-center">
-                                    <span class="mt-2 h6"><strong>@(_logedUser.Hours)</strong>h</span>
+                                    <span class="mt-2 h5"><strong>@(_logedUser.Hours)</strong>h</span>
                                 </div>
                             </div>
                         }
                     </div>
 
-                    <div class="row mt-3 p-3 m2 
-                                gx-xl-3 gx-lg-3 gx-md-3 gx-sm-3
+                    <div class="row mt-3 p-1
+                                gx-xl-2 gx-lg-2 gx-md-2 gx-sm-2
                                 gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
 
                         <!-- Table Projects -->
-                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
+                        <div class="col-xxl-3 col-xl-7 col-lg-7 col-md-7 col-sm-12
                                     table-responsive p-1 table-container">
                             <table class="table table-hover table-success text-center">
                                 <thead>
@@ -92,7 +110,7 @@
                         <!-- Table Disciplines -->
                         @if (_selectedProject != null)
                         {
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12
+                            <div class="col-xxl-3 col-xl-5 col-lg-5 col-md-5 col-sm-12
                                         table-responsive p-1 table-container">
                                 <table class="table table-hover table-info text-center">
                                     <thead>
@@ -110,7 +128,7 @@
                                                 @(((_selectedDiscipline == null
                                                         || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                             ? "" : "highlight_2"))"
-                                                style="min-width: 110px;">
+                                                    style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                     <labe>@discipline.Name</labe>
                                                 </td>
                                                 <td class="align-middle text-center
@@ -118,7 +136,7 @@
                                                         || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                             ? "" : "highlight_2"))">
                                                     <div class="input-group"
-                                                    style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                                         style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                         <input type="number"
                                                         class="form-control"
                                                         value="@discipline.EstimatedMenHours"
@@ -138,7 +156,7 @@
                         <!-- Table Draws -->
                         @if (_selectedDiscipline != null)
                         {
-                            <div class="col-xl-4 col-lg-7 col-md-7 col-sm-12
+                            <div class="col-xxl-4 col-xl-7 col-lg-7 col-md-7 col-sm-12
                                         table-responsive p-1 table-container">
                                 <table class="table table-hover table-primary text-center">
                                     <thead>
@@ -205,7 +223,7 @@
                         <!-- Table Docs -->
                         @if (_selectedDiscipline != null)
                         {
-                            <div class="col-xl-2 col-lg-5 col-md-5 col-sm-12
+                            <div class="col-xxl-2 col-xl-5 col-lg-5 col-md-5 col-sm-12
                                         table-responsive p-1 table-container">
                                 <table class="table table-hover table-primary text-center">
                                     <thead>
@@ -228,17 +246,17 @@
                                                 </td>
 
                                                 <td class="align-middle
-                                                @(((_selectedOther == null ||
-                                                        !_selectedOther.Id.Equals(doc.Id))
-                                                            ? "" : "highlight_4"))"
-                                                style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                                    @(((_selectedOther == null ||
+                                                            !_selectedOther.Id.Equals(doc.Id))
+                                                                ? "" : "highlight_4"))"
+                                                    style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                     @CurentDate
                                                     <div class="input-group"
-                                                    style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                        <input type="number"
-                                                        class="form-control"
-                                                        value="@doc.ManHours"
-                                                        @onchange="(async (e) => await _onDocHoursChanged(doc, e.Value))">
+                                                        style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                                            <input type="number"
+                                                            class="form-control"
+                                                            value="@doc.ManHours"
+                                                            @onchange="(async (e) => await _onDocHoursChanged(doc, e.Value))">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">h</span>
                                                         </div>

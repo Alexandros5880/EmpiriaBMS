@@ -14,10 +14,11 @@ public partial class Projects: IDisposable
 {
     private bool disposedValue;
 
+    bool runInTeams = false;
     bool startLoading = true;
     bool filterLoading = false;
-
-    bool runInTeams = false;
+    bool workStarted = false;
+    DateTime StartWorkTime = DateTime.Now;
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
@@ -132,6 +133,14 @@ public partial class Projects: IDisposable
     #endregion
 
     #region Properties Changed Evenets
+    private void ToogleWorkStatus()
+    {
+        workStarted = !workStarted;
+
+        if (workStarted)
+            StartWorkTime = DateTime.Now;
+    }
+
     private async Task OnSelectProject(ProjectVM project)
     {
         _draws.Clear();
