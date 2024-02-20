@@ -61,8 +61,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _estimatedMandays;
-    public int? EstimatedMandays
+    private long? _estimatedMandays;
+    public long? EstimatedMandays
     {
         get => _estimatedMandays;
         set
@@ -74,8 +74,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _estimatedHours;
-    public int? EstimatedHours
+    private long? _estimatedHours;
+    public long? EstimatedHours
     {
         get => _estimatedHours;
         set
@@ -243,8 +243,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _manHours;
-    public int? ManHours
+    private long? _manHours;
+    public long? ManHours
     {
         get => _manHours;
         set

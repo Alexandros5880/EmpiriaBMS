@@ -21,9 +21,9 @@ public class ProjectDto : EntityDto
 
     public string? Drawing { get; set; }
 
-    public int? EstimatedMandays { get; set; }
+    public long? EstimatedMandays { get; set; }
 
-    public int? EstimatedHours { get; set; }
+    public long? EstimatedHours { get; set; }
 
     public DateTime? DurationDate { get; set; }
 
@@ -49,7 +49,7 @@ public class ProjectDto : EntityDto
 
     public int? Completed { get; set; }
 
-    public int? ManHours { get; set; }
+    public long? ManHours { get; set; }
 
     public User? Customer { get; set; }
 

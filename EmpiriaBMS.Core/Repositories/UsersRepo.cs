@@ -119,7 +119,7 @@ public class UsersRepo : Repository<UserDto, User>
                                                 .Select(r => r.Id)
                                                 .ToListAsync();
 
-            var employeeIds = await _context.UserRoles.Where(ur => emplyeeRolesIds.Contains(ur.Id))
+            var employeeIds = await _context.UsersRoles.Where(ur => emplyeeRolesIds.Contains(ur.Id))
                                                       .Select(ur => ur.UserId)
                                                       .ToListAsync();
 
@@ -142,7 +142,7 @@ public class UsersRepo : Repository<UserDto, User>
                                                 .Select(r => r.Id)
                                                 .ToListAsync();
 
-            var employeeIds = await _context.UserRoles.Where(ur => emplyeeRolesIds.Contains(ur.Id))
+            var employeeIds = await _context.UsersRoles.Where(ur => emplyeeRolesIds.Contains(ur.Id))
                                                       .Select(ur => ur.UserId)
                                                       .ToListAsync();
 
@@ -182,7 +182,7 @@ public class UsersRepo : Repository<UserDto, User>
                                                 .Select(r => r.Id)
                                                 .ToListAsync();
 
-            var employeeIds = await _context.UserRoles.Where(ur => emplyeeRolesIds.Contains(ur.Id))
+            var employeeIds = await _context.UsersRoles.Where(ur => emplyeeRolesIds.Contains(ur.Id))
                                                       .Select(ur => ur.UserId)
                                                       .ToListAsync();
 
@@ -221,7 +221,7 @@ public class UsersRepo : Repository<UserDto, User>
                                                 .Select(r => r.Id)
                                                 .ToListAsync();
 
-            var customerIds = await _context.UserRoles.Where(ur => customersRolesIds.Contains(ur.Id))
+            var customerIds = await _context.UsersRoles.Where(ur => customersRolesIds.Contains(ur.Id))
                                                       .Select(ur => ur.UserId)
                                                       .ToListAsync();
 
@@ -244,7 +244,7 @@ public class UsersRepo : Repository<UserDto, User>
                                                 .Select(r => r.Id)
                                                 .ToListAsync();
 
-            var customerIds = await _context.UserRoles.Where(ur => customersRolesIds.Contains(ur.Id))
+            var customerIds = await _context.UsersRoles.Where(ur => customersRolesIds.Contains(ur.Id))
                                                       .Select(ur => ur.UserId)
                                                       .ToListAsync();
 
@@ -282,7 +282,7 @@ public class UsersRepo : Repository<UserDto, User>
                                                 .Select(r => r.Id)
                                                 .ToListAsync();
 
-            var customerIds = await _context.UserRoles.Where(ur => customersRolesIds.Contains(ur.Id))
+            var customerIds = await _context.UsersRoles.Where(ur => customersRolesIds.Contains(ur.Id))
                                                       .Select(ur => ur.UserId)
                                                       .ToListAsync();
 

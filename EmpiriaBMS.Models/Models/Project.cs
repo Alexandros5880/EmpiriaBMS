@@ -20,9 +20,9 @@ public class Project : Entity
 
     public string? Drawing { get; set; }
 
-    public int? EstimatedMandays { get; set; }
+    public long? EstimatedMandays { get; set; }
 
-    public int? EstimatedHours { get; set; }
+    public long? EstimatedHours { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
@@ -54,7 +54,7 @@ public class Project : Entity
 
     public int? Completed { get; set; }
 
-    public int? ManHours { get; set; }
+    public long? ManHours { get; set; }
 
     public User? Customer { get; set; }
 
