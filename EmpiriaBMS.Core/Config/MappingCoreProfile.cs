@@ -14,7 +14,7 @@ public class MappingCoreProfile : Profile
 {
     public MappingCoreProfile()
     {
-        CreateMap<DocDto, Doc>().ReverseMap();
+        CreateMap<OtherDto, Other>().ReverseMap();
         CreateMap<DrawDto, Draw>().ReverseMap();
         CreateMap<InvoiceDto, Invoice>().ReverseMap();
         CreateMap<RoleDto, Role>().ReverseMap();

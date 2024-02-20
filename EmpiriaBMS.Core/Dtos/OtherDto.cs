@@ -1,16 +1,15 @@
-﻿using EmpiriaMS.Models.Models.Base;
+﻿using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaBMS.Models.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmpiriaBMS.Models.Models;
+namespace EmpiriaBMS.Core.Dtos;
 
-public class Doc : Entity
+public class OtherDto : EntityDto
 {
-    [Required]
     public string Name { get; set; }
 
     public double ManHours { get; set; }

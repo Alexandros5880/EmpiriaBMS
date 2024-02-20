@@ -51,11 +51,17 @@ public static class ModelRelations
                .WithMany(de => de.DisciplineEmployees)
                .HasForeignKey(de => de.EmployeeId);
 
-        // ProjectManager Discipline
+        // Engineer Project
         builder.Entity<User>()
-                    .HasMany(p => p.Disciplines)
+                    .HasMany(p => p.Projects)
                     .WithOne(c => c.ProjectManager)
                     .HasForeignKey(c => c.ProjectManagerId);
+
+        // Engineer Discipline
+        builder.Entity<User>()
+                    .HasMany(p => p.Disciplines)
+                    .WithOne(c => c.Engineer)
+                    .HasForeignKey(c => c.EngineerId);
 
         // Project Invoice
         builder.Entity<Project>()

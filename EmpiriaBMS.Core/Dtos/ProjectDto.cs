@@ -25,6 +25,10 @@ public class ProjectDto : EntityDto
 
     public long? EstimatedHours { get; set; }
 
+    public DateTime? DeadLine { get; set; }
+
+    public DateTime? WorkPackege { get; set; }
+
     public DateTime? DurationDate { get; set; }
 
     public DateTime? EstPaymentDate { get; set; }
@@ -50,6 +54,9 @@ public class ProjectDto : EntityDto
     public int? Completed { get; set; }
 
     public long? ManHours { get; set; }
+
+    public int? ProjectManagerId { get; set; }
+    public User? ProjectManager { get; set; }
 
     public User? Customer { get; set; }
 

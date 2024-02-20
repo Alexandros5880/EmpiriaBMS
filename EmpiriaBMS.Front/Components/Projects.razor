@@ -110,7 +110,7 @@
                                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                                 ? "" : "highlight_2"))"
                                                 style="min-width: 110px;">
-                                                <labe>@discipline.ProjectManager.LastName @discipline.ProjectManager.FirstName</labe>
+                                                <labe>@discipline.Engineer.LastName @discipline.Engineer.FirstName</labe>
                                             </td>
                                         </tr>
                                     }
@@ -169,7 +169,7 @@
                                                     <input type="number"
                                                            class="form-control"
                                                            disabled
-                                                           @bind-value="@draw.Completed">
+                                                           @bind-value="@draw.CompletionEstimation">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">%</span>
                                                     </div>
@@ -200,16 +200,16 @@
                                         <tr class="align-middle" @onclick="@(() => OnSelectDoc(doc))">
                                             
                                             <td class="align-middle
-                                                    @(((_selectedDoc == null || 
-                                                            !_selectedDoc.Id.Equals(doc.Id))
+                                                    @(((_selectedOther == null || 
+                                                            !_selectedOther.Id.Equals(doc.Id))
                                                                 ? "" : "highlight_4"))"
                                                 style="min-width: 110px;">
                                                 <div class="align-middle h-100"><labe>@doc.Name</labe></div>
                                             </td>
 
                                             <td class="align-middle
-                                                    @(((_selectedDoc == null ||
-                                                            !_selectedDoc.Id.Equals(doc.Id))
+                                                    @(((_selectedOther == null ||
+                                                            !_selectedOther.Id.Equals(doc.Id))
                                                                 ? "" : "highlight_4"))"
                                                 style="min-width: 90px;max-width: 90px;">
                                                 @CurentDate
@@ -225,8 +225,8 @@
                                             </td>
 
                                             <td class="align-middle
-                                                    @(((_selectedDoc == null ||
-                                                            !_selectedDoc.Id.Equals(doc.Id))
+                                                    @(((_selectedOther == null ||
+                                                            !_selectedOther.Id.Equals(doc.Id))
                                                                 ? "" : "highlight_4"))"
                                                 style="min-width: 90px;max-width: 90px;">
                                                 <div class="input-group">

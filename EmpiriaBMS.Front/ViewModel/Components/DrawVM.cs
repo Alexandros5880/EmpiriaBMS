@@ -31,16 +31,16 @@ public class DrawVM : BaseVM
         }
     }
 
-    private int? _completed;
-    public int? Completed
+    private int? _completionEstimation;
+    public int? CompletionEstimation
     {
-        get => _completed;
+        get => _completionEstimation;
         set
         {
-            if (value == _completed)
+            if (value == _completionEstimation)
                 return;
-            _completed = value;
-            NotifyPropertyChanged(nameof(Completed));
+            _completionEstimation = value;
+            NotifyPropertyChanged(nameof(CompletionEstimation));
         }
     }
 

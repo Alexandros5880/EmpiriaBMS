@@ -25,13 +25,13 @@ public partial class Projects: IDisposable
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DrawVM> _draws = new ObservableCollection<DrawVM>();
-    private ObservableCollection<DocVM> _docs = new ObservableCollection<DocVM>();
+    private ObservableCollection<OtherVM> _docs = new ObservableCollection<OtherVM>();
 
     // Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DrawVM _selectedDraw = new DrawVM();
-    private DocVM _selectedDoc = new DocVM();
+    private OtherVM _selectedOther = new OtherVM();
 
     // Paginator
     private PaginatorVM _paginator = new PaginatorVM(7);
@@ -56,7 +56,7 @@ public partial class Projects: IDisposable
         _selectedProject = null;
         _selectedDiscipline = null;
         _selectedDraw = null;
-        _selectedDoc = null;
+        _selectedOther = null;
         _disciplines.Clear();
         _draws.Clear();
         _docs.Clear();
@@ -155,7 +155,7 @@ public partial class Projects: IDisposable
         _selectedDiscipline = discipline;
 
         var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
-        var docs = await DataProvider.Disciplines.GetDocs(discipline.Id);
+        var docs = await DataProvider.Disciplines.GetOthers(discipline.Id);
         await _getLogedUser();
 
         _draws.Clear();
@@ -164,7 +164,7 @@ public partial class Projects: IDisposable
 
         _docs.Clear();
         foreach (var di in docs)
-            _docs.Add(Mapper.Map<DocVM>(di));
+            _docs.Add(Mapper.Map<OtherVM>(di));
 
 
         StateHasChanged();
@@ -176,9 +176,9 @@ public partial class Projects: IDisposable
         StateHasChanged();
     }
 
-    private void OnSelectDoc(DocVM doc)
+    private void OnSelectDoc(OtherVM doc)
     {
-        _selectedDoc = doc;
+        _selectedOther = doc;
         StateHasChanged();
     }
     
@@ -195,29 +195,29 @@ public partial class Projects: IDisposable
                                     Mapper.Map<ProjectDto>(_selectedProject), 
                                     Mapper.Map<DrawDto>(_selectedDraw));
 
-        _selectedDraw.Completed = complete.DrawCompleted;
-        //_selectedDoc.Completed = complete.DrawCompleted;
+        _selectedDraw.CompletionEstimation = complete.DrawCompleted;
+        //_selectedOther.Completed = complete.DrawCompleted;
         _selectedDiscipline.Completed = complete.DisciplineCompleted;
         _selectedProject.Completed = complete.ProjectCompleted;
 
         StateHasChanged();
     }
 
-    private async Task _onDocHoursChanged(DocVM doc, object val)
+    private async Task _onDocHoursChanged(OtherVM doc, object val)
     {
         var previusValue = doc.ManHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
         doc.ManHours = Convert.ToInt32(val);
         _selectedProject.ManHours += (int?)value;
         _logedUser.Hours += value;
-        _selectedDoc = doc;
+        _selectedOther = doc;
 
         CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
                                     Mapper.Map<ProjectDto>(_selectedProject),
-                                    Mapper.Map<DocDto>(_selectedDoc));
+                                    Mapper.Map<OtherDto>(_selectedOther));
 
         //_selectedDraw.Completed = complete.DrawCompleted;
-        _selectedDoc.Completed = complete.DrawCompleted;
+        _selectedOther.Completed = complete.DrawCompleted;
         _selectedDiscipline.Completed = complete.DisciplineCompleted;
         _selectedProject.Completed = complete.ProjectCompleted;
 

@@ -173,7 +173,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         {
             var disciplines =  await _context.Set<Discipline>()
                                              .Where(d => d.ProjectId == id)
-                                             .Include(r => r.ProjectManager)
+                                             .Include(r => r.Engineer)
                                              .ToListAsync();
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(disciplines);
@@ -205,15 +205,15 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             draws.Add(Mapping.Mapper.Map<Draw>(draw));
             var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
 
-            // Get Docs Sum Hourse
-            List<Doc> docs = await _context
-                                    .Set<Doc>()
+            // Get Others Sum Hourse
+            List<Other> others = await _context
+                                    .Set<Other>()
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
                                     .ToListAsync();
-            var sumDocsHourse = docs.Select(m => m.ManHours).Sum();
+            var sumOthersHourse = others.Select(m => m.ManHours).Sum();
 
             // Some Project Hours
-            var sumProjectHours = sumDrawsHourse + sumDocsHourse;
+            var sumProjectHours = sumDrawsHourse + sumOthersHourse;
 
             // Project Completed
             var projectCompleted = Convert.ToInt32((sumProjectHours / estimatedHours) * 100);
@@ -223,14 +223,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 ProjectCompleted = projectCompleted,
                 DisciplineCompleted = projectCompleted / disciplinesCount,
                 DrawCompleted = (projectCompleted / 2) / draws.Count,
-                DocCompleted = (projectCompleted / 2) / docs.Count
+                OtherCompleted = (projectCompleted / 2) / others.Count
             };
 
             return result;
         }
     }
 
-    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DocDto doc)
+    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, OtherDto Other)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -247,17 +247,17 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                     .ToListAsync();
             var sumDrawsHourse = draws.Select(m => m.ManHours).Sum();
 
-            // Get Docs Sum Hourse
-            List<Doc> docs = await _context
-                                    .Set<Doc>()
-                                    .Where(d => d.Id != doc.Id)
+            // Get Others Sum Hourse
+            List<Other> Others = await _context
+                                    .Set<Other>()
+                                    .Where(d => d.Id != Other.Id)
                                     .Where(d => disciplinesIds.Contains(d.DisciplineId))
                                     .ToListAsync();
-            docs.Add(Mapping.Mapper.Map<Doc>(doc));
-            var sumDocsHourse = docs.Select(m => m.ManHours).Sum();
+            Others.Add(Mapping.Mapper.Map<Other>(Other));
+            var sumOthersHourse = Others.Select(m => m.ManHours).Sum();
 
             // Some Project Hours
-            var sumProjectHours = sumDrawsHourse + sumDocsHourse;
+            var sumProjectHours = sumDrawsHourse + sumOthersHourse;
 
             // Project Completed
             var projectCompleted = Convert.ToInt32((sumProjectHours / estimatedHours) * 100);
@@ -267,7 +267,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 ProjectCompleted = projectCompleted,
                 DisciplineCompleted = projectCompleted / disciplinesCount,
                 DrawCompleted = (projectCompleted / 2) / draws.Count,
-                DocCompleted = (projectCompleted / 2) / docs.Count
+                OtherCompleted = (projectCompleted / 2) / Others.Count
             };
 
             return result;

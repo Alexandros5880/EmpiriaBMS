@@ -17,14 +17,18 @@ public class Discipline : Entity
     public int ProjectId { get; set; }
     public Project Project { get; set; }
 
+    public long? EstimatedHours { get; set; }
+
+    public long? EstimatedManHours { get; set; }
+
     public int? Completed { get; set; }
 
-    public int? ProjectManagerId { get; set; }
-    public User? ProjectManager { get; set; }
+    public int? EngineerId { get; set; }
+    public User? Engineer { get; set; }
 
     public ICollection<Draw> Draws { get; set; }
 
-    public ICollection<Doc> Docs { get; set; }
+    public ICollection<Other> Others { get; set; }
 
     public ICollection<DisciplineEmployee> DisciplineEmployees { get; set; }
 }

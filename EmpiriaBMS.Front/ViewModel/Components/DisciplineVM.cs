@@ -19,6 +19,32 @@ public class DisciplineVM : BaseVM
         }
     }
 
+    private long? _estimatedHours;
+    public long? EstimatedHours
+    {
+        get => _estimatedHours;
+        set
+        {
+            if (value == _estimatedHours)
+                return;
+            _estimatedHours = value;
+            NotifyPropertyChanged(nameof(EstimatedHours));
+        }
+    }
+
+    private long? _estimatedManHours;
+    public long? EstimatedManHours
+    {
+        get => _estimatedManHours;
+        set
+        {
+            if (value == _estimatedManHours)
+                return;
+            _estimatedManHours = value;
+            NotifyPropertyChanged(nameof(EstimatedManHours));
+        }
+    }
+
     private int? _completed;
     public int? Completed
     {
@@ -45,16 +71,16 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private User? _projectManager;
-    public User? ProjectManager
+    private User? _engineer;
+    public User? Engineer
     {
-        get => _projectManager;
+        get => _engineer;
         set
         {
-            if (value == _projectManager)
+            if (value == _engineer)
                 return;
-            _projectManager = value;
-            NotifyPropertyChanged(nameof(ProjectManager));
+            _engineer = value;
+            NotifyPropertyChanged(nameof(Engineer));
         }
     }
 }

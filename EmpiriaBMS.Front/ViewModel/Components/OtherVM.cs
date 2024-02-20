@@ -3,7 +3,7 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DocVM : BaseVM
+public class OtherVM : BaseVM
 {
     private string _name;
     public string Name

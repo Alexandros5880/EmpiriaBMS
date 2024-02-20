@@ -18,7 +18,7 @@ public class AppDbContext : DbContext
     public DbSet<Project> Projects { get; set; }
     public DbSet<Discipline> Disciplines { get; set; }
     public DbSet<Draw> Draws { get; set; }
-    public DbSet<Doc> Docs { get; set; }
+    public DbSet<Other> Others { get; set; }
     public DbSet<DisciplineEmployee> DisciplinesEmployees { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
     
@@ -134,9 +134,9 @@ public class AppDbContext : DbContext
         for (var i = 1; i < 10; i++)
         {
             double drawManHours = 10 * i + 1;
-            double docManHours = 10 * i + 2;
+            double OtherManHours = 10 * i + 2;
             long estimatedHours = Convert.ToInt64(10 * Math.Pow(i, 10));
-            double dicliplineHours = (drawManHours * 10) + (docManHours * 10);
+            double dicliplineHours = (drawManHours * 10) + (OtherManHours * 10);
             long projectHours = Convert.ToInt64(dicliplineHours * 10);
             var projectCompleted = (Convert.ToDouble(projectHours) / Convert.ToDouble(estimatedHours)) * 100; // 50%
 
@@ -252,7 +252,7 @@ public class AppDbContext : DbContext
                     LastUpdatedDate = DateTime.Now,
                     Name = (i) % 2 == 0 ? "HVAC" : "ELEC",
                     ProjectId = projectId,
-                    ProjectManagerId = pmId,
+                    EngineerId = pmId,
                     Completed = Convert.ToInt32(projectCompleted)
                 };
                 builder.Entity<Discipline>().HasData(discipline);
@@ -333,6 +333,7 @@ public class AppDbContext : DbContext
 
                     // Draw
                     var dawId = random.Next(123456789, 999999999) + i * 11 + i + j + e;
+                    double completed = projectCompleted / 2;
                     Draw draw = new Draw()
                     {
                         Id = dawId,
@@ -341,23 +342,23 @@ public class AppDbContext : DbContext
                         Name = $"Draw_{i + j + e}",
                         ManHours = drawManHours,
                         DisciplineId = disciplineId,
-                        Completed = Convert.ToInt32(projectCompleted / 2)
+                        CompletionEstimation = Convert.ToInt32(completed)
                     };
                     builder.Entity<Draw>().HasData(draw);
 
-                    // Doc
-                    var docId = random.Next(123456789, 999999999) + i * 12 + i + j + e;
-                    Doc doc = new Doc()
+                    // Other
+                    var otherId = random.Next(123456789, 999999999) + i * 12 + i + j + e;
+                    Other other = new Other()
                     {
-                        Id = docId,
+                        Id = otherId,
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Name = $"Doc_{i + j + e}",
-                        ManHours = docManHours,
+                        Name = $"Other_{i + j + e}",
+                        ManHours = OtherManHours,
                         DisciplineId = disciplineId,
-                        Completed = Convert.ToInt32(projectCompleted / 2)
+                        Completed = Convert.ToInt32(completed)
                     };
-                    builder.Entity<Doc>().HasData(doc);
+                    builder.Entity<Other>().HasData(other);
                 }
             }
         }

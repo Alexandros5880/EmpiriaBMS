@@ -28,7 +28,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             var disclipline = await _context
                              .Set<Discipline>()
                              .Include(r => r.Project)
-                             .Include(r => r.ProjectManager)
+                             .Include(r => r.Engineer)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<DisciplineDto>(disclipline);
@@ -44,7 +44,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             {
                 ds = await _context.Set<Discipline>()
                                      .Include(r => r.Project)
-                                     .Include(r => r.ProjectManager)
+                                     .Include(r => r.Engineer)
                                      .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -54,7 +54,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(r => r.Project)
-                                 .Include(r => r.ProjectManager)
+                                 .Include(r => r.Engineer)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -74,9 +74,9 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                 ds = await _context.Set<Discipline>()
                                      .Where(expresion)
                                      .Include(r => r.Project)
-                                     .Include(r => r.ProjectManager)
+                                     .Include(r => r.Engineer)
                                      .Include(r => r.Draws)
-                                     .Include(r => r.Docs)
+                                     .Include(r => r.Others)
                                      .Include(r => r.DisciplineEmployees)
                                      .ToListAsync();
 
@@ -88,9 +88,9 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)
                                .Include(r => r.Project)
-                               .Include(r => r.ProjectManager)
+                               .Include(r => r.Engineer)
                                .Include(r => r.Draws)
-                               .Include(r => r.Docs)
+                               .Include(r => r.Others)
                                .Include(r => r.DisciplineEmployees)
                                .ToListAsync();
 
@@ -130,35 +130,35 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<List<DocDto>> GetDocs(int id)
+    public async Task<List<OtherDto>> GetOthers(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var docs = await _context
-                             .Set<Doc>()
+            var Others = await _context
+                             .Set<Other>()
                              .Where(d => d.DisciplineId == id)
                              .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Doc>, List<DocDto>>(docs);
+            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(Others);
         }
     }
 
-    public async Task<List<DocDto>> GetDocs(int[] ids)
+    public async Task<List<OtherDto>> GetOthers(int[] ids)
     {
         if (ids == null)
             throw new ArgumentNullException(nameof(ids));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var docs = await _context
-                             .Set<Doc>()
+            var Others = await _context
+                             .Set<Other>()
                              .Where(d => ids.Contains(d.DisciplineId))
                              .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Doc>, List<DocDto>>(docs);
+            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(Others);
         }
     }
 

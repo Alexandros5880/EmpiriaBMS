@@ -26,6 +26,14 @@ public class Project : Entity
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
+    public DateTime? DeadLine { get; set; }
+
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime? WorkPackege { get; set; }
+
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
     public DateTime? DurationDate { get; set; }
 
     [DataType(DataType.DateTime)]
@@ -55,6 +63,9 @@ public class Project : Entity
     public int? Completed { get; set; }
 
     public long? ManHours { get; set; }
+
+    public int? ProjectManagerId { get; set; }
+    public User? ProjectManager { get; set; }
 
     public User? Customer { get; set; }
 

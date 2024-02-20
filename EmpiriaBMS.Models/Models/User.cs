@@ -38,6 +38,8 @@ public class User : Entity
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
 
+    public ICollection<Project> Projects { get; set; }
+
     public ICollection<Discipline> Disciplines { get; set; }
 
     public ICollection<UserRole> UserRoles { get; set; }

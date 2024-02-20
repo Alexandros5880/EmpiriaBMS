@@ -16,7 +16,7 @@ public class MappingProfile : Profile
         CreateMap<InvoiceDto, InvoiceVM>().ReverseMap();
         CreateMap<RoleDto, RoleVM>().ReverseMap();
         CreateMap<UserDto, UserVM>().ReverseMap();
-        CreateMap<DocDto, DocVM>().ReverseMap();
+        CreateMap<OtherDto, OtherVM>().ReverseMap();
         CreateMap<DisciplineDto, DisciplineVM>().ReverseMap();
         CreateMap<ProjectDto, ProjectVM>().ReverseMap();
     }

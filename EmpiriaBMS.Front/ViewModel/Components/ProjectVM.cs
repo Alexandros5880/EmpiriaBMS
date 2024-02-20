@@ -87,6 +87,19 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private DateTime? _deadLine;
+    public DateTime? DeadLine
+    {
+        get => _deadLine;
+        set
+        {
+            if (value == _deadLine)
+                return;
+            _deadLine = value;
+            NotifyPropertyChanged(nameof(DeadLine));
+        }
+    }
+
     private DateTime? _durationDate;
     public DateTime? DurationDate
     {
@@ -97,6 +110,19 @@ public class ProjectVM : BaseVM
                 return;
             _durationDate = value;
             NotifyPropertyChanged(nameof(DurationDate));
+        }
+    }
+
+    private DateTime? _workPackege;
+    public DateTime? WorkPackege
+    {
+        get => _workPackege;
+        set
+        {
+            if (value == _workPackege)
+                return;
+            _workPackege = value;
+            NotifyPropertyChanged(nameof(WorkPackege));
         }
     }
 
@@ -253,6 +279,19 @@ public class ProjectVM : BaseVM
                 return;
             _manHours = value;
             NotifyPropertyChanged(nameof(ManHours));
+        }
+    }
+
+    private User? _projectManager;
+    public User? ProjectManager
+    {
+        get => _projectManager;
+        set
+        {
+            if (value == _projectManager)
+                return;
+            _projectManager = value;
+            NotifyPropertyChanged(nameof(ProjectManager));
         }
     }
 
