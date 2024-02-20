@@ -18,10 +18,14 @@ public partial class Projects: IDisposable
     bool runInTeams = false;
     bool startLoading = true;
     bool filterLoading = false;
-    bool workStarted = false;
-    Timer timer; 
+
+    // Working Timer
+    Timer timer;
     DateTime StartWorkTime = DateTime.Now;
+    bool workStarted = false;
+    double hoursBaused = 0;
     double? hoursPassed = null;
+    double hoursUsed = 0;
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
@@ -50,6 +54,7 @@ public partial class Projects: IDisposable
         base.OnInitialized();
         await _getLogedUser();
         await _getProjects();
+        hoursPassed = null;
         startLoading = false;
         StateHasChanged();
     }
@@ -198,7 +203,7 @@ public partial class Projects: IDisposable
     {
         var previusValue = draw.ManHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        if (hoursPassed < value)
+        if ((hoursPassed - hoursUsed) < value)
         {
             // TODO: Display a Msg
             return;
@@ -206,7 +211,7 @@ public partial class Projects: IDisposable
         draw.ManHours = Convert.ToInt32(val);
         _selectedProject.ManHours += (int?)value;
         _logedUser.Hours += value;
-        hoursPassed -= value;
+        hoursUsed += value;
         _selectedDraw = draw;
 
         //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
@@ -225,7 +230,7 @@ public partial class Projects: IDisposable
     {
         var previusValue = doc.ManHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        if (hoursPassed < value)
+        if ((hoursPassed - hoursUsed) < value)
         {
             // TODO: Display a Msg
             return;
@@ -233,7 +238,7 @@ public partial class Projects: IDisposable
         doc.ManHours = Convert.ToInt32(val);
         _selectedProject.ManHours += (int?)value;
         _logedUser.Hours += value;
-        hoursPassed -= value;
+        hoursUsed += value;
         _selectedOther = doc;
 
         //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
@@ -256,7 +261,7 @@ public partial class Projects: IDisposable
         timer = new System.Threading.Timer((_) =>
         {
             var chrono = DateTime.Now - StartWorkTime;
-            hoursPassed = chrono.Hours;
+            hoursPassed = chrono.Hours + hoursBaused;
 
             InvokeAsync(() =>
             {
@@ -267,7 +272,7 @@ public partial class Projects: IDisposable
 
     private void StopTimer()
     {
-        hoursPassed = null;
+        hoursBaused = (double)hoursPassed;
         timer.Dispose();
     }
     #endregion
