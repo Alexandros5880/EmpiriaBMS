@@ -125,7 +125,7 @@
                             <table class="table table-hover table-primary text-center">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Draw</th>
+                                        <th scope="col">Drawings</th>
                                         <th scope="col">Hours</th>
                                         <th scope="col">Completed</th>
                                     </tr>
@@ -147,7 +147,8 @@
                                                     @(((_selectedDraw == null ||
                                                             !_selectedDraw.Id.Equals(draw.Id))
                                                                 ? "" : "highlight_3"))"
-                                                style="min-width: 110px;">
+                                                style="min-width: 90px;max-width: 90px;">
+                                                @CurentDate
                                                 <div class="input-group">
                                                     <input type="number"
                                                            class="form-control"
@@ -163,7 +164,7 @@
                                                     @(((_selectedDraw == null ||
                                                             !_selectedDraw.Id.Equals(draw.Id))
                                                                 ? "" : "highlight_3"))"
-                                                style="min-width: 110px;">
+                                                style="min-width: 90px;max-width: 90px;">
                                                 <div class="input-group">
                                                     <input type="number"
                                                            class="form-control"
@@ -210,7 +211,8 @@
                                                     @(((_selectedDoc == null ||
                                                             !_selectedDoc.Id.Equals(doc.Id))
                                                                 ? "" : "highlight_4"))"
-                                                style="min-width: 110px;">
+                                                style="min-width: 90px;max-width: 90px;">
+                                                @CurentDate
                                                 <div class="input-group">
                                                     <input type="number"
                                                            class="form-control"
@@ -226,7 +228,7 @@
                                                     @(((_selectedDoc == null ||
                                                             !_selectedDoc.Id.Equals(doc.Id))
                                                                 ? "" : "highlight_4"))"
-                                                style="min-width: 110px;">
+                                                style="min-width: 90px;max-width: 90px;">
                                                 <div class="input-group">
                                                     <input type="number"
                                                            class="form-control"
