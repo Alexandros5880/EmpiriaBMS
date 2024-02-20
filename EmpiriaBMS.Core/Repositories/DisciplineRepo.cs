@@ -77,7 +77,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                      .Include(r => r.ProjectManager)
                                      .Include(r => r.Draws)
                                      .Include(r => r.Docs)
-                                     .Include(r => r.Engineers)
                                      .Include(r => r.DisciplineEmployees)
                                      .ToListAsync();
 
@@ -92,7 +91,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                .Include(r => r.ProjectManager)
                                .Include(r => r.Draws)
                                .Include(r => r.Docs)
-                               .Include(r => r.Engineers)
                                .Include(r => r.DisciplineEmployees)
                                .ToListAsync();
 

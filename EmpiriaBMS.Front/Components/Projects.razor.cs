@@ -69,9 +69,8 @@ public partial class Projects: IDisposable
             _paginator.PagesCounter = quotient == 0 ? divide : divide + 1;
 
             // TODO: Get My Project And Down
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex))
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_logedUser.Id, _paginator.PageSize, _paginator.PageIndex))
                                                                        .ToList<ProjectDto>();
-
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
 
