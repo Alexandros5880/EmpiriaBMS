@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 
@@ -17,6 +18,10 @@ public class Draw : Entity
     public double ManHours { get; set; }
 
     public int? CompletionEstimation { get; set; }
+
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime? CompletionDate { get; set; }
 
     public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
 }

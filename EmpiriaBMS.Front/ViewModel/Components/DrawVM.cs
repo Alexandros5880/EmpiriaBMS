@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -44,6 +45,19 @@ public class DrawVM : BaseVM
         }
     }
 
+    private DateTime? _completionDate;
+    public DateTime? CompletionDate
+    {
+        get => _completionDate;
+        set
+        {
+            if (value == _completionDate)
+                return;
+            _completionDate = value;
+            NotifyPropertyChanged(nameof(CompletionDate));
+        }
+    }
+
     private Discipline _discipline;
     public Discipline Discipline
     {
@@ -56,4 +70,7 @@ public class DrawVM : BaseVM
             NotifyPropertyChanged(nameof(Discipline));
         }
     }
+
+    [NotMapped]
+    public string CompletionDateDisplay => $"{CompletionDate.Value.Day}/{CompletionDate.Value.Month}/{CompletionDate.Value.Year}";
 }

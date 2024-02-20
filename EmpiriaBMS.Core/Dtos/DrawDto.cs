@@ -16,6 +16,8 @@ public class DrawDto : EntityDto
 
     public int? CompletionEstimation { get; set; }
 
+    public DateTime? CompletionDate { get; set; }
+
     public int DisciplineId { get; set; }
     public Discipline Discipline { get; set; }
 }

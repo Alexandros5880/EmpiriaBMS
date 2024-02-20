@@ -454,7 +454,8 @@ public class AppDbContext : DbContext
                         LastUpdatedDate = DateTime.Now,
                         Name = $"Draw_{i + j + e}",
                         ManHours = drawManHours,
-                        CompletionEstimation = Convert.ToInt32(drawsCompleted)
+                        CompletionEstimation = Convert.ToInt32(drawsCompleted),
+                        CompletionDate = pjk.DeadLine
                     };
                     builder.Entity<Draw>().HasData(draw);
                     DisciplineDraw dd = new DisciplineDraw()
