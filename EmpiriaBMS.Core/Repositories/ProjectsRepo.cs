@@ -50,7 +50,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .OrderBy(e => e.DeadLine)
                                       .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
     }
 
@@ -66,7 +66,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(r => r.Invoice)
                                          .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
-                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
 
             projects =  await _context.Set<Project>()
@@ -77,7 +77,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .OrderBy(e => e.DeadLine)
                                       .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
     }
 
@@ -97,7 +97,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(r => r.Invoice)
                                          .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
-                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
 
             projects = await _context.Set<Project>()
@@ -109,7 +109,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .OrderBy(e => e.DeadLine)
                                      .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
     }
 
@@ -128,7 +128,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                             .OrderBy(e => e.DeadLine)
                                             .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
     }
 
@@ -151,7 +151,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
 
             projects = await _context.Set<DisciplinePoject>()
@@ -162,7 +162,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .OrderBy(e => e.DeadLine)
                                      .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
     }
 
@@ -189,7 +189,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
 
             projects = await _context.Set<DisciplinePoject>()
@@ -201,7 +201,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .OrderBy(e => e.DeadLine)
                                      .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
     }
 

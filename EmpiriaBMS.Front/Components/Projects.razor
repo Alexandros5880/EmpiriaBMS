@@ -140,16 +140,7 @@
                                                 @(((_selectedDiscipline == null
                                                         || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                             ? "" : "highlight_2"))">
-                                                    <div class="input-group"
-                                                         style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                        <input type="number"
-                                                        class="form-control"
-                                                        value="@discipline.EstimatedMenHours"
-                                                        disabled>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">h</span>
-                                                        </div>
-                                                    </div>
+                                                    <label>@discipline.EstimatedMenHours Hours</label>
                                                 </td>
                                             </tr>
                                         }
@@ -190,13 +181,15 @@
                                                             !_selectedDraw.Id.Equals(draw.Id))
                                                                 ? "" : "highlight_3"))"
                                                     style="min-width: 90px;max-width: 90px;">
-                                                    @CurentDate
+                                                    <div>@CurentDate</div> <label>@draw.ManHours h</label>
                                                     <div class="input-group">
                                                         <input type="number"
                                                                class="form-control"
-                                                                value="@draw.ManHours"
-                                                                disabled="@(!workStarted)"
-                                                                @onchange="(async (e) => await _onDrawHoursChanged(draw, e.Value))">
+                                                               disabled="@(!workStarted)"
+                                                               EnableMinMax="true"
+                                                               Min="0"
+                                                               Max="@hoursPassed"
+                                                               @onchange="(async (e) => await _onDrawHoursChanged(draw, e.Value))">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">h</span>
                                                         </div>
@@ -256,12 +249,14 @@
                                                             !_selectedOther.Id.Equals(doc.Id))
                                                                 ? "" : "highlight_4"))"
                                                     style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                    @CurentDate
+                                                    <div>@CurentDate</div> <label>@doc.ManHours h</label>
                                                     <div class="input-group"
                                                         style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                             <input type="number"
                                                                    class="form-control"
-                                                                   value="@doc.ManHours"
+                                                                   EnableMinMax="true"
+                                                                   Min="0"
+                                                                   Max="@hoursPassed"
                                                                    disabled="@(!workStarted)"
                                                                    @onchange="(async (e) => await _onDocHoursChanged(doc, e.Value))">
                                                         <div class="input-group-append">

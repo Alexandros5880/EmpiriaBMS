@@ -141,7 +141,7 @@ public partial class Projects: IDisposable
     #endregion
 
     #region Properties Changed Evenets
-    private async void ToogleWorkStatus()
+    private void ToogleWorkStatus()
     {
         workStarted = !workStarted;
 
@@ -158,7 +158,11 @@ public partial class Projects: IDisposable
     {
         _draws.Clear();
         _docs.Clear();
+        _disciplines.Clear();
         _selectedProject = project;
+        _selectedDiscipline = null;
+        _selectedDraw = null;
+        _selectedOther = null;
         var disciplines = await DataProvider.Projects.GetDisciplines(project.Id);
 
         _disciplines.Clear();
@@ -214,6 +218,10 @@ public partial class Projects: IDisposable
         hoursUsed += value;
         _selectedDraw = draw;
 
+        foreach (var d in _draws)
+            if (d.Id == _selectedDraw.Id)
+                d.ManHours = _selectedDraw.ManHours;
+
         //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
         //                            Mapper.Map<ProjectDto>(_selectedProject),
         //                            Mapper.Map<DrawDto>(_selectedDraw));
@@ -240,6 +248,9 @@ public partial class Projects: IDisposable
         _logedUser.Hours += value;
         hoursUsed += value;
         _selectedOther = doc;
+        foreach (var d in _docs)
+            if (d.Id == _selectedDraw.Id)
+                d.ManHours = doc.ManHours;
 
         //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
         //                            Mapper.Map<ProjectDto>(_selectedProject),
