@@ -117,11 +117,19 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var projects = await _context.Disciplines
-                                            .Where(d => d.DisciplineEmployees.Select(de => de.EmployeeId).Contains(userId))
-                                            .Select(d => d.Project)
-                                            .OrderBy(e => e.DeadLine)
+            var disciplineIds = await _context.Set<DisciplineEmployee>()
+                                            .Where(de => de.EmployeeId == userId)
+                                            .Select(de => de.DisciplineId)
                                             .ToListAsync();
+
+            var disciplines = await _context.Set<Discipline>()
+                                            .Where(d => d.EngineerId == userId || disciplineIds.Contains(d.Id))
+                                            .Include(d => d.Project)
+                                            .ToListAsync();
+
+            var projects = disciplines.Select(d => d.Project)
+                                      .OrderBy(e => e?.DeadLine)
+                                      .ToList();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
         }
@@ -132,23 +140,30 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var disciplineIds = await _context.Set<DisciplineEmployee>()
+                                              .Where(de => de.EmployeeId == userId)
+                                              .Select(de => de.DisciplineId)
+                                              .ToListAsync();
+
+            var disciplines = await _context.Set<Discipline>()
+                                            .Where(d => d.EngineerId == userId || disciplineIds.Contains(d.Id))
+                                            .Include(d => d.Project)
+                                            .ToListAsync();
+
             if (pageSize == 0 || pageIndex == 0)
             {
-                projects = await _context.Disciplines
-                                            .Where(d => d.DisciplineEmployees.Select(de => de.EmployeeId).Contains(userId))
-                                            .Select(d => d.Project)
-                                            .OrderBy(e => e.DeadLine)
-                                            .ToListAsync();
+                projects = disciplines.Select(d => d.Project)
+                                      .OrderBy(e => e?.DeadLine)
+                                      .ToList();
+
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
             }
 
-            projects = await _context.Disciplines
-                                            .Where(d => d.DisciplineEmployees.Select(de => de.EmployeeId).Contains(userId))
-                                            .Skip((pageIndex - 1) * pageSize)
-                                            .Take(pageSize)
-                                            .Select(d => d.Project)
-                                            .OrderBy(e => e.DeadLine)
-                                            .ToListAsync();
+            projects = disciplines.Select(d => d.Project)
+                                  .Skip((pageIndex - 1) * pageSize)
+                                  .Take(pageSize)
+                                  .OrderBy(e => e?.DeadLine)
+                                  .ToList();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
         }
@@ -163,31 +178,40 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var disciplineIds = await _context.Set<DisciplineEmployee>()
+                                            .Where(de => de.EmployeeId == userId)
+                                            .Select(de => de.DisciplineId)
+                                            .ToListAsync();
+
+            var disciplines = await _context.Set<Discipline>()
+                                            .Where(d => d.EngineerId == userId || disciplineIds.Contains(d.Id))
+                                            .Include(d => d.Project)
+                                            .ToListAsync();
+
             if (pageSize == 0 || pageIndex == 0)
             {
-                projects = await _context.Disciplines
-                                            .Where(d => d.DisciplineEmployees.Select(de => de.EmployeeId).Contains(userId))
-                                            .Select(d => d.Project)
-                                            .Where(expresion)
-                                            .OrderBy(e => e.DeadLine)
-                                            .ToListAsync();
+                projects = disciplines.Select(d => d.Project)
+                                      .AsQueryable()
+                                      .Where(expresion)
+                                      .OrderBy(e => e.DeadLine)
+                                      .ToList();
+
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
             }
 
-            projects = await _context.Disciplines
-                                            .Where(d => d.DisciplineEmployees.Select(de => de.EmployeeId).Contains(userId))
-                                            .Skip((pageIndex - 1) * pageSize)
-                                            .Take(pageSize)
-                                            .Select(d => d.Project)
-                                            .Where(expresion)
-                                            .OrderBy(e => e.DeadLine)
-                                            .ToListAsync();
+            projects = disciplines.Select(d => d.Project)
+                                  .AsQueryable()
+                                  .Where(expresion)
+                                  .Skip((pageIndex - 1) * pageSize)
+                                  .Take(pageSize)
+                                  .OrderBy(e => e.DeadLine)
+                                  .ToList();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects);
         }
     }
 
-    public new async Task<ICollection<DisciplineDto>> GetDisciplines(int id)
+    public async Task<ICollection<DisciplineDto>> GetDisciplines(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));

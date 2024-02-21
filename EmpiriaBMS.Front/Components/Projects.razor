@@ -195,6 +195,7 @@
                                                         <input type="number"
                                                                 class="form-control"
                                                                 value="@draw.ManHours"
+                                                                disabled="@(!workStarted)"
                                                                 @onchange="(async (e) => await _onDrawHoursChanged(draw, e.Value))">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">h</span>
@@ -259,9 +260,10 @@
                                                     <div class="input-group"
                                                         style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                             <input type="number"
-                                                            class="form-control"
-                                                            value="@doc.ManHours"
-                                                            @onchange="(async (e) => await _onDocHoursChanged(doc, e.Value))">
+                                                                   class="form-control"
+                                                                   value="@doc.ManHours"
+                                                                   disabled="@(!workStarted)"
+                                                                   @onchange="(async (e) => await _onDocHoursChanged(doc, e.Value))">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">h</span>
                                                         </div>

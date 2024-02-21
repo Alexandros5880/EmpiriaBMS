@@ -79,7 +79,7 @@ public partial class Projects: IDisposable
             // TODO: Get My Project And Down
             //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_logedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll()).ToList<ProjectDto>();
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_logedUser.Id)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);

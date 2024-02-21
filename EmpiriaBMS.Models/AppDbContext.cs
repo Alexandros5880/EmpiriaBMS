@@ -34,6 +34,7 @@ public class AppDbContext : DbContext
         base.OnModelCreating(builder);
 
         Random random = new Random();
+        var createdDate = DateTime.Now;
 
         // Relations
         ModelRelations.CreateRelations(builder);
@@ -131,16 +132,36 @@ public class AppDbContext : DbContext
         builder.Entity<Role>().HasData(role_7);
         builder.Entity<Role>().HasData(role_8);
 
-        for (var i = 1; i < 10; i++)
-        {
-            double drawManHours = 10 * i + 1;
-            double OtherManHours = 10 * i + 2;
-            long estimatedHours = Convert.ToInt64(10 * Math.Pow(i, 10));
-            double dicliplineHours = (drawManHours * 10) + (OtherManHours * 10);
-            long projectHours = Convert.ToInt64(dicliplineHours * 10);
-            var projectCompleted = (Convert.ToDouble(projectHours) / Convert.ToDouble(estimatedHours)) * 100; // 50%
-            double disciplineCompleted = projectCompleted / 10;
 
+        // Other Comm
+        var otherCommId = random.Next(123456789, 999999999) * 33;
+        Other otherComm = new Other()
+        {
+            Id = otherCommId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"Comm",
+            ManHours = 0
+        };
+        builder.Entity<Other>().HasData(otherComm);
+
+        // Other Printing
+        var otherPrintingId = random.Next(123456789, 999999999) * 33;
+        Other otherPrinting = new Other()
+        {
+            Id = otherPrintingId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"Printing",
+            ManHours = 0
+        };
+        builder.Entity<Other>().HasData(otherPrinting);
+
+
+        // Create 10 Projects
+        List<Project> projects = new List<Project>();
+        for (var i = 1; i < 11; i++)
+        {
             // Project Manager
             var pmId = random.Next(123456789, 999999999) + i * 4;
             User pm = new User()
@@ -167,14 +188,9 @@ public class AppDbContext : DbContext
             };
             builder.Entity<UserRole>().HasData(pmRole_em);
 
-            // Projects
+            // Projects 
             var projectId = random.Next(123456789, 999999999) + i * 2;
-            var f1 = i + 50 - (i * 3) + (i * 5);
-            var f2 = i + 50 - (i * 3) + (i * 4);
-            var f3 = i + 50 - (i * 3) + (i * 5) + 1;
-            var f4 = i + 3 - (i * 3) + (i * 5) + (i * 2);
-            var createdDate = DateTime.Now;
-            Project pjk = new Project()
+            Project project = new Project()
             {
                 Id = projectId,
                 CreatedDate = createdDate,
@@ -183,27 +199,28 @@ public class AppDbContext : DbContext
                 Name = "Project_" + Convert.ToString(i),
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 Drawing = "KL-" + Convert.ToString(i),
-                EstimatedMandays = Convert.ToInt64(estimatedHours / 8),
-                EstimatedHours = estimatedHours,
-                DurationDate = createdDate.AddDays(f1),
-                EstPaymentDate = createdDate.AddDays(f2),
-                PaymentDate = createdDate.AddDays(f3),
-                DeadLine = createdDate.AddDays(f3),
-                WorkPackege = createdDate.AddDays(f4),
-                DelayInPayment = f4,
+                EstimatedMandays = Convert.ToInt64(Math.Pow(i, 3)),
+                EstimatedHours = Convert.ToInt64(Math.Pow(i, 3) / 8),
+                DurationDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                EstPaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                PaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                WorkPackege = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                DelayInPayment = Convert.ToInt32(Math.Pow(i, 2)),
                 PaymentDetailes = "Payment Detailes For Project_" + Convert.ToString(i * random.Next(1, 7)),
                 DayCost = 7 + i - (1 * 2),
                 Bank = i % 2 == 0 ? "ALPHA" : "NBG_IBANK",
                 PaidFee = 7 - (1 * 2),
-                DaysUntilPayment = (createdDate - createdDate.AddDays(f3)).Days,
+                DaysUntilPayment = (createdDate.AddDays(Convert.ToInt32(Math.Pow(i, 2))) - createdDate).Days,
                 PendingPayments = i,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
-                Completed = Convert.ToInt32(projectCompleted),
-                WorkPackegedCompleted = Convert.ToInt32(projectCompleted),
-                ManHours = projectHours,
+                Completed = 0,
+                WorkPackegedCompleted = 0,
+                ManHours = 0,
                 ProjectManagerId = pm.Id
             };
-            builder.Entity<Project>().HasData(pjk);
+            builder.Entity<Project>().HasData(project);
+            projects.Add(project);
 
             // Customers
             var customerId = random.Next(123456789, 999999999) + i * 10;
@@ -246,36 +263,94 @@ public class AppDbContext : DbContext
                 ProjectId = projectId,
             };
             builder.Entity<Invoice>().HasData(invoice);
+        }
 
-            for (var j = 1; j <= 10; j++)
+        // Other Outside
+        var otherOutsideId = random.Next(123456789, 999999999) * 33;
+        Other otherOutside = new Other()
+        {
+            Id = otherOutsideId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"Outside",
+            ManHours = 0
+        };
+        builder.Entity<Other>().HasData(otherOutside);
+
+        // OtherMeeting
+        var otherMeetingId = random.Next(123456789, 999999999) * 33;
+        Other otherMeeting = new Other()
+        {
+            Id = otherMeetingId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"Meeting",
+            ManHours = 0
+        };
+        builder.Entity<Other>().HasData(otherMeeting);
+
+        // OtherAdministration
+        var otherAdministrationId = random.Next(123456789, 999999999) * 33;
+        Other otherAdministration = new Other()
+        {
+            Id = otherAdministrationId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"Administration",
+            ManHours = 0
+        };
+        builder.Entity<Other>().HasData(otherAdministration);
+
+        // Create 2 Disciplines For Everu Project
+        List<Discipline> disciplines = new List<Discipline>();
+        for (var i = 1; i <= projects.Count; i++)
+        {
+            for (var j = 1; j < 3; j++)
             {
+                // Discipline Engineer
+                var engineerId = random.Next(123456789, 999999999) + i * 6 + j;
+                User engineer = new User()
+                {
+                    Id = engineerId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Email = $"alexpl_{i + j + 2}@gmail.com",
+                    LastName = "Alexandros_" + Convert.ToString(i + j + 2),
+                    FirstName = "Platanios_Engineer_" + Convert.ToString(i + j + 2),
+                    Phone1 = "694927778" + Convert.ToString(i + j + 2),
+                    Description = "Test Description Engineer " + Convert.ToString(i + j + 2),
+                    Hours = i * 8,
+                    DailyHours = 8
+                };
+                builder.Entity<User>().HasData(engineer);
+                UserRole engineerRole_em = new UserRole()
+                {
+                    Id = random.Next(123456789, 999999999) + i * 7 + j,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    UserId = engineerId,
+                    RoleId = role_2_id
+                };
+                builder.Entity<UserRole>().HasData(engineerRole_em);
+
                 // Discipline
-                var disciplineId = random.Next(123456789, 999999999) + i * 8 + j;
+                var disciplineId = random.Next(123456789, 999999999) + i * 8;
                 Discipline discipline = new Discipline()
                 {
                     Id = disciplineId,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    Name = (i) % 2 == 0 ? "HVAC" : "ELEC",
-                    ProjectId = projectId,
-                    EngineerId = pmId,
+                    Name = j % 2 == 0 ? "HVAC" : "ELEC",
+                    ProjectId = projects[i - 1].Id,
+                    EngineerId = engineerId,
                     EstimatedHours = 2345,
                     EstimatedMenHours = 3425,
-                    Completed = Convert.ToInt32(disciplineCompleted)
+                    Completed = 0
                 };
                 builder.Entity<Discipline>().HasData(discipline);
+                disciplines.Add(discipline);
 
-                // Other Comm
-                var otherCommId = random.Next(123456789, 999999999) + i * 12 + i + j;
-                Other otherComm = new Other()
-                {
-                    Id = otherCommId,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = $"Comm",
-                    ManHours = OtherManHours
-                };
-                builder.Entity<Other>().HasData(otherComm);
+                // Connect All Others With Every Disclipline
                 DisciplineOther dq_comm = new DisciplineOther()
                 {
                     Id = random.Next(123456789, 999999999) + i * 2 + 1 + j,
@@ -285,18 +360,7 @@ public class AppDbContext : DbContext
                     OtherId = otherCommId
                 };
                 builder.Entity<DisciplineOther>().HasData(dq_comm);
-
-                // Other Printing
-                var otherPrintingId = random.Next(123456789, 999999999) + i * 12 + i + j;
-                Other otherPrinting = new Other()
-                {
-                    Id = otherPrintingId,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = $"Printing",
-                    ManHours = OtherManHours
-                };
-                builder.Entity<Other>().HasData(otherPrinting);
+                
                 DisciplineOther dq_priting = new DisciplineOther()
                 {
                     Id = random.Next(123456789, 999999999) + i * 2 + 1 + j,
@@ -306,18 +370,7 @@ public class AppDbContext : DbContext
                     OtherId = otherPrintingId
                 };
                 builder.Entity<DisciplineOther>().HasData(dq_priting);
-
-                // Other Outside
-                var otherOutsideId = random.Next(123456789, 999999999) + i * 12 + i + j;
-                Other otherOutside = new Other()
-                {
-                    Id = otherOutsideId,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = $"Outside",
-                    ManHours = OtherManHours
-                };
-                builder.Entity<Other>().HasData(otherOutside);
+                
                 DisciplineOther dq_outside = new DisciplineOther()
                 {
                     Id = random.Next(123456789, 999999999) + i * 2 + 1 + j,
@@ -327,18 +380,7 @@ public class AppDbContext : DbContext
                     OtherId = otherOutsideId
                 };
                 builder.Entity<DisciplineOther>().HasData(dq_outside);
-
-                // OtherMeeting
-                var otherMeetingId = random.Next(123456789, 999999999) + i * 12 + i + j;
-                Other otherMeeting = new Other()
-                {
-                    Id = otherMeetingId,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = $"Meeting",
-                    ManHours = OtherManHours
-                };
-                builder.Entity<Other>().HasData(otherMeeting);
+                
                 DisciplineOther dq_meeting = new DisciplineOther()
                 {
                     Id = random.Next(123456789, 999999999) + i * 2 + 1 + j,
@@ -348,18 +390,7 @@ public class AppDbContext : DbContext
                     OtherId = otherMeetingId
                 };
                 builder.Entity<DisciplineOther>().HasData(dq_meeting);
-
-                // OtherAdministration
-                var otherAdministrationId = random.Next(123456789, 999999999) + i * 12 + i + j;
-                Other otherAdministration = new Other()
-                {
-                    Id = otherAdministrationId,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = $"Administration",
-                    ManHours = OtherManHours
-                };
-                builder.Entity<Other>().HasData(otherAdministration);
+                
                 DisciplineOther dq_admin = new DisciplineOther()
                 {
                     Id = random.Next(123456789, 999999999) + i * 2 + 1 + j,
@@ -370,95 +401,20 @@ public class AppDbContext : DbContext
                 };
                 builder.Entity<DisciplineOther>().HasData(dq_admin);
 
-                double drawsCompleted = projectCompleted / 10;
-
-                for (var e = 1; e <= 10; e++)
+                // Create 10 Draws For Every Discipline
+                for (var e = 1; e < 11; e++)
                 {
-                    // Engineers
-                    var engineerId = random.Next(123456789, 999999999) + i * 6 + j + e;
-                    User engineer = new User()
-                    {
-                        Id = engineerId,
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now,
-                        Email = $"alexpl_{i + j + 2}@gmail.com",
-                        LastName = "Alexandros_" + Convert.ToString(i + j + 2),
-                        FirstName = "Platanios_Engineer_" + Convert.ToString(i + j + 2),
-                        Phone1 = "694927778" + Convert.ToString(i + j + 2),
-                        Description = "Test Description Engineer " + Convert.ToString(i + j + 2),
-                        Hours = i * 8,
-                        DailyHours = 8
-                    };
-                    builder.Entity<User>().HasData(engineer);
-                    UserRole engineerRole_em = new UserRole()
-                    {
-                        Id = random.Next(123456789, 999999999) + i * 7 + j + e,
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now,
-                        UserId = engineerId,
-                        RoleId = role_2_id
-                    };
-                    builder.Entity<UserRole>().HasData(engineerRole_em);
-
-                    // Draftsmen
-                    var draftsmenId = random.Next(123456789, 999999999) + i * 13 + j + e;
-                    User draftsmen = new User()
-                    {
-                        Id = draftsmenId,
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now,
-                        Email = $"alexpl_{i + j + 3}@gmail.com",
-                        LastName = "Alexandros_" + Convert.ToString(i + j + 3),
-                        FirstName = "Platanios_Draftsman_" + Convert.ToString(i + j + 3),
-                        Phone1 = "694927778" + Convert.ToString(i + j + 3),
-                        Description = "Test Description Draftsman " + Convert.ToString(i + j + 3),
-                        Hours = i * 8,
-                        DailyHours = 8
-                    };
-                    builder.Entity<User>().HasData(draftsmen);
-                    UserRole DraftsmanRole_em = new UserRole()
-                    {
-                        Id = random.Next(123456789, 999999999) + i * 7 + j + e,
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now,
-                        UserId = draftsmenId,
-                        RoleId = role_1_id
-                    };
-                    builder.Entity<UserRole>().HasData(DraftsmanRole_em);
-
-                    // Discipline Engineer
-                    DisciplineEmployee disciplineEngineer_em = new DisciplineEmployee()
-                    {
-                        Id = random.Next(123456789, 999999999) + i * 9 + e,
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now,
-                        DisciplineId = disciplineId,
-                        EmployeeId = engineerId
-                    };
-                    builder.Entity<DisciplineEmployee>().HasData(disciplineEngineer_em);
-
-                    // Discipline Draftsmen
-                    DisciplineEmployee disciplineDraftsmen_em = new DisciplineEmployee()
-                    {
-                        Id = random.Next(123456789, 999999999) + i * 9 + e,
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now,
-                        DisciplineId = disciplineId,
-                        EmployeeId = draftsmenId
-                    };
-                    builder.Entity<DisciplineEmployee>().HasData(disciplineDraftsmen_em);
-
                     // Draw
-                    var dawId = random.Next(123456789, 999999999) + i * 11 + i + j + e;
+                    var dawId = random.Next(123456789, 999999999) + i * 11 + i + j + j;
                     Draw draw = new Draw()
                     {
                         Id = dawId,
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Name = $"Draw_{i + j + e}",
-                        ManHours = drawManHours,
-                        CompletionEstimation = Convert.ToInt32(drawsCompleted),
-                        CompletionDate = pjk.DeadLine
+                        Name = $"Draw_{i + j}",
+                        ManHours = 0,
+                        CompletionEstimation = 0,
+                        CompletionDate = projects[i - 1].DeadLine
                     };
                     builder.Entity<Draw>().HasData(draw);
                     DisciplineDraw dd = new DisciplineDraw()
@@ -472,7 +428,49 @@ public class AppDbContext : DbContext
                     builder.Entity<DisciplineDraw>().HasData(dd);
                 }
             }
+        }
 
+        // Create 10 Draftsmen And Draw For Every Discipline
+        for (var i = 1; i <= disciplines.Count; i++)
+        {
+            for (var j = 1; j < 11; j++)
+            {
+                // Draftsmen
+                var draftsmenId = random.Next(123456789, 999999999) + i * 13 + j + i*1;
+                User draftsmen = new User()
+                {
+                    Id = draftsmenId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Email = $"alexpl_{i + j + 3}@gmail.com",
+                    LastName = "Alexandros_" + Convert.ToString(i + j + 3),
+                    FirstName = "Platanios_Draftsman_" + Convert.ToString(i + j + 3),
+                    Phone1 = "694927778" + Convert.ToString(i + j + 3),
+                    Description = "Test Description Draftsman " + Convert.ToString(i + j + 3),
+                    Hours = i * 8,
+                    DailyHours = 8
+                };
+                builder.Entity<User>().HasData(draftsmen);
+                UserRole DraftsmanRole_em = new UserRole()
+                {
+                    Id = random.Next(123456789, 999999999) + i * 7 + j,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    UserId = draftsmenId,
+                    RoleId = role_1_id
+                };
+                builder.Entity<UserRole>().HasData(DraftsmanRole_em);
+
+                DisciplineEmployee de = new DisciplineEmployee()
+                {
+                    Id = random.Next(123456789, 999999999) + i * 2 + 1 + j,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    EmployeeId = draftsmenId,
+                    DisciplineId = disciplines[i-1].Id
+                };
+                builder.Entity<DisciplineEmployee>().HasData(de);
+            }
         }
 
     }
