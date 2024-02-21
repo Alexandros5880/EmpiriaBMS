@@ -58,19 +58,6 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private Project _project;
-    public Project Project
-    {
-        get => _project;
-        set
-        {
-            if (value == _project)
-                return;
-            _project = value;
-            NotifyPropertyChanged(nameof(Project));
-        }
-    }
-
     private User? _engineer;
     public User? Engineer
     {

@@ -73,5 +73,5 @@ public class Project : Entity
 
     public Invoice? Invoice { get; set; }
 
-    public ICollection<Discipline> Disciplines { get; set; }
+    public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
 }

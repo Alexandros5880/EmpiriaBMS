@@ -27,7 +27,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         {
             var disclipline = await _context
                              .Set<Discipline>()
-                             .Include(r => r.Project)
                              .Include(r => r.Engineer)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
@@ -43,7 +42,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 ds = await _context.Set<Discipline>()
-                                     .Include(r => r.Project)
                                      .Include(r => r.Engineer)
                                      .ToListAsync();
 
@@ -53,7 +51,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             ds = await _context.Set<Discipline>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
-                                 .Include(r => r.Project)
                                  .Include(r => r.Engineer)
                                  .ToListAsync();
 
@@ -73,7 +70,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             {
                 ds = await _context.Set<Discipline>()
                                      .Where(expresion)
-                                     .Include(r => r.Project)
                                      .Include(r => r.Engineer)
                                      .Include(r => r.DisciplineEmployees)
                                      .ToListAsync();
@@ -85,7 +81,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                .Where(expresion)
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)
-                               .Include(r => r.Project)
                                .Include(r => r.Engineer)
                                .Include(r => r.DisciplineEmployees)
                                .ToListAsync();

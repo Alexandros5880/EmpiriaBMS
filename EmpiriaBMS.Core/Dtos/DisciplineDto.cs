@@ -19,9 +19,6 @@ public class DisciplineDto : EntityDto
 
     public int? Completed { get; set; }
 
-    public int ProjectId { get; set; }
-    public ProjectDto Project { get; set; }
-
     public int? EngineerId { get; set; }
     public User? Engineer { get; set; }
 }

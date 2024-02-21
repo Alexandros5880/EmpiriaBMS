@@ -24,31 +24,19 @@ public static class ModelRelations
         builder.Entity<UserRole>()
                .HasOne(sc => sc.Role)
                .WithMany(c => c.UserRoles)
-               .HasForeignKey(sc => sc.RoleId);
+               .HasForeignKey(sc => sc.RoleId);        
 
-        // Project Disciplines
-        builder.Entity<Project>()
-                    .HasMany(p => p.Disciplines)
-                    .WithOne(c => c.Project)
-                    .HasForeignKey(c => c.ProjectId);
-
-        // Discipline Draw
-        builder.Entity<Project>()
-                    .HasMany(p => p.Disciplines)
-                    .WithOne(c => c.Project)
-                    .HasForeignKey(c => c.ProjectId);
-
-        // Projects Employees
-        builder.Entity<DisciplineEmployee>()
-               .HasKey(de => new { de.DisciplineId, de.EmployeeId });
-        builder.Entity<DisciplineEmployee>()
+        // Project Desciplines
+        builder.Entity<DisciplinePoject>()
+               .HasKey(de => new { de.DisciplineId, de.ProjectId });
+        builder.Entity<DisciplinePoject>()
                .HasOne(de => de.Discipline)
-               .WithMany(de => de.DisciplineEmployees)
+               .WithMany(de => de.DisciplinesProjects)
                .HasForeignKey(de => de.DisciplineId);
-        builder.Entity<DisciplineEmployee>()
-               .HasOne(de => de.Employee)
-               .WithMany(de => de.DisciplineEmployees)
-               .HasForeignKey(de => de.EmployeeId);
+        builder.Entity<DisciplinePoject>()
+               .HasOne(de => de.Project)
+               .WithMany(de => de.DisciplinesProjects)
+               .HasForeignKey(de => de.ProjectId);
 
         // Disciplines Draws
         builder.Entity<DisciplineDraw>()
@@ -73,6 +61,18 @@ public static class ModelRelations
                .HasOne(de => de.Other)
                .WithMany(de => de.DisciplinesOthers)
                .HasForeignKey(de => de.OtherId);
+
+        // Disciplines Employees
+        builder.Entity<DisciplineEmployee>()
+               .HasKey(de => new { de.DisciplineId, de.EmployeeId });
+        builder.Entity<DisciplineEmployee>()
+               .HasOne(de => de.Discipline)
+               .WithMany(de => de.DisciplineEmployees)
+               .HasForeignKey(de => de.DisciplineId);
+        builder.Entity<DisciplineEmployee>()
+               .HasOne(de => de.Employee)
+               .WithMany(de => de.DisciplineEmployees)
+               .HasForeignKey(de => de.EmployeeId);
 
         // Engineer Project
         builder.Entity<User>()

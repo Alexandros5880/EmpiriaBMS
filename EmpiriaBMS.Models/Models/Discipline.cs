@@ -14,9 +14,6 @@ public class Discipline : Entity
     [Required]
     public string Name { get; set; }
 
-    public int ProjectId { get; set; }
-    public Project Project { get; set; }
-
     public long? EstimatedHours { get; set; }
 
     public long? EstimatedMenHours { get; set; }
@@ -31,4 +28,6 @@ public class Discipline : Entity
     public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
 
     public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
+
+    public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
 }
