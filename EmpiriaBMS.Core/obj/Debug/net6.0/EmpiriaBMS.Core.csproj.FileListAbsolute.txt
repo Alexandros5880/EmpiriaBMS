@@ -9,7 +9,7 @@ C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\De
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.AssemblyInfo.cs
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.csproj.CoreCompileInputs.cache
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.sourcelink.json
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.csproj.CopyComplete
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaB.8F71F31B.Up2Date
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\refint\EmpiriaBMS.Core.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Core\obj\Debug\net6.0\EmpiriaBMS.Core.pdb

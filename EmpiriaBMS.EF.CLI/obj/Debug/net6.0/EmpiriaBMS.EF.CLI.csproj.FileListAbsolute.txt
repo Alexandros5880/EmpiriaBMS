@@ -60,7 +60,7 @@ C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\obj\
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.AssemblyInfo.cs
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.csproj.CoreCompileInputs.cache
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.sourcelink.json
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.csproj.CopyComplete
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\obj\Debug\net6.0\EmpiriaB.85EE0C2F.Up2Date
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\obj\Debug\net6.0\refint\EmpiriaBMS.EF.CLI.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\obj\Debug\net6.0\EmpiriaBMS.EF.CLI.pdb
