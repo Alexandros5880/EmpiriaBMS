@@ -194,17 +194,17 @@ public class AppDbContext : DbContext
         };
         builder.Entity<Other>().HasData(otherPrinting);
 
-        // Other Outside
-        var otherOutsideId = random.Next(123456789, 999999999) * 33;
-        Other otherOutside = new Other()
+        // Other Inside
+        var otherInsideId = random.Next(123456789, 999999999) * 33;
+        Other otherInside = new Other()
         {
-            Id = otherOutsideId,
+            Id = otherInsideId,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = $"Outside",
+            Name = $"Inside",
             MenHours = 0
         };
-        builder.Entity<Other>().HasData(otherOutside);
+        builder.Entity<Other>().HasData(otherInside);
 
         // OtherMeeting
         var otherMeetingId = random.Next(123456789, 999999999) * 33;
@@ -430,7 +430,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 DisciplineId = disciplineId,
-                OtherId = otherOutsideId
+                OtherId = otherInsideId
             };
             builder.Entity<DisciplineOther>().HasData(dq_outside);
 
