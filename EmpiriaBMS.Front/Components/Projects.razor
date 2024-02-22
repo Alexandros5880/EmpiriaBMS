@@ -224,18 +224,6 @@
                                                                     ? "" : "highlight_3"))"
                                                         style="min-width: 90px;max-width: 90px;">
                                                         <label>@draw.MenHours h</label>
-                                                        <div class="input-group">
-                                                            <input type="number"
-                                                                   class="form-control"
-                                                                   disabled="@(!workStarted)"
-                                                                   EnableMinMax="true"
-                                                                   Min="0"
-                                                                   Max="@hoursPassed"
-                                                                   @onchange="(async (e) => await _onDrawHoursChanged(draw, e.Value))">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">h</span>
-                                                            </div>
-                                                        </div>
                                                     </td>
 
                                                     <td class="align-middle
@@ -296,19 +284,6 @@
                                                                     ? "" : "highlight_4"))"
                                                         style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                         <label>@_other.MenHours h</label>
-                                                        <div class="input-group"
-                                                            style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                                <input type="number"
-                                                                       class="form-control"
-                                                                       EnableMinMax="true"
-                                                                       Min="0"
-                                                                       Max="@hoursPassed"
-                                                                       disabled="@(!workStarted)"
-                                                                   @onchange="(async (e) => await _onOtherHoursChanged(_other, e.Value))">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">h</span>
-                                                            </div>
-                                                        </div>
                                                     </td>
 
                                                 </tr>

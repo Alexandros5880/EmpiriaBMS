@@ -153,6 +153,9 @@ public partial class Projects: IDisposable
         } else
         {
             StopTimer();
+
+            // TODO: Display Dialog With the hours of the day on top and under display 2
+            // editable list with drawings on left and other on right with editable hous and completed
         }
     }
 
@@ -205,33 +208,33 @@ public partial class Projects: IDisposable
         StateHasChanged();
     }
     
-    private async Task _onDrawHoursChanged(DrawVM draw, object val)
-    {
-        var previusValue = draw.MenHours;
-        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        if ((hoursPassed - hoursUsed) < value)
-        {
-            // TODO: Display a Msg
-            return;
-        }
+    //private async Task _onDrawHoursChanged(DrawVM draw, object val)
+    //{
+    //    var previusValue = draw.MenHours;
+    //    var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+    //    if ((hoursPassed - hoursUsed) < value)
+    //    {
+    //        // TODO: Display a Msg
+    //        return;
+    //    }
 
-        _logedUser.Hours += value;
-        //await DataProvider.Draws.UpdateHours(_selectedProject.Id, draw.Id, value);
-    }
+    //    _logedUser.Hours += value;
+    //    //await DataProvider.Draws.UpdateHours(_selectedProject.Id, draw.Id, value);
+    //}
 
-    private async Task _onOtherHoursChanged(OtherVM other, object val)
-    {
-        var previusValue = other.MenHours;
-        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        if ((hoursPassed - hoursUsed) < value)
-        {
-            // TODO: Display a Msg
-            return;
-        }
+    //private async Task _onOtherHoursChanged(OtherVM other, object val)
+    //{
+    //    var previusValue = other.MenHours;
+    //    var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+    //    if ((hoursPassed - hoursUsed) < value)
+    //    {
+    //        // TODO: Display a Msg
+    //        return;
+    //    }
 
-        _logedUser.Hours += value;
-        //await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, value);
-    }
+    //    _logedUser.Hours += value;
+    //    //await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, value);
+    //}
     #endregion
 
     #region Async Jobs
