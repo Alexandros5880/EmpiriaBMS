@@ -310,4 +310,11 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
+    // TODO: Get Users Today DailyHours
+
+    // TODO: Get Users Sum Of All Days Hours
+
+    // TODO: Get Users Last Week Sum Of Hours
+
+    // TODO: Add To User DailyHours (Date, Hours)
 }

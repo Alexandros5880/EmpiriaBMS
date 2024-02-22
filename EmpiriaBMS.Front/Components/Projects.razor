@@ -87,7 +87,8 @@
                                             {
                                                 <span>MyHours This Week: </span>
 
-                                                <b>@_logedUser.Hours</b>
+                                                <p class="text-warning">Display Last Week User Hours</p>
+                                                // <b>@_logedUser.Hours</b>
                                             }
                                         }
                                     </span>
@@ -476,7 +477,9 @@
         </div>
 
         <div class="row">
-            <FluentButton Disabled="@(hoursPassed > 0)" class="col-6" OnClick="@(async () => await _endWorkDialogAccept())">
+            <FluentButton Disabled="@(hoursPassed != 0)"
+                          class="col-6"
+                          OnClick="@(async () => await _endWorkDialogAccept())">
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => _endWorkDialogCansel())">

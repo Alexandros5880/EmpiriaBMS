@@ -111,32 +111,6 @@ public class UserVM : BaseVM
         }
     }
 
-    private double? _hours;
-    public double? Hours
-    {
-        get => _hours;
-        set
-        {
-            if (value == _hours)
-                return;
-            _hours = value;
-            NotifyPropertyChanged(nameof(Hours));
-        }
-    }
-
-    private double? _dailyHours;
-    public double? DailyHours
-    {
-        get => _dailyHours;
-        set
-        {
-            if (value == _dailyHours)
-                return;
-            _dailyHours = value;
-            NotifyPropertyChanged(nameof(DailyHours));
-        }
-    }
-
     private Project? _project;
     public Project? Project
     {
@@ -152,9 +126,4 @@ public class UserVM : BaseVM
 
     [NotMapped]
     public string FullName => LastName + FullName;
-
-    public UserVM()
-    {
-        Hours = 0;
-    }
 }

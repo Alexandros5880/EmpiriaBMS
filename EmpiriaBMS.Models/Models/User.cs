@@ -33,10 +33,6 @@ public class User : Entity
 
     public string? Description { get; set; }
 
-    public double? Hours { get; set; }
-
-    public double? DailyHours { get; set; }
-
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
 
@@ -47,4 +43,6 @@ public class User : Entity
     public ICollection<UserRole> UserRoles { get; set; }
     
     public ICollection<DisciplineEmployee> DisciplineEmployees { get; set; }
+
+    public ICollection<DailyHour> DailyHours { get; set; }
 }

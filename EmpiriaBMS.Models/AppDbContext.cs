@@ -151,9 +151,7 @@ public class AppDbContext : DbContext
                 LastName = "Alexandros" + Convert.ToString(i),
                 FirstName = "Platanios" + Convert.ToString(i),
                 Phone1 = "694927778" + Convert.ToString(i),
-                Description = "Draftsman " + Convert.ToString(i),
-                Hours = i * 8,
-                DailyHours = 8
+                Description = "Draftsman " + Convert.ToString(i)
             };
             builder.Entity<User>().HasData(draftman);
             draftsmen.Add(draftman);
@@ -251,9 +249,7 @@ public class AppDbContext : DbContext
                 LastName = "Alexandros_" + Convert.ToString(i + 2),
                 FirstName = "Platanios_PM_" + Convert.ToString(i + 2),
                 Phone1 = "694927778" + Convert.ToString(i + 2),
-                Description = "Test Description PM " + Convert.ToString(i + 2),
-                Hours = i * 8,
-                DailyHours = 8
+                Description = "Test Description PM " + Convert.ToString(i + 2)
             };
             builder.Entity<User>().HasData(pm);
             UserRole pmRole_em = new UserRole()
@@ -377,9 +373,7 @@ public class AppDbContext : DbContext
                 LastName = "Alexandros_" + Convert.ToString(i + 2),
                 FirstName = "Platanios_Engineer_" + Convert.ToString(i + 2),
                 Phone1 = "694927778" + Convert.ToString(i + 2),
-                Description = "Test Description Engineer " + Convert.ToString(i + 2),
-                Hours = i * 8,
-                DailyHours = 8
+                Description = "Test Description Engineer " + Convert.ToString(i + 2)
             };
             builder.Entity<User>().HasData(engineer);
             UserRole engineerRole_em = new UserRole()

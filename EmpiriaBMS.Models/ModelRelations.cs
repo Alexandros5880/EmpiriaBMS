@@ -91,5 +91,11 @@ public static class ModelRelations
                .HasOne(p => p.Invoice)
                .WithOne(c => c.Project)
                .HasForeignKey<Invoice>(c => c.ProjectId);
+
+        // User DailyHours
+        builder.Entity<User>()
+                    .HasMany(u => u.DailyHours)
+                    .WithOne(d => d.User)
+                    .HasForeignKey(d => d.UserId);
     }
 }
