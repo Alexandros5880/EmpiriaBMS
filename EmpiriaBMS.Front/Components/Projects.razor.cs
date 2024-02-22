@@ -23,8 +23,10 @@ public partial class Projects: IDisposable
     Timer timer;
     DateTime StartWorkTime = DateTime.Now;
     bool workStarted = false;
-    double hoursBaused = 0;
+    double hoursPaused = 0;
     double? hoursPassed = null;
+    double? minutsPassed = 0;
+    double? minutsPaused = 0;
     double hoursUsed = 0;
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
@@ -33,7 +35,7 @@ public partial class Projects: IDisposable
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DrawVM> _draws = new ObservableCollection<DrawVM>();
-    private ObservableCollection<OtherVM> _docs = new ObservableCollection<OtherVM>();
+    private ObservableCollection<OtherVM> _others = new ObservableCollection<OtherVM>();
 
     // Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
@@ -68,7 +70,7 @@ public partial class Projects: IDisposable
         _selectedOther = null;
         _disciplines.Clear();
         _draws.Clear();
-        _docs.Clear();
+        _others.Clear();
 
         filterLoading = !startLoading ? true : filterLoading;
         try
@@ -157,7 +159,7 @@ public partial class Projects: IDisposable
     private async Task OnSelectProject(ProjectVM project)
     {
         _draws.Clear();
-        _docs.Clear();
+        _others.Clear();
         _disciplines.Clear();
         _selectedProject = project;
         _selectedDiscipline = null;
@@ -184,9 +186,9 @@ public partial class Projects: IDisposable
         foreach (var di in draws)
             _draws.Add(Mapper.Map<DrawVM>(di));
 
-        _docs.Clear();
+        _others.Clear();
         foreach (var di in others)
-            _docs.Add(Mapper.Map<OtherVM>(di));
+            _others.Add(Mapper.Map<OtherVM>(di));
 
         StateHasChanged();
     }
@@ -222,46 +224,48 @@ public partial class Projects: IDisposable
             if (d.Id == _selectedDraw.Id)
                 d.ManHours = _selectedDraw.ManHours;
 
-        //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
-        //                            Mapper.Map<ProjectDto>(_selectedProject),
-        //                            Mapper.Map<DrawDto>(_selectedDraw));
+        CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
+                                        Mapper.Map<ProjectDto>(_selectedProject),
+                                        Mapper.Map<DrawDto>(_selectedDraw),
+                                        _logedUser.Id
+                                    );
 
-        //_selectedDraw.CompletionEstimation = complete.DrawCompleted;
-        ////_selectedOther.Completed = complete.DrawCompleted;
-        //_selectedDiscipline.Completed = complete.DisciplineCompleted;
-        //_selectedProject.Completed = complete.ProjectCompleted;
+        _selectedDraw.CompletionEstimation = complete.DrawCompleted;
+        //_selectedOther.Completed = complete.DrawCompleted;
+        _selectedDiscipline.Completed = complete.DisciplineCompleted;
+        _selectedProject.Completed = complete.ProjectCompleted;
 
-        //StateHasChanged();
+        StateHasChanged();
     }
 
-    private async Task _onDocHoursChanged(OtherVM doc, object val)
+    private async Task _onDocHoursChanged(OtherVM other, object val)
     {
-        var previusValue = doc.ManHours;
+        var previusValue = other.ManHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
         if ((hoursPassed - hoursUsed) < value)
         {
             // TODO: Display a Msg
             return;
         }
-        doc.ManHours = Convert.ToInt32(val);
+        other.ManHours = Convert.ToInt32(val);
         _selectedProject.ManHours += (int?)value;
         _logedUser.Hours += value;
         hoursUsed += value;
-        _selectedOther = doc;
-        foreach (var d in _docs)
-            if (d.Id == _selectedDraw.Id)
-                d.ManHours = doc.ManHours;
+        _selectedOther = other;
+        foreach (var o in _others)
+            if (o.Id == _selectedDraw.Id)
+                o.ManHours = other.ManHours;
 
-        //CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
-        //                            Mapper.Map<ProjectDto>(_selectedProject),
-        //                            Mapper.Map<OtherDto>(_selectedOther));
+        CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
+                                        Mapper.Map<ProjectDto>(_selectedProject),
+                                        Mapper.Map<DrawDto>(_selectedDraw),
+                                        _logedUser.Id
+                                    );
 
-        ////_selectedDraw.Completed = complete.DrawCompleted;
+        _selectedDraw.CompletionEstimation = complete.DrawCompleted;
         //_selectedOther.Completed = complete.DrawCompleted;
-        //_selectedDiscipline.Completed = complete.DisciplineCompleted;
-        //_selectedProject.Completed = complete.ProjectCompleted;
-
-        //StateHasChanged();
+        _selectedDiscipline.Completed = complete.DisciplineCompleted;
+        _selectedProject.Completed = complete.ProjectCompleted;
     }
     #endregion
 
@@ -272,9 +276,10 @@ public partial class Projects: IDisposable
         timer = new System.Threading.Timer((_) =>
         {
             var chrono = DateTime.Now - StartWorkTime;
-            hoursPassed = chrono.Hours + hoursBaused;
+            hoursPassed = chrono.Hours + hoursPaused;
+            minutsPassed = chrono.Minutes + minutsPaused;
 
-            InvokeAsync(() =>
+        InvokeAsync(() =>
             {
                 StateHasChanged();
             });
@@ -283,7 +288,8 @@ public partial class Projects: IDisposable
 
     private void StopTimer()
     {
-        hoursBaused = (double)hoursPassed;
+        hoursPaused = (double)hoursPassed;
+        minutsPaused = (double)minutsPassed;
         timer.Dispose();
     }
     #endregion

@@ -57,7 +57,7 @@
                                     <span class="mt-2 h5">
                                         @if (hoursPassed != null)
                                         {
-                                            <span>@hoursPassed / </span>
+                                            <span>@hoursPassed:@minutsPassed / </span>
                                         }
                                         <strong>@(_logedUser.Hours)</strong>h</span>
                                 </div>
@@ -219,7 +219,7 @@
                             </div>
                         }
 
-                        <!-- Table Docs -->
+                        <!-- Table Others -->
                         @if (_selectedDiscipline != null)
                         {
                             <div class="col-xxl-2 col-xl-5 col-lg-5 col-md-5 col-sm-12
@@ -232,24 +232,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var doc in _docs)
+                                        @foreach (var _other in _others)
                                         {
-                                            <tr class="align-middle" @onclick="@(() => OnSelectDoc(doc))">
+                                            <tr class="align-middle" @onclick="@(() => OnSelectDoc(_other))">
 
                                                 <td class="align-middle
-                                                @(((_selectedOther == null ||
-                                                        !_selectedOther.Id.Equals(doc.Id))
-                                                            ? "" : "highlight_4"))"
-                                                style="min-width: 110px;">
-                                                    <div class="align-middle h-100"><labe>@doc.Name</labe></div>
+                                                    @(((_selectedOther == null ||
+                                                            !_selectedOther.Id.Equals(_other.Id))
+                                                                ? "" : "highlight_4"))"
+                                                    style="min-width: 110px;">
+                                                    <div class="align-middle h-100"><labe>@_other.Name</labe></div>
                                                 </td>
 
                                                 <td class="align-middle
                                                     @(((_selectedOther == null ||
-                                                            !_selectedOther.Id.Equals(doc.Id))
+                                                            !_selectedOther.Id.Equals(_other.Id))
                                                                 ? "" : "highlight_4"))"
                                                     style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                    <div>@CurentDate</div> <label>@doc.ManHours h</label>
+                                                    <div>@CurentDate</div> <label>@_other.ManHours h</label>
                                                     <div class="input-group"
                                                         style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                             <input type="number"
@@ -258,7 +258,7 @@
                                                                    Min="0"
                                                                    Max="@hoursPassed"
                                                                    disabled="@(!workStarted)"
-                                                                   @onchange="(async (e) => await _onDocHoursChanged(doc, e.Value))">
+                                                               @onchange="(async (e) => await _onDocHoursChanged(_other, e.Value))">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">h</span>
                                                         </div>

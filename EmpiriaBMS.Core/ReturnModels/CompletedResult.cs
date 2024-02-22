@@ -11,5 +11,4 @@ public class CompletedResult
     public int ProjectCompleted { get; set; }
     public int DisciplineCompleted { get; set; }
     public int DrawCompleted { get; set; }
-    public int OtherCompleted { get; set; }
 }
