@@ -13,7 +13,7 @@ public class Other : Entity
     [Required]
     public string Name { get; set; }
 
-    public double ManHours { get; set; }
+    public double MenHours { get; set; }
 
     public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
 }

@@ -18,16 +18,16 @@ public class OtherVM : BaseVM
         }
     }
 
-    private double _manHours;
-    public double ManHours
+    private double _menHours;
+    public double MenHours
     {
-        get => _manHours;
+        get => _menHours;
         set
         {
-            if (value == _manHours)
+            if (value == _menHours)
                 return;
-            _manHours = value;
-            NotifyPropertyChanged(nameof(ManHours));
+            _menHours = value;
+            NotifyPropertyChanged(nameof(MenHours));
         }
     }
 

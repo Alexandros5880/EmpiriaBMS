@@ -21,9 +21,15 @@ public class ProjectDto : EntityDto
 
     public string? Drawing { get; set; }
 
-    public long? EstimatedMandays { get; set; }
+    public long EstimatedMandays { get; set; }
 
-    public long? EstimatedHours { get; set; }
+    public long EstimatedHours { get; set; }
+
+    public long MenHours { get; set; }
+
+    public int Completed { get; set; }
+
+    public int WorkPackegedCompleted { get; set; }
 
     public DateTime? DeadLine { get; set; }
 
@@ -50,12 +56,6 @@ public class ProjectDto : EntityDto
     public double? PendingPayments { get; set; }
 
     public int? CalculationDaly { get; set; }
-
-    public int? Completed { get; set; }
-
-    public int? WorkPackegedCompleted { get; set; }
-
-    public long? ManHours { get; set; }
 
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }

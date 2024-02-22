@@ -19,8 +19,8 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private long? _estimatedHours;
-    public long? EstimatedHours
+    private long _estimatedHours;
+    public long EstimatedHours
     {
         get => _estimatedHours;
         set
@@ -32,21 +32,21 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private long? _estimatedMenHours;
-    public long? EstimatedMenHours
+    private long _menHours;
+    public long MenHours
     {
-        get => _estimatedMenHours;
+        get => _menHours;
         set
         {
-            if (value == _estimatedMenHours)
+            if (value == _menHours)
                 return;
-            _estimatedMenHours = value;
-            NotifyPropertyChanged(nameof(EstimatedMenHours));
+            _menHours = value;
+            NotifyPropertyChanged(nameof(MenHours));
         }
     }
 
-    private int? _completed;
-    public int? Completed
+    private int _completed;
+    public int Completed
     {
         get => _completed;
         set

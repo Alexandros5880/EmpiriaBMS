@@ -15,9 +15,9 @@ public class Draw : Entity
     [Required]
     public string Name { get; set; }
 
-    public double ManHours { get; set; }
+    public double MenHours { get; set; }
 
-    public int? CompletionEstimation { get; set; }
+    public int CompletionEstimation { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]

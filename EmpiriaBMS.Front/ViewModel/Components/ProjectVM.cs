@@ -61,8 +61,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private long? _estimatedMandays;
-    public long? EstimatedMandays
+    private long _estimatedMandays;
+    public long EstimatedMandays
     {
         get => _estimatedMandays;
         set
@@ -74,8 +74,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private long? _estimatedHours;
-    public long? EstimatedHours
+    private long _estimatedHours;
+    public long EstimatedHours
     {
         get => _estimatedHours;
         set
@@ -84,6 +84,45 @@ public class ProjectVM : BaseVM
                 return;
             _estimatedHours = value;
             NotifyPropertyChanged(nameof(_estimatedHours));
+        }
+    }
+
+    private long _menHours;
+    public long MenHours
+    {
+        get => _menHours;
+        set
+        {
+            if (value == _menHours)
+                return;
+            _menHours = value;
+            NotifyPropertyChanged(nameof(MenHours));
+        }
+    }
+
+    private int _completed;
+    public int Completed
+    {
+        get => _completed;
+        set
+        {
+            if (value == _completed)
+                return;
+            _completed = value;
+            NotifyPropertyChanged(nameof(Completed));
+        }
+    }
+
+    private int _workPackegedCompleted;
+    public int WorkPackegedCompleted
+    {
+        get => _workPackegedCompleted;
+        set
+        {
+            if (value == _workPackegedCompleted)
+                return;
+            _workPackegedCompleted = value;
+            NotifyPropertyChanged(nameof(WorkPackegedCompleted));
         }
     }
 
@@ -253,45 +292,6 @@ public class ProjectVM : BaseVM
                 return;
             _calculationDaly = value;
             NotifyPropertyChanged(nameof(CalculationDaly));
-        }
-    }
-
-    private int? _completed;
-    public int? Completed
-    {
-        get => _completed;
-        set
-        {
-            if (value == _completed)
-                return;
-            _completed = value;
-            NotifyPropertyChanged(nameof(Completed));
-        }
-    }
-
-    private int? _workPackegedCompleted;
-    public int? WorkPackegedCompleted
-    {
-        get => _workPackegedCompleted;
-        set
-        {
-            if (value == _workPackegedCompleted)
-                return;
-            _workPackegedCompleted = value;
-            NotifyPropertyChanged(nameof(WorkPackegedCompleted));
-        }
-    }
-
-    private long? _manHours;
-    public long? ManHours
-    {
-        get => _manHours;
-        set
-        {
-            if (value == _manHours)
-                return;
-            _manHours = value;
-            NotifyPropertyChanged(nameof(ManHours));
         }
     }
 

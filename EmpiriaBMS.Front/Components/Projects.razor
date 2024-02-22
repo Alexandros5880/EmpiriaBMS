@@ -31,35 +31,66 @@
                         @if (_logedUser != null)
                         {
                             <div class="row ms-2 me-8" style="overflow:hidden;">
-                                <div class="col-lg-8 col-md-8 col-sm-8">
-                                    @foreach (var role in _loggedUserRoles)
-                                    {
-                                        <h4><b>@_logedUser.LastName @_logedUser.FirstName</b></h4>
-                                    }
+                                <div class="col-lg-4 col-md-8 col-sm-8">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h4>
+                                                <b>
+                                                    @_logedUser.LastName @_logedUser.FirstName
+                                                </b>
+                                            </h4>
+                                        </div>
+                                        <div class="col">
+                                            <h6 class="mt-1">@CurentDate</h6>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-lg-2 col-md-8 col-sm-8">
-                                    @if (workStarted)
-                                    {
-                                        <button type="button" class="btn btn-secondary btn-lg"
-                                                @onclick="@ToogleWorkStatus">
-                                            End Work
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <button type="button" class="btn btn-primary btn-lg"
-                                                @onclick="@ToogleWorkStatus">
-                                            Start Work
-                                        </button>
-                                    }
+                                <div class="col-lg-5 col-md-8 col-sm-8">
+                                    <div class="d-grid">
+                                        @if (workStarted)
+                                        {
+                                            <button type="button" class="btn btn-danger btn-lg w-50"
+                                                    @onclick="@ToogleWorkStatus">
+                                                End Work
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-success btn-lg w-50"
+                                                    @onclick="@ToogleWorkStatus">
+                                                Start Work
+                                            </button>
+                                        }
+                                    </div>
                                 </div>
-                                <div class="col-lg-2 col-md-4 col-sm-4 row primary-bg-color rounded-1 text-center">
+                                <div class="col-lg-3 col-md-4 col-sm-4 
+                                            row primary-bg-color rounded-1 text-center">
                                     <span class="mt-2 h5">
                                         @if (hoursPassed != null)
                                         {
-                                            <span>@hoursPassed:@minutsPassed / </span>
+                                            <span>@hoursPassed / </span>
                                         }
-                                        <strong>@(_logedUser.Hours)</strong>h</span>
+                                        @{
+                                            if (_selectedProject != null && _selectedDiscipline == null)
+                                            {
+                                                <span>Estimate Project Hours: </span>
+
+                                                <b>@_selectedProject.EstimatedHours</b>
+                                            }
+                                            else if (_selectedProject != null && _selectedDiscipline != null)
+                                            {
+                                                <span>Discipline Hours: </span>
+
+                                                <b>@_selectedDiscipline.MenHours</b>
+                                            }
+                                            else
+                                            {
+                                                <span>MyHours This Week: </span>
+
+                                                <b>@_logedUser.Hours</b>
+                                            }
+                                        }
+                                    </span>
                                 </div>
                             </div>
                         }
@@ -73,6 +104,9 @@
                         <div class="col-xxl-3 col-xl-7 col-lg-7 col-md-7 col-sm-12
                                     table-responsive p-1 table-container">
                             <table class="table table-hover table-success text-center">
+                                <thead class="table-light">
+                                    <h3>Projects</h3>
+                                </thead>
                                 <thead>
                                     <tr>
                                         <th scope="col" class="sticky-header">Project</th>
@@ -140,7 +174,7 @@
                                                 @(((_selectedDiscipline == null
                                                         || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                             ? "" : "highlight_2"))">
-                                                    <label>@discipline.EstimatedMenHours Hours</label>
+                                                    <label>@discipline.MenHours Hours</label>
                                                 </td>
                                             </tr>
                                         }
@@ -181,7 +215,7 @@
                                                             !_selectedDraw.Id.Equals(draw.Id))
                                                                 ? "" : "highlight_3"))"
                                                     style="min-width: 90px;max-width: 90px;">
-                                                    <div>@CurentDate</div> <label>@draw.ManHours h</label>
+                                                    <label>@draw.MenHours h</label>
                                                     <div class="input-group">
                                                         <input type="number"
                                                                class="form-control"
@@ -224,7 +258,7 @@
                         {
                             <div class="col-xxl-2 col-xl-5 col-lg-5 col-md-5 col-sm-12
                                         table-responsive p-1 table-container">
-                                <table class="table table-hover table-primary text-center">
+                                <table class="table table-hover table-warning text-center table-sm">
                                     <thead>
                                         <tr>
                                             <th scope="col" class="sticky-header">Docs</th>
@@ -249,7 +283,7 @@
                                                             !_selectedOther.Id.Equals(_other.Id))
                                                                 ? "" : "highlight_4"))"
                                                     style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                    <div>@CurentDate</div> <label>@_other.ManHours h</label>
+                                                    <label>@_other.MenHours h</label>
                                                     <div class="input-group"
                                                         style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                             <input type="number"
@@ -258,7 +292,7 @@
                                                                    Min="0"
                                                                    Max="@hoursPassed"
                                                                    disabled="@(!workStarted)"
-                                                               @onchange="(async (e) => await _onDocHoursChanged(_other, e.Value))">
+                                                               @onchange="(async (e) => await _onOtherHoursChanged(_other, e.Value))">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">h</span>
                                                         </div>

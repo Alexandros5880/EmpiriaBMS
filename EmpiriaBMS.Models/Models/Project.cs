@@ -20,9 +20,15 @@ public class Project : Entity
 
     public string? Drawing { get; set; }
 
-    public long? EstimatedMandays { get; set; }
+    public long EstimatedMandays { get; set; }
 
-    public long? EstimatedHours { get; set; }
+    public long EstimatedHours { get; set; }
+    
+    public long MenHours { get; set; }
+
+    public int? Completed { get; set; }
+
+    public int? WorkPackegedCompleted { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
@@ -59,12 +65,6 @@ public class Project : Entity
     public double? PendingPayments { get; set; }
 
     public int? CalculationDaly { get; set; }
-
-    public int? Completed { get; set; }
-    
-    public int? WorkPackegedCompleted { get; set; }
-
-    public long? ManHours { get; set; }
 
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }

@@ -257,9 +257,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var estimatedHours = project.EstimatedHours;
-            var projectHours = project.ManHours;
-
             // Get Loges User DesciplineIds
             var disciplinesUserIds = await _context
                                         .Set<DisciplineEmployee>()
@@ -288,8 +285,15 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             draws.Add(Mapping.Mapper.Map<Draw>(draw));
             var sumDrawsComp = draws.Select(m => m.CompletionEstimation).Sum();
 
-            // Some Project Hours
+            // Some Project Completion
             var sumProjectCompl = sumDrawsComp;
+
+
+
+            var estimatedHours = project.EstimatedHours;
+            var projectHours = project.MenHours;
+
+
 
             // Project Completed
             var projectCompleted = Convert.ToInt32((sumProjectCompl / estimatedHours) * 100);

@@ -12,9 +12,9 @@ public class DrawDto : EntityDto
 {
     public string Name { get; set; }
 
-    public double ManHours { get; set; }
+    public double MenHours { get; set; }
 
-    public int? CompletionEstimation { get; set; }
+    public int CompletionEstimation { get; set; }
 
     public DateTime? CompletionDate { get; set; }
 

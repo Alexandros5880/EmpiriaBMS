@@ -207,65 +207,30 @@ public partial class Projects: IDisposable
     
     private async Task _onDrawHoursChanged(DrawVM draw, object val)
     {
-        var previusValue = draw.ManHours;
+        var previusValue = draw.MenHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
         if ((hoursPassed - hoursUsed) < value)
         {
             // TODO: Display a Msg
             return;
         }
-        draw.ManHours = Convert.ToInt32(val);
-        _selectedProject.ManHours += (int?)value;
+
         _logedUser.Hours += value;
-        hoursUsed += value;
-        _selectedDraw = draw;
-
-        foreach (var d in _draws)
-            if (d.Id == _selectedDraw.Id)
-                d.ManHours = _selectedDraw.ManHours;
-
-        CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
-                                        Mapper.Map<ProjectDto>(_selectedProject),
-                                        Mapper.Map<DrawDto>(_selectedDraw),
-                                        _logedUser.Id
-                                    );
-
-        _selectedDraw.CompletionEstimation = complete.DrawCompleted;
-        //_selectedOther.Completed = complete.DrawCompleted;
-        _selectedDiscipline.Completed = complete.DisciplineCompleted;
-        _selectedProject.Completed = complete.ProjectCompleted;
-
-        StateHasChanged();
+        //await DataProvider.Draws.UpdateHours(_selectedProject.Id, draw.Id, value);
     }
 
-    private async Task _onDocHoursChanged(OtherVM other, object val)
+    private async Task _onOtherHoursChanged(OtherVM other, object val)
     {
-        var previusValue = other.ManHours;
+        var previusValue = other.MenHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
         if ((hoursPassed - hoursUsed) < value)
         {
             // TODO: Display a Msg
             return;
         }
-        other.ManHours = Convert.ToInt32(val);
-        _selectedProject.ManHours += (int?)value;
+
         _logedUser.Hours += value;
-        hoursUsed += value;
-        _selectedOther = other;
-        foreach (var o in _others)
-            if (o.Id == _selectedDraw.Id)
-                o.ManHours = other.ManHours;
-
-        CompletedResult complete = await DataProvider.Projects.CalcProjectComplete(
-                                        Mapper.Map<ProjectDto>(_selectedProject),
-                                        Mapper.Map<DrawDto>(_selectedDraw),
-                                        _logedUser.Id
-                                    );
-
-        _selectedDraw.CompletionEstimation = complete.DrawCompleted;
-        //_selectedOther.Completed = complete.DrawCompleted;
-        _selectedDiscipline.Completed = complete.DisciplineCompleted;
-        _selectedProject.Completed = complete.ProjectCompleted;
+        //await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, value);
     }
     #endregion
 
@@ -277,7 +242,7 @@ public partial class Projects: IDisposable
         {
             var chrono = DateTime.Now - StartWorkTime;
             hoursPassed = chrono.Hours + hoursPaused;
-            minutsPassed = chrono.Minutes + minutsPaused;
+            minutsPassed = chrono.Seconds + minutsPaused;
 
         InvokeAsync(() =>
             {

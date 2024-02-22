@@ -178,7 +178,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Comm",
-            ManHours = 0
+            MenHours = 0
         };
         builder.Entity<Other>().HasData(otherComm);
 
@@ -190,7 +190,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Printing",
-            ManHours = 0
+            MenHours = 0
         };
         builder.Entity<Other>().HasData(otherPrinting);
 
@@ -202,7 +202,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Outside",
-            ManHours = 0
+            MenHours = 0
         };
         builder.Entity<Other>().HasData(otherOutside);
 
@@ -214,7 +214,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Meeting",
-            ManHours = 0
+            MenHours = 0
         };
         builder.Entity<Other>().HasData(otherMeeting);
 
@@ -226,7 +226,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Administration",
-            ManHours = 0
+            MenHours = 0
         };
         builder.Entity<Other>().HasData(otherAdministration);
 
@@ -289,7 +289,7 @@ public class AppDbContext : DbContext
                 CalculationDaly = i < 5 ? i : i - (i - 1),
                 Completed = 0,
                 WorkPackegedCompleted = 0,
-                ManHours = 0,
+                MenHours = 0,
                 ProjectManagerId = pm.Id
             };
             builder.Entity<Project>().HasData(project);
@@ -348,7 +348,7 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     Name = $"Draw_{i}_{e}",
-                    ManHours = 0,
+                    MenHours = 0,
                     CompletionEstimation = 0,
                     CompletionDate = projects[i - 1].DeadLine
                 };
@@ -397,7 +397,7 @@ public class AppDbContext : DbContext
                 Name = i % 2 == 0 ? "HVAC" : "ELEC",
                 EngineerId = engineerId,
                 EstimatedHours = 2345,
-                EstimatedMenHours = 3425,
+                MenHours = 3425,
                 Completed = 0
             };
             builder.Entity<Discipline>().HasData(discipline);

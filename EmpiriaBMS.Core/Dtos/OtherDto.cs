@@ -12,7 +12,7 @@ public class OtherDto : EntityDto
 {
     public string Name { get; set; }
 
-    public double ManHours { get; set; }
+    public double MenHours { get; set; }
 
     public int DisciplineId { get; set; }
     public Discipline Discipline { get; set; }
