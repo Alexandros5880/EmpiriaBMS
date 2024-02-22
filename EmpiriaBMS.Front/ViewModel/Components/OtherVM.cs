@@ -31,6 +31,19 @@ public class OtherVM : BaseVM
         }
     }
 
+    private int _completionEstimation;
+    public int CompletionEstimation
+    {
+        get => _completionEstimation;
+        set
+        {
+            if (value == _completionEstimation)
+                return;
+            _completionEstimation = value;
+            NotifyPropertyChanged(nameof(CompletionEstimation));
+        }
+    }
+
     private Discipline _discipline;
     public Discipline Discipline
     {

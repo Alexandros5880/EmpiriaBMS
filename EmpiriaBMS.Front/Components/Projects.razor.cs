@@ -5,6 +5,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
+using Microsoft.Fast.Components.FluentUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -50,6 +51,10 @@ public partial class Projects: IDisposable
     private UserVM _logedUser;
     private ICollection<RoleVM> _loggedUserRoles = new List<RoleVM>();
     private bool _logesUserChanged = false;
+
+    // Work End Dialog
+    private FluentDialog? _endWorkDialog;
+    private bool _isEndWorkDialogOdepened = false;
 
     protected override async void OnInitialized()
     {
@@ -142,10 +147,13 @@ public partial class Projects: IDisposable
     }
     #endregion
 
-    #region Properties Changed Evenets
-    private void ToogleWorkStatus()
+    #region Properties Changed Events
+    private void ToogleWorkStatus(bool? start = null)
     {
-        workStarted = !workStarted;
+        if (start != null)
+            workStarted = (bool)start;
+        else
+            workStarted = !workStarted;
 
         if (workStarted)
         {
@@ -154,13 +162,19 @@ public partial class Projects: IDisposable
         {
             StopTimer();
 
-            // TODO: Display Dialog With the hours of the day on top and under display 2
-            // editable list with drawings on left and other on right with editable hous and completed
+            // TODO: Enable This
+            //if (hoursPassed < 1) return;
+
+            _endWorkDialog.Show();
+            _isEndWorkDialogOdepened = true;
         }
     }
 
-    private async Task OnSelectProject(ProjectVM project)
+    private async Task OnSelectProject(int projectId)
     {
+        if (projectId == 0) return;
+
+        var project = _projects.FirstOrDefault(p => p.Id == projectId);
         _draws.Clear();
         _others.Clear();
         _disciplines.Clear();
@@ -177,8 +191,11 @@ public partial class Projects: IDisposable
         StateHasChanged();
     }
 
-    private async Task OnSelectDiscipline(DisciplineVM discipline)
+    private async Task OnSelectDiscipline(int disciplineId)
     {
+        if (disciplineId == 0) return;
+
+        var discipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
         _selectedDiscipline = discipline;
 
         var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
@@ -207,34 +224,6 @@ public partial class Projects: IDisposable
         _selectedOther = doc;
         StateHasChanged();
     }
-    
-    //private async Task _onDrawHoursChanged(DrawVM draw, object val)
-    //{
-    //    var previusValue = draw.MenHours;
-    //    var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-    //    if ((hoursPassed - hoursUsed) < value)
-    //    {
-    //        // TODO: Display a Msg
-    //        return;
-    //    }
-
-    //    _logedUser.Hours += value;
-    //    //await DataProvider.Draws.UpdateHours(_selectedProject.Id, draw.Id, value);
-    //}
-
-    //private async Task _onOtherHoursChanged(OtherVM other, object val)
-    //{
-    //    var previusValue = other.MenHours;
-    //    var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-    //    if ((hoursPassed - hoursUsed) < value)
-    //    {
-    //        // TODO: Display a Msg
-    //        return;
-    //    }
-
-    //    _logedUser.Hours += value;
-    //    //await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, value);
-    //}
     #endregion
 
     #region Async Jobs
@@ -245,7 +234,7 @@ public partial class Projects: IDisposable
         {
             var chrono = DateTime.Now - StartWorkTime;
             hoursPassed = chrono.Hours + hoursPaused;
-            minutsPassed = chrono.Seconds + minutsPaused;
+            minutsPassed = chrono.Minutes + minutsPaused;
 
         InvokeAsync(() =>
             {
@@ -259,6 +248,55 @@ public partial class Projects: IDisposable
         hoursPaused = (double)hoursPassed;
         minutsPaused = (double)minutsPassed;
         timer.Dispose();
+    }
+    #endregion
+
+    #region On Press Work End Dialog Actions
+    private void _onDrawHoursChanged(DrawVM draw, object val)
+    {
+        var previusValue = draw.MenHours;
+        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        if ((hoursPassed - hoursUsed) < value)
+        {
+            // TODO: Display a Msg
+            return;
+        }
+        hoursPassed -= value;
+    }
+
+    private void _onOtherHoursChanged(OtherVM other, object val)
+    {
+        var previusValue = other.MenHours;
+        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        if ((hoursPassed - hoursUsed) < value)
+        {
+            // TODO: Display a Msg
+            return;
+        }
+        hoursPassed -= value;
+    }
+
+    public async Task _endWorkDialogAccept()
+    {
+        _endWorkDialog.Hide();
+        _isEndWorkDialogOdepened = false;
+
+        if (hoursPassed > 0)
+        {
+            // TODO: Display a message to update his hours.
+            return;
+        }
+
+        // TODO: Add User Hours with current Date and then Update all parrents Hours and Save Changes
+
+        await Task.Delay(2000);
+    }
+
+    public void _endWorkDialogCansel()
+    {
+        ToogleWorkStatus(true);
+        _endWorkDialog.Hide();
+        _isEndWorkDialogOdepened = false;
     }
     #endregion
 

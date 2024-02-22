@@ -1,3 +1,24 @@
 ﻿.add-hover:hover {
     transform: translate(4px, 4px) !important;
 }
+
+.form-select {
+    min-width: 300px !important;
+}
+
+.list-group {
+    max-height: 300px;
+    min-width: 350px !important;
+    margin-bottom: 10px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    background-color: transparent !important;
+}
+
+.modal-content {
+    word-wrap: break-word;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    margin: 0 auto !important;
+    max-height: 50vh !important;
+}

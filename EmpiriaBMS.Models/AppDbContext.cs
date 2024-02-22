@@ -178,6 +178,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Comm",
+            CompletionEstimation = 0,
             MenHours = 0
         };
         builder.Entity<Other>().HasData(otherComm);
@@ -190,6 +191,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Printing",
+            CompletionEstimation = 0,
             MenHours = 0
         };
         builder.Entity<Other>().HasData(otherPrinting);
@@ -202,6 +204,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Inside",
+            CompletionEstimation = 0,
             MenHours = 0
         };
         builder.Entity<Other>().HasData(otherInside);
@@ -214,6 +217,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Meeting",
+            CompletionEstimation = 0,
             MenHours = 0
         };
         builder.Entity<Other>().HasData(otherMeeting);
@@ -226,6 +230,7 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Administration",
+            CompletionEstimation = 0,
             MenHours = 0
         };
         builder.Entity<Other>().HasData(otherAdministration);
