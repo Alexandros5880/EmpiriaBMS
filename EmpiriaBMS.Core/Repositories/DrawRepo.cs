@@ -88,7 +88,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
         }
     }
 
-    public async Task<bool> UpdateHours(int projectId, int drawId, double hours)
+    public async Task UpdateCompleted(int projectId, int drawId, int completed)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -115,24 +115,68 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
                                           .FirstOrDefault();
 
             // Add Hours To Drawing
+            drawing.CompletionEstimation += completed;
+
+
+            // Calculate Parent Discipline Completed
+            var sumComplitionOfDrawings = purentDiscipline.DisciplinesDraws
+                                          .Select(dd => dd.Draw)
+                                          .Select(d => d.CompletionEstimation)
+                                          .Sum();
+            sumComplitionOfDrawings += completed;
+
+            var drawsCounter = purentDiscipline.DisciplinesDraws.Count() + 1;
+            purentDiscipline.Completed = (sumComplitionOfDrawings / drawsCounter) * 100;
+
+            // Calculate Parent Project Complition
+            var sumCompplitionOfDisciplines = project.DisciplinesProjects
+                                                     .Select(dp => dp.Discipline)
+                                                     .Select(d => d.Completed)
+                                                     .Sum();
+
+            var disciplinesCounter = projectDisciplinesIds.Count();
+
+            project.Completed = (sumCompplitionOfDisciplines / disciplinesCounter) * 100;
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task UpdateHours(int projectId, int drawId, double hours)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Get Parent Project
+            var project = await _context.Set<Project>()
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            // Get Parent Discipline
+            var projectDisciplinesIds = await _context.Set<DisciplinePoject>()
+                                                      .Where(dp => dp.ProjectId == projectId)
+                                                      .Select(dp => dp.DisciplineId)
+                                                      .ToListAsync();
+
+            var disciplinesDraws = await _context.Set<DisciplineDraw>()
+                                                 .Where(dd => projectDisciplinesIds.Contains(dd.DisciplineId))
+                                                 .Where(dd => dd.DrawId == drawId)
+                                                 .ToListAsync();
+
+            var purentDiscipline = disciplinesDraws.Select(dd => dd.Discipline)
+                                                   .FirstOrDefault();
+
+            // Get Current Drawing
+            var drawing = disciplinesDraws.Select(dd => dd.Draw)
+                                          .FirstOrDefault();
+
+            if (drawing == null)
+                throw new NullReferenceException(nameof(drawing));
+
+            // Add Hours To Drawing
             drawing.MenHours += hours;
             purentDiscipline.MenHours += Convert.ToInt64(hours);
             project.MenHours += Convert.ToInt64(hours);
 
-            // Validate Tha Drawing.MenHours < From Discipline.EstimatedHours
-            var disciplineValid = purentDiscipline.EstimatedHours > purentDiscipline.MenHours;
-
-            // Calculate Discipline.Completed   με το "Discipline.EstimatedHours" και το "Discipline.MenHours"
-            purentDiscipline.Completed = Convert.ToInt32(purentDiscipline.EstimatedHours * purentDiscipline.MenHours / 100);
-
-            // Validate Project.MenHours < Project.EstimatedHours
-            var projectValid = project.EstimatedHours > project.MenHours;
-
-            // Με Βάση το "Project.EstimatedHours" και το "Project.MenHours" υπολογίζω το "ProjectComplete".
-
             await _context.SaveChangesAsync();
-
-            return disciplineValid && projectValid;
         }
     }
 

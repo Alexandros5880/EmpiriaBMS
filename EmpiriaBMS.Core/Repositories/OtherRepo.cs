@@ -18,9 +18,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 {
     public OtherRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-
-    // TODO: FIX THAT
-    public async Task<bool> UpdateHours(int projectId, int otherId, double hours)
+    public async Task UpdateCompleted(int projectId, int otherId, int completed)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -35,9 +33,9 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                                       .ToListAsync();
 
             var disciplinesOthers = await _context.Set<DisciplineOther>()
-                                                 .Where(dd => projectDisciplinesIds.Contains(dd.DisciplineId))
-                                                 .Where(dd => dd.OtherId == otherId)
-                                                 .ToListAsync();
+                                                  .Where(dd => projectDisciplinesIds.Contains(dd.DisciplineId))
+                                                  .Where(dd => dd.OtherId == otherId)
+                                                  .ToListAsync();
 
             var purentDiscipline = disciplinesOthers.Select(dd => dd.Discipline)
                                                    .FirstOrDefault();
@@ -47,28 +45,70 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                           .FirstOrDefault();
 
             // Add Hours To Other
+            other.CompletionEstimation += completed;
+
+
+            // Calculate Parent Discipline Completed
+            var sumComplitionOfOthers = purentDiscipline.DisciplinesOthers
+                                                        .Select(dd => dd.Other)
+                                                        .Select(d => d.CompletionEstimation)
+                                                        .Sum();
+            sumComplitionOfOthers += completed;
+
+            var othersCounter = purentDiscipline.DisciplinesOthers.Count() + 1;
+            purentDiscipline.Completed = (sumComplitionOfOthers / othersCounter) * 100;
+
+            // Calculate Parent Project Complition
+            var sumCompplitionOfDisciplines = project.DisciplinesProjects
+                                                     .Select(dp => dp.Discipline)
+                                                     .Select(d => d.Completed)
+                                                     .Sum();
+
+            var disciplinesCounter = projectDisciplinesIds.Count();
+
+            project.Completed = (sumCompplitionOfDisciplines / disciplinesCounter) * 100;
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task UpdateHours(int projectId, int otherId, double hours)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Get Parent Project
+            var project = await _context.Set<Project>()
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            // Get Parent Discipline
+            var projectDisciplinesIds = await _context.Set<DisciplinePoject>()
+                                                      .Where(dp => dp.ProjectId == projectId)
+                                                      .Select(dp => dp.DisciplineId)
+                                                      .ToListAsync();
+
+            var disciplinesOthers = await _context.Set<DisciplineOther>()
+                                                  .Where(dd => projectDisciplinesIds.Contains(dd.DisciplineId))
+                                                  .Where(dd => dd.OtherId == otherId)
+                                                  .ToListAsync();
+
+            var purentDiscipline = disciplinesOthers.Select(dd => dd.Discipline)
+                                                   .FirstOrDefault();
+
+            // Get Current Other
+            var other = disciplinesOthers.Select(dd => dd.Other)
+                                         .FirstOrDefault();
+
+            if (other == null)
+                throw new NullReferenceException(nameof(other));
+
+            // Add Hours To Drawing
             other.MenHours += hours;
             purentDiscipline.MenHours += Convert.ToInt64(hours);
             project.MenHours += Convert.ToInt64(hours);
 
-            // Validate Tha Drawing.MenHours < From Discipline.EstimatedHours
-            var disciplineValid = purentDiscipline.EstimatedHours > purentDiscipline.MenHours;
-
-            // Calculate Discipline.Completed   με το "Discipline.EstimatedHours" και το "Discipline.MenHours"
-            purentDiscipline.Completed = Convert.ToInt32(purentDiscipline.EstimatedHours * purentDiscipline.MenHours / 100);
-
-            // Validate Project.MenHours < Project.EstimatedHours
-            var projectValid = project.EstimatedHours > project.MenHours;
-
-            // Με Βάση το "Project.EstimatedHours" και το "Project.MenHours" υπολογίζω το "ProjectComplete".
-
             await _context.SaveChangesAsync();
-
-            return disciplineValid && projectValid;
         }
     }
-
-
 
     //public new async Task<OtherDto?> Get(int id)
     //{
