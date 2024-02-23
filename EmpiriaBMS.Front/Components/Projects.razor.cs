@@ -14,7 +14,7 @@ using System.Diagnostics;
 using System.Threading;
 
 namespace EmpiriaBMS.Front.Components;
-public partial class Projects: IDisposable
+public partial class Projects : IDisposable
 {
     private bool disposedValue;
 
@@ -37,6 +37,8 @@ public partial class Projects: IDisposable
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DrawVM> _draws = new ObservableCollection<DrawVM>();
     private ObservableCollection<OtherVM> _others = new ObservableCollection<OtherVM>();
+    private List<DrawVM> _drawsChanged = new List<DrawVM>();
+    private List<OtherVM> _othersChanged = new List<OtherVM>();
 
     // Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
@@ -212,7 +214,7 @@ public partial class Projects: IDisposable
         _disciplines.Clear();
         foreach (var di in disciplines)
             _disciplines.Add(Mapper.Map<DisciplineVM>(di));
-        
+
         StateHasChanged();
     }
 
@@ -260,10 +262,10 @@ public partial class Projects: IDisposable
         {
             timePassed = DateTime.Now - StartWorkTime;
 
-        InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
+            InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
         }, null, 0, 1000);
     }
 
@@ -287,8 +289,13 @@ public partial class Projects: IDisposable
             return;
         }
 
-        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, timeToSet.Seconds);
+        draw.MenHours += value;
+        _drawsChanged.Add(draw);
+
+        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
         timeToSet = updatedTimeSpan;
+
+        StateHasChanged();
     }
 
     private void _onOtherHoursChanged(OtherVM other, object val)
@@ -303,8 +310,13 @@ public partial class Projects: IDisposable
             return;
         }
 
-        var updatedTimeSpan = new TimeSpan(timePaused.Days, timePaused.Hours - Convert.ToInt32(value), timePaused.Minutes, timePaused.Seconds);
-        timePaused = updatedTimeSpan;
+        other.MenHours += value;
+        _othersChanged.Add(other);
+
+        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
+        timeToSet = updatedTimeSpan;
+
+        StateHasChanged();
     }
 
     public async Task _endWorkDialogAccept()
@@ -318,18 +330,47 @@ public partial class Projects: IDisposable
             return;
         }
 
+        startLoading = true;
+
+        // Update User Hours
         await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
 
-        // TODO: Update all Records With User Hours
+        // Update Draws
+        foreach (var draw in _drawsChanged)
+        {
+            await DataProvider.Draws.UpdateCompleted(_selectedProject.Id, draw.Id, draw.CompletionEstimation);
+            await DataProvider.Draws.UpdateHours(_selectedProject.Id, draw.Id, draw.MenHours);
+        }
 
-        await Task.Delay(2000);
+        // Update Others
+        foreach (var other in _othersChanged)
+        {
+            await DataProvider.Others.UpdateCompleted(_selectedProject.Id, other.Id, other.CompletionEstimation);
+            await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, other.MenHours);
+        }
+
+        startLoading = false;
+
+        StateHasChanged();
     }
 
     public void _endWorkDialogCansel()
     {
+        _drawsChanged.Clear();
+        _othersChanged.Clear();
         ToogleWorkStatus(true);
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
+    }
+    #endregion
+
+    #region View Hellper Functions
+    private string _displayProjectsHoursComplition(ProjectVM project)
+    {
+        if (project.MenHours == 0 || project.EstimatedHours == 0)
+            return "0";
+
+        return Convert.ToString((project.MenHours / project.EstimatedHours) * 100);
     }
     #endregion
 

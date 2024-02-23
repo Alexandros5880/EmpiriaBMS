@@ -107,20 +107,28 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
                                                  .Where(dd => dd.DrawId == drawId)
                                                  .ToListAsync();
 
-            var purentDiscipline = disciplinesDraws.Select(dd => dd.Discipline)
-                                                   .FirstOrDefault();
+            var purentDisciplineId = disciplinesDraws.Select(dd => dd.DisciplineId)
+                                                     .FirstOrDefault();
+            var purentDiscipline = await _context.Set<Discipline>()
+                                                 .FirstOrDefaultAsync(d => d.Id == purentDisciplineId);
 
             // Get Current Drawing
-            var drawing = disciplinesDraws.Select(dd => dd.Draw)
-                                          .FirstOrDefault();
+            var drawing = await _context.Set<Draw>()
+                                        .FirstOrDefaultAsync(d => d.Id == drawId);
+
+
+            if (drawing == null)
+                throw new NullReferenceException(nameof(drawing));
 
             // Add Hours To Drawing
             drawing.CompletionEstimation += completed;
 
 
             // Calculate Parent Discipline Completed
-            var sumComplitionOfDrawings = purentDiscipline.DisciplinesDraws
-                                          .Select(dd => dd.Draw)
+            var allDrawingsIds = purentDiscipline.DisciplinesDraws.Select(dd => dd.DrawId);
+            var allDrawings = await _context.Set<Draw>().Where(d => allDrawingsIds.Contains(d.Id))
+                                                        .ToListAsync();
+            var sumComplitionOfDrawings = allDrawings
                                           .Select(d => d.CompletionEstimation)
                                           .Sum();
             sumComplitionOfDrawings += completed;
@@ -129,10 +137,10 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
             purentDiscipline.Completed = (sumComplitionOfDrawings / drawsCounter) * 100;
 
             // Calculate Parent Project Complition
-            var sumCompplitionOfDisciplines = project.DisciplinesProjects
-                                                     .Select(dp => dp.Discipline)
-                                                     .Select(d => d.Completed)
-                                                     .Sum();
+            var sumCompplitionOfDisciplines = await _context.Set<Discipline>()
+                                                            .Where(d => projectDisciplinesIds.Contains(d.Id))
+                                                            .Select(d => d.Completed)
+                                                            .SumAsync();
 
             var disciplinesCounter = projectDisciplinesIds.Count();
 
@@ -161,12 +169,14 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
                                                  .Where(dd => dd.DrawId == drawId)
                                                  .ToListAsync();
 
-            var purentDiscipline = disciplinesDraws.Select(dd => dd.Discipline)
-                                                   .FirstOrDefault();
+            var purentDisciplineId = disciplinesDraws.Select(dd => dd.DisciplineId)
+                                                     .FirstOrDefault();
+            var purentDiscipline = await _context.Set<Discipline>()
+                                                 .FirstOrDefaultAsync(d => d.Id == purentDisciplineId);
 
             // Get Current Drawing
-            var drawing = disciplinesDraws.Select(dd => dd.Draw)
-                                          .FirstOrDefault();
+            var drawing = await _context.Set<Draw>()
+                                        .FirstOrDefaultAsync(d => d.Id == drawId);
 
             if (drawing == null)
                 throw new NullReferenceException(nameof(drawing));

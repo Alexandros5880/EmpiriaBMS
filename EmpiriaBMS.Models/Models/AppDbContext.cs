@@ -276,7 +276,7 @@ public class AppDbContext : DbContext
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 Drawing = "KL-" + Convert.ToString(i),
                 EstimatedMandays = Convert.ToInt64(Math.Pow(i, 3)),
-                EstimatedHours = Convert.ToInt64(Math.Pow(i, 3) / 8),
+                EstimatedHours = 3000,
                 DurationDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 EstPaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 PaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),

@@ -37,32 +37,35 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                                   .Where(dd => dd.OtherId == otherId)
                                                   .ToListAsync();
 
-            var purentDiscipline = disciplinesOthers.Select(dd => dd.Discipline)
-                                                   .FirstOrDefault();
+            var purentDisciplineId = disciplinesOthers.Select(dd => dd.DisciplineId)
+                                                      .FirstOrDefault();
+            var purentDiscipline = await _context.Set<Discipline>()
+                                                 .FirstOrDefaultAsync(d => d.Id == purentDisciplineId);
 
             // Get Current Other
-            var other = disciplinesOthers.Select(dd => dd.Other)
-                                          .FirstOrDefault();
+            var other = await _context.Set<Other>()
+                                      .FirstOrDefaultAsync(d => d.Id == otherId);
 
             // Add Hours To Other
             other.CompletionEstimation += completed;
 
 
             // Calculate Parent Discipline Completed
-            var sumComplitionOfOthers = purentDiscipline.DisciplinesOthers
-                                                        .Select(dd => dd.Other)
-                                                        .Select(d => d.CompletionEstimation)
-                                                        .Sum();
+            var allOthersIds = purentDiscipline.DisciplinesOthers.Select(dd => dd.OtherId);
+            var allDrawings = await _context.Set<Other>().Where(d => allOthersIds.Contains(d.Id))
+                                                        .ToListAsync();
+            var sumComplitionOfOthers = allDrawings.Select(d => d.CompletionEstimation)
+                                                   .Sum();
             sumComplitionOfOthers += completed;
 
             var othersCounter = purentDiscipline.DisciplinesOthers.Count() + 1;
             purentDiscipline.Completed = (sumComplitionOfOthers / othersCounter) * 100;
 
             // Calculate Parent Project Complition
-            var sumCompplitionOfDisciplines = project.DisciplinesProjects
-                                                     .Select(dp => dp.Discipline)
-                                                     .Select(d => d.Completed)
-                                                     .Sum();
+            var sumCompplitionOfDisciplines = await _context.Set<Discipline>()
+                                                            .Where(d => projectDisciplinesIds.Contains(d.Id))
+                                                            .Select(d => d.Completed)
+                                                            .SumAsync();
 
             var disciplinesCounter = projectDisciplinesIds.Count();
 
@@ -91,12 +94,14 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                                   .Where(dd => dd.OtherId == otherId)
                                                   .ToListAsync();
 
-            var purentDiscipline = disciplinesOthers.Select(dd => dd.Discipline)
-                                                   .FirstOrDefault();
+            var purentDisciplineId = disciplinesOthers.Select(dd => dd.DisciplineId)
+                                                      .FirstOrDefault();
+            var purentDiscipline = await _context.Set<Discipline>()
+                                                 .FirstOrDefaultAsync(d => d.Id == purentDisciplineId);
 
             // Get Current Other
-            var other = disciplinesOthers.Select(dd => dd.Other)
-                                         .FirstOrDefault();
+            var other = await _context.Set<Other>()
+                                      .FirstOrDefaultAsync(d => d.Id == otherId);
 
             if (other == null)
                 throw new NullReferenceException(nameof(other));

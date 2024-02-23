@@ -120,7 +120,8 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="sticky-header">Project</th>
-                                                <th scope="col" class="sticky-header"> Work Package Completed</th>
+                                                <th scope="col" class="sticky-header">Work Package Completed</th>
+                                                <th scope="col" class="sticky-header">Hours Completed</th>
                                                 <th scope="col" class="sticky-header">Deadline</th>
                                             </tr>
                                         </thead>
@@ -142,6 +143,13 @@
                                                                                 ? "" : "highlight_1"))"
                                                         style="min-width: 120px;">
                                                         <label>@project.WorkPackegedCompleted %</label>
+                                                    </td>
+                                                    <td class="align-middle
+                                                        @((_selectedProject == null ||
+                                                                !_selectedProject.Id.Equals(project.Id)
+                                                                                ? "" : "highlight_1"))"
+                                                        style="min-width: 120px;">
+                                                        <label>@_displayProjectsHoursComplition(@project) %</label>
                                                     </td>
                                                     <td class="align-middle
                                                         @((_selectedProject == null ||
@@ -465,7 +473,7 @@
         </div>
 
         <div class="row">
-            <FluentButton Disabled="@(timePassed != TimeSpan.Zero)"
+            <FluentButton Disabled="@(timeToSet != TimeSpan.Zero)"
                           class="col-6"
                           OnClick="@(async () => await _endWorkDialogAccept())">
                 Ok
