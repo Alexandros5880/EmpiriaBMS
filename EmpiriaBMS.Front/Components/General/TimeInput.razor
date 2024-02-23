@@ -1,0 +1,44 @@
+﻿@inject MicrosoftTeams MicrosoftTeams
+
+<input id="timeInput"
+       class="form-control"
+       type="text"
+       value="@TimeAsString"
+       placeholder="HH:MM"
+       style="max-width: 68px !important;"
+       @onchange=@((e) => OnPropertyChanged.InvokeAsync(e)) />
+
+@code {
+
+    [Parameter]
+    public TimeSpan Time { get; set; }
+
+    private string TimeAsString
+    {
+        get => Time.ToString(@"hh\:mm");
+        set
+        {
+            if (TimeSpan.TryParseExact(value, @"hh\:mm\:ss", null, out TimeSpan parsedTime))
+            {
+                Time = parsedTime;
+            }
+        }
+    }
+
+    [Parameter]
+    public TimeSpan Min { get; set; }
+
+    [Parameter]
+    public TimeSpan Max { get; set; }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnPropertyChanged { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await MicrosoftTeams.ApplyTimeMask("timeInput");
+        }
+    }
+}

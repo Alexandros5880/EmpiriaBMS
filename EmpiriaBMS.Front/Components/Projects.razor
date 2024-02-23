@@ -1,6 +1,7 @@
 ﻿@page "/"
 @page "/projects"
 @using Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Front.Components.General; 
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -399,13 +400,10 @@
                                                     </div>
                                                     <div class="col">
                                                         <div class="input-group">
-                                                            <input type="time"
-                                                                   class="form-control"
-                                                                   EnableMinMax="true"
-                                                                   Min="@TimeSpan.Zero"
-                                                                   Max="@timePassed"
-                                                                   value="@_draw.MenHours"
-                                                                   @onchange=@((e) => _onDrawHoursChanged(_draw, e.Value))>
+                                                            <TimeInput Min="@TimeSpan.Zero"
+                                                                       Max="@timePassed"
+                                                                       Time="@(new TimeSpan((int)_draw.MenHours,0,0))"
+                                                                       OnPropertyChanged=@((e) => _onDrawHoursChanged(_draw, e.Value))/>
                                                         </div>
                                                     </div>
                                                     <div class="col">
@@ -445,13 +443,10 @@
                                                     </div>
                                                     <div class="col">
                                                         <div class="input-group">
-                                                            <input type="time"
-                                                                   class="form-control"
-                                                                   EnableMinMax="true"
-                                                                   Min="@TimeSpan.Zero"
-                                                                   Max="@timePassed"
-                                                                   value="@_other.MenHours"
-                                                                   @onchange=@((e) => _onOtherHoursChanged(_other, e.Value))>
+                                                            <TimeInput Min="@TimeSpan.Zero"
+                                                                       Max="@timePassed"
+                                                                       Time="@(new TimeSpan((int)_other.MenHours,0,0))"
+                                                                       OnPropertyChanged=@((e) => _onOtherHoursChanged(_other, e.Value)) />
                                                         </div>
                                                     </div>
                                                 </div>

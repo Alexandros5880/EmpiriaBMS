@@ -34,4 +34,9 @@ public class MicrosoftTeams : InteropModuleBase
             return Task.FromResult(false);
         }
     }
+
+    public Task ApplyTimeMask(string elementId)
+    {
+        return InvokeVoidAsync("applyTimeMask", elementId);
+    }
 }

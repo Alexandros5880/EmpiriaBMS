@@ -1,11 +1,13 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Front.DefaultComponents;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -61,6 +63,17 @@ public partial class Projects: IDisposable
         await _getProjects();
         startLoading = false;
         StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+
+            StateHasChanged();
+        }
     }
 
     #region Get Records
@@ -251,6 +264,8 @@ public partial class Projects: IDisposable
     #region On Press Work End Dialog Actions
     private void _onDrawHoursChanged(DrawVM draw, object val)
     {
+        if (Convert.ToString(val) == "") return;
+        val += ":00";
         var previusValue = draw.MenHours;
         TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
         var value = Convert.ToInt32(timeSpan.Hours) > previusValue ? Convert.ToInt32(timeSpan.Hours) - previusValue : -(previusValue - Convert.ToInt32(timeSpan.Hours));
@@ -266,6 +281,8 @@ public partial class Projects: IDisposable
 
     private void _onOtherHoursChanged(OtherVM other, object val)
     {
+        if (Convert.ToString(val) == "") return;
+        val += ":00";
         var previusValue = other.MenHours;
         TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
         var value = Convert.ToInt32(timeSpan.Hours) > previusValue ? Convert.ToInt32(timeSpan.Hours) - previusValue : -(previusValue - Convert.ToInt32(timeSpan.Hours));

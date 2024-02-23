@@ -132,14 +132,6 @@ code {
     overflow-y: auto;
 }
 
-.bootstrap-timepicker-widget table tr:nth-child(3) > td:last-child a {
-    display: none;
-}
-
-.bootstrap-timepicker-widget table tr:nth-child(1) > td:last-child a {
-    display: none;
-}
-
 /* Selected Table Row */
 .highlight_1 {
     background-color: var(--selected_1-row-bg-color) !important;
