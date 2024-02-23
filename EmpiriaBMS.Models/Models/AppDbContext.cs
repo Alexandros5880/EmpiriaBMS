@@ -62,7 +62,7 @@ public class AppDbContext : DbContext
             Id = role_1_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Draftsmen",
+            Name = "Designer",
             IsEmployee = true,
         };
 

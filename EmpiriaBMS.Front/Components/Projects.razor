@@ -104,7 +104,7 @@
                         }
                     </div>
 
-                    <div class="row mt-3 p-1
+                    <div class="row mt-4 p-1
                                 gx-xl-2 gx-lg-2 gx-md-2 gx-sm-2
                                 gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
 
@@ -140,22 +140,19 @@
                                                     <td class="align-middle
                                                         @((_selectedProject == null ||
                                                                 !_selectedProject.Id.Equals(project.Id)
-                                                                                ? "" : "highlight_1"))"
-                                                        style="min-width: 120px;">
+                                                                                ? "" : "highlight_1"))">
                                                         <label>@project.WorkPackegedCompleted %</label>
                                                     </td>
                                                     <td class="align-middle
                                                         @((_selectedProject == null ||
                                                                 !_selectedProject.Id.Equals(project.Id)
-                                                                                ? "" : "highlight_1"))"
-                                                        style="min-width: 120px;">
+                                                                                ? "" : "highlight_1"))">
                                                         <label>@_displayProjectsHoursComplition(@project) %</label>
                                                     </td>
                                                     <td class="align-middle
                                                         @((_selectedProject == null ||
                                                                 !_selectedProject.Id.Equals(project.Id)
-                                                                                ? "" : "highlight_1"))"
-                                                        style="min-width: 120px;">
+                                                                                ? "" : "highlight_1"))">
                                                         <label>@project.DeadlineDisplay</label>
                                                     </td>
                                                 </tr>
@@ -210,7 +207,7 @@
                         <!-- Table Draws -->
                         @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                         {
-                            <div class="col-xxl-5 col-xl-7 col-lg-7 col-md-7 col-sm-12">
+                            <div class="col-xxl-4 col-xl-7 col-lg-7 col-md-7 col-sm-12">
                                 <div class="text-center">
                                     <h3>Deliverables</h3>
                                 </div>
@@ -419,9 +416,9 @@
                                                             <input type="number"
                                                                    class="form-control"
                                                                    EnableMinMax="true"
-                                                                   Min="@TimeSpan.Zero"
-                                                                   Max="@_draw.CompletionEstimation"
-                                                                   @bind="@_draw.CompletionEstimation">
+                                                                   Min="0"
+                                                                   Max="100"
+                                                                   @onchange=@((e) => _onDrawCompletedChanged(_draw, e.Value))>
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">%</span>
                                                             </div>

@@ -48,6 +48,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
             // Add Hours To Other
             other.CompletionEstimation += completed;
+            await _context.SaveChangesAsync();
 
 
             // Calculate Parent Discipline Completed
@@ -60,6 +61,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
             var othersCounter = purentDiscipline.DisciplinesOthers.Count() + 1;
             purentDiscipline.Completed = (sumComplitionOfOthers / othersCounter) * 100;
+            await _context.SaveChangesAsync();
 
             // Calculate Parent Project Complition
             var sumCompplitionOfDisciplines = await _context.Set<Discipline>()
@@ -68,9 +70,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                                             .SumAsync();
 
             var disciplinesCounter = projectDisciplinesIds.Count();
-
             project.Completed = (sumCompplitionOfDisciplines / disciplinesCounter) * 100;
-
             await _context.SaveChangesAsync();
         }
     }
@@ -108,9 +108,12 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
             // Add Hours To Drawing
             other.MenHours += hours;
-            purentDiscipline.MenHours += Convert.ToInt64(hours);
-            project.MenHours += Convert.ToInt64(hours);
+            await _context.SaveChangesAsync();
 
+            purentDiscipline.MenHours += Convert.ToInt64(hours);
+            await _context.SaveChangesAsync();
+
+            project.MenHours += Convert.ToInt64(hours);
             await _context.SaveChangesAsync();
         }
     }

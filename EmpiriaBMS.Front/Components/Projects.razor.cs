@@ -122,7 +122,7 @@ public partial class Projects : IDisposable
         {
             // TODO: Get Teams Loged User And Mach him With Oure Users
 
-            var defaultRoleId = await GetProjectManagersRoleId("Draftsmen");
+            var defaultRoleId = await GetProjectManagersRoleId("Designer");
             if (defaultRoleId == 0)
                 throw new Exception("Exception `Project Managers` role not exists!");
 
@@ -151,7 +151,8 @@ public partial class Projects : IDisposable
     {
         try
         {
-            return (await DataProvider.Roles.Get(roleName)).Id;
+            var role = await DataProvider.Roles.Get(roleName);
+            return role?.Id ?? 0;
         }
         catch (Exception ex)
         {
@@ -298,6 +299,14 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
+    private void _onDrawCompletedChanged(DrawVM draw, object val)
+    {
+        draw.CompletionEstimation += Convert.ToInt32(val);
+        _drawsChanged.Add(draw);
+
+        StateHasChanged();
+    }
+
     private void _onOtherHoursChanged(OtherVM other, object val)
     {
         if (Convert.ToString(val) == "") return;
@@ -345,7 +354,7 @@ public partial class Projects : IDisposable
         // Update Others
         foreach (var other in _othersChanged)
         {
-            await DataProvider.Others.UpdateCompleted(_selectedProject.Id, other.Id, other.CompletionEstimation);
+            //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, other.Id, other.CompletionEstimation);
             await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, other.MenHours);
         }
 

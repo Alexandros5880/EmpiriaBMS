@@ -122,7 +122,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
 
             // Add Hours To Drawing
             drawing.CompletionEstimation += completed;
-
+            await _context.SaveChangesAsync();
 
             // Calculate Parent Discipline Completed
             var allDrawingsIds = purentDiscipline.DisciplinesDraws.Select(dd => dd.DrawId);
@@ -135,6 +135,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
 
             var drawsCounter = purentDiscipline.DisciplinesDraws.Count() + 1;
             purentDiscipline.Completed = (sumComplitionOfDrawings / drawsCounter) * 100;
+            await _context.SaveChangesAsync();
 
             // Calculate Parent Project Complition
             var sumCompplitionOfDisciplines = await _context.Set<Discipline>()
@@ -183,8 +184,13 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
 
             // Add Hours To Drawing
             drawing.MenHours += hours;
+            await _context.SaveChangesAsync();
+
             purentDiscipline.MenHours += Convert.ToInt64(hours);
+            await _context.SaveChangesAsync();
+
             project.MenHours += Convert.ToInt64(hours);
+            await _context.SaveChangesAsync();
 
             await _context.SaveChangesAsync();
         }
