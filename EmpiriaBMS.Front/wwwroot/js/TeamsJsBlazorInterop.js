@@ -61,10 +61,12 @@ export function inTeams() {
   return false;
 }
 
-export function applyTimeMask(elementId) {
-    var timeInput = document.getElementById(elementId);
+export function applyTimeMask(para) {
+    var timeInput = document.getElementById(para.elementId);
     if (timeInput) {
         timeInput.addEventListener('input', function () {
+
+            // Validate Mask
             var val = this.value;
             var lastLength;
             do {
@@ -72,6 +74,9 @@ export function applyTimeMask(elementId) {
                 val = replaceBadInputs(val);
             } while (val.length > 0 && lastLength !== val.length);
             this.value = val;
+
+            // Validate Min Max Time
+            validateMinMaxTime(this, val, para.minTime, para.maxTime);
 
         });
 
@@ -87,6 +92,18 @@ export function applyTimeMask(elementId) {
             val = val.replace(/^(\d{2}:[0-5])[^0-9]/, "$1");
             val = val.replace(/^(\d{2}:\d[0-9])./, "$1");
             return val;
+        }
+
+        function validateMinMaxTime(self, val, min, max) {
+            var inputTime = val;
+            var minTime = min; // '08:00'
+            var maxTime = max; // '18:00'
+
+            if (inputTime < minTime || inputTime > maxTime) {
+                $(self).addClass('invalid');
+            } else {
+                $(self).removeClass('invalid');
+            }
         }
     }
 };

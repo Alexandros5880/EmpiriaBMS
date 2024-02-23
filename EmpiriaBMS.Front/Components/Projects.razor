@@ -376,7 +376,7 @@
                             </select>
                         </div>
                         <div class="col text-center">
-                            <h3>My Hours Since Start <b>@timePassed.Hours</b></h3>
+                            <h3>My Hours Since Start <b>@timeToSet.Hours</b></h3>
                         </div>
                     </div>
 
@@ -401,8 +401,8 @@
                                                     <div class="col">
                                                         <div class="input-group">
                                                             <TimeInput Min="@TimeSpan.Zero"
-                                                                       Max="@timePassed"
-                                                                       Time="@(new TimeSpan((int)_draw.MenHours,0,0))"
+                                                                       Max="@timeToSet"
+                                                                       Time="@TimeSpan.Zero"
                                                                        OnPropertyChanged=@((e) => _onDrawHoursChanged(_draw, e.Value))/>
                                                         </div>
                                                     </div>
@@ -412,7 +412,7 @@
                                                                    class="form-control"
                                                                    EnableMinMax="true"
                                                                    Min="@TimeSpan.Zero"
-                                                                   Max="@timePassed"
+                                                                   Max="@_draw.CompletionEstimation"
                                                                    @bind="@_draw.CompletionEstimation">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">%</span>
@@ -444,8 +444,8 @@
                                                     <div class="col">
                                                         <div class="input-group">
                                                             <TimeInput Min="@TimeSpan.Zero"
-                                                                       Max="@timePassed"
-                                                                       Time="@(new TimeSpan((int)_other.MenHours,0,0))"
+                                                                       Max="@timeToSet"
+                                                                       Time="@TimeSpan.Zero"
                                                                        OnPropertyChanged=@((e) => _onOtherHoursChanged(_other, e.Value)) />
                                                         </div>
                                                     </div>

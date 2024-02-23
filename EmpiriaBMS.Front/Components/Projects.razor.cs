@@ -28,6 +28,7 @@ public partial class Projects: IDisposable
     bool workStarted = false;
     TimeSpan timePassed = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
+    TimeSpan timeToSet = TimeSpan.Zero;
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
@@ -72,7 +73,7 @@ public partial class Projects: IDisposable
         if (firstRender)
         {
 
-            StateHasChanged();
+            //StateHasChanged();
         }
     }
 
@@ -169,13 +170,25 @@ public partial class Projects: IDisposable
 
         if (workStarted)
         {
+            timeToSet = TimeSpan.Zero;
             StartTimer();
         } else
         {
             StopTimer();
 
             // TODO: Enable This
-            //if (hoursPassed < 1) return;
+            //if (timePaused < 1) return;
+
+            timeToSet = timePaused;
+
+            _others.Clear();
+            _draws.Clear();
+            _disciplines.Clear();
+            _selectedOther = null;
+            _selectedDraw = null;
+            _selectedDiscipline = null;
+            _selectedProject = null;
+            StateHasChanged();
 
             _endWorkDialog.Show();
             _isEndWorkDialogOdepened = true;
@@ -256,7 +269,7 @@ public partial class Projects: IDisposable
 
     private void StopTimer()
     {
-        timePassed = timePaused;
+        timePaused = timePassed;
         timer.Dispose();
     }
     #endregion
@@ -266,34 +279,32 @@ public partial class Projects: IDisposable
     {
         if (Convert.ToString(val) == "") return;
         val += ":00";
-        var previusValue = draw.MenHours;
         TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
-        var value = Convert.ToInt32(timeSpan.Hours) > previusValue ? Convert.ToInt32(timeSpan.Hours) - previusValue : -(previusValue - Convert.ToInt32(timeSpan.Hours));
-        if (timePassed.Hours < value)
+        var value = Convert.ToInt32(timeSpan.Hours);
+        if (timeToSet.Hours < value)
         {
             // TODO: Display a Msg
             return;
         }
 
-        var updatedTimeSpan = new TimeSpan(timePassed.Days, timePassed.Hours - Convert.ToInt32(value), timePassed.Minutes, timePassed.Seconds);
-        timePassed = updatedTimeSpan;
+        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, timeToSet.Seconds);
+        timeToSet = updatedTimeSpan;
     }
 
     private void _onOtherHoursChanged(OtherVM other, object val)
     {
         if (Convert.ToString(val) == "") return;
         val += ":00";
-        var previusValue = other.MenHours;
         TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
-        var value = Convert.ToInt32(timeSpan.Hours) > previusValue ? Convert.ToInt32(timeSpan.Hours) - previusValue : -(previusValue - Convert.ToInt32(timeSpan.Hours));
-        if (timePassed.Hours < value)
+        var value = Convert.ToInt32(timeSpan.Hours);
+        if (timeToSet.Hours < value)
         {
             // TODO: Display a Msg
             return;
         }
 
-        var updatedTimeSpan = new TimeSpan(timePassed.Days, timePassed.Hours - Convert.ToInt32(value), timePassed.Minutes, timePassed.Seconds);
-        timePassed = updatedTimeSpan;
+        var updatedTimeSpan = new TimeSpan(timePaused.Days, timePaused.Hours - Convert.ToInt32(value), timePaused.Minutes, timePaused.Seconds);
+        timePaused = updatedTimeSpan;
     }
 
     public async Task _endWorkDialogAccept()
@@ -301,13 +312,13 @@ public partial class Projects: IDisposable
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
 
-        if (timePassed.Hours > 0)
+        if (timeToSet.Hours > 0)
         {
             // TODO: Display a message to update his hours.
             return;
         }
 
-        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timePassed.Hours));
+        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
 
         // TODO: Update all Records With User Hours
 
