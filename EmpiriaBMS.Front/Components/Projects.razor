@@ -111,7 +111,7 @@
                         @if (!_isEndWorkDialogOdepened)
                         {
                             <div class="col-xxl-3 col-xl-7 col-lg-7 col-md-7 col-sm-12">
-                                <div>
+                                <div class="text-center">
                                     <h3>Projects</h3>
                                 </div>
                                 <div class="table-responsive p-1 table-container">
@@ -161,7 +161,7 @@
                         @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                         {
                             <div class="col-xxl-2 col-xl-5 col-lg-5 col-md-5 col-sm-12">
-                                <div>
+                                <div class="text-center">
                                     <h3>Disciplines</h3>
                                 </div>
                                 <div class="table-responsive p-1 table-container">
@@ -169,7 +169,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="sticky-header">Discipline</th>
-                                                <th scope="col" class="sticky-header">Esti/MenHours</th>
+                                                <th scope="col" class="sticky-header">Estimated Manhours</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -202,7 +202,7 @@
                         @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                         {
                             <div class="col-xxl-5 col-xl-7 col-lg-7 col-md-7 col-sm-12">
-                                <div>
+                                <div class="text-center">
                                     <h3>Deliverables</h3>
                                 </div>
                                 <div class="table-responsive p-1 table-container">
@@ -264,7 +264,7 @@
                         @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                         {
                             <div class="col-xxl-2 col-xl-5 col-lg-5 col-md-5 col-sm-12">
-                                <div>
+                                <div class="text-center">
                                     <h3>Supportive Works</h3>
                                 </div>
                                 <div class="table-responsive p-1 table-container">
@@ -341,6 +341,9 @@
                     <!-- Headder -->
                     <div class="mt-1 p-2 row">
                         <div Class="col">
+                            <div class="text-center">
+                                <h3>Select Project</h3>
+                            </div>
                             <select class="form-select form-select-lg"
                                     aria-label="Select Project"
                                     @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
@@ -355,6 +358,9 @@
                             </select>
                         </div>
                         <div class="col">
+                            <div class="text-center">
+                                <h3>Select Descipline</h3>
+                            </div>
                             <select class="form-select form-select-lg"
                                     aria-label="Select Discipline"
                                     @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
@@ -374,7 +380,7 @@
                     </div>
 
                     <div class="mt-1 p-2 modal-content">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-around">
 
                             <!-- Drawings -->
                             @if (_draws != null && _draws.Count > 0)
@@ -400,13 +406,10 @@
                                                                    Max="@timePassed"
                                                                    value="@_draw.MenHours"
                                                                    @onchange=@((e) => _onDrawHoursChanged(_draw, e.Value))>
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">h</span>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col">
-                                                        <div class="input-group">
+                                                        <div class="input-group" style="width: 100px;">
                                                             <input type="number"
                                                                    class="form-control"
                                                                    EnableMinMax="true"
@@ -449,9 +452,6 @@
                                                                    Max="@timePassed"
                                                                    value="@_other.MenHours"
                                                                    @onchange=@((e) => _onOtherHoursChanged(_other, e.Value))>
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">h</span>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

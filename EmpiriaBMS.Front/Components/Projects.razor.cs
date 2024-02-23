@@ -252,7 +252,8 @@ public partial class Projects: IDisposable
     private void _onDrawHoursChanged(DrawVM draw, object val)
     {
         var previusValue = draw.MenHours;
-        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
+        var value = Convert.ToInt32(timeSpan.Hours) > previusValue ? Convert.ToInt32(timeSpan.Hours) - previusValue : -(previusValue - Convert.ToInt32(timeSpan.Hours));
         if (timePassed.Hours < value)
         {
             // TODO: Display a Msg
@@ -266,7 +267,8 @@ public partial class Projects: IDisposable
     private void _onOtherHoursChanged(OtherVM other, object val)
     {
         var previusValue = other.MenHours;
-        var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
+        TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
+        var value = Convert.ToInt32(timeSpan.Hours) > previusValue ? Convert.ToInt32(timeSpan.Hours) - previusValue : -(previusValue - Convert.ToInt32(timeSpan.Hours));
         if (timePassed.Hours < value)
         {
             // TODO: Display a Msg

@@ -170,70 +170,70 @@ public class AppDbContext : DbContext
         }
 
         // Create 5 Others
-        // Other Comm
-        var otherCommId = random.Next(123456789, 999999999) * 33;
-        Other otherComm = new Other()
+        // Other Communications
+        var other_1_Id = random.Next(123456789, 999999999) * 33;
+        Other other1 = new Other()
         {
-            Id = otherCommId,
+            Id = other_1_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = $"Comm",
+            Name = $"Communications",
             CompletionEstimation = 0,
             MenHours = 0
         };
-        builder.Entity<Other>().HasData(otherComm);
+        builder.Entity<Other>().HasData(other1);
 
         // Other Printing
-        var otherPrintingId = random.Next(123456789, 999999999) * 33;
-        Other otherPrinting = new Other()
+        var other_2_Id = random.Next(123456789, 999999999) * 33;
+        Other other2 = new Other()
         {
-            Id = otherPrintingId,
+            Id = other_2_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Printing",
             CompletionEstimation = 0,
             MenHours = 0
         };
-        builder.Entity<Other>().HasData(otherPrinting);
+        builder.Entity<Other>().HasData(other2);
 
-        // Other Inside
-        var otherInsideId = random.Next(123456789, 999999999) * 33;
-        Other otherInside = new Other()
+        // Other On-Site
+        var other_3_Id = random.Next(123456789, 999999999) * 33;
+        Other other3 = new Other()
         {
-            Id = otherInsideId,
+            Id = other_3_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = $"Inside",
+            Name = $"On-Site",
             CompletionEstimation = 0,
             MenHours = 0
         };
-        builder.Entity<Other>().HasData(otherInside);
+        builder.Entity<Other>().HasData(other3);
 
-        // OtherMeeting
-        var otherMeetingId = random.Next(123456789, 999999999) * 33;
-        Other otherMeeting = new Other()
+        // Other Meetings
+        var other_4_Id = random.Next(123456789, 999999999) * 33;
+        Other other4 = new Other()
         {
-            Id = otherMeetingId,
+            Id = other_4_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = $"Meeting",
+            Name = $"Meetings",
             CompletionEstimation = 0,
             MenHours = 0
         };
-        builder.Entity<Other>().HasData(otherMeeting);
+        builder.Entity<Other>().HasData(other4);
 
-        // OtherAdministration
-        var otherAdministrationId = random.Next(123456789, 999999999) * 33;
-        Other otherAdministration = new Other()
+        // other5
+        var other_5_Id = random.Next(123456789, 999999999) * 33;
+        Other other5 = new Other()
         {
-            Id = otherAdministrationId,
+            Id = other_5_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = $"Administration",
             CompletionEstimation = 0,
             MenHours = 0
         };
-        builder.Entity<Other>().HasData(otherAdministration);
+        builder.Entity<Other>().HasData(other5);
 
         // Create 10 Projects
         List<Project> projects = new List<Project>();
@@ -405,55 +405,55 @@ public class AppDbContext : DbContext
             disciplines.Add(discipline);
 
             // Connect All Others With Every Disclipline
-            DisciplineOther dq_comm = new DisciplineOther()
+            DisciplineOther dq_other_1 = new DisciplineOther()
             {
                 Id = random.Next(123456789, 999999999) + i * 2 + 1,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 DisciplineId = disciplineId,
-                OtherId = otherCommId
+                OtherId = other_1_Id
             };
-            builder.Entity<DisciplineOther>().HasData(dq_comm);
+            builder.Entity<DisciplineOther>().HasData(dq_other_1);
 
-            DisciplineOther dq_priting = new DisciplineOther()
+            DisciplineOther dq_other_2 = new DisciplineOther()
             {
                 Id = random.Next(123456789, 999999999) + i * 2 + 1,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 DisciplineId = disciplineId,
-                OtherId = otherPrintingId
+                OtherId = other_2_Id
             };
-            builder.Entity<DisciplineOther>().HasData(dq_priting);
+            builder.Entity<DisciplineOther>().HasData(dq_other_2);
 
-            DisciplineOther dq_outside = new DisciplineOther()
+            DisciplineOther dq_other_3 = new DisciplineOther()
             {
                 Id = random.Next(123456789, 999999999) + i * 2 + 1,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 DisciplineId = disciplineId,
-                OtherId = otherInsideId
+                OtherId = other_3_Id
             };
-            builder.Entity<DisciplineOther>().HasData(dq_outside);
+            builder.Entity<DisciplineOther>().HasData(dq_other_3);
 
-            DisciplineOther dq_meeting = new DisciplineOther()
+            DisciplineOther dq_other_4 = new DisciplineOther()
             {
                 Id = random.Next(123456789, 999999999) + i * 2 + 1,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 DisciplineId = disciplineId,
-                OtherId = otherMeetingId
+                OtherId = other_4_Id
             };
-            builder.Entity<DisciplineOther>().HasData(dq_meeting);
+            builder.Entity<DisciplineOther>().HasData(dq_other_4);
 
-            DisciplineOther dq_admin = new DisciplineOther()
+            DisciplineOther dq_other_5 = new DisciplineOther()
             {
                 Id = random.Next(123456789, 999999999) + i * 2 + 1,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 DisciplineId = disciplineId,
-                OtherId = otherAdministrationId
+                OtherId = other_5_Id
             };
-            builder.Entity<DisciplineOther>().HasData(dq_admin);
+            builder.Entity<DisciplineOther>().HasData(dq_other_5);
 
             // Connect Every Draftman With Every Discipline
             foreach (var draftman in draftsmen)
