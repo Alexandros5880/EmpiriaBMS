@@ -24,7 +24,7 @@ public partial class Projects: IDisposable
     Timer timer;
     DateTime StartWorkTime = DateTime.Now;
     bool workStarted = false;
-    TimeSpan timePassed = new TimeSpan(7,0,0,0);//TimeSpan.Zero;
+    TimeSpan timePassed = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
@@ -228,7 +228,8 @@ public partial class Projects: IDisposable
     #region Async Jobs
     private async Task StartTimer()
     {
-        StartWorkTime = DateTime.Now;
+        // TODO: Remove "AddHours(-7)"
+        StartWorkTime = DateTime.Now.AddHours(-7); //DateTime.Now;
         timer = new System.Threading.Timer((_) =>
         {
             timePassed = DateTime.Now - StartWorkTime;

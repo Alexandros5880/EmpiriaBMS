@@ -37,7 +37,11 @@
                                         <div class="col">
                                             <h4>
                                                 <b>
-                                                    @_logedUser.LastName @_logedUser.FirstName
+                                                    @_logedUser.LastName
+                                                    @foreach (var role in _loggedUserRoles)
+                                                    {
+                                                        <span>&nbsp;&nbsp; @role.Name</span>
+                                                    }
                                                 </b>
                                             </h4>
                                         </div>
@@ -115,7 +119,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="sticky-header">Project</th>
-                                                <th scope="col" class="sticky-header">W.P.Completed</th>
+                                                <th scope="col" class="sticky-header"> Work Package Completed</th>
                                                 <th scope="col" class="sticky-header">Deadline</th>
                                             </tr>
                                         </thead>
@@ -161,7 +165,7 @@
                                     <h3>Disciplines</h3>
                                 </div>
                                 <div class="table-responsive p-1 table-container">
-                                    <table class="table table-hover table-info text-center">
+                                    <table class="table table-hover table-danger text-center">
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="sticky-header">Discipline</th>
@@ -207,8 +211,8 @@
                                             <tr>
                                                 <th scope="col" class="sticky-header">Drawing</th>
                                                 <th scope="col" class="sticky-header">Total Hours</th>
-                                                <th scope="col" class="sticky-header">Completed</th>
-                                                <th scope="col" class="sticky-header">CompletionDate</th>
+                                                <th scope="col" class="sticky-header">Declared Completion</th>
+                                                <th scope="col" class="sticky-header">Deadline</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -261,7 +265,7 @@
                         {
                             <div class="col-xxl-2 col-xl-5 col-lg-5 col-md-5 col-sm-12">
                                 <div>
-                                    <h3>Auxiliares</h3>
+                                    <h3>Supportive Works</h3>
                                 </div>
                                 <div class="table-responsive p-1 table-container">
                                     <table class="table table-hover table-warning text-center">
@@ -327,7 +331,7 @@
                   style="--dialog-width: auto !important;
                         --dialog-height: auto !important;">
 
-        <div class="badge text-dark text-wrap fs-3">Update Your Hours</div>
+        <div class="badge text-dark text-wrap fs-3">Work update</div>
 
         <div class="modal-body row">
             <div class="m-1 row justify-content-center">
@@ -365,7 +369,7 @@
                             </select>
                         </div>
                         <div class="col text-center">
-                            <h3>My Hours <b>@timePassed.Hours</b></h3>
+                            <h3>My Hours Since Start <b>@timePassed.Hours</b></h3>
                         </div>
                     </div>
 
@@ -438,7 +442,7 @@
                                                     </div>
                                                     <div class="col">
                                                         <div class="input-group">
-                                                            <input type="number"
+                                                            <input type="time"
                                                                    class="form-control"
                                                                    EnableMinMax="true"
                                                                    Min="@TimeSpan.Zero"
@@ -447,19 +451,6 @@
                                                                    @onchange=@((e) => _onOtherHoursChanged(_other, e.Value))>
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">h</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="input-group">
-                                                            <input type="number"
-                                                                   class="form-control"
-                                                                   EnableMinMax="true"
-                                                                   Min="@TimeSpan.Zero"
-                                                                   Max="@timePassed"
-                                                                   @bind="@_other.CompletionEstimation">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">%</span>
                                                             </div>
                                                         </div>
                                                     </div>
