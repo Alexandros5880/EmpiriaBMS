@@ -31,6 +31,7 @@
                         @if (_logedUser != null)
                         {
                             <div class="row ms-2 me-8" style="overflow:hidden;">
+                                
                                 <div class="col-lg-4 col-md-8 col-sm-8">
                                     <div class="row">
                                         <div class="col">
@@ -45,6 +46,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-lg-5 col-md-8 col-sm-8">
                                     <div class="d-grid">
                                         @if (workStarted)
@@ -63,12 +65,13 @@
                                         }
                                     </div>
                                 </div>
+
                                 <div class="col-lg-3 col-md-4 col-sm-4 
                                             row primary-bg-color rounded-1 text-center">
                                     <span class="mt-2 h5">
-                                        @if (hoursPassed != null)
+                                        @if (timePassed != TimeSpan.Zero)
                                         {
-                                            <span>@hoursPassed / </span>
+                                            <span>@timePassed.Hours:@timePassed.Minutes:@timePassed.Seconds  / </span>
                                         }
                                         @{
                                             if (_selectedProject != null && _selectedDiscipline == null)
@@ -91,6 +94,7 @@
                                         }
                                     </span>
                                 </div>
+
                             </div>
                         }
                     </div>
@@ -361,7 +365,7 @@
                             </select>
                         </div>
                         <div class="col text-center">
-                            <h3>My Hours <b>@hoursPassed</b></h3>
+                            <h3>My Hours <b>@timePassed.Hours</b></h3>
                         </div>
                     </div>
 
@@ -385,11 +389,11 @@
                                                     </div>
                                                     <div class="col">
                                                         <div class="input-group">
-                                                            <input type="number"
+                                                            <input type="time"
                                                                    class="form-control"
                                                                    EnableMinMax="true"
-                                                                   Min="0"
-                                                                   Max="@hoursPassed"
+                                                                   Min="@TimeSpan.Zero"
+                                                                   Max="@timePassed"
                                                                    value="@_draw.MenHours"
                                                                    @onchange=@((e) => _onDrawHoursChanged(_draw, e.Value))>
                                                             <div class="input-group-append">
@@ -402,8 +406,8 @@
                                                             <input type="number"
                                                                    class="form-control"
                                                                    EnableMinMax="true"
-                                                                   Min="0"
-                                                                   Max="@hoursPassed"
+                                                                   Min="@TimeSpan.Zero"
+                                                                   Max="@timePassed"
                                                                    @bind="@_draw.CompletionEstimation">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">%</span>
@@ -437,8 +441,8 @@
                                                             <input type="number"
                                                                    class="form-control"
                                                                    EnableMinMax="true"
-                                                                   Min="0"
-                                                                   Max="@hoursPassed"
+                                                                   Min="@TimeSpan.Zero"
+                                                                   Max="@timePassed"
                                                                    value="@_other.MenHours"
                                                                    @onchange=@((e) => _onOtherHoursChanged(_other, e.Value))>
                                                             <div class="input-group-append">
@@ -451,8 +455,8 @@
                                                             <input type="number"
                                                                    class="form-control"
                                                                    EnableMinMax="true"
-                                                                   Min="0"
-                                                                   Max="@hoursPassed"
+                                                                   Min="@TimeSpan.Zero"
+                                                                   Max="@timePassed"
                                                                    @bind="@_other.CompletionEstimation">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">%</span>
@@ -475,7 +479,7 @@
         </div>
 
         <div class="row">
-            <FluentButton Disabled="@(hoursPassed != 0)"
+            <FluentButton Disabled="@(timePassed != TimeSpan.Zero)"
                           class="col-6"
                           OnClick="@(async () => await _endWorkDialogAccept())">
                 Ok

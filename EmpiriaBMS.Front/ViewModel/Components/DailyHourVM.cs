@@ -18,16 +18,16 @@ public class DailyHourVM : BaseVM
         }
     }
 
-    private double _hours;
-    public double Hours
+    private Timespan _timeSpan;
+    public Timespan TimeSpan
     {
-        get => _hours;
+        get => _timeSpan;
         set
         {
-            if (value == _hours)
+            if (value == _timeSpan)
                 return;
-            _hours = value;
-            NotifyPropertyChanged(nameof(Hours));
+            _timeSpan = value;
+            NotifyPropertyChanged(nameof(TimeSpan));
         }
     }
 

@@ -14,7 +14,7 @@ public class DailyHourDto : EntityDto
 {
     public DateTime Date { get; set; }
 
-    public double Hours { get; set; }
+    public Timespan TimeSpan { get; set; }
 
     public int UserId { get; set; }
     public User User { get; set; }

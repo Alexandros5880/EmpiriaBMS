@@ -5,7 +5,7 @@ using EmpiriaBMS.Core.Repositories;
 using EmpiriaBMS.Front;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
-using EmpiriaMS.Models;
+using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Fast.Components.FluentUI;
 using System.Reflection;

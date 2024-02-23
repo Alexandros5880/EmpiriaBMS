@@ -1,7 +1,6 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
-using EmpiriaMS.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -327,7 +326,7 @@ public class UsersRepo : Repository<UserDto, User>
             
             var dailyHour = dailyHours.FirstOrDefault(d => d.Date.CompareTo(date) == 0);
             
-            return dailyHour.Hours;
+            return dailyHour.TimeSpan.Hours;
         }
     }
 
@@ -349,7 +348,7 @@ public class UsersRepo : Repository<UserDto, User>
             return await _context.Set<DailyHour>()
                                            .Where(u => u.UserId == userId)
                                            .Where(u => u.Date.CompareTo(lastMondaysDate) > 0)
-                                           .Select(u => u.Hours)
+                                           .Select(u => u.TimeSpan.Hours)
                                            .SumAsync();
         }
     }
@@ -363,7 +362,7 @@ public class UsersRepo : Repository<UserDto, User>
         {
             return await _context.Set<DailyHour>()
                            .Where(u => u.UserId == userId)
-                           .Select(d => d.Hours)
+                           .Select(d => d.TimeSpan.Hours)
                            .SumAsync();
         }
     }
@@ -382,12 +381,12 @@ public class UsersRepo : Repository<UserDto, User>
             return await _context.Set<DailyHour>()
                                            .Where(u => u.UserId == userId)
                                            .Where(u => u.Date.CompareTo(dateBeforeWeek) > 0)
-                                           .Select(u => u.Hours)
+                                           .Select(u => u.TimeSpan.Hours)
                                            .SumAsync();
         }
     }
 
-    public async Task<DailyHour> AddHours(int userId, DateTime date, double hours)
+    public async Task<DailyHour> AddHours(int userId, DateTime date, long hours)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -409,8 +408,11 @@ public class UsersRepo : Repository<UserDto, User>
                 var yesterdayDailyHour = await _context.Set<DailyHour>()
                                                    .Where(u => u.UserId == userId)
                                                    .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
-
-                yesterdayDailyHour.Hours += hours;
+                
+                var timespan = yesterdayDailyHour.TimeSpan;
+                var newHours = timespan.Hours + hours;
+                yesterdayDailyHour.TimeSpan = new Timespan(
+                    timespan.Days, newHours, timespan.Minutes, timespan.Seconds);
 
                 await _context.SaveChangesAsync();
 

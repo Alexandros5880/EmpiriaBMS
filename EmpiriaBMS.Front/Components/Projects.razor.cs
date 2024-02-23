@@ -24,11 +24,8 @@ public partial class Projects: IDisposable
     Timer timer;
     DateTime StartWorkTime = DateTime.Now;
     bool workStarted = false;
-    double hoursPaused = 0;
-    double? hoursPassed = null;
-    double? minutsPassed = 0;
-    double? minutsPaused = 0;
-    double hoursUsed = 0;
+    TimeSpan timePassed = new TimeSpan(7,0,0,0);//TimeSpan.Zero;
+    TimeSpan timePaused = TimeSpan.Zero;
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
@@ -62,7 +59,6 @@ public partial class Projects: IDisposable
         base.OnInitialized();
         await _getLogedUser();
         await _getProjects();
-        hoursPassed = null;
         startLoading = false;
         StateHasChanged();
     }
@@ -235,9 +231,7 @@ public partial class Projects: IDisposable
         StartWorkTime = DateTime.Now;
         timer = new System.Threading.Timer((_) =>
         {
-            var chrono = DateTime.Now - StartWorkTime;
-            hoursPassed = chrono.Hours + hoursPaused;
-            minutsPassed = chrono.Minutes + minutsPaused;
+            timePassed = DateTime.Now - StartWorkTime;
 
         InvokeAsync(() =>
             {
@@ -248,8 +242,7 @@ public partial class Projects: IDisposable
 
     private void StopTimer()
     {
-        hoursPaused = (double)hoursPassed;
-        minutsPaused = (double)minutsPassed;
+        timePassed = timePaused;
         timer.Dispose();
     }
     #endregion
@@ -259,24 +252,28 @@ public partial class Projects: IDisposable
     {
         var previusValue = draw.MenHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        if ((hoursPassed - hoursUsed) < value)
+        if (timePassed.Hours < value)
         {
             // TODO: Display a Msg
             return;
         }
-        hoursPassed -= value;
+
+        var updatedTimeSpan = new TimeSpan(timePassed.Days, timePassed.Hours - Convert.ToInt32(value), timePassed.Minutes, timePassed.Seconds);
+        timePassed = updatedTimeSpan;
     }
 
     private void _onOtherHoursChanged(OtherVM other, object val)
     {
         var previusValue = other.MenHours;
         var value = Convert.ToInt32(val) > previusValue ? Convert.ToInt32(val) - previusValue : -(previusValue - Convert.ToInt32(val));
-        if ((hoursPassed - hoursUsed) < value)
+        if (timePassed.Hours < value)
         {
             // TODO: Display a Msg
             return;
         }
-        hoursPassed -= value;
+
+        var updatedTimeSpan = new TimeSpan(timePassed.Days, timePassed.Hours - Convert.ToInt32(value), timePassed.Minutes, timePassed.Seconds);
+        timePassed = updatedTimeSpan;
     }
 
     public async Task _endWorkDialogAccept()
@@ -284,13 +281,13 @@ public partial class Projects: IDisposable
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
 
-        if (hoursPassed > 0)
+        if (timePassed.Hours > 0)
         {
             // TODO: Display a message to update his hours.
             return;
         }
 
-        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToDouble(hoursPassed));
+        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timePassed.Hours));
 
         // TODO: Update all Records With User Hours
 

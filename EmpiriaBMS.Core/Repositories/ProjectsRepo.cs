@@ -1,7 +1,6 @@
 ﻿using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using EmpiriaMS.Models.Models.Base;
 using Microsoft.EntityFrameworkCore;

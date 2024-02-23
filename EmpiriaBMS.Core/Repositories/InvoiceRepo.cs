@@ -1,5 +1,4 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
-using EmpiriaMS.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -12,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable

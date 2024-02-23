@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaMS.Models.Models;
-using EmpiriaMS.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

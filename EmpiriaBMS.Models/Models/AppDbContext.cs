@@ -1,12 +1,11 @@
 ﻿using EmpiriaBMS.Models;
-using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Reflection.Emit;
 using System.Xml.Linq;
 
-namespace EmpiriaMS.Models;
+namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
 {
     const string SmarterASPNetDB = "Data Source=SQL5110.site4now.net;Initial Catalog=db_a8c181_empiriam;User Id=db_a8c181_empiriam_admin;Password=admin1234567";
@@ -19,6 +18,9 @@ public class AppDbContext : DbContext
     public DbSet<Draw> Draws { get; set; }
     public DbSet<Other> Others { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
+
+    //public DbSet<DailyHour> DailyHour { get; set; }
+    //public DbSet<Timespan> TimeSpan { get; set; }
 
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DisciplinePoject> DisciplinesPojects { get; set; }
@@ -53,8 +55,8 @@ public class AppDbContext : DbContext
         var role_7_id = random.Next(123456789, 999999999);
         var role_8_id = random.Next(123456789, 999999999);
 
-        var employes_roles_ids = (new List<int>(){role_1_id, role_2_id, role_3_id, role_4_id, role_5_id, role_6_id}).ToArray();
-        
+        var employes_roles_ids = new List<int>() { role_1_id, role_2_id, role_3_id, role_4_id, role_5_id, role_6_id }.ToArray();
+
         Role role_1 = new()
         {
             Id = role_1_id,
@@ -282,9 +284,9 @@ public class AppDbContext : DbContext
                 WorkPackege = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 DelayInPayment = Convert.ToInt32(Math.Pow(i, 2)),
                 PaymentDetailes = "Payment Detailes For Project_" + Convert.ToString(i * random.Next(1, 7)),
-                DayCost = 7 + i - (1 * 2),
+                DayCost = 7 + i - 1 * 2,
                 Bank = i % 2 == 0 ? "ALPHA" : "NBG_IBANK",
-                PaidFee = 7 - (1 * 2),
+                PaidFee = 7 - 1 * 2,
                 DaysUntilPayment = (createdDate.AddDays(Convert.ToInt32(Math.Pow(i, 2))) - createdDate).Days,
                 PendingPayments = i,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
@@ -472,7 +474,7 @@ public class AppDbContext : DbContext
             {
                 DisciplineDraw dd = new DisciplineDraw()
                 {
-                    Id = random.Next(123456789, 999999999) + (e+1) * 2 + 1,
+                    Id = random.Next(123456789, 999999999) + (e + 1) * 2 + 1,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     DisciplineId = disciplineId,
@@ -483,9 +485,9 @@ public class AppDbContext : DbContext
         }
 
         // Disciplines With Projects 2 Disciplines on Every Project
-        foreach(var project in projects)
+        foreach (var project in projects)
         {
-            foreach(var discipline in disciplines)
+            foreach (var discipline in disciplines)
             {
                 DisciplinePoject disciplinePoject = new DisciplinePoject()
                 {
