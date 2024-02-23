@@ -47,8 +47,9 @@ public partial class Projects: IDisposable
     // Paginator
     private PaginatorVM _paginator = new PaginatorVM(7);
 
-    // Basic Models
+    // Auth Models
     private UserVM _logedUser;
+    private double _logesUserHours = 0;
     private ICollection<RoleVM> _loggedUserRoles = new List<RoleVM>();
     private bool _logesUserChanged = false;
 
@@ -120,6 +121,8 @@ public partial class Projects: IDisposable
                 throw new Exception("Exception user with `Draftsmen` role not exists!");
 
             _logedUser = Mapper.Map<UserVM>(dbUser);
+
+            _logesUserHours = await DataProvider.Users.GetUserHoursFromLastMonday(_logedUser.Id, DateTime.Now);
 
             _loggedUserRoles = (await DataProvider.Roles.GetEmplyeeRoles(dbUser.Id))
                                                         .Select(r => Mapper.Map<RoleVM>(r))
@@ -287,7 +290,9 @@ public partial class Projects: IDisposable
             return;
         }
 
-        // TODO: Add User Hours with current Date and then Update all parrents Hours and Save Changes
+        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToDouble(hoursPassed));
+
+        // TODO: Update all Records With User Hours
 
         await Task.Delay(2000);
     }

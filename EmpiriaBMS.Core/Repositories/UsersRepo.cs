@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.ExtensionMethods;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>
@@ -95,7 +96,7 @@ public class UsersRepo : Repository<UserDto, User>
     {
         if (userId == 0)
             throw new NullReferenceException($"No User Id Specified!");
- 
+
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var roleIds = await _context.Set<UserRole>()
@@ -156,7 +157,7 @@ public class UsersRepo : Repository<UserDto, User>
                 return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
             }
 
-            
+
 
             users = await _context.Users.Where(u => employeeIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
@@ -167,7 +168,7 @@ public class UsersRepo : Repository<UserDto, User>
                                        .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
-        } 
+        }
     }
 
     public async Task<ICollection<UserDto>> GetEmployees(
@@ -310,11 +311,121 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    // TODO: Get Users Today DailyHours
+    public async Task<double> GetUserHours(int userId, DateTime date)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
 
-    // TODO: Get Users Sum Of All Days Hours
+        if (date > DateTime.Now)
+            throw new ArgumentException(nameof(date));
 
-    // TODO: Get Users Last Week Sum Of Hours
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var dailyHours = await _context.Set<DailyHour>()
+                                     .Where(u => u.UserId == userId)
+                                     .ToListAsync();
+            
+            var dailyHour = dailyHours.FirstOrDefault(d => d.Date.CompareTo(date) == 0);
+            
+            return dailyHour.Hours;
+        }
+    }
 
-    // TODO: Add To User DailyHours (Date, Hours)
+    public async Task<double> GetUserHoursFromLastMonday(int userId, DateTime date)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        if (date > DateTime.Now)
+            throw new ArgumentException(nameof(date));
+
+        if (date.DayOfWeek == DayOfWeek.Monday)
+            return 0.0;
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var lastMondaysDate = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
+
+            return await _context.Set<DailyHour>()
+                                           .Where(u => u.UserId == userId)
+                                           .Where(u => u.Date.CompareTo(lastMondaysDate) > 0)
+                                           .Select(u => u.Hours)
+                                           .SumAsync();
+        }
+    }
+
+    public async Task<double> GetUserSumHours(int userId)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<DailyHour>()
+                           .Where(u => u.UserId == userId)
+                           .Select(d => d.Hours)
+                           .SumAsync();
+        }
+    }
+
+    public async Task<double> GetUserLastWeekHours(int userId, DateTime date)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        if (date > DateTime.Now)
+            throw new ArgumentException(nameof(date));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var dateBeforeWeek = date.AddDays(-7);
+            return await _context.Set<DailyHour>()
+                                           .Where(u => u.UserId == userId)
+                                           .Where(u => u.Date.CompareTo(dateBeforeWeek) > 0)
+                                           .Select(u => u.Hours)
+                                           .SumAsync();
+        }
+    }
+
+    public async Task<DailyHour> AddHours(int userId, DateTime date, double hours)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        if (date > DateTime.Now)
+            throw new ArgumentException(nameof(date));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Check if time is betoween 12 - 5 at morning
+            TimeSpan start = new TimeSpan(12, 0, 0);
+            TimeSpan end = new TimeSpan(5, 0, 0);
+            TimeSpan now = date.TimeOfDay;
+
+            if ((now > start) && (now < end))
+            {
+                // Get Yesterday DailyHour
+                var yesterdayDate = date.AddDays(-1);
+                var yesterdayDailyHour = await _context.Set<DailyHour>()
+                                                   .Where(u => u.UserId == userId)
+                                                   .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
+
+                yesterdayDailyHour.Hours += hours;
+
+                await _context.SaveChangesAsync();
+
+                return yesterdayDailyHour;
+            }
+            else
+            {
+                var result = await _context.Set<DailyHour>()
+                                       .AddAsync(
+                    new DailyHour { UserId = userId, Date = date }
+                );
+
+                return result.Entity;
+            }
+        }
+    }
+
 }
