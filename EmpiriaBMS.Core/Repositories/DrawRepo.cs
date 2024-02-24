@@ -88,66 +88,45 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
         }
     }
 
-    public async Task UpdateCompleted(int projectId, int drawId, int completed)
+    public async Task UpdateCompleted(int projectId, int disciplineId, int drawId, int completed)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            // Get Parent Project
-            var project = await _context.Set<Project>()
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            // Get Parent Discipline
-            var projectDisciplinesIds = await _context.Set<DisciplinePoject>()
-                                                      .Where(dp => dp.ProjectId == projectId)
-                                                      .Select(dp => dp.DisciplineId)
-                                                      .ToListAsync();
-
-            var disciplinesDraws = await _context.Set<DisciplineDraw>()
-                                                 .Where(dd => projectDisciplinesIds.Contains(dd.DisciplineId))
-                                                 .Where(dd => dd.DrawId == drawId)
-                                                 .ToListAsync();
-
-            var purentDisciplineId = disciplinesDraws.Select(dd => dd.DisciplineId)
-                                                     .FirstOrDefault();
-            var purentDiscipline = await _context.Set<Discipline>()
-                                                 .FirstOrDefaultAsync(d => d.Id == purentDisciplineId);
-
-            // Get Current Drawing
+            // Update Current Drawing
             var drawing = await _context.Set<Draw>()
                                         .FirstOrDefaultAsync(d => d.Id == drawId);
-
-
             if (drawing == null)
                 throw new NullReferenceException(nameof(drawing));
-
-            // Add Hours To Drawing
             drawing.CompletionEstimation += completed;
-            await _context.SaveChangesAsync();
 
             // Calculate Parent Discipline Completed
-            var allDrawingsIds = purentDiscipline.DisciplinesDraws.Select(dd => dd.DrawId);
+            var discipline = await _context.Set<Discipline>()
+                                           .Include(d => d.DisciplinesDraws)
+                                           .FirstOrDefaultAsync(d => d.Id == disciplineId);
+            if (discipline == null)
+                throw new NullReferenceException(nameof(discipline));
+            var allDrawingsIds = discipline.DisciplinesDraws.Select(dd => dd.DrawId).ToList();
             var allDrawings = await _context.Set<Draw>().Where(d => allDrawingsIds.Contains(d.Id))
                                                         .ToListAsync();
             var sumComplitionOfDrawings = allDrawings
                                           .Select(d => d.CompletionEstimation)
                                           .Sum();
-            sumComplitionOfDrawings += completed;
-
-            var drawsCounter = purentDiscipline.DisciplinesDraws.Count() + 1;
-            purentDiscipline.Completed = sumComplitionOfDrawings / drawsCounter;
-            await _context.SaveChangesAsync();
+            var drawsCounter = discipline.DisciplinesDraws.Count();
+            discipline.Completed = sumComplitionOfDrawings / drawsCounter;
 
             // Calculate Parent Project Complition
-            var sumCompplitionOfDisciplines = await _context.Set<Discipline>()
-                                                            .Where(d => projectDisciplinesIds.Contains(d.Id))
-                                                            .Select(d => d.Completed)
-                                                            .SumAsync();
-
-            var disciplinesCounter = projectDisciplinesIds.Count();
-
+            var project = await _context.Set<Project>()
+                                        .Include(p => p.DisciplinesProjects)
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+            var disciplineIds = project.DisciplinesProjects.Select(dp => dp.DisciplineId).ToList();
+            var disciplines = await _context.Set<Discipline>()
+                                            .Where(d => disciplineIds.Contains(d.Id))
+                                            .ToListAsync();
+            var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
+            var disciplinesCounter = disciplineIds.Count();
             project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
 
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
         }
     }
 

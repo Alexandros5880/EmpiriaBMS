@@ -291,7 +291,14 @@ public partial class Projects : IDisposable
         }
 
         draw.MenHours += value;
-        _drawsChanged.Add(draw);
+
+        if (_drawsChanged.Any(d => d.Id == draw.Id))
+        {
+            var d = _drawsChanged.FirstOrDefault(d => d.Id == draw.Id);
+            d.MenHours = draw.MenHours;
+        }
+        else
+            _drawsChanged.Add(draw);
 
         var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
         timeToSet = updatedTimeSpan;
@@ -302,7 +309,14 @@ public partial class Projects : IDisposable
     private void _onDrawCompletedChanged(DrawVM draw, object val)
     {
         draw.CompletionEstimation += Convert.ToInt32(val);
-        _drawsChanged.Add(draw);
+
+        if (_drawsChanged.Any(d => d.Id == draw.Id))
+        {
+            var d = _drawsChanged.FirstOrDefault(d => d.Id == draw.Id);
+            d.CompletionEstimation = draw.CompletionEstimation;
+        }
+        else
+            _drawsChanged.Add(draw);
 
         StateHasChanged();
     }
@@ -320,7 +334,14 @@ public partial class Projects : IDisposable
         }
 
         other.MenHours += value;
-        _othersChanged.Add(other);
+
+        if (_othersChanged.Any(o => o.Id == other.Id))
+        {
+            var o = _othersChanged.FirstOrDefault(o => o.Id == other.Id);
+            o.MenHours = other.MenHours;
+        }
+        else
+            _othersChanged.Add(other);
 
         var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
         timeToSet = updatedTimeSpan;
@@ -347,15 +368,15 @@ public partial class Projects : IDisposable
         // Update Draws
         foreach (var draw in _drawsChanged)
         {
-            await DataProvider.Draws.UpdateCompleted(_selectedProject.Id, draw.Id, draw.CompletionEstimation);
-            await DataProvider.Draws.UpdateHours(_selectedProject.Id, draw.Id, draw.MenHours);
+            await DataProvider.Draws.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
+            //await DataProvider.Draws.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
         }
 
         // Update Others
         foreach (var other in _othersChanged)
         {
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, other.Id, other.CompletionEstimation);
-            await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, other.MenHours);
+            //await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, other.MenHours);
         }
 
         _drawsChanged.Clear();
