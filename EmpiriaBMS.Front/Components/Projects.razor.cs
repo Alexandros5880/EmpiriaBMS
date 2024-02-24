@@ -362,21 +362,18 @@ public partial class Projects : IDisposable
 
         startLoading = true;
 
-        // Update User Hours
-        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
-
         // Update Draws
         foreach (var draw in _drawsChanged)
         {
-            //var old = _draws.FirstOrDefault(d => d.Id == draw.Id);
-            //if (old.CompletionEstimation > draw.CompletionEstimation)
-            //{
-            //TODO: Display Msg
+            var old = _draws.FirstOrDefault(d => d.Id == draw.Id);
+            if (old.CompletionEstimation > draw.CompletionEstimation)
+            {
+                //TODO: Display Msg
 
-            //    return;
-            //}
-            //else
-            await DataProvider.Draws.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
+                return;
+            }
+            else
+                await DataProvider.Draws.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
             await DataProvider.Draws.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
         }
 
@@ -386,6 +383,9 @@ public partial class Projects : IDisposable
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
             await DataProvider.Others.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
         }
+
+        // Update User Hours
+        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
 
         _drawsChanged.Clear();
         _othersChanged.Clear();
