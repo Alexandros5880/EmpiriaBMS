@@ -130,72 +130,42 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
         }
     }
 
-    public async Task UpdateHours(int projectId, int drawId, double hours)
+    public async Task UpdateHours(int projectId, int disciplineId, int drawId, long hours)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            // Get Parent Project
-            var project = await _context.Set<Project>()
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            // Get Parent Discipline
-            var projectDisciplinesIds = await _context.Set<DisciplinePoject>()
-                                                      .Where(dp => dp.ProjectId == projectId)
-                                                      .Select(dp => dp.DisciplineId)
-                                                      .ToListAsync();
-
-            var disciplinesDraws = await _context.Set<DisciplineDraw>()
-                                                 .Where(dd => projectDisciplinesIds.Contains(dd.DisciplineId))
-                                                 .Where(dd => dd.DrawId == drawId)
-                                                 .ToListAsync();
-
-            var purentDisciplineId = disciplinesDraws.Select(dd => dd.DisciplineId)
-                                                     .FirstOrDefault();
-            var purentDiscipline = await _context.Set<Discipline>()
-                                                 .FirstOrDefaultAsync(d => d.Id == purentDisciplineId);
-
-            // Get Current Drawing
+            // Update Current Drawing
             var drawing = await _context.Set<Draw>()
                                         .FirstOrDefaultAsync(d => d.Id == drawId);
-
             if (drawing == null)
                 throw new NullReferenceException(nameof(drawing));
-
-            // Add Hours To Drawing
             drawing.MenHours += hours;
-            await _context.SaveChangesAsync();
 
-            purentDiscipline.MenHours += Convert.ToInt64(hours);
-            await _context.SaveChangesAsync();
+            // Calculate Parent Discipline Hours
+            var discipline = await _context.Set<Discipline>()
+                                           .Include(d => d.DisciplinesDraws)
+                                           .FirstOrDefaultAsync(d => d.Id == disciplineId);
+            if (discipline == null)
+                throw new NullReferenceException(nameof(discipline));
+            var allDrawingsIds = discipline.DisciplinesDraws.Select(dd => dd.DrawId).ToList();
+            var allDrawings = await _context.Set<Draw>().Where(d => allDrawingsIds.Contains(d.Id))
+                                                        .ToListAsync();
+            var sumHoursOfDrawings = allDrawings.Select(d => d.MenHours).Sum();
+            discipline.MenHours = sumHoursOfDrawings;
 
-            project.MenHours += Convert.ToInt64(hours);
-            project.EstimatedCompleted = (project.MenHours / project.EstimatedHours) * 100;
-            await _context.SaveChangesAsync();
-
+            // Calculate Parent Project MenHours && EstimatedCompleted
+            var project = await _context.Set<Project>()
+                                        .Include(p => p.DisciplinesProjects)
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+            var disciplineIds = project.DisciplinesProjects.Select(dp => dp.DisciplineId).ToList();
+            var disciplines = await _context.Set<Discipline>()
+                                            .Where(d => disciplineIds.Contains(d.Id))
+                                            .ToListAsync();
+            var sumMenHoursOfDisciplines = disciplines.Select(d => d.MenHours).Sum();
+            project.MenHours = sumMenHoursOfDisciplines;
+            decimal divitionResult = Convert.ToDecimal(project.MenHours / project.EstimatedHours);
+            project.EstimatedCompleted = (float)divitionResult * 100;
             await _context.SaveChangesAsync();
         }
     }
-
-    //public async Task<int> GetUsersWorkPackegedCompleted(int userId)
-    //{
-    //    if (userId == 0)
-    //        throw new ArgumentException(nameof(userId));
-
-    //    using (var _context = _dbContextFactory.CreateDbContext())
-    //    {
-    //        var disciplines = await _context.Set<DisciplineEmployee>()
-    //                                          .Where(de => de.EmployeeId == userId)
-    //                                          .Select(de => de.Discipline)
-    //                                          .ToListAsync();
-
-    //        var Draws2D = disciplines.Select(d => d.DisciplinesDraws.Select(dd => dd.Draw));
-    //        List<int?> drawsCompleteds = new List<int?>();
-
-    //        foreach(var d1 in Draws2D)
-    //            foreach (var d2 in d1)
-    //                drawsCompleteds.Add(d2.CompletionEstimation);
-
-    //        return drawsCompleteds.Sum() ?? 0;
-    //    }
-    //}
 }

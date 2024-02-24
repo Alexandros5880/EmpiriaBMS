@@ -19,8 +19,8 @@ public class DrawVM : BaseVM
         }
     }
 
-    private double _menHours;
-    public double MenHours
+    private long _menHours;
+    public long MenHours
     {
         get => _menHours;
         set

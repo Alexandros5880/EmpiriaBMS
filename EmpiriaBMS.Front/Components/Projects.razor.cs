@@ -369,14 +369,14 @@ public partial class Projects : IDisposable
         foreach (var draw in _drawsChanged)
         {
             await DataProvider.Draws.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            //await DataProvider.Draws.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
+            await DataProvider.Draws.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
         }
 
         // Update Others
         foreach (var other in _othersChanged)
         {
-            //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, other.Id, other.CompletionEstimation);
-            //await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, other.MenHours);
+            //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
+            await DataProvider.Others.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
         }
 
         _drawsChanged.Clear();

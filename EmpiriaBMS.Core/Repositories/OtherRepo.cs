@@ -18,6 +18,74 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 {
     public OtherRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public new async Task<OtherDto?> Get(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var dr = await _context
+                             .Set<Other>()
+                             .FirstOrDefaultAsync(r => r.Id == id);
+
+            return Mapping.Mapper.Map<OtherDto>(dr);
+        }
+    }
+
+    public new async Task<ICollection<OtherDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Other> drs;
+
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                drs = await _context.Set<Other>()
+                                     .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+            }
+
+
+            drs = await _context.Set<Other>()
+                                 .Skip((pageIndex - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+        }
+    }
+
+    public new async Task<ICollection<OtherDto>> GetAll(
+        Expression<Func<Other, bool>> expresion,
+        int pageSize = 0,
+        int pageIndex = 0
+    ) {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Other> drs;
+
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                drs = await _context.Set<Other>()
+                                    .Where(expresion)
+                                    .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+            }
+
+
+            drs = await _context.Set<Other>()
+                                .Where(expresion)
+                                .Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+        }
+    }
+
     public async Task UpdateCompleted(int projectId, int disciplineId, int otherId, float completed)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -60,117 +128,42 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         }
     }
 
-    public async Task UpdateHours(int projectId, int otherId, double hours)
+    public async Task UpdateHours(int projectId, int disciplineId, int otherId, long hours)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            // Get Parent Project
-            var project = await _context.Set<Project>()
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            // Get Parent Discipline
-            var projectDisciplinesIds = await _context.Set<DisciplinePoject>()
-                                                      .Where(dp => dp.ProjectId == projectId)
-                                                      .Select(dp => dp.DisciplineId)
-                                                      .ToListAsync();
-
-            var disciplinesOthers = await _context.Set<DisciplineOther>()
-                                                  .Where(dd => projectDisciplinesIds.Contains(dd.DisciplineId))
-                                                  .Where(dd => dd.OtherId == otherId)
-                                                  .ToListAsync();
-
-            var purentDisciplineId = disciplinesOthers.Select(dd => dd.DisciplineId)
-                                                      .FirstOrDefault();
-            var purentDiscipline = await _context.Set<Discipline>()
-                                                 .FirstOrDefaultAsync(d => d.Id == purentDisciplineId);
-
-            // Get Current Other
+            // Update Current Other
             var other = await _context.Set<Other>()
-                                      .FirstOrDefaultAsync(d => d.Id == otherId);
-
+                                        .FirstOrDefaultAsync(d => d.Id == otherId);
             if (other == null)
                 throw new NullReferenceException(nameof(other));
-
-            // Add Hours To Drawing
             other.MenHours += hours;
-            await _context.SaveChangesAsync();
 
-            purentDiscipline.MenHours += Convert.ToInt64(hours);
-            await _context.SaveChangesAsync();
+            // Calculate Parent Discipline Hours
+            var discipline = await _context.Set<Discipline>()
+                                           .Include(d => d.DisciplinesOthers)
+                                           .FirstOrDefaultAsync(d => d.Id == disciplineId);
+            if (discipline == null)
+                throw new NullReferenceException(nameof(discipline));
+            var allOthersIds = discipline.DisciplinesOthers.Select(dd => dd.OtherId).ToList();
+            var allOthers = await _context.Set<Other>().Where(d => allOthersIds.Contains(d.Id))
+                                                        .ToListAsync();
+            var sumHoursOfOthers = allOthers.Select(d => d.MenHours).Sum();
+            discipline.MenHours = sumHoursOfOthers;
 
-            project.MenHours += Convert.ToInt64(hours);
+            // Calculate Parent Project MenHours && EstimatedCompleted
+            var project = await _context.Set<Project>()
+                                        .Include(p => p.DisciplinesProjects)
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+            var disciplineIds = project.DisciplinesProjects.Select(dp => dp.DisciplineId).ToList();
+            var disciplines = await _context.Set<Discipline>()
+                                            .Where(d => disciplineIds.Contains(d.Id))
+                                            .ToListAsync();
+            var sumMenHoursOfDisciplines = disciplines.Select(d => d.MenHours).Sum();
+            project.MenHours = sumMenHoursOfDisciplines;
+            decimal divitionResult = Convert.ToDecimal(project.MenHours / project.EstimatedHours);
+            project.EstimatedCompleted = (float)divitionResult * 100;
             await _context.SaveChangesAsync();
         }
     }
-
-    //public new async Task<OtherDto?> Get(int id)
-    //{
-    //    if (id == 0)
-    //        throw new ArgumentNullException(nameof(id));
-
-    //    using (var _context = _dbContextFactory.CreateDbContext())
-    //    {
-    //        var Other = await _context
-    //                         .Set<Other>()
-    //                         .Include(r => r.Discipline)
-    //                         .FirstOrDefaultAsync(r => r.Id == id);
-
-    //        return Mapping.Mapper.Map<OtherDto>(Other);
-    //    }
-    //}
-
-    //public new async Task<ICollection<OtherDto>> GetAll(int pageSize = 0, int pageIndex = 0)
-    //{
-    //    using (var _context = _dbContextFactory.CreateDbContext())
-    //    {
-    //        List<Other> ds;
-
-    //        if (pageSize == 0 || pageIndex == 0)
-    //        {
-    //            ds =  await _context.Set<Other>()
-    //                                 .Include(r => r.Discipline)
-    //                                 .ToListAsync();
-
-    //            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(ds);
-    //        }
-
-    //        ds = await _context.Set<Other>()
-    //                             .Skip((pageIndex - 1) * pageSize)
-    //                             .Take(pageSize)
-    //                             .Include(r => r.Discipline)
-    //                             .ToListAsync();
-
-    //        return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(ds);
-    //    } 
-    //}
-
-    //public new async Task<ICollection<OtherDto>> GetAll(
-    //    Expression<Func<Other, bool>> expresion,
-    //    int pageSize = 0,
-    //    int pageIndex = 0
-    //) {
-    //    using (var _context = _dbContextFactory.CreateDbContext())
-    //    {
-    //        List<Other> ds;
-
-    //        if (pageSize == 0 || pageIndex == 0)
-    //        {
-    //            ds = await _context.Set<Other>()
-    //                               .Where(expresion)
-    //                               .Include(r => r.Discipline)
-    //                               .ToListAsync();
-
-    //            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(ds);
-    //        }
-
-    //        ds = await _context.Set<Other>()
-    //                           .Where(expresion)
-    //                           .Skip((pageIndex - 1) * pageSize)
-    //                           .Take(pageSize)
-    //                           .Include(r => r.Discipline)
-    //                           .ToListAsync();
-
-    //        return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(ds);
-    //    }
-    //}
 }
