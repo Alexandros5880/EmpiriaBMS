@@ -27,11 +27,11 @@ public class ProjectDto : EntityDto
 
     public long MenHours { get; set; }
 
-    public long EstimatedCompleted { get; set; }
+    public float EstimatedCompleted { get; set; }
 
-    public int Completed { get; set; }
+    public float Completed { get; set; }
 
-    public int WorkPackegedCompleted { get; set; }
+    public float WorkPackegedCompleted { get; set; }
 
     public DateTime? DeadLine { get; set; }
 

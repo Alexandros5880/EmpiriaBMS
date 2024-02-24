@@ -14,7 +14,7 @@ public class DrawDto : EntityDto
 
     public double MenHours { get; set; }
 
-    public int CompletionEstimation { get; set; }
+    public float CompletionEstimation { get; set; }
 
     public DateTime? CompletionDate { get; set; }
 

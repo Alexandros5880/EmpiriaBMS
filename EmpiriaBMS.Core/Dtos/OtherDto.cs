@@ -14,7 +14,7 @@ public class OtherDto : EntityDto
 
     public double MenHours { get; set; }
 
-    public int CompletionEstimation { get; set; }
+    public float CompletionEstimation { get; set; }
 
     public int DisciplineId { get; set; }
     public Discipline Discipline { get; set; }

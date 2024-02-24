@@ -18,7 +18,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 {
     public OtherRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async Task UpdateCompleted(int projectId, int disciplineId, int otherId, int completed)
+    public async Task UpdateCompleted(int projectId, int disciplineId, int otherId, float completed)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -56,7 +56,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
             var disciplinesCounter = disciplineIds.Count();
             project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
 
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 

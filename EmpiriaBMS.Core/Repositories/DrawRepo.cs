@@ -88,7 +88,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
         }
     }
 
-    public async Task UpdateCompleted(int projectId, int disciplineId, int drawId, int completed)
+    public async Task UpdateCompleted(int projectId, int disciplineId, int drawId, float completed)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -126,7 +126,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
             var disciplinesCounter = disciplineIds.Count();
             project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
 
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 

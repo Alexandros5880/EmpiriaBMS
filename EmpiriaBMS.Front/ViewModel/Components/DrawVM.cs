@@ -32,8 +32,8 @@ public class DrawVM : BaseVM
         }
     }
 
-    private int _completionEstimation;
-    public int CompletionEstimation
+    private float _completionEstimation;
+    public float CompletionEstimation
     {
         get => _completionEstimation;
         set

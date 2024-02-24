@@ -26,11 +26,11 @@ public class Project : Entity
     
     public long MenHours { get; set; }
 
-    public long EstimatedCompleted { get; set; }
+    public float EstimatedCompleted { get; set; }
 
-    public int? Completed { get; set; }
+    public float Completed { get; set; }
 
-    public int? WorkPackegedCompleted { get; set; }
+    public float WorkPackegedCompleted { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]

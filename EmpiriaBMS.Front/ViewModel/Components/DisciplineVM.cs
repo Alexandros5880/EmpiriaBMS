@@ -45,8 +45,8 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private int _completed;
-    public int Completed
+    private float _completed;
+    public float Completed
     {
         get => _completed;
         set

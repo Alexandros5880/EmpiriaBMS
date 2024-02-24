@@ -18,7 +18,7 @@ public class Discipline : Entity
 
     public long MenHours { get; set; }
 
-    public int Completed { get; set; }
+    public float Completed { get; set; }
 
     public int? EngineerId { get; set; }
     public User? Engineer { get; set; }

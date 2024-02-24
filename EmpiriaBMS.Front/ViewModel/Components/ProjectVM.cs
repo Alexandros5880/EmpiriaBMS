@@ -100,8 +100,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private long _estimatedCompleted;
-    public long EstimatedCompleted
+    private float _estimatedCompleted;
+    public float EstimatedCompleted
     {
         get => _estimatedCompleted;
         set
@@ -113,8 +113,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int _completed;
-    public int Completed
+    private float _completed;
+    public float Completed
     {
         get => _completed;
         set
@@ -126,8 +126,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int _workPackegedCompleted;
-    public int WorkPackegedCompleted
+    private float _workPackegedCompleted;
+    public float WorkPackegedCompleted
     {
         get => _workPackegedCompleted;
         set

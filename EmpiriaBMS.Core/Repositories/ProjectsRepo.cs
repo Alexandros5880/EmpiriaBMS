@@ -229,7 +229,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                  .CountAsync();
     }
 
-    public async Task<int> GetUsersWorkPackegedCompleted(int userId)
+    public async Task<float> GetUsersWorkPackegedCompleted(int userId)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -242,13 +242,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                               .ToListAsync();
 
             var Draws2D = disciplines.Select(d => d.DisciplinesDraws.Select(dd => dd.Draw));
-            List<int?> drawsCompleteds = new List<int?>();
+            List<float> drawsCompleteds = new List<float>();
 
             foreach (var d1 in Draws2D)
                 foreach (var d2 in d1)
                     drawsCompleteds.Add(d2.CompletionEstimation);
 
-            return drawsCompleteds.Sum() ?? 0;
+            return drawsCompleteds.Sum();
         }
     }
 
