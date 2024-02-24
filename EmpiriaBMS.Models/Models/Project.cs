@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EmpiriaMS.Models.Models.Base;
-using EmpiriaMS.Models.Enums;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaMS.Models.Models;
 public class Project : Entity
@@ -20,10 +20,25 @@ public class Project : Entity
 
     public string? Drawing { get; set; }
 
-    [Required]
-    public PlanType PlanType { get; set; }
+    public long EstimatedMandays { get; set; }
 
-    public int? WorkingDays { get; set; }
+    public long EstimatedHours { get; set; }
+    
+    public long MenHours { get; set; }
+
+    public float EstimatedCompleted { get; set; }
+
+    public float Completed { get; set; }
+
+    public float WorkPackegedCompleted { get; set; }
+
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime? DeadLine { get; set; }
+
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime? WorkPackege { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
@@ -53,20 +68,12 @@ public class Project : Entity
 
     public int? CalculationDaly { get; set; }
 
-    [Required]
-    [Range(0, 100)]
-    public int? Completed { get; set; }
+    public int? ProjectManagerId { get; set; }
+    public User? ProjectManager { get; set; }
 
-    public int? ManHours { get; set; }
+    public User? Customer { get; set; }
 
-    [Required]
-    [ForeignKey("Customer")]
-    public string? CustomerId { get; set; }
-    public Customer? Customer { get; set; }
-
-    [ForeignKey("Invoice")]
-    public string? InvoiceId { get; set; }
     public Invoice? Invoice { get; set; }
 
-    public IEnumerable<Employee>? Employees { get; set; }
+    public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
 }

@@ -34,4 +34,26 @@ public class MicrosoftTeams : InteropModuleBase
             return Task.FromResult(false);
         }
     }
+
+    public Task ApplyTimeMask(string elementId, string minTime, string maxTime)
+    {
+        ApplyTimeInputValidationParameters param = new ApplyTimeInputValidationParameters()
+        {
+            ElementId = elementId,
+            MinTime = minTime,
+            MaxTime = maxTime
+        };
+        return InvokeVoidAsync("applyTimeMask", param);
+    }
+
+
+
+
+    // Parameter Class
+    protected class ApplyTimeInputValidationParameters
+    {
+        public string ElementId { get; set; }
+        public string MinTime { get; set; }
+        public string MaxTime { get; set; }
+    }
 }

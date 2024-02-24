@@ -1,14 +1,39 @@
+using AutoMapper;
+using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Repositories;
 using EmpiriaBMS.Front;
+using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
+using EmpiriaBMS.Models.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Fast.Components.FluentUI;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+// TODO: Dependency Injection Decliration Here
 var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
+
+// Data Providing Dependency Injection
+builder.Services.AddDbContextFactory<AppDbContext>();
+builder.Services.AddScoped<IDataProvider, DataProvider>();
+
+// TODO: AutoMapper
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+
+builder.Services.AddFluentUIComponents();
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient("WebClient", client => client.Timeout = TimeSpan.FromSeconds(600));

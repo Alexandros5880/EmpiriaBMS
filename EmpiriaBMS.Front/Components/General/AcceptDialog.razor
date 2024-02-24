@@ -1,0 +1,102 @@
+﻿@inject MicrosoftTeams MicrosoftTeams
+
+<!-- Accept Dialog -->
+<FluentDialog @ref="_acceptDialog"
+              Hidden="@(!IsAcceptDialogOdepened)"
+              Modal="false">
+
+    <div class="badge text-dark text-wrap fs-3">@AcceptDialogMsg</div>
+
+    @if (IsLoading)
+    {
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 5%;">
+            <FluentProgressRing />
+        </div>
+    }
+    else
+    {
+        @if (AcceptButtons)
+        {
+            <div class="mt-2 row">
+                <FluentButton class="col-6" OnClick="@(async () => await AcceptDialogOnAccept())">
+                    Ok
+                </FluentButton>
+                <FluentButton class="col-6" OnClick="@(() => Close())">
+                    Cancel
+                </FluentButton>
+            </div>
+        }
+    }
+
+</FluentDialog>
+
+@code {
+
+    [Parameter]
+    public bool IsAcceptDialogOdepened { get; set; } = false;
+
+    public bool IsLoading { get; set; } = false;
+
+    private FluentDialog? _acceptDialog;
+
+    public bool AcceptButtons { get; set; } = true;
+
+    public string AcceptDialogMsg { get; set; } = string.Empty;
+
+    public Func<Task> AcceptDialogOnAccept { get; set; } = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Close();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            var runInTeams = await MicrosoftTeams.IsInTeams();
+            if (runInTeams)
+            {
+
+            }
+
+            // Update UI
+            //StateHasChanged();
+        }
+
+        Close();
+    }
+
+    public async Task ToogleAcceptDialog(
+        bool open,
+        Func<Task> acceptDialogOnAccept = null,
+        string msg = "",
+        bool acceptButtons = true,
+        int delay = 3000
+    ) {
+        AcceptButtons = acceptButtons;
+        AcceptDialogMsg = msg;
+        IsAcceptDialogOdepened = open;
+        AcceptDialogOnAccept = acceptDialogOnAccept;
+        if (open)
+            _acceptDialog.Show();
+        else
+            _acceptDialog.Hide();
+
+        if (acceptDialogOnAccept == null && open)
+        {
+            await Task.Delay(delay);
+            _acceptDialog.Hide();
+        }
+    }
+
+    public void Close()
+    {
+        IsAcceptDialogOdepened = false;
+        _acceptDialog?.Hide();
+    }
+
+}

@@ -5,3 +5,5 @@ EmpiriaMS.Core/obj
 EmpiriaMS.EF.CLI/bin
 EmpiriaMS.Models/bin
 EmpiriaMS.Core/bin
+bin/
+obj/
