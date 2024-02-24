@@ -163,7 +163,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
                                             .ToListAsync();
             var sumMenHoursOfDisciplines = disciplines.Select(d => d.MenHours).Sum();
             project.MenHours = sumMenHoursOfDisciplines;
-            decimal divitionResult = Convert.ToDecimal(project.MenHours / project.EstimatedHours);
+            decimal divitionResult = Convert.ToDecimal(project.MenHours) / Convert.ToDecimal(project.EstimatedHours);
             project.EstimatedCompleted = (float)divitionResult * 100;
             await _context.SaveChangesAsync();
         }
