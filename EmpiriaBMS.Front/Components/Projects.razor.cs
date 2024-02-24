@@ -368,6 +368,14 @@ public partial class Projects : IDisposable
         // Update Draws
         foreach (var draw in _drawsChanged)
         {
+            //var old = _draws.FirstOrDefault(d => d.Id == draw.Id);
+            //if (old.CompletionEstimation > draw.CompletionEstimation)
+            //{
+            //TODO: Display Msg
+
+            //    return;
+            //}
+            //else
             await DataProvider.Draws.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
             await DataProvider.Draws.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
         }
@@ -381,9 +389,10 @@ public partial class Projects : IDisposable
 
         _drawsChanged.Clear();
         _othersChanged.Clear();
-        startLoading = false;
 
-        StateHasChanged();
+        await _getProjects();
+
+        startLoading = false;
     }
 
     public void _endWorkDialogCansel()
