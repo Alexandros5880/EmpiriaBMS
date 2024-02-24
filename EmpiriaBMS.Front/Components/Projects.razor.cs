@@ -358,6 +358,8 @@ public partial class Projects : IDisposable
             await DataProvider.Others.UpdateHours(_selectedProject.Id, other.Id, other.MenHours);
         }
 
+        _drawsChanged.Clear();
+        _othersChanged.Clear();
         startLoading = false;
 
         StateHasChanged();
@@ -370,16 +372,6 @@ public partial class Projects : IDisposable
         ToogleWorkStatus(true);
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
-    }
-    #endregion
-
-    #region View Hellper Functions
-    private string _displayProjectsHoursComplition(ProjectVM project)
-    {
-        if (project.MenHours == 0 || project.EstimatedHours == 0)
-            return "0";
-
-        return Convert.ToString((project.MenHours / project.EstimatedHours) * 100);
     }
     #endregion
 

@@ -100,6 +100,19 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private long _estimatedCompleted;
+    public long EstimatedCompleted
+    {
+        get => _estimatedCompleted;
+        set
+        {
+            if (value == _estimatedCompleted)
+                return;
+            _estimatedCompleted = value;
+            NotifyPropertyChanged(nameof(EstimatedCompleted));
+        }
+    }
+
     private int _completed;
     public int Completed
     {

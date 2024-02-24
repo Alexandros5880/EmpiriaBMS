@@ -26,6 +26,8 @@ public class Project : Entity
     
     public long MenHours { get; set; }
 
+    public long EstimatedCompleted { get; set; }
+
     public int? Completed { get; set; }
 
     public int? WorkPackegedCompleted { get; set; }

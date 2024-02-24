@@ -60,7 +60,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
             sumComplitionOfOthers += completed;
 
             var othersCounter = purentDiscipline.DisciplinesOthers.Count() + 1;
-            purentDiscipline.Completed = (sumComplitionOfOthers / othersCounter) * 100;
+            purentDiscipline.Completed = sumComplitionOfOthers / othersCounter;
             await _context.SaveChangesAsync();
 
             // Calculate Parent Project Complition
@@ -70,7 +70,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                                             .SumAsync();
 
             var disciplinesCounter = projectDisciplinesIds.Count();
-            project.Completed = (sumCompplitionOfDisciplines / disciplinesCounter) * 100;
+            project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
             await _context.SaveChangesAsync();
         }
     }

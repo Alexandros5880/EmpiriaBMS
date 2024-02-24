@@ -275,8 +275,6 @@ public class AppDbContext : DbContext
                 Name = "Project_" + Convert.ToString(i),
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 Drawing = "KL-" + Convert.ToString(i),
-                EstimatedMandays = Convert.ToInt64(Math.Pow(i, 3)),
-                EstimatedHours = 3000,
                 DurationDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 EstPaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 PaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
@@ -290,10 +288,13 @@ public class AppDbContext : DbContext
                 DaysUntilPayment = (createdDate.AddDays(Convert.ToInt32(Math.Pow(i, 2))) - createdDate).Days,
                 PendingPayments = i,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
+                ProjectManagerId = pm.Id,
+                EstimatedMandays = 3000/8,
+                EstimatedHours = 3000,
                 Completed = 0,
                 WorkPackegedCompleted = 0,
                 MenHours = 0,
-                ProjectManagerId = pm.Id
+                EstimatedCompleted = 0
             };
             builder.Entity<Project>().HasData(project);
             projects.Add(project);
@@ -397,8 +398,8 @@ public class AppDbContext : DbContext
                 LastUpdatedDate = DateTime.Now,
                 Name = i % 2 == 0 ? "HVAC" : "ELEC",
                 EngineerId = engineerId,
-                EstimatedHours = 2345,
-                MenHours = 3425,
+                EstimatedHours = 1500,
+                MenHours = 0,
                 Completed = 0
             };
             builder.Entity<Discipline>().HasData(discipline);

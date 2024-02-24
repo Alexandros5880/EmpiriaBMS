@@ -111,7 +111,7 @@
                         <!-- Table Projects -->
                         @if (!_isEndWorkDialogOdepened)
                         {
-                            <div class="col-xxl-3 col-xl-7 col-lg-7 col-md-7 col-sm-12">
+                            <div class="col-xxl-4 col-xl-7 col-lg-7 col-md-7 col-sm-12">
                                 <div class="text-center">
                                     <h3>Projects</h3>
                                 </div>
@@ -147,7 +147,7 @@
                                                         @((_selectedProject == null ||
                                                                 !_selectedProject.Id.Equals(project.Id)
                                                                                 ? "" : "highlight_1"))">
-                                                        <label>@_displayProjectsHoursComplition(@project) %</label>
+                                                        <label>@project.EstimatedCompleted %</label>
                                                     </td>
                                                     <td class="align-middle
                                                         @((_selectedProject == null ||
