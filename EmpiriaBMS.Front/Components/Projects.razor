@@ -54,19 +54,22 @@
 
                                 <div class="col-lg-5 col-md-8 col-sm-8">
                                     <div class="d-grid">
-                                        @if (workStarted)
+                                        @if (_loggedUserRoles.Select(r => r.Name).Contains("Designer"))
                                         {
-                                            <button type="button" class="btn btn-danger btn-lg w-50"
-                                                    @onclick="@(() => ToogleWorkStatus())">
-                                                Press Work End
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-success btn-lg w-50"
-                                                    @onclick="@(() => ToogleWorkStatus())">
-                                                Press Work Start
-                                            </button>
+                                            @if (workStarted)
+                                            {
+                                                <button type="button" class="btn btn-danger btn-lg w-50"
+                                                        @onclick="@(() => ToogleWorkStatus())">
+                                                    Press Work End
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-success btn-lg w-50"
+                                                        @onclick="@(() => ToogleWorkStatus())">
+                                                    Press Work Start
+                                                </button>
+                                            }
                                         }
                                     </div>
                                 </div>
@@ -226,7 +229,9 @@
                                         <tbody>
                                             @foreach (var draw in _draws)
                                             {
-                                                <tr class="align-middle" @onclick="@(() => OnSelectDraw(draw))">
+                                                <tr class="align-middle"
+                                                    @onclick="@(() => OnSelectDraw(draw))"
+                                                    @ondblclick="@((x) => OnDbSelectDraw(draw))">
 
                                                     <td class="align-middle
                                                         @(((_selectedDraw == null ||
@@ -328,10 +333,9 @@
 
 <FilterProgressRing FilterLoading="@filterLoading"/>
 
-
-<!-- On "Press Work End" Button Click Dialog -->
 @if (!startLoading)
 {
+    <!-- On "Press Work End" Button Click Dialog -->
     <FluentDialog @ref="_endWorkDialog"
                   Hidden="@(!_isEndWorkDialogOdepened || startLoading)"
                   Modal="false"
@@ -478,6 +482,71 @@
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => _endWorkDialogCansel())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On "Add Designer3" Button Click Dialog -->
+    <FluentDialog @ref="_addDesignerDialog"
+                  Hidden="@(!_isAddDesignerDialogOdepened || startLoading)"
+                  Modal="false"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: 400px !important;
+                         --dialog-height: 300px !important;">
+
+        <div class="badge text-dark text-wrap fs-3">Work update</div>
+
+        <div class="modal-body row">
+            <div class="m-1 row justify-content-center">
+
+                <div class="col-12 p-2">
+
+                    <!-- Headder -->
+                    <div class="mt-1 p-2 row" style="width: 300px;">
+                        <div Class="col">
+                            <div class="text-center">
+                                <h3>Add Designers</h3>
+                            </div>
+                        </div>
+                        <div class="col">
+                            @* <div class="text-center">
+                                <h3>Select Descipline</h3>
+                            </div>
+                            <select class="form-select form-select-lg"
+                                    aria-label="Select Discipline"
+                                    @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
+                                <option value="0" selected>Select Discipline</option>
+                                @foreach (var discipline in _disciplines)
+                                {
+                                    <option selected="@(discipline.Id == _selectedDiscipline?.Id)"
+                                            value="@discipline.Id">
+                                        @discipline.Name
+                                    </option>
+                                }
+                            </select> *@
+                        </div>
+                    </div>
+
+                    <div class="mt-1 p-2 modal-content">
+                        <div class="d-flex justify-content-around">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <FluentButton Disabled="@(timeToSet != TimeSpan.Zero)"
+                          class="col-6"
+                          OnClick="@(async () => await _addDesignerDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addDesignerDialogCansel())">
                 Cancel
             </FluentButton>
         </div>

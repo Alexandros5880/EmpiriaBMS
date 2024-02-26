@@ -60,6 +60,10 @@ public partial class Projects : IDisposable
     private FluentDialog? _endWorkDialog;
     private bool _isEndWorkDialogOdepened = false;
 
+    // Add Designer Dialog
+    private FluentDialog? _addDesignerDialog;
+    private bool _isAddDesignerDialogOdepened = false;
+
     protected override async void OnInitialized()
     {
         base.OnInitialized();
@@ -261,6 +265,12 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
+    private void OnDbSelectDraw(DrawingVM draw)
+    {
+        _addDesignerDialog.Show();
+        _isAddDesignerDialogOdepened = true;
+    }
+
     private void OnSelectDoc(OtherVM doc)
     {
         _selectedOther = doc;
@@ -416,6 +426,27 @@ public partial class Projects : IDisposable
         ToogleWorkStatus(true);
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
+    }
+    #endregion
+
+    #region On Press Add Designer Dialog Actions
+    public async Task _addDesignerDialogAccept()
+    {
+        _addDesignerDialog.Hide();
+        _isAddDesignerDialogOdepened = false;
+
+
+        startLoading = true;
+
+
+
+        startLoading = false;
+    }
+
+    public void _addDesignerDialogCansel()
+    {
+        _addDesignerDialog.Hide();
+        _isAddDesignerDialogOdepened = false;
     }
     #endregion
 
