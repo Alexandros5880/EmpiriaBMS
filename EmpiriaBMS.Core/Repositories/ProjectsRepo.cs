@@ -205,6 +205,28 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
+    public async Task<long> GetMenHoursAsync(int projectId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<ManHour>()
+                                 .Where(mh => mh.ProjectId == projectId)
+                                 .Select(mh => mh.Hours)
+                                 .SumAsync();
+        }
+    }
+
+    public long GetMenHours(int projectId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return _context.Set<ManHour>()
+                                 .Where(mh => mh.ProjectId == projectId)
+                                 .Select(mh => mh.Hours)
+                                 .Sum();
+        }
+    }
+
     public async Task<ICollection<DisciplineDto>> GetDisciplines(int id)
     {
         if (id == 0)
@@ -228,84 +250,4 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                  .Where(de => de.ProjectId == id)
                                  .CountAsync();
     }
-
-    public async Task<float> GetUsersWorkPackegedCompleted(int userId)
-    {
-        if (userId == 0)
-            throw new ArgumentException(nameof(userId));
-
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var disciplines = await _context.Set<DisciplineEmployee>()
-                                              .Where(de => de.EmployeeId == userId)
-                                              .Select(de => de.Discipline)
-                                              .ToListAsync();
-
-            var Draws2D = disciplines.Select(d => d.DisciplinesDraws.Select(dd => dd.Draw));
-            List<float> drawsCompleteds = new List<float>();
-
-            foreach (var d1 in Draws2D)
-                foreach (var d2 in d1)
-                    drawsCompleteds.Add(d2.CompletionEstimation);
-
-            return drawsCompleteds.Sum();
-        }
-    }
-
-    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DrawingDto draw, int logedUserId)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            // Get Loges User DesciplineIds
-            var disciplinesUserIds = await _context
-                                        .Set<DisciplineEmployee>()
-                                        .Where(de => de.EmployeeId == logedUserId)
-                                        .Select(de => de.DisciplineId)
-                                        .ToListAsync();
-
-            // Get Selected Projects Desciplines
-            var disciplinesProjectIds = await _context
-                                            .Set<DisciplinePoject>()
-                                            .Where(dp => dp.ProjectId == project.Id)
-                                            .Where(dp => disciplinesUserIds.Contains(dp.DisciplineId))
-                                            .Select(de => de.DisciplineId)
-                                            .ToListAsync();
-
-            // Add 2 List Remove Duplicates
-            List<int> disciplinesIds = disciplinesUserIds.Union(disciplinesProjectIds).ToList();
-            int disciplinesCount = disciplinesIds.Count();
-
-            // Get Draws Sum Of Draws.CompletionEstimation
-            List<Drawing> draws = await _context
-                                    .Set<DisciplineDraw>()
-                                    .Where(dd => disciplinesIds.Contains(dd.DisciplineId))
-                                    .Select(dd => dd.Draw)
-                                    .ToListAsync();
-            draws.Add(Mapping.Mapper.Map<Drawing>(draw));
-            var sumDrawsComp = draws.Select(m => m.CompletionEstimation).Sum();
-
-            // Some Project Completion
-            var sumProjectCompl = sumDrawsComp;
-
-
-
-            var estimatedHours = project.EstimatedHours;
-            var projectHours = project.MenHours;
-
-
-
-            // Project Completed
-            var projectCompleted = Convert.ToInt32((sumProjectCompl / estimatedHours) * 100);
-
-            CompletedResult result = new CompletedResult()
-            {
-                ProjectCompleted = projectCompleted,
-                DisciplineCompleted = projectCompleted / disciplinesCount,
-                DrawCompleted = (projectCompleted / 2) / draws.Count
-            };
-
-            return result;
-        }
-    }
-
 }

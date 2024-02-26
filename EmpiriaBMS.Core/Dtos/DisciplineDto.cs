@@ -15,8 +15,6 @@ public class DisciplineDto : EntityDto
 
     public long EstimatedHours { get; set; }
 
-    public long MenHours { get; set; }
-
     public float Completed { get; set; }
 
     public int? EngineerId { get; set; }

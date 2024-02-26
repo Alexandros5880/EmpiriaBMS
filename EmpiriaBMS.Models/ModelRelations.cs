@@ -97,5 +97,35 @@ public static class ModelRelations
                     .HasMany(u => u.DailyHours)
                     .WithOne(d => d.User)
                     .HasForeignKey(d => d.UserId);
+
+        // User ManHours
+        builder.Entity<User>()
+                    .HasMany(p => p.Hours)
+                    .WithOne(c => c.User)
+                    .HasForeignKey(c => c.UserId);
+
+        // Project ManHours
+        builder.Entity<Project>()
+                    .HasMany(p => p.MenHours)
+                    .WithOne(c => c.Project)
+                    .HasForeignKey(c => c.ProjectId);
+
+        // Discipline ManHours
+        builder.Entity<Discipline>()
+                    .HasMany(p => p.MenHours)
+                    .WithOne(c => c.Discipline)
+                    .HasForeignKey(c => c.DisciplineId);
+
+        // Other ManHours
+        builder.Entity<Other>()
+                    .HasMany(p => p.MenHours)
+                    .WithOne(c => c.Other)
+                    .HasForeignKey(c => c.OtherId);
+
+        // Drawing ManHours
+        builder.Entity<Drawing>()
+                    .HasMany(p => p.MenHours)
+                    .WithOne(c => c.Drawing)
+                    .HasForeignKey(c => c.DrawingId);
     }
 }

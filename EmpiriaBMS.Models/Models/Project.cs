@@ -23,8 +23,6 @@ public class Project : Entity
     public long EstimatedMandays { get; set; }
 
     public long EstimatedHours { get; set; }
-    
-    public long MenHours { get; set; }
 
     public float EstimatedCompleted { get; set; }
 
@@ -74,6 +72,8 @@ public class Project : Entity
     public User? Customer { get; set; }
 
     public Invoice? Invoice { get; set; }
+
+    public ICollection<ManHour> MenHours { get; set; }
 
     public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
 }

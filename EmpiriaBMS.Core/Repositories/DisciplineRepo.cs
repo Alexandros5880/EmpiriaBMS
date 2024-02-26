@@ -120,5 +120,26 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
+    public async Task<long> GetMenHoursAsync(int disciplineId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<ManHour>()
+                                 .Where(mh => mh.DisciplineId == disciplineId)
+                                 .Select(mh => mh.Hours)
+                                 .SumAsync();
+        }
+    }
+
+    public long GetMenHours(int disciplineId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return _context.Set<ManHour>()
+                                 .Where(mh => mh.DisciplineId == disciplineId)
+                                 .Select(mh => mh.Hours)
+                                 .Sum();
+        }
+    }
 }
 

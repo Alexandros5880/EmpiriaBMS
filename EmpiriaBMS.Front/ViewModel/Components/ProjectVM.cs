@@ -87,19 +87,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private long _menHours;
-    public long MenHours
-    {
-        get => _menHours;
-        set
-        {
-            if (value == _menHours)
-                return;
-            _menHours = value;
-            NotifyPropertyChanged(nameof(MenHours));
-        }
-    }
-
     private float _estimatedCompleted;
     public float EstimatedCompleted
     {

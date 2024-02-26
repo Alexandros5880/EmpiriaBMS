@@ -18,7 +18,7 @@ public class DataProvider : IDataProvider, IDisposable
     public UsersRepo Users { get; set; }
     public ProjectsRepo Projects { get; set; }
     public DisciplineRepo Disciplines { get; set; }
-    public DrawingRepo Draws { get; set; }
+    public DrawingRepo Drawings { get; set; }
     public OtherRepo Others { get; set; }
     public InvoiceRepo Invoices { get; set; }
 
@@ -27,7 +27,7 @@ public class DataProvider : IDataProvider, IDisposable
         Users = new UsersRepo(dbFactory);
         Projects = new ProjectsRepo(dbFactory);
         Disciplines = new DisciplineRepo(dbFactory);
-        Draws = new DrawingRepo(dbFactory);
+        Drawings = new DrawingRepo(dbFactory);
         Others = new OtherRepo(dbFactory);
         Invoices = new InvoiceRepo(dbFactory);
     }
@@ -42,7 +42,7 @@ public class DataProvider : IDataProvider, IDisposable
                 Users.Dispose();
                 Projects.Dispose();
                 Disciplines.Dispose();
-                Draws.Dispose();
+                Drawings.Dispose();
                 Others.Dispose();
                 Invoices.Dispose();
             }

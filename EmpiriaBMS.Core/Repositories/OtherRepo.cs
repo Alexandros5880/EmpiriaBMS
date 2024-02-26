@@ -86,6 +86,28 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         }
     }
 
+    public async Task<long> GetMenHoursAsync(int otherId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<ManHour>()
+                                 .Where(mh => mh.OtherId == otherId)
+                                 .Select(mh => mh.Hours)
+                                 .SumAsync();
+        }
+    }
+
+    public long GetMenHours(int otherId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return _context.Set<ManHour>()
+                                 .Where(mh => mh.OtherId == otherId)
+                                 .Select(mh => mh.Hours)
+                                 .Sum();
+        }
+    }
+
     public async Task UpdateCompleted(int projectId, int disciplineId, int otherId, float completed)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -128,41 +150,43 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         }
     }
 
-    public async Task UpdateHours(int projectId, int disciplineId, int otherId, long hours)
+    public async Task UpdateHours(int userId, int projectId, int disciplineId, int otherId, long hours)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            // Update Current Other
-            var other = await _context.Set<Other>()
-                                        .FirstOrDefaultAsync(d => d.Id == otherId);
-            if (other == null)
-                throw new NullReferenceException(nameof(other));
-            other.MenHours += hours;
+            ManHour mhours = new ManHour()
+            {
+                UserId = userId,
+                ProjectId = projectId,
+                DisciplineId = disciplineId,
+                OtherId = otherId,
+                Hours = hours
+            };
+            await _context.Set<ManHour>().AddAsync(mhours);
 
-            // Calculate Parent Discipline Hours
+            // Get Discipline && Calculate Estimated Hours
             var discipline = await _context.Set<Discipline>()
-                                           .Include(d => d.DisciplinesOthers)
-                                           .FirstOrDefaultAsync(d => d.Id == disciplineId);
+                                           .Include(p => p.MenHours)
+                                           .FirstOrDefaultAsync(p => p.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var allOthersIds = discipline.DisciplinesOthers.Select(dd => dd.OtherId).ToList();
-            var allOthers = await _context.Set<Other>().Where(d => allOthersIds.Contains(d.Id))
-                                                        .ToListAsync();
-            var sumHoursOfOthers = allOthers.Select(d => d.MenHours).Sum();
-            discipline.MenHours = sumHoursOfOthers;
+            var disciplineMenHours = discipline.MenHours.Select(h => h.Hours).Sum();
 
-            // Calculate Parent Project MenHours && EstimatedCompleted
+            decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
+            discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
+
+            // Get Project && Calculate Estimated Hours
             var project = await _context.Set<Project>()
-                                        .Include(p => p.DisciplinesProjects)
+                                        .Include(p => p.MenHours)
                                         .FirstOrDefaultAsync(p => p.Id == projectId);
-            var disciplineIds = project.DisciplinesProjects.Select(dp => dp.DisciplineId).ToList();
-            var disciplines = await _context.Set<Discipline>()
-                                            .Where(d => disciplineIds.Contains(d.Id))
-                                            .ToListAsync();
-            var sumMenHoursOfDisciplines = disciplines.Select(d => d.MenHours).Sum();
-            project.MenHours = sumMenHoursOfDisciplines;
-            decimal divitionResult = Convert.ToDecimal(project.MenHours / project.EstimatedHours);
-            project.EstimatedCompleted = (float)divitionResult * 100;
+            if (project == null)
+                throw new NullReferenceException(nameof(project));
+            var projectMenHours = project.MenHours.Select(h => h.Hours).Sum();
+
+            decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
+            project.EstimatedCompleted = (float)divitionProResult * 100;
+
+            // Save Changes
             await _context.SaveChangesAsync();
         }
     }

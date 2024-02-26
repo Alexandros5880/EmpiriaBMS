@@ -89,7 +89,7 @@
                                             {
                                                 <span>Discipline Hours: </span>
 
-                                                <b>@_selectedDiscipline.MenHours</b>
+                                                <b>@GetDisciplineMenHours(_selectedDiscipline.Id)</b>
                                             }
                                             else
                                             {
@@ -194,7 +194,9 @@
                                                     @(((_selectedDiscipline == null
                                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                                 ? "" : "highlight_2"))">
-                                                        <label>@discipline.MenHours Hours</label>
+                                                        <label>
+                                                            @GetDisciplineMenHours(discipline.Id) Hours
+                                                        </label>
                                                     </td>
                                                 </tr>
                                             }
@@ -239,7 +241,7 @@
                                                                 !_selectedDraw.Id.Equals(draw.Id))
                                                                     ? "" : "highlight_3"))"
                                                         style="min-width: 90px;max-width: 90px;">
-                                                        <label>@draw.MenHours h</label>
+                                                        <label>@GetDrawingMenHours(draw.Id) h</label>
                                                     </td>
 
                                                     <td class="align-middle
@@ -299,7 +301,7 @@
                                                                 !_selectedOther.Id.Equals(_other.Id))
                                                                     ? "" : "highlight_4"))"
                                                         style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                        <label>@_other.MenHours h</label>
+                                                        <label>@GetOtherMenHours(_other.Id) h</label>
                                                     </td>
 
                                                 </tr>

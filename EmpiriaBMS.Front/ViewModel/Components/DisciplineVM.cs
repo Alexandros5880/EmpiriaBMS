@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -29,19 +30,6 @@ public class DisciplineVM : BaseVM
                 return;
             _estimatedHours = value;
             NotifyPropertyChanged(nameof(EstimatedHours));
-        }
-    }
-
-    private long _menHours;
-    public long MenHours
-    {
-        get => _menHours;
-        set
-        {
-            if (value == _menHours)
-                return;
-            _menHours = value;
-            NotifyPropertyChanged(nameof(MenHours));
         }
     }
 

@@ -13,9 +13,9 @@ public class Other : Entity
     [Required]
     public string Name { get; set; }
 
-    public long MenHours { get; set; }
-
     public float CompletionEstimation { get; set; }
+
+    public ICollection<ManHour> MenHours { get; set; }
 
     public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
 }

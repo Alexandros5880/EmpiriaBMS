@@ -15,13 +15,13 @@ public class Drawing : Entity
     [Required]
     public string Name { get; set; }
 
-    public long MenHours { get; set; }
-
     public float CompletionEstimation { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime? CompletionDate { get; set; }
+
+    public ICollection<ManHour> MenHours { get; set; }
 
     public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
 }

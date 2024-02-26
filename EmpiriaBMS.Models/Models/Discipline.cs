@@ -16,12 +16,14 @@ public class Discipline : Entity
 
     public long EstimatedHours { get; set; }
 
-    public long MenHours { get; set; }
+    public float EstimatedCompleted { get; set; }
 
     public float Completed { get; set; }
 
     public int? EngineerId { get; set; }
     public User? Engineer { get; set; }
+
+    public ICollection<ManHour> MenHours { get; set; }
 
     public ICollection<DisciplineEmployee> DisciplineEmployees { get; set; }
 

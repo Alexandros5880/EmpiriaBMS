@@ -25,8 +25,6 @@ public class ProjectDto : EntityDto
 
     public long EstimatedHours { get; set; }
 
-    public long MenHours { get; set; }
-
     public float EstimatedCompleted { get; set; }
 
     public float Completed { get; set; }

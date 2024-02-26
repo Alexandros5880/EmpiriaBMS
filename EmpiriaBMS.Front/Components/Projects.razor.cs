@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Config;
+﻿using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.DefaultComponents;
@@ -161,6 +162,19 @@ public partial class Projects : IDisposable
             return 0;
         }
     }
+
+    private long GetProjectMenHours(int disciplineId) =>
+        DataProvider.Projects.GetMenHours(disciplineId);
+
+    private long GetDisciplineMenHours(int disciplineId) =>
+        DataProvider.Disciplines.GetMenHours(disciplineId);
+
+    private long GetDrawingMenHours(int disciplineId) =>
+        DataProvider.Drawings.GetMenHours(disciplineId);
+
+    private long GetOtherMenHours(int disciplineId) =>
+        DataProvider.Others.GetMenHours(disciplineId);
+
     #endregion
 
     #region Properties Changed Events
@@ -373,15 +387,15 @@ public partial class Projects : IDisposable
                 return;
             }
             else
-                await DataProvider.Draws.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            await DataProvider.Draws.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
+                await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
+            await DataProvider.Drawings.UpdateHours(_logedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
         }
 
         // Update Others
         foreach (var other in _othersChanged)
         {
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-            await DataProvider.Others.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
+            await DataProvider.Others.UpdateHours(_logedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
         }
 
         // Update User Hours
