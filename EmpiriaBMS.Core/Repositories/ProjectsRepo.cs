@@ -118,14 +118,21 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var myDrawingIds = await _context.Set<DrawingEmployee>()
-                                           .Where(de => de.EmployeeId == userId)
-                                           .Select(e => e.DrawingId)
-                                           .ToListAsync();
+                                             .Where(de => de.EmployeeId == userId)
+                                             .Select(e => e.DrawingId)
+                                             .ToListAsync();
 
-            var myDisciplinesIds = await _context.Set<DisciplineDraw>()
+            var drawingsDisciplinesIds = await _context.Set<DisciplineDraw>()
                                                  .Where(dd => myDrawingIds.Contains(dd.DrawId))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
+
+            var engineerDisciplineIds = await _context.Set<Discipline>()
+                                                      .Where(d => d.EngineerId == userId)
+                                                      .Select(e => e.Id)
+                                                      .ToListAsync();
+
+            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
             var projects = await _context.Set<DisciplinePoject>()
                                  .Where(dp => myDisciplinesIds.Contains(dp.DisciplineId))
@@ -143,15 +150,21 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var myDrawingIds = await _context.Set<DrawingEmployee>()
-                                           .Where(de => de.EmployeeId == userId)
-                                           .Select(e => e.DrawingId)
-                                           .ToListAsync();
+                                             .Where(de => de.EmployeeId == userId)
+                                             .Select(e => e.DrawingId)
+                                             .ToListAsync();
 
-            var myDisciplinesIds = await _context.Set<DisciplineDraw>()
+            var drawingsDisciplinesIds = await _context.Set<DisciplineDraw>()
                                                  .Where(dd => myDrawingIds.Contains(dd.DrawId))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
+            var engineerDisciplineIds = await _context.Set<Discipline>()
+                                                      .Where(d => d.EngineerId == userId)
+                                                      .Select(e => e.Id)
+                                                      .ToListAsync();
+
+            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
             if (pageSize == 0 || pageIndex == 0)
             {
@@ -188,14 +201,21 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var myDrawingIds = await _context.Set<DrawingEmployee>()
-                                           .Where(de => de.EmployeeId == userId)
-                                           .Select(e => e.DrawingId)
-                                           .ToListAsync();
+                                             .Where(de => de.EmployeeId == userId)
+                                             .Select(e => e.DrawingId)
+                                             .ToListAsync();
 
-            var myDisciplinesIds = await _context.Set<DisciplineDraw>()
+            var drawingsDisciplinesIds = await _context.Set<DisciplineDraw>()
                                                  .Where(dd => myDrawingIds.Contains(dd.DrawId))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
+
+            var engineerDisciplineIds = await _context.Set<Discipline>()
+                                                      .Where(d => d.EngineerId == userId)
+                                                      .Select(e => e.Id)
+                                                      .ToListAsync();
+
+            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
             if (pageSize == 0 || pageIndex == 0)
             {

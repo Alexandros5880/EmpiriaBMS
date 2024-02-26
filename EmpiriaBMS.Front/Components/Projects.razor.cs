@@ -121,9 +121,9 @@ public partial class Projects : IDisposable
     {
         try
         {
-            // TODO: Get Teams Loged User And Mach him With Oure Users
+            // TODO: Get Teams Logged User And Mach him With Our Users
 
-            var defaultRoleId = await GetProjectManagersRoleId("Designer");
+            var defaultRoleId = await GetProjectManagersRoleId("Engineer"); // Engineer Designer
             if (defaultRoleId == 0)
                 throw new Exception("Exception `Project Managers` role not exists!");
 
