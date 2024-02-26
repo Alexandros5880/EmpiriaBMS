@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class Draw : Entity
+public class Drawing : Entity
 {
     [Required]
     public string Name { get; set; }

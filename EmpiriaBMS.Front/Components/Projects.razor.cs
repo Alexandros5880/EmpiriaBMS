@@ -35,15 +35,15 @@ public partial class Projects : IDisposable
     // List
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
-    private ObservableCollection<DrawVM> _draws = new ObservableCollection<DrawVM>();
+    private ObservableCollection<DrawingVM> _draws = new ObservableCollection<DrawingVM>();
     private ObservableCollection<OtherVM> _others = new ObservableCollection<OtherVM>();
-    private List<DrawVM> _drawsChanged = new List<DrawVM>();
+    private List<DrawingVM> _drawsChanged = new List<DrawingVM>();
     private List<OtherVM> _othersChanged = new List<OtherVM>();
 
     // Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
-    private DrawVM _selectedDraw = new DrawVM();
+    private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
 
     // Paginator
@@ -232,7 +232,7 @@ public partial class Projects : IDisposable
 
         _draws.Clear();
         foreach (var di in draws)
-            _draws.Add(Mapper.Map<DrawVM>(di));
+            _draws.Add(Mapper.Map<DrawingVM>(di));
 
         _others.Clear();
         foreach (var di in others)
@@ -241,7 +241,7 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
-    private void OnSelectDraw(DrawVM draw)
+    private void OnSelectDraw(DrawingVM draw)
     {
         _selectedDraw = draw;
         StateHasChanged();
@@ -278,7 +278,7 @@ public partial class Projects : IDisposable
     #endregion
 
     #region On Press Work End Dialog Actions
-    private void _onDrawHoursChanged(DrawVM draw, object val)
+    private void _onDrawHoursChanged(DrawingVM draw, object val)
     {
         if (Convert.ToString(val) == "") return;
         val += ":00";
@@ -306,7 +306,7 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
-    private void _onDrawCompletedChanged(DrawVM draw, object val)
+    private void _onDrawCompletedChanged(DrawingVM draw, object val)
     {
         draw.CompletionEstimation += Convert.ToInt32(val);
 

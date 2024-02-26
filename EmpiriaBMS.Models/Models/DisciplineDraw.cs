@@ -13,6 +13,6 @@ public class DisciplineDraw : Entity
     public Discipline Discipline { get; set; }
 
     public int DrawId { get; set; }
-    public Draw Draw { get; set; }
+    public Drawing Draw { get; set; }
 }
 

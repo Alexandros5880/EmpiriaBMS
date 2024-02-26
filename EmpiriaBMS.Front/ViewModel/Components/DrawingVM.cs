@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DrawVM : BaseVM
+public class DrawingVM : BaseVM
 {
     private string _name;
     public string Name

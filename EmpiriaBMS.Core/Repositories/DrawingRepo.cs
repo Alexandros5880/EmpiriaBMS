@@ -16,11 +16,11 @@ using System.Data.Common;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
+public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
 {
-    public DrawRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public DrawingRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public new async Task<DrawDto?> Get(int id)
+    public new async Task<DrawingDto?> Get(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -28,63 +28,63 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var dr = await _context
-                             .Set<Draw>()
+                             .Set<Drawing>()
                              .FirstOrDefaultAsync(r => r.Id == id);
 
-            return Mapping.Mapper.Map<DrawDto>(dr);
+            return Mapping.Mapper.Map<DrawingDto>(dr);
         }
     }
 
-    public new async Task<ICollection<DrawDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public new async Task<ICollection<DrawingDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Draw> drs;
+            List<Drawing> drs;
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                drs = await _context.Set<Draw>()
+                drs = await _context.Set<Drawing>()
                                      .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(drs);
+                return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
             }
 
 
-            drs = await _context.Set<Draw>()
+            drs = await _context.Set<Drawing>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(drs);
+            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
         }
     }
 
-    public new async Task<ICollection<DrawDto>> GetAll(
-        Expression<Func<Draw, bool>> expresion,
+    public new async Task<ICollection<DrawingDto>> GetAll(
+        Expression<Func<Drawing, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Draw> drs;
+            List<Drawing> drs;
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                drs = await _context.Set<Draw>()
+                drs = await _context.Set<Drawing>()
                                     .Where(expresion)
                                     .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(drs);
+                return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
             }
 
 
-            drs = await _context.Set<Draw>()
+            drs = await _context.Set<Drawing>()
                                 .Where(expresion)
                                 .Skip((pageIndex - 1) * pageSize)
                                 .Take(pageSize)
                                 .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(drs);
+            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
         }
     }
 
@@ -93,7 +93,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             // Update Current Drawing
-            var drawing = await _context.Set<Draw>()
+            var drawing = await _context.Set<Drawing>()
                                         .FirstOrDefaultAsync(d => d.Id == drawId);
             if (drawing == null)
                 throw new NullReferenceException(nameof(drawing));
@@ -106,7 +106,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
             var allDrawingsIds = discipline.DisciplinesDraws.Select(dd => dd.DrawId).ToList();
-            var allDrawings = await _context.Set<Draw>().Where(d => allDrawingsIds.Contains(d.Id))
+            var allDrawings = await _context.Set<Drawing>().Where(d => allDrawingsIds.Contains(d.Id))
                                                         .ToListAsync();
             var sumComplitionOfDrawings = allDrawings
                                           .Select(d => d.CompletionEstimation)
@@ -135,7 +135,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             // Update Current Drawing
-            var drawing = await _context.Set<Draw>()
+            var drawing = await _context.Set<Drawing>()
                                         .FirstOrDefaultAsync(d => d.Id == drawId);
             if (drawing == null)
                 throw new NullReferenceException(nameof(drawing));
@@ -148,7 +148,7 @@ public class DrawRepo : Repository<DrawDto, Draw>, IDisposable
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
             var allDrawingsIds = discipline.DisciplinesDraws.Select(dd => dd.DrawId).ToList();
-            var allDrawings = await _context.Set<Draw>().Where(d => allDrawingsIds.Contains(d.Id))
+            var allDrawings = await _context.Set<Drawing>().Where(d => allDrawingsIds.Contains(d.Id))
                                                         .ToListAsync();
             var sumHoursOfDrawings = allDrawings.Select(d => d.MenHours).Sum();
             discipline.MenHours = sumHoursOfDrawings;

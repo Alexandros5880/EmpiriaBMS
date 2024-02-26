@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Dtos;
 
-public class DrawDto : EntityDto
+public class DrawingDto : EntityDto
 {
     public string Name { get; set; }
 

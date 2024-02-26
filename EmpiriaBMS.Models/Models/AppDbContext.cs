@@ -15,7 +15,7 @@ public class AppDbContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Discipline> Disciplines { get; set; }
-    public DbSet<Draw> Draws { get; set; }
+    public DbSet<Drawing> Drawings { get; set; }
     public DbSet<Other> Others { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
 
@@ -237,7 +237,7 @@ public class AppDbContext : DbContext
 
         // Create 10 Projects
         List<Project> projects = new List<Project>();
-        List<Draw> drawings = new List<Draw>();
+        List<Drawing> drawings = new List<Drawing>();
         for (var i = 1; i < 11; i++)
         {
             // Project Manager
@@ -346,7 +346,7 @@ public class AppDbContext : DbContext
             {
                 // Draw
                 var dawId = random.Next(123456789, 999999999) + i * 11 + i;
-                Draw draw = new Draw()
+                Drawing draw = new Drawing()
                 {
                     Id = dawId,
                     CreatedDate = DateTime.Now,
@@ -356,7 +356,7 @@ public class AppDbContext : DbContext
                     CompletionEstimation = 0,
                     CompletionDate = projects[i - 1].DeadLine
                 };
-                builder.Entity<Draw>().HasData(draw);
+                builder.Entity<Drawing>().HasData(draw);
                 drawings.Add(draw);
             }
         }

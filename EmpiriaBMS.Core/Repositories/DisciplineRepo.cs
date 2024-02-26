@@ -88,7 +88,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<List<DrawDto>> GetDraws(int id)
+    public async Task<List<DrawingDto>> GetDraws(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -96,11 +96,11 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var draws = await _context
-                             .Set<Draw>()
+                             .Set<Drawing>()
                              .Where(d => d.DisciplinesDraws.Select(o => o.DisciplineId).Contains(id))
                              .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Draw>, List<DrawDto>>(draws);
+            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(draws);
         }
     }
 

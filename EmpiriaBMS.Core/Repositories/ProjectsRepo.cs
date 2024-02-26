@@ -252,7 +252,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DrawDto draw, int logedUserId)
+    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DrawingDto draw, int logedUserId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -276,12 +276,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             int disciplinesCount = disciplinesIds.Count();
 
             // Get Draws Sum Of Draws.CompletionEstimation
-            List<Draw> draws = await _context
+            List<Drawing> draws = await _context
                                     .Set<DisciplineDraw>()
                                     .Where(dd => disciplinesIds.Contains(dd.DisciplineId))
                                     .Select(dd => dd.Draw)
                                     .ToListAsync();
-            draws.Add(Mapping.Mapper.Map<Draw>(draw));
+            draws.Add(Mapping.Mapper.Map<Drawing>(draw));
             var sumDrawsComp = draws.Select(m => m.CompletionEstimation).Sum();
 
             // Some Project Completion
