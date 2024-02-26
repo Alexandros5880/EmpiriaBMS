@@ -38,6 +38,7 @@ public partial class Projects : IDisposable
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DrawingVM> _draws = new ObservableCollection<DrawingVM>();
     private ObservableCollection<OtherVM> _others = new ObservableCollection<OtherVM>();
+    private List<DisciplineVM> _disciplinesChanged = new List<DisciplineVM>();
     private List<DrawingVM> _drawsChanged = new List<DrawingVM>();
     private List<OtherVM> _othersChanged = new List<OtherVM>();
 
@@ -430,15 +431,84 @@ public partial class Projects : IDisposable
     #endregion
 
     #region On Press Add Designer Dialog Actions
+    private void _onDisciplineHoursChanged(DisciplineVM discipline, object val)
+    {
+        if (Convert.ToString(val) == "") return;
+        val += ":00";
+        TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
+        var value = Convert.ToInt32(timeSpan.Hours);
+        if (timeToSet.Hours < value)
+        {
+            // TODO: Display a Msg
+            return;
+        }
+
+        discipline.MenHours += value;
+
+        if (_disciplinesChanged.Any(d => d.Id == discipline.Id))
+        {
+            var d = _disciplinesChanged.FirstOrDefault(d => d.Id == discipline.Id);
+            d.MenHours = discipline.MenHours;
+        }
+        else
+            _disciplinesChanged.Add(discipline);
+
+        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
+        timeToSet = updatedTimeSpan;
+
+        StateHasChanged();
+    }
+
+    private void _onDisciplineCompletedChanged(DisciplineVM discipline, object val)
+    {
+        discipline.Completed += Convert.ToInt32(val);
+
+        if (_disciplinesChanged.Any(d => d.Id == discipline.Id))
+        {
+            var d = _disciplinesChanged.FirstOrDefault(d => d.Id == discipline.Id);
+            d.Completed = discipline.Completed;
+        }
+        else
+            _disciplinesChanged.Add(discipline);
+
+        StateHasChanged();
+    }
+
     public async Task _addDesignerDialogAccept()
     {
         _addDesignerDialog.Hide();
         _isAddDesignerDialogOdepened = false;
 
+        if (timeToSet.Hours > 0)
+        {
+            // TODO: Display a message to update his hours.
+            return;
+        }
 
         startLoading = true;
 
+        // Update Draws
+        foreach (var discipline in _disciplinesChanged)
+        {
+            var old = _disciplines.FirstOrDefault(d => d.Id == discipline.Id);
+            if (old.Completed > discipline.Completed)
+            {
+                //TODO: Display Msg
 
+                return;
+            }
+            else
+                await DataProvider.Disciplines.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, discipline.Completed);
+            await DataProvider.Disciplines.UpdateHours(_logedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, discipline.MenHours);
+        }
+
+        // Update User Hours
+        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
+
+        _drawsChanged.Clear();
+        _othersChanged.Clear();
+
+        await _getProjects();
 
         startLoading = false;
     }
