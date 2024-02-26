@@ -18,9 +18,9 @@ public class AppDbContext : DbContext
     public DbSet<Drawing> Drawings { get; set; }
     public DbSet<Other> Others { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
-
-    //public DbSet<DailyHour> DailyHour { get; set; }
-    //public DbSet<Timespan> TimeSpan { get; set; }
+    public DbSet<DailyHour> DailyHours { get; set; }
+    public DbSet<Timespan> TimeSpans { get; set; }
+    public DbSet<ManHour> ManHours { get; set; }
 
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DisciplinePoject> DisciplinesPojects { get; set; }
@@ -28,7 +28,6 @@ public class AppDbContext : DbContext
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
     public DbSet<DisciplineDraw> DisciplinesDraws { get; set; }
     public DbSet<DisciplineOther> DisciplinesOthers { get; set; }
-
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

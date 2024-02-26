@@ -12,6 +12,7 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Hellpers;
 using System.Data.Common;
+using AutoMapper;
 
 
 namespace EmpiriaBMS.Core.Repositories;
@@ -158,6 +159,8 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
         {
             ManHour mhours = new ManHour()
             {
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
                 UserId = userId,
                 ProjectId = projectId,
                 DisciplineId = disciplineId,
@@ -189,6 +192,65 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
             project.EstimatedCompleted = (float)divitionProResult * 100;
             
             // Save Changes
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<ICollection<UserDto>> GetDesigners(int drwaingId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var users = await _context.Set<DrawingEmployee>()
+                                 .Where(de => de.DrawingId == drwaingId)
+                                 .Include(de => de.Employee)
+                                 .Select(de => de.Employee)
+                                 .ToListAsync();
+
+            return Mapping.Mapper.Map<List<UserDto>>(users);
+        }
+    }
+
+    public async Task AddDesigners(int drawingId, ICollection<UserDto> designers)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            foreach(var d in designers)
+            {
+                DrawingEmployee de = new DrawingEmployee()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    DrawingId = drawingId,
+                    EmployeeId = d.Id
+                };
+
+                // Check If Exists
+                var exists = await _context.Set<DrawingEmployee>()
+                    .AnyAsync(de => de.DrawingId == drawingId && de.EmployeeId == d.Id);
+                if (exists) continue;
+
+                await _context.Set<DrawingEmployee>().AddAsync(de);
+                await _context.SaveChangesAsync();
+            }
+        }
+    }
+
+    public async Task RemoveDesigners(int drwaingId, ICollection<int> designersIds)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var designers = await _context.Set<DrawingEmployee>()
+                                              .Where(d => designersIds.Contains(d.EmployeeId))
+                                              .ToListAsync();
+
+            if (designers == null)
+                throw new NullReferenceException(nameof(designers));
+
+            foreach (var designer in designers)
+            {
+                _context.Set<DrawingEmployee>().Remove(designer);
+            }
+
             await _context.SaveChangesAsync();
         }
     }

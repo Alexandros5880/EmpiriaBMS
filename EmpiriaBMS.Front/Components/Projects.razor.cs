@@ -41,6 +41,7 @@ public partial class Projects : IDisposable
     private List<DisciplineVM> _disciplinesChanged = new List<DisciplineVM>();
     private List<DrawingVM> _drawsChanged = new List<DrawingVM>();
     private List<OtherVM> _othersChanged = new List<OtherVM>();
+    private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
 
     // Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
@@ -122,21 +123,52 @@ public partial class Projects : IDisposable
         filterLoading = !startLoading ? false : filterLoading;
     }
 
+    private async Task _getDesigners()
+    {
+        try
+        {
+            var defaultRoleId = await GetRoleId("Designer");
+            if (defaultRoleId == 0)
+                throw new Exception("Exception `Designer` role not exists!");
+
+            var disigners = await DataProvider.Roles.GetUsers(defaultRoleId);
+
+            if (disigners == null)
+                throw new NullReferenceException(nameof(disigners));
+
+            var myDesignersIds = (await DataProvider.Drawings.GetDesigners(_selectedDraw.Id)).Select(d => d.Id);
+
+            var disignersVM = Mapper.Map<List<UserVM>>(disigners);
+            _designers.Clear();
+            disignersVM.ForEach(d =>
+            {
+                d.IsSelected = myDesignersIds.Contains(d.Id);
+                _designers.Add(d);
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     private async Task _getLogedUser()
     {
         try
         {
             // TODO: Get Teams Logged User And Mach him With Our Users
 
-            var defaultRoleId = await GetProjectManagersRoleId("Engineer"); // Engineer Designer
+            string roleName = "Engineer"; // Engineer Designer
+            var defaultRoleId = await GetRoleId(roleName); 
             if (defaultRoleId == 0)
-                throw new Exception("Exception `Project Managers` role not exists!");
+                throw new Exception($"Exception `{roleName}` role not exists!");
 
             var users = await DataProvider.Roles.GetUsers(defaultRoleId);
             var dbUser = users.FirstOrDefault();
 
             if (dbUser == null)
-                throw new Exception("Exception user with `Draftsmen` role not exists!");
+                throw new NullReferenceException(nameof(dbUser));
 
             _logedUser = Mapper.Map<UserVM>(dbUser);
 
@@ -153,7 +185,7 @@ public partial class Projects : IDisposable
         }
     }
 
-    private async Task<int> GetProjectManagersRoleId(string roleName)
+    private async Task<int> GetRoleId(string roleName)
     {
         try
         {
@@ -266,10 +298,22 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
-    private void OnDbSelectDraw(DrawingVM draw)
+    private async Task OnDbSelectDraw(DrawingVM draw)
     {
-        _addDesignerDialog.Show();
-        _isAddDesignerDialogOdepened = true;
+        if (!workStarted) return;
+        try
+        {
+            _selectedDraw = draw;
+            await _getDesigners();
+            StateHasChanged();
+            _addDesignerDialog.Show();
+            _isAddDesignerDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
     }
 
     private void OnSelectDoc(OtherVM doc)
@@ -473,42 +517,23 @@ public partial class Projects : IDisposable
 
         StateHasChanged();
     }
-
+    
     public async Task _addDesignerDialogAccept()
     {
         _addDesignerDialog.Hide();
         _isAddDesignerDialogOdepened = false;
 
-        if (timeToSet.Hours > 0)
-        {
-            // TODO: Display a message to update his hours.
-            return;
-        }
-
         startLoading = true;
 
         // Update Draws
-        foreach (var discipline in _disciplinesChanged)
-        {
-            var old = _disciplines.FirstOrDefault(d => d.Id == discipline.Id);
-            if (old.Completed > discipline.Completed)
-            {
-                //TODO: Display Msg
+        var forDeleteIds = _designers.Where(d => d.IsSelected == null || d.IsSelected == false)
+                                     .Select(d => d.Id)
+                                     .ToList();
+        await DataProvider.Drawings.RemoveDesigners(_selectedDraw.Id, forDeleteIds);
 
-                return;
-            }
-            else
-                await DataProvider.Disciplines.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, discipline.Completed);
-            await DataProvider.Disciplines.UpdateHours(_logedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, discipline.MenHours);
-        }
-
-        // Update User Hours
-        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
-
-        _drawsChanged.Clear();
-        _othersChanged.Clear();
-
-        await _getProjects();
+        var forAdd = _designers.Where(d => d.IsSelected == true).ToList();
+        var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
+        await DataProvider.Drawings.AddDesigners(_selectedDraw.Id, forAddDto);
 
         startLoading = false;
     }

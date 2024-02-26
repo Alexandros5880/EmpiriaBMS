@@ -228,7 +228,7 @@
                                             {
                                                 <tr class="align-middle"
                                                     @onclick="@(() => OnSelectDraw(draw))"
-                                                    @ondblclick="@((x) => OnDbSelectDraw(draw))">
+                                                    @ondblclick="@(async (x) => await OnDbSelectDraw(draw))">
 
                                                     <td class="align-middle
                                                         @(((_selectedDraw == null ||
@@ -570,45 +570,47 @@
                   Hidden="@(!_isAddDesignerDialogOdepened || startLoading)"
                   Modal="false"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: 400px !important;
-                         --dialog-height: 300px !important;">
+                  style="--dialog-width: 50vw !important;
+                         --dialog-height: auto !important;">
 
-        <div class="badge text-dark text-wrap fs-3">Work update</div>
+        <div class="badge text-dark text-wrap fs-3">
+            Add Designers
+        </div>
 
         <div class="modal-body row">
             <div class="m-1 row justify-content-center">
 
                 <div class="col-12 p-2">
 
-                    <!-- Headder -->
-                    <div class="mt-1 p-2 row" style="width: 300px;">
-                        <div Class="col">
-                            <div class="text-center">
-                                <h3>Add Designers</h3>
-                            </div>
-                        </div>
-                        <div class="col">
-                            @* <div class="text-center">
-                                <h3>Select Descipline</h3>
-                            </div>
-                            <select class="form-select form-select-lg"
-                                    aria-label="Select Discipline"
-                                    @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
-                                <option value="0" selected>Select Discipline</option>
-                                @foreach (var discipline in _disciplines)
-                                {
-                                    <option selected="@(discipline.Id == _selectedDiscipline?.Id)"
-                                            value="@discipline.Id">
-                                        @discipline.Name
-                                    </option>
-                                }
-                            </select> *@
-                        </div>
-                    </div>
-
                     <div class="mt-1 p-2 modal-content">
                         <div class="d-flex justify-content-around">
-
+                            <div class="table-responsive p-1" style="max-height: 400px;">
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="sticky-header">Designer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var designer in _designers)
+                                        {
+                                            <tr clss="align-middle d-flex">
+                                                <td class="align-middle">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input"
+                                                               type="checkbox"
+                                                               id="isSelectedDesigner"
+                                                               @bind=@designer.IsSelected>
+                                                        <label class="form-check-label" for="isSelectedDesigner">
+                                                            @designer.LastName &nbsp; @designer.FirstName
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
