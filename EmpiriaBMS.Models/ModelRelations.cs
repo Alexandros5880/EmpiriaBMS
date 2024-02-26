@@ -62,16 +62,28 @@ public static class ModelRelations
                .WithMany(de => de.DisciplinesOthers)
                .HasForeignKey(de => de.OtherId);
 
-        // Disciplines Employees
-        builder.Entity<DisciplineEmployee>()
-               .HasKey(de => new { de.DisciplineId, de.EmployeeId });
-        builder.Entity<DisciplineEmployee>()
-               .HasOne(de => de.Discipline)
-               .WithMany(de => de.DisciplineEmployees)
-               .HasForeignKey(de => de.DisciplineId);
-        builder.Entity<DisciplineEmployee>()
+        // Drawing Employee
+        builder.Entity<DrawingEmployee>()
+               .HasKey(de => new { de.DrawingId, de.EmployeeId });
+        builder.Entity<DrawingEmployee>()
+               .HasOne(de => de.Drawing)
+               .WithMany(de => de.DrawingsEmployees)
+               .HasForeignKey(de => de.DrawingId);
+        builder.Entity<DrawingEmployee>()
                .HasOne(de => de.Employee)
-               .WithMany(de => de.DisciplineEmployees)
+               .WithMany(de => de.DrawingsEmployees)
+               .HasForeignKey(de => de.EmployeeId);
+
+        // Other Employee
+        builder.Entity<OtherEmployee>()
+               .HasKey(de => new { de.OtherId, de.EmployeeId });
+        builder.Entity<OtherEmployee>()
+               .HasOne(de => de.Other)
+               .WithMany(de => de.OthersEmployees)
+               .HasForeignKey(de => de.OtherId);
+        builder.Entity<OtherEmployee>()
+               .HasOne(de => de.Employee)
+               .WithMany(de => de.OthersEmployees)
                .HasForeignKey(de => de.EmployeeId);
 
         // Engineer Project

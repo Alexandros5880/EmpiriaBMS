@@ -24,7 +24,8 @@ public class AppDbContext : DbContext
 
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DisciplinePoject> DisciplinesPojects { get; set; }
-    public DbSet<DisciplineEmployee> DisciplinesEmployees { get; set; }
+    public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
+    public DbSet<OtherEmployee> OthersEmployees { get; set; }
     public DbSet<DisciplineDraw> DisciplinesDraws { get; set; }
     public DbSet<DisciplineOther> DisciplinesOthers { get; set; }
 
@@ -230,6 +231,60 @@ public class AppDbContext : DbContext
         };
         builder.Entity<Other>().HasData(other5);
 
+        // Connect Every Draftman With Every Other
+        foreach (var draftman in draftsmen)
+        {
+            OtherEmployee de_1 = new OtherEmployee()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                EmployeeId = draftman.Id,
+                OtherId = other_1_Id
+            };
+            builder.Entity<OtherEmployee>().HasData(de_1);
+
+            OtherEmployee de_2 = new OtherEmployee()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                EmployeeId = draftman.Id,
+                OtherId = other_2_Id
+            };
+            builder.Entity<OtherEmployee>().HasData(de_2);
+
+            OtherEmployee de_3 = new OtherEmployee()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                EmployeeId = draftman.Id,
+                OtherId = other_3_Id
+            };
+            builder.Entity<OtherEmployee>().HasData(de_3);
+
+            OtherEmployee de_4 = new OtherEmployee()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                EmployeeId = draftman.Id,
+                OtherId = other_4_Id
+            };
+            builder.Entity<OtherEmployee>().HasData(de_4);
+
+            OtherEmployee de_5 = new OtherEmployee()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                EmployeeId = draftman.Id,
+                OtherId = other_5_Id
+            };
+            builder.Entity<OtherEmployee>().HasData(de_5);
+        }
+
         // Create 10 Projects
         List<Project> projects = new List<Project>();
         List<Drawing> drawings = new List<Drawing>();
@@ -351,6 +406,20 @@ public class AppDbContext : DbContext
                 };
                 builder.Entity<Drawing>().HasData(draw);
                 drawings.Add(draw);
+
+                // Connect Every Draftman With Every Drawing
+                foreach (var draftman in draftsmen)
+                {
+                    DrawingEmployee de = new DrawingEmployee()
+                    {
+                        Id = random.Next(123456789, 999999999) * 9,
+                        CreatedDate = DateTime.Now,
+                        LastUpdatedDate = DateTime.Now,
+                        EmployeeId = draftman.Id,
+                        DrawingId = dawId
+                    };
+                    builder.Entity<DrawingEmployee>().HasData(de);
+                }
             }
         }
 
@@ -447,20 +516,6 @@ public class AppDbContext : DbContext
                 OtherId = other_5_Id
             };
             builder.Entity<DisciplineOther>().HasData(dq_other_5);
-
-            // Connect Every Draftman With Every Discipline
-            foreach (var draftman in draftsmen)
-            {
-                DisciplineEmployee de = new DisciplineEmployee()
-                {
-                    Id = random.Next(123456789, 999999999) * 9,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    EmployeeId = draftman.Id,
-                    DisciplineId = disciplineId
-                };
-                builder.Entity<DisciplineEmployee>().HasData(de);
-            }
 
             // Connect Every Drwaing With Every Discipline
             for (var e = 0; e < drawings.Count; e++)

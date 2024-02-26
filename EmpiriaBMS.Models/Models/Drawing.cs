@@ -24,4 +24,6 @@ public class Drawing : Entity
     public ICollection<ManHour> MenHours { get; set; }
 
     public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
+
+    public ICollection<DrawingEmployee> DrawingsEmployees { get; set; }
 }

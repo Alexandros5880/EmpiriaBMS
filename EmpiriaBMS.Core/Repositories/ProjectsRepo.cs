@@ -117,16 +117,21 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplineIds = await _context.Set<DisciplineEmployee>()
-                                            .Where(de => de.EmployeeId == userId)
-                                            .Select(de => de.DisciplineId)
-                                            .ToListAsync();
+            var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                           .Where(de => de.EmployeeId == userId)
+                                           .Select(e => e.DrawingId)
+                                           .ToListAsync();
 
-            var projects= await _context.Set<DisciplinePoject>()
-                                            .Where(d => disciplineIds.Contains(d.DisciplineId))
-                                            .Select(dp => dp.Project)
-                                            .OrderBy(e => e.DeadLine)
-                                            .ToListAsync();
+            var myDisciplinesIds = await _context.Set<DisciplineDraw>()
+                                                 .Where(dd => myDrawingIds.Contains(dd.DrawId))
+                                                 .Select(e => e.DisciplineId)
+                                                 .ToListAsync();
+
+            var projects = await _context.Set<DisciplinePoject>()
+                                 .Where(dp => myDisciplinesIds.Contains(dp.DisciplineId))
+                                 .Include(dp => dp.Project)
+                                 .Select(dp => dp.Project)
+                                 .ToArrayAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
@@ -137,16 +142,22 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplineIds = await _context.Set<DisciplineEmployee>()
-                                            .Where(de => de.EmployeeId == userId)
-                                            .Select(de => de.DisciplineId)
-                                            .ToListAsync();
+            var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                           .Where(de => de.EmployeeId == userId)
+                                           .Select(e => e.DrawingId)
+                                           .ToListAsync();
+
+            var myDisciplinesIds = await _context.Set<DisciplineDraw>()
+                                                 .Where(dd => myDrawingIds.Contains(dd.DrawId))
+                                                 .Select(e => e.DisciplineId)
+                                                 .ToListAsync();
 
 
             if (pageSize == 0 || pageIndex == 0)
             {
                 projects = await _context.Set<DisciplinePoject>()
-                                         .Where(d => disciplineIds.Contains(d.DisciplineId))
+                                         .Where(d => myDisciplinesIds.Contains(d.DisciplineId))
+                                         .Include(dp => dp.Project)
                                          .Select(dp => dp.Project)
                                          .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -155,7 +166,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             projects = await _context.Set<DisciplinePoject>()
-                                     .Where(d => disciplineIds.Contains(d.DisciplineId))
+                                     .Where(d => myDisciplinesIds.Contains(d.DisciplineId))
+                                     .Include(dp => dp.Project)
                                      .Select(dp => dp.Project)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
@@ -175,15 +187,21 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplineIds = await _context.Set<DisciplineEmployee>()
-                                              .Where(de => de.EmployeeId == userId)
-                                              .Select(de => de.DisciplineId)
-                                              .ToListAsync();
+            var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                           .Where(de => de.EmployeeId == userId)
+                                           .Select(e => e.DrawingId)
+                                           .ToListAsync();
+
+            var myDisciplinesIds = await _context.Set<DisciplineDraw>()
+                                                 .Where(dd => myDrawingIds.Contains(dd.DrawId))
+                                                 .Select(e => e.DisciplineId)
+                                                 .ToListAsync();
 
             if (pageSize == 0 || pageIndex == 0)
             {
                 projects = await _context.Set<DisciplinePoject>()
-                                         .Where(d => disciplineIds.Contains(d.DisciplineId))
+                                         .Where(d => myDisciplinesIds.Contains(d.DisciplineId))
+                                         .Include(dp => dp.Project)
                                          .Select(dp => dp.Project)
                                          .Where(expresion)
                                          .OrderBy(e => e.DeadLine)
@@ -193,7 +211,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             projects = await _context.Set<DisciplinePoject>()
-                                     .Where(d => disciplineIds.Contains(d.DisciplineId))
+                                     .Where(d => myDisciplinesIds.Contains(d.DisciplineId))
+                                     .Include(dp => dp.Project)
                                      .Select(dp => dp.Project)
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)

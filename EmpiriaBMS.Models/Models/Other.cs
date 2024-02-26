@@ -18,4 +18,6 @@ public class Other : Entity
     public ICollection<ManHour> MenHours { get; set; }
 
     public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
+
+    public ICollection<OtherEmployee> OthersEmployees { get; set; }
 }

@@ -70,7 +70,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                 ds = await _context.Set<Discipline>()
                                      .Where(expresion)
                                      .Include(r => r.Engineer)
-                                     .Include(r => r.DisciplineEmployees)
                                      .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -81,7 +80,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)
                                .Include(r => r.Engineer)
-                               .Include(r => r.DisciplineEmployees)
                                .ToListAsync();
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);

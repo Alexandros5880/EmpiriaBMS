@@ -28,7 +28,6 @@ public class UsersRepo : Repository<UserDto, User>
                              .Set<User>()
                              .Include(r => r.Disciplines)
                              .Include(r => r.UserRoles)
-                             .Include(r => r.DisciplineEmployees)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<UserDto>(u);
@@ -54,7 +53,6 @@ public class UsersRepo : Repository<UserDto, User>
                                  .Take(pageSize)
                                  .Include(r => r.Disciplines)
                                  .Include(r => r.UserRoles)
-                                 .Include(r => r.DisciplineEmployees)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(us);
@@ -84,7 +82,6 @@ public class UsersRepo : Repository<UserDto, User>
                                .Take(pageSize)
                                .Include(r => r.Disciplines)
                                .Include(r => r.UserRoles)
-                               .Include(r => r.DisciplineEmployees)
                                .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(us);
@@ -126,7 +123,6 @@ public class UsersRepo : Repository<UserDto, User>
             var users = await _context.Users.Where(u => employeeIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
@@ -161,7 +157,6 @@ public class UsersRepo : Repository<UserDto, User>
             users = await _context.Users.Where(u => employeeIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .Skip((pageIndex - 1) * pageSize)
                                        .Take(pageSize)
                                        .ToListAsync();
@@ -202,7 +197,6 @@ public class UsersRepo : Repository<UserDto, User>
             users = await _context.Users.Where(u => employeeIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .Where(expresion)
                                        .Skip((pageIndex - 1) * pageSize)
                                        .Take(pageSize)
@@ -228,7 +222,6 @@ public class UsersRepo : Repository<UserDto, User>
             var users = await _context.Users.Where(u => customerIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
@@ -261,7 +254,6 @@ public class UsersRepo : Repository<UserDto, User>
             users = await _context.Users.Where(u => customerIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .Skip((pageIndex - 1) * pageSize)
                                        .Take(pageSize)
                                        .ToListAsync();
@@ -300,7 +292,6 @@ public class UsersRepo : Repository<UserDto, User>
             users = await _context.Users.Where(u => customerIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .Where(expresion)
                                        .Skip((pageIndex - 1) * pageSize)
                                        .Take(pageSize)
