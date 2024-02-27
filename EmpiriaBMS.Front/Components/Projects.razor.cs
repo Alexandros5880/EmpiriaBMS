@@ -113,7 +113,7 @@ public partial class Projects : IDisposable
     private FluentDialog? _addPMDialog;
     private bool _isAddPMDialogOdepened = false;
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
         base.OnInitialized();
     }
@@ -125,14 +125,23 @@ public partial class Projects : IDisposable
         if (firstRender)
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
+
             await _getProjects();
             _startLoading = false;
             StateHasChanged();
         }
     }
 
+    public async Task Refresh()
+    {
+        _startLoading = true;
+        await _getProjects();
+        _startLoading = false;
+        StateHasChanged();
+    }
+
     #region Get Records
-    private async Task _getProjects()
+    public async Task _getProjects()
     {
         _selectedProject = null;
         _selectedDiscipline = null;

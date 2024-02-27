@@ -23,7 +23,7 @@
 }
 else
 {
-    <Projects LogedUser="@_logedUser" LogesUserHours="@_logesUserHours" LoggedUserRoles="@_loggedUserRoles"/>
+    <Projects @ref=projectsCompoment LogedUser="@_logedUser" LogesUserHours="@_logesUserHours" LoggedUserRoles="@_loggedUserRoles"/>
 
     <!-- Remove This -->
     <select class="form-select" @onchange="RoleSelectionChanged">
@@ -123,6 +123,7 @@ else
 
     // TODO: Remove This
     // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer
+    private Projects projectsCompoment;
     private string _defaultRole = "Designer";
     private ICollection<RoleVM> _allRoles = new List<RoleVM>();
 
@@ -132,6 +133,7 @@ else
         var selectRoleId = Convert.ToInt32(e.Value);
         await _getLogedUser(selectRoleId, _runInTeams);
         StateHasChanged();
+        await projectsCompoment.Refresh();
         isLoading = false;
     }
 
@@ -142,4 +144,5 @@ else
         _allRoles.Clear();
         roles.ForEach(_allRoles.Add);
     }
+
 }
