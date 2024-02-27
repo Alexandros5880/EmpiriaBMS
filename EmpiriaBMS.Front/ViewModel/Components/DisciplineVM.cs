@@ -58,17 +58,4 @@ public class DisciplineVM : BaseVM
             NotifyPropertyChanged(nameof(Completed));
         }
     }
-
-    private User? _engineer;
-    public User? Engineer
-    {
-        get => _engineer;
-        set
-        {
-            if (value == _engineer)
-                return;
-            _engineer = value;
-            NotifyPropertyChanged(nameof(Engineer));
-        }
-    }
 }

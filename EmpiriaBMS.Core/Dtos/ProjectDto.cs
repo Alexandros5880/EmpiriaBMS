@@ -57,10 +57,11 @@ public class ProjectDto : EntityDto
 
     public int? CalculationDaly { get; set; }
 
-    public int? ProjectManagerId { get; set; }
-    public User? ProjectManager { get; set; }
-
     public User? Customer { get; set; }
 
     public Invoice? Invoice { get; set; }
+
+    public ProjectType Type { get; set; }
+
+    public User? SubContractor { get; set; }
 }

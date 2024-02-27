@@ -20,9 +20,6 @@ public class Discipline : Entity
 
     public float Completed { get; set; }
 
-    public int? EngineerId { get; set; }
-    public User? Engineer { get; set; }
-
     public ICollection<ManHour> MenHours { get; set; }
 
     public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
@@ -30,4 +27,5 @@ public class Discipline : Entity
     public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
 
     public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
+    public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 }

@@ -295,19 +295,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private User? _projectManager;
-    public User? ProjectManager
-    {
-        get => _projectManager;
-        set
-        {
-            if (value == _projectManager)
-                return;
-            _projectManager = value;
-            NotifyPropertyChanged(nameof(ProjectManager));
-        }
-    }
-
     private User? _customer;
     public User? Customer
     {
@@ -331,6 +318,32 @@ public class ProjectVM : BaseVM
                 return;
             _invoice = value;
             NotifyPropertyChanged(nameof(Invoice));
+        }
+    }
+
+    private ProjectType _type;
+    public ProjectType Type
+    {
+        get => _type;
+        set
+        {
+            if (value == _type)
+                return;
+            _type = value;
+            NotifyPropertyChanged(nameof(Type));
+        }
+    }
+
+    private User? _subContractor;
+    public User? SubContractor
+    {
+        get => _subContractor;
+        set
+        {
+            if (value == _subContractor)
+                return;
+            _subContractor = value;
+            NotifyPropertyChanged(nameof(SubContractor));
         }
     }
 

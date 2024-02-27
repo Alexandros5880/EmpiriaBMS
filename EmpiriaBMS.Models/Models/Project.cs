@@ -66,8 +66,11 @@ public class Project : Entity
 
     public int? CalculationDaly { get; set; }
 
-    public int? ProjectManagerId { get; set; }
-    public User? ProjectManager { get; set; }
+    public int TypeId { get; set; }
+    public ProjectType Type { get; set; }
+
+    public int? SubContractorId { get; set; }
+    public User? SubContractor { get; set; }
 
     public User? Customer { get; set; }
 
@@ -76,4 +79,6 @@ public class Project : Entity
     public ICollection<ManHour> MenHours { get; set; }
 
     public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
+
+    public ICollection<ProjectPmanager> ProjectsPmanagers { get; set; }
 }

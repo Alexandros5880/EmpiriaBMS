@@ -26,7 +26,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         {
             var disclipline = await _context
                              .Set<Discipline>()
-                             .Include(r => r.Engineer)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<DisciplineDto>(disclipline);
@@ -41,7 +40,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 ds = await _context.Set<Discipline>()
-                                     .Include(r => r.Engineer)
                                      .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -50,7 +48,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             ds = await _context.Set<Discipline>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
-                                 .Include(r => r.Engineer)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -69,7 +66,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             {
                 ds = await _context.Set<Discipline>()
                                      .Where(expresion)
-                                     .Include(r => r.Engineer)
                                      .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -79,7 +75,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                .Where(expresion)
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)
-                               .Include(r => r.Engineer)
                                .ToListAsync();
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);

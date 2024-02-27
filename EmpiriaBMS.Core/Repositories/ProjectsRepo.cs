@@ -127,9 +127,9 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
-            var engineerDisciplineIds = await _context.Set<Discipline>()
+            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
                                                       .Where(d => d.EngineerId == userId)
-                                                      .Select(e => e.Id)
+                                                      .Select(e => e.DisciplineId)
                                                       .ToListAsync();
 
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
@@ -159,9 +159,9 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
-            var engineerDisciplineIds = await _context.Set<Discipline>()
+            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
                                                       .Where(d => d.EngineerId == userId)
-                                                      .Select(e => e.Id)
+                                                      .Select(e => e.DisciplineId)
                                                       .ToListAsync();
 
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
@@ -210,9 +210,9 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
-            var engineerDisciplineIds = await _context.Set<Discipline>()
+            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
                                                       .Where(d => d.EngineerId == userId)
-                                                      .Select(e => e.Id)
+                                                      .Select(e => e.DisciplineId)
                                                       .ToListAsync();
 
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
