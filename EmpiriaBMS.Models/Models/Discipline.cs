@@ -27,5 +27,6 @@ public class Discipline : Entity
     public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
 
     public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
+
     public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 }

@@ -134,11 +134,19 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
-            var projects = await _context.Set<DisciplinePoject>()
-                                 .Where(dp => myDisciplinesIds.Contains(dp.DisciplineId))
-                                 .Include(dp => dp.Project)
-                                 .Select(dp => dp.Project)
-                                 .ToArrayAsync();
+            var projectsFromDisciplineIds = await _context.Set<DisciplinePoject>()
+                                                        .Where(dp => myDisciplinesIds.Contains(dp.DisciplineId))
+                                                        .Select(dp => dp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
+                                                        .Where(pp => pp.ProjectManagerId == userId)
+                                                        .Select(pp => pp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
+
+            var projects = await _context.Set<Project>().Where(p => projectsIds.Contains(p.Id)).ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
@@ -166,22 +174,30 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
+            var projectsFromDisciplineIds = await _context.Set<DisciplinePoject>()
+                                                        .Where(dp => myDisciplinesIds.Contains(dp.DisciplineId))
+                                                        .Select(dp => dp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
+                                                        .Where(pp => pp.ProjectManagerId == userId)
+                                                        .Select(pp => pp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
+
             if (pageSize == 0 || pageIndex == 0)
             {
-                projects = await _context.Set<DisciplinePoject>()
-                                         .Where(d => myDisciplinesIds.Contains(d.DisciplineId))
-                                         .Include(dp => dp.Project)
-                                         .Select(dp => dp.Project)
+                projects = await _context.Set<Project>()
+                                         .Where(p => projectsIds.Contains(p.Id))
                                          .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
 
-            projects = await _context.Set<DisciplinePoject>()
-                                     .Where(d => myDisciplinesIds.Contains(d.DisciplineId))
-                                     .Include(dp => dp.Project)
-                                     .Select(dp => dp.Project)
+            projects = await _context.Set<Project>()
+                                     .Where(p => projectsIds.Contains(p.Id))
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
                                      .OrderBy(e => e.DeadLine)
@@ -217,12 +233,22 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
+            var projectsFromDisciplineIds = await _context.Set<DisciplinePoject>()
+                                                        .Where(dp => myDisciplinesIds.Contains(dp.DisciplineId))
+                                                        .Select(dp => dp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
+                                                        .Where(pp => pp.ProjectManagerId == userId)
+                                                        .Select(pp => pp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
+
             if (pageSize == 0 || pageIndex == 0)
             {
-                projects = await _context.Set<DisciplinePoject>()
-                                         .Where(d => myDisciplinesIds.Contains(d.DisciplineId))
-                                         .Include(dp => dp.Project)
-                                         .Select(dp => dp.Project)
+                projects = await _context.Set<Project>()
+                                         .Where(p => projectsIds.Contains(p.Id))
                                          .Where(expresion)
                                          .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -230,10 +256,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
 
-            projects = await _context.Set<DisciplinePoject>()
-                                     .Where(d => myDisciplinesIds.Contains(d.DisciplineId))
-                                     .Include(dp => dp.Project)
-                                     .Select(dp => dp.Project)
+            projects = await _context.Set<Project>()
+                                     .Where(p => projectsIds.Contains(p.Id))
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)

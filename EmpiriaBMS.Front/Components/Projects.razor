@@ -11,22 +11,23 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 
-<div class="row justify-content-center mt-1 mb-1">
-    <div class="col-auto" style="width: 100%; height: 100%;">
-        @if (_startLoading)
-        {
-            <div style="display: flex; justify-content: center; align-items: center; margin-top: 20%;">
-                <FluentProgressRing />
-            </div>
-        }
-        else
-        {
+@if (_startLoading)
+{
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20%;">
+        <FluentProgressRing />
+    </div>
+}
+else
+{
+    <div class="row justify-content-center mt-1 mb-1">
+        <div class="col-auto" style="width: 100%; height: 100%;">
+        
             <div class="m-1 row justify-content-center">
 
                 <div class="col-12 p-2"
-                     style="overflow-x:hidden; margin: 0 auto;">
+                        style="overflow-x:hidden; margin: 0 auto;">
                     
-                     <!-- Headder -->
+                        <!-- Headder -->
                     <div class="mt-2 shadow p-2">
                         @if (LogedUser != null)
                         {
@@ -164,7 +165,7 @@
                         <!-- Table Disciplines -->
                         @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                         {
-                            <div class="col-xxl-2 col-xl-5 col-lg-5 col-md-5 col-sm-12">
+                            <div class="col-xxl-3 col-xl-5 col-lg-5 col-md-5 col-sm-12">
                                 <div class="text-center">
                                     <h3>Disciplines</h3>
                                 </div>
@@ -174,28 +175,43 @@
                                             <tr>
                                                 <th scope="col" class="sticky-header">Discipline</th>
                                                 <th scope="col" class="sticky-header">Estimated Manhours</th>
+                                                @if (EditDiscipline)
+                                                {
+                                                    <th scope="col"></th>
+                                                }
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach (var discipline in _disciplines)
                                             {
                                                 <tr clss="align-middle d-flex"
-                                                @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
+                                                    @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
+                                                    
                                                     <td class="align-middle
-                                                    @(((_selectedDiscipline == null
+                                                        @(((_selectedDiscipline == null
                                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                ? "" : "highlight_2"))"
-                                                        style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                                                ? "" : "highlight_2"))">
                                                         <labe>@discipline.Name</labe>
                                                     </td>
+                                                    
                                                     <td class="align-middle text-center
-                                                    @(((_selectedDiscipline == null
+                                                        @(((_selectedDiscipline == null
                                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                                 ? "" : "highlight_2"))">
                                                         <label>
                                                             @GetDisciplineMenHours(discipline.Id) Hours
                                                         </label>
                                                     </td>
+
+                                                    @if (EditDiscipline)
+                                                    {
+                                                        <td class="align-middle">
+                                                            <span class="clarity--assign-user-line"
+                                                                  @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
+                                                            </span>
+                                                        </td>
+                                                    }
+
                                                 </tr>
                                             }
                                         </tbody>
@@ -207,7 +223,7 @@
                         <!-- Table Draws -->
                         @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                         {
-                            <div class="col-xxl-4 col-xl-7 col-lg-7 col-md-7 col-sm-12">
+                            <div class="col-xxl-3 col-xl-7 col-lg-7 col-md-7 col-sm-12">
                                 <div class="text-center">
                                     <h3>Deliverables</h3>
                                 </div>
@@ -234,32 +250,28 @@
                                                     <td class="align-middle
                                                         @(((_selectedDraw == null ||
                                                                 !_selectedDraw.Id.Equals(draw.Id))
-                                                                    ? "" : "highlight_3"))"
-                                                        style="min-width: 90px;max-width: 90px;">
+                                                                    ? "" : "highlight_3"))">
                                                         <div class="align-middle h-100"><labe>@draw.Name</labe></div>
                                                     </td>
 
                                                     <td class="align-middle
                                                         @(((_selectedDraw == null ||
                                                                 !_selectedDraw.Id.Equals(draw.Id))
-                                                                    ? "" : "highlight_3"))"
-                                                        style="min-width: 90px;max-width: 90px;">
+                                                                    ? "" : "highlight_3"))">
                                                         <label>@GetDrawingMenHours(draw.Id) h</label>
                                                     </td>
 
                                                     <td class="align-middle
                                                         @(((_selectedDraw == null ||
                                                             !_selectedDraw.Id.Equals(draw.Id))
-                                                                ? "" : "highlight_3"))"
-                                                        style="min-width: 90px;max-width: 90px;">
+                                                                ? "" : "highlight_3"))">
                                                         <label>@draw.CompletionEstimation %</label>
                                                     </td>
 
                                                     <td class="align-middle
                                                         @(((_selectedDraw == null ||
                                                             !_selectedDraw.Id.Equals(draw.Id))
-                                                                ? "" : "highlight_3"))"
-                                                        style="min-width: 90px;max-width: 90px;">
+                                                                ? "" : "highlight_3"))">
                                                         <label>@draw.CompletionDateDisplay</label>
                                                     </td>
 
@@ -267,7 +279,7 @@
                                                     {
                                                         <td class="align-middle">
                                                             <span class="clarity--assign-user-line"
-                                                                  @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
+                                                                    @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
                                                             </span>
                                                         </td>
                                                     }
@@ -334,9 +346,9 @@
                 </div>
                 
             </div>
-        }
+        </div>
     </div>
-</div>
+}
 
 <FilterProgressRing FilterLoading="@_filterLoading" />
 
@@ -496,7 +508,7 @@
 
     </FluentDialog>
 
-    <!-- On "Add Designer3" Button Click Dialog -->
+    <!-- On "Add Designers" Button Click Dialog -->
     <FluentDialog @ref="_addDesignerDialog"
                   Hidden="@(!_isAddDesignerDialogOdepened || _startLoading)"
                   Modal="false"
@@ -549,12 +561,75 @@
         </div>
 
         <div class="row">
-            <FluentButton Disabled="@(timeToSet != TimeSpan.Zero)"
-                          class="col-6"
+            <FluentButton class="col-6"
                           OnClick="@(async () => await _addDesignerDialogAccept())">
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => _addDesignerDialogCansel())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On "Add Engineers" Button Click Dialog -->
+    <FluentDialog @ref="_addEngineerDialog"
+                  Hidden="@(!_isAddEngineerDialogOdepened || _startLoading)"
+                  Modal="false"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: 400px !important;
+                         --dialog-height: auto !important;">
+
+        <div class="badge text-dark text-wrap fs-3">
+            Add Designers
+        </div>
+
+        <div class="modal-body row">
+            <div class="m-1 row justify-content-center">
+
+                <div class="col-12 p-2">
+
+                    <div class="mt-1 p-2 modal-content">
+                        <div class="d-flex justify-content-around">
+                            <div class="table-responsive p-1 w-100 h-100 m-3">
+                                <div class="text-center">
+                                    <h3>Select Engineers</h3>
+                                </div>
+                                <table class="table table-borderless rounded-3">
+                                    <tbody>
+                                        @foreach (var engineer in _engineers)
+                                        {
+                                            <tr clss="align-middle d-flex">
+                                                <td class="align-middle">
+                                                    <input class="form-check-input big-checkbox"
+                                                           type="checkbox"
+                                                           id="isSelectedDesigner"
+                                                           @bind=@engineer.IsSelected>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <label>
+                                                        @engineer.LastName &nbsp; @engineer.FirstName
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEngineerDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addEngineerDialogCansel())">
                 Cancel
             </FluentButton>
         </div>

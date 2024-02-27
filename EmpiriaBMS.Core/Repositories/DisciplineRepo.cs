@@ -212,4 +212,64 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<ICollection<UserDto>> GetEngineers(int disciplineId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var users = await _context.Set<DisciplineEngineer>()
+                                      .Where(de => de.DisciplineId == disciplineId)
+                                      .Include(de => de.Engineer)
+                                      .Select(de => de.Engineer)
+                                      .ToListAsync();
+
+            return Mapping.Mapper.Map<List<UserDto>>(users);
+        }
+    }
+
+    public async Task AddEngineers(int disciplineId, ICollection<UserDto> engineers)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            foreach (var e in engineers)
+            {
+                DisciplineEngineer de = new DisciplineEngineer()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    DisciplineId = disciplineId,
+                    EngineerId = e.Id
+                };
+
+                // Check If Exists
+                var exists = await _context.Set<DisciplineEngineer>()
+                    .AnyAsync(de => de.DisciplineId == disciplineId && de.EngineerId == e.Id);
+                if (exists) continue;
+
+                await _context.Set<DisciplineEngineer>().AddAsync(de);
+                await _context.SaveChangesAsync();
+            }
+        }
+    }
+
+    public async Task RemoveEngineers(int disciplineId, ICollection<int> engineersIds)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var engineers = await _context.Set<DisciplineEngineer>()
+                                              .Where(d => engineersIds.Contains(d.EngineerId)
+                                                                && d.DisciplineId == disciplineId)
+                                              .ToListAsync();
+
+            if (engineers == null)
+                throw new NullReferenceException(nameof(engineers));
+
+            foreach (var engineer in engineers)
+            {
+                _context.Set<DisciplineEngineer>().Remove(engineer);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+    }
 }
