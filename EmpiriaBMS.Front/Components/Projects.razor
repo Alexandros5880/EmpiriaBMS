@@ -55,17 +55,17 @@
                                 <!-- Start / Stop Buttons -->
                                 <div class="col-lg-5 col-md-8 col-sm-8">
                                     <div class="d-grid">
-                                        @if (workStarted)
+                                        @if (isWorkingMode)
                                         {
                                             <button type="button" class="btn btn-danger btn-lg w-50"
-                                                    @onclick="@(() => ToogleWorkStatus())">
+                                                    @onclick="@(() => StopWorkClick())">
                                                 <span>@timePassed.ToString(@"hh\:mm\:ss")</span>
                                             </button>
                                         }
                                         else
                                         {
                                             <button type="button" class="btn btn-success btn-lg w-50"
-                                                    @onclick="@(() => ToogleWorkStatus())">
+                                                    @onclick="@(() => StartWorkClick())">
                                                 Press Work Start
                                             </button>
                                         }
@@ -219,14 +219,17 @@
                                                 <th scope="col" class="sticky-header">Total Hours</th>
                                                 <th scope="col" class="sticky-header">Declared Completion</th>
                                                 <th scope="col" class="sticky-header">Deadline</th>
+                                                @if (EditDrawing)
+                                                {
+                                                    <th scope="col"></th>
+                                                }
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach (var draw in _draws)
                                             {
                                                 <tr class="align-middle"
-                                                    @onclick="@(() => OnSelectDraw(draw))"
-                                                    @ondblclick="@(async (x) => await OnDbSelectDraw(draw))">
+                                                    @onclick="@(() => OnSelectDraw(draw))">
 
                                                     <td class="align-middle
                                                         @(((_selectedDraw == null ||
@@ -259,6 +262,15 @@
                                                         style="min-width: 90px;max-width: 90px;">
                                                         <label>@draw.CompletionDateDisplay</label>
                                                     </td>
+
+                                                    @if (EditDrawing)
+                                                    {
+                                                        <td class="align-middle">
+                                                            <span class="clarity--assign-user-line"
+                                                                  @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
+                                                            </span>
+                                                        </td>
+                                                    }
 
                                                 </tr>
                                             }
@@ -346,204 +358,125 @@
 
                 <div class="col-12 p-2">
 
-                    @if (LoggedUserRoles.Select(r => r.Name).Contains("Designer"))
-                    {
-                        <!-- Headder -->
-                        <div class="mt-1 p-2 row">
-                            <div Class="col">
-                                <div class="text-center">
-                                    <h3>Select Project</h3>
-                                </div>
-                                <select class="form-select form-select-lg"
-                                        aria-label="Select Project"
-                                        @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
-                                    <option value="0" selected>Select Project</option>
-                                    @foreach (var project in _projects)
-                                    {
-                                        <option selected="@(project.Id == _selectedProject?.Id)"
-                                                value="@project.Id">
-                                            @project.Name
-                                        </option>
-                                    }
-                                </select>
+                    <!-- Headder -->
+                    <div class="mt-1 p-2 row">
+                        <div Class="col">
+                            <div class="text-center">
+                                <h3>Select Project</h3>
                             </div>
-                            <div class="col">
-                                <div class="text-center">
-                                    <h3>Select Descipline</h3>
-                                </div>
-                                <select class="form-select form-select-lg"
-                                        aria-label="Select Discipline"
-                                        @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
-                                    <option value="0" selected>Select Discipline</option>
-                                    @foreach (var discipline in _disciplines)
-                                    {
-                                        <option selected="@(discipline.Id == _selectedDiscipline?.Id)"
-                                                value="@discipline.Id">
-                                            @discipline.Name
-                                        </option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="col text-center">
-                                <h3>My Hours Since Start: <b>@timeToSet.Hours</b></h3>
-                            </div>
-                        </div>
-
-                        <div class="mt-1 p-2 modal-content">
-                            <div class="d-flex justify-content-around">
-
-                                <!-- Drawings -->
-                                @if (_draws != null && _draws.Count > 0)
+                            <select class="form-select form-select-lg"
+                                    aria-label="Select Project"
+                                    @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
+                                <option value="0" selected>Select Project</option>
+                                @foreach (var project in _projects)
                                 {
+                                    <option selected="@(project.Id == _selectedProject?.Id)"
+                                            value="@project.Id">
+                                        @project.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col">
+                            <div class="text-center">
+                                <h3>Select Descipline</h3>
+                            </div>
+                            <select class="form-select form-select-lg"
+                                    aria-label="Select Discipline"
+                                    @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
+                                <option value="0" selected>Select Discipline</option>
+                                @foreach (var discipline in _disciplines)
+                                {
+                                    <option selected="@(discipline.Id == _selectedDiscipline?.Id)"
+                                            value="@discipline.Id">
+                                        @discipline.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col text-center">
+                            <h3>My Hours Since Start: <b>@timeToSet.Hours</b></h3>
+                        </div>
+                    </div>
+
+                    <div class="mt-1 p-2 modal-content">
+                        <div class="d-flex justify-content-around">
+
+                            <!-- Drawings -->
+                            @if (_draws != null && _draws.Count > 0)
+                            {
+                                <div>
                                     <div>
-                                        <div>
-                                            <h3>Deliverables</h3>
-                                        </div>
-                                        <ul class="list-group">
-                                            @foreach (var _draw in _draws)
-                                            {
-                                                <li class="list-group-item">
-                                                    <div class="row gx-2">
-                                                        <div class="col">
-                                                            <labe>@_draw.Name</labe>
+                                        <h3>Deliverables</h3>
+                                    </div>
+                                    <ul class="list-group">
+                                        @foreach (var _draw in _draws)
+                                        {
+                                            <li class="list-group-item">
+                                                <div class="row gx-2">
+                                                    <div class="col">
+                                                        <labe>@_draw.Name</labe>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="input-group">
+                                                            <TimeInput Min="@TimeSpan.Zero"
+                                                                       Max="@timeToSet"
+                                                                       Time="@TimeSpan.Zero"
+                                                                       OnPropertyChanged=@((e) => _onDrawHoursChanged(_draw, e.Value)) />
                                                         </div>
-                                                        <div class="col">
-                                                            <div class="input-group">
-                                                                <TimeInput Min="@TimeSpan.Zero"
-                                                                           Max="@timeToSet"
-                                                                           Time="@TimeSpan.Zero"
-                                                                           OnPropertyChanged=@((e) => _onDrawHoursChanged(_draw, e.Value))/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col">
-                                                            <div class="input-group" style="width: 100px;">
-                                                                <input type="number"
-                                                                       class="form-control"
-                                                                       EnableMinMax="true"
-                                                                       Min="0"
-                                                                       Max="100"
-                                                                       @onchange=@((e) => _onDrawCompletedChanged(_draw, e.Value))>
-                                                                <div class="input-group-append">
-                                                                    <span class="input-group-text">%</span>
-                                                                </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="input-group" style="width: 100px;">
+                                                            <input type="number"
+                                                                   class="form-control"
+                                                                   EnableMinMax="true"
+                                                                   Min="0"
+                                                                   Max="100"
+                                                                   @onchange=@((e) => _onDrawCompletedChanged(_draw, e.Value))>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">%</span>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
-                                }
-
-                                <!-- Others -->
-                                @if (_others != null && _others.Count > 0)
-                                {
-                                    <div>
-                                        <div>
-                                            <h3>Auxiliares</h3>
-                                        </div>
-                                        <ul class="list-group list-group-flush">
-                                            @foreach (var _other in _others)
-                                            {
-                                                <li class="list-group-item">
-                                                    <div class="row gx-2">
-                                                        <div class="col">
-                                                            <labe>@_other.Name</labe>
-                                                        </div>
-                                                        <div class="col">
-                                                            <div class="input-group">
-                                                                <TimeInput Min="@TimeSpan.Zero"
-                                                                           Max="@timeToSet"
-                                                                           Time="@TimeSpan.Zero"
-                                                                           OnPropertyChanged=@((e) => _onOtherHoursChanged(_other, e.Value)) />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-                    }
-
-                    @if (LoggedUserRoles.Select(r => r.Name).Contains("Engineer"))
-                    {
-                        <!-- Headder -->
-                        <div class="mt-1 p-2 row">
-                            <div Class="col-8">
-                                <div class="text-center">
-                                    <h3>Select Project</h3>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
                                 </div>
-                                <select class="form-select form-select-lg"
-                                        aria-label="Select Project"
-                                        @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
-                                    <option value="0" selected>Select Project</option>
-                                    @foreach (var project in _projects)
-                                    {
-                                        <option selected="@(project.Id == _selectedProject?.Id)"
-                                                value="@project.Id">
-                                            @project.Name
-                                        </option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="col-4 text-center">
-                                <h3>My Hours Since Start <b>@timeToSet.Hours</b></h3>
-                            </div>
-                        </div>
+                            }
 
-                        <div class="mt-1 p-2 modal-content">
-                            <div class="d-flex justify-content-around">
-
-                                <!-- Disciplines -->
-                                @if (_disciplines != null && _disciplines.Count > 0)
-                                {
+                            <!-- Others -->
+                            @if (_others != null && _others.Count > 0)
+                            {
+                                <div>
                                     <div>
-                                        <div>
-                                            <h3>Disciplines</h3>
-                                        </div>
-                                        <ul class="list-group">
-                                            @foreach (var _discipline in _disciplines)
-                                            {
-                                                <li class="list-group-item">
-                                                    <div class="row gx-2">
-                                                        <div class="col">
-                                                            <labe>@_discipline.Name</labe>
-                                                        </div>
-                                                        <div class="col">
-                                                            <div class="input-group">
-                                                                <TimeInput Min="@TimeSpan.Zero"
-                                                                           Max="@timeToSet"
-                                                                           Time="@TimeSpan.Zero"
-                                                                           OnPropertyChanged=@((e) => _onDisciplineHoursChanged(_discipline, e.Value)) />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col">
-                                                            <div class="input-group" style="width: 100px;">
-                                                                <input type="number"
-                                                                       class="form-control"
-                                                                       EnableMinMax="true"
-                                                                       Min="0"
-                                                                       Max="100"
-                                                                       @onchange=@((e) => _onDisciplineCompletedChanged(_discipline, e.Value))>
-                                                                <div class="input-group-append">
-                                                                    <span class="input-group-text">%</span>
-                                                                </div>
-                                                            </div>
+                                        <h3>Auxiliaries</h3>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var _other in _others)
+                                        {
+                                            <li class="list-group-item">
+                                                <div class="row gx-2">
+                                                    <div class="col">
+                                                        <labe>@_other.Name</labe>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="input-group">
+                                                            <TimeInput Min="@TimeSpan.Zero"
+                                                                       Max="@timeToSet"
+                                                                       Time="@TimeSpan.Zero"
+                                                                       OnPropertyChanged=@((e) => _onOtherHoursChanged(_other, e.Value)) />
                                                         </div>
                                                     </div>
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
-                                }
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
 
-                            </div>
                         </div>
-                    }
+                    </div>
 
                 </div>
 

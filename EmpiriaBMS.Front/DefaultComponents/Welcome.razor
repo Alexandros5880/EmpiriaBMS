@@ -58,7 +58,7 @@ else
             var userExists = DataProvider.Users.Exists(teamsUser.PreferredUserName);
 
 
-            string roleName = "Designer"; // Engineer Designer
+            string roleName = "Engineer"; // Engineer Designer
             var defaultRoleId = await GetRoleId(roleName);
             if (defaultRoleId == 0)
                 throw new Exception($"Exception `{roleName}` role not exists!");

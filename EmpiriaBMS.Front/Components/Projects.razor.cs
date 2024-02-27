@@ -10,6 +10,7 @@ using EmpiriaMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using Microsoft.JSInterop;
+using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -25,21 +26,24 @@ public partial class Projects : IDisposable
     [Parameter]
     public double LogesUserHours { get; set; } = 0;
     [Parameter]
-    public ICollection<RoleVM> LoggedUserRoles { get; set; } = new List<RoleVM>();
+    public ICollection<RoleVM> LoggedUserRoles { get; set; }
 
-
+    // General Fields
     private bool disposedValue;
-
     bool _runInTeams = false;
     bool _authenticated = false;
-
     bool _startLoading = true;
     bool _filterLoading = false;
+
+    // Visibility Properties
+    public bool EditDrawing => LoggedUserRoles.Select(r => r.Name)
+                                              .ToList()
+                                              .Contains("Engineer");
 
     // Working Timer
     Timer timer;
     DateTime StartWorkTime = DateTime.Now;
-    bool workStarted = false;
+    bool isWorkingMode = false;
     TimeSpan timePassed = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
     TimeSpan timeToSet = TimeSpan.Zero;
@@ -187,39 +191,31 @@ public partial class Projects : IDisposable
 
     #endregion
 
-    #region Properties Changed Events
-    private void ToogleWorkStatus(bool? start = null)
+    #region Actions Functions
+    private void StartWorkClick()
     {
-        if (start != null)
-            workStarted = (bool)start;
-        else
-            workStarted = !workStarted;
+        isWorkingMode = true;
+        StartTimer();
+    }
 
-        if (workStarted)
-        {
-            timeToSet = TimeSpan.Zero;
-            StartTimer();
-        } else
-        {
-            StopTimer();
+    private void StopWorkClick()
+    {
+        isWorkingMode = false;
+        StopTimer();
 
-            // TODO: Enable This
-            //if (timePaused < 1) return;
+        timeToSet = timePaused;
 
-            timeToSet = timePaused;
+        _others.Clear();
+        _draws.Clear();
+        _disciplines.Clear();
+        _selectedOther = null;
+        _selectedDraw = null;
+        _selectedDiscipline = null;
+        _selectedProject = null;
+        StateHasChanged();
 
-            _others.Clear();
-            _draws.Clear();
-            _disciplines.Clear();
-            _selectedOther = null;
-            _selectedDraw = null;
-            _selectedDiscipline = null;
-            _selectedProject = null;
-            StateHasChanged();
-
-            _endWorkDialog.Show();
-            _isEndWorkDialogOdepened = true;
-        }
+        _endWorkDialog.Show();
+        _isEndWorkDialogOdepened = true;
     }
 
     private async Task OnSelectProject(int projectId)
@@ -270,21 +266,25 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
-    private async Task OnDbSelectDraw(DrawingVM draw)
+    private async Task OnDrawingAssignClick(DrawingVM draw)
     {
-        if (!workStarted) return;
-        try
+        if (!isWorkingMode) return;
+        var myRoles = LoggedUserRoles.Select(r => r.Name).ToList();
+        if (myRoles.Contains("Engineer"))
         {
-            _selectedDraw = draw;
-            await _getDesigners();
-            StateHasChanged();
-            _addDesignerDialog.Show();
-            _isAddDesignerDialogOdepened = true;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            try
+            {
+                _selectedDraw = draw;
+                await _getDesigners();
+                StateHasChanged();
+                _addDesignerDialog.Show();
+                _isAddDesignerDialogOdepened = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception: {ex.Message}");
+                // TODO: Log Error
+            }
         }
     }
 
@@ -295,14 +295,16 @@ public partial class Projects : IDisposable
     }
     #endregion
 
-    #region Async Jobs
+    #region Timer
     private async Task StartTimer()
     {
-        // TODO: Remove "AddHours(-7)"
-        StartWorkTime = DateTime.Now.AddHours(-7); //DateTime.Now;
+        // TODO: Projects Timer -> Change """ timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7); """ TO """ DateTime.Now """
+        StartWorkTime = timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7);
         timer = new System.Threading.Timer((_) =>
         {
             timePassed = DateTime.Now - StartWorkTime;
+            if (timePaused != TimeSpan.Zero)
+                timePassed += timePaused;
 
             InvokeAsync(() =>
                 {
@@ -440,7 +442,7 @@ public partial class Projects : IDisposable
     {
         _drawsChanged.Clear();
         _othersChanged.Clear();
-        ToogleWorkStatus(true);
+        StartWorkClick();
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
     }
