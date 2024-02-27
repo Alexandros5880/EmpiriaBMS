@@ -129,9 +129,9 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return _context.Set<ManHour>()
-                                 .Where(mh => mh.DisciplineId == disciplineId)
-                                 .Select(mh => mh.Hours)
-                                 .Sum();
+                           .Where(mh => mh.DisciplineId == disciplineId)
+                           .Select(mh => mh.Hours)
+                           .Sum();
         }
     }
 

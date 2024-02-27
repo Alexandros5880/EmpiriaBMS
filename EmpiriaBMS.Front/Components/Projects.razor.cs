@@ -449,49 +449,6 @@ public partial class Projects : IDisposable
     #endregion
 
     #region On Press Add Designer Dialog Actions
-    private void _onDisciplineHoursChanged(DisciplineVM discipline, object val)
-    {
-        if (Convert.ToString(val) == "") return;
-        val += ":00";
-        TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
-        var value = Convert.ToInt32(timeSpan.Hours);
-        if (timeToSet.Hours < value)
-        {
-            // TODO: Display a Msg
-            return;
-        }
-
-        discipline.MenHours += value;
-
-        if (_disciplinesChanged.Any(d => d.Id == discipline.Id))
-        {
-            var d = _disciplinesChanged.FirstOrDefault(d => d.Id == discipline.Id);
-            d.MenHours = discipline.MenHours;
-        }
-        else
-            _disciplinesChanged.Add(discipline);
-
-        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
-        timeToSet = updatedTimeSpan;
-
-        StateHasChanged();
-    }
-
-    private void _onDisciplineCompletedChanged(DisciplineVM discipline, object val)
-    {
-        discipline.Completed += Convert.ToInt32(val);
-
-        if (_disciplinesChanged.Any(d => d.Id == discipline.Id))
-        {
-            var d = _disciplinesChanged.FirstOrDefault(d => d.Id == discipline.Id);
-            d.Completed = discipline.Completed;
-        }
-        else
-            _disciplinesChanged.Add(discipline);
-
-        StateHasChanged();
-    }
-    
     public async Task _addDesignerDialogAccept()
     {
         _addDesignerDialog.Hide();

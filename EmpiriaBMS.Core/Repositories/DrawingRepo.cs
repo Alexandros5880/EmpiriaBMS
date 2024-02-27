@@ -201,10 +201,10 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var users = await _context.Set<DrawingEmployee>()
-                                 .Where(de => de.DrawingId == drwaingId)
-                                 .Include(de => de.Employee)
-                                 .Select(de => de.Employee)
-                                 .ToListAsync();
+                                      .Where(de => de.DrawingId == drwaingId)
+                                      .Include(de => de.Employee)
+                                      .Select(de => de.Employee)
+                                      .ToListAsync();
 
             return Mapping.Mapper.Map<List<UserDto>>(users);
         }
@@ -235,12 +235,13 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
         }
     }
 
-    public async Task RemoveDesigners(int drwaingId, ICollection<int> designersIds)
+    public async Task RemoveDesigners(int drawingId, ICollection<int> designersIds)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var designers = await _context.Set<DrawingEmployee>()
-                                              .Where(d => designersIds.Contains(d.EmployeeId))
+                                              .Where(d => designersIds.Contains(d.EmployeeId) 
+                                                                        && d.DrawingId == drawingId)
                                               .ToListAsync();
 
             if (designers == null)

@@ -829,9 +829,9 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Connect Every Draftman With Every Other
-        for (var d = 0; d< draftsmen.Count; d++)
+        for (var o = 0; o < others.Count; o++) 
         {
-            for (var o = 0; o < others.Count; o++)
+            for (var d = 0; d < draftsmen.Count; d++)
             {
                 OtherEmployee de_1 = new OtherEmployee()
                 {
@@ -847,9 +847,9 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Connect Every Draftman With Every Drawing
-        for (var d = 0; d < draftsmen.Count; d++)
+        for (var o = 0; o < drawings.Count; o++)
         {
-            for (var o = 0; o < drawings.Count; o++)
+            for (var d = 0; d < draftsmen.Count; d++)
             {
                 DrawingEmployee de_1 = new DrawingEmployee()
                 {
