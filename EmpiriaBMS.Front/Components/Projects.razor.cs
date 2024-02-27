@@ -36,12 +36,35 @@ public partial class Projects : IDisposable
     bool _filterLoading = false;
 
     // Visibility Properties
-    public bool EditDrawing => LoggedUserRoles.Select(r => r.Name)
-                                              .ToList()
-                                              .Contains("Engineer");
-    public bool EditDiscipline => LoggedUserRoles.Select(r => r.Name)
-                                              .ToList()
-                                              .Contains("Project Manager");
+    public bool EditDrawing {
+        get
+        {
+            return isWorkingMode && (LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO"));
+        }
+    }
+    public bool EditDiscipline
+    {
+        get
+        {
+            return isWorkingMode && (LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO"));
+        }
+    }
+    public bool EditProject
+    {
+        get
+        {
+            return isWorkingMode && (LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO"));
+        }
+    }
 
     // Working Timer
     Timer timer;
@@ -63,6 +86,7 @@ public partial class Projects : IDisposable
     private List<OtherVM> _othersChanged = new List<OtherVM>();
     private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
+    private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
 
     // Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
@@ -84,6 +108,10 @@ public partial class Projects : IDisposable
     // Add Engineer Dialog
     private FluentDialog? _addEngineerDialog;
     private bool _isAddEngineerDialogOdepened = false;
+
+    // Add ProjectManager Dialog
+    private FluentDialog? _addPMDialog;
+    private bool _isAddPMDialogOdepened = false;
 
     protected override void OnInitialized()
     {
@@ -200,6 +228,36 @@ public partial class Projects : IDisposable
         }
     }
 
+    private async Task _getProjectManagers()
+    {
+        try
+        {
+            var defaultRoleId = await GetRoleId("Project Manager");
+            if (defaultRoleId == 0)
+                throw new Exception("Exception `Project Manager` role not exists!");
+
+            var pms = await DataProvider.Roles.GetUsers(defaultRoleId);
+
+            if (pms == null)
+                throw new NullReferenceException(nameof(pms));
+
+            var myPmsIds = (await DataProvider.Projects.GetProjectManagers(_selectedProject.Id)).Select(d => d.Id);
+
+            var pmsVM = Mapper.Map<List<UserVM>>(pms);
+            _projectManagers.Clear();
+            pmsVM.ForEach(d =>
+            {
+                d.IsSelected = myPmsIds.Contains(d.Id);
+                _projectManagers.Add(d);
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     private async Task<int> GetRoleId(string roleName)
     {
         try
@@ -234,6 +292,7 @@ public partial class Projects : IDisposable
     {
         isWorkingMode = true;
         StartTimer();
+        StateHasChanged();
     }
 
     private void StopWorkClick()
@@ -281,11 +340,10 @@ public partial class Projects : IDisposable
     {
         if (disciplineId == 0) return;
 
-        var discipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
-        _selectedDiscipline = discipline;
+        _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
-        var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
-        var others = await DataProvider.Disciplines.GetOthers(discipline.Id);
+        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id);
+        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id);
 
         _draws.Clear();
         foreach (var di in draws)
@@ -307,44 +365,54 @@ public partial class Projects : IDisposable
     private async Task OnDrawingAssignClick(DrawingVM draw)
     {
         if (!isWorkingMode) return;
-        var myRoles = LoggedUserRoles.Select(r => r.Name).ToList();
-        if (myRoles.Contains("Engineer"))
+        try
         {
-            try
-            {
-                _selectedDraw = draw;
-                await _getDesigners();
-                StateHasChanged();
-                _addDesignerDialog.Show();
-                _isAddDesignerDialogOdepened = true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Exception: {ex.Message}");
-                // TODO: Log Error
-            }
+            _selectedDraw = draw;
+            await _getDesigners();
+            StateHasChanged();
+            _addDesignerDialog.Show();
+            _isAddDesignerDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
         }
     }
 
     private async Task OnDesciplineAssignClick(DisciplineVM discipline)
     {
         if (!isWorkingMode) return;
-        var myRoles = LoggedUserRoles.Select(r => r.Name).ToList();
-        if (myRoles.Contains("Project Manager"))
+        try
         {
-            try
-            {
-                _selectedDiscipline = discipline;
-                await _getEngineers();
-                StateHasChanged();
-                _addEngineerDialog.Show();
-                _isAddEngineerDialogOdepened = true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Exception: {ex.Message}");
-                // TODO: Log Error
-            }
+            _selectedDiscipline = discipline;
+            await _getEngineers();
+            StateHasChanged();
+            _addEngineerDialog.Show();
+            _isAddEngineerDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task OnProjectAssignClick(ProjectVM project)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedProject = project;
+            await _getProjectManagers();
+            StateHasChanged();
+            _addPMDialog.Show();
+            _isAddPMDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
         }
     }
 
@@ -516,7 +584,6 @@ public partial class Projects : IDisposable
 
         _startLoading = true;
 
-        // Update Draws
         var forDeleteIds = _designers.Where(d => d.IsSelected == null || d.IsSelected == false)
                                      .Select(d => d.Id)
                                      .ToList();
@@ -544,7 +611,6 @@ public partial class Projects : IDisposable
 
         _startLoading = true;
 
-        // Update Draws
         var forDeleteIds = _engineers.Where(d => d.IsSelected == null || d.IsSelected == false)
                                      .Select(d => d.Id)
                                      .ToList();
@@ -561,6 +627,33 @@ public partial class Projects : IDisposable
     {
         _addEngineerDialog.Hide();
         _isAddEngineerDialogOdepened = false;
+    }
+    #endregion
+
+    #region On Press Add Project Manager Dialog Actions
+    public async Task _addPMDialogAccept()
+    {
+        _addPMDialog.Hide();
+        _isAddPMDialogOdepened = false;
+
+        _startLoading = true;
+
+        var forDeleteIds = _projectManagers.Where(d => d.IsSelected == null || d.IsSelected == false)
+                                           .Select(d => d.Id)
+                                     .ToList();
+        await DataProvider.Projects.RemoveProjectManager(_selectedProject.Id, forDeleteIds);
+
+        var forAdd = _projectManagers.Where(d => d.IsSelected == true).ToList();
+        var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
+        await DataProvider.Projects.AddProjectManager(_selectedProject.Id, forAddDto);
+
+        _startLoading = false;
+    }
+
+    public void _addPMDialogCansel()
+    {
+        _addPMDialog.Hide();
+        _isAddPMDialogOdepened = false;
     }
     #endregion
 

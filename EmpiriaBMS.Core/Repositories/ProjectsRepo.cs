@@ -117,6 +117,24 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            // Get User Roles
+            var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => r.UserId == userId)
+                                        .Select(r => r.RoleId)
+                                        .ToListAsync();
+
+            var roles = await _context.Roles.Where(r => roleIds.Contains(r.Id))
+                                            .ToListAsync();
+
+            if (roles.Any(r => r.Name.Equals("CEO")
+                    || r.Name.Equals("CTO") || r.Name.Equals("COO")))
+            {
+                var allProjects = await _context.Set<Project>().ToListAsync();
+
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(allProjects.Distinct().ToList());
+            }
+
+            // Filter Projects
             var myDrawingIds = await _context.Set<DrawingEmployee>()
                                              .Where(de => de.EmployeeId == userId)
                                              .Select(e => e.DrawingId)
@@ -157,6 +175,37 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            // Get User Roles
+            var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => r.UserId == userId)
+                                        .Select(r => r.RoleId)
+                                        .ToListAsync();
+
+            var roles = await _context.Roles.Where(r => roleIds.Contains(r.Id))
+                                            .ToListAsync();
+
+            if (roles.Any(r => r.Name.Equals("CEO")
+                    || r.Name.Equals("CTO") || r.Name.Equals("COO")))
+            {
+                if (pageSize == 0 || pageIndex == 0)
+                {
+                    projects = await _context.Set<Project>()
+                                             .OrderBy(e => e.DeadLine)
+                                             .ToListAsync();
+
+                    return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+                }
+
+                projects = await _context.Set<Project>()
+                                         .Skip((pageIndex - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .OrderBy(e => e.DeadLine)
+                                         .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+            }
+
+            // Filter Projects
             var myDrawingIds = await _context.Set<DrawingEmployee>()
                                              .Where(de => de.EmployeeId == userId)
                                              .Select(e => e.DrawingId)
@@ -216,6 +265,39 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            // Get User Roles
+            var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => r.UserId == userId)
+                                        .Select(r => r.RoleId)
+                                        .ToListAsync();
+
+            var roles = await _context.Roles.Where(r => roleIds.Contains(r.Id))
+                                            .ToListAsync();
+
+            if (roles.Any(r => r.Name.Equals("CEO")
+                    || r.Name.Equals("CTO") || r.Name.Equals("COO")))
+            {
+                if (pageSize == 0 || pageIndex == 0)
+                {
+                    projects = await _context.Set<Project>()
+                                             .Where(expresion)
+                                             .OrderBy(e => e.DeadLine)
+                                             .ToListAsync();
+
+                    return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+                }
+
+                projects = await _context.Set<Project>()
+                                         .Where(expresion)
+                                         .Skip((pageIndex - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .OrderBy(e => e.DeadLine)
+                                         .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+            }
+
+            // Filter Projects
             var myDrawingIds = await _context.Set<DrawingEmployee>()
                                              .Where(de => de.EmployeeId == userId)
                                              .Select(e => e.DrawingId)
@@ -312,5 +394,65 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return await _context.Set<DisciplinePoject>()
                                  .Where(de => de.ProjectId == id)
                                  .CountAsync();
+    }
+
+    public async Task<ICollection<UserDto>> GetProjectManagers(int projectId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var users = await _context.Set<ProjectPmanager>()
+                                      .Where(de => de.ProjectId == projectId)
+                                      .Include(de => de.ProjectManager)
+                                      .Select(de => de.ProjectManager)
+                                      .ToListAsync();
+
+            return Mapping.Mapper.Map<List<UserDto>>(users);
+        }
+    }
+
+    public async Task AddProjectManager(int projectId, ICollection<UserDto> pms)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            foreach (var e in pms)
+            {
+                ProjectPmanager pm = new ProjectPmanager()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    ProjectId = projectId,
+                    ProjectManagerId = e.Id
+                };
+
+                // Check If Exists
+                var exists = await _context.Set<ProjectPmanager>()
+                    .AnyAsync(pm => pm.ProjectId == projectId && pm.ProjectManagerId == e.Id);
+                if (exists) continue;
+
+                await _context.Set<ProjectPmanager>().AddAsync(pm);
+                await _context.SaveChangesAsync();
+            }
+        }
+    }
+
+    public async Task RemoveProjectManager(int projectId, ICollection<int> projectManagersIds)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var pms = await _context.Set<ProjectPmanager>()
+                                              .Where(d => projectManagersIds.Contains(d.ProjectManagerId)
+                                                                && d.ProjectId == projectId)
+                                              .ToListAsync();
+
+            if (pms == null)
+                throw new NullReferenceException(nameof(pms));
+
+            foreach (var projectManager in pms)
+            {
+                _context.Set<ProjectPmanager>().Remove(projectManager);
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

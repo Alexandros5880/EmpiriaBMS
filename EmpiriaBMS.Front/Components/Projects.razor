@@ -122,6 +122,10 @@ else
                                                 <th scope="col" class="sticky-header">Work Package Declared Completed</th>
                                                 <th scope="col" class="sticky-header">Estimated Hours Completed</th>
                                                 <th scope="col" class="sticky-header">Deadline</th>
+                                                @if (EditProject)
+                                                {
+                                                    <th scope="col"></th>
+                                                }
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -129,6 +133,7 @@ else
                                             {
                                                 <tr clss="align-middle d-flex"
                                                     @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                    
                                                     <td class="align-middle
                                                         @((_selectedProject == null || 
                                                                 !_selectedProject.Id.Equals(project.Id)
@@ -136,24 +141,37 @@ else
                                                         style="word-wrap: break-word;min-width: 110px;max-width: 110px;">
                                                         <labe>@project.Name</labe>
                                                     </td>
+                                                    
                                                     <td class="align-middle
                                                         @((_selectedProject == null ||
                                                                 !_selectedProject.Id.Equals(project.Id)
                                                                                 ? "" : "highlight_1"))">
                                                         <label>@project.WorkPackegedCompleted %</label>
                                                     </td>
+                                                    
                                                     <td class="align-middle
                                                         @((_selectedProject == null ||
                                                                 !_selectedProject.Id.Equals(project.Id)
                                                                                 ? "" : "highlight_1"))">
                                                         <label>@project.EstimatedCompleted %</label>
                                                     </td>
+                                                    
                                                     <td class="align-middle
                                                         @((_selectedProject == null ||
                                                                 !_selectedProject.Id.Equals(project.Id)
                                                                                 ? "" : "highlight_1"))">
                                                         <label>@project.DeadlineDisplay</label>
                                                     </td>
+
+                                                    @if (EditProject)
+                                                    {
+                                                        <td class="align-middle">
+                                                            <span class="clarity--assign-user-line"
+                                                                  @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                            </span>
+                                                        </td>
+                                                    }
+
                                                 </tr>
                                             }
                                         </tbody>
@@ -630,6 +648,70 @@ else
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => _addEngineerDialogCansel())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On "Add Project Managers" Button Click Dialog -->
+    <FluentDialog @ref="_addPMDialog"
+                  Hidden="@(!_isAddPMDialogOdepened || _startLoading)"
+                  Modal="false"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: 400px !important;
+                         --dialog-height: auto !important;">
+
+        <div class="badge text-dark text-wrap fs-3">
+            Add Designers
+        </div>
+
+        <div class="modal-body row">
+            <div class="m-1 row justify-content-center">
+
+                <div class="col-12 p-2">
+
+                    <div class="mt-1 p-2 modal-content">
+                        <div class="d-flex justify-content-around">
+                            <div class="table-responsive p-1 w-100 h-100 m-3">
+                                <div class="text-center">
+                                    <h3>Select Engineers</h3>
+                                </div>
+                                <table class="table table-borderless rounded-3">
+                                    <tbody>
+                                        @foreach (var pm in _projectManagers)
+                                        {
+                                            <tr clss="align-middle d-flex">
+                                                <td class="align-middle">
+                                                    <input class="form-check-input big-checkbox"
+                                                           type="checkbox"
+                                                           id="isSelectedDesigner"
+                                                           @bind=@pm.IsSelected>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <label>
+                                                        @pm.LastName &nbsp; @pm.FirstName
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addPMDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addPMDialogCansel())">
                 Cancel
             </FluentButton>
         </div>

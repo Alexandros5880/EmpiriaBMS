@@ -24,6 +24,22 @@
 else
 {
     <Projects LogedUser="@_logedUser" LogesUserHours="@_logesUserHours" LoggedUserRoles="@_loggedUserRoles"/>
+
+    <!-- Remove This -->
+    <select class="form-select" @onchange="RoleSelectionChanged">
+        @foreach (var role in _allRoles)
+        {
+            @if (@role.Name.Equals(_defaultRole))
+            {
+                <option value="@role.Id" selected>@role.Name</option>
+            }
+            else
+            {
+                <option value="@role.Id">@role.Name</option>
+            }
+        }
+    </select>
+
 }
 
 @code {
@@ -43,13 +59,14 @@ else
         if(firstRender)
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
-            await _getLogedUser(_runInTeams);
+            await GetAllRoles(); // TODO: Remove This
+            await _getLogedUser(_runInTeams: _runInTeams);
             isLoading = false;
             StateHasChanged();            
         }
     }
 
-    private async Task _getLogedUser(bool _runInTeams = true)
+    private async Task _getLogedUser(int roleId = 0, bool _runInTeams = true)
     {
         try
         {
@@ -58,12 +75,11 @@ else
             var userExists = DataProvider.Users.Exists(teamsUser.PreferredUserName);
 
             // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer
-            string roleName = "COO";
-            var defaultRoleId = await GetRoleId(roleName);
-            if (defaultRoleId == 0)
-                throw new Exception($"Exception `{roleName}` role not exists!");
+            var _defaultRoleId = roleId != 0 ? roleId : await GetRoleId(_defaultRole);
+            if (_defaultRoleId == 0)
+                throw new Exception($"Exception `{_defaultRole}` role not exists!");
 
-            var users = await DataProvider.Roles.GetUsers(defaultRoleId);
+            var users = await DataProvider.Roles.GetUsers(_defaultRoleId);
             var dbUser = users.FirstOrDefault();
 
             if (dbUser == null)
@@ -102,5 +118,28 @@ else
     private string GetEnvironmentName()
     {
         return HostEnvironment.IsDevelopment() ? "local environment" : "Azure environment";
+    }
+
+
+    // TODO: Remove This
+    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer
+    private string _defaultRole = "Designer";
+    private ICollection<RoleVM> _allRoles = new List<RoleVM>();
+
+    private async Task RoleSelectionChanged(ChangeEventArgs e)
+    {
+        bool isLoading = true;
+        var selectRoleId = Convert.ToInt32(e.Value);
+        await _getLogedUser(selectRoleId, _runInTeams);
+        StateHasChanged();
+        isLoading = false;
+    }
+
+    private async Task GetAllRoles()
+    {
+        var rolesDtos = await DataProvider.Roles.GetAll();
+        var roles = Mapper.Map<List<RoleVM>>(rolesDtos);
+        _allRoles.Clear();
+        roles.ForEach(_allRoles.Add);
     }
 }

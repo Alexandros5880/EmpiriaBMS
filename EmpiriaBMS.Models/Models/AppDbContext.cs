@@ -140,6 +140,108 @@ public class AppDbContext : DbContext
         builder.Entity<Role>().HasData(role_7);
         builder.Entity<Role>().HasData(role_8);
 
+        #region Create Users With Roles:  CEO, CTO, COO, Guest,
+        // CEO
+        var ceoId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        User ceo = new User()
+        {
+            Id = ceoId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Email = $"ceo@gmail.com",
+            LastName = "Alexandros",
+            FirstName = "Platanios",
+            Phone1 = "694927778",
+            Description = "CEO"
+        };
+        builder.Entity<User>().HasData(ceo);
+
+        UserRole ceoRole = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = ceoId,
+            RoleId = role_6_id
+        };
+        builder.Entity<UserRole>().HasData(ceoRole);
+
+        // CTO
+        var ctoId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        User cto = new User()
+        {
+            Id = ctoId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Email = $"cto@gmail.com",
+            LastName = "Alexandros",
+            FirstName = "Platanios",
+            Phone1 = "694927778",
+            Description = "CTO"
+        };
+        builder.Entity<User>().HasData(cto);
+
+        UserRole ctoRole = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = ctoId,
+            RoleId = role_5_id
+        };
+        builder.Entity<UserRole>().HasData(ctoRole);
+
+        // COO
+        var cooId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        User coo = new User()
+        {
+            Id = cooId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Email = $"coo@gmail.com",
+            LastName = "Alexandros",
+            FirstName = "Platanios",
+            Phone1 = "694927778",
+            Description = "COO"
+        };
+        builder.Entity<User>().HasData(coo);
+
+        UserRole cooRole = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = cooId,
+            RoleId = role_4_id
+        };
+        builder.Entity<UserRole>().HasData(cooRole);
+
+        // Guest
+        var guestId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        User guest = new User()
+        {
+            Id = guestId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Email = $"guest@gmail.com",
+            LastName = "Alexandros",
+            FirstName = "Platanios",
+            Phone1 = "694927778",
+            Description = "Guest"
+        };
+        builder.Entity<User>().HasData(guest);
+
+        UserRole guestRole = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = guestId,
+            RoleId = role_7_id
+        };
+        builder.Entity<UserRole>().HasData(guestRole);
+        #endregion
+
         #region Create 5 Draftmen
         List<User> draftsmen = new List<User>();
         for (var i = 0; i <= 5; i++)
