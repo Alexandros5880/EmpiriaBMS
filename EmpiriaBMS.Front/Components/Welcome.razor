@@ -17,9 +17,9 @@
 
 @if(isLoading)
 {
-    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+    @* <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
 		<FluentProgressRing/>
-	</div>
+	</div> *@
 }
 else
 {
@@ -58,7 +58,7 @@ else
             var userExists = DataProvider.Users.Exists(teamsUser.PreferredUserName);
 
             // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer
-            string roleName = "Project Manager";
+            string roleName = "COO";
             var defaultRoleId = await GetRoleId(roleName);
             if (defaultRoleId == 0)
                 throw new Exception($"Exception `{roleName}` role not exists!");
