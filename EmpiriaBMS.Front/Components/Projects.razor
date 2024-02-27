@@ -1,5 +1,4 @@
-﻿@page "/"
-@page "/projects"
+﻿@page "/projects"
 @using Microsoft.Fast.Components.FluentUI
 @using EmpiriaBMS.Front.Components.General; 
 
@@ -14,7 +13,7 @@
 
 <div class="row justify-content-center mt-1 mb-1">
     <div class="col-auto" style="width: 100%; height: 100%;">
-        @if (startLoading)
+        @if (_startLoading)
         {
             <div style="display: flex; justify-content: center; align-items: center; margin-top: 20%;">
                 <FluentProgressRing />
@@ -29,7 +28,7 @@
                     
                      <!-- Headder -->
                     <div class="mt-2 shadow p-2">
-                        @if (_logedUser != null)
+                        @if (LogedUser != null)
                         {
                             <div class="row ms-2 me-8" style="overflow:hidden;">
                                 
@@ -38,8 +37,8 @@
                                         <div class="col">
                                             <h4>
                                                 <b>
-                                                    @_logedUser.LastName
-                                                    @foreach (var role in _loggedUserRoles)
+                                                    @LogedUser.LastName
+                                                    @foreach (var role in LoggedUserRoles)
                                                     {
                                                         <span>&nbsp;&nbsp; @role.Name</span>
                                                     }
@@ -94,7 +93,7 @@
                                             else
                                             {
                                                 <span>My Hours This Week: </span>
-                                                <b>@_logesUserHours</b>
+                                                <b>@LogesUserHours</b>
                                             }
                                         }
                                     </span>
@@ -328,14 +327,14 @@
     </div>
 </div>
 
-<FilterProgressRing FilterLoading="@filterLoading"/>
+<FilterProgressRing FilterLoading="@_filterLoading" />
 
-@if (!startLoading)
+@if (!_startLoading)
 {
 
     <!-- On "Press Work End" Button Click Dialog -->
     <FluentDialog @ref="_endWorkDialog"
-                  Hidden="@(!_isEndWorkDialogOdepened || startLoading)"
+                  Hidden="@(!_isEndWorkDialogOdepened || _startLoading)"
                   Modal="false"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: auto !important;
@@ -348,7 +347,7 @@
 
                 <div class="col-12 p-2">
 
-                    @if (_loggedUserRoles.Select(r => r.Name).Contains("Designer"))
+                    @if (LoggedUserRoles.Select(r => r.Name).Contains("Designer"))
                     {
                         <!-- Headder -->
                         <div class="mt-1 p-2 row">
@@ -471,7 +470,7 @@
                         </div>
                     }
 
-                    @if (_loggedUserRoles.Select(r => r.Name).Contains("Engineer"))
+                    @if (LoggedUserRoles.Select(r => r.Name).Contains("Engineer"))
                     {
                         <!-- Headder -->
                         <div class="mt-1 p-2 row">
@@ -567,7 +566,7 @@
 
     <!-- On "Add Designer3" Button Click Dialog -->
     <FluentDialog @ref="_addDesignerDialog"
-                  Hidden="@(!_isAddDesignerDialogOdepened || startLoading)"
+                  Hidden="@(!_isAddDesignerDialogOdepened || _startLoading)"
                   Modal="false"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: 400px !important;

@@ -1,12 +1,19 @@
-﻿@using Microsoft.Extensions.Configuration
+﻿@page "/"
+@page "/welcome"
+
+@using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
+
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
 @inject IWebHostEnvironment HostEnvironment
 @inject IConfiguration Configuration
 @inject NavigationManager MyNavigationManager
+@inject IDataProvider DataProvider
+@inject IMapper Mapper
+
 
 @if(isLoading)
 {
@@ -16,42 +23,18 @@
 }
 else
 {
-    <div class="welcome page">
-        <div class="narrow page-padding">
-            <img src="hello.png" />
-            <h1 class="center">Congratulations@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h1>
-            <p class="center">Your app is running in your @(GetEnvironmentName())</p>
-           
-            <FluentTabs style="width: 80%; justify-content: space-between; margin: 4rem auto;">
-                <FluentTab style="font-size: 14px; min-height: 32px;">1. Build your app locally</FluentTab>
-                <FluentTab>2. Provision and Deploy to the Cloud</FluentTab>
-                <FluentTab>3. Publish to Teams</FluentTab>
-                <FluentTabPanel>
-                    <div style="display:block; width:100%;">
-                        @if (isInTeams)
-                        {
-                            <CurrentUser UserName="@userName" />
-                        }
-                        <Graph ErrorMessage="@errorMessage"/>
-                    </div>
-                </FluentTabPanel>
-                <FluentTabPanel>
-                    <Deploy/>
-                </FluentTabPanel>
-                <FluentTabPanel>
-                    <Publish/>
-                </FluentTabPanel>
-            </FluentTabs>
-
-        </div>
-    </div>
+    <Projects LogedUser="@_logedUser" LogesUserHours="@_logesUserHours" LoggedUserRoles="@_loggedUserRoles"/>
 }
 
 @code {
-    string userName; // Email
-    string errorMessage;
-    bool isInTeams;
-    bool isLoading = true; 
+    bool _runInTeams = false;
+    bool _authenticated = false;
+    bool isLoading = true;
+
+    // Auth Models
+    private UserVM _logedUser;
+    private double _logesUserHours = 0;
+    private ICollection<RoleVM> _loggedUserRoles = new List<RoleVM>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -59,20 +42,60 @@ else
 
         if(firstRender)
         {
-            isInTeams = await MicrosoftTeams.IsInTeams();
-
-            if (isInTeams)
-            { 
-               var user = await teamsUserCredential.GetUserInfoAsync();
-               userName = user.DisplayName;
-            }
-            else
-            {
-                errorMessage = "Not running in Microsoft Teams.";
-            }
-
+            _runInTeams = await MicrosoftTeams.IsInTeams();
+            await _getLogedUser(_runInTeams);
             isLoading = false;
             StateHasChanged();            
+        }
+    }
+
+    private async Task _getLogedUser(bool _runInTeams = true)
+    {
+        try
+        {
+            // TODO: Get Teams Logged User And Mach him With Our Users
+            var teamsUser = await teamsUserCredential.GetUserInfoAsync();
+            var userExists = DataProvider.Users.Exists(teamsUser.PreferredUserName);
+
+
+            string roleName = "Engineer"; // Engineer Designer
+            var defaultRoleId = await GetRoleId(roleName);
+            if (defaultRoleId == 0)
+                throw new Exception($"Exception `{roleName}` role not exists!");
+
+            var users = await DataProvider.Roles.GetUsers(defaultRoleId);
+            var dbUser = users.FirstOrDefault();
+
+            if (dbUser == null)
+                throw new NullReferenceException(nameof(dbUser));
+
+            _logedUser = Mapper.Map<UserVM>(dbUser);
+
+            _logesUserHours = await DataProvider.Users.GetUserHoursFromLastMonday(_logedUser.Id, DateTime.Now);
+
+            _loggedUserRoles = (await DataProvider.Roles.GetEmplyeeRoles(dbUser.Id))
+                                                        .Select(r => Mapper.Map<RoleVM>(r))
+                                                        .ToList();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task<int> GetRoleId(string roleName)
+    {
+        try
+        {
+            var role = await DataProvider.Roles.Get(roleName);
+            return role?.Id ?? 0;
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log Error
+            Debug.WriteLine($"Exception: {ex.Message}");
+            return 0;
         }
     }
 
@@ -81,4 +104,3 @@ else
         return HostEnvironment.IsDevelopment() ? "local environment" : "Azure environment";
     }
 }
-

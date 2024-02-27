@@ -7,6 +7,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using Microsoft.JSInterop;
 using System.Collections.Generic;
@@ -17,11 +18,23 @@ using System.Threading;
 namespace EmpiriaBMS.Front.Components;
 public partial class Projects : IDisposable
 {
+
+    // Auth Models
+    [Parameter]
+    public UserVM LogedUser { get; set; }
+    [Parameter]
+    public double LogesUserHours { get; set; } = 0;
+    [Parameter]
+    public ICollection<RoleVM> LoggedUserRoles { get; set; } = new List<RoleVM>();
+
+
     private bool disposedValue;
 
-    bool runInTeams = false;
-    bool startLoading = true;
-    bool filterLoading = false;
+    bool _runInTeams = false;
+    bool _authenticated = false;
+
+    bool _startLoading = true;
+    bool _filterLoading = false;
 
     // Working Timer
     Timer timer;
@@ -52,12 +65,6 @@ public partial class Projects : IDisposable
     // Paginator
     private PaginatorVM _paginator = new PaginatorVM(7);
 
-    // Auth Models
-    private UserVM _logedUser;
-    private double _logesUserHours = 0;
-    private ICollection<RoleVM> _loggedUserRoles = new List<RoleVM>();
-    private bool _logesUserChanged = false;
-
     // Work End Dialog
     private FluentDialog? _endWorkDialog;
     private bool _isEndWorkDialogOdepened = false;
@@ -66,13 +73,9 @@ public partial class Projects : IDisposable
     private FluentDialog? _addDesignerDialog;
     private bool _isAddDesignerDialogOdepened = false;
 
-    protected override async void OnInitialized()
+    protected override void OnInitialized()
     {
         base.OnInitialized();
-        await _getLogedUser();
-        await _getProjects();
-        startLoading = false;
-        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -81,8 +84,10 @@ public partial class Projects : IDisposable
 
         if (firstRender)
         {
-
-            //StateHasChanged();
+            _runInTeams = await MicrosoftTeams.IsInTeams();
+            await _getProjects();
+            _startLoading = false;
+            StateHasChanged();
         }
     }
 
@@ -97,16 +102,16 @@ public partial class Projects : IDisposable
         _draws.Clear();
         _others.Clear();
 
-        filterLoading = !startLoading ? true : filterLoading;
+        _filterLoading = !_startLoading ? true : _filterLoading;
         try
         {
             // Todo: Find a way to add this in to PaginatorVM
             //_paginator.SetRecordsLength(await DataProvider.Projects.Count());
 
             // TODO: Get My Project And Down
-            //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_logedUser.Id, _paginator.PageSize, _paginator.PageIndex))
+            //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_logedUser.Id)).ToList<ProjectDto>();
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
@@ -119,8 +124,8 @@ public partial class Projects : IDisposable
             Debug.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
-        startLoading = false;
-        filterLoading = !startLoading ? false : filterLoading;
+        _startLoading = false;
+        _filterLoading = !_startLoading ? false : _filterLoading;
     }
 
     private async Task _getDesigners()
@@ -145,38 +150,6 @@ public partial class Projects : IDisposable
                 d.IsSelected = myDesignersIds.Contains(d.Id);
                 _designers.Add(d);
             });
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private async Task _getLogedUser()
-    {
-        try
-        {
-            // TODO: Get Teams Logged User And Mach him With Our Users
-
-            string roleName = "Engineer"; // Engineer Designer
-            var defaultRoleId = await GetRoleId(roleName); 
-            if (defaultRoleId == 0)
-                throw new Exception($"Exception `{roleName}` role not exists!");
-
-            var users = await DataProvider.Roles.GetUsers(defaultRoleId);
-            var dbUser = users.FirstOrDefault();
-
-            if (dbUser == null)
-                throw new NullReferenceException(nameof(dbUser));
-
-            _logedUser = Mapper.Map<UserVM>(dbUser);
-
-            _logesUserHours = await DataProvider.Users.GetUserHoursFromLastMonday(_logedUser.Id, DateTime.Now);
-
-            _loggedUserRoles = (await DataProvider.Roles.GetEmplyeeRoles(dbUser.Id))
-                                                        .Select(r => Mapper.Map<RoleVM>(r))
-                                                        .ToList();
         }
         catch (Exception ex)
         {
@@ -279,7 +252,6 @@ public partial class Projects : IDisposable
 
         var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
         var others = await DataProvider.Disciplines.GetOthers(discipline.Id);
-        await _getLogedUser();
 
         _draws.Clear();
         foreach (var di in draws)
@@ -429,7 +401,7 @@ public partial class Projects : IDisposable
             return;
         }
 
-        startLoading = true;
+        _startLoading = true;
 
         // Update Draws
         foreach (var draw in _drawsChanged)
@@ -443,25 +415,25 @@ public partial class Projects : IDisposable
             }
             else
                 await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            await DataProvider.Drawings.UpdateHours(_logedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
+            await DataProvider.Drawings.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
         }
 
         // Update Others
         foreach (var other in _othersChanged)
         {
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-            await DataProvider.Others.UpdateHours(_logedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
+            await DataProvider.Others.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
         }
 
         // Update User Hours
-        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
+        await DataProvider.Users.AddHours(LogedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
 
         _drawsChanged.Clear();
         _othersChanged.Clear();
 
         await _getProjects();
 
-        startLoading = false;
+        _startLoading = false;
     }
 
     public void _endWorkDialogCansel()
@@ -523,7 +495,7 @@ public partial class Projects : IDisposable
         _addDesignerDialog.Hide();
         _isAddDesignerDialogOdepened = false;
 
-        startLoading = true;
+        _startLoading = true;
 
         // Update Draws
         var forDeleteIds = _designers.Where(d => d.IsSelected == null || d.IsSelected == false)
@@ -535,7 +507,7 @@ public partial class Projects : IDisposable
         var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
         await DataProvider.Drawings.AddDesigners(_selectedDraw.Id, forAddDto);
 
-        startLoading = false;
+        _startLoading = false;
     }
 
     public void _addDesignerDialogCansel()

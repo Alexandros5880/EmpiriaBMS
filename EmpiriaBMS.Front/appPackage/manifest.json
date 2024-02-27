@@ -38,9 +38,9 @@
     "staticTabs": [
       {
         "entityId": "index",
-        "name": "Projects",
-        "contentUrl": "${{TAB_ENDPOINT}}/projects",
-        "websiteUrl": "${{TAB_ENDPOINT}}/projects",
+        "name": "Dashboard",
+        "contentUrl": "${{TAB_ENDPOINT}}/welcome",
+        "websiteUrl": "${{TAB_ENDPOINT}}/welcome",
         "scopes": [
           "personal"
         ]

@@ -17,6 +17,15 @@ public class UsersRepo : Repository<UserDto, User>
 {
     public UsersRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<bool> Exists(string email)
+    {
+        if (email == null)
+            return false;
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            return await _context.Set<User>().AnyAsync(u => u.Email.Equals(email));
+    }
+
     public new async Task<UserDto?> Get(int id)
     {
         if (id == 0)
