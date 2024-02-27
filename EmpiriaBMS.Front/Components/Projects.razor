@@ -32,6 +32,7 @@
                         {
                             <div class="row ms-2 me-8" style="overflow:hidden;">
                                 
+                                <!-- User Name + Roles + Current Date -->
                                 <div class="col-lg-4 col-md-8 col-sm-8">
                                     <div class="row">
                                         <div class="col">
@@ -51,13 +52,14 @@
                                     </div>
                                 </div>
 
+                                <!-- Start / Stop Buttons -->
                                 <div class="col-lg-5 col-md-8 col-sm-8">
                                     <div class="d-grid">
                                         @if (workStarted)
                                         {
                                             <button type="button" class="btn btn-danger btn-lg w-50"
                                                     @onclick="@(() => ToogleWorkStatus())">
-                                                Press Work End
+                                                <span>@timePassed.ToString(@"hh\:mm\:ss")</span>
                                             </button>
                                         }
                                         else
@@ -70,13 +72,10 @@
                                     </div>
                                 </div>
 
+                                <!-- Display Hours Passed -->
                                 <div class="col-lg-3 col-md-4 col-sm-4 
                                             row primary-bg-color rounded-1 text-center">
                                     <span class="mt-2 h5">
-                                        @if (timePassed != TimeSpan.Zero)
-                                        {
-                                            <span>@timePassed.Hours / </span>
-                                        }
                                         @{
                                             if (_selectedProject != null && _selectedDiscipline == null)
                                             {
@@ -119,8 +118,8 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="sticky-header">Project</th>
-                                                <th scope="col" class="sticky-header">Work Package Completed</th>
-                                                <th scope="col" class="sticky-header">Hours Completed</th>
+                                                <th scope="col" class="sticky-header">Work Package Declared Completed</th>
+                                                <th scope="col" class="sticky-header">Estimated Hours Completed</th>
                                                 <th scope="col" class="sticky-header">Deadline</th>
                                             </tr>
                                         </thead>
@@ -386,7 +385,7 @@
                                 </select>
                             </div>
                             <div class="col text-center">
-                                <h3>My Hours Since Start <b>@timeToSet.Hours</b></h3>
+                                <h3>My Hours Since Start: <b>@timeToSet.Hours</b></h3>
                             </div>
                         </div>
 
