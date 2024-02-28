@@ -9,6 +9,7 @@ using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.Graph.Models;
 using Microsoft.JSInterop;
 using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
@@ -319,7 +320,7 @@ public partial class Projects : IDisposable
 
     private async Task OnSelectProject(int projectId)
     {
-        if (projectId == 0 || projectId == _selectedProject.Id) return;
+        if (projectId == 0 || projectId == _selectedProject?.Id) return;
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
         _draws.Clear();
@@ -329,7 +330,14 @@ public partial class Projects : IDisposable
         _selectedDiscipline = null;
         _selectedDraw = null;
         _selectedOther = null;
-        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id);
+
+        var getAll = LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
+                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
+                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
+                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO");
+
+        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, LogedUser.Id, getAll);
 
         _disciplines.Clear();
         foreach (var di in disciplines)
@@ -340,7 +348,7 @@ public partial class Projects : IDisposable
 
     private async Task OnSelectDiscipline(int disciplineId)
     {
-        if (disciplineId == 0 || disciplineId == _selectedDiscipline.Id) return;
+        if (disciplineId == 0 || disciplineId == _selectedDiscipline?.Id) return;
 
         _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
@@ -360,14 +368,14 @@ public partial class Projects : IDisposable
 
     private void OnSelectDraw(DrawingVM draw)
     {
-        if (draw == null || draw.Id == _selectedDraw.Id) return;
+        if (draw == null || draw.Id == _selectedDraw?.Id) return;
         _selectedDraw = draw;
         StateHasChanged();
     }
 
     private void OnSelectDoc(OtherVM doc)
     {
-        if (doc == null || doc.Id == _selectedOther.Id) return;
+        if (doc == null || doc.Id == _selectedOther?.Id) return;
         _selectedOther = doc;
         StateHasChanged();
     }

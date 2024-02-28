@@ -372,17 +372,40 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<DisciplineDto>> GetDisciplines(int id)
+    public async Task<ICollection<DisciplineDto>> GetDisciplines(int projectId, int userId, bool all)
     {
-        if (id == 0)
-            throw new ArgumentNullException(nameof(id));
+        if (projectId == 0)
+            throw new ArgumentNullException(nameof(projectId));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplines = await _context.Set<DisciplinePoject>()
-                                             .Where(de => de.ProjectId == id)
+            List<Discipline> disciplines = new List<Discipline>();
+
+            if (all)
+            {
+                disciplines = await _context.Set<DisciplinePoject>()
+                                             .Where(de => de.ProjectId == projectId)
                                              .Select(de => de.Discipline)
                                              .ToListAsync();
+            }
+            else
+            {
+                var myDrawingsIds = await _context.Set<DrawingEmployee>()
+                                            .Where(de => de.EmployeeId == userId)
+                                            .Select(de => de.DrawingId)
+                                            .ToListAsync();
+
+                var myDisciplinesIds = await _context.Set<DisciplineDraw>()
+                                                .Where(dd => myDrawingsIds.Contains(dd.DrawId))
+                                                .Select(dd => dd.DisciplineId)
+                                                .ToListAsync();
+
+                disciplines = await _context.Set<DisciplinePoject>()
+                                             .Where(de => de.ProjectId == projectId && 
+                                                                myDisciplinesIds.Contains(de.DisciplineId))
+                                             .Select(de => de.Discipline)
+                                             .ToListAsync();
+            }
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(disciplines);
         }
