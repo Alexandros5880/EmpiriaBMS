@@ -133,7 +133,8 @@ else
                                         <tbody>
                                             @foreach (var project in _projects)
                                             {
-                                                <tr clss="align-middle d-flex"
+                                                <tr class="align-middle
+                                                            @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-danger" : ""))"
                                                     @onclick="@(async () => await OnSelectProject(project.Id))">
                                                     
                                                     <td class="align-middle
@@ -204,7 +205,8 @@ else
                                         <tbody>
                                             @foreach (var discipline in _disciplines)
                                             {
-                                                <tr clss="align-middle d-flex"
+                                                <tr class="align-middle
+                                                          @(( @GetDisciplineMenHours(discipline.Id) > discipline.EstimatedHours ? "table-danger" : ""))"
                                                     @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
                                                     
                                                     <td class="align-middle

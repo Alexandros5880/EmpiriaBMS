@@ -276,18 +276,17 @@ public partial class Projects : IDisposable
         }
     }
 
-    private long GetProjectMenHours(int disciplineId) =>
-        DataProvider.Projects.GetMenHours(disciplineId);
+    private long GetProjectMenHours(int projecId) =>
+        DataProvider.Projects.GetMenHours(projecId);
 
     private long GetDisciplineMenHours(int disciplineId) =>
         DataProvider.Disciplines.GetMenHours(disciplineId);
 
-    private long GetDrawingMenHours(int disciplineId) =>
-        DataProvider.Drawings.GetMenHours(disciplineId);
+    private long GetDrawingMenHours(int drawingId) =>
+        DataProvider.Drawings.GetMenHours(drawingId);
 
-    private long GetOtherMenHours(int disciplineId) =>
-        DataProvider.Others.GetMenHours(disciplineId);
-
+    private long GetOtherMenHours(int otherId) =>
+        DataProvider.Others.GetMenHours(otherId);
     #endregion
 
     #region Actions Functions
