@@ -34,22 +34,18 @@ else
                             <div class="row ms-2 me-8" style="overflow:hidden;">
                                 
                                 <!-- User Name + Roles + Current Date -->
-                                <div class="col-lg-4 col-md-8 col-sm-8">
-                                    <div class="row">
-                                        <div class="col">
-                                            <h4>
-                                                <b>
-                                                    @LogedUser.LastName
-                                                    @foreach (var role in LoggedUserRoles)
-                                                    {
-                                                        <span>&nbsp;&nbsp; @role.Name</span>
-                                                    }
-                                                </b>
-                                            </h4>
-                                        </div>
-                                        <div class="col">
-                                            <h6 class="mt-1">@CurentDate</h6>
-                                        </div>
+                                <div class="col-lg-4 col-md-8 col-sm-8 row">
+                                    <div class="col">
+                                        <h4 class="mt-3">
+                                            @LogedUser.LastName
+                                            @foreach (var role in LoggedUserRoles)
+                                            {
+                                                <span>&nbsp;&nbsp; @role.Name</span>
+                                            }
+                                        </h4>
+                                    </div>
+                                    <div class="col mt-3">
+                                        <h4>@CurentDate</h4>
                                     </div>
                                 </div>
 
@@ -198,7 +194,7 @@ else
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="sticky-header">Discipline</th>
-                                                <th scope="col" class="sticky-header">Estimated Manhours</th>
+                                                <th scope="col" class="sticky-header">Estimated Discipline Hours</th>
                                                 @if (EditDiscipline)
                                                 {
                                                     <th scope="col"></th>
@@ -223,7 +219,7 @@ else
                                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                                 ? "" : "highlight_2"))">
                                                         <label>
-                                                            @GetDisciplineMenHours(discipline.Id) Hours
+                                                            @GetDisciplineMenHours(discipline.Id)
                                                         </label>
                                                     </td>
 
