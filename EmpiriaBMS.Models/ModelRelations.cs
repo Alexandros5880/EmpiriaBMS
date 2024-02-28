@@ -128,6 +128,24 @@ public static class ModelRelations
                     .WithOne(d => d.User)
                     .HasForeignKey(d => d.UserId);
 
+        // User PersonalTime
+        builder.Entity<User>()
+                    .HasMany(u => u.PersonalTime)
+                    .WithOne(d => d.User)
+                    .HasForeignKey(d => d.UserId);
+
+        // User TrainingTime
+        builder.Entity<User>()
+                    .HasMany(u => u.TrainingTime)
+                    .WithOne(d => d.User)
+                    .HasForeignKey(d => d.UserId);
+
+        // User CorporateEvents
+        builder.Entity<User>()
+                    .HasMany(u => u.CorporateEventTime)
+                    .WithOne(d => d.User)
+                    .HasForeignKey(d => d.UserId);
+
         // User ManHours
         builder.Entity<User>()
                     .HasMany(p => p.Hours)
