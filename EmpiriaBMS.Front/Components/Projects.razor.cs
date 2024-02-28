@@ -39,21 +39,14 @@ public partial class Projects : IDisposable
     public bool EditDrawing {
         get
         {
-            return isWorkingMode && (LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
-                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
-                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
-                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO"));
+            return isWorkingMode && LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer");
         }
     }
     public bool EditDiscipline
     {
         get
         {
-            return isWorkingMode && (LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
-                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
-                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO"));
+            return isWorkingMode && LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager");
         }
     }
     public bool EditProject

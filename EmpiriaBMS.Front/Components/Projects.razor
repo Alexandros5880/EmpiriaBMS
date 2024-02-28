@@ -258,7 +258,6 @@ else
                                                 <th scope="col" class="sticky-header">Drawing</th>
                                                 <th scope="col" class="sticky-header">Total Hours</th>
                                                 <th scope="col" class="sticky-header">Declared Completion</th>
-                                                <th scope="col" class="sticky-header">Deadline</th>
                                                 @if (EditDrawing)
                                                 {
                                                     <th scope="col"></th>
@@ -290,13 +289,6 @@ else
                                                             !_selectedDraw.Id.Equals(draw.Id))
                                                                 ? "" : "highlight_3"))">
                                                         <label>@draw.CompletionEstimation %</label>
-                                                    </td>
-
-                                                    <td class="align-middle
-                                                        @(((_selectedDraw == null ||
-                                                            !_selectedDraw.Id.Equals(draw.Id))
-                                                                ? "" : "highlight_3"))">
-                                                        <label>@draw.CompletionDateDisplay</label>
                                                     </td>
 
                                                     @if (EditDrawing)

@@ -305,9 +305,66 @@ public class AppDbContext : DbContext
         }
         #endregion
 
+        #region Create 4 Project Types
+        // Project Type Buildings
+        var project_type_1_Id = random.Next(123456789, 999999999) + 33;
+        ProjectType project_type_1 = new ProjectType()
+        {
+            Id = project_type_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Buildings",
+            Description = "Buildings Description"
+        };
+        builder.Entity<ProjectType>().HasData(project_type_1);
+
+        // Project Type Infrastructure
+        var project_type_2_Id = random.Next(123456789, 999999999) + 33;
+        ProjectType project_type_2 = new ProjectType()
+        {
+            Id = project_type_2_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Infrastructure",
+            Description = "Infrastructure Description"
+        };
+        builder.Entity<ProjectType>().HasData(project_type_2);
+
+        // Project Type Energy
+        var project_type_3_Id = random.Next(123456789, 999999999) + 33;
+        ProjectType project_type_3 = new ProjectType()
+        {
+            Id = project_type_3_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Energy",
+            Description = "Energy Description"
+        };
+        builder.Entity<ProjectType>().HasData(project_type_3);
+
+        // Project Type Consulting
+        var project_type_4_Id = random.Next(123456789, 999999999) + 33;
+        ProjectType project_type_4 = new ProjectType()
+        {
+            Id = project_type_4_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Consulting",
+            Description = "Consulting Description"
+        };
+        builder.Entity<ProjectType>().HasData(project_type_4);
+
+        int[] projectTypes = {
+            project_type_1_Id,
+            project_type_2_Id,
+            project_type_3_Id,
+            project_type_4_Id
+        };
+        #endregion
+
         #region Create 4 Project Managers
         List<User> projectManagers = new List<User>();
-        for (var i = 1; i <= 5; i++)
+        for (var i = 1; i <= projectTypes.Count(); i++)
         {
             var pmId = random.Next(123456789, 999999999) + i * 4;
             User pm = new User()
@@ -403,148 +460,49 @@ public class AppDbContext : DbContext
         others.Add(other5);
         #endregion
 
-        #region Create 6 Drawings
+        #region Create 3 Drawings
         List<Drawing> drawings = new List<Drawing>();
-        // Drawing 1
+        // Drawing Documents
         var drawing_1_Id = random.Next(123456789, 999999999);
         Drawing drawing_1 = new Drawing()
         {
             Id = drawing_1_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = $"Drawing 1",
+            Name = $"Documents",
             CompletionEstimation = 0,
             CompletionDate = DateTime.Now.AddDays(11)
         };
         builder.Entity<Drawing>().HasData(drawing_1);
         drawings.Add(drawing_1);
 
-        // Drawing 2
+        // Drawing Calculations
         var drawing_2_Id = random.Next(123456789, 999999999);
         Drawing drawing_2 = new Drawing()
         {
             Id = drawing_2_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = $"Drawing 2",
+            Name = $"Calculations",
             CompletionEstimation = 0,
             CompletionDate = DateTime.Now.AddDays(11)
         };
         builder.Entity<Drawing>().HasData(drawing_2);
         drawings.Add(drawing_2);
 
-        // Drawing 3
+        // Drawing Drawings
         var drawing_3_Id = random.Next(123456789, 999999999);
         Drawing drawing_3 = new Drawing()
         {
             Id = drawing_3_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = $"Drawing 3",
+            Name = $"Drawings",
             CompletionEstimation = 0,
             CompletionDate = DateTime.Now.AddDays(11)
         };
         builder.Entity<Drawing>().HasData(drawing_3);
         drawings.Add(drawing_3);
-
-        // Drawing 4
-        var drawing_4_Id = random.Next(123456789, 999999999);
-        Drawing drawing_4 = new Drawing()
-        {
-            Id = drawing_4_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Drawing 4",
-            CompletionEstimation = 0,
-            CompletionDate = DateTime.Now.AddDays(11)
-        };
-        builder.Entity<Drawing>().HasData(drawing_4);
-        drawings.Add(drawing_4);
-
-        // Drawing 5
-        var drawing_5_Id = random.Next(123456789, 999999999);
-        Drawing drawing_5 = new Drawing()
-        {
-            Id = drawing_5_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Drawing 5",
-            CompletionEstimation = 0,
-            CompletionDate = DateTime.Now.AddDays(11)
-        };
-        builder.Entity<Drawing>().HasData(drawing_5);
-        drawings.Add(drawing_5);
-
-        // Drawing 6
-        var drawing_6_Id = random.Next(123456789, 999999999);
-        Drawing drawing_6 = new Drawing()
-        {
-            Id = drawing_6_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Drawing 6",
-            CompletionEstimation = 0,
-            CompletionDate = DateTime.Now.AddDays(11)
-        };
-        builder.Entity<Drawing>().HasData(drawing_6);
-        drawings.Add(drawing_6);
-        #endregion
-
-        #region Create 4 Project Types
-        // Project Type Buildings
-        var project_type_1_Id = random.Next(123456789, 999999999) + 33;
-        ProjectType project_type_1 = new ProjectType()
-        {
-            Id = project_type_1_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Buildings",
-            Description = "Buildings Description"
-        };
-        builder.Entity<ProjectType>().HasData(project_type_1);
-
-        // Project Type Infrastructure
-        var project_type_2_Id = random.Next(123456789, 999999999) + 33;
-        ProjectType project_type_2 = new ProjectType()
-        {
-            Id = project_type_2_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Infrastructure",
-            Description = "Infrastructure Description"
-        };
-        builder.Entity<ProjectType>().HasData(project_type_2);
-
-        // Project Type Energy
-        var project_type_3_Id = random.Next(123456789, 999999999) + 33;
-        ProjectType project_type_3 = new ProjectType()
-        {
-            Id = project_type_3_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Energy",
-            Description = "Energy Description"
-        };
-        builder.Entity<ProjectType>().HasData(project_type_3);
-
-        // Project Type Consulting
-        var project_type_4_Id = random.Next(123456789, 999999999) + 33;
-        ProjectType project_type_4 = new ProjectType()
-        {
-            Id = project_type_4_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Consulting",
-            Description = "Consulting Description"
-        };
-        builder.Entity<ProjectType>().HasData(project_type_4);
-
-        int[] projectTypes = {
-            project_type_1_Id,
-            project_type_2_Id,
-            project_type_3_Id,
-            project_type_4_Id
-        };
         #endregion
 
         #region Create 4 Projects
@@ -841,10 +799,52 @@ public class AppDbContext : DbContext
         };
         builder.Entity<Discipline>().HasData(discipline_15);
         disciplines.Add(discipline_15);
+
+        // Discipline Outsource
+        var discipline_16_Id = random.Next(123456789, 999999999) * 8;
+        Discipline discipline_16 = new Discipline()
+        {
+            Id = discipline_16_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Outsource",
+            EstimatedHours = 1500,
+            Completed = 0
+        };
+        builder.Entity<Discipline>().HasData(discipline_16);
+        disciplines.Add(discipline_16);
+
+        // Discipline TenderDocument
+        var discipline_17_Id = random.Next(123456789, 999999999) * 8;
+        Discipline discipline_17 = new Discipline()
+        {
+            Id = discipline_17_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "TenderDocument",
+            EstimatedHours = 1500,
+            Completed = 0
+        };
+        builder.Entity<Discipline>().HasData(discipline_17);
+        disciplines.Add(discipline_17);
+
+        // Discipline Construction Supervision
+        var discipline_18_Id = random.Next(123456789, 999999999) * 8;
+        Discipline discipline_18 = new Discipline()
+        {
+            Id = discipline_18_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Construction Supervision",
+            EstimatedHours = 1500,
+            Completed = 0
+        };
+        builder.Entity<Discipline>().HasData(discipline_18);
+        disciplines.Add(discipline_18);
         #endregion
 
         #region Connect Project Manager With Every Project
-        for(var i = 0; i < projects.Count; i++)
+        for (var i = 0; i < projects.Count; i++)
         {
             ProjectPmanager dq_other = new ProjectPmanager()
             {
