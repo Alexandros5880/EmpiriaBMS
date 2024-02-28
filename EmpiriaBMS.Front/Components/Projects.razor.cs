@@ -319,7 +319,7 @@ public partial class Projects : IDisposable
 
     private async Task OnSelectProject(int projectId)
     {
-        if (projectId == 0) return;
+        if (projectId == 0 || projectId == _selectedProject.Id) return;
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
         _draws.Clear();
@@ -340,7 +340,7 @@ public partial class Projects : IDisposable
 
     private async Task OnSelectDiscipline(int disciplineId)
     {
-        if (disciplineId == 0) return;
+        if (disciplineId == 0 || disciplineId == _selectedDiscipline.Id) return;
 
         _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
@@ -360,7 +360,15 @@ public partial class Projects : IDisposable
 
     private void OnSelectDraw(DrawingVM draw)
     {
+        if (draw == null || draw.Id == _selectedDraw.Id) return;
         _selectedDraw = draw;
+        StateHasChanged();
+    }
+
+    private void OnSelectDoc(OtherVM doc)
+    {
+        if (doc == null || doc.Id == _selectedOther.Id) return;
+        _selectedOther = doc;
         StateHasChanged();
     }
 
@@ -416,12 +424,6 @@ public partial class Projects : IDisposable
             Debug.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
-    }
-
-    private void OnSelectDoc(OtherVM doc)
-    {
-        _selectedOther = doc;
-        StateHasChanged();
     }
     #endregion
 
