@@ -20,13 +20,17 @@
     @* <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
 		<FluentProgressRing/>
 	</div> *@
+
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <FilterProgressRing FilterLoading="@isLoading"/>
+    </div>
 }
 else
 {
     <Projects @ref=projectsCompoment LogedUser="@_logedUser" LogesUserHours="@_logesUserHours" LoggedUserRoles="@_loggedUserRoles"/>
 
     <!-- Remove This -->
-    <select class="form-select" @onchange="RoleSelectionChanged">
+    <select class="form-select" @onchange="RoleSelectionChanged" style="position:fixed !important; bottom:50px !important;">
         @foreach (var role in _allRoles)
         {
             @if (@role.Name.Equals(_defaultRole))
