@@ -30,7 +30,7 @@ else
     <Projects @ref=projectsCompoment LogedUser="@_logedUser" LogesUserHours="@_logesUserHours" LoggedUserRoles="@_loggedUserRoles"/>
 
     <!-- Remove This -->
-    <select class="form-select" @onchange="RoleSelectionChanged" style="position:fixed !important; bottom:50px !important;">
+    <select class="form-select" @onchange="RoleSelectionChanged" style="position:fixed !important; bottom:0px !important;">
         @foreach (var role in _allRoles)
         {
             @if (@role.Name.Equals(_defaultRole))

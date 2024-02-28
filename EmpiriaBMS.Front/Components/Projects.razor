@@ -56,19 +56,22 @@ else
                                 <!-- Start / Stop Buttons -->
                                 <div class="col-lg-5 col-md-8 col-sm-8">
                                     <div class="d-grid">
-                                        @if (isWorkingMode)
+                                        @if (!_isEndWorkDialogOdepened)
                                         {
-                                            <button type="button" class="btn btn-danger btn-lg w-50"
-                                                    @onclick="@(() => StopWorkClick())">
-                                                <span>@timePassed.ToString(@"hh\:mm\:ss")</span>
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-success btn-lg w-50"
-                                                    @onclick="@(() => StartWorkClick())">
-                                                Press Work Start
-                                            </button>
+                                            @if (isWorkingMode)
+                                            {
+                                                <button type="button" class="btn btn-danger btn-lg w-50"
+                                                        @onclick="@(() => StopWorkClick())">
+                                                    <span>@timePassed.ToString(@"hh\:mm\:ss")</span>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-success btn-lg w-50"
+                                                        @onclick="@(() => StartWorkClick())">
+                                                    Press Work Start
+                                                </button>
+                                            }
                                         }
                                     </div>
                                 </div>
