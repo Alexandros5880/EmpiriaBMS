@@ -488,7 +488,7 @@ public partial class Projects : IDisposable
             updatedHours = remainingTime.Hours;
             newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
         }
-        if (remainingTime.Minutes < updatedMinutes)
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
         {
             updatedMinutes = remainingTime.Minutes;
             newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
@@ -559,7 +559,7 @@ public partial class Projects : IDisposable
             updatedHours = remainingTime.Hours;
             newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
         }
-        if (remainingTime.Minutes < updatedMinutes)
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
         {
             updatedMinutes = remainingTime.Minutes;
             newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
