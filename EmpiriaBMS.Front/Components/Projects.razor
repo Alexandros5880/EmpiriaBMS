@@ -525,7 +525,7 @@ else
 
 
         <div class="row">
-            <FluentButton Disabled="@(remainingTime != TimeSpan.Zero)"
+            <FluentButton Disabled="@_isEndWorkAcceptDialogDisabled"
                           class="col-6"
                           OnClick="@(async () => await _endWorkDialogAccept())">
                 Ok

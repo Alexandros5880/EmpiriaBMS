@@ -94,6 +94,7 @@ public partial class Projects : IDisposable
     // Work End Dialog
     private FluentDialog? _endWorkDialog;
     private bool _isEndWorkDialogOdepened = false;
+    private bool _isEndWorkAcceptDialogDisabled => remainingTime.Hours != 0 || remainingTime.Minutes != 0;
 
     // Add Designer Dialog
     private FluentDialog? _addDesignerDialog;
