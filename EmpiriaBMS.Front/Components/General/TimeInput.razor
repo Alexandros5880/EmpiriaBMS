@@ -7,10 +7,10 @@
            value="@Time.Hours"
            placeholder="HH"
            style="min-width: 45px !important; max-width: 45px !important;"
-           min="0"
-           max="24"
-           onkeyup="if(value<0) value=0; if(value>24) value=24;"
-           onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+           min="@Min.Hours"
+           max="@Max.Hours"
+           onmousewheel="if(e.deltaY > 1) value++; else if (e.deltaY < -1) value--;"
+           onkeyup="if(value<min) value=min; if(value>max) value=max;"
            @onchange=@((e) => _onHoursChanged(e)) />
 
     <div class="input-group-append">
@@ -24,28 +24,11 @@
            style="min-width: 45px !important; max-width: 45px !important;"
            min="0"
            max="60"
-           onkeyup="if(value<0) value=0; if(value>60) value=60;"
            onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+           onkeyup="if(value<min) value=min; if(value>max) value=max;"
            @onchange=@((e) => _onMinutesChanged(e)) />
 
 </div>
-
-<style>
-
-    /* Chrome, Safari, Edge, Opera */
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    /* Firefox */
-    input[type=number] {
-        -moz-appearance: textfield;
-    }
-
-</style>
-
 
 @code {
 
@@ -53,7 +36,7 @@
     public TimeSpan Time { get; set; }
 
     private string _prevMin;
-    private TimeSpan _min;
+    private TimeSpan _min = new TimeSpan(24,60,60);
     [Parameter]
     public TimeSpan Min
     {
@@ -71,7 +54,7 @@
     }
 
     private string _prevMax;
-    private TimeSpan _max;
+    private TimeSpan _max = new TimeSpan(24, 60, 60);
     [Parameter]
     public TimeSpan Max
     {
@@ -87,58 +70,21 @@
         }
     }
 
-    private string TimeAsString
-    {
-        get => Time.ToString(@"hh\:mm");
-        set
-        {
-            if (TimeSpan.TryParseExact(value, @"hh\:mm\:ss", null, out TimeSpan parsedTime))
-            {
-                Time = parsedTime;
-            }
-        }
-    }
-
     [Parameter]
     public EventCallback<TimeSpan> OnPropertyChanged { get; set; }
-
 
     private async Task _onHoursChanged(ChangeEventArgs e)
     {
         int hours = Convert.ToInt32(e.Value);
-
-        // if (Min.Hours < hours)
-        //     hours = Min.Hours;
-
-        // if (Max.Hours < hours)
-        //     hours = Max.Hours;
-
-        // Time = new TimeSpan(hours, Time.Minutes, Time.Seconds);
-        // await OnPropertyChanged.InvokeAsync(Time);
+        Time = new TimeSpan(hours, Time.Minutes, Time.Seconds);
+        await OnPropertyChanged.InvokeAsync(Time);
     }
 
     private async Task _onMinutesChanged(ChangeEventArgs e)
     {
         var minutes = Convert.ToInt32(e.Value);
-
-        // if (Min.Minutes < minutes)
-        //     minutes = Min.Minutes;
-
-        // if (Max.Minutes < minutes)
-        //     minutes = Max.Minutes;
-
-        // Time = new TimeSpan(Time.Hours, minutes, Time.Seconds);
-        // await OnPropertyChanged.InvokeAsync(Time);
+        Time = new TimeSpan(Time.Hours, minutes, Time.Seconds);
+        await OnPropertyChanged.InvokeAsync(Time);
     }
 
-
-
-
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     if (firstRender)
-    //     {
-    //         await MicrosoftTeams.ApplyTimeMask("timeInput", MinAsString, MaxAsString);
-    //     }
-    // }
 }

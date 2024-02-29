@@ -380,7 +380,7 @@ else
         <!-- Headder -->
         <div class="d-flex justify-content-between">
             <h3>Work update</h3>
-            <h3>My Time Since Start: <b class="text-warning">@timeToSet.ToString(@"hh\:mm")</b></h3>
+            <h3>My Time Since Start: <b class="text-warning">@remainingTime.ToString(@"hh\:mm")</b></h3>
         </div>
         
 
@@ -454,8 +454,8 @@ else
                                         </td>
                                         <td class="align-middle">
                                             <TimeInput Min="@TimeSpan.Zero"
-                                                       Max="@timeToSet"
-                                                       Time="@TimeSpan.Zero"
+                                                       Max="@remainingTime"
+                                                       Time="_draw.Time"
                                                        OnPropertyChanged=@((time) => _onDrawTimeChanged(_draw, time)) />
                                         </td>
                                         <td class="align-middle">
@@ -504,7 +504,7 @@ else
                                         </td>
                                         <td class="align-middle">
                                             <TimeInput Min="@TimeSpan.Zero"
-                                                       Max="@timeToSet"
+                                                       Max="@remainingTime"
                                                        Time="@TimeSpan.Zero"
                                                        OnPropertyChanged=@((time) => _onOtherTimeChanged(_other, time)) />
                                         </td>
@@ -521,7 +521,7 @@ else
 
 
         <div class="row">
-            <FluentButton Disabled="@(timeToSet != TimeSpan.Zero)"
+            <FluentButton Disabled="@(remainingTime != TimeSpan.Zero)"
                           class="col-6"
                           OnClick="@(async () => await _endWorkDialogAccept())">
                 Ok

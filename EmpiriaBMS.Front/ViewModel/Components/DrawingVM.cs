@@ -19,16 +19,16 @@ public class DrawingVM : BaseVM
         }
     }
 
-    private long _menHours;
-    public long MenHours
+    private TimeSpan _time = TimeSpan.Zero;
+    public TimeSpan Time
     {
-        get => _menHours;
+        get => _time;
         set
         {
-            if (value == _menHours)
+            if (value == _time)
                 return;
-            _menHours = value;
-            NotifyPropertyChanged(nameof(MenHours));
+            _time = value;
+            NotifyPropertyChanged(nameof(Time));
         }
     }
 

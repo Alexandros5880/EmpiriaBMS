@@ -12,8 +12,6 @@ public class DrawingDto : EntityDto
 {
     public string Name { get; set; }
 
-    public long MenHours { get; set; }
-
     public float CompletionEstimation { get; set; }
 
     public DateTime? CompletionDate { get; set; }

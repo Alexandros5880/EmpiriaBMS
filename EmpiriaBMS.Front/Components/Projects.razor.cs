@@ -66,7 +66,7 @@ public partial class Projects : IDisposable
     bool isWorkingMode = false;
     TimeSpan timePassed = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
-    TimeSpan timeToSet = TimeSpan.Zero;
+    TimeSpan remainingTime = TimeSpan.Zero;
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
@@ -302,7 +302,7 @@ public partial class Projects : IDisposable
         isWorkingMode = false;
         StopTimer();
 
-        timeToSet = timePaused;
+        remainingTime = timePaused;
 
         _others.Clear();
         _draws.Clear();
@@ -438,7 +438,7 @@ public partial class Projects : IDisposable
     private async Task StartTimer()
     {
         // TODO: Projects Timer -> Change """ timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7); """ TO """ DateTime.Now """
-        StartWorkTime = timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7);
+        StartWorkTime = timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7).AddMinutes(-10);
         timer = new System.Threading.Timer((_) =>
         {
             timePassed = DateTime.Now - StartWorkTime;
@@ -460,27 +460,46 @@ public partial class Projects : IDisposable
     #endregion
 
     #region On Press Work End Dialog Actions
-    private void _onDrawTimeChanged(DrawingVM draw, TimeSpan timeSpan)
+    private void _onDrawTimeChanged(DrawingVM draw, TimeSpan newTimeSpan)
     {
-        var value = Convert.ToInt32(timeSpan.Hours);
-        if (timeToSet.Hours < value)
+        // previusTime, updatedTime, remainingTime
+
+        var previusTime = draw.Time;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ? 
+                                          newTimeSpan.Hours < previusTime.Hours ? 
+                                                          -(previusTime.Hours - newTimeSpan.Hours) 
+                                                        : newTimeSpan.Hours 
+                                        : 0;
+        var updatedMinutes = minutesChanged ? 
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
         {
-            // TODO: Display a Msg
-            return;
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
         }
 
-        draw.MenHours += value;
+        draw.Time = newTimeSpan;
 
         if (_drawsChanged.Any(d => d.Id == draw.Id))
         {
             var d = _drawsChanged.FirstOrDefault(d => d.Id == draw.Id);
-            d.MenHours = draw.MenHours;
+            d.Time = draw.Time;
         }
         else
             _drawsChanged.Add(draw);
-
-        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
-        timeToSet = updatedTimeSpan;
 
         StateHasChanged();
     }
@@ -500,27 +519,46 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
-    private void _onOtherTimeChanged(OtherVM other, TimeSpan timeSpan)
+    private void _onOtherTimeChanged(OtherVM other, TimeSpan newTimeSpan)
     {
-        var value = Convert.ToInt32(timeSpan.Hours);
-        if (timeToSet.Hours < value)
+        // previusTime, updatedTime, remainingTime
+
+        var previusTime = other.Time;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
+                                        : 0;
+        var updatedMinutes = minutesChanged ?
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
         {
-            // TODO: Display a Msg
-            return;
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
         }
 
-        other.MenHours += value;
+        other.Time = newTimeSpan;
 
         if (_othersChanged.Any(o => o.Id == other.Id))
         {
             var o = _othersChanged.FirstOrDefault(o => o.Id == other.Id);
-            o.MenHours = other.MenHours;
+            o.Time = other.Time;
         }
         else
             _othersChanged.Add(other);
-
-        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
-        timeToSet = updatedTimeSpan;
 
         StateHasChanged();
     }
@@ -530,45 +568,45 @@ public partial class Projects : IDisposable
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
 
-        if (timeToSet.Hours > 0)
-        {
-            // TODO: Display a message to update his hours.
-            return;
-        }
+        //if (remainingTime.Hours > 0)
+        //{
+        //    // TODO: Display a message to update his hours.
+        //    return;
+        //}
 
-        _startLoading = true;
+        //_startLoading = true;
 
-        // Update Draws
-        foreach (var draw in _drawsChanged)
-        {
-            var old = _draws.FirstOrDefault(d => d.Id == draw.Id);
-            if (old.CompletionEstimation > draw.CompletionEstimation)
-            {
-                //TODO: Display Msg
+        //// Update Draws
+        //foreach (var draw in _drawsChanged)
+        //{
+        //    var old = _draws.FirstOrDefault(d => d.Id == draw.Id);
+        //    if (old.CompletionEstimation > draw.CompletionEstimation)
+        //    {
+        //        //TODO: Display Msg
 
-                return;
-            }
-            else
-                await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            await DataProvider.Drawings.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
-        }
+        //        return;
+        //    }
+        //    else
+        //        await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
+        //    await DataProvider.Drawings.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
+        //}
 
-        // Update Others
-        foreach (var other in _othersChanged)
-        {
-            //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-            await DataProvider.Others.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
-        }
+        //// Update Others
+        //foreach (var other in _othersChanged)
+        //{
+        //    //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
+        //    await DataProvider.Others.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
+        //}
 
-        // Update User Hours
-        await DataProvider.Users.AddHours(LogedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
+        //// Update User Hours
+        //await DataProvider.Users.AddHours(LogedUser.Id, DateTime.Now, Convert.ToInt64(remainingTime.Hours));
 
-        _drawsChanged.Clear();
-        _othersChanged.Clear();
+        //_drawsChanged.Clear();
+        //_othersChanged.Clear();
 
-        await _getProjects();
+        //await _getProjects();
 
-        _startLoading = false;
+        //_startLoading = false;
     }
 
     public void _endWorkDialogCansel()
