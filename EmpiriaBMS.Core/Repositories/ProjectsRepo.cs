@@ -152,8 +152,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
-            var projectsFromDisciplineIds = await _context.Set<DisciplinePoject>()
-                                                        .Where(dp => myDisciplinesIds.Contains(dp.DisciplineId))
+            var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
@@ -223,8 +223,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
-            var projectsFromDisciplineIds = await _context.Set<DisciplinePoject>()
-                                                        .Where(dp => myDisciplinesIds.Contains(dp.DisciplineId))
+            var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
@@ -315,8 +315,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
-            var projectsFromDisciplineIds = await _context.Set<DisciplinePoject>()
-                                                        .Where(dp => myDisciplinesIds.Contains(dp.DisciplineId))
+            var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
@@ -383,9 +383,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             if (all)
             {
-                disciplines = await _context.Set<DisciplinePoject>()
+                disciplines = await _context.Set<Discipline>()
                                              .Where(de => de.ProjectId == projectId)
-                                             .Select(de => de.Discipline)
                                              .ToListAsync();
             }
             else
@@ -400,10 +399,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                 .Select(dd => dd.DisciplineId)
                                                 .ToListAsync();
 
-                disciplines = await _context.Set<DisciplinePoject>()
-                                             .Where(de => de.ProjectId == projectId && 
-                                                                myDisciplinesIds.Contains(de.DisciplineId))
-                                             .Select(de => de.Discipline)
+                disciplines = await _context.Set<Discipline>()
+                                             .Where(d => d.ProjectId == projectId && 
+                                                                myDisciplinesIds.Contains(d.Id))
+                                             .Include(d => d.Type)
                                              .ToListAsync();
             }
 
@@ -414,7 +413,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     public async Task<int> CountDiscipline(int id)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
-            return await _context.Set<DisciplinePoject>()
+            return await _context.Set<Discipline>()
                                  .Where(de => de.ProjectId == id)
                                  .CountAsync();
     }

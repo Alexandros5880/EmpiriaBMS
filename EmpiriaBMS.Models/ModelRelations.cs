@@ -24,19 +24,19 @@ public static class ModelRelations
         builder.Entity<UserRole>()
                .HasOne(sc => sc.Role)
                .WithMany(c => c.UserRoles)
-               .HasForeignKey(sc => sc.RoleId);        
+               .HasForeignKey(sc => sc.RoleId);
 
-        // Projects Desciplines
-        builder.Entity<DisciplinePoject>()
-               .HasKey(de => new { de.DisciplineId, de.ProjectId });
-        builder.Entity<DisciplinePoject>()
-               .HasOne(de => de.Discipline)
-               .WithMany(de => de.DisciplinesProjects)
-               .HasForeignKey(de => de.DisciplineId);
-        builder.Entity<DisciplinePoject>()
-               .HasOne(de => de.Project)
-               .WithMany(de => de.DisciplinesProjects)
-               .HasForeignKey(de => de.ProjectId);
+        // Project Disciplines
+        builder.Entity<Project>()
+               .HasMany(p => p.Disciplines)
+               .WithOne(c => c.Project)
+               .HasForeignKey(c => c.ProjectId);
+
+        // DisciplineType Desciplines
+        builder.Entity<DisciplineType>()
+               .HasMany(p => p.Disciplines)
+               .WithOne(c => c.Type)
+               .HasForeignKey(c => c.TypeId);
 
         // Projects ProjectManagers
         builder.Entity<ProjectPmanager>()

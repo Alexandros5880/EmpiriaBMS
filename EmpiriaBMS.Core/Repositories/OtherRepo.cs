@@ -135,15 +135,12 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
             discipline.Completed = sumComplitionOfOthers / othersCounter;
 
             // Calculate Parent Project Complition
-            var project = await _context.Set<Project>()
-                                        .Include(p => p.DisciplinesProjects)
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-            var disciplineIds = project.DisciplinesProjects.Select(dp => dp.DisciplineId).ToList();
             var disciplines = await _context.Set<Discipline>()
-                                            .Where(d => disciplineIds.Contains(d.Id))
+                                            .Where(d => d.ProjectId == projectId)
                                             .ToListAsync();
+            var project = discipline.Project;
             var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
-            var disciplinesCounter = disciplineIds.Count();
+            var disciplinesCounter = disciplines.Count();
             project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
 
             await _context.SaveChangesAsync();

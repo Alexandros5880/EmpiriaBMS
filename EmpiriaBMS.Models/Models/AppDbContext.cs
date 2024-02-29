@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Discipline> Disciplines { get; set; }
+    public DbSet<DisciplineType> DisciplineTypes { get; set; }
     public DbSet<Drawing> Drawings { get; set; }
     public DbSet<Other> Others { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
@@ -25,9 +26,7 @@ public class AppDbContext : DbContext
     public DbSet<ParsonalTime> ParsonalTime { get; set; }
     public DbSet<TrainingTime> TrainingTime { get; set; }
     public DbSet<CorporateEventTime> CorporateEventTime { get; set; }
-
     public DbSet<UserRole> UsersRoles { get; set; }
-    public DbSet<DisciplinePoject> DisciplinesPojects { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
     public DbSet<DisciplineDraw> DisciplinesDraws { get; set; }
@@ -590,260 +589,67 @@ public class AppDbContext : DbContext
         }
         #endregion
 
-        #region Create Disciplines
+        #region Create Discipline Types
+        List<DisciplineType> disciplineTypes = new List<DisciplineType>();
+        string[] typeNames = { 
+            "HVAC", 
+            "Sewage", 
+            "Potable Water", 
+            "Drainage", 
+            "Fire Detection", 
+            "Fire Suppression",
+            "Elevators",
+            "Natural Gas",
+            "Power Distribution",
+            "Structured Cabling",
+            "Burglar Alarm",
+            "CCTV",
+            "BMS",
+            "Photovoltaics",
+            "Energy Efficiency",
+            "Outsource",
+            "TenderDocument",
+            "Construction Supervision",
+        };
+        for (var i = 0; i < typeNames.Length; i++)
+        {
+            var discipline_type_Id = random.Next(123456789, 999999999);
+            DisciplineType dt = new DisciplineType()
+            {
+                Id = discipline_type_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = typeNames[i],
+            };
+            builder.Entity<DisciplineType>().HasData(dt);
+            disciplineTypes.Add(dt);
+        }
+        #endregion
+
+        #region Create 3 Random Disciplines
         List<Discipline> disciplines = new List<Discipline>();
-
-        // Discipline HVAC
-        var discipline_1_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_1 = new Discipline()
+        for (var i = 0; i < projects.Count; i++)
         {
-            Id = discipline_1_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "HVAC",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_1);
-        disciplines.Add(discipline_1);
-
-        // Discipline Sewage
-        var discipline_2_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_2 = new Discipline()
-        {
-            Id = discipline_2_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Sewage",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_2);
-        disciplines.Add(discipline_2);
-
-        // Discipline Potable Water
-        var discipline_3_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_3 = new Discipline()
-        {
-            Id = discipline_3_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Potable Water",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_3);
-        disciplines.Add(discipline_3);
-
-        // Discipline Drainage
-        var discipline_4_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_4 = new Discipline()
-        {
-            Id = discipline_4_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Drainage",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_4);
-        disciplines.Add(discipline_4);
-
-        // Discipline Fire Detection
-        var discipline_5_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_5 = new Discipline()
-        {
-            Id = discipline_5_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Fire Detection",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_5);
-        disciplines.Add(discipline_5);
-
-        // Discipline Fire Suppression
-        var discipline_6_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_6 = new Discipline()
-        {
-            Id = discipline_6_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Fire Suppression",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_6);
-        disciplines.Add(discipline_6);
-
-        // Discipline Elevators
-        var discipline_7_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_7 = new Discipline()
-        {
-            Id = discipline_7_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Elevators",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_7);
-        disciplines.Add(discipline_7);
-
-        // Discipline Natural Gas
-        var discipline_8_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_8 = new Discipline()
-        {
-            Id = discipline_8_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Natural Gas",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_8);
-        disciplines.Add(discipline_8);
-
-        // Discipline Power Distribution
-        var discipline_9_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_9 = new Discipline()
-        {
-            Id = discipline_9_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Power Distribution",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_9);
-        disciplines.Add(discipline_9);
-
-        // Discipline Structured Cabling
-        var discipline_10_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_10 = new Discipline()
-        {
-            Id = discipline_10_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Structured Cabling",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_10);
-        disciplines.Add(discipline_10);
-
-        // Discipline Burglar Alarm
-        var discipline_11_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_11 = new Discipline()
-        {
-            Id = discipline_11_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Burglar Alarm",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_11);
-        disciplines.Add(discipline_11);
-
-        // Discipline CCTV
-        var discipline_12_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_12 = new Discipline()
-        {
-            Id = discipline_12_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "CCTV",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_12);
-        disciplines.Add(discipline_12);
-
-        // Discipline BMS
-        var discipline_13_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_13 = new Discipline()
-        {
-            Id = discipline_13_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "BMS",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_13);
-        disciplines.Add(discipline_13);
-
-        // Discipline Photovoltaics
-        var discipline_14_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_14 = new Discipline()
-        {
-            Id = discipline_14_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Photovoltaics",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_14);
-        disciplines.Add(discipline_14);
-
-        // Discipline Energy Efficiency
-        var discipline_15_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_15 = new Discipline()
-        {
-            Id = discipline_15_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Energy Efficiency",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_15);
-        disciplines.Add(discipline_15);
-
-        // Discipline Outsource
-        var discipline_16_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_16 = new Discipline()
-        {
-            Id = discipline_16_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Outsource",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_16);
-        disciplines.Add(discipline_16);
-
-        // Discipline TenderDocument
-        var discipline_17_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_17 = new Discipline()
-        {
-            Id = discipline_17_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "TenderDocument",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_17);
-        disciplines.Add(discipline_17);
-
-        // Discipline Construction Supervision
-        var discipline_18_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_18 = new Discipline()
-        {
-            Id = discipline_18_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Construction Supervision",
-            EstimatedHours = 1500,
-            Completed = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_18);
-        disciplines.Add(discipline_18);
+            // Create 3 Disciplines With Random Type
+            List<int> randomTypeIndexes = new List<int>();
+            for (int j = 0; j < 3; j++)
+            {
+                int typeIndex = GetUniqueRandomNumber(random, randomTypeIndexes, 0, disciplineTypes.Count-1);
+                var discipline_Id = random.Next(123456789, 999999999) * 8;
+                Discipline discipline = new Discipline()
+                {
+                    Id = discipline_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    TypeId = disciplineTypes[typeIndex].Id,
+                    EstimatedHours = 1500,
+                    ProjectId = projects[i].Id,
+                    Completed = 0
+                };
+                builder.Entity<Discipline>().HasData(discipline);
+                disciplines.Add(discipline);
+            }
+        }
         #endregion
 
         #region Connect Project Manager With Every Project
@@ -858,24 +664,6 @@ public class AppDbContext : DbContext
                 ProjectManagerId = projectManagers[i].Id
             };
             builder.Entity<ProjectPmanager>().HasData(dq_other);
-        }
-        #endregion
-
-        #region Connect All Disciplines To Any Project
-        for (var d = 0; d < disciplines.Count; d++)
-        {
-            for (var p = 0; p < projects.Count; p++)
-            {
-                DisciplinePoject disciplinePoject = new DisciplinePoject()
-                {
-                    Id = random.Next(123456789, 999999999) * random.Next(1, 100),
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    DisciplineId = disciplines[d].Id,
-                    ProjectId = projects[p].Id
-                };
-                builder.Entity<DisciplinePoject>().HasData(disciplinePoject);
-            }
         }
         #endregion
 
@@ -968,6 +756,19 @@ public class AppDbContext : DbContext
             }
         }
         #endregion
+    }
+
+    static int GetUniqueRandomNumber(Random random, List<int> selectedNumbers, int min, int max)
+    {
+        int number;
+        do
+        {
+            number = random.Next(min, max);
+        } while (selectedNumbers.Contains(number));
+
+        // Add the selected number to the list
+        selectedNumbers.Add(number);
+        return number;
     }
 
 }

@@ -78,7 +78,7 @@ public class Project : Entity
 
     public ICollection<ManHour> MenHours { get; set; }
 
-    public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
+    public ICollection<Discipline> Disciplines { get; set; }
 
     public ICollection<ProjectPmanager> ProjectsPmanagers { get; set; }
 }

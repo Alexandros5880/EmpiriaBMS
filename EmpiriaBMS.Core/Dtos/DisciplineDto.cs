@@ -11,7 +11,8 @@ namespace EmpiriaBMS.Core.Dtos;
 
 public class DisciplineDto : EntityDto
 {
-    public string Name { get; set; }
+    public int TypeId { get; set; }
+    public DisciplineType Type { get; set; }
 
     public long EstimatedHours { get; set; }
 

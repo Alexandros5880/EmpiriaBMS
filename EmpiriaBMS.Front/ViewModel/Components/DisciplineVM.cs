@@ -7,16 +7,29 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class DisciplineVM : BaseVM
 {
-    private string _name;
-    public string Name
+    private int _typeId;
+    public int TypeId
     {
-        get => _name;
+        get => _typeId;
         set
         {
-            if (value == _name)
+            if (value == _typeId)
                 return;
-            _name = value;
-            NotifyPropertyChanged(nameof(Name));
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
+    private DisciplineType _type;
+    public DisciplineType Type
+    {
+        get => _type;
+        set
+        {
+            if (value == _type)
+                return;
+            _type = value;
+            NotifyPropertyChanged(nameof(Type));
         }
     }
 

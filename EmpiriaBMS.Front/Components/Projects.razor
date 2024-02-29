@@ -213,7 +213,7 @@ else
                                                         @(((_selectedDiscipline == null
                                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                                 ? "" : "highlight_2"))">
-                                                        <labe>@discipline.Name</labe>
+                                                        <labe>@discipline.Type.Name</labe>
                                                     </td>
                                                     
                                                     <td class="align-middle text-center
@@ -418,7 +418,7 @@ else
                         @foreach (var discipline in _disciplines)
                         {
                             <option value="@discipline.Id">
-                                @discipline.Name
+                                @discipline.Type.Name
                             </option>
                         }
                     </select>
