@@ -58,7 +58,7 @@ else
                                             @if (isWorkingMode)
                                             {
                                                 <button type="button" class="btn btn-danger btn-lg w-50"
-                                                        @onclick="@(() => StopWorkClick())">
+                                                        @onclick="@(async () => await StopWorkClick())">
                                                     <span>@timePassed.ToString(@"hh\:mm\:ss")</span>
                                                 </button>
                                             }
@@ -399,8 +399,7 @@ else
                         <option value="0" selected>Select Project</option>
                         @foreach (var project in _projects)
                         {
-                            <option selected="@(project.Id == _selectedProject?.Id)"
-                                    value="@project.Id">
+                            <option value="@project.Id">
                                 @project.Name
                             </option>
                         }
@@ -418,8 +417,7 @@ else
                         <option value="0" selected>Select Discipline</option>
                         @foreach (var discipline in _disciplines)
                         {
-                            <option selected="@(discipline.Id == _selectedDiscipline?.Id)"
-                                    value="@discipline.Id">
+                            <option value="@discipline.Id">
                                 @discipline.Name
                             </option>
                         }

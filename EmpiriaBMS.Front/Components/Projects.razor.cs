@@ -298,13 +298,14 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
-    private void StopWorkClick()
+    private async Task StopWorkClick()
     {
         isWorkingMode = false;
         StopTimer();
 
         remainingTime = timePaused;
 
+        _projects.Clear();
         _others.Clear();
         _draws.Clear();
         _disciplines.Clear();
@@ -312,6 +313,7 @@ public partial class Projects : IDisposable
         _selectedDraw = null;
         _selectedDiscipline = null;
         _selectedProject = null;
+        await _getProjects();
         StateHasChanged();
 
         _endWorkDialog.Show();
@@ -593,45 +595,48 @@ public partial class Projects : IDisposable
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
 
-        //if (remainingTime.Hours > 0)
-        //{
-        //    // TODO: Display a message to update his hours.
-        //    return;
-        //}
+        // Validate
+        if (remainingTime.Hours > 0)
+        {
+            // TODO: Display a message to update his hours.
+            return;
+        }
 
-        //_startLoading = true;
 
-        //// Update Draws
-        //foreach (var draw in _drawsChanged)
-        //{
-        //    var old = _draws.FirstOrDefault(d => d.Id == draw.Id);
-        //    if (old.CompletionEstimation > draw.CompletionEstimation)
-        //    {
-        //        //TODO: Display Msg
+        // Update Db
+        _startLoading = true;
 
-        //        return;
-        //    }
-        //    else
-        //        await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-        //    await DataProvider.Drawings.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
-        //}
+        // Update Draws
+        foreach (var draw in _drawsChanged)
+        {
+            var old = _draws.FirstOrDefault(d => d.Id == draw.Id);
+            if (old.CompletionEstimation > draw.CompletionEstimation)
+            {
+                //TODO: Display Msg
 
-        //// Update Others
-        //foreach (var other in _othersChanged)
-        //{
-        //    //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-        //    await DataProvider.Others.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
-        //}
+                return;
+            }
+            else
+                await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
+            await DataProvider.Drawings.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time.Hours);
+        }
 
-        //// Update User Hours
-        //await DataProvider.Users.AddHours(LogedUser.Id, DateTime.Now, Convert.ToInt64(remainingTime.Hours));
+        // Update Others
+        foreach (var other in _othersChanged)
+        {
+            //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
+            await DataProvider.Others.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time.Hours);
+        }
 
-        //_drawsChanged.Clear();
-        //_othersChanged.Clear();
+        // Update User Hours
+        await DataProvider.Users.AddHours(LogedUser.Id, DateTime.Now, Convert.ToInt64(remainingTime.Hours));
 
-        //await _getProjects();
+        _drawsChanged.Clear();
+        _othersChanged.Clear();
 
-        //_startLoading = false;
+        await _getProjects();
+
+        _startLoading = false;
     }
 
     public void _endWorkDialogCansel()
