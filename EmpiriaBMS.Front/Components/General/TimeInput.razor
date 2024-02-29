@@ -7,8 +7,8 @@
            value="@Time.Hours"
            placeholder="HH"
            style="min-width: 45px !important; max-width: 45px !important;"
-           min="@Min.Hours"
-           max="@Max.Hours"
+           min="@MinHours"
+           max="@MaxHours"
            onmousewheel="if(e.deltaY > 1) value++; else if (e.deltaY < -1) value--;"
            onkeyup="if(value<min) value=min; if(value>max) value=max;"
            @onchange=@((e) => _onHoursChanged(e)) />
@@ -22,8 +22,8 @@
            value="@Time.Minutes"
            placeholder="MM"
            style="min-width: 45px !important; max-width: 45px !important;"
-           min="0"
-           max="60"
+           min="@MinMinutes"
+           max="@MaxMinutes"
            onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
            onkeyup="if(value<min) value=min; if(value>max) value=max;"
            @onchange=@((e) => _onMinutesChanged(e)) />
@@ -35,38 +35,51 @@
     [Parameter]
     public TimeSpan Time { get; set; }
 
-    private string _prevMin;
-    private TimeSpan _min = new TimeSpan(24,60,60);
+    private int _minHours = 0;
     [Parameter]
-    public TimeSpan Min
+    public int MinHours
     {
-        get => _min;
+        get => _minHours;
         set
         {
-            if (value == _min) return;
-            _min = value;
-            if (value.ToString(@"hh\:mm") != _prevMin)
-            {
-                _prevMin = value.ToString(@"hh\:mm");
-                //MicrosoftTeams.ApplyTimeMask("timeInput", _prevMin, _prevMax);
-            }
+            if (value == _minHours) return;
+            _minHours = value;
         }
     }
 
-    private string _prevMax;
-    private TimeSpan _max = new TimeSpan(24, 60, 60);
+    private int _maxHours = 24;
     [Parameter]
-    public TimeSpan Max
+    public int MaxHours
     {
-        get => _max;
+        get => _maxHours;
         set
         {
-            if (value == _max) return;
-            _max = value;
-            if (value.ToString(@"hh\:mm") != _prevMax) {
-                _prevMax = value.ToString(@"hh\:mm");
-                //MicrosoftTeams.ApplyTimeMask("timeInput", MinAsString, _prevMax);
-            }
+            if (value == _maxHours) return;
+            _maxHours = value;
+        }
+    }
+
+    private int _minMinutes = 0;
+    [Parameter]
+    public int MinMinutes
+    {
+        get => _minMinutes;
+        set
+        {
+            if (value == _minMinutes) return;
+            _minMinutes = value;
+        }
+    }
+
+    private int _maxMinutes = 60;
+    [Parameter]
+    public int MaxMinutes
+    {
+        get => _maxMinutes;
+        set
+        {
+            if (value == _maxMinutes) return;
+            _maxMinutes = value;
         }
     }
 

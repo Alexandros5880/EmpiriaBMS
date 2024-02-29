@@ -479,6 +479,18 @@ public partial class Projects : IDisposable
                                                         : newTimeSpan.Minutes
                                         : 0;
 
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
+        {
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
+        }
+
         var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
 
         TimeSpan difference = remainingTime - updatedTime;
@@ -537,6 +549,18 @@ public partial class Projects : IDisposable
                                                           -(previusTime.Minutes - newTimeSpan.Minutes)
                                                         : newTimeSpan.Minutes
                                         : 0;
+
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
+        {
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
+        }
 
         var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
 
