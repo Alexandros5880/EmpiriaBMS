@@ -384,62 +384,59 @@ else
         </div>
         
 
-        <div class="modal-body row">
-            <div class="m-1 row justify-content-between">
-                <div class="col-12 p-2">
-                    <div class="mt-1 p-2 row">
-                        <!-- Select Project -->
-                        <div Class="col">
-                            <div class="text-center">
-                                <h3>Select Project</h3>
-                            </div>
-                            <select class="form-select form-select-lg"
-                                    aria-label="Select Project"
-                                    @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
-                                <option value="0" selected>Select Project</option>
-                                @foreach (var project in _projects)
-                                {
-                                    <option selected="@(project.Id == _selectedProject?.Id)"
-                                            value="@project.Id">
-                                        @project.Name
-                                    </option>
-                                }
-                            </select>
-                        </div>
-                        <!-- Discipline -->
-                        <div class="col">
-                            <div class="text-center">
-                                <h3>Select Descipline</h3>
-                            </div>
-                            <select class="form-select form-select-lg"
-                                    aria-label="Select Discipline"
-                                    @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
-                                <option value="0" selected>Select Discipline</option>
-                                @foreach (var discipline in _disciplines)
-                                {
-                                    <option selected="@(discipline.Id == _selectedDiscipline?.Id)"
-                                            value="@discipline.Id">
-                                        @discipline.Name
-                                    </option>
-                                }
-                            </select>
-                        </div>
+        <div class="modal-body">
+
+            <div class="mt-1 row gx-3">
+
+                <!-- Select Project -->
+                <div class="col">
+                    <div class="text-center">
+                        <h5>Select Project</h5>
                     </div>
+                    <select class="form-select form-select-lg"
+                            aria-label="Select Project"
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select Project</option>
+                        @foreach (var project in _projects)
+                        {
+                            <option selected="@(project.Id == _selectedProject?.Id)"
+                                    value="@project.Id">
+                                @project.Name
+                            </option>
+                        }
+                    </select>
                 </div>
+
+                <!-- Discipline -->
+                <div class="col">
+                    <div class="text-center">
+                        <h5>Select Descipline</h5>
+                    </div>
+                    <select class="form-select form-select-lg"
+                            aria-label="Select Discipline"
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select Discipline</option>
+                        @foreach (var discipline in _disciplines)
+                        {
+                            <option selected="@(discipline.Id == _selectedDiscipline?.Id)"
+                                    value="@discipline.Id">
+                                @discipline.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+
             </div>
-        </div>
 
+            <div class="mt-1 row gx-3">
 
-        <div class="mt-1 p-2 modal-content">
-            <div class="row">
-               
                 <!-- Drawings -->
-                <div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12">
-                    <div>
-                        <h3>Deliverables</h3>
+                <div class="col">
+                    <div class="text-center">
+                        <h5>Deliverables</h5>
                     </div>
                     <div class="table-responsive"
-                         style="width: 400px; height: 300px;">
+                         style="height: 300px;">
                         <table class="table table-hover table-borderless">
                             <thead class="table-primary">
                                 <tr>
@@ -459,15 +456,18 @@ else
                                             <TimeInput Min="@TimeSpan.Zero"
                                                        Max="@timeToSet"
                                                        Time="@TimeSpan.Zero"
-                                                       OnPropertyChanged=@((e) => _onDrawHoursChanged(_draw, e.Value)) />
+                                                       OnPropertyChanged=@((time) => _onDrawTimeChanged(_draw, time)) />
                                         </td>
                                         <td class="align-middle">
-                                            <div class="input-group" style="width: 140px !important; margin: 0 auto;">
+                                            <div class="input-group" style="width: 110px;">
                                                 <input type="number"
                                                        class="form-control"
                                                        EnableMinMax="true"
-                                                       Min="0"
-                                                       Max="100"
+                                                       min="0"
+                                                       max="100"
+                                                       style="min-width: 45px !important; max-width: 45px !important;"
+                                                       onkeyup="if(value<0) value=0; if(value>100) value=100;"
+                                                       onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
                                                        @onchange=@((e) => _onDrawCompletedChanged(_draw, e.Value))>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">%</span>
@@ -482,12 +482,12 @@ else
                 </div>
 
                 <!-- Others -->
-                <div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12">
-                    <div>
-                        <h3>Auxiliaries</h3>
+                <div class="col">
+                    <div class="text-center">
+                        <h5>Auxiliaries</h5>
                     </div>
                     <div class="table-responsive"
-                         style="width: 400px; height: 300px;">
+                         style="height: 300px;">
                         <table class="table table-hover table-borderless">
                             <thead class="table-primary">
                                 <tr>
@@ -506,7 +506,7 @@ else
                                             <TimeInput Min="@TimeSpan.Zero"
                                                        Max="@timeToSet"
                                                        Time="@TimeSpan.Zero"
-                                                       OnPropertyChanged=@((e) => _onOtherHoursChanged(_other, e.Value)) />
+                                                       OnPropertyChanged=@((time) => _onOtherTimeChanged(_other, time)) />
                                         </td>
                                     </tr>
                                 }
@@ -514,9 +514,11 @@ else
                         </table>
                     </div>
                 </div>
-            
+
             </div>
+
         </div>
+
 
         <div class="row">
             <FluentButton Disabled="@(timeToSet != TimeSpan.Zero)"

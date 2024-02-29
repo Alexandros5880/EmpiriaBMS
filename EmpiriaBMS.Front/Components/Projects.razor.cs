@@ -460,11 +460,8 @@ public partial class Projects : IDisposable
     #endregion
 
     #region On Press Work End Dialog Actions
-    private void _onDrawHoursChanged(DrawingVM draw, object val)
+    private void _onDrawTimeChanged(DrawingVM draw, TimeSpan timeSpan)
     {
-        if (Convert.ToString(val) == "") return;
-        val += ":00";
-        TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
         var value = Convert.ToInt32(timeSpan.Hours);
         if (timeToSet.Hours < value)
         {
@@ -503,11 +500,8 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
-    private void _onOtherHoursChanged(OtherVM other, object val)
+    private void _onOtherTimeChanged(OtherVM other, TimeSpan timeSpan)
     {
-        if (Convert.ToString(val) == "") return;
-        val += ":00";
-        TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
         var value = Convert.ToInt32(timeSpan.Hours);
         if (timeToSet.Hours < value)
         {

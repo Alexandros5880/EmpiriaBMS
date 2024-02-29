@@ -1,12 +1,51 @@
 ﻿@inject MicrosoftTeams MicrosoftTeams
 
-<input id="timeInput"
-       class="form-control"
-       type="text"
-       value="@TimeAsString"
-       placeholder="HH:MM"
-       style="max-width: 74px !important;"
-       @onchange=@((e) => OnPropertyChanged.InvokeAsync(e)) />
+<div class="input-group" style="width:150px;">
+    
+    <input class="form-control"
+           type="number"
+           value="@Time.Hours"
+           placeholder="HH"
+           style="min-width: 45px !important; max-width: 45px !important;"
+           min="0"
+           max="24"
+           onkeyup="if(value<0) value=0; if(value>24) value=24;"
+           onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+           @onchange=@((e) => _onHoursChanged(e)) />
+
+    <div class="input-group-append">
+        <span class="input-group-text">:</span>
+    </div>
+    
+    <input class="form-control"
+           type="number"
+           value="@Time.Minutes"
+           placeholder="MM"
+           style="min-width: 45px !important; max-width: 45px !important;"
+           min="0"
+           max="60"
+           onkeyup="if(value<0) value=0; if(value>60) value=60;"
+           onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+           @onchange=@((e) => _onMinutesChanged(e)) />
+
+</div>
+
+<style>
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+</style>
+
 
 @code {
 
@@ -26,7 +65,7 @@
             if (value.ToString(@"hh\:mm") != _prevMin)
             {
                 _prevMin = value.ToString(@"hh\:mm");
-                MicrosoftTeams.ApplyTimeMask("timeInput", _prevMin, _prevMax);
+                //MicrosoftTeams.ApplyTimeMask("timeInput", _prevMin, _prevMax);
             }
         }
     }
@@ -43,7 +82,7 @@
             _max = value;
             if (value.ToString(@"hh\:mm") != _prevMax) {
                 _prevMax = value.ToString(@"hh\:mm");
-                MicrosoftTeams.ApplyTimeMask("timeInput", MinAsString, _prevMax);
+                //MicrosoftTeams.ApplyTimeMask("timeInput", MinAsString, _prevMax);
             }
         }
     }
@@ -60,32 +99,40 @@
         }
     }
 
-    private string MinAsString
-    {
-        get => Min.ToString(@"hh\:mm");
-        set
-        {
-            if (TimeSpan.TryParseExact(value, @"hh\:mm\:ss", null, out TimeSpan parsedTime))
-            {
-                Min = parsedTime;
-            }
-        }
-    }
-
-    private string MaxAsString
-    {
-        get => Max.ToString(@"hh\:mm");
-        set
-        {
-            if (TimeSpan.TryParseExact(value, @"hh\:mm\:ss", null, out TimeSpan parsedTime))
-            {
-                Max = parsedTime;
-            }
-        }
-    }
-
     [Parameter]
-    public EventCallback<ChangeEventArgs> OnPropertyChanged { get; set; }
+    public EventCallback<TimeSpan> OnPropertyChanged { get; set; }
+
+
+    private async Task _onHoursChanged(ChangeEventArgs e)
+    {
+        int hours = Convert.ToInt32(e.Value);
+
+        // if (Min.Hours < hours)
+        //     hours = Min.Hours;
+
+        // if (Max.Hours < hours)
+        //     hours = Max.Hours;
+
+        // Time = new TimeSpan(hours, Time.Minutes, Time.Seconds);
+        // await OnPropertyChanged.InvokeAsync(Time);
+    }
+
+    private async Task _onMinutesChanged(ChangeEventArgs e)
+    {
+        var minutes = Convert.ToInt32(e.Value);
+
+        // if (Min.Minutes < minutes)
+        //     minutes = Min.Minutes;
+
+        // if (Max.Minutes < minutes)
+        //     minutes = Max.Minutes;
+
+        // Time = new TimeSpan(Time.Hours, minutes, Time.Seconds);
+        // await OnPropertyChanged.InvokeAsync(Time);
+    }
+
+
+
 
     // protected override async Task OnAfterRenderAsync(bool firstRender)
     // {
