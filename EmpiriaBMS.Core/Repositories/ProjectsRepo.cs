@@ -385,6 +385,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 disciplines = await _context.Set<Discipline>()
                                              .Where(de => de.ProjectId == projectId)
+                                             .Include(d => d.Type)
                                              .ToListAsync();
             }
             else

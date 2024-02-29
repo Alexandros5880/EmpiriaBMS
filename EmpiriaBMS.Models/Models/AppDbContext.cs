@@ -722,7 +722,7 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Connect Every Draftman With Every Other
-        for (var o = 0; o < others.Count; o++) 
+        for (var o = 0; o < others.Count; o++)
         {
             for (var d = 0; d < draftsmen.Count; d++)
             {
@@ -739,23 +739,23 @@ public class AppDbContext : DbContext
         }
         #endregion
 
-        #region Connect Every Draftman With Every Drawing
-        for (var o = 0; o < drawings.Count; o++)
-        {
-            for (var d = 0; d < draftsmen.Count; d++)
-            {
-                DrawingEmployee de_1 = new DrawingEmployee()
-                {
-                    Id = random.Next(123456789, 999999999) * 9,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    EmployeeId = draftsmen[d].Id,
-                    DrawingId = drawings[o].Id
-                };
-                builder.Entity<DrawingEmployee>().HasData(de_1);
-            }
-        }
-        #endregion
+        //#region Connect Every Draftman With Every Drawing
+        //for (var o = 0; o < drawings.Count; o++)
+        //{
+        //    for (var d = 0; d < draftsmen.Count; d++)
+        //    {
+        //        DrawingEmployee de_1 = new DrawingEmployee()
+        //        {
+        //            Id = random.Next(123456789, 999999999) * 9,
+        //            CreatedDate = DateTime.Now,
+        //            LastUpdatedDate = DateTime.Now,
+        //            EmployeeId = draftsmen[d].Id,
+        //            DrawingId = drawings[o].Id
+        //        };
+        //        builder.Entity<DrawingEmployee>().HasData(de_1);
+        //    }
+        //}
+        //#endregion
     }
 
     static int GetUniqueRandomNumber(Random random, List<int> selectedNumbers, int min, int max)
