@@ -10,7 +10,7 @@ using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class DailyHour : Entity
+public class DailyTime : Entity
 {
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]

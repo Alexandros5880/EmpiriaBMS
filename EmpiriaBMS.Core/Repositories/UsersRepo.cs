@@ -320,7 +320,7 @@ public class UsersRepo : Repository<UserDto, User>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var dailyHours = await _context.Set<DailyHour>()
+            var dailyHours = await _context.Set<DailyTime>()
                                      .Where(u => u.DailyUserId == userId)
                                      .ToListAsync();
             
@@ -345,7 +345,7 @@ public class UsersRepo : Repository<UserDto, User>
         {
             var lastMondaysDate = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
 
-            return await _context.Set<DailyHour>()
+            return await _context.Set<DailyTime>()
                                            .Where(u => u.DailyUserId == userId)
                                            .Where(u => u.Date.CompareTo(lastMondaysDate) > 0)
                                            .Select(u => u.TimeSpan.Hours)
@@ -360,7 +360,7 @@ public class UsersRepo : Repository<UserDto, User>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<DailyHour>()
+            return await _context.Set<DailyTime>()
                            .Where(u => u.DailyUserId == userId)
                            .Select(d => d.TimeSpan.Hours)
                            .SumAsync();
@@ -378,7 +378,7 @@ public class UsersRepo : Repository<UserDto, User>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var dateBeforeWeek = date.AddDays(-7);
-            return await _context.Set<DailyHour>()
+            return await _context.Set<DailyTime>()
                                            .Where(u => u.DailyUserId == userId)
                                            .Where(u => u.Date.CompareTo(dateBeforeWeek) > 0)
                                            .Select(u => u.TimeSpan.Hours)
@@ -386,7 +386,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<DailyHour> AddHours(int userId, DateTime date, long hours)
+    public async Task<DailyTime> AddTime(int userId, DateTime date, TimeSpan ts)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -405,7 +405,7 @@ public class UsersRepo : Repository<UserDto, User>
             {
                 // Get Yesterday DailyHour
                 var yesterdayDate = date.AddDays(-1);
-                var yesterdayDailyHour = await _context.Set<DailyHour>()
+                var yesterdayDailyHour = await _context.Set<DailyTime>()
                                                    .Where(u => u.DailyUserId == userId)
                                                    .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
 
@@ -413,7 +413,7 @@ public class UsersRepo : Repository<UserDto, User>
                     throw new NullReferenceException(nameof(yesterdayDailyHour));
 
                 var timespan = yesterdayDailyHour.TimeSpan;
-                var newHours = timespan.Hours + hours;
+                var newHours = timespan.Hours + ts.Hours;
                 yesterdayDailyHour.TimeSpan = new Timespan(
                     timespan.Days, newHours, timespan.Minutes, timespan.Seconds);
 
@@ -423,16 +423,16 @@ public class UsersRepo : Repository<UserDto, User>
             }
             else
             {
-                var result = await _context.Set<DailyHour>()
+                var result = await _context.Set<DailyTime>()
                                        .AddAsync(
-                    new DailyHour {
+                    new DailyTime {
                         DailyUserId = userId,
                         Date = date,
                         TimeSpan = new Timespan(
-                            0,
-                            hours,
-                            0,
-                            0
+                            ts.Days,
+                            ts.Hours,
+                            ts.Minutes,
+                            ts.Seconds
                         )
                     }
                 );

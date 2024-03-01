@@ -93,7 +93,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<DailyHour>()
+            return await _context.Set<DailyTime>()
                                  .Where(mh => mh.DrawingId == drwaingId)
                                  .Include(mh => mh.TimeSpan)
                                  .Select(mh => mh.TimeSpan.Hours)
@@ -105,7 +105,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return _context.Set<DailyHour>()
+            return _context.Set<DailyTime>()
                            .Where(mh => mh.DrawingId == drwaingId)
                            .Include(mh => mh.TimeSpan)
                            .Select(mh => mh.TimeSpan.Hours)
@@ -151,11 +151,11 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
         }
     }
 
-    public async Task UpdateHours(int userId, int projectId, int disciplineId, int drawId, int hours)
+    public async Task AddTime(int userId, int projectId, int disciplineId, int drawId, TimeSpan timespan)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            DailyHour time = new DailyHour()
+            DailyTime time = new DailyTime()
             {
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
@@ -164,9 +164,9 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
                 ProjectId = projectId,
                 DisciplineId = disciplineId,
                 DrawingId = drawId,
-                TimeSpan = new Timespan(0, hours, 0 ,0)
+                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds)
             };
-            await _context.Set<DailyHour>().AddAsync(time);
+            await _context.Set<DailyTime>().AddAsync(time);
 
             // Get Discipline && Calculate Estimated Hours
             var discipline = await _context.Set<Discipline>()
@@ -185,7 +185,11 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
                                         .FirstOrDefaultAsync(p => p.Id == projectId);
             if (project == null)
                 throw new NullReferenceException(nameof(project));
-            var projectMenHours = project.DailyTime.Select(h => h.TimeSpan.Hours).Sum();
+            var projectMenHours = await _context.Set<DailyTime>()
+                                                .Where(dt => dt.ProjectId == project.Id)
+                                                .Include(dt => dt.TimeSpan)
+                                                .Select(dt => dt.TimeSpan.Hours)
+                                                .SumAsync();
 
             decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
             project.EstimatedCompleted = (float)divitionProResult * 100;

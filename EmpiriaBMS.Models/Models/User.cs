@@ -50,11 +50,11 @@ public class User : Entity
 
     public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 
-    public ICollection<DailyHour> DailyHours { get; set; }
+    public ICollection<DailyTime> DailyTime { get; set; }
 
-    public ICollection<DailyHour> PersonalTime { get; set; }
+    public ICollection<DailyTime> PersonalTime { get; set; }
 
-    public ICollection<DailyHour> TrainingTime { get; set; }
+    public ICollection<DailyTime> TrainingTime { get; set; }
 
-    public ICollection<DailyHour> CorporateEventTime { get; set; }
+    public ICollection<DailyTime> CorporateEventTime { get; set; }
 }

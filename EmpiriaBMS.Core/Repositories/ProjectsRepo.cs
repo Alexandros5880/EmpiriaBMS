@@ -39,7 +39,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public new async Task<ICollection<ProjectDto>> GetAll()
+    public async Task<ICollection<ProjectDto>> GetAll()
     {
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -113,7 +113,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public new async Task<ICollection<ProjectDto>> GetAll(int userId)
+    public async Task<ICollection<ProjectDto>> GetAll(int userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -170,7 +170,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public new async Task<ICollection<ProjectDto>> GetAll(int userId, int pageSize = 0, int pageIndex = 0)
+    public async Task<ICollection<ProjectDto>> GetAll(int userId, int pageSize = 0, int pageIndex = 0)
     {
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -256,7 +256,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public new async Task<ICollection<ProjectDto>> GetAll(
+    public async Task<ICollection<ProjectDto>> GetAll(
         Expression<Func<Project, bool>> expresion, 
         int userId, 
         int pageSize = 0,
@@ -354,7 +354,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<DailyHour>()
+            return await _context.Set<DailyTime>()
                                  .Where(mh => mh.ProjectId == projectId)
                                  .Include(mh => mh.TimeSpan)
                                  .Select(mh => mh.TimeSpan.Hours)
@@ -366,7 +366,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return _context.Set<DailyHour>()
+            return _context.Set<DailyTime>()
                            .Where(mh => mh.ProjectId == projectId)
                            .Include(mh => mh.TimeSpan)
                            .Select(mh => mh.TimeSpan.Hours)

@@ -23,10 +23,10 @@ public class AppDbContext : DbContext
     public DbSet<Invoice>? Invoices { get; set; }
     public DbSet<Timespan> TimeSpans { get; set; }
     public DbSet<ProjectType> ProjectType { get; set; }
-    public DbSet<DailyHour> DailyHours { get; set; }
-    public DbSet<DailyHour> ParsonalTime { get; set; }
-    public DbSet<DailyHour> TrainingTime { get; set; }
-    public DbSet<DailyHour> CorporateEventTime { get; set; }
+    public DbSet<DailyTime> DailyTime { get; set; }
+    public DbSet<DailyTime> ParsonalTime { get; set; }
+    public DbSet<DailyTime> TrainingTime { get; set; }
+    public DbSet<DailyTime> CorporateEventTime { get; set; }
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }

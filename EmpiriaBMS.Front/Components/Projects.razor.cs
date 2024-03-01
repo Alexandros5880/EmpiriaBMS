@@ -612,6 +612,8 @@ public partial class Projects : IDisposable
         // Update Db
         _startLoading = true;
 
+        TimeSpan sumTime = new TimeSpan();
+
         // Update Draws
         foreach (var draw in _drawsChanged)
         {
@@ -624,18 +626,20 @@ public partial class Projects : IDisposable
             }
             else
                 await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            await DataProvider.Drawings.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time.Hours);
+            await DataProvider.Drawings.AddTime(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+            sumTime += draw.Time;
         }
 
         // Update Others
         foreach (var other in _othersChanged)
         {
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-            await DataProvider.Others.UpdateHours(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time.Hours);
+            await DataProvider.Others.AddTime(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+            sumTime += other.Time;
         }
 
         // Update User Hours
-        await DataProvider.Users.AddHours(LogedUser.Id, DateTime.Now, Convert.ToInt64(remainingTime.Hours));
+        await DataProvider.Users.AddTime(LogedUser.Id, DateTime.Now, sumTime);
 
         _drawsChanged.Clear();
         _othersChanged.Clear();

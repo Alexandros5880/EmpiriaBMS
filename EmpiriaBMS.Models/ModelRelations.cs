@@ -122,9 +122,9 @@ public static class ModelRelations
                .WithOne(c => c.Project)
                .HasForeignKey<Invoice>(c => c.ProjectId);
 
-        // User DailyHours
+        // User DailyTime
         builder.Entity<User>()
-                    .HasMany(u => u.DailyHours)
+                    .HasMany(u => u.DailyTime)
                     .WithOne(d => d.DailyUser)
                     .HasForeignKey(d => d.DailyUserId)
                     .OnDelete(DeleteBehavior.Restrict);

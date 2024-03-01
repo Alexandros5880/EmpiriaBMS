@@ -20,7 +20,7 @@ public class Other : Entity
 
     public float CompletionEstimation { get; set; }
 
-    public ICollection<DailyHour> DailyTime { get; set; }
+    public ICollection<DailyTime> DailyTime { get; set; }
 
     public ICollection<OtherEmployee> OthersEmployees { get; set; }
 }
