@@ -22,8 +22,7 @@ public class AppDbContext : DbContext
     public DbSet<OtherType> OtherTypes { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
     public DbSet<Timespan> TimeSpans { get; set; }
-    public DbSet<ManHour> ManHours { get; set; }
-    public DbSet<ManHour> ProjectType { get; set; }
+    public DbSet<ProjectType> ProjectType { get; set; }
     public DbSet<DailyHour> DailyHours { get; set; }
     public DbSet<DailyHour> ParsonalTime { get; set; }
     public DbSet<DailyHour> TrainingTime { get; set; }

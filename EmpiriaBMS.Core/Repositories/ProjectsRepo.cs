@@ -354,9 +354,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<ManHour>()
+            return await _context.Set<DailyHour>()
                                  .Where(mh => mh.ProjectId == projectId)
-                                 .Select(mh => mh.Hours)
+                                 .Include(mh => mh.TimeSpan)
+                                 .Select(mh => mh.TimeSpan.Hours)
                                  .SumAsync();
         }
     }
@@ -365,10 +366,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return _context.Set<ManHour>()
-                                 .Where(mh => mh.ProjectId == projectId)
-                                 .Select(mh => mh.Hours)
-                                 .Sum();
+            return _context.Set<DailyHour>()
+                           .Where(mh => mh.ProjectId == projectId)
+                           .Include(mh => mh.TimeSpan)
+                           .Select(mh => mh.TimeSpan.Hours)
+                           .Sum();
         }
     }
 

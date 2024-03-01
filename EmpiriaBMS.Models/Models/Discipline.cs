@@ -28,7 +28,7 @@ public class Discipline : Entity
 
     public ICollection<Other> Others { get; set; }
 
-    public ICollection<ManHour> MenHours { get; set; }
+    public ICollection<DailyHour> DailyTime { get; set; }
 
     public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 }

@@ -26,7 +26,7 @@ public class Drawing : Entity
     [Column(TypeName = "datetime2")]
     public DateTime? CompletionDate { get; set; }
 
-    public ICollection<ManHour> MenHours { get; set; }
+    public ICollection<DailyHour> DailyTime { get; set; }
 
     public ICollection<DrawingEmployee> DrawingsEmployees { get; set; }
 }

@@ -90,9 +90,10 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<ManHour>()
+            return await _context.Set<DailyHour>()
                                  .Where(mh => mh.OtherId == otherId)
-                                 .Select(mh => mh.Hours)
+                                 .Include(mh => mh.TimeSpan)
+                                 .Select(mh => mh.TimeSpan.Hours)
                                  .SumAsync();
         }
     }
@@ -101,10 +102,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return _context.Set<ManHour>()
-                                 .Where(mh => mh.OtherId == otherId)
-                                 .Select(mh => mh.Hours)
-                                 .Sum();
+            return _context.Set<DailyHour>()
+                           .Where(mh => mh.OtherId == otherId)
+                           .Include(mh => mh.TimeSpan)
+                           .Select(mh => mh.TimeSpan.Hours)
+                           .Sum();
         }
     }
 
@@ -149,34 +151,37 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            ManHour mhours = new ManHour()
+            DailyHour time = new DailyHour()
             {
-                UserId = userId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                DailyUserId = userId,
                 ProjectId = projectId,
                 DisciplineId = disciplineId,
                 OtherId = otherId,
-                Hours = hours
+                TimeSpan = new Timespan(0, hours, 0, 0)
             };
-            await _context.Set<ManHour>().AddAsync(mhours);
+            await _context.Set<DailyHour>().AddAsync(time);
 
             // Get Discipline && Calculate Estimated Hours
             var discipline = await _context.Set<Discipline>()
-                                           .Include(p => p.MenHours)
+                                           .Include(p => p.DailyTime)
                                            .FirstOrDefaultAsync(p => p.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var disciplineMenHours = discipline.MenHours.Select(h => h.Hours).Sum();
+            var disciplineMenHours = discipline.DailyTime.Select(h => h.TimeSpan.Hours).Sum();
 
             decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
             discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
 
             // Get Project && Calculate Estimated Hours
             var project = await _context.Set<Project>()
-                                        .Include(p => p.MenHours)
+                                        .Include(p => p.DailyTime)
                                         .FirstOrDefaultAsync(p => p.Id == projectId);
             if (project == null)
                 throw new NullReferenceException(nameof(project));
-            var projectMenHours = project.MenHours.Select(h => h.Hours).Sum();
+            var projectMenHours = project.DailyTime.Select(h => h.TimeSpan.Hours).Sum();
 
             decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
             project.EstimatedCompleted = (float)divitionProResult * 100;

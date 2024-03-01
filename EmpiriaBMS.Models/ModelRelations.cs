@@ -150,27 +150,27 @@ public static class ModelRelations
                     .HasForeignKey(d => d.CorporateUserId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-        // Project ManHours
+        // Project DailyTime
         builder.Entity<Project>()
-                    .HasMany(p => p.MenHours)
+                    .HasMany(p => p.DailyTime)
                     .WithOne(c => c.Project)
                     .HasForeignKey(c => c.ProjectId);
 
-        // Discipline ManHours
+        // Discipline DailyTime
         builder.Entity<Discipline>()
-                    .HasMany(p => p.MenHours)
+                    .HasMany(p => p.DailyTime)
                     .WithOne(c => c.Discipline)
                     .HasForeignKey(c => c.DisciplineId);
 
-        // Other ManHours
+        // Other DailyTime
         builder.Entity<Other>()
-                    .HasMany(p => p.MenHours)
+                    .HasMany(p => p.DailyTime)
                     .WithOne(c => c.Other)
                     .HasForeignKey(c => c.OtherId);
 
-        // Drawing ManHours
+        // Drawing DailyTime
         builder.Entity<Drawing>()
-                    .HasMany(p => p.MenHours)
+                    .HasMany(p => p.DailyTime)
                     .WithOne(c => c.Drawing)
                     .HasForeignKey(c => c.DrawingId);
 

@@ -76,7 +76,7 @@ public class Project : Entity
 
     public Invoice? Invoice { get; set; }
 
-    public ICollection<ManHour> MenHours { get; set; }
+    public ICollection<DailyHour> DailyTime { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }
 
