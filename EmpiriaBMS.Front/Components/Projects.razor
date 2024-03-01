@@ -152,14 +152,14 @@ else
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
-                                                            <label>@project.WorkPackegedCompleted %</label>
+                                                            <label>@(project.WorkPackegedCompleted.ToString("#.##")) %</label>
                                                         </td>
                                                     
                                                         <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
-                                                            <label>@project.EstimatedCompleted %</label>
+                                                            <label>@(project.EstimatedCompleted.ToString("#.##")) %</label>
                                                         </td>
                                                     
                                                         <td class="align-middle
@@ -224,7 +224,7 @@ else
                                                         @(((_selectedDiscipline == null
                                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                                 ? "" : "highlight_2"))">
-                                                        <label>@discipline.EstimatedCompleted %</label>
+                                                        <label>@(discipline.EstimatedCompleted.ToString("#.##")) %</label>
                                                     </td>
 
                                                     @if (EditDiscipline)
