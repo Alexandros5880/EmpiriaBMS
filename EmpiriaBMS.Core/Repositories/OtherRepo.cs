@@ -121,17 +121,15 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
             // Calculate Parent Discipline Completed
             var discipline = await _context.Set<Discipline>()
-                                           .Include(d => d.DisciplinesOthers)
+                                           .Include(d => d.Others)
                                            .FirstOrDefaultAsync(d => d.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var allOthersIds = discipline.DisciplinesOthers.Select(dd => dd.OtherId).ToList();
-            var allOthers = await _context.Set<Other>().Where(d => allOthersIds.Contains(d.Id))
-                                                        .ToListAsync();
+            var allOthers = discipline.Others;
             var sumComplitionOfOthers = allOthers
                                           .Select(d => d.CompletionEstimation)
                                           .Sum();
-            var othersCounter = discipline.DisciplinesOthers.Count();
+            var othersCounter = allOthers.Count();
             discipline.Completed = sumComplitionOfOthers / othersCounter;
 
             // Calculate Parent Project Complition

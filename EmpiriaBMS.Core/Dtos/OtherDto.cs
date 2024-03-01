@@ -10,7 +10,8 @@ namespace EmpiriaBMS.Core.Dtos;
 
 public class OtherDto : EntityDto
 {
-    public string Name { get; set; }
+    public int TypeId { get; set; }
+    public OtherType Type { get; set; }
 
     public long MenHours { get; set; }
 

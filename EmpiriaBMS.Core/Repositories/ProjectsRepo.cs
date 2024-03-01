@@ -140,8 +140,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                              .Select(e => e.DrawingId)
                                              .ToListAsync();
 
-            var drawingsDisciplinesIds = await _context.Set<DisciplineDraw>()
-                                                 .Where(dd => myDrawingIds.Contains(dd.DrawId))
+            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(dd => myDrawingIds.Contains(dd.Id))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
@@ -211,8 +211,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                              .Select(e => e.DrawingId)
                                              .ToListAsync();
 
-            var drawingsDisciplinesIds = await _context.Set<DisciplineDraw>()
-                                                 .Where(dd => myDrawingIds.Contains(dd.DrawId))
+            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(d => myDrawingIds.Contains(d.Id))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
@@ -303,8 +303,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                              .Select(e => e.DrawingId)
                                              .ToListAsync();
 
-            var drawingsDisciplinesIds = await _context.Set<DisciplineDraw>()
-                                                 .Where(dd => myDrawingIds.Contains(dd.DrawId))
+            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(d => myDrawingIds.Contains(d.Id))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
@@ -395,8 +395,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                             .Select(de => de.DrawingId)
                                             .ToListAsync();
 
-                var myDisciplinesIds = await _context.Set<DisciplineDraw>()
-                                                .Where(dd => myDrawingsIds.Contains(dd.DrawId))
+                var myDisciplinesIds = await _context.Set<Drawing>()
+                                                .Where(d => myDrawingsIds.Contains(d.Id))
                                                 .Select(dd => dd.DisciplineId)
                                                 .ToListAsync();
 

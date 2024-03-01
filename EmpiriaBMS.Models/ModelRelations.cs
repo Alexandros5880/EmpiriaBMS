@@ -50,29 +50,29 @@ public static class ModelRelations
                .WithMany(de => de.ProjectsPmanagers)
                .HasForeignKey(de => de.ProjectId);
 
-        // Disciplines Draws
-        builder.Entity<DisciplineDraw>()
-               .HasKey(de => new { de.DisciplineId, de.DrawId });
-        builder.Entity<DisciplineDraw>()
-               .HasOne(de => de.Discipline)
-               .WithMany(de => de.DisciplinesDraws)
-               .HasForeignKey(de => de.DisciplineId);
-        builder.Entity<DisciplineDraw>()
-               .HasOne(de => de.Draw)
-               .WithMany(de => de.DisciplinesDraws)
-               .HasForeignKey(de => de.DrawId);
+        // Discipline Draws
+        builder.Entity<Discipline>()
+               .HasMany(p => p.Drawings)
+               .WithOne(c => c.Discipline)
+               .HasForeignKey(c => c.DisciplineId);
 
-        // Disciplines Others
-        builder.Entity<DisciplineOther>()
-               .HasKey(de => new { de.DisciplineId, de.OtherId });
-        builder.Entity<DisciplineOther>()
-               .HasOne(de => de.Discipline)
-               .WithMany(de => de.DisciplinesOthers)
-               .HasForeignKey(de => de.DisciplineId);
-        builder.Entity<DisciplineOther>()
-               .HasOne(de => de.Other)
-               .WithMany(de => de.DisciplinesOthers)
-               .HasForeignKey(de => de.OtherId);
+        // DrawingType Drawings
+        builder.Entity<DrawingType>()
+               .HasMany(p => p.Drawings)
+               .WithOne(c => c.Type)
+               .HasForeignKey(c => c.TypeId);
+
+        // Discipline Others
+        builder.Entity<Discipline>()
+               .HasMany(p => p.Others)
+               .WithOne(c => c.Discipline)
+               .HasForeignKey(c => c.DisciplineId);
+
+        // OtherType Others
+        builder.Entity<OtherType>()
+               .HasMany(p => p.Others)
+               .WithOne(c => c.Type)
+               .HasForeignKey(c => c.TypeId);
 
         // Drawings Employees
         builder.Entity<DrawingEmployee>()

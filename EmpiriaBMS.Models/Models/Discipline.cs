@@ -24,11 +24,11 @@ public class Discipline : Entity
     public int TypeId { get; set; }
     public DisciplineType Type { get; set; }
 
+    public ICollection<Drawing> Drawings { get; set; }
+
+    public ICollection<Other> Others { get; set; }
+
     public ICollection<ManHour> MenHours { get; set; }
-
-    public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
-
-    public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
 
     public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 }

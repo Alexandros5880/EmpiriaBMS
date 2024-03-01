@@ -17,7 +17,9 @@ public class AppDbContext : DbContext
     public DbSet<Discipline> Disciplines { get; set; }
     public DbSet<DisciplineType> DisciplineTypes { get; set; }
     public DbSet<Drawing> Drawings { get; set; }
+    public DbSet<DrawingType> DrawingTypes { get; set; }
     public DbSet<Other> Others { get; set; }
+    public DbSet<OtherType> OtherTypes { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
     public DbSet<Timespan> TimeSpans { get; set; }
     public DbSet<ManHour> ManHours { get; set; }
@@ -29,8 +31,6 @@ public class AppDbContext : DbContext
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<DisciplineDraw> DisciplinesDraws { get; set; }
-    public DbSet<DisciplineOther> DisciplinesOthers { get; set; }
     public DbSet<ProjectPmanager> ProjectsPmanagers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -394,119 +394,6 @@ public class AppDbContext : DbContext
         }
         #endregion
 
-        #region Create 5 Others
-        List<Other> others = new List<Other>();
-        // Other Communications
-        var other_1_Id = random.Next(123456789, 999999999) * 33;
-        Other other1 = new Other()
-        {
-            Id = other_1_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Communications",
-            CompletionEstimation = 0
-        };
-        builder.Entity<Other>().HasData(other1);
-        others.Add(other1);
-
-        // Other Printing
-        var other_2_Id = random.Next(123456789, 999999999) * 33;
-        Other other2 = new Other()
-        {
-            Id = other_2_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Printing",
-            CompletionEstimation = 0
-        };
-        builder.Entity<Other>().HasData(other2);
-        others.Add(other2);
-
-        // Other On-Site
-        var other_3_Id = random.Next(123456789, 999999999) * 33;
-        Other other3 = new Other()
-        {
-            Id = other_3_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"On-Site",
-            CompletionEstimation = 0
-        };
-        builder.Entity<Other>().HasData(other3);
-        others.Add(other3);
-
-        // Other Meetings
-        var other_4_Id = random.Next(123456789, 999999999) * 33;
-        Other other4 = new Other()
-        {
-            Id = other_4_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Meetings",
-            CompletionEstimation = 0
-        };
-        builder.Entity<Other>().HasData(other4);
-        others.Add(other4);
-
-        // other5
-        var other_5_Id = random.Next(123456789, 999999999) * 33;
-        Other other5 = new Other()
-        {
-            Id = other_5_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Administration",
-            CompletionEstimation = 0
-        };
-        builder.Entity<Other>().HasData(other5);
-        others.Add(other5);
-        #endregion
-
-        #region Create 3 Drawings
-        List<Drawing> drawings = new List<Drawing>();
-        // Drawing Documents
-        var drawing_1_Id = random.Next(123456789, 999999999);
-        Drawing drawing_1 = new Drawing()
-        {
-            Id = drawing_1_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Documents",
-            CompletionEstimation = 0,
-            CompletionDate = DateTime.Now.AddDays(11)
-        };
-        builder.Entity<Drawing>().HasData(drawing_1);
-        drawings.Add(drawing_1);
-
-        // Drawing Calculations
-        var drawing_2_Id = random.Next(123456789, 999999999);
-        Drawing drawing_2 = new Drawing()
-        {
-            Id = drawing_2_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Calculations",
-            CompletionEstimation = 0,
-            CompletionDate = DateTime.Now.AddDays(11)
-        };
-        builder.Entity<Drawing>().HasData(drawing_2);
-        drawings.Add(drawing_2);
-
-        // Drawing Drawings
-        var drawing_3_Id = random.Next(123456789, 999999999);
-        Drawing drawing_3 = new Drawing()
-        {
-            Id = drawing_3_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = $"Drawings",
-            CompletionEstimation = 0,
-            CompletionDate = DateTime.Now.AddDays(11)
-        };
-        builder.Entity<Drawing>().HasData(drawing_3);
-        drawings.Add(drawing_3);
-        #endregion
-
         #region Create 4 Projects
         List<Project> projects = new List<Project>();
         for (var i = 1; i <= projectTypes.Count(); i++)
@@ -591,7 +478,7 @@ public class AppDbContext : DbContext
 
         #region Create Discipline Types
         List<DisciplineType> disciplineTypes = new List<DisciplineType>();
-        string[] typeNames = { 
+        string[] dicTypeNames = { 
             "HVAC", 
             "Sewage", 
             "Potable Water", 
@@ -611,7 +498,7 @@ public class AppDbContext : DbContext
             "TenderDocument",
             "Construction Supervision",
         };
-        for (var i = 0; i < typeNames.Length; i++)
+        for (var i = 0; i < dicTypeNames.Length; i++)
         {
             var discipline_type_Id = random.Next(123456789, 999999999);
             DisciplineType dt = new DisciplineType()
@@ -619,7 +506,7 @@ public class AppDbContext : DbContext
                 Id = discipline_type_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = typeNames[i],
+                Name = dicTypeNames[i],
             };
             builder.Entity<DisciplineType>().HasData(dt);
             disciplineTypes.Add(dt);
@@ -648,6 +535,97 @@ public class AppDbContext : DbContext
                 };
                 builder.Entity<Discipline>().HasData(discipline);
                 disciplines.Add(discipline);
+            }
+        }
+        #endregion
+
+        #region Create Drawing Types
+        List<DrawingType> drawingTypes = new List<DrawingType>();
+        string[] drawTypeNames = {
+            "Documents",
+            "Calculations",
+            "Drawings"
+        };
+        for (var i = 0; i < drawTypeNames.Length; i++)
+        {
+            var drawing_type_Id = random.Next(123456789, 999999999);
+            DrawingType drt = new DrawingType()
+            {
+                Id = drawing_type_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = drawTypeNames[i],
+            };
+            builder.Entity<DrawingType>().HasData(drt);
+            drawingTypes.Add(drt);
+        }
+        #endregion
+
+        #region Create Drawings
+        List<Drawing> drawings = new List<Drawing>();
+        for (var i = 0; i < disciplines.Count; i++)
+        {
+            for (int j = 0; j < drawingTypes.Count; j++)
+            {
+                var drawing_Id = random.Next(123456789, 999999999);
+                Drawing drawing = new Drawing()
+                {
+                    Id = drawing_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    TypeId = drawingTypes[j].Id,
+                    DisciplineId = disciplines[i].Id,
+                    CompletionEstimation = 0,
+                    CompletionDate = DateTime.Now.AddDays(11)
+                };
+                builder.Entity<Drawing>().HasData(drawing);
+                drawings.Add(drawing);
+            }
+        }
+        #endregion
+
+        #region Create Other Types
+        List<OtherType> otherTypes = new List<OtherType>();
+        string[] otherTypeNames = {
+            "Communications",
+            "Printing",
+            "On-Site",
+            "Meetings",
+            "Administration"
+        };
+        for (var i = 0; i < otherTypeNames.Length; i++)
+        {
+            var other_type_Id = random.Next(123456789, 999999999);
+            OtherType ort = new OtherType()
+            {
+                Id = other_type_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = otherTypeNames[i],
+            };
+            builder.Entity<OtherType>().HasData(ort);
+            otherTypes.Add(ort);
+        }
+        #endregion
+
+        #region Create Others
+        List<Other> others = new List<Other>();
+        for (var i = 0; i < disciplines.Count; i++)
+        {
+            for (int j = 0; j < otherTypes.Count; j++)
+            {
+                var other_Id = random.Next(123456789, 999999999);
+                Other other = new Other()
+                {
+                    Id = other_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    TypeId = otherTypes[j].Id,
+                    DisciplineId = disciplines[i].Id,
+                    CompletionEstimation = 0
+                };
+                builder.Entity<Other>().HasData(other);
+                others.Add(other);
             }
         }
         #endregion
@@ -685,61 +663,25 @@ public class AppDbContext : DbContext
         }
         #endregion
 
-        #region Connect All Others With Every Disclipline
-        for (var d = 0; d < disciplines.Count; d++)
-        {
-            for (var o = 0; o < others.Count; o++)
-            {
-                DisciplineOther dq_other = new DisciplineOther()
-                {
-                    Id = random.Next(123456789, 999999999) + d + o,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    DisciplineId = disciplines[d].Id,
-                    OtherId = others[o].Id
-                };
-                builder.Entity<DisciplineOther>().HasData(dq_other);
-            }
-        }
-        #endregion
-
-        #region Connect Every Drwaing With Every Discipline
-        for (var d = 0; d < disciplines.Count; d++)
-        {
-            for (var o = 0; o < drawings.Count; o++)
-            {
-                DisciplineDraw dd = new DisciplineDraw()
-                {
-                    Id = random.Next(123456789, 999999999) + d + o + 1,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    DisciplineId = disciplines[d].Id,
-                    DrawId = drawings[o].Id
-                };
-                builder.Entity<DisciplineDraw>().HasData(dd);
-            }
-        }
-        #endregion
-
         #region Connect Every Draftman With Every Other
-        for (var o = 0; o < others.Count; o++)
-        {
-            for (var d = 0; d < draftsmen.Count; d++)
-            {
-                OtherEmployee de_1 = new OtherEmployee()
-                {
-                    Id = random.Next(123456789, 999999999) * 9,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    EmployeeId = draftsmen[d].Id,
-                    OtherId = others[o].Id
-                };
-                builder.Entity<OtherEmployee>().HasData(de_1);
-            }
-        }
+        //for (var o = 0; o < others.Count; o++)
+        //{
+        //    for (var d = 0; d < draftsmen.Count; d++)
+        //    {
+        //        OtherEmployee de_1 = new OtherEmployee()
+        //        {
+        //            Id = random.Next(123456789, 999999999) * 9,
+        //            CreatedDate = DateTime.Now,
+        //            LastUpdatedDate = DateTime.Now,
+        //            EmployeeId = draftsmen[d].Id,
+        //            OtherId = others[o].Id
+        //        };
+        //        builder.Entity<OtherEmployee>().HasData(de_1);
+        //    }
+        //}
         #endregion
 
-        //#region Connect Every Draftman With Every Drawing
+        #region Connect Every Draftman With Every Drawing
         //for (var o = 0; o < drawings.Count; o++)
         //{
         //    for (var d = 0; d < draftsmen.Count; d++)
@@ -755,7 +697,7 @@ public class AppDbContext : DbContext
         //        builder.Entity<DrawingEmployee>().HasData(de_1);
         //    }
         //}
-        //#endregion
+        #endregion
     }
 
     static int GetUniqueRandomNumber(Random random, List<int> selectedNumbers, int min, int max)

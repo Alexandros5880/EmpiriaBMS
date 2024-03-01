@@ -13,7 +13,12 @@ namespace EmpiriaBMS.Models.Models;
 public class Drawing : Entity
 {
     [Required]
-    public string Name { get; set; }
+    public int TypeId { get; set; }
+    public DrawingType Type { get; set; }
+
+    [Required]
+    public int DisciplineId { get; set; }
+    public Discipline Discipline { get; set; }
 
     public float CompletionEstimation { get; set; }
 
@@ -22,8 +27,6 @@ public class Drawing : Entity
     public DateTime? CompletionDate { get; set; }
 
     public ICollection<ManHour> MenHours { get; set; }
-
-    public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
 
     public ICollection<DrawingEmployee> DrawingsEmployees { get; set; }
 }

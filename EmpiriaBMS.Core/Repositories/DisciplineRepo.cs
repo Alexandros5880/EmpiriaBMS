@@ -90,7 +90,8 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         {
             var draws = await _context
                              .Set<Drawing>()
-                             .Where(d => d.DisciplinesDraws.Select(o => o.DisciplineId).Contains(id))
+                             .Where(d => d.DisciplineId == id)
+                             .Include(d => d.Type)
                              .ToListAsync();
 
             return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(draws);
@@ -106,7 +107,8 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         {
             var others = await _context
                              .Set<Other>()
-                             .Where(d => d.DisciplinesOthers.Select(o => o.DisciplineId).Contains(id))
+                             .Where(d => d.DisciplineId == id)
+                             .Include(d => d.Type)
                              .ToListAsync();
 
             return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
@@ -142,20 +144,19 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             // Calculate Parent Discipline Completed
             var discipline = await _context.Set<Discipline>()
                                            .Include(d => d.Project)
-                                           .Include(d => d.DisciplinesDraws)
+                                           .Include(d => d.Drawings)
+                                           .Include(d => d.Others)
                                            .FirstOrDefaultAsync(d => d.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var allDrawingsIds = discipline.DisciplinesDraws.Select(dd => dd.DrawId).ToList();
-            var allDrawings = await _context.Set<Drawing>().Where(d => allDrawingsIds.Contains(d.Id))
-                                                        .ToListAsync();
+            var allDrawings = discipline.Drawings;
             var sumComplitionOfDrawings = allDrawings
                                           .Select(d => d.CompletionEstimation)
                                           .Sum();
 
             sumComplitionOfDrawings += completed;
 
-            var drawsCounter = discipline.DisciplinesDraws.Count();
+            var drawsCounter = allDrawings.Count();
             discipline.Completed = sumComplitionOfDrawings / drawsCounter;
 
             // Calculate Parent Project Complition

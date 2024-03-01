@@ -272,7 +272,7 @@ else
                                                         @(((_selectedDraw == null ||
                                                                 !_selectedDraw.Id.Equals(draw.Id))
                                                                     ? "" : "highlight_3"))">
-                                                        <div class="align-middle h-100"><labe>@draw.Name</labe></div>
+                                                        <div class="align-middle h-100"><labe>@draw.Type.Name</labe></div>
                                                     </td>
 
                                                     <td class="align-middle
@@ -331,7 +331,7 @@ else
                                                                 !_selectedOther.Id.Equals(_other.Id))
                                                                     ? "" : "highlight_4"))"
                                                         style="min-width: 110px;">
-                                                        <div class="align-middle h-100"><labe>@_other.Name</labe></div>
+                                                        <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
                                                     </td>
 
                                                     <td class="align-middle
@@ -448,7 +448,7 @@ else
                                 {
                                     <tr class="align-middle">
                                         <td class="align-middle">
-                                            <div class="align-middle h-100"><labe>@_draw.Name</labe></div>
+                                            <div class="align-middle h-100"><labe>@_draw.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
                                             <TimeInput MinHours="0"
@@ -500,7 +500,7 @@ else
                                 {
                                     <tr class="align-middle">
                                         <td class="align-middle">
-                                            <div class="align-middle h-100"><labe>@_other.Name</labe></div>
+                                            <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
                                             <TimeInput MinHours="0"

@@ -124,17 +124,15 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
 
             // Calculate Parent Discipline Completed
             var discipline = await _context.Set<Discipline>()
-                                           .Include(d => d.DisciplinesDraws)
+                                           .Include(d => d.Drawings)
                                            .FirstOrDefaultAsync(d => d.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var allDrawingsIds = discipline.DisciplinesDraws.Select(dd => dd.DrawId).ToList();
-            var allDrawings = await _context.Set<Drawing>().Where(d => allDrawingsIds.Contains(d.Id))
-                                                        .ToListAsync();
+            var allDrawings = discipline.Drawings;
             var sumComplitionOfDrawings = allDrawings
                                           .Select(d => d.CompletionEstimation)
                                           .Sum();
-            var drawsCounter = discipline.DisciplinesDraws.Count();
+            var drawsCounter = allDrawings.Count();
             discipline.Completed = sumComplitionOfDrawings / drawsCounter;
 
             // Calculate Parent Project Complition
