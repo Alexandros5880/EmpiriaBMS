@@ -1,0 +1,54 @@
+﻿@using EmpiriaBMS.Core.ReturnModels
+@inject IDataProvider DataProvider
+
+@if (LogedUserTimes != null)
+{
+    <div class="row gx-3 m-2 ">
+        <div class="col-4 text-center">
+            <span class="mb-2 fs-5">Personal</span>
+            <TimeInput MinHours="0"
+                       MaxHours="@RemainingTime.Hours"
+                       MinMinutes="0"
+                       MaxMinutes="60"
+                       Time="LogedUserTimes.PersonalTime"
+                       OnPropertyChanged=@(async (time) => await OnPersonalTimeChanged.InvokeAsync(time)) />
+        </div>
+        <div class="col-4 text-center">
+            <span class="mb-2 fs-5">Training</span>
+            <TimeInput MinHours="0"
+                       MaxHours="@RemainingTime.Hours"
+                       MinMinutes="0"
+                       MaxMinutes="60"
+                       Time="LogedUserTimes.TrainingTime"
+                       OnPropertyChanged=@(async (time) => await OnTrainingTimeChanged.InvokeAsync(time)) />
+        </div>
+        <div class="col-4 text-center">
+            <span class="mb-2 fs-5">Corporate Event</span>
+            <TimeInput MinHours="0"
+                       MaxHours="@RemainingTime.Hours"
+                       MinMinutes="0"
+                       MaxMinutes="60"
+                       Time="LogedUserTimes.CorporateEventTime"
+                       OnPropertyChanged=@(async (time) => await OnCorporateTimeChanged.InvokeAsync(time)) />
+        </div>
+    </div>
+}
+
+@code {
+    
+
+    [Parameter]
+    public UserTimes LogedUserTimes { get; set; }
+    
+    [Parameter]
+    public TimeSpan RemainingTime { get; set; }
+
+    [Parameter]
+    public EventCallback<TimeSpan> OnPersonalTimeChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<TimeSpan> OnTrainingTimeChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<TimeSpan> OnCorporateTimeChanged { get; set; }
+}

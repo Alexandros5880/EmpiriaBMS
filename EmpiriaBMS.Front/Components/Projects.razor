@@ -360,7 +360,7 @@ else
                         <div class="col-xxl-4 col-xl-7 col-lg-7 col-md-7 col-sm-12 row">
                             <!-- User Extra Hours -->
                             <div class="col-12">
-                                <UserTime LogedUser="@LogedUser" />
+                                <UserTime LogedUserTimes="@_logedUserTimes" />
                             </div>
                         </div>
                     </div>
@@ -399,7 +399,16 @@ else
 
         <div class="modal-body">
 
-            <div class="mt-1 row gx-3">
+            <!-- Set User Extra Time -->
+            <div class="mt-1">
+                <SetUserTime LogedUserTimes="@_editLogedUserTimes"
+                             RemainingTime="@remainingTime"
+                             OnPersonalTimeChanged="@_onPersonalTimeChanged"
+                             OnTrainingTimeChanged="@_onTrainingTimeChanged"
+                             OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+            </div>
+
+            <div class="mt-2 row gx-3">
 
                 <!-- Select Project -->
                 <div class="col">

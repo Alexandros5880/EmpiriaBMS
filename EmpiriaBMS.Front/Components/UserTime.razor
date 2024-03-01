@@ -1,7 +1,7 @@
 ﻿@using EmpiriaBMS.Core.ReturnModels
 @inject IDataProvider DataProvider
 
-@if (_times != null)
+@if (LogedUserTimes != null)
 {
     <div class="text-center">
         <h3>User Time</h3>
@@ -20,7 +20,7 @@
                         <labe>Today's Time</labe>
                     </td>
                     <td class="align-middle">
-                        <labe>@_times.DailyTime.ToString(@"hh\:mm")</labe>
+                        <labe>@LogedUserTimes.DailyTime.ToString(@"hh\:mm")</labe>
                     </td>
                 </tr>
                 <tr class="align-middle">
@@ -28,7 +28,7 @@
                         <labe>Personal Time</labe>
                     </td>
                     <td class="align-middle">
-                        <labe>@_times.PersonalTime.ToString(@"hh\:mm")</labe>
+                        <labe>@LogedUserTimes.PersonalTime.ToString(@"hh\:mm")</labe>
                     </td>
                 </tr>
                 <tr class="align-middle">
@@ -36,7 +36,7 @@
                         <labe>Training Time</labe>
                     </td>
                     <td class="align-middle">
-                        <labe>@_times.TrainingTime.ToString(@"hh\:mm")</labe>
+                        <labe>@LogedUserTimes.TrainingTime.ToString(@"hh\:mm")</labe>
                     </td>
                 </tr>
                 <tr class="align-middle">
@@ -44,7 +44,7 @@
                         <labe>Corporate Event Time</labe>
                     </td>
                     <td class="align-middle">
-                        <labe>@_times.CorporateEventTime.ToString(@"hh\:mm")</labe>
+                        <labe>@LogedUserTimes.CorporateEventTime.ToString(@"hh\:mm")</labe>
                     </td>
                 </tr>
             </tbody>
@@ -55,24 +55,6 @@
 @code {
 
     [Parameter]
-    public UserVM LogedUser { get; set; }
-
-    private UserTimes _times;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            await GetTimes();
-            StateHasChanged();
-        }
-    }
-
-    private async Task GetTimes()
-    {
-        _times = await DataProvider.Users.GetTime(LogedUser.Id, DateTime.Now);
-    }
+    public UserTimes LogedUserTimes { get; set; }
 
 }

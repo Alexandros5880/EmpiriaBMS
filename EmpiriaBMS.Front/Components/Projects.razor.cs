@@ -28,6 +28,8 @@ public partial class Projects : IDisposable
     public double LogesUserHours { get; set; } = 0;
     [Parameter]
     public ICollection<RoleVM> LoggedUserRoles { get; set; }
+    private UserTimes _logedUserTimes;
+    private UserTimes _editLogedUserTimes;
     bool getAllDisciplines => LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
@@ -132,7 +134,7 @@ public partial class Projects : IDisposable
         if (firstRender)
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
-
+            await GetLogedUserTimes(LogedUser.Id);
             await _getProjects();
             _startLoading = false;
             StateHasChanged();
@@ -148,6 +150,11 @@ public partial class Projects : IDisposable
     }
 
     #region Get Records
+    private async Task GetLogedUserTimes(int userId)
+    {
+        _logedUserTimes = await DataProvider.Users.GetTime(userId, DateTime.Now);
+    }
+
     public async Task _getProjects()
     {
         _selectedProject = null;
@@ -316,6 +323,13 @@ public partial class Projects : IDisposable
         StopTimer();
 
         remainingTime = timePaused;
+        _editLogedUserTimes = new UserTimes()
+        {
+            DailyTime = TimeSpan.Zero,
+            PersonalTime = TimeSpan.Zero,
+            TrainingTime = TimeSpan.Zero,
+            CorporateEventTime = TimeSpan.Zero,
+        };
 
         _projects.Clear();
         _others.Clear();
@@ -596,6 +610,144 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
+    private void _onPersonalTimeChanged(TimeSpan newTimeSpan)
+    {
+        var previusTime = _logedUserTimes.PersonalTime;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
+                                        : 0;
+        var updatedMinutes = minutesChanged ?
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
+        {
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
+        }
+
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
+        {
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
+        }
+
+        _logedUserTimes.PersonalTime = newTimeSpan;
+
+        StateHasChanged();
+    }
+
+    private void _onTrainingTimeChanged(TimeSpan newTimeSpan)
+    {
+        var previusTime = _logedUserTimes.TrainingTime;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
+                                        : 0;
+        var updatedMinutes = minutesChanged ?
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
+        {
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
+        }
+
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
+        {
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
+        }
+
+        _logedUserTimes.TrainingTime = newTimeSpan;
+
+        StateHasChanged();
+    }
+
+    private void _onCorporateTimeChanged(TimeSpan newTimeSpan)
+    {
+        var previusTime = _logedUserTimes.CorporateEventTime;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
+                                        : 0;
+        var updatedMinutes = minutesChanged ?
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
+        {
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
+        }
+
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
+        {
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
+        }
+
+        _logedUserTimes.CorporateEventTime = newTimeSpan;
+
+        StateHasChanged();
+    }
+
     public async Task _endWorkDialogAccept()
     {
         _endWorkDialog.Hide();
@@ -639,7 +791,13 @@ public partial class Projects : IDisposable
         }
 
         // Update User Hours
-        await DataProvider.Users.AddTime(LogedUser.Id, DateTime.Now, sumTime);
+        await DataProvider.Users.AddDailyTime(LogedUser.Id, DateTime.Now, sumTime);
+        if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
+            await DataProvider.Users.AddPersonalTime(LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
+        if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
+            await DataProvider.Users.AddTraningTime(LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
+        if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
+            await DataProvider.Users.AddCorporateEventTime(LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
 
         _drawsChanged.Clear();
         _othersChanged.Clear();
