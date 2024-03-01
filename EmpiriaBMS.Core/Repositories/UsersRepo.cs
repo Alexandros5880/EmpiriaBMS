@@ -11,6 +11,8 @@ using System.Linq.Expressions;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.ExtensionMethods;
+using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Core.Hellpers;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>
@@ -442,4 +444,61 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
+    public async Task<UserTimes> GetTime(int userId, DateTime date)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // DailyTime
+            var dailyTimeSpans = await _context.Set<DailyTime>()
+                                          .Where(dt => 
+                                                dt.DailyUserId == userId
+                                                && dt.Date.Year.Equals(date.Year)
+                                                && dt.Date.Month.Equals(date.Month)
+                                                && dt.Date.Day.Equals(date.Day))
+                                          .Include(dt => dt.TimeSpan)
+                                          .ToListAsync();
+            TimeSpan dailyTimeTotal = TimeHelper.CalculateTotalTime(dailyTimeSpans);
+
+            // PersonalTime
+            var personalTimeSpans = await _context.Set<DailyTime>()
+                                            .Where(dt =>
+                                                dt.PersonalUserId == userId
+                                                && dt.Date.Year.Equals(date.Year)
+                                                && dt.Date.Month.Equals(date.Month)
+                                                && dt.Date.Day.Equals(date.Day))
+                                          .Include(dt => dt.TimeSpan)
+                                          .ToListAsync();
+            TimeSpan personalTimeTotal = TimeHelper.CalculateTotalTime(personalTimeSpans);
+
+            // TrainingTime
+            var trainingTimeSpans = await _context.Set<DailyTime>()
+                                          .Where(dt =>
+                                                dt.TrainingUserId == userId
+                                                && dt.Date.Year.Equals(date.Year)
+                                                && dt.Date.Month.Equals(date.Month)
+                                                && dt.Date.Day.Equals(date.Day))
+                                          .Include(dt => dt.TimeSpan)
+                                          .ToListAsync();
+            TimeSpan trainingTimeTotal = TimeHelper.CalculateTotalTime(trainingTimeSpans);
+
+            // CorporateEventTime
+            var corporateEventTimeSpans = await _context.Set<DailyTime>()
+                                          .Where(dt =>
+                                                dt.CorporateUserId == userId
+                                                && dt.Date.Year.Equals(date.Year)
+                                                && dt.Date.Month.Equals(date.Month)
+                                                && dt.Date.Day.Equals(date.Day))
+                                          .Include(dt => dt.TimeSpan)
+                                          .ToListAsync();
+            TimeSpan corporateEventTimeTotal = TimeHelper.CalculateTotalTime(corporateEventTimeSpans);
+
+            return new UserTimes()
+            {
+                DailyTime = dailyTimeTotal,
+                PersonalTime = personalTimeTotal,
+                TrainingTime = trainingTimeTotal,
+                CorporateEventTime = corporateEventTimeTotal
+            };
+        }
+    }
 }
