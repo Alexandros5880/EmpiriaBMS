@@ -28,6 +28,16 @@ public partial class Projects : IDisposable
     public double LogesUserHours { get; set; } = 0;
     [Parameter]
     public ICollection<RoleVM> LoggedUserRoles { get; set; }
+    bool getAllDisciplines => LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO");
+    bool getAllDrawings => LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO");
 
     // General Fields
     private bool disposedValue;
@@ -333,13 +343,7 @@ public partial class Projects : IDisposable
         _selectedDraw = null;
         _selectedOther = null;
 
-        var getAll = LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
-                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
-                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
-                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
-                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO");
-
-        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, LogedUser.Id, getAll);
+        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, LogedUser.Id, getAllDisciplines);
 
         _disciplines.Clear();
         foreach (var di in disciplines)
@@ -354,8 +358,8 @@ public partial class Projects : IDisposable
 
         _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
-        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id);
-        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id);
+        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, LogedUser.Id, getAllDrawings);
+        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, LogedUser.Id, true);
 
         _draws.Clear();
         foreach (var di in draws)

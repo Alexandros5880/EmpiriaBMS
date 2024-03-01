@@ -98,6 +98,44 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
+    public async Task<List<DrawingDto>> GetDraws(int id, int userId, bool all)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Drawing> drawings;
+            var disciplineDrawingsIds = await _context
+                                         .Set<Drawing>()
+                                         .Where(d => d.DisciplineId == id)
+                                         .Select(d => d.Id)
+                                         .ToListAsync();
+            if (all)
+            {
+                drawings = await _context.Set<Drawing>()
+                                         .Where(d => disciplineDrawingsIds.Contains(d.Id))
+                                         .Include(d => d.Type)
+                                         .ToListAsync();
+            }
+            else
+            {
+                var drawingIds = await _context.Set<DrawingEmployee>()
+                                                    .Where(de => disciplineDrawingsIds.Contains(de.DrawingId))
+                                                    .Where(de => de.EmployeeId == userId)
+                                                    .Select(de => de.DrawingId)
+                                                    .ToListAsync();
+
+                drawings = await _context.Set<Drawing>()
+                                         .Where(d => drawingIds.Contains(d.Id))
+                                         .Include(d => d.Type)
+                                         .ToListAsync();
+            }
+
+            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drawings);
+        }
+    }
+
     public async Task<List<OtherDto>> GetOthers(int id)
     {
         if (id == 0)
@@ -110,6 +148,44 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                              .Where(d => d.DisciplineId == id)
                              .Include(d => d.Type)
                              .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+        }
+    }
+
+    public async Task<List<OtherDto>> GetOthers(int id, int userId, bool all)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Other> others;
+            var disciplineOthersIds = await _context
+                                         .Set<Other>()
+                                         .Where(d => d.DisciplineId == id)
+                                         .Select(d => d.Id)
+                                         .ToListAsync();
+            if (all)
+            {
+                others = await _context.Set<Other>()
+                                       .Where(o => disciplineOthersIds.Contains(o.Id))
+                                       .Include(d => d.Type)
+                                       .ToListAsync();
+            }
+            else
+            {
+                var otherIds = await _context.Set<OtherEmployee>()
+                                                    .Where(de => disciplineOthersIds.Contains(de.OtherId))
+                                                    .Where(de => de.EmployeeId == userId)
+                                                    .Select(de => de.OtherId)
+                                                    .ToListAsync();
+
+                others = await _context.Set<Other>()
+                                       .Where(o => otherIds.Contains(o.Id))
+                                       .Include(d => d.Type)
+                                       .ToListAsync();
+            }
 
             return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
         }
