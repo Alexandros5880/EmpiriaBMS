@@ -1,0 +1,54 @@
+﻿<div class="text-center">
+    <h3>User Time</h3>
+</div>
+<div class="table-responsive p-1 table-container">
+    <table class="table table-hover table-success text-center">
+        <thead>
+            <tr>
+                <th scope="col" class="sticky-header">Name</th>
+                <th scope="col" class="sticky-header">Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="align-middle">
+                <td class="align-middle">
+                    <labe>DailyTime</labe>
+                </td>
+                <td class="align-middle">
+                    <labe>0</labe>
+                </td>
+            </tr>
+            <tr class="align-middle">
+                <td class="align-middle">
+                    <labe>PersonalTime</labe>
+                </td>
+                <td class="align-middle">
+                    <labe>0</labe>
+                </td>
+            </tr>
+            <tr class="align-middle">
+                <td class="align-middle">
+                    <labe>TrainingTime</labe>
+                </td>
+                <td class="align-middle">
+                    <labe>0</labe>
+                </td>
+            </tr>
+            <tr class="align-middle">
+                <td class="align-middle">
+                    <labe>CorporateEventTime</labe>
+                </td>
+                <td class="align-middle">
+                    <labe>0</labe>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@code {
+
+    [Parameter]
+    public UserVM LogedUser { get; set; }
+
+}

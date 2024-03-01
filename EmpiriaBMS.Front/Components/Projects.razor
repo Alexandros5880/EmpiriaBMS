@@ -114,73 +114,75 @@ else
                         <!-- Table Projects -->
                         @if (!_isEndWorkDialogOdepened)
                         {
-                            <div class="col-xxl-4 col-xl-7 col-lg-7 col-md-7 col-sm-12">
-                                <div class="text-center">
-                                    <h3>Projects</h3>
-                                </div>
-                                <div class="table-responsive p-1 table-container">
-                                    <table class="table table-hover table-success text-center">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="sticky-header">Project</th>
-                                                <th scope="col" class="sticky-header">Work Package Declared Completed</th>
-                                                <th scope="col" class="sticky-header">Estimated Hours Completed</th>
-                                                <th scope="col" class="sticky-header">Deadline</th>
-                                                @if (EditProject)
-                                                {
-                                                    <th scope="col"></th>
-                                                }
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var project in _projects)
-                                            {
-                                                <tr class="align-middle
-                                                            @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-danger" : ""))"
-                                                    @onclick="@(async () => await OnSelectProject(project.Id))">
-                                                    
-                                                    <td class="align-middle
-                                                        @((_selectedProject == null || 
-                                                                !_selectedProject.Id.Equals(project.Id)
-                                                                                ? "" : "highlight_1"))"
-                                                        style="word-wrap: break-word;min-width: 110px;max-width: 110px;">
-                                                        <labe>@project.Name</labe>
-                                                    </td>
-                                                    
-                                                    <td class="align-middle
-                                                        @((_selectedProject == null ||
-                                                                !_selectedProject.Id.Equals(project.Id)
-                                                                                ? "" : "highlight_1"))">
-                                                        <label>@project.WorkPackegedCompleted %</label>
-                                                    </td>
-                                                    
-                                                    <td class="align-middle
-                                                        @((_selectedProject == null ||
-                                                                !_selectedProject.Id.Equals(project.Id)
-                                                                                ? "" : "highlight_1"))">
-                                                        <label>@project.EstimatedCompleted %</label>
-                                                    </td>
-                                                    
-                                                    <td class="align-middle
-                                                        @((_selectedProject == null ||
-                                                                !_selectedProject.Id.Equals(project.Id)
-                                                                                ? "" : "highlight_1"))">
-                                                        <label>@project.DeadlineDisplay</label>
-                                                    </td>
-
+                            <div class="col-xxl-4 col-xl-7 col-lg-7 col-md-7 col-sm-12 row">
+                                <div class="col-12">
+                                    <div class="text-center">
+                                        <h3>Projects</h3>
+                                    </div>
+                                    <div class="table-responsive p-1 table-container">
+                                        <table class="table table-hover table-success text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="sticky-header">Project</th>
+                                                    <th scope="col" class="sticky-header">Work Package Declared Completed</th>
+                                                    <th scope="col" class="sticky-header">Estimated Hours Completed</th>
+                                                    <th scope="col" class="sticky-header">Deadline</th>
                                                     @if (EditProject)
                                                     {
-                                                        <td class="align-middle">
-                                                            <span class="clarity--assign-user-line"
-                                                                  @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                            </span>
-                                                        </td>
+                                                        <th scope="col"></th>
                                                     }
-
                                                 </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var project in _projects)
+                                                {
+                                                    <tr class="align-middle
+                                                                @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-danger" : ""))"
+                                                        @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                    
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null || 
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "highlight_1"))"
+                                                            style="word-wrap: break-word;">
+                                                            <labe>@project.Name</labe>
+                                                        </td>
+                                                    
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "highlight_1"))">
+                                                            <label>@project.WorkPackegedCompleted %</label>
+                                                        </td>
+                                                    
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "highlight_1"))">
+                                                            <label>@project.EstimatedCompleted %</label>
+                                                        </td>
+                                                    
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "highlight_1"))">
+                                                            <label>@project.DeadlineDisplay</label>
+                                                        </td>
+
+                                                        @if (EditProject)
+                                                        {
+                                                            <td class="align-middle">
+                                                                <span class="clarity--assign-user-line"
+                                                                      @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                </span>
+                                                            </td>
+                                                        }
+
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -350,6 +352,17 @@ else
                             </div>
                         }
 
+                    </div>
+
+                    <div class="row mt-4 p-1
+                                gx-xl-2 gx-lg-2 gx-md-2 gx-sm-2
+                                gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
+                        <div class="col-xxl-4 col-xl-7 col-lg-7 col-md-7 col-sm-12 row">
+                            <!-- User Extra Hours -->
+                            <div class="col-12">
+                                <UserTime LogedUser="@LogedUser" />
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Paginator -->

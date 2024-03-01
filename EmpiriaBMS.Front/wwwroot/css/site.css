@@ -118,7 +118,7 @@ code {
 }
 
 .table-container {
-    min-height: 72vh;
+    min-height: 34vh;
     max-height: 72vh;
     overflow-x: hidden;
     overflow-y: auto;
