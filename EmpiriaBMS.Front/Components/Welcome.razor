@@ -96,6 +96,11 @@ else
             _loggedUserRoles = (await DataProvider.Roles.GetEmplyeeRoles(dbUser.Id))
                                                         .Select(r => Mapper.Map<RoleVM>(r))
                                                         .ToList();
+
+            // if (_loggedUserRoles.Select(r => r.Name).ToList().Contains("Admin"))
+            // {
+                
+            // }
         }
         catch (Exception ex)
         {

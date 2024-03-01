@@ -58,6 +58,7 @@ public class AppDbContext : DbContext
         var role_6_id = random.Next(123456789, 999999999);
         var role_7_id = random.Next(123456789, 999999999);
         var role_8_id = random.Next(123456789, 999999999);
+        var role_9_id = random.Next(123456789, 999999999);
 
         var employes_roles_ids = new List<int>() { role_1_id, role_2_id, role_3_id, role_4_id, role_5_id, role_6_id }.ToArray();
 
@@ -133,6 +134,15 @@ public class AppDbContext : DbContext
             IsEmployee = false,
         };
 
+        Role role_9 = new()
+        {
+            Id = role_9_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Admin",
+            IsEmployee = false,
+        };
+
         builder.Entity<Role>().HasData(role_1);
         builder.Entity<Role>().HasData(role_2);
         builder.Entity<Role>().HasData(role_3);
@@ -141,8 +151,34 @@ public class AppDbContext : DbContext
         builder.Entity<Role>().HasData(role_6);
         builder.Entity<Role>().HasData(role_7);
         builder.Entity<Role>().HasData(role_8);
+        builder.Entity<Role>().HasData(role_9);
 
-        #region Create Users With Roles:  CEO, CTO, COO, Guest,
+        #region Create Users With Roles:  Admin, CEO, CTO, COO, Guest,
+        // Admin
+        var adminId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        User admin = new User()
+        {
+            Id = adminId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Email = $"admin@gmail.com",
+            LastName = "Alexandros",
+            FirstName = "Platanios",
+            Phone1 = "694927778",
+            Description = "Admin"
+        };
+        builder.Entity<User>().HasData(admin);
+
+        UserRole adminRole = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = adminId,
+            RoleId = role_9_id
+        };
+        builder.Entity<UserRole>().HasData(adminRole);
+
         // CEO
         var ceoId = random.Next(123456789, 999999999) + random.Next(0, 33);
         User ceo = new User()

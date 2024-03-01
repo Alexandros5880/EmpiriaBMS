@@ -46,19 +46,6 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private long _menHours;
-    public long MenHours
-    {
-        get => _menHours;
-        set
-        {
-            if (value == _menHours)
-                return;
-            _menHours = value;
-            NotifyPropertyChanged(nameof(MenHours));
-        }
-    }
-
     private float _completed;
     public float Completed
     {

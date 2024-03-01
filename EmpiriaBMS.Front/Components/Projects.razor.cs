@@ -32,12 +32,14 @@ public partial class Projects : IDisposable
                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO");
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
     bool getAllDrawings => LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
                     || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO");
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
 
     // General Fields
     private bool disposedValue;

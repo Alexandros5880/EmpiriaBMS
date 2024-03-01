@@ -138,6 +138,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
             // Calculate Parent Project Complition
             var disciplines = await _context.Set<Discipline>()
                                             .Where(d => d.ProjectId == projectId)
+                                            .Include(d => d.Project)
                                             .ToListAsync();
             var project = discipline.Project;
             var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
