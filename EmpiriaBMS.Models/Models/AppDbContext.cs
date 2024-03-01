@@ -664,21 +664,21 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Connect Every Draftman With Every Other
-        //for (var o = 0; o < others.Count; o++)
-        //{
-        //    for (var d = 0; d < draftsmen.Count; d++)
-        //    {
-        //        OtherEmployee de_1 = new OtherEmployee()
-        //        {
-        //            Id = random.Next(123456789, 999999999) * 9,
-        //            CreatedDate = DateTime.Now,
-        //            LastUpdatedDate = DateTime.Now,
-        //            EmployeeId = draftsmen[d].Id,
-        //            OtherId = others[o].Id
-        //        };
-        //        builder.Entity<OtherEmployee>().HasData(de_1);
-        //    }
-        //}
+        for (var o = 0; o < others.Count; o++)
+        {
+            for (var d = 0; d < draftsmen.Count; d++)
+            {
+                OtherEmployee de_1 = new OtherEmployee()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    EmployeeId = draftsmen[d].Id,
+                    OtherId = others[o].Id
+                };
+                builder.Entity<OtherEmployee>().HasData(de_1);
+            }
+        }
         #endregion
 
         #region Connect Every Draftman With Every Drawing
