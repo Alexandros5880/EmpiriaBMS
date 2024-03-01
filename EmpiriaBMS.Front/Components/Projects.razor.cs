@@ -76,9 +76,9 @@ public partial class Projects : IDisposable
 
     // Working Timer
     Timer timer;
-    DateTime StartWorkTime = DateTime.Now;
     bool isWorkingMode = false;
-    TimeSpan timePassed = TimeSpan.Zero;
+    TimeSpan StartWorkTime = TimeSpan.Zero;
+    TimeSpan elapsedTime = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
     TimeSpan remainingTime = TimeSpan.Zero;
 
@@ -125,6 +125,7 @@ public partial class Projects : IDisposable
     protected override async void OnInitialized()
     {
         base.OnInitialized();
+        isWorkingMode = TimerService.IsRunning(LogedUser.Id.ToString());
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -458,26 +459,25 @@ public partial class Projects : IDisposable
     #endregion
 
     #region Timer
+    private void UpdateElapsedTime()
+    {
+        elapsedTime = TimerService.GetElapsedTime(LogedUser.Id.ToString());
+        InvokeAsync(StateHasChanged);
+    }
+
     private async Task StartTimer()
     {
         // TODO: Projects Timer -> Change """ timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7); """ TO """ DateTime.Now """
-        StartWorkTime = timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7).AddMinutes(-10);
-        timer = new System.Threading.Timer((_) =>
-        {
-            timePassed = DateTime.Now - StartWorkTime;
-            if (timePaused != TimeSpan.Zero)
-                timePassed += timePaused;
+        StartWorkTime = DateTime.Now.AddHours(-7).AddMinutes(-10).TimeOfDay;
 
-            InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
-        }, null, 0, 1000);
+        timer = new Timer(_ => UpdateElapsedTime(), null, 0, 1000);
+        TimerService.StartTimer(LogedUser.Id.ToString(), StartWorkTime);
     }
 
     private void StopTimer()
     {
-        timePaused = timePassed;
+        TimerService.StopTimer(LogedUser.Id.ToString());
+        timePaused = TimerService.GetPausedTime(LogedUser.Id.ToString());
         timer.Dispose();
     }
     #endregion
@@ -904,7 +904,7 @@ public partial class Projects : IDisposable
         {
             if (disposing)
             {
-
+                
             }
             disposedValue = true;
         }

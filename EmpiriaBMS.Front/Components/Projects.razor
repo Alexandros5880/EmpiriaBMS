@@ -1,6 +1,7 @@
 ﻿@page "/projects"
 @using Microsoft.Fast.Components.FluentUI
-@using EmpiriaBMS.Front.Components.General; 
+@using EmpiriaBMS.Front.Components.General;
+@using EmpiriaBMS.Front.Horizontal;
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -10,6 +11,7 @@
 @inject NavigationManager MyNavigationManager
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
+@inject TimerService TimerService
 
 @if (_startLoading)
 {
@@ -59,7 +61,7 @@ else
                                             {
                                                 <button type="button" class="btn btn-danger btn-lg w-50"
                                                         @onclick="@(async () => await StopWorkClick())">
-                                                    <span>@timePassed.ToString(@"hh\:mm\:ss")</span>
+                                                    <span>@elapsedTime.ToString(@"hh\:mm\:ss")</span>
                                                 </button>
                                             }
                                             else

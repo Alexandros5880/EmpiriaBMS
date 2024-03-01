@@ -19,6 +19,7 @@ builder.Services.AddServerSideBlazor();
 var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
+builder.Services.AddSingleton<TimerService>();
 
 // Data Providing Dependency Injection
 builder.Services.AddDbContextFactory<AppDbContext>();
