@@ -25,9 +25,9 @@ public class AppDbContext : DbContext
     public DbSet<ManHour> ManHours { get; set; }
     public DbSet<ManHour> ProjectType { get; set; }
     public DbSet<DailyHour> DailyHours { get; set; }
-    public DbSet<ParsonalTime> ParsonalTime { get; set; }
-    public DbSet<TrainingTime> TrainingTime { get; set; }
-    public DbSet<CorporateEventTime> CorporateEventTime { get; set; }
+    public DbSet<DailyHour> ParsonalTime { get; set; }
+    public DbSet<DailyHour> TrainingTime { get; set; }
+    public DbSet<DailyHour> CorporateEventTime { get; set; }
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }

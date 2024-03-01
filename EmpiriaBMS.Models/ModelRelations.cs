@@ -125,32 +125,30 @@ public static class ModelRelations
         // User DailyHours
         builder.Entity<User>()
                     .HasMany(u => u.DailyHours)
-                    .WithOne(d => d.User)
-                    .HasForeignKey(d => d.UserId);
+                    .WithOne(d => d.DailyUser)
+                    .HasForeignKey(d => d.DailyUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         // User PersonalTime
         builder.Entity<User>()
                     .HasMany(u => u.PersonalTime)
-                    .WithOne(d => d.User)
-                    .HasForeignKey(d => d.UserId);
+                    .WithOne(d => d.PersonalUser)
+                    .HasForeignKey(d => d.PersonalUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         // User TrainingTime
         builder.Entity<User>()
                     .HasMany(u => u.TrainingTime)
-                    .WithOne(d => d.User)
-                    .HasForeignKey(d => d.UserId);
+                    .WithOne(d => d.TrainingUser)
+                    .HasForeignKey(d => d.TrainingUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         // User CorporateEvents
         builder.Entity<User>()
                     .HasMany(u => u.CorporateEventTime)
-                    .WithOne(d => d.User)
-                    .HasForeignKey(d => d.UserId);
-
-        // User ManHours
-        builder.Entity<User>()
-                    .HasMany(p => p.Hours)
-                    .WithOne(c => c.User)
-                    .HasForeignKey(c => c.UserId);
+                    .WithOne(d => d.CorporateUser)
+                    .HasForeignKey(d => d.CorporateUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         // Project ManHours
         builder.Entity<Project>()

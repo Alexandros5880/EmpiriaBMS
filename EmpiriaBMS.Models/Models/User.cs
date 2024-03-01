@@ -36,8 +36,6 @@ public class User : Entity
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
 
-    public ICollection<ManHour> Hours { get; set; }
-
     public ICollection<Project> Projects { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }
@@ -54,9 +52,9 @@ public class User : Entity
 
     public ICollection<DailyHour> DailyHours { get; set; }
 
-    public ICollection<ParsonalTime> PersonalTime { get; set; }
+    public ICollection<DailyHour> PersonalTime { get; set; }
 
-    public ICollection<TrainingTime> TrainingTime { get; set; }
+    public ICollection<DailyHour> TrainingTime { get; set; }
 
-    public ICollection<CorporateEventTime> CorporateEventTime { get; set; }
+    public ICollection<DailyHour> CorporateEventTime { get; set; }
 }

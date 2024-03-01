@@ -321,7 +321,7 @@ public class UsersRepo : Repository<UserDto, User>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var dailyHours = await _context.Set<DailyHour>()
-                                     .Where(u => u.UserId == userId)
+                                     .Where(u => u.DailyUserId == userId)
                                      .ToListAsync();
             
             var dailyHour = dailyHours.FirstOrDefault(d => d.Date.CompareTo(date) == 0);
@@ -346,7 +346,7 @@ public class UsersRepo : Repository<UserDto, User>
             var lastMondaysDate = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
 
             return await _context.Set<DailyHour>()
-                                           .Where(u => u.UserId == userId)
+                                           .Where(u => u.DailyUserId == userId)
                                            .Where(u => u.Date.CompareTo(lastMondaysDate) > 0)
                                            .Select(u => u.TimeSpan.Hours)
                                            .SumAsync();
@@ -361,7 +361,7 @@ public class UsersRepo : Repository<UserDto, User>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return await _context.Set<DailyHour>()
-                           .Where(u => u.UserId == userId)
+                           .Where(u => u.DailyUserId == userId)
                            .Select(d => d.TimeSpan.Hours)
                            .SumAsync();
         }
@@ -379,7 +379,7 @@ public class UsersRepo : Repository<UserDto, User>
         {
             var dateBeforeWeek = date.AddDays(-7);
             return await _context.Set<DailyHour>()
-                                           .Where(u => u.UserId == userId)
+                                           .Where(u => u.DailyUserId == userId)
                                            .Where(u => u.Date.CompareTo(dateBeforeWeek) > 0)
                                            .Select(u => u.TimeSpan.Hours)
                                            .SumAsync();
@@ -406,9 +406,12 @@ public class UsersRepo : Repository<UserDto, User>
                 // Get Yesterday DailyHour
                 var yesterdayDate = date.AddDays(-1);
                 var yesterdayDailyHour = await _context.Set<DailyHour>()
-                                                   .Where(u => u.UserId == userId)
+                                                   .Where(u => u.DailyUserId == userId)
                                                    .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
-                
+
+                if (yesterdayDailyHour == null)
+                    throw new NullReferenceException(nameof(yesterdayDailyHour));
+
                 var timespan = yesterdayDailyHour.TimeSpan;
                 var newHours = timespan.Hours + hours;
                 yesterdayDailyHour.TimeSpan = new Timespan(
@@ -422,7 +425,16 @@ public class UsersRepo : Repository<UserDto, User>
             {
                 var result = await _context.Set<DailyHour>()
                                        .AddAsync(
-                    new DailyHour { UserId = userId, Date = date }
+                    new DailyHour {
+                        DailyUserId = userId,
+                        Date = date,
+                        TimeSpan = new Timespan(
+                            0,
+                            hours,
+                            0,
+                            0
+                        )
+                    }
                 );
 
                 return result.Entity;

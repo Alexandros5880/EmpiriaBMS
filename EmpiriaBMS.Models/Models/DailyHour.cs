@@ -17,6 +17,15 @@ public class DailyHour : Entity
 
     public Timespan TimeSpan { get; set; }
 
-    public int UserId { get; set; }
-    public User User { get; set; }
+    public int? DailyUserId { get; set; }
+    public User DailyUser { get; set; }
+
+    public int? PersonalUserId { get; set; }
+    public User PersonalUser { get; set; }
+
+    public int? TrainingUserId { get; set; }
+    public User TrainingUser { get; set; }
+
+    public int? CorporateUserId { get; set; }
+    public User CorporateUser { get; set; }
 }
