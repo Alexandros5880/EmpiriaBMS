@@ -181,11 +181,8 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                         .FirstOrDefaultAsync(p => p.Id == projectId);
             if (project == null)
                 throw new NullReferenceException(nameof(project));
-            var projectMenHours = await _context.Set<DailyTime>()
-                                                .Where(dt => dt.ProjectId == project.Id)
-                                                .Include(dt => dt.TimeSpan)
-                                                .Select(dt => dt.TimeSpan.Hours)
-                                                .SumAsync();
+            var projectsTimes = project.DailyTime.Select(dt => dt.TimeSpan).ToList();
+            var projectMenHours = projectsTimes.Select(t => t.Hours).Sum();
 
             decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
             project.EstimatedCompleted = (float)divitionProResult * 100;

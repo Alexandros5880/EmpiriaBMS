@@ -46,6 +46,19 @@ public class DisciplineVM : BaseVM
         }
     }
 
+    private float _estimatedCompleted;
+    public float EstimatedCompleted
+    {
+        get => _estimatedCompleted;
+        set
+        {
+            if (value == _estimatedCompleted)
+                return;
+            _estimatedCompleted = value;
+            NotifyPropertyChanged(nameof(EstimatedCompleted));
+        }
+    }
+
     private float _completed;
     public float Completed
     {
