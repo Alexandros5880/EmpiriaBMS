@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class DisciplineDraw : Entity
+public class OtherEmployee : Entity
 {
-    public int DisciplineId { get; set; }
-    public Discipline Discipline { get; set; }
+    public int OtherId { get; set; }
+    public Other Other { get; set; }
 
-    public int DrawId { get; set; }
-    public Draw Draw { get; set; }
+    public int EmployeeId { get; set; }
+    public User Employee { get; set; }
 }
-

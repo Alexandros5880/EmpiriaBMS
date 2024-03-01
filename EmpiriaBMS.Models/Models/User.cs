@@ -42,7 +42,19 @@ public class User : Entity
 
     public ICollection<UserRole> UserRoles { get; set; }
     
-    public ICollection<DisciplineEmployee> DisciplineEmployees { get; set; }
+    public ICollection<DrawingEmployee> DrawingsEmployees { get; set; }
 
-    public ICollection<DailyHour> DailyHours { get; set; }
+    public ICollection<OtherEmployee> OthersEmployees { get; set; }
+
+    public ICollection<ProjectPmanager> ProjectsPmanagers { get; set; }
+
+    public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<DailyTime> PersonalTime { get; set; }
+
+    public ICollection<DailyTime> TrainingTime { get; set; }
+
+    public ICollection<DailyTime> CorporateEventTime { get; set; }
 }

@@ -10,12 +10,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class Draw : Entity
+public class Drawing : Entity
 {
     [Required]
-    public string Name { get; set; }
+    public int TypeId { get; set; }
+    public DrawingType Type { get; set; }
 
-    public long MenHours { get; set; }
+    [Required]
+    public int DisciplineId { get; set; }
+    public Discipline Discipline { get; set; }
 
     public float CompletionEstimation { get; set; }
 
@@ -23,5 +26,7 @@ public class Draw : Entity
     [Column(TypeName = "datetime2")]
     public DateTime? CompletionDate { get; set; }
 
-    public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
+    public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<DrawingEmployee> DrawingsEmployees { get; set; }
 }

@@ -1,0 +1,60 @@
+﻿@using EmpiriaBMS.Core.ReturnModels
+@inject IDataProvider DataProvider
+
+@if (LogedUserTimes != null)
+{
+    <div class="text-center">
+        <h3>User Time</h3>
+    </div>
+    <div class="table-responsive p-1 table-container">
+        <table class="table table-hover table-success text-center">
+            <thead>
+                <tr>
+                    <th scope="col" class="sticky-header">Name</th>
+                    <th scope="col" class="sticky-header">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="align-middle">
+                    <td class="align-middle">
+                        <labe>Today's Time</labe>
+                    </td>
+                    <td class="align-middle">
+                        <labe>@LogedUserTimes.DailyTime.ToString(@"hh\:mm")</labe>
+                    </td>
+                </tr>
+                <tr class="align-middle">
+                    <td class="align-middle">
+                        <labe>Personal Time</labe>
+                    </td>
+                    <td class="align-middle">
+                        <labe>@LogedUserTimes.PersonalTime.ToString(@"hh\:mm")</labe>
+                    </td>
+                </tr>
+                <tr class="align-middle">
+                    <td class="align-middle">
+                        <labe>Training Time</labe>
+                    </td>
+                    <td class="align-middle">
+                        <labe>@LogedUserTimes.TrainingTime.ToString(@"hh\:mm")</labe>
+                    </td>
+                </tr>
+                <tr class="align-middle">
+                    <td class="align-middle">
+                        <labe>Corporate Event Time</labe>
+                    </td>
+                    <td class="align-middle">
+                        <labe>@LogedUserTimes.CorporateEventTime.ToString(@"hh\:mm")</labe>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public UserTimes LogedUserTimes { get; set; }
+
+}

@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Dtos;
 
-public class DrawDto : EntityDto
+public class DrawingDto : EntityDto
 {
-    public string Name { get; set; }
-
-    public long MenHours { get; set; }
+    public int TypeId { get; set; }
+    public DrawingType Type { get; set; }
 
     public float CompletionEstimation { get; set; }
 

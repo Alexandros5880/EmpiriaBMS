@@ -11,23 +11,24 @@ namespace EmpiriaBMS.Models.Models;
 
 public class Discipline : Entity
 {
-    [Required]
-    public string Name { get; set; }
-
     public long EstimatedHours { get; set; }
 
-    public long MenHours { get; set; }
+    public float EstimatedCompleted { get; set; }
 
     public float Completed { get; set; }
 
-    public int? EngineerId { get; set; }
-    public User? Engineer { get; set; }
+    public int ProjectId { get; set; }
+    public Project Project { get; set; }
 
-    public ICollection<DisciplineEmployee> DisciplineEmployees { get; set; }
+    [Required]
+    public int TypeId { get; set; }
+    public DisciplineType Type { get; set; }
 
-    public ICollection<DisciplineOther> DisciplinesOthers { get; set; }
+    public ICollection<Drawing> Drawings { get; set; }
 
-    public ICollection<DisciplineDraw> DisciplinesDraws { get; set; }
+    public ICollection<Other> Others { get; set; }
 
-    public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
+    public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 }

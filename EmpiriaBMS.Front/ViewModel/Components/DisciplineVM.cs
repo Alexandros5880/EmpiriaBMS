@@ -1,21 +1,35 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class DisciplineVM : BaseVM
 {
-    private string _name;
-    public string Name
+    private int _typeId;
+    public int TypeId
     {
-        get => _name;
+        get => _typeId;
         set
         {
-            if (value == _name)
+            if (value == _typeId)
                 return;
-            _name = value;
-            NotifyPropertyChanged(nameof(Name));
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
+    private DisciplineType _type;
+    public DisciplineType Type
+    {
+        get => _type;
+        set
+        {
+            if (value == _type)
+                return;
+            _type = value;
+            NotifyPropertyChanged(nameof(Type));
         }
     }
 
@@ -32,16 +46,16 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private long _menHours;
-    public long MenHours
+    private float _estimatedCompleted;
+    public float EstimatedCompleted
     {
-        get => _menHours;
+        get => _estimatedCompleted;
         set
         {
-            if (value == _menHours)
+            if (value == _estimatedCompleted)
                 return;
-            _menHours = value;
-            NotifyPropertyChanged(nameof(MenHours));
+            _estimatedCompleted = value;
+            NotifyPropertyChanged(nameof(EstimatedCompleted));
         }
     }
 
@@ -55,19 +69,6 @@ public class DisciplineVM : BaseVM
                 return;
             _completed = value;
             NotifyPropertyChanged(nameof(Completed));
-        }
-    }
-
-    private User? _engineer;
-    public User? Engineer
-    {
-        get => _engineer;
-        set
-        {
-            if (value == _engineer)
-                return;
-            _engineer = value;
-            NotifyPropertyChanged(nameof(Engineer));
         }
     }
 }

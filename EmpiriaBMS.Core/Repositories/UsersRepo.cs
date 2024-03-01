@@ -11,11 +11,22 @@ using System.Linq.Expressions;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.ExtensionMethods;
+using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Core.Hellpers;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>
 {
     public UsersRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+
+    public async Task<bool> Exists(string email)
+    {
+        if (email == null)
+            return false;
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            return await _context.Set<User>().AnyAsync(u => u.Email.Equals(email));
+    }
 
     public new async Task<UserDto?> Get(int id)
     {
@@ -28,7 +39,6 @@ public class UsersRepo : Repository<UserDto, User>
                              .Set<User>()
                              .Include(r => r.Disciplines)
                              .Include(r => r.UserRoles)
-                             .Include(r => r.DisciplineEmployees)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<UserDto>(u);
@@ -54,7 +64,6 @@ public class UsersRepo : Repository<UserDto, User>
                                  .Take(pageSize)
                                  .Include(r => r.Disciplines)
                                  .Include(r => r.UserRoles)
-                                 .Include(r => r.DisciplineEmployees)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(us);
@@ -84,7 +93,6 @@ public class UsersRepo : Repository<UserDto, User>
                                .Take(pageSize)
                                .Include(r => r.Disciplines)
                                .Include(r => r.UserRoles)
-                               .Include(r => r.DisciplineEmployees)
                                .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(us);
@@ -126,7 +134,6 @@ public class UsersRepo : Repository<UserDto, User>
             var users = await _context.Users.Where(u => employeeIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
@@ -161,7 +168,6 @@ public class UsersRepo : Repository<UserDto, User>
             users = await _context.Users.Where(u => employeeIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .Skip((pageIndex - 1) * pageSize)
                                        .Take(pageSize)
                                        .ToListAsync();
@@ -202,7 +208,6 @@ public class UsersRepo : Repository<UserDto, User>
             users = await _context.Users.Where(u => employeeIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .Where(expresion)
                                        .Skip((pageIndex - 1) * pageSize)
                                        .Take(pageSize)
@@ -228,7 +233,6 @@ public class UsersRepo : Repository<UserDto, User>
             var users = await _context.Users.Where(u => customerIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
@@ -261,7 +265,6 @@ public class UsersRepo : Repository<UserDto, User>
             users = await _context.Users.Where(u => customerIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .Skip((pageIndex - 1) * pageSize)
                                        .Take(pageSize)
                                        .ToListAsync();
@@ -300,7 +303,6 @@ public class UsersRepo : Repository<UserDto, User>
             users = await _context.Users.Where(u => customerIds.Contains(u.Id))
                                        .Include(r => r.Disciplines)
                                        .Include(r => r.UserRoles)
-                                       .Include(r => r.DisciplineEmployees)
                                        .Where(expresion)
                                        .Skip((pageIndex - 1) * pageSize)
                                        .Take(pageSize)
@@ -320,8 +322,8 @@ public class UsersRepo : Repository<UserDto, User>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var dailyHours = await _context.Set<DailyHour>()
-                                     .Where(u => u.UserId == userId)
+            var dailyHours = await _context.Set<DailyTime>()
+                                     .Where(u => u.DailyUserId == userId)
                                      .ToListAsync();
             
             var dailyHour = dailyHours.FirstOrDefault(d => d.Date.CompareTo(date) == 0);
@@ -345,8 +347,8 @@ public class UsersRepo : Repository<UserDto, User>
         {
             var lastMondaysDate = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
 
-            return await _context.Set<DailyHour>()
-                                           .Where(u => u.UserId == userId)
+            return await _context.Set<DailyTime>()
+                                           .Where(u => u.DailyUserId == userId)
                                            .Where(u => u.Date.CompareTo(lastMondaysDate) > 0)
                                            .Select(u => u.TimeSpan.Hours)
                                            .SumAsync();
@@ -360,8 +362,8 @@ public class UsersRepo : Repository<UserDto, User>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<DailyHour>()
-                           .Where(u => u.UserId == userId)
+            return await _context.Set<DailyTime>()
+                           .Where(u => u.DailyUserId == userId)
                            .Select(d => d.TimeSpan.Hours)
                            .SumAsync();
         }
@@ -378,15 +380,15 @@ public class UsersRepo : Repository<UserDto, User>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var dateBeforeWeek = date.AddDays(-7);
-            return await _context.Set<DailyHour>()
-                                           .Where(u => u.UserId == userId)
+            return await _context.Set<DailyTime>()
+                                           .Where(u => u.DailyUserId == userId)
                                            .Where(u => u.Date.CompareTo(dateBeforeWeek) > 0)
                                            .Select(u => u.TimeSpan.Hours)
                                            .SumAsync();
         }
     }
 
-    public async Task<DailyHour> AddHours(int userId, DateTime date, long hours)
+    public async Task<DailyTime> AddDailyTime(int userId, DateTime date, TimeSpan ts)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -405,12 +407,15 @@ public class UsersRepo : Repository<UserDto, User>
             {
                 // Get Yesterday DailyHour
                 var yesterdayDate = date.AddDays(-1);
-                var yesterdayDailyHour = await _context.Set<DailyHour>()
-                                                   .Where(u => u.UserId == userId)
+                var yesterdayDailyHour = await _context.Set<DailyTime>()
+                                                   .Where(u => u.DailyUserId == userId)
                                                    .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
-                
+
+                if (yesterdayDailyHour == null)
+                    throw new NullReferenceException(nameof(yesterdayDailyHour));
+
                 var timespan = yesterdayDailyHour.TimeSpan;
-                var newHours = timespan.Hours + hours;
+                var newHours = timespan.Hours + ts.Hours;
                 yesterdayDailyHour.TimeSpan = new Timespan(
                     timespan.Days, newHours, timespan.Minutes, timespan.Seconds);
 
@@ -420,9 +425,18 @@ public class UsersRepo : Repository<UserDto, User>
             }
             else
             {
-                var result = await _context.Set<DailyHour>()
+                var result = await _context.Set<DailyTime>()
                                        .AddAsync(
-                    new DailyHour { UserId = userId, Date = date }
+                    new DailyTime {
+                        DailyUserId = userId,
+                        Date = date,
+                        TimeSpan = new Timespan(
+                            ts.Days,
+                            ts.Hours,
+                            ts.Minutes,
+                            ts.Seconds
+                        )
+                    }
                 );
 
                 return result.Entity;
@@ -430,4 +444,232 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
+    public async Task<DailyTime> AddPersonalTime(int userId, DateTime date, TimeSpan ts)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        if (date > DateTime.Now)
+            throw new ArgumentException(nameof(date));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Check if time is betoween 12 - 5 at morning
+            TimeSpan start = new TimeSpan(12, 0, 0);
+            TimeSpan end = new TimeSpan(5, 0, 0);
+            TimeSpan now = date.TimeOfDay;
+
+            if ((now > start) && (now < end))
+            {
+                // Get Yesterday DailyHour
+                var yesterdayDate = date.AddDays(-1);
+                var yesterdayDailyHour = await _context.Set<DailyTime>()
+                                                   .Where(u => u.PersonalUserId == userId)
+                                                   .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
+
+                if (yesterdayDailyHour == null)
+                    throw new NullReferenceException(nameof(yesterdayDailyHour));
+
+                var timespan = yesterdayDailyHour.TimeSpan;
+                var newHours = timespan.Hours + ts.Hours;
+                yesterdayDailyHour.TimeSpan = new Timespan(
+                    timespan.Days, newHours, timespan.Minutes, timespan.Seconds);
+
+                await _context.SaveChangesAsync();
+
+                return yesterdayDailyHour;
+            }
+            else
+            {
+                var result = await _context.Set<DailyTime>()
+                                       .AddAsync(
+                    new DailyTime
+                    {
+                        PersonalUserId = userId,
+                        Date = date,
+                        TimeSpan = new Timespan(
+                            ts.Days,
+                            ts.Hours,
+                            ts.Minutes,
+                            ts.Seconds
+                        )
+                    }
+                );
+
+                return result.Entity;
+            }
+        }
+    }
+
+    public async Task<DailyTime> AddTraningTime(int userId, DateTime date, TimeSpan ts)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        if (date > DateTime.Now)
+            throw new ArgumentException(nameof(date));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Check if time is betoween 12 - 5 at morning
+            TimeSpan start = new TimeSpan(12, 0, 0);
+            TimeSpan end = new TimeSpan(5, 0, 0);
+            TimeSpan now = date.TimeOfDay;
+
+            if ((now > start) && (now < end))
+            {
+                // Get Yesterday DailyHour
+                var yesterdayDate = date.AddDays(-1);
+                var yesterdayDailyHour = await _context.Set<DailyTime>()
+                                                   .Where(u => u.TrainingUserId == userId)
+                                                   .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
+
+                if (yesterdayDailyHour == null)
+                    throw new NullReferenceException(nameof(yesterdayDailyHour));
+
+                var timespan = yesterdayDailyHour.TimeSpan;
+                var newHours = timespan.Hours + ts.Hours;
+                yesterdayDailyHour.TimeSpan = new Timespan(
+                    timespan.Days, newHours, timespan.Minutes, timespan.Seconds);
+
+                await _context.SaveChangesAsync();
+
+                return yesterdayDailyHour;
+            }
+            else
+            {
+                var result = await _context.Set<DailyTime>()
+                                       .AddAsync(
+                    new DailyTime
+                    {
+                        TrainingUserId = userId,
+                        Date = date,
+                        TimeSpan = new Timespan(
+                            ts.Days,
+                            ts.Hours,
+                            ts.Minutes,
+                            ts.Seconds
+                        )
+                    }
+                );
+
+                return result.Entity;
+            }
+        }
+    }
+
+    public async Task<DailyTime> AddCorporateEventTime(int userId, DateTime date, TimeSpan ts)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        if (date > DateTime.Now)
+            throw new ArgumentException(nameof(date));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Check if time is betoween 12 - 5 at morning
+            TimeSpan start = new TimeSpan(12, 0, 0);
+            TimeSpan end = new TimeSpan(5, 0, 0);
+            TimeSpan now = date.TimeOfDay;
+
+            if ((now > start) && (now < end))
+            {
+                // Get Yesterday DailyHour
+                var yesterdayDate = date.AddDays(-1);
+                var yesterdayDailyHour = await _context.Set<DailyTime>()
+                                                   .Where(u => u.CorporateUserId == userId)
+                                                   .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
+
+                if (yesterdayDailyHour == null)
+                    throw new NullReferenceException(nameof(yesterdayDailyHour));
+
+                var timespan = yesterdayDailyHour.TimeSpan;
+                var newHours = timespan.Hours + ts.Hours;
+                yesterdayDailyHour.TimeSpan = new Timespan(
+                    timespan.Days, newHours, timespan.Minutes, timespan.Seconds);
+
+                await _context.SaveChangesAsync();
+
+                return yesterdayDailyHour;
+            }
+            else
+            {
+                var result = await _context.Set<DailyTime>()
+                                       .AddAsync(
+                    new DailyTime
+                    {
+                        CorporateUserId = userId,
+                        Date = date,
+                        TimeSpan = new Timespan(
+                            ts.Days,
+                            ts.Hours,
+                            ts.Minutes,
+                            ts.Seconds
+                        )
+                    }
+                );
+
+                return result.Entity;
+            }
+        }
+    }
+
+    public async Task<UserTimes> GetTime(int userId, DateTime date)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // DailyTime
+            var dailyTimeSpans = await _context.Set<DailyTime>()
+                                          .Where(dt => 
+                                                dt.DailyUserId == userId
+                                                && dt.Date.Year.Equals(date.Year)
+                                                && dt.Date.Month.Equals(date.Month)
+                                                && dt.Date.Day.Equals(date.Day))
+                                          .Include(dt => dt.TimeSpan)
+                                          .ToListAsync();
+            TimeSpan dailyTimeTotal = TimeHelper.CalculateTotalTime(dailyTimeSpans);
+
+            // PersonalTime
+            var personalTimeSpans = await _context.Set<DailyTime>()
+                                            .Where(dt =>
+                                                dt.PersonalUserId == userId
+                                                && dt.Date.Year.Equals(date.Year)
+                                                && dt.Date.Month.Equals(date.Month)
+                                                && dt.Date.Day.Equals(date.Day))
+                                          .Include(dt => dt.TimeSpan)
+                                          .ToListAsync();
+            TimeSpan personalTimeTotal = TimeHelper.CalculateTotalTime(personalTimeSpans);
+
+            // TrainingTime
+            var trainingTimeSpans = await _context.Set<DailyTime>()
+                                          .Where(dt =>
+                                                dt.TrainingUserId == userId
+                                                && dt.Date.Year.Equals(date.Year)
+                                                && dt.Date.Month.Equals(date.Month)
+                                                && dt.Date.Day.Equals(date.Day))
+                                          .Include(dt => dt.TimeSpan)
+                                          .ToListAsync();
+            TimeSpan trainingTimeTotal = TimeHelper.CalculateTotalTime(trainingTimeSpans);
+
+            // CorporateEventTime
+            var corporateEventTimeSpans = await _context.Set<DailyTime>()
+                                          .Where(dt =>
+                                                dt.CorporateUserId == userId
+                                                && dt.Date.Year.Equals(date.Year)
+                                                && dt.Date.Month.Equals(date.Month)
+                                                && dt.Date.Day.Equals(date.Day))
+                                          .Include(dt => dt.TimeSpan)
+                                          .ToListAsync();
+            TimeSpan corporateEventTimeTotal = TimeHelper.CalculateTotalTime(corporateEventTimeSpans);
+
+            return new UserTimes()
+            {
+                DailyTime = dailyTimeTotal,
+                PersonalTime = personalTimeTotal,
+                TrainingTime = trainingTimeTotal,
+                CorporateEventTime = corporateEventTimeTotal
+            };
+        }
+    }
 }

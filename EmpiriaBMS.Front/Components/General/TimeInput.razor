@@ -1,97 +1,101 @@
-﻿@inject MicrosoftTeams MicrosoftTeams
+﻿
+<div class="input-group text-center" style="width:118px; margin: 0 auto !important;">
+    
+    <input class="form-control"
+           type="number"
+           value="@Time.Hours"
+           placeholder="HH"
+           style="min-width: 45px !important; max-width: 45px !important;"
+           min="@MinHours"
+           max="@MaxHours"
+           onmousewheel="if(e.deltaY > 1) value++; else if (e.deltaY < -1) value--;"
+           onkeyup="if(value<min) value=min; if(value>max) value=max;"
+           @onchange=@((e) => _onHoursChanged(e)) />
 
-<input id="timeInput"
-       class="form-control"
-       type="text"
-       value="@TimeAsString"
-       placeholder="HH:MM"
-       style="max-width: 74px !important;"
-       @onchange=@((e) => OnPropertyChanged.InvokeAsync(e)) />
+    <div class="input-group-append">
+        <span class="input-group-text">:</span>
+    </div>
+    
+    <input class="form-control"
+           type="number"
+           value="@Time.Minutes"
+           placeholder="MM"
+           style="min-width: 45px !important; max-width: 45px !important;"
+           min="@MinMinutes"
+           max="@MaxMinutes"
+           onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+           onkeyup="if(value<min) value=min; if(value>max) value=max;"
+           @onchange=@((e) => _onMinutesChanged(e)) />
+
+</div>
 
 @code {
-
     [Parameter]
     public TimeSpan Time { get; set; }
 
-    private string _prevMin;
-    private TimeSpan _min;
+    private int _minHours = 0;
     [Parameter]
-    public TimeSpan Min
+    public int MinHours
     {
-        get => _min;
+        get => _minHours;
         set
         {
-            if (value == _min) return;
-            _min = value;
-            if (value.ToString(@"hh\:mm") != _prevMin)
-            {
-                _prevMin = value.ToString(@"hh\:mm");
-                MicrosoftTeams.ApplyTimeMask("timeInput", _prevMin, _prevMax);
-            }
+            if (value == _minHours) return;
+            _minHours = value;
         }
     }
 
-    private string _prevMax;
-    private TimeSpan _max;
+    private int _maxHours = 24;
     [Parameter]
-    public TimeSpan Max
+    public int MaxHours
     {
-        get => _max;
+        get => _maxHours;
         set
         {
-            if (value == _max) return;
-            _max = value;
-            if (value.ToString(@"hh\:mm") != _prevMax) {
-                _prevMax = value.ToString(@"hh\:mm");
-                MicrosoftTeams.ApplyTimeMask("timeInput", MinAsString, _prevMax);
-            }
+            if (value == _maxHours) return;
+            _maxHours = value;
         }
     }
 
-    private string TimeAsString
+    private int _minMinutes = 0;
+    [Parameter]
+    public int MinMinutes
     {
-        get => Time.ToString(@"hh\:mm");
+        get => _minMinutes;
         set
         {
-            if (TimeSpan.TryParseExact(value, @"hh\:mm\:ss", null, out TimeSpan parsedTime))
-            {
-                Time = parsedTime;
-            }
+            if (value == _minMinutes) return;
+            _minMinutes = value;
         }
     }
 
-    private string MinAsString
+    private int _maxMinutes = 60;
+    [Parameter]
+    public int MaxMinutes
     {
-        get => Min.ToString(@"hh\:mm");
+        get => _maxMinutes;
         set
         {
-            if (TimeSpan.TryParseExact(value, @"hh\:mm\:ss", null, out TimeSpan parsedTime))
-            {
-                Min = parsedTime;
-            }
-        }
-    }
-
-    private string MaxAsString
-    {
-        get => Max.ToString(@"hh\:mm");
-        set
-        {
-            if (TimeSpan.TryParseExact(value, @"hh\:mm\:ss", null, out TimeSpan parsedTime))
-            {
-                Max = parsedTime;
-            }
+            if (value == _maxMinutes) return;
+            _maxMinutes = value;
         }
     }
 
     [Parameter]
-    public EventCallback<ChangeEventArgs> OnPropertyChanged { get; set; }
+    public EventCallback<TimeSpan> OnPropertyChanged { get; set; }
 
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     if (firstRender)
-    //     {
-    //         await MicrosoftTeams.ApplyTimeMask("timeInput", MinAsString, MaxAsString);
-    //     }
-    // }
+    private async Task _onHoursChanged(ChangeEventArgs e)
+    {
+        int hours = Convert.ToInt32(e.Value);
+        Time = new TimeSpan(hours, Time.Minutes, Time.Seconds);
+        await OnPropertyChanged.InvokeAsync(Time);
+    }
+
+    private async Task _onMinutesChanged(ChangeEventArgs e)
+    {
+        var minutes = Convert.ToInt32(e.Value);
+        Time = new TimeSpan(Time.Hours, minutes, Time.Seconds);
+        await OnPropertyChanged.InvokeAsync(Time);
+    }
+
 }

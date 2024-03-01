@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Config;
+﻿using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.DefaultComponents;
@@ -6,8 +7,11 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.Graph.Models;
 using Microsoft.JSInterop;
+using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -16,56 +20,111 @@ using System.Threading;
 namespace EmpiriaBMS.Front.Components;
 public partial class Projects : IDisposable
 {
-    private bool disposedValue;
 
-    bool runInTeams = false;
-    bool startLoading = true;
-    bool filterLoading = false;
+    // Auth Models
+    [Parameter]
+    public UserVM LogedUser { get; set; }
+    [Parameter]
+    public double LogesUserHours { get; set; } = 0;
+    [Parameter]
+    public ICollection<RoleVM> LoggedUserRoles { get; set; }
+    private UserTimes _logedUserTimes;
+    private UserTimes _editLogedUserTimes;
+    bool getAllDisciplines => LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
+    bool getAllDrawings => LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
+
+    // General Fields
+    private bool disposedValue;
+    bool _runInTeams = false;
+    bool _authenticated = false;
+    bool _startLoading = true;
+    bool _filterLoading = false;
+
+    // Visibility Properties
+    public bool EditDrawing {
+        get
+        {
+            return isWorkingMode && LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer");
+        }
+    }
+    public bool EditDiscipline
+    {
+        get
+        {
+            return isWorkingMode && LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager");
+        }
+    }
+    public bool EditProject
+    {
+        get
+        {
+            return isWorkingMode && (LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO"));
+        }
+    }
 
     // Working Timer
     Timer timer;
     DateTime StartWorkTime = DateTime.Now;
-    bool workStarted = false;
+    bool isWorkingMode = false;
     TimeSpan timePassed = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
-    TimeSpan timeToSet = TimeSpan.Zero;
+    TimeSpan remainingTime = TimeSpan.Zero;
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
     // List
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
-    private ObservableCollection<DrawVM> _draws = new ObservableCollection<DrawVM>();
+    private ObservableCollection<DrawingVM> _draws = new ObservableCollection<DrawingVM>();
     private ObservableCollection<OtherVM> _others = new ObservableCollection<OtherVM>();
-    private List<DrawVM> _drawsChanged = new List<DrawVM>();
+    private List<DisciplineVM> _disciplinesChanged = new List<DisciplineVM>();
+    private List<DrawingVM> _drawsChanged = new List<DrawingVM>();
     private List<OtherVM> _othersChanged = new List<OtherVM>();
+    private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
+    private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
+    private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
 
     // Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
-    private DrawVM _selectedDraw = new DrawVM();
+    private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
 
     // Paginator
     private PaginatorVM _paginator = new PaginatorVM(7);
 
-    // Auth Models
-    private UserVM _logedUser;
-    private double _logesUserHours = 0;
-    private ICollection<RoleVM> _loggedUserRoles = new List<RoleVM>();
-    private bool _logesUserChanged = false;
-
     // Work End Dialog
     private FluentDialog? _endWorkDialog;
     private bool _isEndWorkDialogOdepened = false;
+    private bool _isEndWorkAcceptDialogDisabled => remainingTime.Hours != 0 || remainingTime.Minutes != 0;
+
+    // Add Designer Dialog
+    private FluentDialog? _addDesignerDialog;
+    private bool _isAddDesignerDialogOdepened = false;
+
+    // Add Engineer Dialog
+    private FluentDialog? _addEngineerDialog;
+    private bool _isAddEngineerDialogOdepened = false;
+
+    // Add ProjectManager Dialog
+    private FluentDialog? _addPMDialog;
+    private bool _isAddPMDialogOdepened = false;
 
     protected override async void OnInitialized()
     {
         base.OnInitialized();
-        await _getLogedUser();
-        await _getProjects();
-        startLoading = false;
-        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -74,13 +133,29 @@ public partial class Projects : IDisposable
 
         if (firstRender)
         {
-
-            //StateHasChanged();
+            _runInTeams = await MicrosoftTeams.IsInTeams();
+            await GetLogedUserTimes(LogedUser.Id);
+            await _getProjects();
+            _startLoading = false;
+            StateHasChanged();
         }
     }
 
+    public async Task Refresh()
+    {
+        _startLoading = true;
+        await _getProjects();
+        _startLoading = false;
+        StateHasChanged();
+    }
+
     #region Get Records
-    private async Task _getProjects()
+    private async Task GetLogedUserTimes(int userId)
+    {
+        _logedUserTimes = await DataProvider.Users.GetTime(userId, DateTime.Now);
+    }
+
+    public async Task _getProjects()
     {
         _selectedProject = null;
         _selectedDiscipline = null;
@@ -90,16 +165,16 @@ public partial class Projects : IDisposable
         _draws.Clear();
         _others.Clear();
 
-        filterLoading = !startLoading ? true : filterLoading;
+        _filterLoading = !_startLoading ? true : _filterLoading;
         try
         {
             // Todo: Find a way to add this in to PaginatorVM
             //_paginator.SetRecordsLength(await DataProvider.Projects.Count());
 
             // TODO: Get My Project And Down
-            //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_logedUser.Id, _paginator.PageSize, _paginator.PageIndex))
+            //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_logedUser.Id)).ToList<ProjectDto>();
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
@@ -112,33 +187,32 @@ public partial class Projects : IDisposable
             Debug.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
-        startLoading = false;
-        filterLoading = !startLoading ? false : filterLoading;
+        _startLoading = false;
+        _filterLoading = !_startLoading ? false : _filterLoading;
     }
 
-    private async Task _getLogedUser()
+    private async Task _getDesigners()
     {
         try
         {
-            // TODO: Get Teams Loged User And Mach him With Oure Users
-
-            var defaultRoleId = await GetProjectManagersRoleId("Designer");
+            var defaultRoleId = await GetRoleId("Designer");
             if (defaultRoleId == 0)
-                throw new Exception("Exception `Project Managers` role not exists!");
+                throw new Exception("Exception `Designer` role not exists!");
 
-            var users = await DataProvider.Roles.GetUsers(defaultRoleId);
-            var dbUser = users.FirstOrDefault();
+            var disigners = await DataProvider.Roles.GetUsers(defaultRoleId);
 
-            if (dbUser == null)
-                throw new Exception("Exception user with `Draftsmen` role not exists!");
+            if (disigners == null)
+                throw new NullReferenceException(nameof(disigners));
 
-            _logedUser = Mapper.Map<UserVM>(dbUser);
+            var myDesignersIds = (await DataProvider.Drawings.GetDesigners(_selectedDraw.Id)).Select(d => d.Id);
 
-            _logesUserHours = await DataProvider.Users.GetUserHoursFromLastMonday(_logedUser.Id, DateTime.Now);
-
-            _loggedUserRoles = (await DataProvider.Roles.GetEmplyeeRoles(dbUser.Id))
-                                                        .Select(r => Mapper.Map<RoleVM>(r))
-                                                        .ToList();
+            var disignersVM = Mapper.Map<List<UserVM>>(disigners);
+            _designers.Clear();
+            disignersVM.ForEach(d =>
+            {
+                d.IsSelected = myDesignersIds.Contains(d.Id);
+                _designers.Add(d);
+            });
         }
         catch (Exception ex)
         {
@@ -147,7 +221,67 @@ public partial class Projects : IDisposable
         }
     }
 
-    private async Task<int> GetProjectManagersRoleId(string roleName)
+    private async Task _getEngineers()
+    {
+        try
+        {
+            var defaultRoleId = await GetRoleId("Engineer");
+            if (defaultRoleId == 0)
+                throw new Exception("Exception `Engineer` role not exists!");
+
+            var engineers = await DataProvider.Roles.GetUsers(defaultRoleId);
+
+            if (engineers == null)
+                throw new NullReferenceException(nameof(engineers));
+
+            var myEngineersIds = (await DataProvider.Disciplines.GetEngineers(_selectedDiscipline.Id)).Select(d => d.Id);
+
+            var engineersVM = Mapper.Map<List<UserVM>>(engineers);
+            _engineers.Clear();
+            engineersVM.ForEach(d =>
+            {
+                d.IsSelected = myEngineersIds.Contains(d.Id);
+                _engineers.Add(d);
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task _getProjectManagers()
+    {
+        try
+        {
+            var defaultRoleId = await GetRoleId("Project Manager");
+            if (defaultRoleId == 0)
+                throw new Exception("Exception `Project Manager` role not exists!");
+
+            var pms = await DataProvider.Roles.GetUsers(defaultRoleId);
+
+            if (pms == null)
+                throw new NullReferenceException(nameof(pms));
+
+            var myPmsIds = (await DataProvider.Projects.GetProjectManagers(_selectedProject.Id)).Select(d => d.Id);
+
+            var pmsVM = Mapper.Map<List<UserVM>>(pms);
+            _projectManagers.Clear();
+            pmsVM.ForEach(d =>
+            {
+                d.IsSelected = myPmsIds.Contains(d.Id);
+                _projectManagers.Add(d);
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task<int> GetRoleId(string roleName)
     {
         try
         {
@@ -161,46 +295,60 @@ public partial class Projects : IDisposable
             return 0;
         }
     }
+
+    private long GetProjectMenHours(int projecId) =>
+        DataProvider.Projects.GetMenHours(projecId);
+
+    private long GetDisciplineMenHours(int disciplineId) =>
+        DataProvider.Disciplines.GetMenHours(disciplineId);
+
+    private long GetDrawingMenHours(int drawingId) =>
+        DataProvider.Drawings.GetMenHours(drawingId);
+
+    private long GetOtherMenHours(int otherId) =>
+        DataProvider.Others.GetMenHours(otherId);
     #endregion
 
-    #region Properties Changed Events
-    private void ToogleWorkStatus(bool? start = null)
+    #region Actions Functions
+    private void StartWorkClick()
     {
-        if (start != null)
-            workStarted = (bool)start;
-        else
-            workStarted = !workStarted;
+        isWorkingMode = true;
+        StartTimer();
+        StateHasChanged();
+    }
 
-        if (workStarted)
+    private async Task StopWorkClick()
+    {
+        isWorkingMode = false;
+        StopTimer();
+
+        remainingTime = timePaused;
+        _editLogedUserTimes = new UserTimes()
         {
-            timeToSet = TimeSpan.Zero;
-            StartTimer();
-        } else
-        {
-            StopTimer();
+            DailyTime = TimeSpan.Zero,
+            PersonalTime = TimeSpan.Zero,
+            TrainingTime = TimeSpan.Zero,
+            CorporateEventTime = TimeSpan.Zero,
+        };
 
-            // TODO: Enable This
-            //if (timePaused < 1) return;
+        _projects.Clear();
+        _others.Clear();
+        _draws.Clear();
+        _disciplines.Clear();
+        _selectedOther = null;
+        _selectedDraw = null;
+        _selectedDiscipline = null;
+        _selectedProject = null;
+        await _getProjects();
+        StateHasChanged();
 
-            timeToSet = timePaused;
-
-            _others.Clear();
-            _draws.Clear();
-            _disciplines.Clear();
-            _selectedOther = null;
-            _selectedDraw = null;
-            _selectedDiscipline = null;
-            _selectedProject = null;
-            StateHasChanged();
-
-            _endWorkDialog.Show();
-            _isEndWorkDialogOdepened = true;
-        }
+        _endWorkDialog.Show();
+        _isEndWorkDialogOdepened = true;
     }
 
     private async Task OnSelectProject(int projectId)
     {
-        if (projectId == 0) return;
+        if (projectId == 0 || projectId == _selectedProject?.Id) return;
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
         _draws.Clear();
@@ -210,7 +358,8 @@ public partial class Projects : IDisposable
         _selectedDiscipline = null;
         _selectedDraw = null;
         _selectedOther = null;
-        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id);
+
+        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, LogedUser.Id, getAllDisciplines);
 
         _disciplines.Clear();
         foreach (var di in disciplines)
@@ -221,18 +370,16 @@ public partial class Projects : IDisposable
 
     private async Task OnSelectDiscipline(int disciplineId)
     {
-        if (disciplineId == 0) return;
+        if (disciplineId == 0 || disciplineId == _selectedDiscipline?.Id) return;
 
-        var discipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
-        _selectedDiscipline = discipline;
+        _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
-        var draws = await DataProvider.Disciplines.GetDraws(discipline.Id);
-        var others = await DataProvider.Disciplines.GetOthers(discipline.Id);
-        await _getLogedUser();
+        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, LogedUser.Id, getAllDrawings);
+        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, LogedUser.Id, true);
 
         _draws.Clear();
         foreach (var di in draws)
-            _draws.Add(Mapper.Map<DrawVM>(di));
+            _draws.Add(Mapper.Map<DrawingVM>(di));
 
         _others.Clear();
         foreach (var di in others)
@@ -241,27 +388,85 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
-    private void OnSelectDraw(DrawVM draw)
+    private void OnSelectDraw(DrawingVM draw)
     {
+        if (draw == null || draw.Id == _selectedDraw?.Id) return;
         _selectedDraw = draw;
         StateHasChanged();
     }
 
     private void OnSelectDoc(OtherVM doc)
     {
+        if (doc == null || doc.Id == _selectedOther?.Id) return;
         _selectedOther = doc;
         StateHasChanged();
     }
+
+    private async Task OnDrawingAssignClick(DrawingVM draw)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedDraw = draw;
+            await _getDesigners();
+            StateHasChanged();
+            _addDesignerDialog.Show();
+            _isAddDesignerDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task OnDesciplineAssignClick(DisciplineVM discipline)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedDiscipline = discipline;
+            await _getEngineers();
+            StateHasChanged();
+            _addEngineerDialog.Show();
+            _isAddEngineerDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task OnProjectAssignClick(ProjectVM project)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedProject = project;
+            await _getProjectManagers();
+            StateHasChanged();
+            _addPMDialog.Show();
+            _isAddPMDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
     #endregion
 
-    #region Async Jobs
+    #region Timer
     private async Task StartTimer()
     {
-        // TODO: Remove "AddHours(-7)"
-        StartWorkTime = DateTime.Now.AddHours(-7); //DateTime.Now;
+        // TODO: Projects Timer -> Change """ timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7); """ TO """ DateTime.Now """
+        StartWorkTime = timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7).AddMinutes(-10);
         timer = new System.Threading.Timer((_) =>
         {
             timePassed = DateTime.Now - StartWorkTime;
+            if (timePaused != TimeSpan.Zero)
+                timePassed += timePaused;
 
             InvokeAsync(() =>
                 {
@@ -278,35 +483,63 @@ public partial class Projects : IDisposable
     #endregion
 
     #region On Press Work End Dialog Actions
-    private void _onDrawHoursChanged(DrawVM draw, object val)
+    private void _onDrawTimeChanged(DrawingVM draw, TimeSpan newTimeSpan)
     {
-        if (Convert.ToString(val) == "") return;
-        val += ":00";
-        TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
-        var value = Convert.ToInt32(timeSpan.Hours);
-        if (timeToSet.Hours < value)
+        // previusTime, updatedTime, remainingTime
+
+        var previusTime = draw.Time;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ? 
+                                          newTimeSpan.Hours < previusTime.Hours ? 
+                                                          -(previusTime.Hours - newTimeSpan.Hours) 
+                                                        : newTimeSpan.Hours 
+                                        : 0;
+        var updatedMinutes = minutesChanged ? 
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
         {
-            // TODO: Display a Msg
-            return;
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
         }
 
-        draw.MenHours += value;
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
+        {
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
+        }
+
+        draw.Time = newTimeSpan;
 
         if (_drawsChanged.Any(d => d.Id == draw.Id))
         {
             var d = _drawsChanged.FirstOrDefault(d => d.Id == draw.Id);
-            d.MenHours = draw.MenHours;
+            d.Time = draw.Time;
         }
         else
             _drawsChanged.Add(draw);
 
-        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
-        timeToSet = updatedTimeSpan;
-
         StateHasChanged();
     }
 
-    private void _onDrawCompletedChanged(DrawVM draw, object val)
+    private void _onDrawCompletedChanged(DrawingVM draw, object val)
     {
         draw.CompletionEstimation += Convert.ToInt32(val);
 
@@ -321,30 +554,196 @@ public partial class Projects : IDisposable
         StateHasChanged();
     }
 
-    private void _onOtherHoursChanged(OtherVM other, object val)
+    private void _onOtherTimeChanged(OtherVM other, TimeSpan newTimeSpan)
     {
-        if (Convert.ToString(val) == "") return;
-        val += ":00";
-        TimeSpan timeSpan = TimeSpan.Parse(Convert.ToString(val));
-        var value = Convert.ToInt32(timeSpan.Hours);
-        if (timeToSet.Hours < value)
+        // previusTime, updatedTime, remainingTime
+
+        var previusTime = other.Time;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
+                                        : 0;
+        var updatedMinutes = minutesChanged ?
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
         {
-            // TODO: Display a Msg
-            return;
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
         }
 
-        other.MenHours += value;
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
+        {
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
+        }
+
+        other.Time = newTimeSpan;
 
         if (_othersChanged.Any(o => o.Id == other.Id))
         {
             var o = _othersChanged.FirstOrDefault(o => o.Id == other.Id);
-            o.MenHours = other.MenHours;
+            o.Time = other.Time;
         }
         else
             _othersChanged.Add(other);
 
-        var updatedTimeSpan = new TimeSpan(timeToSet.Days, timeToSet.Hours - Convert.ToInt32(value), timeToSet.Minutes, 0);
-        timeToSet = updatedTimeSpan;
+        StateHasChanged();
+    }
+
+    private void _onPersonalTimeChanged(TimeSpan newTimeSpan)
+    {
+        var previusTime = _logedUserTimes.PersonalTime;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
+                                        : 0;
+        var updatedMinutes = minutesChanged ?
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
+        {
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
+        }
+
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
+        {
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
+        }
+
+        _logedUserTimes.PersonalTime = newTimeSpan;
+
+        StateHasChanged();
+    }
+
+    private void _onTrainingTimeChanged(TimeSpan newTimeSpan)
+    {
+        var previusTime = _logedUserTimes.TrainingTime;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
+                                        : 0;
+        var updatedMinutes = minutesChanged ?
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
+        {
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
+        }
+
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
+        {
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
+        }
+
+        _logedUserTimes.TrainingTime = newTimeSpan;
+
+        StateHasChanged();
+    }
+
+    private void _onCorporateTimeChanged(TimeSpan newTimeSpan)
+    {
+        var previusTime = _logedUserTimes.CorporateEventTime;
+        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
+        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
+                                        : 0;
+        var updatedMinutes = minutesChanged ?
+                                          newTimeSpan.Minutes < previusTime.Minutes ?
+                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
+                                                        : newTimeSpan.Minutes
+                                        : 0;
+
+        // TODO: Can save somewhere the extra hours and miutes
+        if (remainingTime.Hours < updatedHours)
+        {
+            updatedHours = remainingTime.Hours;
+            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
+        }
+        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
+        {
+            updatedMinutes = remainingTime.Minutes;
+            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
+        }
+
+        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
+
+        TimeSpan difference = remainingTime - updatedTime;
+        if (difference < TimeSpan.Zero)
+        {
+            remainingTime += updatedTime;
+        }
+        else
+        {
+            remainingTime -= updatedTime;
+        }
+
+        _logedUserTimes.CorporateEventTime = newTimeSpan;
 
         StateHasChanged();
     }
@@ -354,13 +753,18 @@ public partial class Projects : IDisposable
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
 
-        if (timeToSet.Hours > 0)
+        // Validate
+        if (remainingTime.Hours > 0)
         {
             // TODO: Display a message to update his hours.
             return;
         }
 
-        startLoading = true;
+
+        // Update Db
+        _startLoading = true;
+
+        TimeSpan sumTime = new TimeSpan();
 
         // Update Draws
         foreach (var draw in _drawsChanged)
@@ -373,35 +777,124 @@ public partial class Projects : IDisposable
                 return;
             }
             else
-                await DataProvider.Draws.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            await DataProvider.Draws.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.MenHours);
+                await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
+            await DataProvider.Drawings.AddTime(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+            sumTime += draw.Time;
         }
 
         // Update Others
         foreach (var other in _othersChanged)
         {
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-            await DataProvider.Others.UpdateHours(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.MenHours);
+            await DataProvider.Others.AddTime(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+            sumTime += other.Time;
         }
 
         // Update User Hours
-        await DataProvider.Users.AddHours(_logedUser.Id, DateTime.Now, Convert.ToInt64(timeToSet.Hours));
+        await DataProvider.Users.AddDailyTime(LogedUser.Id, DateTime.Now, sumTime);
+        if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
+            await DataProvider.Users.AddPersonalTime(LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
+        if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
+            await DataProvider.Users.AddTraningTime(LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
+        if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
+            await DataProvider.Users.AddCorporateEventTime(LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
 
         _drawsChanged.Clear();
         _othersChanged.Clear();
 
         await _getProjects();
 
-        startLoading = false;
+        _startLoading = false;
     }
 
     public void _endWorkDialogCansel()
     {
         _drawsChanged.Clear();
         _othersChanged.Clear();
-        ToogleWorkStatus(true);
+        StartWorkClick();
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
+    }
+    #endregion
+
+    #region On Press Add Designer Dialog Actions
+    public async Task _addDesignerDialogAccept()
+    {
+        _addDesignerDialog.Hide();
+        _isAddDesignerDialogOdepened = false;
+
+        _startLoading = true;
+
+        var forDeleteIds = _designers.Where(d => d.IsSelected == null || d.IsSelected == false)
+                                     .Select(d => d.Id)
+                                     .ToList();
+        await DataProvider.Drawings.RemoveDesigners(_selectedDraw.Id, forDeleteIds);
+
+        var forAdd = _designers.Where(d => d.IsSelected == true).ToList();
+        var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
+        await DataProvider.Drawings.AddDesigners(_selectedDraw.Id, forAddDto);
+
+        _startLoading = false;
+    }
+
+    public void _addDesignerDialogCansel()
+    {
+        _addDesignerDialog.Hide();
+        _isAddDesignerDialogOdepened = false;
+    }
+    #endregion
+
+    #region On Press Add Engineer Dialog Actions
+    public async Task _addEngineerDialogAccept()
+    {
+        _addEngineerDialog.Hide();
+        _isAddEngineerDialogOdepened = false;
+
+        _startLoading = true;
+
+        var forDeleteIds = _engineers.Where(d => d.IsSelected == null || d.IsSelected == false)
+                                     .Select(d => d.Id)
+                                     .ToList();
+        await DataProvider.Disciplines.RemoveEngineers(_selectedDiscipline.Id, forDeleteIds);
+
+        var forAdd = _engineers.Where(d => d.IsSelected == true).ToList();
+        var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
+        await DataProvider.Disciplines.AddEngineers(_selectedDiscipline.Id, forAddDto);
+
+        _startLoading = false;
+    }
+
+    public void _addEngineerDialogCansel()
+    {
+        _addEngineerDialog.Hide();
+        _isAddEngineerDialogOdepened = false;
+    }
+    #endregion
+
+    #region On Press Add Project Manager Dialog Actions
+    public async Task _addPMDialogAccept()
+    {
+        _addPMDialog.Hide();
+        _isAddPMDialogOdepened = false;
+
+        _startLoading = true;
+
+        var forDeleteIds = _projectManagers.Where(d => d.IsSelected == null || d.IsSelected == false)
+                                           .Select(d => d.Id)
+                                     .ToList();
+        await DataProvider.Projects.RemoveProjectManager(_selectedProject.Id, forDeleteIds);
+
+        var forAdd = _projectManagers.Where(d => d.IsSelected == true).ToList();
+        var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
+        await DataProvider.Projects.AddProjectManager(_selectedProject.Id, forAddDto);
+
+        _startLoading = false;
+    }
+
+    public void _addPMDialogCansel()
+    {
+        _addPMDialog.Hide();
+        _isAddPMDialogOdepened = false;
     }
     #endregion
 

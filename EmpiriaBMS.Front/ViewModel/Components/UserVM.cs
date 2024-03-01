@@ -7,6 +7,19 @@ using EmpiriaMS.Models.Models;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class UserVM : BaseVM
 {
+    private bool? _isSelected = false;
+    public bool? IsSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (value == _isSelected)
+                return;
+            _isSelected = value;
+            NotifyPropertyChanged(nameof(IsSelected));
+        }
+    }
+
     private string? _email;
     public string? Email
     {
@@ -123,7 +136,4 @@ public class UserVM : BaseVM
             NotifyPropertyChanged(nameof(Project));
         }
     }
-
-    [NotMapped]
-    public string FullName => LastName + FullName;
 }

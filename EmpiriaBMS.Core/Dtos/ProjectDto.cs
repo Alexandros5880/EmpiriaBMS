@@ -25,8 +25,6 @@ public class ProjectDto : EntityDto
 
     public long EstimatedHours { get; set; }
 
-    public long MenHours { get; set; }
-
     public float EstimatedCompleted { get; set; }
 
     public float Completed { get; set; }
@@ -59,10 +57,11 @@ public class ProjectDto : EntityDto
 
     public int? CalculationDaly { get; set; }
 
-    public int? ProjectManagerId { get; set; }
-    public User? ProjectManager { get; set; }
-
     public User? Customer { get; set; }
 
     public Invoice? Invoice { get; set; }
+
+    public ProjectType Type { get; set; }
+
+    public User? SubContractor { get; set; }
 }

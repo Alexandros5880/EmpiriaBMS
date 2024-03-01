@@ -23,8 +23,6 @@ public class Project : Entity
     public long EstimatedMandays { get; set; }
 
     public long EstimatedHours { get; set; }
-    
-    public long MenHours { get; set; }
 
     public float EstimatedCompleted { get; set; }
 
@@ -68,12 +66,19 @@ public class Project : Entity
 
     public int? CalculationDaly { get; set; }
 
-    public int? ProjectManagerId { get; set; }
-    public User? ProjectManager { get; set; }
+    public int TypeId { get; set; }
+    public ProjectType Type { get; set; }
+
+    public int? SubContractorId { get; set; }
+    public User? SubContractor { get; set; }
 
     public User? Customer { get; set; }
 
     public Invoice? Invoice { get; set; }
 
-    public ICollection<DisciplinePoject> DisciplinesProjects { get; set; }
+    public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<Discipline> Disciplines { get; set; }
+
+    public ICollection<ProjectPmanager> ProjectsPmanagers { get; set; }
 }

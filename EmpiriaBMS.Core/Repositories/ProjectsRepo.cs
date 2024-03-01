@@ -39,7 +39,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public new async Task<ICollection<ProjectDto>> GetAll()
+    public async Task<ICollection<ProjectDto>> GetAll()
     {
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -113,50 +113,140 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public new async Task<ICollection<ProjectDto>> GetAll(int userId)
+    public async Task<ICollection<ProjectDto>> GetAll(int userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplineIds = await _context.Set<DisciplineEmployee>()
-                                            .Where(de => de.EmployeeId == userId)
-                                            .Select(de => de.DisciplineId)
+            // Get User Roles
+            var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => r.UserId == userId)
+                                        .Select(r => r.RoleId)
+                                        .ToListAsync();
+
+            var roles = await _context.Roles.Where(r => roleIds.Contains(r.Id))
                                             .ToListAsync();
 
-            var projects= await _context.Set<DisciplinePoject>()
-                                            .Where(d => disciplineIds.Contains(d.DisciplineId))
-                                            .Select(dp => dp.Project)
-                                            .OrderBy(e => e.DeadLine)
-                                            .ToListAsync();
+            if (roles.Any(r => r.Name.Equals("CEO")
+                    || r.Name.Equals("CTO") || r.Name.Equals("COO")))
+            {
+                var allProjects = await _context.Set<Project>().ToListAsync();
+
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(allProjects.Distinct().ToList());
+            }
+
+            // Filter Projects
+            var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(de => de.EmployeeId == userId)
+                                             .Select(e => e.DrawingId)
+                                             .ToListAsync();
+
+            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(dd => myDrawingIds.Contains(dd.Id))
+                                                 .Select(e => e.DisciplineId)
+                                                 .ToListAsync();
+
+            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(d => d.EngineerId == userId)
+                                                      .Select(e => e.DisciplineId)
+                                                      .ToListAsync();
+
+            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
+
+            var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                        .Select(dp => dp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
+                                                        .Where(pp => pp.ProjectManagerId == userId)
+                                                        .Select(pp => pp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
+
+            var projects = await _context.Set<Project>().Where(p => projectsIds.Contains(p.Id)).ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
     }
 
-    public new async Task<ICollection<ProjectDto>> GetAll(int userId, int pageSize = 0, int pageIndex = 0)
+    public async Task<ICollection<ProjectDto>> GetAll(int userId, int pageSize = 0, int pageIndex = 0)
     {
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplineIds = await _context.Set<DisciplineEmployee>()
-                                            .Where(de => de.EmployeeId == userId)
-                                            .Select(de => de.DisciplineId)
+            // Get User Roles
+            var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => r.UserId == userId)
+                                        .Select(r => r.RoleId)
+                                        .ToListAsync();
+
+            var roles = await _context.Roles.Where(r => roleIds.Contains(r.Id))
                                             .ToListAsync();
 
-
-            if (pageSize == 0 || pageIndex == 0)
+            if (roles.Any(r => r.Name.Equals("CEO")
+                    || r.Name.Equals("CTO") || r.Name.Equals("COO")))
             {
-                projects = await _context.Set<DisciplinePoject>()
-                                         .Where(d => disciplineIds.Contains(d.DisciplineId))
-                                         .Select(dp => dp.Project)
+                if (pageSize == 0 || pageIndex == 0)
+                {
+                    projects = await _context.Set<Project>()
+                                             .OrderBy(e => e.DeadLine)
+                                             .ToListAsync();
+
+                    return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+                }
+
+                projects = await _context.Set<Project>()
+                                         .Skip((pageIndex - 1) * pageSize)
+                                         .Take(pageSize)
                                          .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
 
-            projects = await _context.Set<DisciplinePoject>()
-                                     .Where(d => disciplineIds.Contains(d.DisciplineId))
-                                     .Select(dp => dp.Project)
+            // Filter Projects
+            var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(de => de.EmployeeId == userId)
+                                             .Select(e => e.DrawingId)
+                                             .ToListAsync();
+
+            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(d => myDrawingIds.Contains(d.Id))
+                                                 .Select(e => e.DisciplineId)
+                                                 .ToListAsync();
+
+            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(d => d.EngineerId == userId)
+                                                      .Select(e => e.DisciplineId)
+                                                      .ToListAsync();
+
+            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
+
+            var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                        .Select(dp => dp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
+                                                        .Where(pp => pp.ProjectManagerId == userId)
+                                                        .Select(pp => pp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
+
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                projects = await _context.Set<Project>()
+                                         .Where(p => projectsIds.Contains(p.Id))
+                                         .OrderBy(e => e.DeadLine)
+                                         .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+            }
+
+            projects = await _context.Set<Project>()
+                                     .Where(p => projectsIds.Contains(p.Id))
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
                                      .OrderBy(e => e.DeadLine)
@@ -166,7 +256,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public new async Task<ICollection<ProjectDto>> GetAll(
+    public async Task<ICollection<ProjectDto>> GetAll(
         Expression<Func<Project, bool>> expresion, 
         int userId, 
         int pageSize = 0,
@@ -175,16 +265,72 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplineIds = await _context.Set<DisciplineEmployee>()
-                                              .Where(de => de.EmployeeId == userId)
-                                              .Select(de => de.DisciplineId)
-                                              .ToListAsync();
+            // Get User Roles
+            var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => r.UserId == userId)
+                                        .Select(r => r.RoleId)
+                                        .ToListAsync();
+
+            var roles = await _context.Roles.Where(r => roleIds.Contains(r.Id))
+                                            .ToListAsync();
+
+            if (roles.Any(r => r.Name.Equals("CEO")
+                    || r.Name.Equals("CTO") || r.Name.Equals("COO")))
+            {
+                if (pageSize == 0 || pageIndex == 0)
+                {
+                    projects = await _context.Set<Project>()
+                                             .Where(expresion)
+                                             .OrderBy(e => e.DeadLine)
+                                             .ToListAsync();
+
+                    return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+                }
+
+                projects = await _context.Set<Project>()
+                                         .Where(expresion)
+                                         .Skip((pageIndex - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .OrderBy(e => e.DeadLine)
+                                         .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+            }
+
+            // Filter Projects
+            var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(de => de.EmployeeId == userId)
+                                             .Select(e => e.DrawingId)
+                                             .ToListAsync();
+
+            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(d => myDrawingIds.Contains(d.Id))
+                                                 .Select(e => e.DisciplineId)
+                                                 .ToListAsync();
+
+            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(d => d.EngineerId == userId)
+                                                      .Select(e => e.DisciplineId)
+                                                      .ToListAsync();
+
+            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
+
+            var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                        .Select(dp => dp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
+                                                        .Where(pp => pp.ProjectManagerId == userId)
+                                                        .Select(pp => pp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                projects = await _context.Set<DisciplinePoject>()
-                                         .Where(d => disciplineIds.Contains(d.DisciplineId))
-                                         .Select(dp => dp.Project)
+                projects = await _context.Set<Project>()
+                                         .Where(p => projectsIds.Contains(p.Id))
                                          .Where(expresion)
                                          .OrderBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -192,9 +338,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
 
-            projects = await _context.Set<DisciplinePoject>()
-                                     .Where(d => disciplineIds.Contains(d.DisciplineId))
-                                     .Select(dp => dp.Project)
+            projects = await _context.Set<Project>()
+                                     .Where(p => projectsIds.Contains(p.Id))
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
@@ -205,17 +350,64 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<DisciplineDto>> GetDisciplines(int id)
+    public async Task<long> GetMenHoursAsync(int projectId)
     {
-        if (id == 0)
-            throw new ArgumentNullException(nameof(id));
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<DailyTime>()
+                                 .Where(mh => mh.ProjectId == projectId)
+                                 .Include(mh => mh.TimeSpan)
+                                 .Select(mh => mh.TimeSpan.Hours)
+                                 .SumAsync();
+        }
+    }
+
+    public long GetMenHours(int projectId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return _context.Set<DailyTime>()
+                           .Where(mh => mh.ProjectId == projectId)
+                           .Include(mh => mh.TimeSpan)
+                           .Select(mh => mh.TimeSpan.Hours)
+                           .Sum();
+        }
+    }
+
+    public async Task<ICollection<DisciplineDto>> GetDisciplines(int projectId, int userId, bool all)
+    {
+        if (projectId == 0)
+            throw new ArgumentNullException(nameof(projectId));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplines = await _context.Set<DisciplinePoject>()
-                                             .Where(de => de.ProjectId == id)
-                                             .Select(de => de.Discipline)
+            List<Discipline> disciplines = new List<Discipline>();
+
+            if (all)
+            {
+                disciplines = await _context.Set<Discipline>()
+                                             .Where(de => de.ProjectId == projectId)
+                                             .Include(d => d.Type)
                                              .ToListAsync();
+            }
+            else
+            {
+                var myDrawingsIds = await _context.Set<DrawingEmployee>()
+                                            .Where(de => de.EmployeeId == userId)
+                                            .Select(de => de.DrawingId)
+                                            .ToListAsync();
+
+                var myDisciplinesIds = await _context.Set<Drawing>()
+                                                .Where(d => myDrawingsIds.Contains(d.Id))
+                                                .Select(dd => dd.DisciplineId)
+                                                .ToListAsync();
+
+                disciplines = await _context.Set<Discipline>()
+                                             .Where(d => d.ProjectId == projectId && 
+                                                                myDisciplinesIds.Contains(d.Id))
+                                             .Include(d => d.Type)
+                                             .ToListAsync();
+            }
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(disciplines);
         }
@@ -224,88 +416,68 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     public async Task<int> CountDiscipline(int id)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
-            return await _context.Set<DisciplinePoject>()
+            return await _context.Set<Discipline>()
                                  .Where(de => de.ProjectId == id)
                                  .CountAsync();
     }
 
-    public async Task<float> GetUsersWorkPackegedCompleted(int userId)
+    public async Task<ICollection<UserDto>> GetProjectManagers(int projectId)
     {
-        if (userId == 0)
-            throw new ArgumentException(nameof(userId));
-
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var disciplines = await _context.Set<DisciplineEmployee>()
-                                              .Where(de => de.EmployeeId == userId)
-                                              .Select(de => de.Discipline)
+            var users = await _context.Set<ProjectPmanager>()
+                                      .Where(de => de.ProjectId == projectId)
+                                      .Include(de => de.ProjectManager)
+                                      .Select(de => de.ProjectManager)
+                                      .ToListAsync();
+
+            return Mapping.Mapper.Map<List<UserDto>>(users);
+        }
+    }
+
+    public async Task AddProjectManager(int projectId, ICollection<UserDto> pms)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            foreach (var e in pms)
+            {
+                ProjectPmanager pm = new ProjectPmanager()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    ProjectId = projectId,
+                    ProjectManagerId = e.Id
+                };
+
+                // Check If Exists
+                var exists = await _context.Set<ProjectPmanager>()
+                    .AnyAsync(pm => pm.ProjectId == projectId && pm.ProjectManagerId == e.Id);
+                if (exists) continue;
+
+                await _context.Set<ProjectPmanager>().AddAsync(pm);
+                await _context.SaveChangesAsync();
+            }
+        }
+    }
+
+    public async Task RemoveProjectManager(int projectId, ICollection<int> projectManagersIds)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var pms = await _context.Set<ProjectPmanager>()
+                                              .Where(d => projectManagersIds.Contains(d.ProjectManagerId)
+                                                                && d.ProjectId == projectId)
                                               .ToListAsync();
 
-            var Draws2D = disciplines.Select(d => d.DisciplinesDraws.Select(dd => dd.Draw));
-            List<float> drawsCompleteds = new List<float>();
+            if (pms == null)
+                throw new NullReferenceException(nameof(pms));
 
-            foreach (var d1 in Draws2D)
-                foreach (var d2 in d1)
-                    drawsCompleteds.Add(d2.CompletionEstimation);
-
-            return drawsCompleteds.Sum();
-        }
-    }
-
-    public async Task<CompletedResult> CalcProjectComplete(ProjectDto project, DrawDto draw, int logedUserId)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            // Get Loges User DesciplineIds
-            var disciplinesUserIds = await _context
-                                        .Set<DisciplineEmployee>()
-                                        .Where(de => de.EmployeeId == logedUserId)
-                                        .Select(de => de.DisciplineId)
-                                        .ToListAsync();
-
-            // Get Selected Projects Desciplines
-            var disciplinesProjectIds = await _context
-                                            .Set<DisciplinePoject>()
-                                            .Where(dp => dp.ProjectId == project.Id)
-                                            .Where(dp => disciplinesUserIds.Contains(dp.DisciplineId))
-                                            .Select(de => de.DisciplineId)
-                                            .ToListAsync();
-
-            // Add 2 List Remove Duplicates
-            List<int> disciplinesIds = disciplinesUserIds.Union(disciplinesProjectIds).ToList();
-            int disciplinesCount = disciplinesIds.Count();
-
-            // Get Draws Sum Of Draws.CompletionEstimation
-            List<Draw> draws = await _context
-                                    .Set<DisciplineDraw>()
-                                    .Where(dd => disciplinesIds.Contains(dd.DisciplineId))
-                                    .Select(dd => dd.Draw)
-                                    .ToListAsync();
-            draws.Add(Mapping.Mapper.Map<Draw>(draw));
-            var sumDrawsComp = draws.Select(m => m.CompletionEstimation).Sum();
-
-            // Some Project Completion
-            var sumProjectCompl = sumDrawsComp;
-
-
-
-            var estimatedHours = project.EstimatedHours;
-            var projectHours = project.MenHours;
-
-
-
-            // Project Completed
-            var projectCompleted = Convert.ToInt32((sumProjectCompl / estimatedHours) * 100);
-
-            CompletedResult result = new CompletedResult()
+            foreach (var projectManager in pms)
             {
-                ProjectCompleted = projectCompleted,
-                DisciplineCompleted = projectCompleted / disciplinesCount,
-                DrawCompleted = (projectCompleted / 2) / draws.Count
-            };
+                _context.Set<ProjectPmanager>().Remove(projectManager);
+            }
 
-            return result;
+            await _context.SaveChangesAsync();
         }
     }
-
 }

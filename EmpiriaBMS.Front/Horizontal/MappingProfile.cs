@@ -12,7 +12,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<DrawDto, DrawVM>().ReverseMap();
+        CreateMap<DrawingDto, DrawingVM>().ReverseMap();
         CreateMap<InvoiceDto, InvoiceVM>().ReverseMap();
         CreateMap<RoleDto, RoleVM>().ReverseMap();
         CreateMap<UserDto, UserVM>().ReverseMap();

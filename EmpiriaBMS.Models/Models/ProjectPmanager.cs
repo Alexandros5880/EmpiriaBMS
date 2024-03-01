@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class DisciplinePoject : Entity
+public class ProjectPmanager : Entity
 {
-    public int DisciplineId { get; set; }
-    public Discipline Discipline { get; set; }
-
     public int ProjectId { get; set; }
     public Project Project { get; set; }
+
+    public int ProjectManagerId { get; set; }
+    public User ProjectManager { get; set; }
 }

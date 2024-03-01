@@ -10,15 +10,18 @@ using System.Threading.Tasks;
 using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
-using System.ComponentModel.DataAnnotations;
+using EmpiriaBMS.Core.Hellpers;
+using System.Data.Common;
+using AutoMapper;
+
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class OtherRepo : Repository<OtherDto, Other>, IDisposable
+public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
 {
-    public OtherRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public DrawingRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public new async Task<OtherDto?> Get(int id)
+    public new async Task<DrawingDto?> Get(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -26,117 +29,118 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var dr = await _context
-                             .Set<Other>()
+                             .Set<Drawing>()
                              .FirstOrDefaultAsync(r => r.Id == id);
 
-            return Mapping.Mapper.Map<OtherDto>(dr);
+            return Mapping.Mapper.Map<DrawingDto>(dr);
         }
     }
 
-    public new async Task<ICollection<OtherDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public new async Task<ICollection<DrawingDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Other> drs;
+            List<Drawing> drs;
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                drs = await _context.Set<Other>()
+                drs = await _context.Set<Drawing>()
                                      .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+                return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
             }
 
 
-            drs = await _context.Set<Other>()
+            drs = await _context.Set<Drawing>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
         }
     }
 
-    public new async Task<ICollection<OtherDto>> GetAll(
-        Expression<Func<Other, bool>> expresion,
+    public new async Task<ICollection<DrawingDto>> GetAll(
+        Expression<Func<Drawing, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
     ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Other> drs;
+            List<Drawing> drs;
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                drs = await _context.Set<Other>()
+                drs = await _context.Set<Drawing>()
                                     .Where(expresion)
                                     .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+                return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
             }
 
 
-            drs = await _context.Set<Other>()
+            drs = await _context.Set<Drawing>()
                                 .Where(expresion)
                                 .Skip((pageIndex - 1) * pageSize)
                                 .Take(pageSize)
                                 .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
         }
     }
 
-    public async Task<long> GetMenHoursAsync(int otherId)
+    public async Task<long> GetMenHoursAsync(int drwaingId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return await _context.Set<DailyTime>()
-                                 .Where(mh => mh.OtherId == otherId)
+                                 .Where(mh => mh.DrawingId == drwaingId)
                                  .Include(mh => mh.TimeSpan)
                                  .Select(mh => mh.TimeSpan.Hours)
                                  .SumAsync();
         }
     }
 
-    public long GetMenHours(int otherId)
+    public long GetMenHours(int drwaingId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return _context.Set<DailyTime>()
-                           .Where(mh => mh.OtherId == otherId)
+                           .Where(mh => mh.DrawingId == drwaingId)
                            .Include(mh => mh.TimeSpan)
                            .Select(mh => mh.TimeSpan.Hours)
                            .Sum();
         }
     }
 
-    public async Task UpdateCompleted(int projectId, int disciplineId, int otherId, float completed)
+    public async Task UpdateCompleted(int projectId, int disciplineId, int drawId, float completed)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            // Update Current Other
-            var other = await _context.Set<Other>()
-                                        .FirstOrDefaultAsync(d => d.Id == otherId);
-            if (other == null)
-                throw new NullReferenceException(nameof(other));
-            other.CompletionEstimation += completed;
+            // Update Current Drawing
+            var drawing = await _context.Set<Drawing>()
+                                        .FirstOrDefaultAsync(d => d.Id == drawId);
+            if (drawing == null)
+                throw new NullReferenceException(nameof(drawing));
+            drawing.CompletionEstimation += completed;
 
             // Calculate Parent Discipline Completed
             var discipline = await _context.Set<Discipline>()
-                                           .Include(d => d.Others)
+                                           .Include(d => d.Drawings)
                                            .FirstOrDefaultAsync(d => d.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var allOthers = discipline.Others;
-            var sumComplitionOfOthers = allOthers
+            var allDrawings = discipline.Drawings;
+            var sumComplitionOfDrawings = allDrawings
                                           .Select(d => d.CompletionEstimation)
                                           .Sum();
-            var othersCounter = allOthers.Count();
-            discipline.Completed = sumComplitionOfOthers / othersCounter;
+            var drawsCounter = allDrawings.Count();
+            discipline.Completed = sumComplitionOfDrawings / drawsCounter;
 
             // Calculate Parent Project Complition
             var disciplines = await _context.Set<Discipline>()
                                             .Where(d => d.ProjectId == projectId)
+                                            .Include(d => d.Project)
                                             .ToListAsync();
             var project = discipline.Project;
             var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
@@ -147,7 +151,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         }
     }
 
-    public async Task AddTime(int userId, int projectId, int disciplineId, int otherId, TimeSpan timespan)
+    public async Task AddTime(int userId, int projectId, int disciplineId, int drawId, TimeSpan timespan)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -159,7 +163,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                 DailyUserId = userId,
                 ProjectId = projectId,
                 DisciplineId = disciplineId,
-                OtherId = otherId,
+                DrawingId = drawId,
                 TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds)
             };
             await _context.Set<DailyTime>().AddAsync(time);
@@ -186,8 +190,68 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
             decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
             project.EstimatedCompleted = (float)divitionProResult * 100;
-
+            
             // Save Changes
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<ICollection<UserDto>> GetDesigners(int drwaingId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var users = await _context.Set<DrawingEmployee>()
+                                      .Where(de => de.DrawingId == drwaingId)
+                                      .Include(de => de.Employee)
+                                      .Select(de => de.Employee)
+                                      .ToListAsync();
+
+            return Mapping.Mapper.Map<List<UserDto>>(users);
+        }
+    }
+
+    public async Task AddDesigners(int drawingId, ICollection<UserDto> designers)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            foreach(var d in designers)
+            {
+                DrawingEmployee de = new DrawingEmployee()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    DrawingId = drawingId,
+                    EmployeeId = d.Id
+                };
+
+                // Check If Exists
+                var exists = await _context.Set<DrawingEmployee>()
+                    .AnyAsync(de => de.DrawingId == drawingId && de.EmployeeId == d.Id);
+                if (exists) continue;
+
+                await _context.Set<DrawingEmployee>().AddAsync(de);
+                await _context.SaveChangesAsync();
+            }
+        }
+    }
+
+    public async Task RemoveDesigners(int drawingId, ICollection<int> designersIds)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var designers = await _context.Set<DrawingEmployee>()
+                                              .Where(d => designersIds.Contains(d.EmployeeId) 
+                                                                        && d.DrawingId == drawingId)
+                                              .ToListAsync();
+
+            if (designers == null)
+                throw new NullReferenceException(nameof(designers));
+
+            foreach (var designer in designers)
+            {
+                _context.Set<DrawingEmployee>().Remove(designer);
+            }
+
             await _context.SaveChangesAsync();
         }
     }
