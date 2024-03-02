@@ -32,7 +32,6 @@ public class AuthorizeServices
         _mapper = mapper;
     }
 
-
     public async Task Authorize()
     {
         await _getLogedUser();

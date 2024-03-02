@@ -1,105 +1,23 @@
 ﻿@page "/"
 @page "/welcome"
 
-@using Microsoft.Extensions.Configuration
-@using Microsoft.AspNetCore.Hosting
-@using Microsoft.Extensions.Hosting
 @using EmpiriaBMS.Front.Components.Admin
 @using EmpiriaBMS.Front.Services
 
-@inject TeamsFx teamsfx
-@inject TeamsUserCredential teamsUserCredential
-@inject MicrosoftTeams MicrosoftTeams
-@inject IWebHostEnvironment HostEnvironment
-@inject IConfiguration Configuration
-@inject NavigationManager MyNavigationManager
-@inject IDataProvider DataProvider
-@inject IMapper Mapper
 @inject AuthorizeServices authorizeServices
 
-
-@if(isLoading)
+@if (IsAdmin)
 {
-    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-        <FilterProgressRing FilterLoading="@isLoading"/>
-    </div>
+    <AdminHost />
 }
 else
 {
-    @if (IsAdmin)
-    {
-        <AdminHost />
-    }
-    else
-    {
-        <Dashboard @ref=dashboardCompoment/>
-    }
-
-    <!-- Remove This -->
-    <select class="form-select" @onchange="RoleSelectionChanged"
-            style="position:fixed !important; bottom:0px !important; width: 200px; left: 10px;">
-        @foreach (var role in _allRoles)
-        {
-            @if (@role.Name.Equals(authorizeServices.DefaultRoleName))
-            {
-                <option value="@role.Id" selected>@role.Name</option>
-            }
-            else
-            {
-                <option value="@role.Id">@role.Name</option>
-            }
-        }
-    </select>
-
+    <Dashboard />
 }
 
 @code {
-    bool _runInTeams = false;
-    bool _authenticated = false;
-    bool isLoading = true;
-
-    public bool IsAdmin => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if(firstRender)
-        {
-            _runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetAllRoles(); // TODO: Remove This
-            isLoading = false;
-            StateHasChanged();            
-        }
-    }
-
-    private string GetEnvironmentName()
-    {
-        return HostEnvironment.IsDevelopment() ? "local environment" : "Azure environment";
-    }
-
-    // TODO: Remove This
-    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
-    private Dashboard dashboardCompoment;
-    private ICollection<RoleVM> _allRoles = new List<RoleVM>();
-
-    private async Task RoleSelectionChanged(ChangeEventArgs e)
-    {
-        bool isLoading = true;
-        var selectRoleId = Convert.ToInt32(e.Value);
-        await authorizeServices.Authorize(selectRoleId, _runInTeams);
-        if (dashboardCompoment != null)
-            await dashboardCompoment.Refresh();
-        isLoading = false;
-        StateHasChanged();
-    }
-
-    private async Task GetAllRoles()
-    {
-        var rolesDtos = await DataProvider.Roles.GetAll();
-        var roles = Mapper.Map<List<RoleVM>>(rolesDtos);
-        _allRoles.Clear();
-        roles.ForEach(_allRoles.Add);
-    }
-
+    public bool IsAdmin => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO");
 }
