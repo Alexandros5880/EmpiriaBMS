@@ -11,15 +11,15 @@ public class TimerService
     public bool IsRunning(string userId) =>
         _timers.ContainsKey(userId);
 
-    public void StartTimer(string userId, TimeSpan? startTime = null)
+    public void StartTimer(string userId)
     {
         if (IsRunning(userId))
         {
             StopTimer(userId);
         }
-        _elapsedTime[userId] = TimeSpan.Zero;            
-        Timer timer = new Timer(Callback, userId, startTime ?? _pausedTime[userId], TimeSpan.FromSeconds(1));
-        _pausedTime[userId] = TimeSpan.Zero;
+
+        _elapsedTime[userId] = TimeSpan.Zero;
+        Timer timer = new Timer(Callback, userId, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         _timers[userId] = timer;
     }
 
@@ -35,14 +35,15 @@ public class TimerService
 
     public void StopTimer(string userId)
     {
-        _pausedTime.AddOrUpdate(
-            userId,
-            _pausedTime[userId],
-            (key, oldTime) => oldTime.Add(_pausedTime[userId])
-        );
-
         if (_timers.TryGetValue(userId, out Timer timer))
         {
+            var timeNow = GetElapsedTime(userId);
+            _pausedTime.AddOrUpdate(
+                userId,
+                timeNow,
+                (key, oldTime) => oldTime.Add(timeNow)
+            );
+
             timer.Dispose();
             _timers.Remove(userId);
         }
@@ -64,5 +65,10 @@ public class TimerService
             return pausedTime;
         }
         return TimeSpan.Zero;
+    }
+
+    public void ResetPausedTime(string userId)
+    {
+        _pausedTime[userId] = TimeSpan.Zero;
     }
 }

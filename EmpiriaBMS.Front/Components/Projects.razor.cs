@@ -49,6 +49,7 @@ public partial class Projects : IDisposable
     bool _authenticated = false;
     bool _startLoading = true;
     bool _filterLoading = false;
+    bool firstRun = false;
 
     // Visibility Properties
     public bool EditDrawing {
@@ -125,12 +126,15 @@ public partial class Projects : IDisposable
     protected override async void OnInitialized()
     {
         base.OnInitialized();
+        // timer = used only to run UpdateElapsedTime() every one second
+        timer = new Timer(_ => UpdateElapsedTime(), null, 0, 1000);
         isWorkingMode = TimerService.IsRunning(LogedUser.Id.ToString());
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
+        firstRun = firstRender;
 
         if (firstRender)
         {
@@ -461,24 +465,33 @@ public partial class Projects : IDisposable
     #region Timer
     private void UpdateElapsedTime()
     {
-        elapsedTime = TimerService.GetElapsedTime(LogedUser.Id.ToString());
-        InvokeAsync(StateHasChanged);
+        var time = TimerService.GetElapsedTime(LogedUser.Id.ToString());
+        timePaused = TimerService.GetPausedTime(LogedUser.Id.ToString());
+
+        var timePlusPaused = time;
+
+        if (timePaused != TimeSpan.Zero)
+            timePlusPaused = time + timePaused;
+
+        if (TimerService.IsRunning(LogedUser.Id.ToString()))
+        {
+            elapsedTime = timePlusPaused;
+            InvokeAsync(StateHasChanged);
+        }
     }
 
     private async Task StartTimer()
     {
+        Debug.WriteLine($"\nStart Time Time\n");
         // TODO: Projects Timer -> Change """ timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7); """ TO """ DateTime.Now """
-        StartWorkTime = DateTime.Now.AddHours(-7).AddMinutes(-10).TimeOfDay;
-
-        timer = new Timer(_ => UpdateElapsedTime(), null, 0, 1000);
-        TimerService.StartTimer(LogedUser.Id.ToString(), StartWorkTime);
+        //StartWorkTime = DateTime.Now.AddHours(-7).AddMinutes(-10).TimeOfDay;
+        TimerService.StartTimer(LogedUser.Id.ToString());
     }
 
     private void StopTimer()
     {
+        Debug.WriteLine($"\nPause Time\n");
         TimerService.StopTimer(LogedUser.Id.ToString());
-        timePaused = TimerService.GetPausedTime(LogedUser.Id.ToString());
-        timer.Dispose();
     }
     #endregion
 
@@ -904,7 +917,7 @@ public partial class Projects : IDisposable
         {
             if (disposing)
             {
-                
+                timer.Dispose();
             }
             disposedValue = true;
         }
