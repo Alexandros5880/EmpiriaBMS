@@ -8,40 +8,78 @@
 
 
 <div class="container-fluid">
-
-    <div class="bb-top-row px-4 d-flex justify-content-between">
+    <!-- Top navigation row -->
+    <div class="bb-top-row d-flex justify-content-between" style="width: 100%; margin: 0 !important; background-crolor: green;">
         <div>
-            <span class="fluent--navigation-16-filled"
-                  @onclick="_toggleSidebar">
-            </span>
+            <span class="fluent--navigation-16-filled" @onclick="_toggleSidebar"></span>
         </div>
         <div>
             <span class="gis--profile-o"></span>
         </div>
     </div>
 
+    <!-- Main content row -->
     <div class="row">
-        <div class="@(_isSidebarOpen ? "col-3" : "col-0")"
+        <!-- Sidebar column -->
+        <div class="@(_isSidebarOpen ? "col-xxl-2 col-xl-2 col-lg-3 col-md-3 col-sm-4" : "col-0")"
              style="@(_isSidebarOpen ? "" : "display:none;")">
             <div class="sidebar">
                 <ul class="nav flex-column">
-
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link 1</a>
+                        <a class="nav-link text-white mb-2 @(_activeLink == "link1" ? "active" : "")"
+                           href="#" @onclick="@(() => _setActiveLink("link1"))">
+                            <span class="file-icons--microsoft-project"></span>
+                            Projects
+                        </a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link 2</a>
+                        <a class="nav-link text-white mb-2 @(_activeLink == "link2" ? "active" : "")"
+                           href="#" @onclick="@(() => _setActiveLink("link2"))">
+                            <span class="ph--users-four-light"></span>
+                            Users
+                       </a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link 3</a>
+                        <a class="nav-link text-white mb-2 @(_activeLink == "link3" ? "active" : "")"
+                           href="#" @onclick="@(() => _setActiveLink("link3"))">
+                            <span class="oui--app-users-roles"></span>
+                            Roles
+                       </a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link text-white mb-2 @(_activeLink == "link4" ? "active" : "")"
+                           href="#" @onclick="@(() => _setActiveLink("link4"))">
+                            <span class="arcticons--ptv"></span>
+                            Project Types
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white mb-2 @(_activeLink == "link5" ? "active" : "")"
+                           href="#" @onclick="@(() => _setActiveLink("link5"))">
+                            <span class="gala--layer"></span>
+                            Discipline Types
+                       </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white mb-2 @(_activeLink == "link6" ? "active" : "")"
+                           href="#" @onclick="@(() => _setActiveLink("link6"))">
+                            <span class="streamline--hand-held-tablet-drawing"></span>
+                            Drawing Types
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white mb-2 @(_activeLink == "link7" ? "active" : "")"
+                           href="#" @onclick="@(() => _setActiveLink("link7"))">
+                            <span class="material-symbols--other-admission-outline-sharp"></span>
+                            Other Types
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
-        <div class="@(_isSidebarOpen ? "col-9" : "col-12")">
+        <!-- Main content column -->
+        <div class="@(_isSidebarOpen ? "col-xxl-10 col-xl-10 col-lg-9 col-md-9 col-sm-8" : "col-12")"
+             style="background-color: #f8f9fa;">
             <main>
                 <article class="content px-4">
                     @Body
@@ -56,6 +94,7 @@
     private bool _runInTeams { get; set; } = false;
     private bool _isSidebarOpen { get; set; } = false;
     private bool _isMobile { get; set; } = false;
+    private string _activeLink { get; set; } = "";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -80,6 +119,12 @@
     {
         var screenSize = await MicrosoftTeams.GetScreenSize();
         _isMobile = screenSize.Width <= 768;
+    }
+
+    private void _setActiveLink(string link)
+    {
+        _activeLink = link;
+        StateHasChanged();
     }
 
 }
