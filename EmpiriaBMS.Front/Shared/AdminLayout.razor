@@ -8,18 +8,6 @@
 
 
 <div class="container-fluid">
-    <!-- Top navigation row -->
-    <div class="bb-top-row d-flex justify-content-between" style="width: 100%; margin: 0 !important; background-crolor: green;">
-        <div>
-            <span class="fluent--navigation-16-filled" @onclick="_toggleSidebar"></span>
-        </div>
-        <div>
-            <span class="gis--profile-o"></span>
-            <span class="fluent-mdl2--locale-language ms-2"></span>
-            <span class="healthicons--ui-user-profile-outline ms-2"></span>
-        </div>
-    </div>
-
     <!-- Main content row -->
     <div class="row">
         <!-- Sidebar column -->
@@ -83,9 +71,25 @@
         <div class="@(_isSidebarOpen ? "col-xxl-10 col-xl-10 col-lg-9 col-md-9 col-sm-8" : "col-12")"
              style="background-color: #f8f9fa;">
             <main>
+
+                <!-- Top navigation row -->
+                <div class="bb-top-row d-flex justify-content-between"
+                     style="width: 100%; margin: 0 !important;">
+                    <div>
+                        <span class="fluent--navigation-16-filled" @onclick="_toggleSidebar"></span>
+                    </div>
+                    <div>
+                        <span class="gis--profile-o"></span>
+                        <span class="fluent-mdl2--locale-language ms-2"></span>
+                        <span class="healthicons--ui-user-profile-outline ms-2"></span>
+                    </div>
+                </div>
+
+                <!-- Body -->
                 <article class="content px-4">
                     @Body
                 </article>
+
             </main>
         </div>
     </div>
