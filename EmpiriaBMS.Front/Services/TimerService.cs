@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace EmpiriaBMS.Front.Horizontal;
+namespace EmpiriaBMS.Front.Services;
 
 public class TimerService
 {

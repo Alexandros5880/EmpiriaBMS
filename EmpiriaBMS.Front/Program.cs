@@ -5,6 +5,7 @@ using EmpiriaBMS.Core.Repositories;
 using EmpiriaBMS.Front;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
+using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Fast.Components.FluentUI;
@@ -20,10 +21,10 @@ var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
 builder.Services.AddSingleton<TimerService>();
-
-// Data Providing Dependency Injection
-builder.Services.AddDbContextFactory<AppDbContext>();
-builder.Services.AddScoped<IDataProvider, DataProvider>();
+builder.Services.AddBlazorBootstrap();
+builder.Services.AddDbContextFactory<AppDbContext>(); // DbContext Dependency Injection
+builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
+builder.Services.AddScoped<AuthorizeServices>();
 
 // TODO: AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>

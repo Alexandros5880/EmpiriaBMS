@@ -4,6 +4,7 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.DefaultComponents;
 using EmpiriaBMS.Front.Horizontal;
+using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
@@ -22,27 +23,20 @@ namespace EmpiriaBMS.Front.Components;
 public partial class Projects : IDisposable
 {
 
-    // Auth Models
-    [Parameter]
-    public UserVM LogedUser { get; set; }
-    [Parameter]
-    public double LogesUserHours { get; set; } = 0;
-    [Parameter]
-    public ICollection<RoleVM> LoggedUserRoles { get; set; }
     private UserTimes _logedUserTimes;
     private UserTimes _editLogedUserTimes;
-    bool getAllDisciplines => LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
-    bool getAllDrawings => LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                    || LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
+    bool getAllDisciplines => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
+    bool getAllDrawings => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
 
     // General Fields
     private bool disposedValue;
@@ -56,23 +50,23 @@ public partial class Projects : IDisposable
     public bool EditDrawing {
         get
         {
-            return isWorkingMode && LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer");
+            return isWorkingMode && authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer");
         }
     }
     public bool EditDiscipline
     {
         get
         {
-            return isWorkingMode && LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager");
+            return isWorkingMode && authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager");
         }
     }
     public bool EditProject
     {
         get
         {
-            return isWorkingMode && (LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
-                                 || LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO"));
+            return isWorkingMode && (authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
+                                 || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
+                                 || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO"));
         }
     }
 
@@ -129,7 +123,7 @@ public partial class Projects : IDisposable
         base.OnInitialized();
         // timer = used only to run UpdateElapsedTime() every one second
         timer = new Timer(_ => UpdateElapsedTime(), null, 0, 1000);
-        isWorkingMode = TimerService.IsRunning(LogedUser.Id.ToString());
+        isWorkingMode = TimerService.IsRunning(authorizeServices.LogedUser.Id.ToString());
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -140,7 +134,7 @@ public partial class Projects : IDisposable
         if (firstRender)
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetLogedUserTimes(LogedUser.Id);
+            await GetLogedUserTimes(authorizeServices.LogedUser.Id);
             await _getProjects();
             _startLoading = false;
             StateHasChanged();
@@ -180,7 +174,7 @@ public partial class Projects : IDisposable
             // TODO: Get My Project And Down
             //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id)).ToList<ProjectDto>();
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(authorizeServices.LogedUser.Id)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
@@ -365,7 +359,7 @@ public partial class Projects : IDisposable
         _selectedDraw = null;
         _selectedOther = null;
 
-        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, LogedUser.Id, getAllDisciplines);
+        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, authorizeServices.LogedUser.Id, getAllDisciplines);
 
         _disciplines.Clear();
         foreach (var di in disciplines)
@@ -380,8 +374,8 @@ public partial class Projects : IDisposable
 
         _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
-        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, LogedUser.Id, getAllDrawings);
-        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, LogedUser.Id, true);
+        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, authorizeServices.LogedUser.Id, getAllDrawings);
+        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, authorizeServices.LogedUser.Id, true);
 
         _draws.Clear();
         foreach (var di in draws)
@@ -466,15 +460,15 @@ public partial class Projects : IDisposable
     #region Timer
     private void UpdateElapsedTime()
     {
-        var time = TimerService.GetElapsedTime(LogedUser.Id.ToString());
-        timePaused = TimerService.GetPausedTime(LogedUser.Id.ToString());
+        var time = TimerService.GetElapsedTime(authorizeServices.LogedUser.Id.ToString());
+        timePaused = TimerService.GetPausedTime(authorizeServices.LogedUser.Id.ToString());
 
         var timePlusPaused = time;
 
         if (timePaused != TimeSpan.Zero)
             timePlusPaused = time + timePaused;
 
-        if (TimerService.IsRunning(LogedUser.Id.ToString()))
+        if (TimerService.IsRunning(authorizeServices.LogedUser.Id.ToString()))
         {
             elapsedTime = timePlusPaused;
             InvokeAsync(StateHasChanged);
@@ -483,12 +477,12 @@ public partial class Projects : IDisposable
 
     private async Task StartTimer()
     {
-        TimerService.StartTimer(LogedUser.Id.ToString());
+        TimerService.StartTimer(authorizeServices.LogedUser.Id.ToString());
     }
 
     private void StopTimer()
     {
-        TimerService.StopTimer(LogedUser.Id.ToString());
+        TimerService.StopTimer(authorizeServices.LogedUser.Id.ToString());
     }
     #endregion
 
@@ -788,7 +782,7 @@ public partial class Projects : IDisposable
             }
             else
                 await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            await DataProvider.Drawings.AddTime(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+            await DataProvider.Drawings.AddTime(authorizeServices.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
             sumTime += draw.Time;
         }
 
@@ -796,18 +790,18 @@ public partial class Projects : IDisposable
         foreach (var other in _othersChanged)
         {
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-            await DataProvider.Others.AddTime(LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+            await DataProvider.Others.AddTime(authorizeServices.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
             sumTime += other.Time;
         }
 
         // Update User Hours
-        await DataProvider.Users.AddDailyTime(LogedUser.Id, DateTime.Now, sumTime);
+        await DataProvider.Users.AddDailyTime(authorizeServices.LogedUser.Id, DateTime.Now, sumTime);
         if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-            await DataProvider.Users.AddPersonalTime(LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
+            await DataProvider.Users.AddPersonalTime(authorizeServices.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
         if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-            await DataProvider.Users.AddTraningTime(LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
+            await DataProvider.Users.AddTraningTime(authorizeServices.LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
         if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-            await DataProvider.Users.AddCorporateEventTime(LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+            await DataProvider.Users.AddCorporateEventTime(authorizeServices.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
 
         _drawsChanged.Clear();
         _othersChanged.Clear();
@@ -815,7 +809,7 @@ public partial class Projects : IDisposable
         await _getProjects();
 
         // Clear Timer From this User
-        TimerService.ClearTimer(LogedUser.Id.ToString());
+        TimerService.ClearTimer(authorizeServices.LogedUser.Id.ToString());
 
         _startLoading = false;
     }

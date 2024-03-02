@@ -1,12 +1,76 @@
-<FluentDesignSystemProvider AccentBaseColor="#6264A7">
-    <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
-        <Found Context="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        </Found>
-        <NotFound>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <p>Sorry, there's nothing at this address.</p>
-            </LayoutView>
-        </NotFound>
-    </Router>
-</FluentDesignSystemProvider>
+@using Microsoft.Extensions.Configuration
+@using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Hosting
+@using EmpiriaBMS.Front.Components.Admin
+@using EmpiriaBMS.Front.Services
+
+@inject TeamsFx teamsfx
+@inject TeamsUserCredential teamsUserCredential
+@inject MicrosoftTeams MicrosoftTeams
+@inject IWebHostEnvironment HostEnvironment
+@inject IConfiguration Configuration
+@inject NavigationManager MyNavigationManager
+@inject IDataProvider DataProvider
+@inject IMapper Mapper
+@inject AuthorizeServices authorizeServices
+
+@if(isLoading)
+{
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <FilterProgressRing FilterLoading="@isLoading"/>
+    </div>
+}
+else
+{
+    <FluentDesignSystemProvider AccentBaseColor="#6264A7">
+        <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+            <Found Context="routeData">
+                @{
+                    Type defaultLayoutType = IsAdmin ? typeof(AdminLayout) : typeof(MainLayout);
+                }
+                <RouteView RouteData="@routeData" DefaultLayout="@defaultLayoutType" />
+            </Found>
+            <NotFound>
+                @{
+                    Type layoutType = IsAdmin ? typeof(AdminLayout) : typeof(MainLayout);
+                }
+                <LayoutView Layout="@layoutType">
+                    <p>Sorry, there's nothing at this address.</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </FluentDesignSystemProvider>
+}
+
+
+@code {
+    bool _runInTeams = false;
+    bool _authenticated = false;
+    bool isLoading = true;
+
+    public bool IsAdmin => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            _runInTeams = await MicrosoftTeams.IsInTeams();
+            await authorizeServices.Authorize(_runInTeams: _runInTeams);
+            authorizeServices.CallBackOnAuthorize = Refresh;
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private void Refresh()
+    {
+        StateHasChanged();
+    }
+
+    private string GetEnvironmentName()
+    {
+        return HostEnvironment.IsDevelopment() ? "local environment" : "Azure environment";
+    }
+}

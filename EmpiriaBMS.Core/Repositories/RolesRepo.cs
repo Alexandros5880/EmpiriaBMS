@@ -50,6 +50,20 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
+    public async Task<ICollection<RoleDto>> GetRoles(int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var roles = await _context.Set<UserRole>()
+                                 .Where(ur => ur.UserId == userId)
+                                 .Include(ur => ur.Role)
+                                 .Select(ur => ur.Role)
+                                 .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
+        }
+    }
+
     public async Task<ICollection<RoleDto>> GetEmployeeRoles()
     {
         using (var _context = _dbContextFactory.CreateDbContext())

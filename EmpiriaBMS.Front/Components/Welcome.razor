@@ -4,6 +4,8 @@
 @using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
+@using EmpiriaBMS.Front.Components.Admin
+@using EmpiriaBMS.Front.Services
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -13,27 +15,32 @@
 @inject NavigationManager MyNavigationManager
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
+@inject AuthorizeServices authorizeServices
 
 
 @if(isLoading)
 {
-    @* <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-		<FluentProgressRing/>
-	</div> *@
-
     <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
         <FilterProgressRing FilterLoading="@isLoading"/>
     </div>
 }
 else
 {
-    <Projects @ref=projectsCompoment LogedUser="@_logedUser" LogesUserHours="@_logesUserHours" LoggedUserRoles="@_loggedUserRoles"/>
+    @if (IsAdmin)
+    {
+        <AdminHost />
+    }
+    else
+    {
+        <Projects @ref=projectsCompoment/>
+    }
 
     <!-- Remove This -->
-    <select class="form-select" @onchange="RoleSelectionChanged" style="position:fixed !important; bottom:0px !important;">
+    <select class="form-select" @onchange="RoleSelectionChanged"
+            style="position:fixed !important; bottom:0px !important; width: 200px; left: 10px;">
         @foreach (var role in _allRoles)
         {
-            @if (@role.Name.Equals(_defaultRole))
+            @if (@role.Name.Equals(authorizeServices.DefaultRoleName))
             {
                 <option value="@role.Id" selected>@role.Name</option>
             }
@@ -51,10 +58,7 @@ else
     bool _authenticated = false;
     bool isLoading = true;
 
-    // Auth Models
-    private UserVM _logedUser;
-    private double _logesUserHours = 0;
-    private ICollection<RoleVM> _loggedUserRoles = new List<RoleVM>();
+    public bool IsAdmin => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -64,63 +68,8 @@ else
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
             await GetAllRoles(); // TODO: Remove This
-            await _getLogedUser(_runInTeams: _runInTeams);
             isLoading = false;
             StateHasChanged();            
-        }
-    }
-
-    private async Task _getLogedUser(int roleId = 0, bool _runInTeams = true)
-    {
-        try
-        {
-            // TODO: Get Teams Logged User And Mach him With Our Users
-            var teamsUser = await teamsUserCredential.GetUserInfoAsync();
-            var userExists = DataProvider.Users.Exists(teamsUser.PreferredUserName);
-
-            // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer
-            var _defaultRoleId = roleId != 0 ? roleId : await GetRoleId(_defaultRole);
-            if (_defaultRoleId == 0)
-                throw new Exception($"Exception `{_defaultRole}` role not exists!");
-
-            var users = await DataProvider.Roles.GetUsers(_defaultRoleId);
-            var dbUser = users.FirstOrDefault();
-
-            if (dbUser == null)
-                throw new NullReferenceException(nameof(dbUser));
-
-            _logedUser = Mapper.Map<UserVM>(dbUser);
-
-            _logesUserHours = await DataProvider.Users.GetUserHoursFromLastMonday(_logedUser.Id, DateTime.Now);
-
-            _loggedUserRoles = (await DataProvider.Roles.GetEmplyeeRoles(dbUser.Id))
-                                                        .Select(r => Mapper.Map<RoleVM>(r))
-                                                        .ToList();
-
-            // if (_loggedUserRoles.Select(r => r.Name).ToList().Contains("Admin"))
-            // {
-                
-            // }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private async Task<int> GetRoleId(string roleName)
-    {
-        try
-        {
-            var role = await DataProvider.Roles.Get(roleName);
-            return role?.Id ?? 0;
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Error
-            Debug.WriteLine($"Exception: {ex.Message}");
-            return 0;
         }
     }
 
@@ -129,21 +78,20 @@ else
         return HostEnvironment.IsDevelopment() ? "local environment" : "Azure environment";
     }
 
-
     // TODO: Remove This
-    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer
+    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
     private Projects projectsCompoment;
-    private string _defaultRole = "Designer";
     private ICollection<RoleVM> _allRoles = new List<RoleVM>();
 
     private async Task RoleSelectionChanged(ChangeEventArgs e)
     {
         bool isLoading = true;
         var selectRoleId = Convert.ToInt32(e.Value);
-        await _getLogedUser(selectRoleId, _runInTeams);
-        StateHasChanged();
-        await projectsCompoment.Refresh();
+        await authorizeServices.Authorize(selectRoleId, _runInTeams);
+        if (projectsCompoment != null)
+            await projectsCompoment.Refresh();
         isLoading = false;
+        StateHasChanged();
     }
 
     private async Task GetAllRoles()
