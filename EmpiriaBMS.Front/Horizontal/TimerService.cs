@@ -71,4 +71,15 @@ public class TimerService
     {
         _pausedTime[userId] = TimeSpan.Zero;
     }
+
+    public void ClearTimer(string userId)
+    {
+        if (_timers.TryGetValue(userId, out Timer timer))
+        {
+            timer.Dispose();
+            _timers.Remove(userId);
+            _elapsedTime.TryRemove(userId, out var ignoredElapsed);
+            _pausedTime.TryRemove(userId, out var ignoredPaused);
+        }
+    }
 }

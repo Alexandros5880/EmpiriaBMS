@@ -3,6 +3,7 @@ using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.DefaultComponents;
+using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
@@ -812,6 +813,9 @@ public partial class Projects : IDisposable
         _othersChanged.Clear();
 
         await _getProjects();
+
+        // Clear Timer From this User
+        TimerService.ClearTimer(LogedUser.Id.ToString());
 
         _startLoading = false;
     }
