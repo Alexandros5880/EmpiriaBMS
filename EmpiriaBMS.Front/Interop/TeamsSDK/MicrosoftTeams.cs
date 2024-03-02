@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using EmpiriaBMS.Front.ViewModel.DefaultComponents;
+using Microsoft.JSInterop;
 
 namespace EmpiriaBMS.Front.Interop.TeamsSDK;
 
@@ -46,7 +47,10 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("applyTimeMask", param);
     }
 
-
+    public Task<ScreenSize> GetScreenSize()
+    {
+        return InvokeAsync<ScreenSize>("getScreenSize");
+    }
 
 
     // Parameter Class

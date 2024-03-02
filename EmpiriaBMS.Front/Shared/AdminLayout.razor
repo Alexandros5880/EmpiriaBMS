@@ -4,55 +4,82 @@
 
 @using EmpiriaBMS.Front.Services;
 @inject AuthorizeServices authorizeServices;
+@inject MicrosoftTeams MicrosoftTeams
 
-<div class="bb-page">
 
-    <Sidebar @ref="sidebar"
-             IconName="IconName.BootstrapFill"
-             Title="Blazor Bootstrap"
-             DataProvider="SidebarDataProvider" />
+<div class="container-fluid">
 
-    <main>
-        <div class="bb-top-row px-4 d-flex justify-content-end">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+    <div class="bb-top-row px-4 d-flex justify-content-between">
+        <div>
+            <span class="fluent--navigation-16-filled"
+                  @onclick="_toggleSidebar">
+            </span>
         </div>
+        <div>
+            <span class="gis--profile-o"></span>
+        </div>
+    </div>
 
-        <article class="content px-4">
-            <div class="py-2">
-                @Body
+    <div class="row">
+        <div class="@(_isSidebarOpen ? "col-3" : "col-0")"
+             style="@(_isSidebarOpen ? "" : "display:none;")">
+            <div class="sidebar">
+                <ul class="nav flex-column">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link 1</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link 2</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link 3</a>
+                    </li>
+
+                </ul>
             </div>
-        </article>
-    </main>
-
+        </div>
+        <div class="@(_isSidebarOpen ? "col-9" : "col-12")">
+            <main>
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </div>
+    </div>
 </div>
-
-<Modal IsServiceModal="true" />
-<Preload />
-<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 
 
 @code {
-    Sidebar sidebar = default!;
-    IEnumerable<NavItem>? navItems;
+    private bool _runInTeams { get; set; } = false;
+    private bool _isSidebarOpen { get; set; } = false;
+    private bool _isMobile { get; set; } = false;
 
-    private async Task<SidebarDataProviderResult> SidebarDataProvider(SidebarDataProviderRequest request)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (navItems is null)
-            navItems = GetNavItems();
+        await base.OnAfterRenderAsync(firstRender);
 
-        return await Task.FromResult(request.ApplyTo(navItems));
-    }
-
-    private IEnumerable<NavItem> GetNavItems()
-    {
-        navItems = new List<NavItem>
+        if (firstRender)
         {
-            new NavItem { Href = "/admin/welcomeadmin", IconName = IconName.HouseDoorFill, Text = "Getting Started"},
-            new NavItem { Href = "#", IconName = IconName.CheckCircleFill, Text = "Alerts"},
-            new NavItem { Href = "#", IconName = IconName.InputCursorText, Text = "Auto Complete"},
-            new NavItem { Href = "#", IconName = IconName.SegmentedNav, Text = "Breadcrumb"},
-            new NavItem { Href = "/sidebar", IconName = IconName.LayoutSidebarInset, Text = "Sidebar"},
-        };
-        return navItems;
+            _runInTeams = await MicrosoftTeams.IsInTeams();
+            await IsMobile();
+            _isSidebarOpen = !_isMobile;
+            StateHasChanged();
+        }
     }
+
+    private void _toggleSidebar()
+    {
+        _isSidebarOpen = !_isSidebarOpen;
+        StateHasChanged();
+    }
+
+    private async Task IsMobile()
+    {
+        var screenSize = await MicrosoftTeams.GetScreenSize();
+        _isMobile = screenSize.Width <= 768;
+    }
+
 }

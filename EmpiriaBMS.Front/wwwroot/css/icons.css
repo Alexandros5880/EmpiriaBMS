@@ -167,3 +167,77 @@
 .clarity--assign-user-line:hover {
     transform: scale(1.5);
 }
+
+
+/* NasvBar Toogle Button */
+.fluent--navigation-16-filled {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' d='M2 3.75A.75.75 0 0 1 2.75 3h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 3.75m0 4A.75.75 0 0 1 2.75 7h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 7.75m0 4a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75'/%3E%3C/svg%3E");
+    background-color: currentColor;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+}
+.fluent--navigation-16-filled:hover {
+    transform: scale(1.5);
+}
+
+
+/* Graph */
+.gis--profile-o {
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M7 24v69h85v-5H12V24Z' color='%23000'/%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M68.219 33.463a2.5 2.5 0 0 0-1.787.816l-20.77 22.832l-11.156-7.238a2.5 2.5 0 0 0-3.461.742l-14.53 22.53c-1.816 2.804 2.4 5.522 4.204 2.709l13.17-20.422l10.834 7.03a2.5 2.5 0 0 0 3.21-.415l20.061-22.053l19.938 29.408c1.85 2.854 6.103-.028 4.138-2.804l-21.72-32.04a2.5 2.5 0 0 0-2.131-1.095' color='%23000'/%3E%3Cpath fill='%23000' d='M2.394 17.004v-2.71l7.813-7.622l-7.252.074V3.863h12.634v2.462l-7.9 7.709l8.346-.087v3.057z'/%3E%3C/svg%3E");
+    background-color: currentColor;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+}
+.gis--profile-o:hover {
+    transform: scale(1.5);
+}
+
+/* Left Arrow */
+.fluent--ios-arrow-24-filled {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12.727 3.687a1 1 0 1 0-1.454-1.374l-8.5 9a1 1 0 0 0 0 1.374l8.5 9.001a1 1 0 1 0 1.454-1.373L4.875 12z'/%3E%3C/svg%3E");
+    background-color: currentColor;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+}
+.fluent--ios-arrow-24-filled:hover {
+    transform: scale(1.5);
+}
+
+/* Right Arrow */
+.ep--arrow-right-bold {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath fill='%23000' d='M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8l-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0'/%3E%3C/svg%3E");
+    background-color: currentColor;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+}
+.ep--arrow-right-bold:hover {
+    transform: scale(1.5);
+}
