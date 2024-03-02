@@ -482,15 +482,11 @@ public partial class Projects : IDisposable
 
     private async Task StartTimer()
     {
-        Debug.WriteLine($"\nStart Time Time\n");
-        // TODO: Projects Timer -> Change """ timePaused != TimeSpan.Zero ? DateTime.Now : DateTime.Now.AddHours(-7); """ TO """ DateTime.Now """
-        //StartWorkTime = DateTime.Now.AddHours(-7).AddMinutes(-10).TimeOfDay;
         TimerService.StartTimer(LogedUser.Id.ToString());
     }
 
     private void StopTimer()
     {
-        Debug.WriteLine($"\nPause Time\n");
         TimerService.StopTimer(LogedUser.Id.ToString());
     }
     #endregion
