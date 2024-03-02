@@ -32,7 +32,7 @@ else
     }
     else
     {
-        <Projects @ref=projectsCompoment/>
+        <Dashboard @ref=dashboardCompoment/>
     }
 
     <!-- Remove This -->
@@ -80,7 +80,7 @@ else
 
     // TODO: Remove This
     // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
-    private Projects projectsCompoment;
+    private Dashboard dashboardCompoment;
     private ICollection<RoleVM> _allRoles = new List<RoleVM>();
 
     private async Task RoleSelectionChanged(ChangeEventArgs e)
@@ -88,8 +88,8 @@ else
         bool isLoading = true;
         var selectRoleId = Convert.ToInt32(e.Value);
         await authorizeServices.Authorize(selectRoleId, _runInTeams);
-        if (projectsCompoment != null)
-            await projectsCompoment.Refresh();
+        if (dashboardCompoment != null)
+            await dashboardCompoment.Refresh();
         isLoading = false;
         StateHasChanged();
     }

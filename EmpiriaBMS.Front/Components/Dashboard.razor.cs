@@ -20,7 +20,7 @@ using System.Diagnostics;
 using System.Threading;
 
 namespace EmpiriaBMS.Front.Components;
-public partial class Projects : IDisposable
+public partial class Dashboard : IDisposable
 {
 
     private UserTimes _logedUserTimes;
