@@ -2,15 +2,18 @@
 
 public class PreviousLocationService
 {
-    private string _previousLocation;
+    private List<object> _previousLocations = new List<object>();
 
-    public void UpdatePreviousLocation(string location)
+    public void UpdatePreviousLocation(object page)
     {
-        _previousLocation = location;
+        _previousLocations.Add(page);
+        if (_previousLocations.Count > 3)
+            _previousLocations.RemoveAt(0);
     }
 
-    public string GetPreviousLocation()
+    public object GetPreviousLocation()
     {
-        return _previousLocation;
+        if (_previousLocations.Count == 0) return null;
+        return _previousLocations[_previousLocations.Count-1];
     }
 }

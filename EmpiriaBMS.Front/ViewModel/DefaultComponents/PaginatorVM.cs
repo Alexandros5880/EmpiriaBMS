@@ -12,18 +12,19 @@ public class PaginatorVM : BNotifyPropertyChanged
         get => _pageSize;
         set
         {
+            if (_pageSize == value) return;
             _pageSize = value;
             NotifyPropertyChanged(nameof(PageSize));
         }
     }
 
-    private int _pageIndex;
+    private int _pageIndex = 1;
     public int PageIndex
     {
         get => _pageIndex;
         set
         {
-            if (value < 1) return;
+            if (value < 1 || _pageIndex == value) return;
             _pageIndex = value;
             NotifyPropertyChanged(nameof(PageIndex));
         }
@@ -35,6 +36,7 @@ public class PaginatorVM : BNotifyPropertyChanged
         get => _recordsCount;
         set
         {
+            if (_recordsCount == value) return;
             _recordsCount = value;
             var divide = value / PageSize;
             var quotient = value % PageSize;
@@ -49,6 +51,7 @@ public class PaginatorVM : BNotifyPropertyChanged
         get => _pagesCounter;
         set
         {
+            if (_pagesCounter == value) return;
             _pagesCounter = value;
             NotifyPropertyChanged(nameof(PagesCounter));
         }
@@ -93,7 +96,8 @@ public class PaginatorVM : BNotifyPropertyChanged
 
     public void SetRecordsLength(int length)
     {
-        RecordsCount = length;
+        if (RecordsCount != length)
+            RecordsCount = length;
     }
 
     public async Task Next(EventCallback func)

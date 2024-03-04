@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.Interop.TeamsSDK;
+﻿using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
@@ -8,14 +9,14 @@ namespace EmpiriaBMS.Front.Components.Admin.Users;
 
 public partial class Users
 {
-    private PaginatorVM _paginator = new PaginatorVM(7);
+    private Paginator _paginator;
     private ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
     private UserVM _selectedUser = new UserVM();
+    UsersTable _usersTable;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        previusLocationService.UpdatePreviousLocation(nameof(Users));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -24,8 +25,22 @@ public partial class Users
 
         if (firstRender)
         {
-            _paginator.RecordsCount = await DataProvider.Users.Count();
-            await _getUsers();
+            var pevLocation = previusLocationService.GetPreviousLocation();
+            if (pevLocation?.GetType() == typeof(Users))
+            {
+                var usersPage = (Users)pevLocation;
+                _users = usersPage._users;
+                _selectedUser = usersPage._selectedUser;
+                _usersTable = usersPage._usersTable;
+                _paginator.SetVM(usersPage._paginator.Peginator);
+            }
+            else
+            {
+                previusLocationService.UpdatePreviousLocation(this);
+                _paginator.SetRecordsLength(await DataProvider.Users.Count());
+                await _getUsers();
+            }
+
             StateHasChanged();
         }
     }
@@ -41,5 +56,11 @@ public partial class Users
     private void _onSelectUser(int id)
     {
         _selectedUser = _users.FirstOrDefault(u => u.Id == id);
+    }
+
+    protected override bool ShouldRender()
+    {
+        // Return false to prevent the entire component from re-rendering
+        return true;
     }
 }

@@ -8,4 +8,16 @@
 
 @code {
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            var pevLocation = previusLocationService.GetPreviousLocation();
+            if (pevLocation?.GetType() == typeof(DrawingsTypes)) return;
+            previusLocationService.UpdatePreviousLocation(this);
+        }
+    }
+
 }

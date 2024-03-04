@@ -53,6 +53,10 @@
         </nav>
     </div>
 }
+else
+{
+    <span>Peginator.PagesCounter @("<") 1</span>
+}
 
 
 @code {
@@ -60,8 +64,11 @@
     [Parameter]
     public EventCallback Renderer { get; set; }
 
-    [Parameter]
-    public PaginatorVM Peginator { get; set; }
+    public PaginatorVM Peginator { get; protected set; } = new PaginatorVM(7);
+
+    public int PageSize => Peginator.PageSize;
+
+    public int PageIndex => Peginator.PageIndex;
 
     private async Task PeginatorNext() =>
         await Peginator.Next(Renderer);
@@ -72,4 +79,13 @@
     private async Task PeginatorSetIndex(int pageIndex) =>
         await Peginator.SetPageIndex(pageIndex, Renderer);
 
+    public void SetRecordsLength(int length)
+    {
+        Peginator.SetRecordsLength(length);
+    }
+
+    public void SetVM(PaginatorVM peginator)
+    {
+        Peginator = peginator;
+    }
 }

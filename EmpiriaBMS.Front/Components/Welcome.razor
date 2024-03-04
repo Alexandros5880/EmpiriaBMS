@@ -16,32 +16,38 @@
 
 @if (SeeAdmin)
 {
-    @switch (previusLocationService.GetPreviousLocation())
+    var prevPageType = previusLocationService.GetPreviousLocation()?.GetType();
+    if (prevPageType == typeof(DisciplinesTypes))
     {
-        case nameof(DisciplinesTypes):
-            <DisciplinesTypes />
-            break;
-        case nameof(DrawingsTypes):
-            <DrawingsTypes />
-            break;
-        case nameof(OthersTypes):
-            <OthersTypes />
-            break;
-        case nameof(Projects):
-            <Projects />
-            break;
-        case nameof(Roles):
-            <Roles />
-            break;
-        case nameof(Users):
-            <Users />
-            break;
-        case nameof(Dashboard):
-            <Dashboard />
-            break;
-        default:
-            <Projects />
-            break;
+        <DisciplinesTypes />
+    }
+    else if (prevPageType == typeof(DrawingsTypes))
+    {
+        <DrawingsTypes />
+    }
+    else if (prevPageType == typeof(OthersTypes))
+    {
+        <OthersTypes />
+    }
+    else if (prevPageType == typeof(Projects))
+    {
+        <Projects />
+    }
+    else if (prevPageType == typeof(Roles))
+    {
+        <Roles />
+    }
+    else if (prevPageType == typeof(Users))
+    {
+        <Users />
+    }
+    else if (prevPageType == typeof(Dashboard) && SeeDashboard)
+    {
+        <Dashboard />
+    }
+    else
+    {
+        <Projects />
     }
 }
 else
@@ -66,4 +72,10 @@ else
         }
     }
     #endregion
+
+    protected override bool ShouldRender()
+    {
+        // Return false to prevent the entire component from re-rendering
+        return false;
+    }
 }
