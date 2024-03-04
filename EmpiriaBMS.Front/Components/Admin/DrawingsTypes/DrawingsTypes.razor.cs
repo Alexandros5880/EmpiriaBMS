@@ -1,16 +1,14 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Front.Components.General;
+﻿using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects;
+namespace EmpiriaBMS.Front.Components.Admin.DrawingsTypes;
 
-public partial class Projects
+public partial class DrawingsTypes
 {
     private Paginator _paginator;
-    private ObservableCollection<ProjectVM> _source = new ObservableCollection<ProjectVM>();
-    private ProjectVM _selectedItem = new ProjectVM();
+    private ObservableCollection<DrawingTypeVM> _source = new ObservableCollection<DrawingTypeVM>();
+    private DrawingTypeVM _selectedItem = new DrawingTypeVM();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -19,9 +17,9 @@ public partial class Projects
         if (firstRender)
         {
             var pevLocation = previusLocationService.GetPreviousLocation();
-            if (pevLocation?.GetType() == typeof(Projects))
+            if (pevLocation?.GetType() == typeof(DrawingsTypes))
             {
-                var prevPage = (Projects)pevLocation;
+                var prevPage = (DrawingsTypes)pevLocation;
                 _source = prevPage._source;
                 _selectedItem = prevPage._selectedItem;
                 _paginator.SetVM(prevPage._paginator.Peginator);
@@ -29,7 +27,7 @@ public partial class Projects
             else
             {
                 previusLocationService.UpdatePreviousLocation(this);
-                _paginator.SetRecordsLength(await DataProvider.Projects.Count());
+                _paginator.SetRecordsLength(await DataProvider.DrawingsTypes.Count());
                 await _getSource();
             }
 
@@ -39,8 +37,8 @@ public partial class Projects
 
     private async Task _getSource()
     {
-        var dtos = await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex);
-        var vms = Mapper.Map<List<ProjectVM>>(dtos);
+        var dtos = await DataProvider.DrawingsTypes.GetAll(_paginator.PageSize, _paginator.PageIndex);
+        var vms = Mapper.Map<List<DrawingTypeVM>>(dtos);
         _source.Clear();
         vms.ForEach(_source.Add);
     }

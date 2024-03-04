@@ -23,5 +23,8 @@ public class MappingCoreProfile : Profile
         CreateMap<DisciplineDto, Discipline>().ReverseMap();
         CreateMap<ProjectDto, Project>().ReverseMap();
         CreateMap<ProjectTypeDto, ProjectType>().ReverseMap();
+        CreateMap<OtherTypeDto, OtherType>().ReverseMap();
+        CreateMap<DrawingTypeDto, DrawingType>().ReverseMap();
+        CreateMap<DisciplineTypeDto, DisciplineType>().ReverseMap();
     }
 }

@@ -4,13 +4,13 @@ using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects;
+namespace EmpiriaBMS.Front.Components.Admin.OthersTypes;
 
-public partial class Projects
+public partial class OthersTypes
 {
     private Paginator _paginator;
-    private ObservableCollection<ProjectVM> _source = new ObservableCollection<ProjectVM>();
-    private ProjectVM _selectedItem = new ProjectVM();
+    private ObservableCollection<OtherTypeVM> _source = new ObservableCollection<OtherTypeVM>();
+    private OtherTypeVM _selectedItem = new OtherTypeVM();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -19,9 +19,9 @@ public partial class Projects
         if (firstRender)
         {
             var pevLocation = previusLocationService.GetPreviousLocation();
-            if (pevLocation?.GetType() == typeof(Projects))
+            if (pevLocation?.GetType() == typeof(OthersTypes))
             {
-                var prevPage = (Projects)pevLocation;
+                var prevPage = (OthersTypes)pevLocation;
                 _source = prevPage._source;
                 _selectedItem = prevPage._selectedItem;
                 _paginator.SetVM(prevPage._paginator.Peginator);
@@ -29,7 +29,7 @@ public partial class Projects
             else
             {
                 previusLocationService.UpdatePreviousLocation(this);
-                _paginator.SetRecordsLength(await DataProvider.Projects.Count());
+                _paginator.SetRecordsLength(await DataProvider.OthersTypes.Count());
                 await _getSource();
             }
 
@@ -39,8 +39,8 @@ public partial class Projects
 
     private async Task _getSource()
     {
-        var dtos = await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex);
-        var vms = Mapper.Map<List<ProjectVM>>(dtos);
+        var dtos = await DataProvider.OthersTypes.GetAll(_paginator.PageSize, _paginator.PageIndex);
+        var vms = Mapper.Map<List<OtherTypeVM>>(dtos);
         _source.Clear();
         vms.ForEach(_source.Add);
     }

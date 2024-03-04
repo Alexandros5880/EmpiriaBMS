@@ -347,6 +347,8 @@ public class ProjectVM : BaseVM
         }
     }
 
+    public List<Project> Projects { get; set; }
+
     [NotMapped]
     public string DeadlineDisplay => $"{DeadLine.Value.Day}/{DeadLine.Value.Month}/{DeadLine.Value.Year}";
 
