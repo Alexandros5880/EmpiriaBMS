@@ -84,17 +84,18 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    // Working Timer
+    #region Working Timer
     Timer timer;
     bool isWorkingMode = false;
     TimeSpan StartWorkTime = TimeSpan.Zero;
     TimeSpan elapsedTime = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
     TimeSpan remainingTime = TimeSpan.Zero;
+    #endregion
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
-    // List
+    #region List
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DrawingVM> _draws = new ObservableCollection<DrawingVM>();
@@ -105,16 +106,19 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
+    #endregion
 
-    // Selected Models
+    #region Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
+    #endregion
 
     // Paginator
     private PaginatorVM _paginator = new PaginatorVM(7);
 
+    #region Dialogs
     // Work End Dialog
     private FluentDialog? _endWorkDialog;
     private bool _isEndWorkDialogOdepened = false;
@@ -131,6 +135,7 @@ public partial class Dashboard : IDisposable
     // Add ProjectManager Dialog
     private FluentDialog? _addPMDialog;
     private bool _isAddPMDialogOdepened = false;
+    #endregion
 
     protected override async void OnInitialized()
     {

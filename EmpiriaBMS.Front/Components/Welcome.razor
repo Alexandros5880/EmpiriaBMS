@@ -6,7 +6,7 @@
 
 @inject AuthorizeServices authorizeServices
 
-@if (IsAdmin)
+@if (SeeAdmin)
 {
     <AdminHost />
 }
@@ -15,9 +15,21 @@ else
     <Dashboard />
 }
 
-@code {
-    public bool IsAdmin => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO");
+@code {    
+    #region Authorization Properties
+    public bool SeeAdmin
+    {
+        get
+        {
+            return authorizeServices.PermissionOrds.Contains(7);
+        }
+    }
+    public bool SeeDashboard
+    {
+        get
+        {
+            return authorizeServices.PermissionOrds.Contains(4);
+        }
+    }
+    #endregion
 }

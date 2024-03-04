@@ -15,6 +15,15 @@
              style="@(_isSidebarOpen ? "" : "display:none;")">
             <div class="sidebar">
                 <ul class="nav flex-column">
+                    @if (SeeDashboard) {
+                        <li class="nav-item">
+                            <a class="nav-link text-white mb-2 @(_activeLink == "link1" ? "active" : "")"
+                               href="/dashboard" @onclick="@(() => _setActiveLink("link1"))">
+                                <span class="arcticons--nextcloud-tables"></span>
+                                Dashboard
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item">
                         <a class="nav-link text-white mb-2 @(_activeLink == "link1" ? "active" : "")"
                            href="/admin/projects" @onclick="@(() => _setActiveLink("link1"))">
@@ -97,6 +106,25 @@
 
 
 @code {
+
+    #region Authorization Properties
+    public bool SeeAdmin
+    {
+        get
+        {
+            return authorizeServices.PermissionOrds.Contains(7);
+        }
+    }
+    public bool SeeDashboard
+    {
+        get
+        {
+            return authorizeServices.PermissionOrds.Contains(4);
+        }
+    }
+    #endregion
+
+
     private bool _runInTeams { get; set; } = false;
     private bool _isSidebarOpen { get; set; } = false;
     private bool _isMobile { get; set; } = false;
