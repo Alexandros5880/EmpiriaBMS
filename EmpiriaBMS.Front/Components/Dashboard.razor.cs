@@ -40,11 +40,8 @@ public partial class Dashboard : IDisposable
 
     // General Fields
     private bool disposedValue;
-    bool _runInTeams = false;
-    bool _authenticated = false;
     bool _startLoading = true;
     bool _filterLoading = false;
-    bool firstRun = false;
 
     #region Authorization Properties
     public bool AssignDesigner {
@@ -114,9 +111,6 @@ public partial class Dashboard : IDisposable
     private OtherVM _selectedOther = new OtherVM();
     #endregion
 
-    // Paginator
-    private PaginatorVM _paginator = new PaginatorVM(7);
-
     #region Dialogs
     // Work End Dialog
     private FluentDialog? _endWorkDialog;
@@ -147,11 +141,10 @@ public partial class Dashboard : IDisposable
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
-        firstRun = firstRender;
 
         if (firstRender)
         {
-            _runInTeams = await MicrosoftTeams.IsInTeams();
+            //_runInTeams = await MicrosoftTeams.IsInTeams();
             await GetLogedUserTimes(authorizeServices.LogedUser.Id);
             await _getProjects();
             _startLoading = false;

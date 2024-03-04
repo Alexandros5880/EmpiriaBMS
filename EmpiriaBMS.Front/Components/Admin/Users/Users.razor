@@ -1,8 +1,60 @@
 ﻿@page "/admin/users"
 @layout AdminLayout
 
-<h3>Users</h3>
+@inject IDataProvider DataProvider
+@inject IMapper Mapper
 
-@code {
+<div class="row">
+    <div class="col-12">
+        <div class="text-center">
+            <h3>Users</h3>
+        </div>
+        <div class="table-responsive p-1 table-container">
+            <table class="table table-hover table-success text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="sticky-header">User</th>
+                        <th scope="col" class="sticky-header">Email</th>
+                        <th scope="col" class="sticky-header">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in _users)
+                    {
+                        <tr class="align-middle"
+                            @onclick="@(() => _onSelectUser(user.Id))">
 
-}
+                            <td class="align-middle
+                                    @((_selectedUser == null ||
+                                            !_selectedUser.Id.Equals(user.Id)
+                                                            ? "" : "highlight_1"))"
+                                style="word-wrap: break-word;">
+                                <labe>@user.LastName @user.FirstName</labe>
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedUser == null ||
+                                            !_selectedUser.Id.Equals(user.Id)
+                                                            ? "" : "highlight_1"))">
+                                <label>@user.Email</label>
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedUser == null ||
+                                            !_selectedUser.Id.Equals(user.Id)
+                                                            ? "" : "highlight_1"))">
+                                <Button>Edit</Button>
+                                <Button>Delete</Button>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- Paginator -->
+        <div style="text-align: right;">
+        <Paginator Renderer="@_getUsers" Peginator="@_paginator" />
+        </div>
+    </div>
+</div>
