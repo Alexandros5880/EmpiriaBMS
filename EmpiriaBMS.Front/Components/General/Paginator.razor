@@ -21,19 +21,25 @@
                     <li class="@((Peginator.IsSelected(Peginator.FirstDisplayed) ? "page-item active" : "page-item"))">
                         <a class="page-link"
                            href="#"
-                           @onclick="async () => await PeginatorSetIndex(1)">@Peginator.FirstDisplayed</a>
+                           @onclick="async () => await PeginatorSetIndex(Peginator.FirstDisplayed)">
+                           @Peginator.FirstDisplayed
+                         </a>
                     </li>
 
                     <li class="@((Peginator.IsSelected(@Peginator.MiddleDisplayed) ? "page-item active" : "page-item"))">
                         <a class="page-link"
                            href="#"
-                           @onclick="async () => await PeginatorSetIndex(1)">@Peginator.MiddleDisplayed</a>
+                           @onclick="async () => await PeginatorSetIndex(Peginator.MiddleDisplayed)">
+                           @Peginator.MiddleDisplayed
+                        </a>
                     </li>
 
                     <li class="@((Peginator.IsSelected(@Peginator.LastDisplayed) ? "page-item active" : "page-item"))">
                         <a class="page-link"
                            href="#"
-                           @onclick="async () => await PeginatorSetIndex(1)">@Peginator.LastDisplayed</a>
+                           @onclick="async () => await PeginatorSetIndex(Peginator.LastDisplayed)">
+                           @Peginator.LastDisplayed
+                         </a>
                     </li>
                 }
 
