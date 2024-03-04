@@ -25,6 +25,7 @@ builder.Services.AddBlazorBootstrap();
 builder.Services.AddDbContextFactory<AppDbContext>(); // DbContext Dependency Injection
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
 builder.Services.AddScoped<AuthorizeServices>();
+builder.Services.AddScoped<PreviousLocationService>();
 
 // TODO: AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>

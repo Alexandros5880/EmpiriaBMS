@@ -54,7 +54,8 @@ public class PaginatorVM : BNotifyPropertyChanged
         }
     }
 
-    public int FirstDisplayed => PageIndex == 1 ? 1 : PageIndex - 1;
+    public int FirstDisplayed =>
+        PageIndex == 1 ? 1 : PageIndex < PagesCounter - 1 ? PageIndex - 1 : PagesCounter - 2;
 
     public int MiddleDisplayed => 
         PageIndex == 1 ? 2 : PageIndex < PagesCounter - 1 ? PageIndex : PagesCounter - 1;

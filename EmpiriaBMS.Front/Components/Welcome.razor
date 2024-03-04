@@ -1,14 +1,48 @@
 ﻿@page "/"
 @page "/welcome"
 
-@using EmpiriaBMS.Front.Components.Admin.Projects
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Admin.DisciplinesTypes;
+@using EmpiriaBMS.Front.Components.Admin.DrawingsTypes;
+@using EmpiriaBMS.Front.Components.Admin.OthersTypes;
+@using EmpiriaBMS.Front.Components.Admin.Projects;
+@using EmpiriaBMS.Front.Components.Admin.ProjectsTypes;
+@using EmpiriaBMS.Front.Components.Admin.Roles;
+@using EmpiriaBMS.Front.Components.Admin.Users;
+@using EmpiriaBMS.Front.Components;
 
 @inject AuthorizeServices authorizeServices
+@inject PreviousLocationService previusLocationService
 
 @if (SeeAdmin)
 {
-    <Projects />
+    @switch (previusLocationService.GetPreviousLocation())
+    {
+        case nameof(DisciplinesTypes):
+            <DisciplinesTypes />
+            break;
+        case nameof(DrawingsTypes):
+            <DrawingsTypes />
+            break;
+        case nameof(OthersTypes):
+            <OthersTypes />
+            break;
+        case nameof(Projects):
+            <Projects />
+            break;
+        case nameof(Roles):
+            <Roles />
+            break;
+        case nameof(Users):
+            <Users />
+            break;
+        case nameof(Dashboard):
+            <Dashboard />
+            break;
+        default:
+            <Projects />
+            break;
+    }
 }
 else
 {

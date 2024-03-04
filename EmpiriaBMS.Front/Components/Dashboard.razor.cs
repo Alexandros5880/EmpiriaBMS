@@ -136,6 +136,7 @@ public partial class Dashboard : IDisposable
         // timer = used only to run UpdateElapsedTime() every one second
         timer = new Timer(_ => UpdateElapsedTime(), null, 0, 1000);
         isWorkingMode = TimerService.IsRunning(authorizeServices.LogedUser.Id.ToString());
+        previusLocationService.UpdatePreviousLocation(nameof(Dashboard));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

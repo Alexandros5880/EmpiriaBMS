@@ -15,6 +15,7 @@ public partial class Users
     protected override void OnInitialized()
     {
         base.OnInitialized();
+        previusLocationService.UpdatePreviousLocation(nameof(Users));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
