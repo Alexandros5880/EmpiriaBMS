@@ -89,7 +89,7 @@ else
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
             await authorizeServices.Authorize(_runInTeams: _runInTeams);
-            authorizeServices.CallBackOnAuthorize = Refresh;
+            authorizeServices.CallBackOnAuthorize = AutorizeCallBac;
 
             await GetAllRoles(); // TODO: Remove This
 
@@ -98,7 +98,7 @@ else
         }
     }
 
-    private void Refresh()
+    private void AutorizeCallBac()
     {
         //StateHasChanged();
     }
