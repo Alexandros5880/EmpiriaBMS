@@ -46,29 +46,35 @@ public partial class Dashboard : IDisposable
     bool _filterLoading = false;
     bool firstRun = false;
 
-    // Visibility Properties
-    public bool EditDrawing {
+    #region Authorization Properties
+    public bool AssignDesigner {
         get
         {
-            return isWorkingMode && authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer");
+            return isWorkingMode && authorizeServices.PermissionOrds.Contains(3);
         }
     }
-    public bool EditDiscipline
+    public bool AssignEngineer
     {
         get
         {
-            return isWorkingMode && authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager");
+            return isWorkingMode && authorizeServices.PermissionOrds.Contains(4);
         }
     }
-    public bool EditProject
+    public bool AssignPm
     {
         get
         {
-            return isWorkingMode && (authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                                 || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
-                                 || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO"));
+            return isWorkingMode && authorizeServices.PermissionOrds.Contains(5);
         }
     }
+    public bool EditMyHours
+    {
+        get
+        {
+            return isWorkingMode && authorizeServices.PermissionOrds.Contains(2);
+        }
+    }
+    #endregion
 
     // Working Timer
     Timer timer;

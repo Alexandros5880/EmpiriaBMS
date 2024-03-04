@@ -132,7 +132,7 @@ else
                                                     <th scope="col" class="sticky-header">Work Package Declared Completed</th>
                                                     <th scope="col" class="sticky-header">Estimated Hours Completed</th>
                                                     <th scope="col" class="sticky-header">Deadline</th>
-                                                    @if (EditProject)
+                                                    @if (AssignPm)
                                                     {
                                                         <th scope="col"></th>
                                                     }
@@ -174,7 +174,7 @@ else
                                                             <label>@project.DeadlineDisplay</label>
                                                         </td>
 
-                                                        @if (EditProject)
+                                                        @if (AssignPm)
                                                         {
                                                             <td class="align-middle">
                                                                 <span class="clarity--assign-user-line"
@@ -205,7 +205,7 @@ else
                                             <tr>
                                                 <th scope="col" class="sticky-header">Discipline</th>
                                                 <th scope="col" class="sticky-header">Estimated Discipline Hours</th>
-                                                @if (EditDiscipline)
+                                                @if (AssignEngineer)
                                                 {
                                                     <th scope="col"></th>
                                                 }
@@ -232,7 +232,7 @@ else
                                                         <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
                                                     </td>
 
-                                                    @if (EditDiscipline)
+                                                    @if (AssignEngineer)
                                                     {
                                                         <td class="align-middle">
                                                             <span class="clarity--assign-user-line"
@@ -263,7 +263,7 @@ else
                                                 <th scope="col" class="sticky-header">Drawing</th>
                                                 <th scope="col" class="sticky-header">Total Hours</th>
                                                 <th scope="col" class="sticky-header">Declared Completion</th>
-                                                @if (EditDrawing)
+                                                @if (AssignDesigner)
                                                 {
                                                     <th scope="col"></th>
                                                 }
@@ -296,7 +296,7 @@ else
                                                         <label>@draw.CompletionEstimation %</label>
                                                     </td>
 
-                                                    @if (EditDrawing)
+                                                    @if (AssignDesigner)
                                                     {
                                                         <td class="align-middle">
                                                             <span class="clarity--assign-user-line"
