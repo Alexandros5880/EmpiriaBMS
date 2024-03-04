@@ -14,5 +14,6 @@ namespace EmpiriaBMS.Core
         public DrawingRepo Drawings { get; set; }
         public OtherRepo Others { get; set; }
         public InvoiceRepo Invoices { get; set; }
+        public ProjectTypeRepo ProjectsTypes { get; set; }
     }
 }

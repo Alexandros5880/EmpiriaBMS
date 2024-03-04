@@ -12,7 +12,6 @@ public partial class Users
     private Paginator _paginator;
     private ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
     private UserVM _selectedUser = new UserVM();
-    UsersTable _usersTable;
 
     protected override void OnInitialized()
     {
@@ -31,7 +30,6 @@ public partial class Users
                 var usersPage = (Users)pevLocation;
                 _users = usersPage._users;
                 _selectedUser = usersPage._selectedUser;
-                _usersTable = usersPage._usersTable;
                 _paginator.SetVM(usersPage._paginator.Peginator);
             }
             else

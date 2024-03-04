@@ -21,6 +21,7 @@ public class DataProvider : IDataProvider, IDisposable
     public DrawingRepo Drawings { get; set; }
     public OtherRepo Others { get; set; }
     public InvoiceRepo Invoices { get; set; }
+    public ProjectTypeRepo ProjectsTypes { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
         Roles = new RolesRepo(dbFactory);
@@ -30,6 +31,7 @@ public class DataProvider : IDataProvider, IDisposable
         Drawings = new DrawingRepo(dbFactory);
         Others = new OtherRepo(dbFactory);
         Invoices = new InvoiceRepo(dbFactory);
+        ProjectsTypes = new ProjectTypeRepo(dbFactory);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -45,6 +47,7 @@ public class DataProvider : IDataProvider, IDisposable
                 Drawings.Dispose();
                 Others.Dispose();
                 Invoices.Dispose();
+                ProjectsTypes.Dispose();
             }
             disposedValue = true;
         }

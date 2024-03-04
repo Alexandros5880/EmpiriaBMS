@@ -19,5 +19,6 @@ public class MappingProfile : Profile
         CreateMap<OtherDto, OtherVM>().ReverseMap();
         CreateMap<DisciplineDto, DisciplineVM>().ReverseMap();
         CreateMap<ProjectDto, ProjectVM>().ReverseMap();
+        CreateMap<ProjectTypeDto, ProjectTypeVM>().ReverseMap();
     }
 }
