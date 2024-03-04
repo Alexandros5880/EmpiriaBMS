@@ -17,7 +17,8 @@
                     <tr>
                         <th scope="col" class="sticky-header">User</th>
                         <th scope="col" class="sticky-header">Email</th>
-                        <th scope="col" class="sticky-header">Actions</th>
+                        <th scope="col" class="sticky-header">Edit</th>
+                        <th scope="col" class="sticky-header">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,8 +46,14 @@
                                     @((_selectedUser == null ||
                                             !_selectedUser.Id.Equals(user.Id)
                                                             ? "" : "highlight_1"))">
-                                <Button>Edit</Button>
-                                <Button>Delete</Button>
+                                <span class="tabler--edit" />
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedUser == null ||
+                                            !_selectedUser.Id.Equals(user.Id)
+                                                            ? "" : "highlight_1"))">
+                                <span class="fluent--delete-28-regular" />
                             </td>
 
                         </tr>
