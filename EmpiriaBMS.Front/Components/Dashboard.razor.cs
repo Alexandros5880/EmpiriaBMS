@@ -74,6 +74,14 @@ public partial class Dashboard : IDisposable
             return isWorkingMode && authorizeServices.PermissionOrds.Contains(2);
         }
     }
+
+    public bool SeeMyHours
+    {
+        get
+        {
+            return authorizeServices.PermissionOrds.Contains(8);
+        }
+    }
     #endregion
 
     // Working Timer
@@ -327,6 +335,11 @@ public partial class Dashboard : IDisposable
     {
         isWorkingMode = false;
         StopTimer();
+
+        if (!EditMyHours)
+        {
+            return;
+        }
 
         remainingTime = timePaused;
         _editLogedUserTimes = new UserTimes()
