@@ -1,14 +1,14 @@
 ﻿@page "/"
 @page "/welcome"
 
-@using EmpiriaBMS.Front.Components.Admin
+@using EmpiriaBMS.Front.Components.Admin.Projects
 @using EmpiriaBMS.Front.Services
 
 @inject AuthorizeServices authorizeServices
 
 @if (SeeAdmin)
 {
-    <AdminHost />
+    <Projects />
 }
 else
 {

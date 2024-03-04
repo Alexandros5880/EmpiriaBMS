@@ -3,6 +3,14 @@
 @inherits LayoutComponentBase
 
 @using EmpiriaBMS.Front.Services;
+@using EmpiriaBMS.Front.Components.Admin.DisciplinesTypes;
+@using EmpiriaBMS.Front.Components.Admin.DrawingsTypes;
+@using EmpiriaBMS.Front.Components.Admin.OthersTypes;
+@using EmpiriaBMS.Front.Components.Admin.Projects;
+@using EmpiriaBMS.Front.Components.Admin.ProjectsTypes;
+@using EmpiriaBMS.Front.Components.Admin.Roles;
+@using EmpiriaBMS.Front.Components.Admin.Users;
+@using EmpiriaBMS.Front.Components;
 @inject AuthorizeServices authorizeServices;
 @inject MicrosoftTeams MicrosoftTeams
 
@@ -17,58 +25,58 @@
                 <ul class="nav flex-column">
                     @if (SeeDashboard) {
                         <li class="nav-item">
-                            <a class="nav-link text-white mb-2 @(_activeLink == "link1" ? "active" : "")"
-                               href="/dashboard" @onclick="@(() => _setActiveLink("link1"))">
+                            <a class="nav-link text-white mb-2 @(_activeLink == nameof(Dashboard) ? "active" : "")"
+                               href="/dashboard" @onclick="@(() => _setActiveLink(nameof(Dashboard)))">
                                 <span class="arcticons--nextcloud-tables"></span>
                                 Dashboard
                             </a>
                         </li>
                     }
                     <li class="nav-item">
-                        <a class="nav-link text-white mb-2 @(_activeLink == "link1" ? "active" : "")"
-                           href="/admin/projects" @onclick="@(() => _setActiveLink("link1"))">
+                        <a class="nav-link text-white mb-2 @(_activeLink == nameof(Projects) ? "active" : "")"
+                           href="/admin/projects" @onclick="@(() => _setActiveLink(nameof(Projects)))">
                             <span class="file-icons--microsoft-project"></span>
                             Projects
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white mb-2 @(_activeLink == "link2" ? "active" : "")"
-                           href="/admin/users" @onclick="@(() => _setActiveLink("link2"))">
+                        <a class="nav-link text-white mb-2 @(_activeLink == nameof(Users) ? "active" : "")"
+                           href="/admin/users" @onclick="@(() => _setActiveLink(nameof(Users)))">
                             <span class="ph--users-four-light"></span>
                             Users
                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white mb-2 @(_activeLink == "link3" ? "active" : "")"
-                           href="/admin/roles" @onclick="@(() => _setActiveLink("link3"))">
+                        <a class="nav-link text-white mb-2 @(_activeLink == nameof(Roles) ? "active" : "")"
+                           href="/admin/roles" @onclick="@(() => _setActiveLink(nameof(Roles)))">
                             <span class="oui--app-users-roles"></span>
                             Roles
                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white mb-2 @(_activeLink == "link4" ? "active" : "")"
-                           href="/admin/projecttypes" @onclick="@(() => _setActiveLink("link4"))">
+                        <a class="nav-link text-white mb-2 @(_activeLink == nameof(ProjectsTypes) ? "active" : "")"
+                           href="/admin/projectstypes" @onclick="@(() => _setActiveLink(nameof(ProjectsTypes)))">
                             <span class="arcticons--ptv"></span>
                             Project Types
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white mb-2 @(_activeLink == "link5" ? "active" : "")"
-                           href="/admin/disciplines" @onclick="@(() => _setActiveLink("link5"))">
+                        <a class="nav-link text-white mb-2 @(_activeLink == nameof(DisciplinesTypes) ? "active" : "")"
+                           href="/admin/disciplinestypes" @onclick="@(() => _setActiveLink(nameof(DisciplinesTypes)))">
                             <span class="gala--layer"></span>
-                            Discipline Types
+                            Disciplines Types
                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white mb-2 @(_activeLink == "link6" ? "active" : "")"
-                           href="/admin/drawings" @onclick="@(() => _setActiveLink("link6"))">
+                        <a class="nav-link text-white mb-2 @(_activeLink == nameof(DrawingsTypes) ? "active" : "")"
+                           href="/admin/drwaingstypes" @onclick="@(() => _setActiveLink(nameof(DrawingsTypes)))">
                             <span class="streamline--hand-held-tablet-drawing"></span>
                             Drawing Types
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white mb-2 @(_activeLink == "link7" ? "active" : "")"
-                           href="/admin/others" @onclick="@(() => _setActiveLink("link7"))">
+                        <a class="nav-link text-white mb-2 @(_activeLink == nameof(OthersTypes) ? "active" : "")"
+                           href="/admin/otherstypes" @onclick="@(() => _setActiveLink(nameof(OthersTypes)))">
                             <span class="material-symbols--other-admission-outline-sharp"></span>
                             Other Types
                         </a>

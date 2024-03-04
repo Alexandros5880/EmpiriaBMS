@@ -38,11 +38,15 @@ public class AuthorizeServices
     public async Task Authorize()
     {
         await _getLogedUser();
+
+        CallBackOnAuthorize?.Invoke();
     }
 
     public async Task Authorize(int roleId = 0, bool _runInTeams = true)
     {
         await _getLogedUser(roleId, _runInTeams);
+
+        CallBackOnAuthorize?.Invoke();
     }
 
     private async Task _getLogedUser(int roleId = 0, bool _runInTeams = true)
@@ -79,8 +83,6 @@ public class AuthorizeServices
             // {
 
             // }
-
-            CallBackOnAuthorize?.Invoke();
         }
         catch (Exception ex)
         {

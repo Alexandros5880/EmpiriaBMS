@@ -71,10 +71,9 @@ public partial class Dashboard : IDisposable
     {
         get
         {
-            return isWorkingMode && authorizeServices.PermissionOrds.Contains(2);
+            return authorizeServices.PermissionOrds.Contains(2);
         }
     }
-
     public bool SeeMyHours
     {
         get
@@ -137,7 +136,7 @@ public partial class Dashboard : IDisposable
     private bool _isAddPMDialogOdepened = false;
     #endregion
 
-    protected override async void OnInitialized()
+    protected override void OnInitialized()
     {
         base.OnInitialized();
         // timer = used only to run UpdateElapsedTime() every one second

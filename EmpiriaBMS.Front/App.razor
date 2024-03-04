@@ -26,13 +26,13 @@ else
         <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
             <Found Context="routeData">
                 @{
-                    Type defaultLayoutType = IsAdmin ? typeof(AdminLayout) : typeof(MainLayout);
+                    Type defaultLayoutType = SeeAdmin ? typeof(AdminLayout) : typeof(MainLayout);
                 }
                 <RouteView RouteData="@routeData" DefaultLayout="@defaultLayoutType" />
             </Found>
             <NotFound>
                 @{
-                    Type layoutType = IsAdmin ? typeof(AdminLayout) : typeof(MainLayout);
+                    Type layoutType = SeeAdmin ? typeof(AdminLayout) : typeof(MainLayout);
                 }
                 <LayoutView Layout="@layoutType">
                     <p>Sorry, there's nothing at this address.</p>
@@ -64,10 +64,22 @@ else
     bool _authenticated = false;
     bool isLoading = true;
 
-    public bool IsAdmin => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin")
-                        || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
-                        || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                        || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO");
+    #region Authorization Properties
+    public bool SeeAdmin
+    {
+        get
+        {
+            return authorizeServices.PermissionOrds.Contains(7);
+        }
+    }
+    public bool SeeDashboard
+    {
+        get
+        {
+            return authorizeServices.PermissionOrds.Contains(4);
+        }
+    }
+    #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

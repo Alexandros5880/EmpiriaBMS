@@ -32,4 +32,6 @@
     <ProjectReference Include="..\EmpiriaBMS.Core\EmpiriaBMS.Core.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties apppackage_4manifest_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>
