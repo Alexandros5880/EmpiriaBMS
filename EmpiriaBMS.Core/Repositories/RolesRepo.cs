@@ -64,6 +64,28 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
+    public async Task<ICollection<PermissionDto>> GetPermissions(int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var roles = await _context.Set<UserRole>()
+                                 .Where(ur => ur.UserId == userId)
+                                 .Include(ur => ur.Role)
+                                 .Select(ur => ur.Role)
+                                 .ToListAsync();
+
+            var roleIds = roles.Select(r => r.Id);
+
+            var permissions = await _context.Set<RolePermission>()
+                                            .Where(rp => roleIds.Contains(rp.RoleId))
+                                            .Include(rp => rp.Permission)
+                                            .Select(rp => rp.Permission)
+                                            .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Permission>, List<PermissionDto>>(permissions);
+        }
+    }
+
     public async Task<ICollection<RoleDto>> GetEmployeeRoles()
     {
         using (var _context = _dbContextFactory.CreateDbContext())

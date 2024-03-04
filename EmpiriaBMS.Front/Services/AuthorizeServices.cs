@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.TeamsFx;
@@ -14,6 +15,8 @@ public class AuthorizeServices
     private IMapper _mapper;
 
     public ICollection<RoleVM> LoggedUserRoles { get; set; } = new List<RoleVM>();
+    public ICollection<PermissionDto> Permissions { get; set; } = new List<PermissionDto>();
+    public ICollection<int> PermissionOrds { get; set; } = new List<int>();
     public UserVM LogedUser { get; set; }
     public double LogesUserHours { get; set; }
 
@@ -67,6 +70,10 @@ public class AuthorizeServices
             LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
                                                         .Select(r => _mapper.Map<RoleVM>(r))
                                                         .ToList();
+
+            Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
+                                                    .ToList();
+            PermissionOrds = Permissions.Select(p => p.Ord).ToList();
 
             // if (_loggedUserRoles.Select(r => r.Name).ToList().Contains("Admin"))
             // {
