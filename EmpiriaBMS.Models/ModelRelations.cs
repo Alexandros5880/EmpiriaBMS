@@ -14,7 +14,19 @@ public static class ModelRelations
 {
     public static void CreateRelations(ModelBuilder builder)
     {
-        // Users Roless
+        // Roles Permissions
+        builder.Entity<RolePermission>()
+               .HasKey(sc => new { sc.RoleId, sc.PermissionId });
+        builder.Entity<RolePermission>()
+               .HasOne(sc => sc.Role)
+               .WithMany(s => s.RolesPermissions)
+               .HasForeignKey(sc => sc.RoleId);
+        builder.Entity<RolePermission>()
+               .HasOne(sc => sc.Permission)
+               .WithMany(c => c.RolesPermissions)
+               .HasForeignKey(sc => sc.PermissionId);
+
+        // Users Roles
         builder.Entity<UserRole>()
                .HasKey(sc => new { sc.UserId, sc.RoleId });
         builder.Entity<UserRole>()

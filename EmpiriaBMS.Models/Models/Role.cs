@@ -17,5 +17,10 @@ public class Role : Entity
     [Required]
     public bool IsEmployee { get; set; }
 
+    [Required]
+    public bool IsEditable { get; set; }
+
     public ICollection<UserRole> UserRoles { get; set; }
+
+    public ICollection<RolePermission> RolesPermissions { get; set; }
 }
