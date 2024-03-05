@@ -2,7 +2,7 @@
 @layout AdminLayout
 
 @using EmpiriaBMS.Front.Services
-@inject PreviousLocationService previusLocationService
+@inject PageCachedService pageCached
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 
@@ -44,7 +44,7 @@
                                             !_selectedRole.Id.Equals(role.Id)
                                                             ? "" : "highlight_1"))"
                                     style="width: 150px !important;"
-                                @onclick="@(async() => await _edit())">
+                                    @onclick="@(async() => await _edit())">
                                     <span class="material-symbols--edit-outline" />
                                 </td>
 

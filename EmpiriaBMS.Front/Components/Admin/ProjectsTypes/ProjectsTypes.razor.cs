@@ -16,17 +16,16 @@ public partial class ProjectsTypes
 
         if (firstRender)
         {
-            var pevLocation = previusLocationService.GetPreviousLocation();
-            if (pevLocation?.GetType() == typeof(ProjectsTypes))
+            var prevPage = pageCached.GetPage<ProjectsTypes>();
+            if (prevPage != null)
             {
-                var prevPage = (ProjectsTypes)pevLocation;
                 _source = prevPage._source;
                 _selectedItem = prevPage._selectedItem;
                 _paginator.SetVM(prevPage._paginator.Peginator);
             }
             else
             {
-                previusLocationService.UpdatePreviousLocation(this);
+                pageCached.AddPage(this);
                 _paginator.SetRecordsLength(await DataProvider.ProjectsTypes.Count());
                 await _getSource();
             }

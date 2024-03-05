@@ -16,17 +16,16 @@ public partial class DrawingsTypes
 
         if (firstRender)
         {
-            var pevLocation = previusLocationService.GetPreviousLocation();
-            if (pevLocation?.GetType() == typeof(DrawingsTypes))
+            var prevPage = pageCached.GetPage<DrawingsTypes>();
+            if (prevPage != null)
             {
-                var prevPage = (DrawingsTypes)pevLocation;
                 _source = prevPage._source;
                 _selectedItem = prevPage._selectedItem;
                 _paginator.SetVM(prevPage._paginator.Peginator);
             }
             else
             {
-                previusLocationService.UpdatePreviousLocation(this);
+                pageCached.AddPage(this);
                 _paginator.SetRecordsLength(await DataProvider.DrawingsTypes.Count());
                 await _getSource();
             }

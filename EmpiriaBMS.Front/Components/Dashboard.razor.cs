@@ -2,6 +2,8 @@
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Front.Components.Admin.Roles;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.DefaultComponents;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Services;
@@ -136,7 +138,6 @@ public partial class Dashboard : IDisposable
         // timer = used only to run UpdateElapsedTime() every one second
         timer = new Timer(_ => UpdateElapsedTime(), null, 0, 1000);
         isWorkingMode = TimerService.IsRunning(authorizeServices.LogedUser.Id.ToString());
-        previusLocationService.UpdatePreviousLocation(this);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

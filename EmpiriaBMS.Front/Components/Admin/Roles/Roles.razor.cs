@@ -31,17 +31,16 @@ public partial class Roles
 
         if (firstRender)
         {
-            var pevLocation = previusLocationService.GetPreviousLocation();
-            if (pevLocation?.GetType() == typeof(Roles))
+            var prevPage = pageCached.GetPage<Roles>();
+            if (prevPage != null)
             {
-                var prevPage = (Roles)pevLocation;
                 _roles = prevPage._roles;
                 _selectedRole = prevPage._selectedRole;
                 _paginator.SetVM(prevPage._paginator.Peginator);
             }
             else
             {
-                previusLocationService.UpdatePreviousLocation(this);
+                pageCached.AddPage(this);
                 _paginator.SetRecordsLength(await DataProvider.Roles.Count());
                 await _getRoles();
             }

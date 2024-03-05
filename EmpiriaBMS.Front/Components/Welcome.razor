@@ -12,11 +12,11 @@
 @using EmpiriaBMS.Front.Components;
 
 @inject AuthorizeServices authorizeServices
-@inject PreviousLocationService previusLocationService
+@inject PageCachedService pageCached
 
 @if (SeeAdmin)
 {
-    var prevPageType = previusLocationService.GetPreviousLocation()?.GetType();
+    var prevPageType = pageCached.GetPageType();
     if (prevPageType == typeof(DisciplinesTypes))
     {
         <DisciplinesTypes />
@@ -55,7 +55,8 @@ else
     <Dashboard />
 }
 
-@code {    
+@code {
+
     #region Authorization Properties
     public bool SeeAdmin
     {
@@ -73,8 +74,4 @@ else
     }
     #endregion
 
-    protected override bool ShouldRender()
-    {
-        return true;
-    }
 }

@@ -13,6 +13,7 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 @inject AuthorizeServices authorizeServices
+@inject PageCachedService pageCached
 
 @if(isLoading)
 {
@@ -61,7 +62,6 @@ else
 
 @code {
     bool _runInTeams = false;
-    bool _authenticated = false;
     bool isLoading = true;
 
     #region Authorization Properties
@@ -87,25 +87,25 @@ else
 
         if (firstRender)
         {
-            _runInTeams = await MicrosoftTeams.IsInTeams();
-            await authorizeServices.Authorize(_runInTeams: _runInTeams);
-            authorizeServices.CallBackOnAuthorize = AutorizeCallBac;
-
-            await GetAllRoles(); // TODO: Remove This
-
-            isLoading = false;
-            StateHasChanged();
+            var mySelf = pageCached.GetPage<App>();
+            if (mySelf != null)
+            {
+                _runInTeams = mySelf._runInTeams;
+                isLoading = false;
+            }
+            else
+            {
+                _runInTeams = await MicrosoftTeams.IsInTeams();
+                await authorizeServices.Authorize(_runInTeams: _runInTeams);
+                await GetAllRoles(); // TODO: Remove This
+                isLoading = false;
+                StateHasChanged();
+            }
         }
-    }
-
-    private void AutorizeCallBac()
-    {
-        //StateHasChanged();
     }
 
     protected override bool ShouldRender()
     {
-        // Return false to prevent the entire component from re-rendering
         return true;
     }
 
@@ -126,7 +126,6 @@ else
         authorizeServices.DefaultRoleName = _allRoles.FirstOrDefault(r => r.Id == selectRoleId).Name;
         NavigationManager.NavigateTo("/welcome");
         isLoading = false;
-        StateHasChanged();
     }
 
     private async Task GetAllRoles()

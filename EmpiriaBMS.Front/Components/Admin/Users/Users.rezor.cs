@@ -24,17 +24,16 @@ public partial class Users
 
         if (firstRender)
         {
-            var pevLocation = previusLocationService.GetPreviousLocation();
-            if (pevLocation?.GetType() == typeof(Users))
+            var prevPage = pageCached.GetPage<Users>();
+            if (prevPage != null)
             {
-                var usersPage = (Users)pevLocation;
-                _users = usersPage._users;
-                _selectedUser = usersPage._selectedUser;
-                _paginator.SetVM(usersPage._paginator.Peginator);
+                _users = prevPage._users;
+                _selectedUser = prevPage._selectedUser;
+                _paginator.SetVM(prevPage._paginator.Peginator);
             }
             else
             {
-                previusLocationService.UpdatePreviousLocation(this);
+                pageCached.AddPage(this);
                 _paginator.SetRecordsLength(await DataProvider.Users.Count());
                 await _getUsers();
             }

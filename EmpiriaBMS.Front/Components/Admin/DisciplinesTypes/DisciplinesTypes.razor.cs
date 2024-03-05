@@ -16,17 +16,16 @@ public partial class DisciplinesTypes
 
         if (firstRender)
         {
-            var pevLocation = previusLocationService.GetPreviousLocation();
-            if (pevLocation?.GetType() == typeof(DisciplinesTypes))
+            var prevPage = pageCached.GetPage<DisciplinesTypes>();
+            if (prevPage != null)
             {
-                var prevPage = (DisciplinesTypes)pevLocation;
                 _source = prevPage._source;
                 _selectedItem = prevPage._selectedItem;
                 _paginator.SetVM(prevPage._paginator.Peginator);
             }
             else
             {
-                previusLocationService.UpdatePreviousLocation(this);
+                pageCached.AddPage(this);
                 _paginator.SetRecordsLength(await DataProvider.DisciplinesTypes.Count());
                 await _getSource();
             }

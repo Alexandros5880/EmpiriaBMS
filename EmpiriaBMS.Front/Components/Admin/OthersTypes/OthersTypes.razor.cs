@@ -18,17 +18,16 @@ public partial class OthersTypes
 
         if (firstRender)
         {
-            var pevLocation = previusLocationService.GetPreviousLocation();
-            if (pevLocation?.GetType() == typeof(OthersTypes))
+            var prevPage = pageCached.GetPage<OthersTypes>();
+            if (prevPage != null)
             {
-                var prevPage = (OthersTypes)pevLocation;
                 _source = prevPage._source;
                 _selectedItem = prevPage._selectedItem;
                 _paginator.SetVM(prevPage._paginator.Peginator);
             }
             else
             {
-                previusLocationService.UpdatePreviousLocation(this);
+                pageCached.AddPage(this);
                 _paginator.SetRecordsLength(await DataProvider.OthersTypes.Count());
                 await _getSource();
             }
