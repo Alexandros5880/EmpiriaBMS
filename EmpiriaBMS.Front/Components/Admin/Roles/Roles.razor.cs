@@ -65,7 +65,6 @@ public partial class Roles
 
     protected override bool ShouldRender()
     {
-        // Return false to prevent the entire component from re-rendering
         return true;
     }
 
