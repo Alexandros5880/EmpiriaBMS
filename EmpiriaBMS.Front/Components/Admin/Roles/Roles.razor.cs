@@ -61,4 +61,9 @@ public partial class Roles
         // Return false to prevent the entire component from re-rendering
         return true;
     }
+
+    private void _addRole()
+    {
+
+    }
 }
