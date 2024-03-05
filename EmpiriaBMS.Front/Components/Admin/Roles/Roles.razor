@@ -8,61 +8,78 @@
 
 <div class="row">
     <div class="col-12 card shadow p-1 mt-2">
-        <div class="d-flex justify-content-between m-1">
-            <div><h3>Roles</h3></div>
-            <div>
-                <span class="codicon--add"
-                      @onclick="@((x) => _addRole())">
-                </span>
+            <div class="d-flex justify-content-between m-1">
+                <div><h3>Roles</h3></div>
+                <div>
+                    <span class="codicon--add"
+                            @onclick="@_add">
+                    </span>
+                </div>
             </div>
-        </div>
-        <div class="table-responsive p-1 table-container">
-            <table class="table table-hover text-center">
-                <thead>
-                    <tr>
-                        <th scope="col" class="sticky-header"><h5>User</h5></th>
-                        <th scope="col" class="sticky-header"><h5>Edit</h5></th>
-                        <th scope="col" class="sticky-header"><h5>Delete</h5></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var role in _roles)
-                    {
-                        <tr class="align-middle"
-                            @onclick="@(() => _onSelectRole(role.Id))">
-
-                            <td class="align-middle
-                                    @((_selectedRole == null ||
-                                            !_selectedRole.Id.Equals(role.Id)
-                                                            ? "" : "highlight_1"))"
-                                style="word-wrap: break-word;">
-                                <labe>@role.Name</labe>
-                            </td>
-
-                            <td class="align-middle
-                                    @((_selectedRole == null ||
-                                            !_selectedRole.Id.Equals(role.Id)
-                                                            ? "" : "highlight_1"))"
-                                style="width: 150px !important;">
-                                <span class="material-symbols--edit-outline" />
-                            </td>
-
-                            <td class="align-middle
-                                    @((_selectedRole == null ||
-                                            !_selectedRole.Id.Equals(role.Id)
-                                                            ? "" : "highlight_1"))"
-                                    style="width: 150px !important;">
-                                <span class="fluent--delete-28-regular" />
-                            </td>
-
+            <div class="table-responsive p-1 table-container">
+                <table class="table table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="sticky-header"><h5>User</h5></th>
+                            <th scope="col" class="sticky-header"><h5>Edit</h5></th>
+                            <th scope="col" class="sticky-header"><h5>Delete</h5></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <!-- Paginator -->
-        <div style="text-align: right;">
-            <Paginator @ref=_paginator Renderer="@_getRoles" />
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var role in _roles)
+                        {
+                            <tr class="align-middle"
+                                @onclick="@(() => _onSelectRole(role.Id))">
+
+                                <td class="align-middle
+                                    @((_selectedRole == null ||
+                                            !_selectedRole.Id.Equals(role.Id)
+                                                            ? "" : "highlight_1"))"
+                                    style="word-wrap: break-word;">
+                                    <labe>@role.Name</labe>
+                                </td>
+
+                                <td class="align-middle
+                                    @((_selectedRole == null ||
+                                            !_selectedRole.Id.Equals(role.Id)
+                                                            ? "" : "highlight_1"))"
+                                    style="width: 150px !important;"
+                                    @onclick="@_edit">
+                                    <span class="material-symbols--edit-outline" />
+                                </td>
+
+                                <td class="align-middle
+                                    @((_selectedRole == null ||
+                                            !_selectedRole.Id.Equals(role.Id)
+                                                            ? "" : "highlight_1"))"
+                                    style="width: 150px !important;"
+                                    @onclick="@(async() => await _delete(role.Id))">
+                                    <span class="fluent--delete-28-regular" />
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- Paginator -->
+            <div style="text-align: right;">
+                <Paginator @ref=_paginator Renderer="@_getRoles" />
+            </div>
     </div>
 </div>
+
+<!-- Add / Edit Dialog -->
+<FluentDialog @ref="_addEditDialog"
+                Hidden="@(!_isAddEditDialogOdepened)"
+                Modal="false"
+                DialogType=@DialogType.Panel
+                style="--dialog-width: 500px !important;
+                       --dialog-height: auto !important;">
+
+    <EditRole Role="@_selectedRole"
+              IsReadMode="@false"
+              OnSave="@(async () => await Save())"
+              OnCancel="@Cancel" />
+
+</FluentDialog>
