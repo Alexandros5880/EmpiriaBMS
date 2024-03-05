@@ -30,7 +30,84 @@ public class RolesRepo : Repository<RoleDto, Role>
             return Mapping.Mapper.Map<RoleDto>(role);
         }
     }
-    
+
+    public async Task<ICollection<RoleDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Role> roles;
+
+            var rolesIds = await _context.Set<UserRole>()
+                                 .Include(ur => ur.Role)
+                                 .Select(ur => ur.RoleId)
+                                 .ToListAsync();
+
+            if (pageSize == 0 || pageIndex == 0)
+            {
+
+
+                roles = await _context.Set<Role>()
+                                      .Where(r => rolesIds.Contains(r.Id))
+                                      .Include(r => r.RolesPermissions)
+                                      .Include(r => r.UserRoles)
+                                      .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
+            }
+
+            roles = await _context.Set<Role>()
+                                  .Where(r => rolesIds.Contains(r.Id))
+                                  .Include(r => r.RolesPermissions)
+                                  .Include(r => r.UserRoles)
+                                  .Skip((pageIndex - 1) * pageSize)
+                                  .Take(pageSize)
+                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
+        }
+    }
+
+    public async Task<ICollection<RoleDto>> GetAll(
+        Expression<Func<Role, bool>> expresion,
+        int pageSize = 0,
+        int pageIndex = 0
+    ) {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Role> roles;
+
+            var rolesIds = await _context.Set<UserRole>()
+                                 .Include(ur => ur.Role)
+                                 .Select(ur => ur.RoleId)
+                                 .ToListAsync();
+
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                
+
+                roles = await _context.Set<Role>()
+                                      .Where(r => rolesIds.Contains(r.Id))
+                                      .Where(expresion)
+                                      .Include(r => r.RolesPermissions)
+                                      .Include(r => r.UserRoles)
+                                      .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
+            }
+
+            roles = await _context.Set<Role>()
+                                  .Where(r => rolesIds.Contains(r.Id))
+                                  .Where(expresion)
+                                  .Include(r => r.RolesPermissions)
+                                  .Include(r => r.UserRoles)
+                                  .Skip((pageIndex - 1) * pageSize)
+                                  .Take(pageSize)
+                                  .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
+        }
+    }
+
     public async Task<ICollection<UserDto>> GetUsers(int roleId)
     {
         if (roleId == 0)
@@ -54,11 +131,17 @@ public class RolesRepo : Repository<RoleDto, Role>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var roles = await _context.Set<UserRole>()
+            var rolesIds = await _context.Set<UserRole>()
                                  .Where(ur => ur.UserId == userId)
                                  .Include(ur => ur.Role)
-                                 .Select(ur => ur.Role)
+                                 .Select(ur => ur.RoleId)
                                  .ToListAsync();
+
+            var roles = await _context.Set<Role>()
+                                .Where(r => rolesIds.Contains(r.Id))
+                                .Include(r => r.RolesPermissions)
+                                .Include(r => r.UserRoles)
+                                .ToListAsync();
 
             return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
         }

@@ -12,7 +12,7 @@
                 <div><h3>Roles</h3></div>
                 <div>
                     <span class="codicon--add"
-                            @onclick="@_add">
+                      @onclick="@(async() => await _add())">
                     </span>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                                             !_selectedRole.Id.Equals(role.Id)
                                                             ? "" : "highlight_1"))"
                                     style="width: 150px !important;"
-                                    @onclick="@_edit">
+                                @onclick="@(async() => await _edit())">
                                     <span class="material-symbols--edit-outline" />
                                 </td>
 
@@ -77,7 +77,8 @@
                 style="--dialog-width: 500px !important;
                        --dialog-height: auto !important;">
 
-    <EditRole Role="@_selectedRole"
+    <EditRole @ref="_editRoleCompoment"
+              Role="@_selectedRole"
               IsReadMode="@false"
               OnSave="@(async () => await Save())"
               OnCancel="@Cancel" />

@@ -26,5 +26,6 @@ public class MappingCoreProfile : Profile
         CreateMap<OtherTypeDto, OtherType>().ReverseMap();
         CreateMap<DrawingTypeDto, DrawingType>().ReverseMap();
         CreateMap<DisciplineTypeDto, DisciplineType>().ReverseMap();
+        CreateMap<PermissionDto, Permission>().ReverseMap();
     }
 }

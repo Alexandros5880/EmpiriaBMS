@@ -14,6 +14,8 @@ public partial class Roles
     private ObservableCollection<RoleVM> _roles = new ObservableCollection<RoleVM>();
     private RoleVM _selectedRole = new RoleVM();
 
+    private EditRole _editRoleCompoment;
+
     // Add / Edit Dialog
     private FluentDialog? _addEditDialog;
     private bool _isAddEditDialogOdepened = false;
@@ -67,15 +69,17 @@ public partial class Roles
         return true;
     }
 
-    private void _add()
+    private async Task _add()
     {
         _selectedRole = null;
+        await _editRoleCompoment.Prepair();
         _addEditDialog.Show();
         _isAddEditDialogOdepened = true;
     }
 
-    private void _edit()
+    private async Task _edit()
     {
+        await _editRoleCompoment.Prepair();
         _addEditDialog.Show();
         _isAddEditDialogOdepened = true;
     }

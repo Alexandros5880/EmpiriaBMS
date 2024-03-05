@@ -18,5 +18,6 @@ namespace EmpiriaBMS.Core
         public OtherTypeRepo OthersTypes { get; set; }
         public DrawingTypeRepo DrawingsTypes { get; set; }
         public DisciplineTypeRepo DisciplinesTypes { get; set; }
+        public PermissionRepo Permissions { get; set; }
     }
 }

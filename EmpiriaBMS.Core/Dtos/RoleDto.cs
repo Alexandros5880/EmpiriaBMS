@@ -14,4 +14,6 @@ public class RoleDto : EntityDto
     public string? Name { get; set; }
 
     public bool IsEmployee { get; set; }
+
+    public ICollection<RolePermission> RolesPermissions { get; set; }
 }

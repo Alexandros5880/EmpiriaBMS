@@ -20,4 +20,5 @@ public class RoleVM : BaseVM
         }
     }
     public bool IsEmployee { get; set; }
+    public ICollection<RolePermission> RolesPermissions { get; set; }
 }
