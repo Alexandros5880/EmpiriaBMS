@@ -21,7 +21,7 @@ public class AuthorizeServices
     public double LogesUserHours { get; set; }
 
     // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
-    public string DefaultRoleName { get; set; } = "Admin";
+    public string DefaultRoleName { get; set; } = "Designer";
 
     public Action CallBackOnAuthorize { get; set; }
 
