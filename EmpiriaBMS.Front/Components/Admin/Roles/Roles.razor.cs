@@ -17,8 +17,9 @@ public partial class Roles
     private EditRole _editRoleCompoment;
 
     // Add / Edit Dialog
-    private FluentDialog? _addEditDialog;
-    private bool _isAddEditDialogOdepened = false;
+    private bool _isEditMode = false;
+    //private FluentDialog? _addEditDialog;
+    //private bool _isAddEditDialogOdepened = false;
 
     protected override void OnInitialized()
     {
@@ -70,16 +71,16 @@ public partial class Roles
     private async Task _add()
     {
         _selectedRole = null;
-        await _editRoleCompoment.Prepair();
-        _addEditDialog.Show();
-        _isAddEditDialogOdepened = true;
+        _isEditMode = true;
+        //_addEditDialog.Show();
+        //_isAddEditDialogOdepened = true;
     }
 
     private async Task _edit()
     {
-        await _editRoleCompoment.Prepair();
-        _addEditDialog.Show();
-        _isAddEditDialogOdepened = true;
+        _isEditMode = true;
+        //_addEditDialog.Show();
+        //_isAddEditDialogOdepened = true;
     }
 
     private async Task _delete(int id)
@@ -87,16 +88,18 @@ public partial class Roles
         await Task.Delay(1333);
     }
 
-    private async Task Save()
+    private async Task _save()
     {
         await Task.Delay(1333);
-        _addEditDialog.Hide();
-        _isAddEditDialogOdepened = false;
+        _isEditMode = false;
+        //_addEditDialog.Hide();
+        //_isAddEditDialogOdepened = false;
     }
 
-    private void Cancel()
+    private void _cancel()
     {
-        _addEditDialog.Hide();
-        _isAddEditDialogOdepened = false;
+        _isEditMode = false;
+        //_addEditDialog.Hide();
+        //_isAddEditDialogOdepened = false;
     }
 }

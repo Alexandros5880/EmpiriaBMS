@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Hosting
 @using EmpiriaBMS.Front.Components.Admin
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -91,10 +92,12 @@ else
             if (mySelf != null)
             {
                 _runInTeams = mySelf._runInTeams;
-                isLoading = false;
+                isLoading = mySelf.isLoading;
+                _allRoles = mySelf._allRoles; ; // TODO: Remove This
             }
             else
             {
+                pageCached.AddPage(this);
                 _runInTeams = await MicrosoftTeams.IsInTeams();
                 await authorizeServices.Authorize(_runInTeams: _runInTeams);
                 await GetAllRoles(); // TODO: Remove This
@@ -104,10 +107,26 @@ else
         }
     }
 
+    #region Rerender
+    bool shouldRender = true;
+
+    protected override void OnParametersSet() => shouldRender = true;
+
     protected override bool ShouldRender()
     {
-        return true;
+        if (shouldRender)
+        {
+            shouldRender = false;
+            return true;
+        }
+        else
+            return false;
     }
+    #endregion
+
+
+
+
 
     private string GetEnvironmentName()
     {

@@ -6,6 +6,8 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 
+@if (!_isEditMode)
+{
 <div class="row">
     <div class="col-12 card shadow p-1 mt-2">
             <div class="d-flex justify-content-between m-1">
@@ -67,10 +69,19 @@
                 <Paginator @ref=_paginator Renderer="@_getRoles" />
             </div>
     </div>
-</div>
+    </div>
+}
+else
+{
+    <EditRole @ref="_editRoleCompoment"
+              Role="@_selectedRole"
+              IsReadMode="@false"
+              OnSave="@(async () => await _save())"
+              OnCancel="@_cancel" />
+}
 
 <!-- Add / Edit Dialog -->
-<FluentDialog @ref="_addEditDialog"
+@* <FluentDialog @ref="_addEditDialog"
                 Hidden="@(!_isAddEditDialogOdepened)"
                 Modal="true"
                 DialogType=@DialogType.Panel
@@ -80,7 +91,7 @@
     <EditRole @ref="_editRoleCompoment"
               Role="@_selectedRole"
               IsReadMode="@false"
-              OnSave="@(async () => await Save())"
-              OnCancel="@Cancel" />
+              OnSave="@(async () => await _save())"
+              OnCancel="@_cancel" />
 
-</FluentDialog>
+</FluentDialog> *@

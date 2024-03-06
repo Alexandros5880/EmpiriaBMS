@@ -44,7 +44,18 @@ public partial class EditRole
         }
     }
 
-    public async Task Prepair()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await _prepair();
+            StateHasChanged();
+        }
+    }
+
+    private async Task _prepair()
     {
         await _getPermissions();
     }

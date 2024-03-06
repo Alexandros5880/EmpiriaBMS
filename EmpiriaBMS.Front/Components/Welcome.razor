@@ -16,32 +16,33 @@
 
 @if (SeeAdmin)
 {
-    var prevPageType = pageCached.GetPageType();
-    if (prevPageType == typeof(DisciplinesTypes))
+    var prevPageType = pageCached.GetPageType()?.FullName ?? "";
+    
+    if (prevPageType.Equals(disciplineTypes))
     {
         <DisciplinesTypes />
     }
-    else if (prevPageType == typeof(DrawingsTypes))
+    else if (prevPageType.Equals(drawingsTypes))
     {
         <DrawingsTypes />
     }
-    else if (prevPageType == typeof(OthersTypes))
+    else if (prevPageType.Equals(othersTypes))
     {
         <OthersTypes />
     }
-    else if (prevPageType == typeof(Projects))
+    else if (prevPageType.Equals(projects))
     {
         <Projects />
     }
-    else if (prevPageType == typeof(Roles))
+    else if (prevPageType.Equals(roles))
     {
         <Roles />
     }
-    else if (prevPageType == typeof(Users))
+    else if (prevPageType.Equals(users))
     {
         <Users />
     }
-    else if (prevPageType == typeof(Dashboard) && SeeDashboard)
+    else if (prevPageType.Equals(dashboard) && SeeDashboard)
     {
         <Dashboard />
     }
@@ -74,4 +75,13 @@ else
     }
     #endregion
 
+    #region Navigation Pages Types Names
+    private string disciplineTypes = typeof(DisciplinesTypes).FullName;
+    private string drawingsTypes = typeof(DrawingsTypes).FullName;
+    private string othersTypes = typeof(OthersTypes).FullName;
+    private string projects = typeof(Projects).FullName;
+    private string roles = typeof(Roles).FullName;
+    private string users = typeof(Users).FullName;
+    private string dashboard = typeof(Dashboard).FullName;
+    #endregion
 }

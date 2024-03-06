@@ -21,7 +21,7 @@ var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
 builder.Services.AddSingleton<TimerService>();
-builder.Services.AddSingleton<RendererService>();
+builder.Services.AddSingleton<StateService>();
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddDbContextFactory<AppDbContext>(); // DbContext Dependency Injection
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection

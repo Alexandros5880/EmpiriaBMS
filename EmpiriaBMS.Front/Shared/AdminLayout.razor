@@ -138,6 +138,11 @@
     private bool _isMobile { get; set; } = false;
     private string _activeLink { get; set; } = "";
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -154,19 +159,18 @@
     private void _toggleSidebar()
     {
         _isSidebarOpen = !_isSidebarOpen;
-        //StateHasChanged();
     }
 
     private async Task IsMobile()
     {
         var screenSize = await MicrosoftTeams.GetScreenSize();
         _isMobile = screenSize.Width <= 768;
+        _isSidebarOpen = !_isMobile;
     }
 
     private void _setActiveLink(string link)
     {
         _activeLink = link;
-        //StateHasChanged();
     }
 
     protected override bool ShouldRender()
