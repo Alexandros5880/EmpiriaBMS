@@ -16,19 +16,8 @@ public partial class DrawingsTypes
 
         if (firstRender)
         {
-            var prevPage = pageCached.GetPage<DrawingsTypes>();
-            if (prevPage != null)
-            {
-                _source = prevPage._source;
-                _selectedItem = prevPage._selectedItem;
-                _paginator.SetVM(prevPage._paginator.Peginator);
-            }
-            else
-            {
-                pageCached.AddPage(this);
-                _paginator.SetRecordsLength(await DataProvider.DrawingsTypes.Count());
-                await _getSource();
-            }
+            _paginator.SetRecordsLength(await DataProvider.DrawingsTypes.Count());
+            await _getSource();
 
             StateHasChanged();
         }

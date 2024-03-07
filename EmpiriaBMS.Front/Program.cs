@@ -21,12 +21,10 @@ var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
 builder.Services.AddSingleton<TimerService>();
-builder.Services.AddSingleton<StateService>();
+builder.Services.AddScoped<AuthorizeServices>();
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddDbContextFactory<AppDbContext>(); // DbContext Dependency Injection
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
-builder.Services.AddScoped<AuthorizeServices>();
-builder.Services.AddScoped<PageCachedService>();
 
 // TODO: AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
@@ -40,6 +38,8 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddFluentUIComponents();
 
 builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 builder.Services.AddHttpClient("WebClient", client => client.Timeout = TimeSpan.FromSeconds(600));
 builder.Services.AddHttpContextAccessor();
 
@@ -65,9 +65,18 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapControllers();
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}"
+    );
+    endpoints.MapRazorPages();
+    endpoints.MapControllerRoute(
+        name: "admin",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
     endpoints.MapBlazorHub();//.RequireAuthorization();
     endpoints.MapFallbackToPage("/_Host");
-    endpoints.MapControllers();
 });
 
 app.Run();

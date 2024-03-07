@@ -4,6 +4,7 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.TeamsFx;
+using NuGet.Protocol;
 using System.Diagnostics;
 
 namespace EmpiriaBMS.Front.Services;
@@ -21,9 +22,11 @@ public class AuthorizeServices
     public double LogesUserHours { get; set; }
 
     // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
-    public string DefaultRoleName { get; set; } = "Designer";
+    public string DefaultRoleName { get; set; } = "Admin";
+    public int DefaultRoleId { get; set; } = 0;
+    public string LogedUserObjectId { get; set; } = null;
 
-    public Action CallBackOnAuthorize { get; set; }
+    public Func<Task> CallBackOnAuthorize { get; set; }
 
     public AuthorizeServices(
         IDataProvider dataProvider,
@@ -39,29 +42,27 @@ public class AuthorizeServices
     {
         await _getLogedUser();
 
-        CallBackOnAuthorize?.Invoke();
+        await CallBackOnAuthorize.Invoke();
     }
 
     public async Task Authorize(int roleId = 0, bool _runInTeams = true)
     {
-        await _getLogedUser(roleId, _runInTeams);
+        DefaultRoleId = roleId != 0 ? roleId : await _getRoleId(DefaultRoleName);
+        await _getLogedUser(_runInTeams);
 
-        CallBackOnAuthorize?.Invoke();
+        await CallBackOnAuthorize.Invoke();
     }
 
-    private async Task _getLogedUser(int roleId = 0, bool _runInTeams = true)
+    private async Task _getLogedUser(bool _runInTeams = true)
     {
         try
         {
             // TODO: Get Teams Logged User And Mach him With Our Users
             var teamsUser = await _teamsUserCredential.GetUserInfoAsync();
+            LogedUserObjectId = teamsUser.ObjectId;
             var userExists = _dataProvider.Users.Exists(teamsUser.PreferredUserName);
 
-            var defaultRoleId = roleId != 0 ? roleId : await _getRoleId(DefaultRoleName);
-            if (defaultRoleId == 0)
-                throw new Exception($"Exception `{DefaultRoleName}` role not exists!");
-
-            var users = await _dataProvider.Roles.GetUsers(defaultRoleId);
+            var users = await _dataProvider.Roles.GetUsers(DefaultRoleId);
             var dbUser = users.FirstOrDefault();
 
             if (dbUser == null)

@@ -16,19 +16,8 @@ public partial class DisciplinesTypes
 
         if (firstRender)
         {
-            var prevPage = pageCached.GetPage<DisciplinesTypes>();
-            if (prevPage != null)
-            {
-                _source = prevPage._source;
-                _selectedItem = prevPage._selectedItem;
-                _paginator.SetVM(prevPage._paginator.Peginator);
-            }
-            else
-            {
-                pageCached.AddPage(this);
-                _paginator.SetRecordsLength(await DataProvider.DisciplinesTypes.Count());
-                await _getSource();
-            }
+            _paginator.SetRecordsLength(await DataProvider.DisciplinesTypes.Count());
+            await _getSource();
 
             StateHasChanged();
         }

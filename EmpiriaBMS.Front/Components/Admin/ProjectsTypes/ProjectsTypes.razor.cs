@@ -16,19 +16,8 @@ public partial class ProjectsTypes
 
         if (firstRender)
         {
-            var prevPage = pageCached.GetPage<ProjectsTypes>();
-            if (prevPage != null)
-            {
-                _source = prevPage._source;
-                _selectedItem = prevPage._selectedItem;
-                _paginator.SetVM(prevPage._paginator.Peginator);
-            }
-            else
-            {
-                pageCached.AddPage(this);
-                _paginator.SetRecordsLength(await DataProvider.ProjectsTypes.Count());
-                await _getSource();
-            }
+            _paginator.SetRecordsLength(await DataProvider.ProjectsTypes.Count());
+            await _getSource();
 
             StateHasChanged();
         }

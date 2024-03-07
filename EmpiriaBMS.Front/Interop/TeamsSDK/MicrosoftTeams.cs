@@ -41,4 +41,8 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeAsync<ScreenSize>("getScreenSize");
     }
 
+    public Task NavigateToAdmin(string url, string objectId, string roleId)
+    {
+        return InvokeVoidAsync("navigateToAdmin", url, objectId, roleId);
+    }
 }

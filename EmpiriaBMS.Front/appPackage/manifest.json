@@ -39,8 +39,8 @@
       {
         "entityId": "index",
         "name": "Dashboard",
-        "contentUrl": "${{TAB_ENDPOINT}}/welcome",
-        "websiteUrl": "${{TAB_ENDPOINT}}/welcome",
+        "contentUrl": "${{TAB_ENDPOINT}}/dashboard",
+        "websiteUrl": "${{TAB_ENDPOINT}}/dashboard",
         "scopes": [
           "personal"
         ]

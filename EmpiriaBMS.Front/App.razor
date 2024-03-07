@@ -4,6 +4,7 @@
 @using EmpiriaBMS.Front.Components.Admin
 @using EmpiriaBMS.Front.Services
 @using EmpiriaBMS.Front.Horizontal
+@using System.Net.Http.Headers
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -14,7 +15,7 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 @inject AuthorizeServices authorizeServices
-@inject PageCachedService pageCached
+@inject HttpClient HttpClient
 
 @if(isLoading)
 {
@@ -24,24 +25,21 @@
 }
 else
 {
-    <FluentDesignSystemProvider AccentBaseColor="#6264A7">
-        <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
-            <Found Context="routeData">
-                @{
-                    Type defaultLayoutType = SeeAdmin ? typeof(AdminLayout) : typeof(MainLayout);
-                }
-                <RouteView RouteData="@routeData" DefaultLayout="@defaultLayoutType" />
-            </Found>
-            <NotFound>
-                @{
-                    Type layoutType = SeeAdmin ? typeof(AdminLayout) : typeof(MainLayout);
-                }
-                <LayoutView Layout="@layoutType">
-                    <p>Sorry, there's nothing at this address.</p>
-                </LayoutView>
-            </NotFound>
-        </Router>
-    </FluentDesignSystemProvider>
+    @if (SeeDashboard)
+    {
+        <FluentDesignSystemProvider AccentBaseColor="#6264A7">
+            <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+                <Found Context="routeData">
+                    <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+                </Found>
+                <NotFound>
+                    <LayoutView Layout="@typeof(MainLayout)">
+                        <p>Sorry, there's nothing at this address.</p>
+                    </LayoutView>
+                </NotFound>
+            </Router>
+        </FluentDesignSystemProvider>
+    }
 
     <!-- Remove This -->
     <select class="form-select" @onchange="RoleSelectionChanged"
@@ -88,23 +86,23 @@ else
 
         if (firstRender)
         {
-            var mySelf = pageCached.GetPage<App>();
-            if (mySelf != null)
-            {
-                _runInTeams = mySelf._runInTeams;
-                isLoading = mySelf.isLoading;
-                _allRoles = mySelf._allRoles; ; // TODO: Remove This
-            }
-            else
-            {
-                pageCached.AddPage(this);
-                _runInTeams = await MicrosoftTeams.IsInTeams();
-                await authorizeServices.Authorize(_runInTeams: _runInTeams);
-                await GetAllRoles(); // TODO: Remove This
-                isLoading = false;
-                StateHasChanged();
-            }
+            _runInTeams = await MicrosoftTeams.IsInTeams();
+            await GetAllRoles(); // TODO: Remove This
+            authorizeServices.CallBackOnAuthorize += _afterAuthCallBack;
+            await authorizeServices.Authorize(_runInTeams: _runInTeams);
         }
+    }
+
+    private async Task _afterAuthCallBack()
+    {
+        isLoading = false;
+        StateHasChanged();
+        await _navigateToAdminArea(authorizeServices.LogedUserObjectId, authorizeServices.DefaultRoleId);
+    }
+
+    private async Task _navigateToAdminArea(string objectId, int roleId)
+    {
+        await MicrosoftTeams.NavigateToAdmin("/Admin/Projects/Table", objectId, roleId.ToString());
     }
 
     private string GetEnvironmentName()
@@ -122,8 +120,9 @@ else
         var selectRoleId = Convert.ToInt32(e.Value);
         await authorizeServices.Authorize(selectRoleId, _runInTeams);
         authorizeServices.DefaultRoleName = _allRoles.FirstOrDefault(r => r.Id == selectRoleId).Name;
-        NavigationManager.NavigateTo("/welcome");
         isLoading = false;
+        isLoading = false;
+        StateHasChanged();
     }
 
     private async Task GetAllRoles()

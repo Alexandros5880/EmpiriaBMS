@@ -114,3 +114,21 @@ export function getScreenSize() {
         height: window.innerHeight
     };
 };
+
+export function navigateToAdmin(url, objectId, roleId) {
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'ObjectId': objectId,
+            'RoleId': roleId
+        }
+    }).then(response => {
+        if (response.ok) {
+            window.location.href = response.url; // Redirect to the returned URL
+        } else {
+            console.error('Failed to navigate:', response.status);
+        }
+    }).catch(error => {
+        console.error('Error navigating:', error);
+    });
+}

@@ -32,19 +32,8 @@ public partial class Roles
 
         if (firstRender)
         {
-            var prevPage = pageCached.GetPage<Roles>();
-            if (prevPage != null)
-            {
-                _roles = prevPage._roles;
-                _selectedRole = prevPage._selectedRole;
-                _paginator.SetVM(prevPage._paginator.Peginator);
-            }
-            else
-            {
-                pageCached.AddPage(this);
-                _paginator.SetRecordsLength(await DataProvider.Roles.Count());
-                await _getRoles();
-            }
+            _paginator.SetRecordsLength(await DataProvider.Roles.Count());
+            await _getRoles();
 
             StateHasChanged();
         }

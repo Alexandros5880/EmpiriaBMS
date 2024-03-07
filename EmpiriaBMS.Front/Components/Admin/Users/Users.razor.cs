@@ -24,19 +24,8 @@ public partial class Users
 
         if (firstRender)
         {
-            var prevPage = pageCached.GetPage<Users>();
-            if (prevPage != null)
-            {
-                _users = prevPage._users;
-                _selectedUser = prevPage._selectedUser;
-                _paginator.SetVM(prevPage._paginator.Peginator);
-            }
-            else
-            {
-                pageCached.AddPage(this);
-                _paginator.SetRecordsLength(await DataProvider.Users.Count());
-                await _getUsers();
-            }
+            _paginator.SetRecordsLength(await DataProvider.Users.Count());
+            await _getUsers();
 
             StateHasChanged();
         }

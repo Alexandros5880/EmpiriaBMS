@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <RuntimeFrameworkVersion>6.0.10</RuntimeFrameworkVersion>
+    <UserSecretsId>f4fdf5df-fb9b-4826-b7e2-e6f29985ddc8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,15 +22,26 @@
     <PackageReference Include="Blazor.Bootstrap" Version="2.0.0" />
     <PackageReference Include="jQuery" Version="3.5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.26" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.27" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.27" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.27">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Fast.Components.FluentUI.Emojis" Version="3.5.4" />
     <PackageReference Include="Microsoft.Fast.Components.FluentUI.Icons" Version="3.5.4" />
     <PackageReference Include="Microsoft.Graph" Version="5.41.0" />
     <PackageReference Include="Microsoft.Fast.Components.FluentUI" Version="3.5.5" />
     <PackageReference Include="Microsoft.TeamsFx" Version="2.4.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EmpiriaBMS.Core\EmpiriaBMS.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties apppackage_4manifest_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
