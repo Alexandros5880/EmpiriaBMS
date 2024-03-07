@@ -24,9 +24,9 @@ public class ProjectsController : Controller
     {
         // Retrieve Bearer token from Authorization header
         string objectId = Request.Headers["ObjectId"];
-        string xRoleId = Request.Headers["RoleId"];
-        int roleId = Convert.ToInt32(xRoleId);
-        await _authorizeService.Authorize(roleId: roleId);
+
+        await _authorizeService.Authorize();
+        //await _authorizeService.Authorize(objectId);
         var logedUserId = _authorizeService.LogedUser.Id;
 
         ProjectsTableVM viewmodel = new ProjectsTableVM();

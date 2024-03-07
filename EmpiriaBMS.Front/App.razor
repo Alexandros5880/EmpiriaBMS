@@ -89,7 +89,7 @@ else
             _runInTeams = await MicrosoftTeams.IsInTeams();
             await GetAllRoles(); // TODO: Remove This
             authorizeServices.CallBackOnAuthorize += _afterAuthCallBack;
-            await authorizeServices.Authorize(_runInTeams: _runInTeams);
+            await authorizeServices.Authorize(runInTeams: _runInTeams);
         }
     }
 
@@ -97,12 +97,12 @@ else
     {
         isLoading = false;
         StateHasChanged();
-        await _navigateToAdminArea(authorizeServices.LogedUserObjectId, authorizeServices.DefaultRoleId);
+        await _navigateToAdminArea(authorizeServices.LogedUserObjectId);
     }
 
-    private async Task _navigateToAdminArea(string objectId, int roleId)
+    private async Task _navigateToAdminArea(string objectId)
     {
-        await MicrosoftTeams.NavigateToAdmin("/Admin/Projects/Table", objectId, roleId.ToString());
+        await MicrosoftTeams.NavigateToAdmin("/Admin/Projects/Table", objectId);
     }
 
     private string GetEnvironmentName()

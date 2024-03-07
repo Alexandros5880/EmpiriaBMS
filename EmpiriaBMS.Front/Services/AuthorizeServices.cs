@@ -40,35 +40,47 @@ public class AuthorizeServices
 
     public async Task Authorize()
     {
-        await _getLogedUser();
+        await _getRandomUserByRole();
 
         if (CallBackOnAuthorize != null)
             await CallBackOnAuthorize.Invoke();
     }
 
-    public async Task Authorize(int roleId = 0, bool _runInTeams = true)
+    public async Task Authorize(int roleId = 0, bool runInTeams = true)
     {
-        DefaultRoleId = roleId != 0 ? roleId : await _getRoleId(DefaultRoleName);
-        await _getLogedUser(_runInTeams);
+        if (runInTeams)
+        {
+            // TODO: Get Teams Logged User And Mach him With Our Users
+            UserInfo teamsUser = teamsUser = await _teamsUserCredential.GetUserInfoAsync();
+
+            LogedUserObjectId = teamsUser.ObjectId;
+            //var userExists = _dataProvider.Users.Exists(teamsUser.PreferredUserName);
+
+            //await _getLogedUser(LogedUserObjectId);
+        }
+
+        
+        // TODO: When Fix Authorization with teams Remove that
+        await _getRandomUserByRole(roleId);
+
+
 
         if (CallBackOnAuthorize != null)
             await CallBackOnAuthorize.Invoke();
     }
 
-    private async Task _getLogedUser(bool _runInTeams = true, string objectId = null)
+    public async Task Authorize(string objectId)
+    {
+        await _getLogedUser(objectId);
+
+        if (CallBackOnAuthorize != null)
+            await CallBackOnAuthorize.Invoke();
+    }
+
+    private async Task _getLogedUser(string objectId)
     {
         try
         {
-            UserInfo teamsUser = null;
-            if (objectId != null)
-            {
-                // TODO: Get Teams Logged User And Mach him With Our Users
-                teamsUser = await _teamsUserCredential.GetUserInfoAsync();
-            }
-            
-            LogedUserObjectId = objectId != null ? objectId : teamsUser.ObjectId;
-            var userExists = _dataProvider.Users.Exists(teamsUser.PreferredUserName);
-
             var users = await _dataProvider.Roles.GetUsers(DefaultRoleId);
             var dbUser = users.FirstOrDefault();
 
@@ -91,6 +103,37 @@ public class AuthorizeServices
             // {
 
             // }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task _getRandomUserByRole(int roleId = 0)
+    {
+        try
+        {
+            DefaultRoleId = roleId != 0 ? roleId : await _getRoleId(DefaultRoleName);
+
+            var users = await _dataProvider.Roles.GetUsers(DefaultRoleId);
+            var dbUser = users.FirstOrDefault();
+
+            if (dbUser == null)
+                throw new NullReferenceException(nameof(dbUser));
+
+            LogedUser = _mapper.Map<UserVM>(dbUser);
+
+            LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(LogedUser.Id, DateTime.Now);
+
+            LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
+                                                        .Select(r => _mapper.Map<RoleVM>(r))
+                                                        .ToList();
+
+            Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
+                                                    .ToList();
+            PermissionOrds = Permissions.Select(p => p.Ord).ToList();
         }
         catch (Exception ex)
         {

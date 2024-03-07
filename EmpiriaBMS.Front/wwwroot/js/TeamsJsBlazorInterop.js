@@ -115,12 +115,11 @@ export function getScreenSize() {
     };
 };
 
-export function navigateToAdmin(url, objectId, roleId) {
+export function navigateToAdmin(url, objectId) {
     fetch(url, {
         method: 'GET',
         headers: {
-            'ObjectId': objectId,
-            'RoleId': roleId
+            'ObjectId': objectId
         }
     }).then(response => {
         if (response.ok) {
