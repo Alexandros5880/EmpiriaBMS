@@ -42,7 +42,8 @@ public class AuthorizeServices
     {
         await _getLogedUser();
 
-        await CallBackOnAuthorize.Invoke();
+        if (CallBackOnAuthorize != null)
+            await CallBackOnAuthorize.Invoke();
     }
 
     public async Task Authorize(int roleId = 0, bool _runInTeams = true)
@@ -50,7 +51,8 @@ public class AuthorizeServices
         DefaultRoleId = roleId != 0 ? roleId : await _getRoleId(DefaultRoleName);
         await _getLogedUser(_runInTeams);
 
-        await CallBackOnAuthorize.Invoke();
+        if (CallBackOnAuthorize != null)
+            await CallBackOnAuthorize.Invoke();
     }
 
     private async Task _getLogedUser(bool _runInTeams = true)

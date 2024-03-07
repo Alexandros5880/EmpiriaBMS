@@ -12,9 +12,11 @@ public class ProjectsController : Controller
     private readonly AuthorizeServices _authorizeService;
 
     public ProjectsController(
-        IDataProvider dataProvider
+        IDataProvider dataProvider,
+        AuthorizeServices authorizeServices
     ) {
         _dataProvider = dataProvider;
+        _authorizeService = authorizeServices;
     }
 
     [HttpGet]
@@ -22,13 +24,13 @@ public class ProjectsController : Controller
     {
         // Retrieve Bearer token from Authorization header
         string objectId = Request.Headers["ObjectId"];
-
-        // Retrieve X-Role-Id header
         string xRoleId = Request.Headers["RoleId"];
+        int roleId = Convert.ToInt32(xRoleId);
+        await _authorizeService.Authorize(roleId: roleId);
+        var logedUserId = _authorizeService.LogedUser.Id;
 
-        int userId = Convert.ToInt32(xRoleId);
         ProjectsTableVM viewmodel = new ProjectsTableVM();
-        viewmodel.Projects = await _dataProvider.Projects.GetAll(userId);
+        viewmodel.Projects = await _dataProvider.Projects.GetAll(logedUserId);
 
         return View(viewmodel);
     }
