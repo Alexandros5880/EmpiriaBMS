@@ -42,7 +42,8 @@ else
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-white mb-2"
-                                        href="/dashboard">
+                                       herf="/dashboard"
+                                       @onclick="@(() => selectUrl("/dashboard"))">
                                         <span class="arcticons--nextcloud-tables"></span>
                                         Dashboard
                                     </a>
@@ -50,49 +51,49 @@ else
                             }
                             <li class="nav-item">
                                 <a class="nav-link text-white mb-2"
-                                   href="/mvc/Admin/Projects/Table">
+                                   @onclick="@(() => selectUrl("/mvc/Admin/Projects/Table"))">
                                     <span class="file-icons--microsoft-project"></span>
                                     Projects
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white mb-2"
-                                       href="/mvc/Admin/Users">
+                                   @onclick="@(() => selectUrl("/mvc/Admin/Users/Table"))">
                                     <span class="ph--users-four-light"></span>
                                     Users
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white mb-2"
-                                       href="/mvc/Admin/Roles">
+                                   @onclick="@(() => selectUrl("/mvc/Admin/Roles/Table"))">
                                     <span class="oui--app-users-roles"></span>
                                     Roles
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white mb-2"
-                                       href="/mvc/Admin/ProjectsTypes">
+                                   @onclick="@(() => selectUrl("/mvc/Admin/ProjectsTypes/Table"))">
                                     <span class="arcticons--ptv"></span>
                                     Project Types
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white mb-2"
-                                       href="/mvc/Admin/DisciplinesTypes">
+                                   @onclick="@(() => selectUrl("/mvc/Admin/DisciplinesTypes/Table"))">
                                     <span class="gala--layer"></span>
                                     Disciplines Types
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white mb-2"
-                                       href="/mvc/Admin/DrwaingsTypes">
+                                   @onclick="@(() => selectUrl("/mvc/Admin/DrwaingsTypes/Table"))">
                                     <span class="streamline--hand-held-tablet-drawing"></span>
                                     Drawing Types
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white mb-2"
-                                       href="/mvc/Admin/OthersTypes">
+                                   @onclick="@(() => selectUrl("/mvc/Admin/OthersTypes/Table"))">
                                     <span class="material-symbols--other-admission-outline-sharp"></span>
                                     Other Types
                                 </a>
@@ -118,7 +119,14 @@ else
                 </div>
             }
             <div class="col py-3">
-                @Body
+                @if (SeeAdmin && !_selectedUrl.Equals("/dashboard"))
+                {
+                    <iframe src="@_selectedUrl" style="width: 100%; height: 100%; border: none;"></iframe>
+                }
+                else
+                {
+                    @Body
+                }
             </div>
         </div>
     </div>
@@ -143,6 +151,7 @@ else
 @code {
     bool _runInTeams = false;
     bool isLoading = true;
+    private string _selectedUrl = "";
 
     #region Authorization Properties
     public bool SeeAdmin
@@ -156,7 +165,7 @@ else
     {
         get
         {
-            return _sharedAuthData.PermissionOrds.Contains(4);
+            return _sharedAuthData.PermissionOrds.Contains(1);
         }
     }
     #endregion
@@ -174,18 +183,17 @@ else
         }
     }
 
-    private async Task _afterAuthCallBack()
+    private void _afterAuthCallBack()
     {
         isLoading = false;
+        selectUrl("/mvc/Admin/Projects/Table");
         StateHasChanged();
-
-        //await _navigateToAdminArea(authorizeServices.LogedUserObjectId);
     }
 
-    // private async Task _navigateToAdminArea(string objectId)
-    // {
-    //     await MicrosoftTeams.NavigateToAdmin("/Admin/Projects/Table", objectId);
-    // }
+    private void selectUrl(string url)
+    {
+        _selectedUrl = url;
+    }
 
     private string GetEnvironmentName()
     {

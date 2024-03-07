@@ -16,7 +16,7 @@ public class AuthorizeServices
     private readonly IMapper _mapper;
     private readonly SharedAuthDataService _sharedAuthData;
 
-    public Func<Task> CallBackOnAuthorize { get; set; }
+    public Action CallBackOnAuthorize { get; set; }
 
     public AuthorizeServices(
         IDataProvider dataProvider,
@@ -35,7 +35,7 @@ public class AuthorizeServices
         await _getRandomUserByRole();
 
         if (CallBackOnAuthorize != null)
-            await CallBackOnAuthorize.Invoke();
+            CallBackOnAuthorize.Invoke();
     }
 
     public async Task Authorize(int roleId = 0, bool runInTeams = true)
@@ -55,10 +55,8 @@ public class AuthorizeServices
         // TODO: When Fix Authorization with teams Remove that
         await _getRandomUserByRole(roleId);
 
-
-
         if (CallBackOnAuthorize != null)
-            await CallBackOnAuthorize.Invoke();
+            CallBackOnAuthorize.Invoke();
     }
 
     public async Task Authorize(int roleId = 0)
@@ -67,7 +65,7 @@ public class AuthorizeServices
         await _getRandomUserByRole(roleId);
 
         if (CallBackOnAuthorize != null)
-            await CallBackOnAuthorize.Invoke();
+            CallBackOnAuthorize.Invoke();
     }
 
     public async Task Authorize(string objectId)
@@ -75,7 +73,7 @@ public class AuthorizeServices
         await _getLogedUser(objectId);
 
         if (CallBackOnAuthorize != null)
-            await CallBackOnAuthorize.Invoke();
+            CallBackOnAuthorize.Invoke();
     }
 
     private async Task _getLogedUser(string objectId)
