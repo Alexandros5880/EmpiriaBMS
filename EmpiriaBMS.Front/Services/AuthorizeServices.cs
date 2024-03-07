@@ -55,13 +55,18 @@ public class AuthorizeServices
             await CallBackOnAuthorize.Invoke();
     }
 
-    private async Task _getLogedUser(bool _runInTeams = true)
+    private async Task _getLogedUser(bool _runInTeams = true, string objectId = null)
     {
         try
         {
-            // TODO: Get Teams Logged User And Mach him With Our Users
-            var teamsUser = await _teamsUserCredential.GetUserInfoAsync();
-            LogedUserObjectId = teamsUser.ObjectId;
+            UserInfo teamsUser = null;
+            if (objectId != null)
+            {
+                // TODO: Get Teams Logged User And Mach him With Our Users
+                teamsUser = await _teamsUserCredential.GetUserInfoAsync();
+            }
+            
+            LogedUserObjectId = objectId != null ? objectId : teamsUser.ObjectId;
             var userExists = _dataProvider.Users.Exists(teamsUser.PreferredUserName);
 
             var users = await _dataProvider.Roles.GetUsers(DefaultRoleId);
