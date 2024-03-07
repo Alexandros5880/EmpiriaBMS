@@ -1,2 +1,217 @@
 @inherits LayoutComponentBase
-@Body
+
+@using Microsoft.Extensions.Configuration
+@using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Hosting
+@using EmpiriaBMS.Front.Components.Admin
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using System.Net.Http.Headers
+
+@inject TeamsFx teamsfx
+@inject TeamsUserCredential teamsUserCredential
+@inject MicrosoftTeams MicrosoftTeams
+@inject IWebHostEnvironment HostEnvironment
+@inject IConfiguration Configuration
+@inject NavigationManager NavigationManager
+@inject IDataProvider DataProvider
+@inject IMapper Mapper
+@inject AuthorizeServices authorizeServices
+@inject SharedAuthDataService _sharedAuthData
+@inject HttpClient HttpClient
+
+@if(isLoading)
+{
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <FilterProgressRing FilterLoading="@isLoading"/>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @if (SeeAdmin)
+            {
+                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                            <span class="fs-5 d-none d-sm-inline">Menu</span>
+                        </a>
+                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                            @if (SeeDashboard)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white mb-2"
+                                        href="/dashboard">
+                                        <span class="arcticons--nextcloud-tables"></span>
+                                        Dashboard
+                                    </a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-white mb-2"
+                                   href="/mvc/Admin/Projects/Table">
+                                    <span class="file-icons--microsoft-project"></span>
+                                    Projects
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white mb-2"
+                                       href="/mvc/Admin/Users">
+                                    <span class="ph--users-four-light"></span>
+                                    Users
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white mb-2"
+                                       href="/mvc/Admin/Roles">
+                                    <span class="oui--app-users-roles"></span>
+                                    Roles
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white mb-2"
+                                       href="/mvc/Admin/ProjectsTypes">
+                                    <span class="arcticons--ptv"></span>
+                                    Project Types
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white mb-2"
+                                       href="/mvc/Admin/DisciplinesTypes">
+                                    <span class="gala--layer"></span>
+                                    Disciplines Types
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white mb-2"
+                                       href="/mvc/Admin/DrwaingsTypes">
+                                    <span class="streamline--hand-held-tablet-drawing"></span>
+                                    Drawing Types
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white mb-2"
+                                       href="/mvc/Admin/OthersTypes">
+                                    <span class="material-symbols--other-admission-outline-sharp"></span>
+                                    Other Types
+                                </a>
+                            </li>
+                        </ul>
+                        <hr>
+                        <div class="dropdown pb-4">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                                <span class="d-none d-sm-inline mx-1">loser</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                                <li><a class="dropdown-item" href="#">New project...</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col py-3">
+                @Body
+            </div>
+        </div>
+    </div>
+
+    <!-- Remove This -->
+    <select class="form-select" @onchange="RoleSelectionChanged"
+            style="position:fixed !important; bottom:0px !important; width: 200px; left: 10px;">
+        @foreach (var role in _allRoles)
+        {
+            @if (@role.Name.Equals(_sharedAuthData.DefaultRoleName))
+            {
+                <option value="@role.Id" selected>@role.Name</option>
+            }
+            else
+            {
+                <option value="@role.Id">@role.Name</option>
+            }
+        }
+    </select>
+}
+
+@code {
+    bool _runInTeams = false;
+    bool isLoading = true;
+
+    #region Authorization Properties
+    public bool SeeAdmin
+    {
+        get
+        {
+            return _sharedAuthData.PermissionOrds.Contains(7);
+        }
+    }
+    public bool SeeDashboard
+    {
+        get
+        {
+            return _sharedAuthData.PermissionOrds.Contains(4);
+        }
+    }
+    #endregion
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            _runInTeams = await MicrosoftTeams.IsInTeams();
+            await GetAllRoles(); // TODO: Remove This
+            authorizeServices.CallBackOnAuthorize += _afterAuthCallBack;
+            await authorizeServices.Authorize(runInTeams: _runInTeams);
+        }
+    }
+
+    private async Task _afterAuthCallBack()
+    {
+        isLoading = false;
+        StateHasChanged();
+
+        //await _navigateToAdminArea(authorizeServices.LogedUserObjectId);
+    }
+
+    // private async Task _navigateToAdminArea(string objectId)
+    // {
+    //     await MicrosoftTeams.NavigateToAdmin("/Admin/Projects/Table", objectId);
+    // }
+
+    private string GetEnvironmentName()
+    {
+        return HostEnvironment.IsDevelopment() ? "local environment" : "Azure environment";
+    }
+
+    // TODO: Remove This
+    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
+    private ICollection<RoleVM> _allRoles = new List<RoleVM>();
+
+    private async Task RoleSelectionChanged(ChangeEventArgs e)
+    {
+        isLoading = true;
+        var selectRoleId = Convert.ToInt32(e.Value);
+        await authorizeServices.Authorize(selectRoleId, _runInTeams);
+        _sharedAuthData.DefaultRoleName = _allRoles.FirstOrDefault(r => r.Id == selectRoleId).Name;
+        isLoading = false;
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task GetAllRoles()
+    {
+        var rolesDtos = await DataProvider.Roles.GetAll();
+        var roles = Mapper.Map<List<RoleVM>>(rolesDtos);
+        _allRoles.Clear();
+        roles.ForEach(_allRoles.Add);
+    }
+}

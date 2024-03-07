@@ -27,60 +27,53 @@ public partial class Dashboard : IDisposable
 
     private UserTimes _logedUserTimes;
     private UserTimes _editLogedUserTimes;
-    bool getAllDisciplines => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
-    bool getAllDrawings => authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Engineer")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("COO")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Project Manager")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CEO")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("CTO")
-                            || authorizeServices.LoggedUserRoles.Select(r => r.Name).ToList().Contains("Admin");
-
-    // General Fields
-    private bool disposedValue;
-    bool _startLoading = true;
-    bool _filterLoading = false;
 
     #region Authorization Properties
-    public bool AssignDesigner {
+    public bool AssignDesigner
+    {
         get
         {
-            return isWorkingMode && authorizeServices.PermissionOrds.Contains(3);
+            return isWorkingMode && _sharedAuthData.PermissionOrds.Contains(3);
         }
     }
     public bool AssignEngineer
     {
         get
         {
-            return isWorkingMode && authorizeServices.PermissionOrds.Contains(4);
+            return isWorkingMode && _sharedAuthData.PermissionOrds.Contains(4);
         }
     }
     public bool AssignPm
     {
         get
         {
-            return isWorkingMode && authorizeServices.PermissionOrds.Contains(5);
+            return isWorkingMode && _sharedAuthData.PermissionOrds.Contains(5);
         }
     }
     public bool EditMyHours
     {
         get
         {
-            return authorizeServices.PermissionOrds.Contains(2);
+            return _sharedAuthData.PermissionOrds.Contains(2);
         }
     }
     public bool SeeMyHours
     {
         get
         {
-            return authorizeServices.PermissionOrds.Contains(8);
+            return _sharedAuthData.PermissionOrds.Contains(8);
         }
     }
+
+    bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
+    bool getAllDrawings => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
     #endregion
+
+
+    // General Fields
+    private bool disposedValue;
+    bool _startLoading = true;
+    bool _filterLoading = false;
 
     #region Working Timer
     Timer timer;
@@ -137,7 +130,7 @@ public partial class Dashboard : IDisposable
         base.OnInitialized();
         // timer = used only to run UpdateElapsedTime() every one second
         timer = new Timer(_ => UpdateElapsedTime(), null, 0, 1000);
-        isWorkingMode = TimerService.IsRunning(authorizeServices.LogedUser.Id.ToString());
+        isWorkingMode = TimerService.IsRunning(_sharedAuthData.LogedUser.Id.ToString());
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -147,7 +140,7 @@ public partial class Dashboard : IDisposable
         if (firstRender)
         {
             //_runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetLogedUserTimes(authorizeServices.LogedUser.Id);
+            await GetLogedUserTimes(_sharedAuthData.LogedUser.Id);
             await _getProjects();
             _startLoading = false;
             StateHasChanged();
@@ -187,7 +180,7 @@ public partial class Dashboard : IDisposable
             // TODO: Get My Project And Down
             //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(authorizeServices.LogedUser.Id)).ToList<ProjectDto>();
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
@@ -377,7 +370,7 @@ public partial class Dashboard : IDisposable
         _selectedDraw = null;
         _selectedOther = null;
 
-        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, authorizeServices.LogedUser.Id, getAllDisciplines);
+        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, _sharedAuthData.LogedUser.Id, getAllDisciplines);
 
         _disciplines.Clear();
         foreach (var di in disciplines)
@@ -392,8 +385,8 @@ public partial class Dashboard : IDisposable
 
         _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
-        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, authorizeServices.LogedUser.Id, getAllDrawings);
-        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, authorizeServices.LogedUser.Id, true);
+        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, getAllDrawings);
+        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, true);
 
         _draws.Clear();
         foreach (var di in draws)
@@ -478,15 +471,15 @@ public partial class Dashboard : IDisposable
     #region Timer
     private void UpdateElapsedTime()
     {
-        var time = TimerService.GetElapsedTime(authorizeServices.LogedUser.Id.ToString());
-        timePaused = TimerService.GetPausedTime(authorizeServices.LogedUser.Id.ToString());
+        var time = TimerService.GetElapsedTime(_sharedAuthData.LogedUser.Id.ToString());
+        timePaused = TimerService.GetPausedTime(_sharedAuthData.LogedUser.Id.ToString());
 
         var timePlusPaused = time;
 
         if (timePaused != TimeSpan.Zero)
             timePlusPaused = time + timePaused;
 
-        if (TimerService.IsRunning(authorizeServices.LogedUser.Id.ToString()))
+        if (TimerService.IsRunning(_sharedAuthData.LogedUser.Id.ToString()))
         {
             elapsedTime = timePlusPaused;
             InvokeAsync(StateHasChanged);
@@ -495,12 +488,12 @@ public partial class Dashboard : IDisposable
 
     private async Task StartTimer()
     {
-        TimerService.StartTimer(authorizeServices.LogedUser.Id.ToString());
+        TimerService.StartTimer(_sharedAuthData.LogedUser.Id.ToString());
     }
 
     private void StopTimer()
     {
-        TimerService.StopTimer(authorizeServices.LogedUser.Id.ToString());
+        TimerService.StopTimer(_sharedAuthData.LogedUser.Id.ToString());
     }
     #endregion
 
@@ -800,7 +793,7 @@ public partial class Dashboard : IDisposable
             }
             else
                 await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            await DataProvider.Drawings.AddTime(authorizeServices.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+            await DataProvider.Drawings.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
             sumTime += draw.Time;
         }
 
@@ -808,18 +801,18 @@ public partial class Dashboard : IDisposable
         foreach (var other in _othersChanged)
         {
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-            await DataProvider.Others.AddTime(authorizeServices.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+            await DataProvider.Others.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
             sumTime += other.Time;
         }
 
         // Update User Hours
-        await DataProvider.Users.AddDailyTime(authorizeServices.LogedUser.Id, DateTime.Now, sumTime);
+        await DataProvider.Users.AddDailyTime(_sharedAuthData.LogedUser.Id, DateTime.Now, sumTime);
         if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-            await DataProvider.Users.AddPersonalTime(authorizeServices.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
+            await DataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
         if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-            await DataProvider.Users.AddTraningTime(authorizeServices.LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
+            await DataProvider.Users.AddTraningTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
         if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-            await DataProvider.Users.AddCorporateEventTime(authorizeServices.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+            await DataProvider.Users.AddCorporateEventTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
 
         _drawsChanged.Clear();
         _othersChanged.Clear();
@@ -827,7 +820,7 @@ public partial class Dashboard : IDisposable
         await _getProjects();
 
         // Clear Timer From this User
-        TimerService.ClearTimer(authorizeServices.LogedUser.Id.ToString());
+        TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
         _startLoading = false;
     }

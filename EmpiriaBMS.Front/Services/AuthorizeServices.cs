@@ -11,31 +11,23 @@ namespace EmpiriaBMS.Front.Services;
 
 public class AuthorizeServices
 {
-    private IDataProvider _dataProvider;
-    private TeamsUserCredential _teamsUserCredential;
-    private IMapper _mapper;
-
-    public ICollection<RoleVM> LoggedUserRoles { get; set; } = new List<RoleVM>();
-    public ICollection<PermissionDto> Permissions { get; set; } = new List<PermissionDto>();
-    public ICollection<int> PermissionOrds { get; set; } = new List<int>();
-    public UserVM LogedUser { get; set; }
-    public double LogesUserHours { get; set; }
-
-    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
-    public string DefaultRoleName { get; set; } = "Admin";
-    public int DefaultRoleId { get; set; } = 0;
-    public string LogedUserObjectId { get; set; } = null;
+    private readonly IDataProvider _dataProvider;
+    private readonly TeamsUserCredential _teamsUserCredential;
+    private readonly IMapper _mapper;
+    private readonly SharedAuthDataService _sharedAuthData;
 
     public Func<Task> CallBackOnAuthorize { get; set; }
 
     public AuthorizeServices(
         IDataProvider dataProvider,
         TeamsUserCredential teamsUserCredential,
-        IMapper mapper
+        IMapper mapper,
+        SharedAuthDataService sharedData
     ) {
         _dataProvider = dataProvider;
         _teamsUserCredential = teamsUserCredential;
         _mapper = mapper;
+        _sharedAuthData = sharedData;
     }
 
     public async Task Authorize()
@@ -53,7 +45,7 @@ public class AuthorizeServices
             // TODO: Get Teams Logged User And Mach him With Our Users
             UserInfo teamsUser = teamsUser = await _teamsUserCredential.GetUserInfoAsync();
 
-            LogedUserObjectId = teamsUser.ObjectId;
+            _sharedAuthData.LogedUserObjectId = teamsUser.ObjectId;
             //var userExists = _dataProvider.Users.Exists(teamsUser.PreferredUserName);
 
             //await _getLogedUser(LogedUserObjectId);
@@ -64,6 +56,15 @@ public class AuthorizeServices
         await _getRandomUserByRole(roleId);
 
 
+
+        if (CallBackOnAuthorize != null)
+            await CallBackOnAuthorize.Invoke();
+    }
+
+    public async Task Authorize(int roleId = 0)
+    {
+        // TODO: When Fix Authorization with teams Remove that
+        await _getRandomUserByRole(roleId);
 
         if (CallBackOnAuthorize != null)
             await CallBackOnAuthorize.Invoke();
@@ -81,23 +82,24 @@ public class AuthorizeServices
     {
         try
         {
-            var users = await _dataProvider.Roles.GetUsers(DefaultRoleId);
+            var users = await _dataProvider.Roles.GetUsers(_sharedAuthData.DefaultRoleId);
             var dbUser = users.FirstOrDefault();
 
             if (dbUser == null)
                 throw new NullReferenceException(nameof(dbUser));
 
-            LogedUser = _mapper.Map<UserVM>(dbUser);
+            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(dbUser);
 
-            LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(LogedUser.Id, DateTime.Now);
+            _sharedAuthData.LogesUserHours = await _dataProvider.Users
+                            .GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
 
-            LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
+            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
                                                         .Select(r => _mapper.Map<RoleVM>(r))
                                                         .ToList();
 
-            Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
+            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
                                                     .ToList();
-            PermissionOrds = Permissions.Select(p => p.Ord).ToList();
+            _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
 
             // if (_loggedUserRoles.Select(r => r.Name).ToList().Contains("Admin"))
             // {
@@ -115,25 +117,25 @@ public class AuthorizeServices
     {
         try
         {
-            DefaultRoleId = roleId != 0 ? roleId : await _getRoleId(DefaultRoleName);
+            _sharedAuthData.DefaultRoleId = roleId != 0 ? roleId : await _getRoleId(_sharedAuthData.DefaultRoleName);
 
-            var users = await _dataProvider.Roles.GetUsers(DefaultRoleId);
+            var users = await _dataProvider.Roles.GetUsers(_sharedAuthData.DefaultRoleId);
             var dbUser = users.FirstOrDefault();
 
             if (dbUser == null)
                 throw new NullReferenceException(nameof(dbUser));
 
-            LogedUser = _mapper.Map<UserVM>(dbUser);
+            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(dbUser);
 
-            LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(LogedUser.Id, DateTime.Now);
+            _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
 
-            LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
+            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
                                                         .Select(r => _mapper.Map<RoleVM>(r))
                                                         .ToList();
 
-            Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
+            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
                                                     .ToList();
-            PermissionOrds = Permissions.Select(p => p.Ord).ToList();
+            _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
         }
         catch (Exception ex)
         {

@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Core;
 using EmpiriaBMS.Front.Areas.Admin.ViewModels.Projects;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,25 +10,20 @@ namespace EmpiriaBMS.Front.Areas.Admin.Controllers;
 public class ProjectsController : Controller
 {
     private readonly IDataProvider _dataProvider;
-    private readonly AuthorizeServices _authorizeService;
+    private readonly SharedAuthDataService _sharedAuthData;
 
     public ProjectsController(
         IDataProvider dataProvider,
-        AuthorizeServices authorizeServices
+        SharedAuthDataService sharedAuthData
     ) {
         _dataProvider = dataProvider;
-        _authorizeService = authorizeServices;
+        _sharedAuthData = sharedAuthData;
     }
 
     [HttpGet]
     public async Task<IActionResult> Table()
     {
-        // Retrieve Bearer token from Authorization header
-        string objectId = Request.Headers["ObjectId"];
-
-        await _authorizeService.Authorize();
-        //await _authorizeService.Authorize(objectId);
-        var logedUserId = _authorizeService.LogedUser.Id;
+        var logedUserId = _sharedAuthData.LogedUser.Id;
 
         ProjectsTableVM viewmodel = new ProjectsTableVM();
         viewmodel.Projects = await _dataProvider.Projects.GetAll(logedUserId);

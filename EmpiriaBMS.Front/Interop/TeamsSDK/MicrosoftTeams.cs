@@ -45,4 +45,14 @@ public class MicrosoftTeams : InteropModuleBase
     {
         return InvokeVoidAsync("navigateToAdmin", url, objectId);
     }
+
+    public async Task SetCookie(string key, string value)
+    {
+        await InvokeVoidAsync("setCooke", key, value);
+    }
+
+    public async Task<string> GetCookie(string key)
+    {
+        return await InvokeAsync<string>("getCooke", key);
+    }
 }

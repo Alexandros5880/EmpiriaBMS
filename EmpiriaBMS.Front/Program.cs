@@ -21,6 +21,7 @@ var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
 builder.Services.AddSingleton<TimerService>();
+builder.Services.AddSingleton<SharedAuthDataService>();
 builder.Services.AddScoped<AuthorizeServices>();
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddDbContextFactory<AppDbContext>(); // DbContext Dependency Injection
@@ -68,12 +69,12 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}"
+        pattern: "mvc/{controller=Home}/{action=Index}/{id?}"
     );
     endpoints.MapRazorPages();
     endpoints.MapControllerRoute(
         name: "admin",
-        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+        pattern: "mvc/{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
     endpoints.MapBlazorHub();//.RequireAuthorization();
     endpoints.MapFallbackToPage("/_Host");

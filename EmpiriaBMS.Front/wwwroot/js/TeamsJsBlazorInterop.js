@@ -131,3 +131,11 @@ export function navigateToAdmin(url, objectId) {
         console.error('Error navigating:', error);
     });
 }
+
+export function setCookie(key, value) {
+    localStorage.setItem(key, value);
+}
+
+export function getCookie(key) {
+    return localStorage.getItem(key);
+}

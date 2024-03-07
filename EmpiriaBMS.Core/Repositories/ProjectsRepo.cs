@@ -130,20 +130,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                             .Select(pr => pr.Permission)
                                             .ToListAsync();
 
-            // Get Permissions Ord
-            var ords = permissions.Select(p => p.Ord).ToList();
-
-            // If Roles Has Permissions As CEO, CTO, COO, Admin
-            int[] cooOrds = { 1, 2, 3, 4, 5, 8 };
-            var isCOO = ords.All(o => cooOrds.Contains(o));
-            int[] ctoOrds = { 1, 2, 3, 4, 5, 6, 8 };
-            var isCTO = ords.All(o => ctoOrds.Contains(o));
-            int[] ceoOrds = { 1, 3, 4, 5, 7 };
-            var isCEO = ords.All(o => ceoOrds.Contains(o));
-            int[] adminOrds = { 7 };
-            var isADMIN = ords.All(o => ceoOrds.Contains(o));
-
-            if (isCOO || isCTO || isCEO || isADMIN)
+            if (permissions.Any(p => p.Ord == 11))
             {
                 var allProjects = await _context.Set<Project>().ToListAsync();
 
@@ -204,20 +191,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                             .Select(pr => pr.Permission)
                                             .ToListAsync();
 
-            // Get Permissions Ord
-            var ords = permissions.Select(p => p.Ord).ToList();
-
-            // If Roles Has Permissions As CEO, CTO, COO, Admin
-            int[] cooOrds = { 1, 2, 3, 4, 5, 8 };
-            var isCOO = ords.All(o => cooOrds.Contains(o));
-            int[] ctoOrds = { 1, 2, 3, 4, 5, 6, 8 };
-            var isCTO = ords.All(o => ctoOrds.Contains(o));
-            int[] ceoOrds = { 1, 3, 4, 5, 7 };
-            var isCEO = ords.All(o => ceoOrds.Contains(o));
-            int[] adminOrds = { 7 };
-            var isADMIN = ords.All(o => ceoOrds.Contains(o));
-
-            if (isCOO || isCTO || isCEO || isADMIN)
+            if (permissions.Any(p => p.Ord == 11))
             {
                 var allProjects = await _context.Set<Project>().ToListAsync();
 
@@ -312,20 +286,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                             .Select(pr => pr.Permission)
                                             .ToListAsync();
 
-            // Get Permissions Ord
-            var ords = permissions.Select(p => p.Ord).ToList();
-
-            // If Roles Has Permissions As CEO, CTO, COO, Admin
-            int[] cooOrds = { 1, 2, 3, 4, 5, 8 };
-            var isCOO = ords.All(o => cooOrds.Contains(o));
-            int[] ctoOrds = { 1, 2, 3, 4, 5, 6, 8 };
-            var isCTO = ords.All(o => ctoOrds.Contains(o));
-            int[] ceoOrds = { 1, 3, 4, 5, 7 };
-            var isCEO = ords.All(o => ceoOrds.Contains(o));
-            int[] adminOrds = { 7 };
-            var isADMIN = ords.All(o => ceoOrds.Contains(o));
-
-            if (isCOO || isCTO || isCEO || isADMIN)
+            if (permissions.Any(p => p.Ord == 11))
             {
                 if (pageSize == 0 || pageIndex == 0)
                 {
