@@ -107,27 +107,6 @@ else
         }
     }
 
-    #region Rerender
-    bool shouldRender = true;
-
-    protected override void OnParametersSet() => shouldRender = true;
-
-    protected override bool ShouldRender()
-    {
-        if (shouldRender)
-        {
-            shouldRender = false;
-            return true;
-        }
-        else
-            return false;
-    }
-    #endregion
-
-
-
-
-
     private string GetEnvironmentName()
     {
         return HostEnvironment.IsDevelopment() ? "local environment" : "Azure environment";
