@@ -72,6 +72,9 @@
                     lengthMenu: "Records _MENU_",
                     info: "Displaying _START_ to _END_ of _TOTAL_ discipline types.",
                 },
+                columnDefs: [
+                    { "orderable": false, "targets": [1, 2] }
+                ],
                 responsive: true,
                 processing: true,
                 serverSide: false,

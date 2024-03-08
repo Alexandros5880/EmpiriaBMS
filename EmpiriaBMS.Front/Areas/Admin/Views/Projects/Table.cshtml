@@ -74,6 +74,9 @@
                     lengthMenu: "Records _MENU_",
                     info: "Displaying _START_ to _END_ of _TOTAL_ projects.",
                 },
+                columnDefs: [
+                    { "orderable": false, "targets": [2, 3] }
+                ],
                 responsive: true,
                 processing: true,
                 serverSide: false,
