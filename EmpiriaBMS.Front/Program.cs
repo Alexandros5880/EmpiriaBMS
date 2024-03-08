@@ -9,6 +9,7 @@ using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Fast.Components.FluentUI;
+using Newtonsoft.Json.Serialization;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +41,7 @@ builder.Services.AddFluentUIComponents();
 
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient("WebClient", client => client.Timeout = TimeSpan.FromSeconds(600));
 builder.Services.AddHttpContextAccessor();

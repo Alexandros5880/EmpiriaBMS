@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Areas.Admin.ViewModels.Projects;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
@@ -45,4 +46,22 @@ public class ProjectsController : Controller
     {
         return View();
     }
+
+    #region API
+
+    [HttpPost]
+    public async Task<IActionResult> GetAllProjects()
+    {
+        var logedUserId = _sharedAuthData.LogedUser.Id;
+
+        var projects = await _dataProvider.Projects.GetAll(logedUserId);
+
+        if (projects == null)
+            return NotFound("No projects found!");
+
+        var returnData = projects.Select(p => new { name = p.Name, description = p.Description }).ToList();
+
+        return Json(projects);
+    }
+    #endregion
 }
