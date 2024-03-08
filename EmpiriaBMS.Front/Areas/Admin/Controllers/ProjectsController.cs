@@ -47,11 +47,11 @@ public class ProjectsController : Controller
     #region API
 
     [HttpPost]
-    public async Task<IActionResult> GetAllMyProjects()
+    public async Task<IActionResult> GetAllProjects()
     {
-        var logedUserId = _sharedAuthData.LogedUser.Id;
+        //var logedUserId = _sharedAuthData.LogedUser.Id;
 
-        var projects = await _dataProvider.Projects.GetAll(logedUserId);
+        var projects = await _dataProvider.Projects.GetAll();
 
         if (projects == null)
             return NotFound("No projects found!");

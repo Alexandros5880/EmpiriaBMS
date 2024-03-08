@@ -45,11 +45,11 @@ public class DrawingTypesController : Controller
     #region API
 
     [HttpPost]
-    public async Task<IActionResult> GetAllMyDrawingsTypes()
+    public async Task<IActionResult> GetAllDrawingsTypes()
     {
-        var logedUserId = _sharedAuthData.LogedUser.Id;
+        //var logedUserId = _sharedAuthData.LogedUser.Id;
 
-        var dtos = await _dataProvider.DrawingsTypes.GetAll(logedUserId);
+        var dtos = await _dataProvider.DrawingsTypes.GetAll();
 
         if (dtos == null)
             return NotFound("No drawing types found!");

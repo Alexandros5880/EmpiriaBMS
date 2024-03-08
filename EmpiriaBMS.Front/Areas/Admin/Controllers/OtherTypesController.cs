@@ -46,11 +46,11 @@ public class OtherTypesController : Controller
     #region API
 
     [HttpPost]
-    public async Task<IActionResult> GetAllMyOthersTypes()
+    public async Task<IActionResult> GetAllOthersTypes()
     {
-        var logedUserId = _sharedAuthData.LogedUser.Id;
+        //var logedUserId = _sharedAuthData.LogedUser.Id;
 
-        var dtos = await _dataProvider.OthersTypes.GetAll(logedUserId);
+        var dtos = await _dataProvider.OthersTypes.GetAll();
 
         if (dtos == null)
             return NotFound("No others types found!");

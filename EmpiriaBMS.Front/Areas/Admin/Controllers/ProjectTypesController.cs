@@ -1,22 +1,20 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Front.Components.General;
+﻿using EmpiriaBMS.Core;
 using EmpiriaBMS.Front.Services;
-using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmpiriaBMS.Front.Areas.Admin.Controllers;
 
 [Area("Admin")]
-public class DisciplineTypesController : Controller
+public class ProjectTypesController : Controller
 {
     private readonly IDataProvider _dataProvider;
     private readonly SharedAuthDataService _sharedAuthData;
 
-    public DisciplineTypesController(
+    public ProjectTypesController(
         IDataProvider dataProvider,
         SharedAuthDataService sharedAuthData
-    ) {
+    )
+    {
         _dataProvider = dataProvider;
         _sharedAuthData = sharedAuthData;
     }
@@ -48,14 +46,14 @@ public class DisciplineTypesController : Controller
     #region API
 
     [HttpPost]
-    public async Task<IActionResult> GetAllDisciplineTypes()
+    public async Task<IActionResult> GetAllProjectTypes()
     {
         //var logedUserId = _sharedAuthData.LogedUser.Id;
 
-        var dtos = await _dataProvider.DisciplinesTypes.GetAll();
+        var dtos = await _dataProvider.ProjectsTypes.GetAll();
 
         if (dtos == null)
-            return NotFound("No discipline types found!");
+            return NotFound("No project types found!");
 
         var returnData = dtos.Select(p => new { name = p.Name }).ToList();
 
