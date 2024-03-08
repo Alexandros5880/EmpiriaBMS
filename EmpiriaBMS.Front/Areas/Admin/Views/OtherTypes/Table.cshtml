@@ -3,7 +3,7 @@
 }
 
 @{
-    ViewData["Title"] = "Drawings Types";
+    ViewData["Title"] = "Other Types";
 }
 
 @section Styles {
@@ -35,7 +35,7 @@
         $(document).ready(function () {
             // Fetch data using AJAX
             $.ajax({
-                url: '/mvc/Admin/DrawingTypes/GetAllMyDrawingsTypes',
+                url: '/mvc/Admin/OtherTypes/GetAllMyOthersTypes',
                 method: 'POST',
                 dataType: 'json',
                 success: function (data) {
@@ -70,7 +70,7 @@
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
                 language: {
                     lengthMenu: "Records _MENU_",
-                    info: "Displaying _START_ to _END_ of _TOTAL_ drawing types.",
+                    info: "Displaying _START_ to _END_ of _TOTAL_ other types.",
                 },
                 columnDefs: [
                     { "orderable": false, "targets": [1, 2] }
