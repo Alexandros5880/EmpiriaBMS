@@ -16,14 +16,13 @@ public class DisciplineTypesController : Controller
     public DisciplineTypesController(
         IDataProvider dataProvider,
         SharedAuthDataService sharedAuthData
-    )
-    {
+    ) {
         _dataProvider = dataProvider;
         _sharedAuthData = sharedAuthData;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Table()
+    public IActionResult Table()
     {
         // TODO: Is Authorized
         //var logedUserId = _sharedAuthData.LogedUser.Id;
@@ -56,7 +55,7 @@ public class DisciplineTypesController : Controller
         var dtos = await _dataProvider.DisciplinesTypes.GetAll(logedUserId);
 
         if (dtos == null)
-            return NotFound("No projects found!");
+            return NotFound("No discipline types found!");
 
         var returnData = dtos.Select(p => new { name = p.Name }).ToList();
 
