@@ -1,21 +1,23 @@
-﻿using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Interop.TeamsSDK;
+﻿using AutoMapper;
+using EmpiriaBMS.Core;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Services;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmpiriaBMS.Front.Areas.Admin.Controllers;
 
 [Area("Admin")]
-public class ProjectsController : Controller
+public class DisciplineTypesController : Controller
 {
     private readonly IDataProvider _dataProvider;
     private readonly SharedAuthDataService _sharedAuthData;
 
-    public ProjectsController(
+    public DisciplineTypesController(
         IDataProvider dataProvider,
         SharedAuthDataService sharedAuthData
-    ) {
+    )
+    {
         _dataProvider = dataProvider;
         _sharedAuthData = sharedAuthData;
     }
@@ -47,16 +49,16 @@ public class ProjectsController : Controller
     #region API
 
     [HttpPost]
-    public async Task<IActionResult> GetAllMyProjects()
+    public async Task<IActionResult> GetAllMyDisciplineTypes()
     {
         var logedUserId = _sharedAuthData.LogedUser.Id;
 
-        var projects = await _dataProvider.Projects.GetAll(logedUserId);
+        var dtos = await _dataProvider.DisciplinesTypes.GetAll(logedUserId);
 
-        if (projects == null)
+        if (dtos == null)
             return NotFound("No projects found!");
 
-        var returnData = projects.Select(p => new { name = p.Name, description = p.Description }).ToList();
+        var returnData = dtos.Select(p => new { name = p.Name }).ToList();
 
         return Json(returnData);
     }

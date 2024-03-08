@@ -3,7 +3,7 @@
 }
 
 @{
-    ViewData["Title"] = "Projects";
+    ViewData["Title"] = "Discipline Types";
 }
 
 @section Styles {
@@ -20,7 +20,6 @@
         <thead>
             <tr>
                 <th scope="col" class="sticky-header"><h5>Name</h5></th>
-                <th scope="col" class="sticky-header"><h5>Description</h5></th>
                 <th scope="col" class="sticky-header"><h5>Edit</h5></th>
                 <th scope="col" class="sticky-header"><h5>Delete</h5></th>
             </tr>
@@ -36,7 +35,7 @@
         $(document).ready(function () {
             // Fetch data using AJAX
             $.ajax({
-                url: '/mvc/Admin/Projects/GetAllMyProjects',
+                url: '/mvc/Admin/DisciplineTypes/GetAllMyDisciplineTypes',
                 method: 'POST',
                 dataType: 'json',
                 success: function (data) {
@@ -55,7 +54,6 @@
                 data: data,
                 columns: [
                     { data: "name" },
-                    { data: "description" },
                     {
                         data: null,
                         render: function (data, type, row) {
@@ -72,7 +70,7 @@
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
                 language: {
                     lengthMenu: "Records _MENU_",
-                    info: "Displaying _START_ to _END_ of _TOTAL_ projects.",
+                    info: "Displaying _START_ to _END_ of _TOTAL_ discipline types.",
                 },
                 responsive: true,
                 processing: true,
