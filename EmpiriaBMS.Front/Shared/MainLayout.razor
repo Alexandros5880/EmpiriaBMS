@@ -134,7 +134,7 @@ else
 
     <!-- Remove This -->
     <select class="form-select" @onchange="RoleSelectionChanged"
-            style="position:fixed !important; bottom:0px !important; width: 200px; left: 10px;">
+            style="position:fixed !important; bottom:0px !important; width: 200px; right: 10px;">
         @foreach (var role in _allRoles)
         {
             @if (@role.Name.Equals(_sharedAuthData.DefaultRoleName))
