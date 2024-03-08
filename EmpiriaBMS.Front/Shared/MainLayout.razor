@@ -33,78 +33,84 @@ else
             @if (SeeAdmin)
             {
                 <!-- NavBar -->
-                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark bg-gradient">
-                    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                            <span class="fs-5 d-none d-sm-inline">Menu</span>
+                <div class="col-auto col-md-3 col-xl-2 px-md-2 px-sm-2 px-0 bg-dark bg-gradient">
+                    <div class="d-flex flex-column
+                                align-items-center align-items-md-start align-items-sm-start
+                                px-3 pt-2 text-white min-vh-100">
+                        <a href="/" class="d-none d-md-inline d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                            <span class="fs-5 d-none d-md-inline">Menu</span>
                         </a>
-                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                        <ul class="nav nav-pills flex-column 
+                                   mb-0 mb-md-auto mb-sm-auto
+                                   align-items-center align-items-md-start align-items-sm-start"
+                            id="menu">
                             @if (SeeDashboard)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-white mb-2"
+                                    <a class="nav-link text-white mb-2 align-middle px-0"
                                        herf="/dashboard"
                                        @onclick="@(() => selectUrl("/dashboard"))">
                                         <span class="arcticons--nextcloud-tables"></span>
-                                        Dashboard
+                                        <span class="ms-1 d-none d-md-inline">Dashboard</span>
                                     </a>
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2"
+                                <a class="nav-link text-white mb-2 align-middle px-0"
                                    @onclick="@(() => selectUrl("/mvc/Admin/Projects/Table"))">
                                     <span class="file-icons--microsoft-project"></span>
-                                    Projects
+                                    <span class="ms-1 d-none d-md-inline">Projects</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2"
+                                <a class="nav-link text-white mb-2 align-middle px-0"
                                    @onclick="@(() => selectUrl("/mvc/Admin/Users/Table"))">
                                     <span class="ph--users-four-light"></span>
-                                    Users
+                                    <span class="ms-1 d-none d-md-inline">Users</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2"
+                                <a class="nav-link text-white mb-2 align-middle px-0"
                                    @onclick="@(() => selectUrl("/mvc/Admin/Roles/Table"))">
                                     <span class="oui--app-users-roles"></span>
-                                    Roles
+                                    <span class="ms-1 d-none d-md-inline">Roles</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2"
+                                <a class="nav-link text-white mb-2 align-middle px-0"
                                    @onclick="@(() => selectUrl("/mvc/Admin/ProjectTypes/Table"))">
                                     <span class="arcticons--ptv"></span>
-                                    Project Types
+                                    <span class="ms-1 d-none d-md-inline">Project Types</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2"
+                                <a class="nav-link text-white mb-2 align-middle px-0"
                                    @onclick="@(() => selectUrl("/mvc/Admin/DisciplineTypes/Table"))">
                                     <span class="gala--layer"></span>
-                                    Disciplines Types
+                                    <span class="ms-1 d-none d-md-inline">Disciplines Types</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2"
+                                <a class="nav-link text-white mb-2 align-middle px-0"
                                    @onclick="@(() => selectUrl("/mvc/Admin/DrawingTypes/Table"))">
                                     <span class="streamline--hand-held-tablet-drawing"></span>
-                                    Drawing Types
+                                    <span class="ms-1 d-none d-md-inline">Drawing Types</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2"
+                                <a class="nav-link text-white mb-2 align-middle px-0"
                                    @onclick="@(() => selectUrl("/mvc/Admin/OtherTypes/Table"))">
                                     <span class="material-symbols--other-admission-outline-sharp"></span>
-                                    Other Types
+                                    <span class="ms-1 d-none d-md-inline">Other Types</span>
                                 </a>
                             </li>
                         </ul>
                         <hr>
+                        <!-- Side NavBar Down Profile Button -->
                         <div class="dropdown pb-4">
                             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                                <span class="d-none d-sm-inline mx-1">@_userName</span>
+                                <span class="d-none d-md-inline mx-1">@_userName</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                                 <li><a class="dropdown-item" href="#">New project...</a></li>
