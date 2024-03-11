@@ -2,8 +2,10 @@
 
 namespace EmpiriaBMS.Front.Services;
 
-public class TimerService
+public class TimerService : IDisposable
 {
+    private bool disposedValue;
+
     private readonly Dictionary<string, Timer> _timers = new();
     private readonly ConcurrentDictionary<string, TimeSpan> _elapsedTime = new();
     private readonly ConcurrentDictionary<string, TimeSpan> _pausedTime = new();
@@ -26,6 +28,23 @@ public class TimerService
     private void Callback(object state)
     {
         var userId = (string)state;
+        
+        // TODO: Remove If tiem no exist add 7 hours
+        if (!_pausedTime.ContainsKey(userId) && _elapsedTime.TryGetValue(userId, out TimeSpan elapsedTime))
+        {
+            if (elapsedTime == TimeSpan.Zero)
+            {
+                _elapsedTime.AddOrUpdate(
+                userId,
+                TimeSpan.FromHours(7),
+                (key, oldTime) => oldTime.Add(TimeSpan.FromHours(7))
+            );
+
+                return;
+            }
+        }
+        ///
+
         _elapsedTime.AddOrUpdate(
             userId,
             TimeSpan.FromSeconds(1),
@@ -81,5 +100,23 @@ public class TimerService
             _elapsedTime.TryRemove(userId, out var ignoredElapsed);
             _pausedTime.TryRemove(userId, out var ignoredPaused);
         }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                
+            }
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }
