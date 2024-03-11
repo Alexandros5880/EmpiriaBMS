@@ -608,26 +608,26 @@ public class AppDbContext : DbContext
         builder.Entity<RolePermission>().HasData(rp_15);
 
         // CTO || Dashboard Assign Designer
-        RolePermission rp_16 = new RolePermission()
-        {
-            Id = random.Next(123456789, 999999999) * 9,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            RoleId = role_5_id,
-            PermissionId = per_3_id
-        };
-        builder.Entity<RolePermission>().HasData(rp_16);
+        //RolePermission rp_16 = new RolePermission()
+        //{
+        //    Id = random.Next(123456789, 999999999) * 9,
+        //    CreatedDate = DateTime.Now,
+        //    LastUpdatedDate = DateTime.Now,
+        //    RoleId = role_5_id,
+        //    PermissionId = per_3_id
+        //};
+        //builder.Entity<RolePermission>().HasData(rp_16);
 
         // CTO || Dashboard Assign Engineer
-        RolePermission rp_17 = new RolePermission()
-        {
-            Id = random.Next(123456789, 999999999) * 9,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            RoleId = role_5_id,
-            PermissionId = per_4_id
-        };
-        builder.Entity<RolePermission>().HasData(rp_17);
+        //RolePermission rp_17 = new RolePermission()
+        //{
+        //    Id = random.Next(123456789, 999999999) * 9,
+        //    CreatedDate = DateTime.Now,
+        //    LastUpdatedDate = DateTime.Now,
+        //    RoleId = role_5_id,
+        //    PermissionId = per_4_id
+        //};
+        //builder.Entity<RolePermission>().HasData(rp_17);
 
         // CTO || Dashboard Assign Project Manager
         RolePermission rp_18 = new RolePermission()
