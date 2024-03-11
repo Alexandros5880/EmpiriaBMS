@@ -806,7 +806,7 @@ public partial class Dashboard : IDisposable
         }
 
         // Update User Hours
-        await DataProvider.Users.AddDailyTime(_sharedAuthData.LogedUser.Id, DateTime.Now, sumTime);
+        //await DataProvider.Users.AddDailyTime(_sharedAuthData.LogedUser.Id, DateTime.Now, sumTime);
         if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
             await DataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
         if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
