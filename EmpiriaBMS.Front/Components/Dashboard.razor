@@ -74,7 +74,7 @@ else
                                                 else
                                                 {
                                                     <button type="button" class="btn btn-success btn-lg w-50"
-                                                            @onclick="@(() => StartWorkClick())">
+                                                            @onclick="@(async () => await StartWorkClick())">
                                                         Press Work Start
                                                     </button>
                                                 }

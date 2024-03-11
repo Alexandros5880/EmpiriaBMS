@@ -316,10 +316,10 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Actions Functions
-    private void StartWorkClick()
+    private async Task StartWorkClick()
     {
         isWorkingMode = true;
-        StartTimer();
+        await StartTimer();
         StateHasChanged();
     }
 
