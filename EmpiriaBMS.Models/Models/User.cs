@@ -13,8 +13,8 @@ using EmpiriaMS.Models.Models.Base;
 namespace EmpiriaBMS.Models.Models;
 public class User : Entity
 {
-    [Required]
-    public string Email { get; set; }
+    // MicrosoftTeams Email
+    public string ProxyAddress { get; set; }
 
     [Required]
     public string LastName { get; set; }
@@ -35,6 +35,8 @@ public class User : Entity
 
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
+
+    public ICollection<Email> Emails { get; set; }
 
     public ICollection<Project> Projects { get; set; }
 

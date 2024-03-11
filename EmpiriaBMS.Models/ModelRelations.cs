@@ -38,6 +38,13 @@ public static class ModelRelations
                .WithMany(c => c.UserRoles)
                .HasForeignKey(sc => sc.RoleId);
 
+        // User Emails
+        builder.Entity<Email>()
+               .HasOne(e => e.User)
+               .WithMany(u => u.Emails)
+               .HasForeignKey(e => e.UserId);
+               //.IsRequired();
+
         // Project Disciplines
         builder.Entity<Project>()
                .HasMany(p => p.Disciplines)

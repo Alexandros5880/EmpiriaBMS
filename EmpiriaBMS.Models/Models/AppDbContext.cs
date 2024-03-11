@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
+    public DbSet<Email> Emails { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Discipline> Disciplines { get; set; }
     public DbSet<DisciplineType> DisciplineTypes { get; set; }
@@ -35,6 +36,10 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(localhostDB);
+        optionsBuilder.EnableSensitiveDataLogging();
+        optionsBuilder.EnableDetailedErrors();
+        optionsBuilder.EnableServiceProviderCaching();
+        optionsBuilder.EnableThreadSafetyChecks();
         base.OnConfiguring(optionsBuilder);
     }
 
@@ -300,15 +305,18 @@ public class AppDbContext : DbContext
         };
         builder.Entity<Role>().HasData(role_9);
 
-        var employes_roles_ids = new List<int>()
+        // Secretariat
+        var role_10_id = random.Next(123456789, 999999999);
+        Role role_10 = new()
         {
-            role_1_id,
-            role_2_id,
-            role_3_id,
-            role_4_id,
-            role_5_id,
-            role_6_id
-        }.ToArray();
+            Id = role_10_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Secretariat",
+            IsEmployee = false,
+            IsEditable = false
+        };
+        builder.Entity<Role>().HasData(role_10);
         #endregion
 
         #region Create Prmissions Roles Connection
@@ -878,24 +886,100 @@ public class AppDbContext : DbContext
             PermissionId = per_11_id
         };
         builder.Entity<RolePermission>().HasData(rp_50);
+
+
+        // Secretariat 
+        // Secretariat || See Dashboard Layout
+        RolePermission rp_51 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_10_id,
+            PermissionId = per_1_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_51);
+
+        // Secretariat || Dashboard Edit My Hours
+        RolePermission rp_52 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_10_id,
+            PermissionId = per_2_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_52);
+
+        // Secretariat || Dashboard See My Hours
+        RolePermission rp_56 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_10_id,
+            PermissionId = per_8_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_56);
+
+        // Secretariat || See All Disciplines
+        RolePermission rp_57 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_10_id,
+            PermissionId = per_9_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_57);
+
+        // Secretariat || See All Drawings
+        RolePermission rp_58 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_10_id,
+            PermissionId = per_10_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_58);
+
+        // Secretariat || See All Projects
+        RolePermission rp_59 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_10_id,
+            PermissionId = per_11_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_59);
         #endregion
 
-        #region Create Users With Roles:  Admin, CEO, CTO, COO, Guest,
+        #region Create Random Users With Roles:  Admin, CEO, CTO, COO, Guest,
         // Admin
-        var adminId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        var adminId = random.Next(123456789, 999999999) + random.Next(0, 333) + 1;
         User admin = new User()
         {
             Id = adminId,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Email = $"admin@gmail.com",
             LastName = "Alexandros",
             FirstName = "Platanios",
             Phone1 = "694927778",
-            Description = "Admin"
+            Description = "Admin",
+            ProxyAddress = "admin@gmail.com",
         };
         builder.Entity<User>().HasData(admin);
-
+        Email email_1 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "admin@gmail.com",
+            UserId = adminId
+        };
+        builder.Entity<Email>().HasData(email_1);
         UserRole adminRole = new UserRole()
         {
             Id = random.Next(123456789, 999999999) + random.Next(0, 33),
@@ -907,20 +991,28 @@ public class AppDbContext : DbContext
         builder.Entity<UserRole>().HasData(adminRole);
 
         // CEO
-        var ceoId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        var ceoId = random.Next(123456789, 999999999) + random.Next(0, 333) + 2;
         User ceo = new User()
         {
             Id = ceoId,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Email = $"ceo@gmail.com",
             LastName = "Alexandros",
             FirstName = "Platanios",
             Phone1 = "694927778",
-            Description = "CEO"
+            Description = "CEO",
+            ProxyAddress = "ceo@gmail.com",
         };
         builder.Entity<User>().HasData(ceo);
-
+        Email email_2 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "ceo@gmail.com",
+            UserId = ceoId
+        };
+        builder.Entity<Email>().HasData(email_2);
         UserRole ceoRole = new UserRole()
         {
             Id = random.Next(123456789, 999999999) + random.Next(0, 33),
@@ -932,20 +1024,28 @@ public class AppDbContext : DbContext
         builder.Entity<UserRole>().HasData(ceoRole);
 
         // CTO
-        var ctoId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        var ctoId = random.Next(123456789, 999999999) + random.Next(0, 333) + 3;
         User cto = new User()
         {
             Id = ctoId,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Email = $"cto@gmail.com",
             LastName = "Alexandros",
             FirstName = "Platanios",
             Phone1 = "694927778",
-            Description = "CTO"
+            Description = "CTO",
+            ProxyAddress = "cto@gmail.com",
         };
         builder.Entity<User>().HasData(cto);
-
+        Email email_3 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "cto@gmail.com",
+            UserId = ctoId
+        };
+        builder.Entity<Email>().HasData(email_3);
         UserRole ctoRole = new UserRole()
         {
             Id = random.Next(123456789, 999999999) + random.Next(0, 33),
@@ -957,20 +1057,28 @@ public class AppDbContext : DbContext
         builder.Entity<UserRole>().HasData(ctoRole);
 
         // COO
-        var cooId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        var cooId = random.Next(123456789, 999999999) + random.Next(0, 333) + 4;
         User coo = new User()
         {
             Id = cooId,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Email = $"coo@gmail.com",
             LastName = "Alexandros",
             FirstName = "Platanios",
             Phone1 = "694927778",
-            Description = "COO"
+            Description = "COO",
+            ProxyAddress = "coo@gmail.com",
         };
         builder.Entity<User>().HasData(coo);
-
+        Email email_4 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "coo@gmail.com",
+            UserId = cooId
+        };
+        builder.Entity<Email>().HasData(email_4);
         UserRole cooRole = new UserRole()
         {
             Id = random.Next(123456789, 999999999) + random.Next(0, 33),
@@ -982,20 +1090,28 @@ public class AppDbContext : DbContext
         builder.Entity<UserRole>().HasData(cooRole);
 
         // Guest
-        var guestId = random.Next(123456789, 999999999) + random.Next(0, 33);
+        var guestId = random.Next(123456789, 999999999) + random.Next(0, 333) + 5;
         User guest = new User()
         {
             Id = guestId,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Email = $"guest@gmail.com",
             LastName = "Alexandros",
             FirstName = "Platanios",
             Phone1 = "694927778",
-            Description = "Guest"
+            Description = "Guest",
+            ProxyAddress = "guest@gmail.com",
         };
         builder.Entity<User>().HasData(guest);
-
+        Email email_5 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "guest@gmail.com",
+            UserId = guestId
+        };
+        builder.Entity<Email>().HasData(email_5);
         UserRole guestRole = new UserRole()
         {
             Id = random.Next(123456789, 999999999) + random.Next(0, 33),
@@ -1007,67 +1123,753 @@ public class AppDbContext : DbContext
         builder.Entity<UserRole>().HasData(guestRole);
         #endregion
 
-        #region Create 5 Draftmen
-        List<User> draftsmen = new List<User>();
-        for (var i = 0; i <= 5; i++)
-        {
-            // Draftsmen
-            var draftsmanId = random.Next(123456789, 999999999) + i * 13;
-            User draftman = new User()
-            {
-                Id = draftsmanId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Email = $"draftman{i}@gmail.com",
-                LastName = "Alexandros" + Convert.ToString(i),
-                FirstName = "Platanios" + Convert.ToString(i),
-                Phone1 = "694927778" + Convert.ToString(i),
-                Description = "Draftsman " + Convert.ToString(i)
-            };
-            builder.Entity<User>().HasData(draftman);
-            draftsmen.Add(draftman);
+        #region Create Secretaries
+        List<User> secretaries = new List<User>();
 
-            UserRole DraftsmanRole_em = new UserRole()
-            {
-                Id = random.Next(123456789, 999999999) + i * 2,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = draftsmanId,
-                RoleId = role_1_id
-            };
-            builder.Entity<UserRole>().HasData(DraftsmanRole_em);
-        }
+        // ΑΘΗΝΑ ΚΩΝΣΤΑΝΤΙΝΙΔΟΥ
+        var secretarie_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 26;
+        User secretarie_1 = new User()
+        {
+            Id = secretarie_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΚΩΝΣΤΑΝΤΙΝΙΔΟΥ",
+            FirstName = "ΑΘΗΝΑ",
+            Phone1 = "694927778",
+            Description = "ΓΡΑΜΜΑΤΕΙΑ",
+            ProxyAddress = "embiria@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(secretarie_1);
+        secretaries.Add(secretarie_1);
+        Email email_6 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "embiria@embiria.gr",
+            UserId = secretarie_1_Id
+        };
+        builder.Entity<Email>().HasData(email_6);
+        Email email_7 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "akonstantinidou@embiria.gr",
+            UserId = secretarie_1_Id
+        };
+        builder.Entity<Email>().HasData(email_7);
+        UserRole secretarieRole_1_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 11,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = secretarie_1_Id,
+            RoleId = role_10_id
+        };
+        builder.Entity<UserRole>().HasData(secretarieRole_1_em);
         #endregion
 
-        #region Create 5 Engineer
-        List<User> engineers = new List<User>();
-        for (var i = 0; i <= 5; i++)
-        {
-            var engineerId = random.Next(123456789, 999999999) + i * 6 + i;
-            User engineer = new User()
-            {
-                Id = engineerId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Email = $"engineer_{i}@gmail.com",
-                LastName = "Alexandros_" + Convert.ToString(i),
-                FirstName = "Platanios_Engineer_" + Convert.ToString(i),
-                Phone1 = "694927778" + Convert.ToString(i),
-                Description = "Test Description Engineer " + Convert.ToString(i)
-            };
-            builder.Entity<User>().HasData(engineer);
-            engineers.Add(engineer);
+        #region Create Draftmen
+        List<User> draftsmen = new List<User>();
 
-            UserRole engineerRole_em = new UserRole()
-            {
-                Id = random.Next(123456789, 999999999) + i * 7,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = engineerId,
-                RoleId = role_2_id
-            };
-            builder.Entity<UserRole>().HasData(engineerRole_em);
-        }
+        // Draftsmen ΔΟΥΓΑΛΕΡΗΣ ΓΡΗΓΟΡΗΣ
+        var draftsman_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 7;
+        User draftman_1 = new User()
+        {
+            Id = draftsman_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΔΟΥΓΑΛΕΡΗΣ",
+            FirstName = "ΓΡΗΓΟΡΗΣ",
+            Phone1 = "694927778",
+            Description = "ΕΦΚΑ - ΣΧΕΔΙΑΣΤΗΣ",
+            ProxyAddress = "dtsa@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(draftman_1);
+        draftsmen.Add(draftman_1);
+        Email email_8 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "gdoug@embiria.gr",
+            UserId = draftsman_1_Id
+        };
+        builder.Entity<Email>().HasData(email_8);
+        UserRole DraftsmanRole_1_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 11,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = draftsman_1_Id,
+            RoleId = role_1_id
+        };
+        builder.Entity<UserRole>().HasData(DraftsmanRole_1_em);
+
+
+        // Draftsmen ΤΣΑΛΑΜΑΓΚΑΚΗΣ ΔΗΜΗΤΡΗΣ
+        var draftsman_2_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 8;
+        User draftman_2 = new User()
+        {
+            Id = draftsman_2_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΤΣΑΛΑΜΑΓΚΑΚΗΣ",
+            FirstName = "ΔΗΜΗΤΡΗΣ",
+            Phone1 = "694927778",
+            Description = "ΕΦΚΑ - ΣΧΕΔΙΑΣΤΗΣ",
+            ProxyAddress = "dtsa@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(draftman_2);
+        draftsmen.Add(draftman_2);
+        Email email_9 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "dtsa@embiria.gr",
+            UserId = draftsman_2_Id
+        };
+        builder.Entity<Email>().HasData(email_9);
+        UserRole DraftsmanRole_2_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 11,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = draftsman_2_Id,
+            RoleId = role_1_id
+        };
+        builder.Entity<UserRole>().HasData(DraftsmanRole_2_em);
+
+
+        // Draftsmen ΧΑΤΖΑΚΗΣ ΜΑΝΩΛΗΣ
+        var draftsman_3_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 9;
+        User draftman_3 = new User()
+        {
+            Id = draftsman_3_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΧΑΤΖΑΚΗΣ",
+            FirstName = "ΜΑΝΩΛΗΣ",
+            Phone1 = "694927778",
+            Description = "ΕΦΚΑ - ΣΧΕΔΙΑΣΤΗΣ",
+            ProxyAddress = "mhatzakis@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(draftman_3);
+        draftsmen.Add(draftman_3);
+        Email email_10 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "dtsa@embiria.gr",
+            UserId = draftsman_3_Id
+        };
+        builder.Entity<Email>().HasData(email_10);
+        UserRole DraftsmanRole_3_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 11,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = draftsman_3_Id,
+            RoleId = role_1_id
+        };
+        builder.Entity<UserRole>().HasData(DraftsmanRole_3_em);
+        #endregion
+
+        #region Create Engineers
+        List<User> engineers = new List<User>();
+
+        // ΠΑΞΙΝΟΣ ΕΥΑΓΓΕΛΟΣ
+        var engineer_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        User engineer_1 = new User()
+        {
+            Id = engineer_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΠΑΞΙΝΟΣ",
+            FirstName = "ΕΥΑΓΓΕΛΟΣ",
+            Phone1 = "694927778",
+            Description = "ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Y.",
+            ProxyAddress = "vpax@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_1);
+        engineers.Add(engineer_1);
+        Email email_11 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "vpax@embiria.gr",
+            UserId = engineer_1_Id
+        };
+        builder.Entity<Email>().HasData(email_11);
+        // Engineer
+        UserRole engineerRole_1_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_1_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_1_em);
+
+        // ΜΑΝΑΡΩΛΗΣ ΞΕΝΟΦΩΝ
+        var engineer_2_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 11;
+        User engineer_2 = new User()
+        {
+            Id = engineer_2_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΜΑΝΑΡΩΛΗΣ",
+            FirstName = "ΞΕΝΟΦΩΝ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "xmanarolis@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_2);
+        engineers.Add(engineer_2);
+        Email email_12 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "xmanarolis@embiria.gr",
+            UserId = engineer_2_Id
+        };
+        builder.Entity<Email>().HasData(email_12);
+        // Engineer
+        UserRole engineerRole_2_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_2_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_2_em);
+
+        // ΠΑΡΙΣΗΣ ΣΤΕΦΑΝΟΣ
+        var engineer_3_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 12;
+        User engineer_3 = new User()
+        {
+            Id = engineer_3_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΠΑΡΙΣΗΣ",
+            FirstName = "ΣΤΕΦΑΝΟΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
+            ProxyAddress = "sparisis@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_3);
+        engineers.Add(engineer_3);
+        Email email_13 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "sparisis@embiria.gr",
+            UserId = engineer_3_Id
+        };
+        builder.Entity<Email>().HasData(email_13);
+        // Engineer
+        UserRole engineerRole_3_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_3_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_3_em);
+
+        // ΚΟΒΡΑΣ ΜΠΑΜΠΗΣ
+        var engineer_4_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 13;
+        User engineer_4 = new User()
+        {
+            Id = engineer_4_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΚΟΒΡΑΣ",
+            FirstName = "ΜΠΑΜΠΗΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "chkovras@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_4);
+        engineers.Add(engineer_4);
+        Email email_14 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "chkovras@embiria.gr",
+            UserId = engineer_4_Id
+        };
+        builder.Entity<Email>().HasData(email_14);
+        // Engineer
+        UserRole engineerRole_4_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_4_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_4_em);
+
+        // ΓΑΛΑΝΗΣ ΝΙΚΗΦΟΡΟΣ
+        var engineer_5_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 14;
+        User engineer_5 = new User()
+        {
+            Id = engineer_5_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΓΑΛΑΝΗΣ",
+            FirstName = "ΝΙΚΗΦΟΡΟΣ",
+            Phone1 = "694927778",
+            Description = "ΔΙΑΧΕΙΡΙΣΤΗΣ - ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "ngal@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_5);
+        engineers.Add(engineer_5);
+        Email email_15 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "ngal@embiria.gr",
+            UserId = engineer_5_Id
+        };
+        builder.Entity<Email>().HasData(email_15);
+        // Engineer
+        UserRole engineerRole_5_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_5_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_5_em);
+        // Admin
+        UserRole engineerRole_5_em_2 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_5_Id,
+            RoleId = role_9_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_5_em_2);
+        // CEO
+        UserRole engineerRole_5_em_3 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_5_Id,
+            RoleId = role_6_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_5_em_3);
+
+        // ΚΟΤΣΩΝΗ ΚΑΤΕΡΙΝΑ
+        var engineer_6_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 15;
+        User engineer_6 = new User()
+        {
+            Id = engineer_6_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΚΟΤΣΩΝΗ",
+            FirstName = "ΚΑΤΕΡΙΝΑ",
+            Phone1 = "694927778",
+            Description = "ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "kkotsoni@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_6);
+        engineers.Add(engineer_6);
+        Email email_16 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "kkotsoni@embiria.gr",
+            UserId = engineer_6_Id
+        };
+        builder.Entity<Email>().HasData(email_16);
+        // Engineer
+        UserRole engineerRole_6_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_6_em);
+        // COO
+        UserRole engineerRole_6_em_coo = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6_Id,
+            RoleId = role_4_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_6_em_coo);
+
+        // ΤΖΑΝΗΣ ΒΑΣΙΛΕΙΟΣ
+        var engineer_7_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 16;
+        User engineer_7 = new User()
+        {
+            Id = engineer_7_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΤΖΑΝΗΣ",
+            FirstName = "ΒΑΣΙΛΕΙΟΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "vtza@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_7);
+        engineers.Add(engineer_7);
+        Email email_17 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "vtza@embiria.gr",
+            UserId = engineer_7_Id
+        };
+        builder.Entity<Email>().HasData(email_17);
+        // Engineer
+        UserRole engineerRole_7_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_7_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_7_em);
+
+        // ΓΡΕΤΟΣ ΑΝΔΡΕΑΣ
+        var engineer_8_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 17;
+        User engineer_8 = new User()
+        {
+            Id = engineer_8_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΓΡΕΤΟΣ",
+            FirstName = "ΑΝΔΡΕΑΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "agretos@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_8);
+        engineers.Add(engineer_8);
+        Email email_18 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "agretos@embiria.gr",
+            UserId = engineer_8_Id
+        };
+        builder.Entity<Email>().HasData(email_18);
+        // Engineer
+        UserRole engineerRole_8_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_8_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_8_em);
+
+        // ΜΑΡΓΕΤΗ ΚΑΤΕΡΙΝΑ
+        var engineer_9_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 18;
+        User engineer_9 = new User()
+        {
+            Id = engineer_9_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΜΑΡΓΕΤΗ",
+            FirstName = "ΚΑΤΕΡΙΝΑ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
+            ProxyAddress = "kmargeti@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_9);
+        engineers.Add(engineer_9);
+        Email email_19 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "kmargeti@embiria.gr",
+            UserId = engineer_9_Id
+        };
+        builder.Entity<Email>().HasData(email_19);
+        // Engineer
+        UserRole engineerRole_9_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_9_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_9_em);
+
+        // ΠΛΑΤΑΝΙΟΣ ΧΑΡΗΣ
+        var engineer_10_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 19;
+        User engineer_10 = new User()
+        {
+            Id = engineer_10_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΠΛΑΤΑΝΙΟΣ",
+            FirstName = "ΧΑΡΗΣ",
+            Phone1 = "694927778",
+            Description = "ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "haris@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_10);
+        engineers.Add(engineer_10);
+        Email email_20 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "haris@embiria.gr",
+            UserId = engineer_10_Id
+        };
+        builder.Entity<Email>().HasData(email_20);
+        // Engineer
+        UserRole engineerRole_10_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_10_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_10_em);
+
+        // ΦΩΚΙΑΝΟΥ ΠΕΓΚΥ
+        var engineer_11_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 20;
+        User engineer_11 = new User()
+        {
+            Id = engineer_11_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΦΩΚΙΑΝΟΥ",
+            FirstName = "ΠΕΓΚΥ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "pfokianou@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_11);
+        engineers.Add(engineer_11);
+        Email email_21 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "pfokianou@embiria.gr",
+            UserId = engineer_11_Id
+        };
+        builder.Entity<Email>().HasData(email_21);
+        // Engineer
+        UserRole engineerRole_11_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_11_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_11_em);
+
+        // ΓΙΑΝΝΟΓΛΟΥ ΟΛΓΑ
+        var engineer_12_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 21;
+        User engineer_12 = new User()
+        {
+            Id = engineer_12_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΓΙΑΝΝΟΓΛΟΥ",
+            FirstName = "ΟΛΓΑ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
+            ProxyAddress = "ogiannoglou@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_12);
+        engineers.Add(engineer_12);
+        Email email_22 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "ogiannoglou@embiria.gr",
+            UserId = engineer_12_Id
+        };
+        builder.Entity<Email>().HasData(email_22);
+        // Engineer
+        UserRole engineerRole_12_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_12_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_12_em);
+
+        // ΛΕΚΟΥ ΒΑΡΒΑΡΑ
+        var engineer_13_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 22;
+        User engineer_13 = new User()
+        {
+            Id = engineer_13_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΛΕΚΟΥ",
+            FirstName = "ΒΑΡΒΑΡΑ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "blekou@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_13);
+        engineers.Add(engineer_13);
+        Email email_23 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "blekou@embiria.gr",
+            UserId = engineer_13_Id
+        };
+        builder.Entity<Email>().HasData(email_23);
+        // Engineer
+        UserRole engineerRole_13_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_13_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_13_em);
+
+        // ΧΟΝΤΟΣ ΒΑΣΙΛΕΙΟΣ
+        var engineer_14_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 23;
+        User engineer_14 = new User()
+        {
+            Id = engineer_14_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΧΟΝΤΟΣ",
+            FirstName = "ΒΑΣΙΛΕΙΟΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
+            ProxyAddress = "vchontos@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_14);
+        engineers.Add(engineer_14);
+        Email email_24 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "vchontos@embiria.gr",
+            UserId = engineer_14_Id
+        };
+        builder.Entity<Email>().HasData(email_24);
+        // Engineer
+        UserRole engineerRole_14_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_14_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_14_em);
+
+        // ΠΕΡΙΒΟΛΛΑΡΗ ΠΑΝΑΓΙΩΤΑ
+        var engineer_15_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 24;
+        User engineer_15 = new User()
+        {
+            Id = engineer_15_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΠΕΡΙΒΟΛΛΑΡΗ",
+            FirstName = "ΠΑΝΑΓΙΩΤΑ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ ΤΕΙ - ΕΦΚΑ",
+            ProxyAddress = "panperivollari@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_15);
+        engineers.Add(engineer_15);
+        Email email_25 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "panperivollari@embiria.gr",
+            UserId = engineer_15_Id
+        };
+        builder.Entity<Email>().HasData(email_25);
+        // Engineer
+        UserRole engineerRole_15_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_15_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_15_em);
+
+        // ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΝΙΚΟΛΑΟΣ
+        var engineer_16_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 25;
+        User engineer_16 = new User()
+        {
+            Id = engineer_16_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΤΡΙΑΝΤΑΦΥΛΛΟΥ",
+            FirstName = "ΝΙΚΟΛΑΟΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "ntriantafyllou@embiria.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(engineer_16);
+        engineers.Add(engineer_16);
+        Email email_26 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "ntriantafyllou@embiria.gr",
+            UserId = engineer_16_Id
+        };
+        builder.Entity<Email>().HasData(email_26);
+        // Engineer
+        UserRole engineerRole_16_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_16_Id,
+            RoleId = role_2_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_16_em);
         #endregion
 
         #region Create 4 Project Types
@@ -1127,34 +1929,44 @@ public class AppDbContext : DbContext
         };
         #endregion
 
-        #region Create 4 Project Managers
+        #region Create 3 Project Managers
         List<User> projectManagers = new List<User>();
-        for (var i = 1; i <= projectTypes.Count(); i++)
+
+        // ΠΑΞΙΝΟΣ ΕΥΑΓΓΕΛΟΣ
+        UserRole pmRole_1 = new UserRole()
         {
-            var pmId = random.Next(123456789, 999999999) + i * 4;
-            User pm = new User()
-            {
-                Id = pmId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Email = $"pm{i}@gmail.com",
-                LastName = "Alexandros_" + Convert.ToString(i),
-                FirstName = "Platanios_PM_" + Convert.ToString(i),
-                Phone1 = "694927778" + Convert.ToString(i),
-                Description = "Test Description PM " + Convert.ToString(i)
-            };
-            builder.Entity<User>().HasData(pm);
-            projectManagers.Add(pm);
-            UserRole pmRole_em = new UserRole()
-            {
-                Id = random.Next(123456789, 999999999) + i * 5,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = pmId,
-                RoleId = role_3_id
-            };
-            builder.Entity<UserRole>().HasData(pmRole_em);
-        }
+            Id = random.Next(123456789, 999999999) / 3,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_1.Id,
+            RoleId = role_3_id
+        };
+        builder.Entity<UserRole>().HasData(pmRole_1);
+        projectManagers.Add(engineer_1);
+
+        // ΚΟΤΣΩΝΗ ΚΑΤΕΡΙΝΑ
+        UserRole pmRole_2 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) / 3,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6.Id,
+            RoleId = role_3_id
+        };
+        builder.Entity<UserRole>().HasData(pmRole_2);
+        projectManagers.Add(engineer_6);
+
+        // ΠΛΑΤΑΝΙΟΣ ΧΑΡΗΣ
+        UserRole pmRole_3 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) / 3,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_10.Id,
+            RoleId = role_3_id
+        };
+        builder.Entity<UserRole>().HasData(pmRole_3);
+        projectManagers.Add(engineer_10);
         #endregion
 
         #region Create 4 Projects
@@ -1196,20 +2008,29 @@ public class AppDbContext : DbContext
             projects.Add(project);
 
             // Customers
-            var customerId = random.Next(123456789, 999999999) + i * 10;
+            var customerId = random.Next(123456789, 999999999) + i * 10 + 28;
             User customer = new User()
             {
                 Id = customerId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Email = $"alexpl_{i}@gmail.com",
                 LastName = "Alexandros_" + Convert.ToString(i),
                 FirstName = "Platanios_Customer_" + Convert.ToString(i),
+                ProxyAddress = "alexpl_{i}@gmail.com",
                 Phone1 = "694927778" + Convert.ToString(i),
                 Description = "Test Description Customer " + Convert.ToString(i),
                 ProjectId = projectId,
             };
             builder.Entity<User>().HasData(customer);
+            Email email_28 = new Email()
+            {
+                Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Address = "alexpl_{i}@gmail.com",
+                UserId = customerId
+            };
+            builder.Entity<Email>().HasData(email_28);
             UserRole userRole_c = new UserRole()
             {
                 Id = random.Next(123456789, 999999999) + i * 2,
@@ -1394,6 +2215,7 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Connect Project Manager With Every Project
+        var pm_index = 0;
         for (var i = 0; i < projects.Count; i++)
         {
             ProjectPmanager dq_other = new ProjectPmanager()
@@ -1402,9 +2224,14 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 ProjectId = projects[i].Id,
-                ProjectManagerId = projectManagers[i].Id
+                ProjectManagerId = projectManagers[pm_index].Id
             };
             builder.Entity<ProjectPmanager>().HasData(dq_other);
+
+            if (pm_index < projectManagers.Count - 1)
+                pm_index++;
+            else
+                pm_index = 0;
         }
         #endregion
 

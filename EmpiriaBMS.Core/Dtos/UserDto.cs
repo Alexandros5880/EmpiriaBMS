@@ -12,7 +12,7 @@ namespace EmpiriaBMS.Core.Dtos;
 
 public class UserDto : EntityDto
 {
-    public string Email { get; set; }
+    public string ProxyAddress { get; set; }
 
     public string LastName { get; set; }
 
@@ -30,4 +30,6 @@ public class UserDto : EntityDto
 
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
+
+    public ICollection<Email> Emails { get; set; }
 }

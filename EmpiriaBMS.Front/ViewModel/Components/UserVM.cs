@@ -20,21 +20,21 @@ public class UserVM : BaseVM
         }
     }
 
-    private string? _email;
-    public string? Email
+    private string _proxyAddress;
+    public string ProxyAddress
     {
-        get => _email;
+        get => _proxyAddress;
         set
         {
-            if (value == _email)
+            if (value == _proxyAddress)
                 return;
-            _email = value;
-            NotifyPropertyChanged(nameof(Email));
+            _proxyAddress = value;
+            NotifyPropertyChanged(nameof(ProxyAddress));
         }
     }
 
-    private string? _lastName;
-    public string? LastName
+    private string _lastName;
+    public string LastName
     {
         get => _lastName;
         set
@@ -46,8 +46,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private string? _firstName;
-    public string? FirstName
+    private string _firstName;
+    public string FirstName
     {
         get => _firstName;
         set
@@ -59,8 +59,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private string? _midName;
-    public string? MidName
+    private string _midName;
+    public string MidName
     {
         get => _midName;
         set
@@ -72,8 +72,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private string? _phone1;
-    public string? Phone1
+    private string _phone1;
+    public string Phone1
     {
         get => _phone1;
         set
@@ -85,8 +85,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private string? _phone2;
-    public string? Phone2
+    private string _phone2;
+    public string Phone2
     {
         get => _phone2;
         set
@@ -98,8 +98,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private string? _phone3;
-    public string? Phone3
+    private string _phone3;
+    public string Phone3
     {
         get => _phone3;
         set
@@ -111,8 +111,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private string? _description;
-    public string? Description
+    private string _description;
+    public string Description
     {
         get => _description;
         set
@@ -124,8 +124,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private Project? _project;
-    public Project? Project
+    private Project _project;
+    public Project Project
     {
         get => _project;
         set
@@ -136,4 +136,6 @@ public class UserVM : BaseVM
             NotifyPropertyChanged(nameof(Project));
         }
     }
+
+    public ICollection<Email> Emails { get; set; }
 }

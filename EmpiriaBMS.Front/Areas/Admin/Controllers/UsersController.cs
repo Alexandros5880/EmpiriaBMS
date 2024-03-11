@@ -58,7 +58,7 @@ public class UsersController : Controller
         var returnData = dtos.Select(p => new 
         { 
             name = p.LastName + " " + p.FirstName,
-            email = p.Email,
+            email = p.ProxyAddress,
             phone = p.Phone1
         }).ToList();
 

@@ -25,7 +25,7 @@ public class UsersRepo : Repository<UserDto, User>
             return false;
 
         using (var _context = _dbContextFactory.CreateDbContext())
-            return await _context.Set<User>().AnyAsync(u => u.Email.Equals(email));
+            return await _context.Set<Email>().AnyAsync(u => u.Address.Equals(email));
     }
 
     public new async Task<UserDto?> Get(int id)
