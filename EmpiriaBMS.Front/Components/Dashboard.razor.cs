@@ -70,7 +70,6 @@ public partial class Dashboard : IDisposable
     bool getAllDrawings => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
     #endregion
 
-
     // General Fields
     private bool disposedValue;
     bool _startLoading = true;
@@ -124,6 +123,10 @@ public partial class Dashboard : IDisposable
     private FluentDialog? _addPMDialog;
     private bool _isAddPMDialogOdepened = false;
     private UserVM _selectedPM = new UserVM();
+
+    // On My Hours Click Dialog
+    private FluentDialog? _myHoursDialog;
+    private bool _isMyHoursDialogOdepened = false;
     #endregion
 
     protected override void OnInitialized()
@@ -363,6 +366,22 @@ public partial class Dashboard : IDisposable
 
         _endWorkDialog.Show();
         _isEndWorkDialogOdepened = true;
+    }
+
+    private void OnMyHoursClick()
+    {
+        if (!SeeMyHours) return;
+        _myHoursDialog.Show();
+        _isMyHoursDialogOdepened = true;
+    }
+
+    private void CloseMyHoursClick()
+    {
+        if (_isMyHoursDialogOdepened)
+        {
+            _myHoursDialog.Hide();
+            _isMyHoursDialogOdepened = false;
+        }
     }
 
     private async Task OnSelectProject(int projectId)
