@@ -327,24 +327,23 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Actions Functions
-    private async Task StartWorkClick()
+    private void StartWorkClick()
     {
         isWorkingMode = true;
-        await StartTimer();
+        StartTimer();
         StateHasChanged();
     }
 
     private async Task StopWorkClick()
     {
-        isWorkingMode = false;
-        StopTimer();
-
         if (!EditMyHours)
         {
             return;
         }
 
-        remainingTime = timePaused;
+        isWorkingMode = false;
+        remainingTime = StopTimer();
+
         _editLogedUserTimes = new UserTimes()
         {
             DailyTime = TimeSpan.Zero,
@@ -362,6 +361,7 @@ public partial class Dashboard : IDisposable
         _selectedDiscipline = null;
         _selectedProject = null;
         await _getProjects();
+
         StateHasChanged();
 
         _endWorkDialog.Show();
@@ -519,14 +519,14 @@ public partial class Dashboard : IDisposable
         }
     }
 
-    private async Task StartTimer()
+    private void StartTimer()
     {
         TimerService.StartTimer(_sharedAuthData.LogedUser.Id.ToString());
     }
 
-    private void StopTimer()
+    private TimeSpan StopTimer()
     {
-        TimerService.StopTimer(_sharedAuthData.LogedUser.Id.ToString());
+        return TimerService.StopTimer(_sharedAuthData.LogedUser.Id.ToString());
     }
     #endregion
 

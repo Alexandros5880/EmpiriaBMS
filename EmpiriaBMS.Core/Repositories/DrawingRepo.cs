@@ -174,7 +174,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
                                            .FirstOrDefaultAsync(p => p.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var disciplineMenHours = discipline.DailyTime.Select(h => h.TimeSpan.Hours).Sum();
+            var disciplineMenHours = discipline.DailyTime.Select(h => h.TimeSpan?.Hours ?? 0).Sum();
 
             decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
             discipline.EstimatedCompleted = (float)divitionDiscResult * 100;

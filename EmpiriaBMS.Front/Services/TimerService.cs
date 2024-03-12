@@ -52,7 +52,7 @@ public class TimerService : IDisposable
         );
     }
 
-    public void StopTimer(string userId)
+    public TimeSpan StopTimer(string userId)
     {
         if (_timers.TryGetValue(userId, out Timer timer))
         {
@@ -65,7 +65,10 @@ public class TimerService : IDisposable
 
             timer.Dispose();
             _timers.Remove(userId);
+
+            return GetPausedTime(userId);
         }
+        return TimeSpan.Zero;
     }
 
     public TimeSpan GetElapsedTime(string userId)
