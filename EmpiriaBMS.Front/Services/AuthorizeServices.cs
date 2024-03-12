@@ -30,52 +30,56 @@ public class AuthorizeServices
         _sharedAuthData = sharedData;
     }
 
-    public async Task Authorize()
-    {
-        await _getRandomUserByRole();
-
-        if (CallBackOnAuthorize != null)
-            CallBackOnAuthorize.Invoke();
-    }
-
     public async Task Authorize(int roleId = 0, bool runInTeams = true)
     {
-        if (runInTeams)
+        _sharedAuthData.Clear();
+
+        // TODO: When Fix Authorization with teams Remove that
+        if (roleId != 0)
+        {
+            await _getRandomUserByRole(roleId);
+        }
+
+        else if (runInTeams)
         {
             // TODO: Get Teams Logged User And Mach him With Our Users
             UserInfo teamsUser = teamsUser = await _teamsUserCredential.GetUserInfoAsync();
 
+            _sharedAuthData.TeamsLogedUser = teamsUser;
             _sharedAuthData.LogedUserObjectId = teamsUser.ObjectId;
-            //var userExists = _dataProvider.Users.Exists(teamsUser.PreferredUserName);
 
-            //await _getLogedUser(LogedUserObjectId);
+            var userExists = await _dataProvider.Users.Exists(teamsUser.PreferredUserName);
+
+            if (userExists)
+            {
+                var logedUser = await _dataProvider.Users.Get(teamsUser.PreferredUserName);
+                _sharedAuthData.LogedUser = _mapper.Map<UserVM>(logedUser);
+                _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
+                _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
+                                                        .Select(r => _mapper.Map<RoleVM>(r))
+                                                        .ToList();
+
+                _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
+                                                        .ToList();
+                _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
+            }
+            else
+            {
+                // TODO: When Fix Authorization with teams Remove that
+                await _getRandomUserByRole();
+            }
+        }
+        else
+        {
+            // TODO: Go to login page
         }
 
-        
-        // TODO: When Fix Authorization with teams Remove that
-        await _getRandomUserByRole(roleId);
-
         if (CallBackOnAuthorize != null)
             CallBackOnAuthorize.Invoke();
     }
 
-    public async Task Authorize(int roleId = 0)
-    {
-        // TODO: When Fix Authorization with teams Remove that
-        await _getRandomUserByRole(roleId);
 
-        if (CallBackOnAuthorize != null)
-            CallBackOnAuthorize.Invoke();
-    }
-
-    public async Task Authorize(string objectId)
-    {
-        await _getLogedUser(objectId);
-
-        if (CallBackOnAuthorize != null)
-            CallBackOnAuthorize.Invoke();
-    }
-
+    // TODO: When Fix Authorization with teams Remove that
     private async Task _getLogedUser(string objectId)
     {
         try

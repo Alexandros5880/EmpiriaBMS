@@ -17,4 +17,16 @@ public class SharedAuthDataService
     public string DefaultRoleName { get; set; } = "Admin";
     public int DefaultRoleId { get; set; } = 0;
     public string LogedUserObjectId { get; set; } = null;
+
+    public void Clear()
+    {
+        TeamsLogedUser = null;
+        LogedUser = null;
+        LogesUserHours = 0.0;
+        DefaultRoleId = 0;
+        LogedUserObjectId = null;
+        LoggedUserRoles.Clear();
+        Permissions.Clear();
+        PermissionOrds.Clear();
+    }
 }

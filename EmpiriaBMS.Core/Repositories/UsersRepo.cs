@@ -25,7 +25,12 @@ public class UsersRepo : Repository<UserDto, User>
             return false;
 
         using (var _context = _dbContextFactory.CreateDbContext())
-            return await _context.Set<Email>().AnyAsync(u => u.Address.Equals(email));
+        {
+            // Search in emails
+            //return await _context.Set<Email>().AnyAsync(u => u.Address.Equals(email));
+            // Search in Reverse Proxy
+            return await _context.Set<User>().AnyAsync(u => u.ProxyAddress.Equals(email));
+        }
     }
 
     public new async Task<UserDto?> Get(int id)
@@ -40,6 +45,23 @@ public class UsersRepo : Repository<UserDto, User>
                              .Include(r => r.Disciplines)
                              .Include(r => r.UserRoles)
                              .FirstOrDefaultAsync(r => r.Id == id);
+
+            return Mapping.Mapper.Map<UserDto>(u);
+        }
+    }
+
+    public new async Task<UserDto?> Get(string email)
+    {
+        if (email == null)
+            throw new ArgumentNullException(nameof(email));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var u = await _context
+                             .Set<User>()
+                             .Include(r => r.Disciplines)
+                             .Include(r => r.UserRoles)
+                             .FirstOrDefaultAsync(r => r.ProxyAddress.Equals(email));
 
             return Mapping.Mapper.Map<UserDto>(u);
         }

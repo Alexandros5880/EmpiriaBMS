@@ -968,7 +968,7 @@ public class AppDbContext : DbContext
             FirstName = "Platanios",
             Phone1 = "694927778",
             Description = "Admin",
-            ProxyAddress = "admin@gmail.com",
+            ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com",
         };
         builder.Entity<User>().HasData(admin);
         Email email_1 = new Email()
@@ -976,7 +976,7 @@ public class AppDbContext : DbContext
             Id = random.Next(123456789, 999999999) + random.Next(0, 33),
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Address = "admin@gmail.com",
+            Address = "alexandrosplatanios15@gmail.com",
             UserId = adminId
         };
         builder.Entity<Email>().HasData(email_1);
@@ -1121,6 +1121,39 @@ public class AppDbContext : DbContext
             RoleId = role_7_id
         };
         builder.Entity<UserRole>().HasData(guestRole);
+
+        // Project Manager
+        var pmId = random.Next(123456789, 999999999) + random.Next(0, 333) + 5;
+        User pm = new User()
+        {
+            Id = pmId,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "Alexandros",
+            FirstName = "Platanios",
+            Phone1 = "694927778",
+            Description = "Project Manager",
+            ProxyAddress = "pm@gmail.com",
+        };
+        builder.Entity<User>().HasData(pm);
+        Email email_27 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "pm@gmail.com",
+            UserId = pmId
+        };
+        builder.Entity<Email>().HasData(email_27);
+        UserRole pmRole = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = pmId,
+            RoleId = role_3_id
+        };
+        builder.Entity<UserRole>().HasData(pmRole);
         #endregion
 
         #region Create Secretaries
