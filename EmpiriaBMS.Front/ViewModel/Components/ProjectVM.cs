@@ -347,6 +347,19 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private string? _pmName;
+    public string? PmName
+    {
+        get => _pmName;
+        set
+        {
+            if (value == _pmName)
+                return;
+            _pmName = value;
+            NotifyPropertyChanged(nameof(PmName));
+        }
+    }
+
     public List<Project> Projects { get; set; }
 
     [NotMapped]

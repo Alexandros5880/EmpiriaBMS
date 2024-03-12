@@ -142,7 +142,7 @@ else
                                                     <th scope="col" class="sticky-header">Deadline</th>
                                                     @if (AssignPm)
                                                     {
-                                                        <th scope="col"></th>
+                                                        <th scope="col">PM</th>
                                                     }
                                                 </tr>
                                             </thead>
@@ -185,9 +185,17 @@ else
                                                         @if (AssignPm)
                                                         {
                                                             <td class="align-middle">
-                                                                <span class="clarity--assign-user-line"
-                                                                      @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                </span>
+                                                                @if (@project.PmName != null) {
+                                                                    <span @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                        @project.PmName
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="clarity--assign-user-line"
+                                                                          @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                    </span>
+                                                                }
                                                             </td>
                                                         }
 

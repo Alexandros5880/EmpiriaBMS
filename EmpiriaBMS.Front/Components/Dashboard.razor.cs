@@ -12,6 +12,7 @@ using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using Microsoft.Graph.Models;
 using Microsoft.JSInterop;
@@ -186,7 +187,12 @@ public partial class Dashboard : IDisposable
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
 
             _projects.Clear();
-            projectsVm.ForEach(_projects.Add);
+            foreach(var p in projectsVm)
+            {
+                var pm = await DataProvider.Projects.GetProjectManager(p.Id);
+                p.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
+                _projects.Add(p);
+            }
         }
         catch (Exception ex)
         {
@@ -270,7 +276,7 @@ public partial class Dashboard : IDisposable
             if (pms == null)
                 throw new NullReferenceException(nameof(pms));
 
-            var myPmsIds = (await DataProvider.Projects.GetProjectManagers(_selectedProject.Id)).Select(d => d.Id);
+            var myPM = await DataProvider.Projects.GetProjectManager(_selectedProject.Id);
 
             var pmsVM = Mapper.Map<List<UserVM>>(pms);
 
@@ -278,7 +284,7 @@ public partial class Dashboard : IDisposable
             _projectManagers.Clear();
             pmsVM.ForEach(d =>
             {
-                d.IsSelected = myPmsIds.Contains(d.Id);
+                d.IsSelected = myPM.Id == d.Id;
                 _projectManagers.Add(d);
             });
         }

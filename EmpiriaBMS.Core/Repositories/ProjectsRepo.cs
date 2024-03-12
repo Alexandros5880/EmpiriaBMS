@@ -432,7 +432,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                  .CountAsync();
     }
 
-    public async Task<ICollection<UserDto>> GetProjectManagers(int projectId)
+    public async Task<UserDto> GetProjectManager(int projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -442,7 +442,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Select(de => de.ProjectManager)
                                       .ToListAsync();
 
-            return Mapping.Mapper.Map<List<UserDto>>(users);
+            return Mapping.Mapper.Map<UserDto>(users.FirstOrDefault());
         }
     }
 
