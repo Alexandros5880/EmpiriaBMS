@@ -2031,7 +2031,7 @@ public class AppDbContext : DbContext
                 PendingPayments = i,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
                 EstimatedMandays = 100/8,
-                EstimatedHours = 100,
+                EstimatedHours = 1500,
                 Completed = 0,
                 WorkPackegedCompleted = 0,
                 EstimatedCompleted = 0,
@@ -2146,7 +2146,7 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     TypeId = disciplineTypes[typeIndex].Id,
-                    EstimatedHours = 1500,
+                    EstimatedHours = 500,
                     ProjectId = projects[i].Id,
                     Completed = 0
                 };
