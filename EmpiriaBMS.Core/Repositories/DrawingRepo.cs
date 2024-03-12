@@ -168,14 +168,19 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
             };
             await _context.Set<DailyTime>().AddAsync(time);
 
+            // Save Changes
+            await _context.SaveChangesAsync();
+
             // Get Discipline && Calculate Estimated Hours
             var discipline = await _context.Set<Discipline>()
                                            .Include(p => p.DailyTime)
                                            .FirstOrDefaultAsync(p => p.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var disciplineMenHours = discipline.DailyTime.Select(h => h.TimeSpan?.Hours ?? 0).Sum();
-
+            var disciplineMenHours = await _context.Set<DailyTime>()
+                                          .Where(d => d.DisciplineId == disciplineId)
+                                          .Select(d => d.TimeSpan.Hours)
+                                          .SumAsync();
             decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
             discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
 
@@ -186,8 +191,10 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
             if (project == null)
                 throw new NullReferenceException(nameof(project));
             var projectsTimes = project.DailyTime.Select(dt => dt.TimeSpan).ToList();
-            var projectMenHours = projectsTimes.Select(t => t.Hours).Sum();
-
+            var projectMenHours = await _context.Set<DailyTime>()
+                                          .Where(d => d.ProjectId == projectId)
+                                          .Select(d => d.TimeSpan.Hours)
+                                          .SumAsync();
             decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
             project.EstimatedCompleted = (float)divitionProResult * 100;
             
