@@ -123,12 +123,12 @@ else
                     <div class="row mt-4 p-1
                                 gx-xl-2 gx-lg-2 gx-md-2 gx-sm-2
                                 gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
-
-                        <!-- Table Projects -->
-                        @if (!_isEndWorkDialogOdepened)
-                        {
-                            <div class="col-xxl-4 col-xl-7 col-lg-6 col-md-6 col-sm-12 row">
-                                <div class="col-12">
+                        
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 row">
+                            <!-- Table Projects -->
+                            <div class="col-12">
+                                @if (!_isEndWorkDialogOdepened)
+                                {
                                     <div class="text-center">
                                         <h3>Projects</h3>
                                     </div>
@@ -193,7 +193,7 @@ else
                                                                 else
                                                                 {
                                                                     <span class="clarity--assign-user-line"
-                                                                          @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                            @onclick="@(async (x) => await OnProjectAssignClick(project))">
                                                                     </span>
                                                                 }
                                                             </td>
@@ -204,188 +204,196 @@ else
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                }
                             </div>
-                        }
+                        </div>
 
-                        <!-- Table Disciplines -->
-                        @if (_selectedProject != null && !_isEndWorkDialogOdepened)
-                        {
-                            <div class="col-xxl-3 col-xl-5 col-lg-5 col-md-5 col-sm-12">
-                                <div class="text-center">
-                                    <h3>Disciplines</h3>
-                                </div>
-                                <div class="table-responsive p-1 table-container">
-                                    <table class="table table-hover table-danger text-center">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="sticky-header">Discipline</th>
-                                                <th scope="col" class="sticky-header">Estimated Discipline Hours</th>
-                                                @if (AssignEngineer)
-                                                {
-                                                    <th scope="col"></th>
-                                                }
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var discipline in _disciplines)
-                                            {
-                                                <tr class="align-middle
-                                                          @(( @GetDisciplineMenHours(discipline.Id) > discipline.EstimatedHours ? "table-danger" : ""))"
-                                                    @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
-                                                    
-                                                    <td class="align-middle
-                                                        @(((_selectedDiscipline == null
-                                                            || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                ? "" : "highlight_2"))">
-                                                        <labe>@discipline.Type.Name</labe>
-                                                    </td>
-                                                    
-                                                    <td class="align-middle text-center
-                                                        @(((_selectedDiscipline == null
-                                                            || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                ? "" : "highlight_2"))">
-                                                        <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
-                                                    </td>
-
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 row">
+                            <!-- Table Disciplines -->
+                            <div class="col-12">
+                                @if (_selectedProject != null && !_isEndWorkDialogOdepened)
+                                {
+                                    <div class="text-center">
+                                        <h3>Disciplines</h3>
+                                    </div>
+                                    <div class="table-responsive p-1 table-container">
+                                        <table class="table table-hover table-danger text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="sticky-header">Discipline</th>
+                                                    <th scope="col" class="sticky-header">Estimated Discipline Hours</th>
                                                     @if (AssignEngineer)
                                                     {
-                                                        <td class="align-middle">
-                                                            <span class="clarity--assign-user-line"
-                                                                  @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
-                                                            </span>
-                                                        </td>
+                                                        <th scope="col"></th>
                                                     }
-
                                                 </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        }
-
-                        <!-- Table Draws -->
-                        @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
-                        {
-                            <div class="col-xxl-3 col-xl-7 col-lg-6 col-md-6 col-sm-12">
-                                <div class="text-center">
-                                    <h3>Deliverables</h3>
-                                </div>
-                                <div class="table-responsive p-1 table-container">
-                                    <table class="table table-hover table-primary text-center">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="sticky-header">Drawing</th>
-                                                <th scope="col" class="sticky-header">Total Hours</th>
-                                                <th scope="col" class="sticky-header">Declared Completion</th>
-                                                @if (AssignDesigner)
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var discipline in _disciplines)
                                                 {
-                                                    <th scope="col"></th>
+                                                    <tr class="align-middle
+                                                                @(( @GetDisciplineMenHours(discipline.Id) > discipline.EstimatedHours ? "table-danger" : ""))"
+                                                        @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
+                                                    
+                                                        <td class="align-middle
+                                                            @(((_selectedDiscipline == null
+                                                                || !_selectedDiscipline.Id.Equals(discipline.Id))
+                                                                    ? "" : "highlight_2"))">
+                                                            <labe>@discipline.Type.Name</labe>
+                                                        </td>
+                                                    
+                                                        <td class="align-middle text-center
+                                                            @(((_selectedDiscipline == null
+                                                                || !_selectedDiscipline.Id.Equals(discipline.Id))
+                                                                    ? "" : "highlight_2"))">
+                                                            <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
+                                                        </td>
+
+                                                        @if (AssignEngineer)
+                                                        {
+                                                            <td class="align-middle">
+                                                                <span class="clarity--assign-user-line"
+                                                                        @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
+                                                                </span>
+                                                            </td>
+                                                        }
+
+                                                    </tr>
                                                 }
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var draw in _draws)
-                                            {
-                                                <tr class="align-middle"
-                                                    @onclick="@(() => OnSelectDraw(draw))">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            </div>
+                        </div>
 
-                                                    <td class="align-middle
-                                                        @(((_selectedDraw == null ||
-                                                                !_selectedDraw.Id.Equals(draw.Id))
-                                                                    ? "" : "highlight_3"))">
-                                                        <div class="align-middle h-100"><labe>@draw.Type.Name</labe></div>
-                                                    </td>
-
-                                                    <td class="align-middle
-                                                        @(((_selectedDraw == null ||
-                                                                !_selectedDraw.Id.Equals(draw.Id))
-                                                                    ? "" : "highlight_3"))">
-                                                        <label>@GetDrawingMenHours(draw.Id) h</label>
-                                                    </td>
-
-                                                    <td class="align-middle
-                                                        @(((_selectedDraw == null ||
-                                                            !_selectedDraw.Id.Equals(draw.Id))
-                                                                ? "" : "highlight_3"))">
-                                                        <label>@draw.CompletionEstimation %</label>
-                                                    </td>
-
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 row">
+                            
+                            <!-- Table Draws -->
+                            <div class="col-12">
+                                @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
+                                {
+                                    <div class="text-center">
+                                        <h3>Deliverables</h3>
+                                    </div>
+                                    <div class="table-responsive p-1 table-container">
+                                        <table class="table table-hover table-primary text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="sticky-header">Drawing</th>
+                                                    <th scope="col" class="sticky-header">Total Hours</th>
+                                                    <th scope="col" class="sticky-header">Declared Completion</th>
                                                     @if (AssignDesigner)
                                                     {
-                                                        <td class="align-middle">
-                                                            <span class="clarity--assign-user-line"
-                                                                    @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
-                                                            </span>
-                                                        </td>
+                                                        <th scope="col"></th>
                                                     }
-
                                                 </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var draw in _draws)
+                                                {
+                                                    <tr class="align-middle"
+                                                        @onclick="@(() => OnSelectDraw(draw))">
+
+                                                        <td class="align-middle
+                                                            @(((_selectedDraw == null ||
+                                                                    !_selectedDraw.Id.Equals(draw.Id))
+                                                                        ? "" : "highlight_3"))">
+                                                            <div class="align-middle h-100"><labe>@draw.Type.Name</labe></div>
+                                                        </td>
+
+                                                        <td class="align-middle
+                                                            @(((_selectedDraw == null ||
+                                                                    !_selectedDraw.Id.Equals(draw.Id))
+                                                                        ? "" : "highlight_3"))">
+                                                            <label>@GetDrawingMenHours(draw.Id) h</label>
+                                                        </td>
+
+                                                        <td class="align-middle
+                                                            @(((_selectedDraw == null ||
+                                                                !_selectedDraw.Id.Equals(draw.Id))
+                                                                    ? "" : "highlight_3"))">
+                                                            <label>@draw.CompletionEstimation %</label>
+                                                        </td>
+
+                                                        @if (AssignDesigner)
+                                                        {
+                                                            <td class="align-middle">
+                                                                <span class="clarity--assign-user-line"
+                                                                        @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
+                                                                </span>
+                                                            </td>
+                                                        }
+
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
                             </div>
-                        }
 
-                        <!-- Table Others -->
-                        @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
-                        {
-                            <div class="col-xxl-2 col-xl-5 col-lg-5 col-md-5 col-sm-12">
-                                <div class="text-center">
-                                    <h3>Supportive Works</h3>
-                                </div>
-                                <div class="table-responsive p-1 table-container">
-                                    <table class="table table-hover table-warning text-center">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="sticky-header">Other</th>
-                                                <th scope="col" class="sticky-header">Total Hours</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var _other in _others)
-                                            {
-                                                <tr class="align-middle" @onclick="@(() => OnSelectDoc(_other))">
+                            <!-- Table Others -->
+                            <div class="col-12">
+                                @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
+                                {
+                                    <div class="text-center">
+                                        <h3>Supportive Works</h3>
+                                    </div>
+                                    <div class="table-responsive p-1 table-container">
+                                        <table class="table table-hover table-warning text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="sticky-header">Other</th>
+                                                    <th scope="col" class="sticky-header">Total Hours</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var _other in _others)
+                                                {
+                                                    <tr class="align-middle" @onclick="@(() => OnSelectDoc(_other))">
 
-                                                    <td class="align-middle
+                                                        <td class="align-middle
                                                         @(((_selectedOther == null ||
                                                                 !_selectedOther.Id.Equals(_other.Id))
                                                                     ? "" : "highlight_4"))"
-                                                        style="min-width: 110px;">
-                                                        <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
-                                                    </td>
+                                                            style="min-width: 110px;">
+                                                            <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
+                                                        </td>
 
-                                                    <td class="align-middle
+                                                        <td class="align-middle
                                                         @(((_selectedOther == null ||
                                                                 !_selectedOther.Id.Equals(_other.Id))
                                                                     ? "" : "highlight_4"))"
-                                                        style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                        <label>@GetOtherMenHours(_other.Id) h</label>
-                                                    </td>
+                                                            style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                                            <label>@GetOtherMenHours(_other.Id) h</label>
+                                                        </td>
 
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
                             </div>
-                        }
+
+                        </div>
 
                     </div>
 
                     <div class="row mt-4 p-1
                                 gx-xl-2 gx-lg-2 gx-md-2 gx-sm-2
                                 gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
-                        <div class="col-xxl-4 col-xl-7 col-lg-7 col-md-7 col-sm-12 row">
+                        
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 row">
                             <!-- User Extra Hours -->
                             @if (SeeMyHours) {
                                 <div class="col-12">
                                     <UserTime LogedUserTimes="@_logedUserTimes" />
                                 </div>
                             }
-                        </div>
+                        </div>                        
+
                     </div>
                 
                 </div>
