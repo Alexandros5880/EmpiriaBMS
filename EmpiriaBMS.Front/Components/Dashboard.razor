@@ -709,41 +709,20 @@ else
 
         <div class="modal-body row">
             <div class="m-1 row justify-content-center">
-
                 <div class="col-12 p-2">
 
-                    <div class="mt-1 p-2 modal-content">
-                        <div class="d-flex justify-content-around">
-                            <div class="table-responsive p-1 w-100 h-100 m-3">
-                                <div class="text-center">
-                                    <h3>Select Engineers</h3>
-                                </div>
-                                <table class="table table-borderless rounded-3">
-                                    <tbody>
-                                        @foreach (var pm in _projectManagers)
-                                        {
-                                            <tr clss="align-middle d-flex">
-                                                <td class="align-middle">
-                                                    <input class="form-check-input big-checkbox"
-                                                           type="checkbox"
-                                                           id="isSelectedDesigner"
-                                                           @bind=@pm.IsSelected>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <label>
-                                                        @pm.LastName &nbsp; @pm.FirstName
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    <select class="form-select form-select-lg">
+                        @foreach (var pm in _projectManagers)
+                        {
+                            <option value="@pm.Id"
+                                    selected="@pm.IsSelected"
+                                    @onchange="@(e => ToggleSelection(pm, e.Value.ToString()))">
+                                @pm.LastName &nbsp; @pm.FirstName
+                            </option>
+                        }
+                    </select>
 
                 </div>
-
             </div>
         </div>
 

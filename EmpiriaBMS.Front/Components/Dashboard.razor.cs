@@ -91,7 +91,6 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DrawingVM> _draws = new ObservableCollection<DrawingVM>();
     private ObservableCollection<OtherVM> _others = new ObservableCollection<OtherVM>();
-    private List<DisciplineVM> _disciplinesChanged = new List<DisciplineVM>();
     private List<DrawingVM> _drawsChanged = new List<DrawingVM>();
     private List<OtherVM> _othersChanged = new List<OtherVM>();
     private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
@@ -123,6 +122,7 @@ public partial class Dashboard : IDisposable
     // Add ProjectManager Dialog
     private FluentDialog? _addPMDialog;
     private bool _isAddPMDialogOdepened = false;
+    private UserVM _selectedPM = new UserVM();
     #endregion
 
     protected override void OnInitialized()
@@ -273,6 +273,8 @@ public partial class Dashboard : IDisposable
             var myPmsIds = (await DataProvider.Projects.GetProjectManagers(_selectedProject.Id)).Select(d => d.Id);
 
             var pmsVM = Mapper.Map<List<UserVM>>(pms);
+
+
             _projectManagers.Clear();
             pmsVM.ForEach(d =>
             {
@@ -447,6 +449,12 @@ public partial class Dashboard : IDisposable
             Debug.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
+    }
+
+    // Projects Manager Selection
+    void ToggleSelection(UserVM pm, string selectedValue)
+    {
+        pm.IsSelected = !_projectManagers.First(p => p.Id.ToString() == selectedValue).IsSelected;
     }
 
     private async Task OnProjectAssignClick(ProjectVM project)
