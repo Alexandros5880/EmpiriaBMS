@@ -417,15 +417,6 @@ else
 
         <div class="modal-body">
 
-            <!-- Set User Extra Time -->
-            <div class="mt-1">
-                <SetUserTime LogedUserTimes="@_editLogedUserTimes"
-                             RemainingTime="@remainingTime"
-                             OnPersonalTimeChanged="@_onPersonalTimeChanged"
-                             OnTrainingTimeChanged="@_onTrainingTimeChanged"
-                             OnCorporateTimeChanged="@_onCorporateTimeChanged" />
-            </div>
-
             <div class="mt-2 row gx-3">
 
                 <!-- Select Project -->
@@ -557,6 +548,15 @@ else
                     </div>
                 </div>
 
+            </div>
+
+            <!-- Set User Extra Time -->
+            <div class="mt-1">
+                <SetUserTime LogedUserTimes="@_editLogedUserTimes"
+                             RemainingTime="@remainingTime"
+                             OnPersonalTimeChanged="@_onPersonalTimeChanged"
+                             OnTrainingTimeChanged="@_onTrainingTimeChanged"
+                             OnCorporateTimeChanged="@_onCorporateTimeChanged" />
             </div>
 
         </div>
