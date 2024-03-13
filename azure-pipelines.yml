@@ -8,6 +8,7 @@ variables:
   dockerRegistryServiceConnection: 'Azure-Kubernetes-Cluster'
   dockerComposeFile: .
   imageName: 'EmpiriaBMS'
+  projectName: 'EmpiriaBMS'
   containerRegistry: 'acrworkflow1710346566236'
   kubernetesNamespace: 'namespace-workflow-1710346566236'
   kubernetesServiceConnection: 'Azure-Kubernetes'
@@ -19,7 +20,7 @@ steps:
     dockerRegistryServiceConnection: '$(dockerRegistryServiceConnection)'
     action: 'Build services'
     dockerComposeFile: '$(dockerComposeFile)'
-    projectName: 'EmpiriaBMS'
+    projectName: '$(projectName)'
     additionalImageTags: '$(Build.BuildId)'
 
 - task: DockerCompose@0
@@ -28,7 +29,7 @@ steps:
     dockerRegistryServiceConnection: '$(dockerRegistryServiceConnection)'
     action: 'Push services'
     dockerComposeFile: '$(dockerComposeFile)'
-    projectName: 'EmpiriaBMS'
+    projectName: '$(projectName)'
     additionalImageTags: '$(Build.BuildId)'
 
 - task: KubernetesManifest@0
