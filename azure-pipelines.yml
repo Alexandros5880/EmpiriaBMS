@@ -2,52 +2,40 @@ trigger:
 - main
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  dotnetSdkVersion: '6.0.420'  # Specify the .NET SDK version
+  dockerRegistryServiceConnection: 'Azure-Kubernetes-Cluster'
+  dockerComposeFile: .
+  imageName: 'EmpiriaBMS'
+  containerRegistry: 'acrworkflow1710346566236'
+  kubernetesNamespace: 'namespace-workflow-1710346566236'
+  kubernetesServiceConnection: 'Azure-Kubernetes'
 
 steps:
-- task: UseDotNet@2
+- task: DockerCompose@0
   inputs:
-    packageType: 'sdk'
-    version: '$(dotnetSdkVersion)'
+    containerregistrytype: 'Container Registry'
+    dockerRegistryServiceConnection: '$(dockerRegistryServiceConnection)'
+    action: 'Build services'
+    dockerComposeFile: '$(dockerComposeFile)'
+    projectName: 'EmpiriaBMS'
+    additionalImageTags: '$(Build.BuildId)'
 
-- task: NuGetToolInstaller@1
-
-- task: NuGetCommand@2
+- task: DockerCompose@0
   inputs:
-    restoreSolution: '$(solution)'
+    containerregistrytype: 'Container Registry'
+    dockerRegistryServiceConnection: '$(dockerRegistryServiceConnection)'
+    action: 'Push services'
+    dockerComposeFile: '$(dockerComposeFile)'
+    projectName: 'EmpiriaBMS'
+    additionalImageTags: '$(Build.BuildId)'
 
-- task: MSBuild@2
+- task: KubernetesManifest@0
   inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    msbuildArguments: '/t:restore'  # Restore all projects in the solution
-    clean: true  # Clean before building
-
-- task: MSBuild@2
-  inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    msbuildArguments: '/t:build'  # Build all projects in the solution
-    maxCpuCount: true  # Use all available CPUs for the build
-
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    testRunTitle: 'Unit Tests'
-
-- task: PublishTestResults@2
-  condition: succeededOrFailed()  # Publish test results regardless of build outcome
-  inputs:
-    testResultsFormat: 'VSTest'
-    testResultsFiles: '**/*.trx'
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    testRunTitle: 'Unit Tests'
+    action: 'deploy'
+    kubernetesServiceConnection: '$(kubernetesServiceConnection)'
+    namespace: '$(kubernetesNamespace)'
+    manifests: |
+      $(Build.SourcesDirectory)/<path-to-your-kubernetes-manifests>/deployment.yml
+      $(Build.SourcesDirectory)/<path-to-your-kubernetes-manifests>/service.yml
