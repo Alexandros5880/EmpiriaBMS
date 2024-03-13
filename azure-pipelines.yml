@@ -27,7 +27,16 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    msbuildArguments: '/t:restore'  # Restore all projects in the solution
+    clean: true  # Clean before building
+
+- task: MSBuild@2
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    msbuildArguments: '/t:build'  # Build all projects in the solution
+    maxCpuCount: true  # Use all available CPUs for the build
 
 - task: VSTest@2
   inputs:
