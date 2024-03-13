@@ -43,7 +43,7 @@ env:
   CONTAINER_NAME: "EmpiriaBMS"
   RESOURCE_GROUP: "EmpiriaBMS_Group"
   CLUSTER_NAME: "Dev"
-  KUSTOMIZE_PATH: ""
+  KUSTOMIZE_PATH: "../../EmpiriaBMS.Front"
 
 jobs:
 
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks out the repository this file is in
-      # - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       # Logs in with your Azure credentials
       - name: Azure login
