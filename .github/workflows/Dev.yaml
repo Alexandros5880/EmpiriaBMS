@@ -6,13 +6,12 @@ name: Dev
     workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: EmpiriaBMS_Group
-    AZURE_CONTAINER_REGISTRY: acrworkflow1710341724090
+    AZURE_CONTAINER_REGISTRY: acrworkflow1710346566236
     CLUSTER_NAME: Dev
     CLUSTER_RESOURCE_GROUP: EmpiriaBMS_Group
-    CONTAINER_NAME: image-workflow-1710341724090
+    CONTAINER_NAME: image-workflow-1710346566236
     DEPLOYMENT_MANIFEST_PATH: |
-        manifests/deployment.yaml
-        manifests/service.yaml
+        ./EmpiriaBMS.Front/aad.manifest.json
 jobs:
     buildImage:
         permissions:
@@ -28,7 +27,7 @@ jobs:
                 subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
                 tenant-id: ${{ secrets.AZURE_TENANT_ID }}
             - name: Build and push image to ACR
-              run: az acr build --image ${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.ACR_RESOURCE_GROUP }} -f Dockerfile ./
+              run: az acr build --image ${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.ACR_RESOURCE_GROUP }} -f ./docker-compose.yml ./
     deploy:
         permissions:
             actions: read
@@ -62,4 +61,4 @@ jobs:
                 action: deploy
                 images: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
                 manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
-                namespace: namespace-workflow-1710341724090
+                namespace: namespace-workflow-1710346566236
