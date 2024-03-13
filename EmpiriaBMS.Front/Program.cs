@@ -25,7 +25,13 @@ builder.Services.AddSingleton<TimerService>();
 builder.Services.AddSingleton<SharedAuthDataService>();
 builder.Services.AddScoped<AuthorizeServices>();
 builder.Services.AddBlazorBootstrap();
-builder.Services.AddDbContextFactory<AppDbContext>(); // DbContext Dependency Injection
+
+// Add configuration
+builder.Configuration
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
+
+builder.Services.AddDbContextFactory<AppDbContext>();
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
 
 // TODO: AutoMapper

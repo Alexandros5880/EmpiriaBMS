@@ -1,6 +1,8 @@
 ﻿using EmpiriaBMS.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Reflection.Emit;
 using System.Xml.Linq;
@@ -8,9 +10,12 @@ using System.Xml.Linq;
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
 {
-    const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
-    const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
-    const string azureDB = "Server=tcp:empiriabms.database.windows.net,1433;Initial Catalog=EmpiriaBMS_DB;Persist Security Info=False;User ID=alexandros5880;Password=-Plat123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+    private readonly IConfiguration _configuration;
+    private readonly IHostEnvironment _environment;
+
+    //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
+    //const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
+    //const string azureDB = "Server=tcp:empiriabms.database.windows.net,1433;Initial Catalog=EmpiriaBMS_DB;Persist Security Info=False;User ID=alexandros5880;Password=-Plat123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -34,9 +39,19 @@ public class AppDbContext : DbContext
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
     public DbSet<ProjectPmanager> ProjectsPmanagers { get; set; }
 
+    public AppDbContext(
+        IConfiguration configuration,
+        IHostEnvironment environment
+    ) {
+        _configuration = configuration;
+        _environment = environment;
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(azureDB);
+        string environmentName = _environment.EnvironmentName;
+        string connectionString = _configuration.GetConnectionString(environmentName);
+        optionsBuilder.UseSqlServer(connectionString);
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.EnableDetailedErrors();
         optionsBuilder.EnableServiceProviderCaching();
