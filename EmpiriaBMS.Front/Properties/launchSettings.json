@@ -1,55 +1,58 @@
 {
-  "profiles": {
-    "Development": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:44302;http://localhost:2544",
-      "hotReloadProfile": "aspnetcore"
-    },
-    "Staging": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Staging"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:44302;http://localhost:2544",
-      "hotReloadProfile": "aspnetcore"
-    },
-    "Production": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:44302;http://localhost:2544",
-      "hotReloadProfile": "aspnetcore"
-    },
-    "Microsoft Teams (browser)": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-      "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:44302;http://localhost:2544",
-      "hotReloadProfile": "aspnetcore"
-    },
-    "WSL": {
-      "commandName": "WSL2",
-      "launchBrowser": true,
-      "launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_URLS": "https://localhost:44302;http://localhost:2544"
-      },
-      "distributionName": ""
-    }
-  }
+	"profiles": {
+		"Development": {
+			"commandName": "Project",
+			"launchBrowser": true,
+			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Development"
+			},
+			"dotnetRunMessages": true,
+			"applicationUrl": "https://localhost:44302;http://localhost:2544",
+			"hotReloadProfile": "aspnetcore"
+		},
+		"Staging": {
+			"commandName": "Project",
+			"launchBrowser": true,
+			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Staging"
+			},
+			"dotnetRunMessages": true,
+			"applicationUrl": "https://localhost:44302;http://localhost:2544",
+			"hotReloadProfile": "aspnetcore"
+		},
+		"Production": {
+			"commandName": "Project",
+			"launchBrowser": true,
+			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Production"
+			},
+			"dotnetRunMessages": true,
+			"applicationUrl": "https://localhost:44302;http://localhost:2544",
+			"hotReloadProfile": "aspnetcore"
+		},
+		"Microsoft Teams (browser)": {
+			"commandName": "Project",
+			"launchBrowser": true,
+			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+			"dotnetRunMessages": true,
+			"applicationUrl": "https://localhost:44302;http://localhost:2544",
+			"hotReloadProfile": "aspnetcore",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Development"
+			}
+		},
+		"WSL": {
+			"commandName": "WSL2",
+			"launchBrowser": true,
+			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"ASPNETCORE_URLS": "https://localhost:44302;http://localhost:2544"
+			},
+			"distributionName": ""
+		}
+	}
 }
