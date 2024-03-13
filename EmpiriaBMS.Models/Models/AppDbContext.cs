@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Diagnostics;
 using System.Reflection.Emit;
 using System.Xml.Linq;
 
@@ -11,7 +12,7 @@ namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
 {
     private readonly IConfiguration _configuration;
-    private readonly IHostEnvironment _environment;
+    //private readonly IHostEnvironment _environment;
 
     //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
     //const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
@@ -40,17 +41,18 @@ public class AppDbContext : DbContext
     public DbSet<ProjectPmanager> ProjectsPmanagers { get; set; }
 
     public AppDbContext(
-        IConfiguration configuration,
-        IHostEnvironment environment
+        IConfiguration configuration
+        //IHostEnvironment environment
     ) {
         _configuration = configuration;
-        _environment = environment;
+        //_environment = environment;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string environmentName = _environment.EnvironmentName;
-        string connectionString = _configuration.GetConnectionString(environmentName);
+        //string environmentName = _environment.EnvironmentName;
+        string connectionString = _configuration.GetConnectionString("DefaultConnection");
+        Debug.WriteLine($"\n\n\n Connection String: {connectionString} \n\n\n");
         optionsBuilder.UseSqlServer(connectionString);
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.EnableDetailedErrors();

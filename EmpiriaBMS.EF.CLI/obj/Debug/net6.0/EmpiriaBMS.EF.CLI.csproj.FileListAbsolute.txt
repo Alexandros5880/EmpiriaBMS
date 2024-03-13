@@ -20,6 +20,8 @@ C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Hosting.Abstractions.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.EF.CLI\bin\Debug\net6.0\Microsoft.Extensions.Logging.dll

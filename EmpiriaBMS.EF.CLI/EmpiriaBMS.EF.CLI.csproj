@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Configurations>Debug;Release;Development;Staging;Production</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
