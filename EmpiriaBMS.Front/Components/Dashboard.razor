@@ -166,16 +166,20 @@ else
                                                         @if (AssignPm)
                                                         {
                                                             <td class="align-middle">
-                                                                @if (@project.PmName != null) {
-                                                                    <span @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                        @project.PmName
-                                                                    </span>
-                                                                }
-                                                                else
+                                                                @if (project.Type.CanAssignePM)
                                                                 {
-                                                                    <span class="clarity--assign-user-line"
-                                                                            @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                    </span>
+                                                                    @if (@project.PmName != null)
+                                                                    {
+                                                                        <span @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                            @project.PmName
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="clarity--assign-user-line"
+                                                                              @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                        </span>
+                                                                    }
                                                                 }
                                                             </td>
                                                         }

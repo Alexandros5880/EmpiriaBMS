@@ -1923,7 +1923,8 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "Buildings",
-            Description = "Buildings Description"
+            Description = "Buildings Description",
+            CanAssignePM = true
         };
         builder.Entity<ProjectType>().HasData(project_type_1);
 
@@ -1935,7 +1936,8 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "Infrastructure",
-            Description = "Infrastructure Description"
+            Description = "Infrastructure Description",
+            CanAssignePM = true
         };
         builder.Entity<ProjectType>().HasData(project_type_2);
 
@@ -1947,7 +1949,8 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "Energy",
-            Description = "Energy Description"
+            Description = "Energy Description",
+            CanAssignePM = true
         };
         builder.Entity<ProjectType>().HasData(project_type_3);
 
@@ -1959,7 +1962,8 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "Consulting",
-            Description = "Consulting Description"
+            Description = "Consulting Description",
+            CanAssignePM = true
         };
         builder.Entity<ProjectType>().HasData(project_type_4);
 
@@ -1971,7 +1975,8 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "Production Management",
-            Description = "Production Management Description"
+            Description = "Production Management Description",
+            CanAssignePM = false
         };
         builder.Entity<ProjectType>().HasData(project_type_5);
 

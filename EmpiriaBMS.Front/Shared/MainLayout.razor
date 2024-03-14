@@ -229,7 +229,6 @@ else
         await authorizeServices.Authorize(selectRoleId, _runInTeams);
         _sharedAuthData.DefaultRoleName = _allRoles.FirstOrDefault(r => r.Id == selectRoleId).Name;
         isLoading = false;
-        isLoading = false;
         StateHasChanged();
     }
 

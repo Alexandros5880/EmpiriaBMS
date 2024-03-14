@@ -14,5 +14,7 @@ public class ProjectType : Entity
 
     public string? Description { get; set; }
 
+    public bool CanAssignePM { get; set; }
+
     public List<Project> Projects { get; set; }
 }
