@@ -3,8 +3,8 @@
 
 @inject MicrosoftTeams MicrosoftTeams
 
-<canvas id="signatureCanvas" @ref="canvasRef" style="height: 100px;"></canvas>
-<button class="btn btn-secondary btn-sm" @onclick="ClearCanvas">Clear</button>
+<canvas id="signatureCanvas" @ref="canvasRef" style="height: 120px;"></canvas>
+<button class="btn btn-outline-warning" @onclick="ClearCanvas">Clear</button>
 
 @code {
     private ElementReference canvasRef;
