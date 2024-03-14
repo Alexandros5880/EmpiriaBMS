@@ -130,7 +130,8 @@ else
                                                 @foreach (var project in _projects)
                                                 {
                                                     <tr class="align-middle
-                                                                @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-danger" : ""))"
+                                                                @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-danger" : ""))
+                                                                @(( project.Completed >= 100 ? "table-secondary" : ""))"
                                                         @onclick="@(async () => await OnSelectProject(project.Id))">
                                                     
                                                         <td class="align-middle
