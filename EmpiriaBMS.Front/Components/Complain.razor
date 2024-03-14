@@ -69,16 +69,16 @@
                 <InputDate id="verificationDate" @bind-Value="_complain.VerificationDate" class="form-control" />
             </div>
         </div>
-        
+
         <div class="row mt-2">
             <div class="col form-group">
                 <label for="verificatorSignature">Verificator Signature:</label>
-                <InputFile id="verificatorSignature" @bind-Value="_complain.VerificatorSignature" class="form-control" />
+                <SignaturePad />
             </div>
 
             <div class="col form-group">
                 <label for="pMSignature">Project Manager Signature:</label>
-                <InputFile id="pMSignature" @bind-Value="_complain.PMSignature" class="form-control" />
+                <SignaturePad />
             </div>
         </div>
 

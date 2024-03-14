@@ -1,0 +1,34 @@
+﻿<!-- SignaturePad.razor -->
+@inherits Microsoft.AspNetCore.Components.ComponentBase
+
+@inject MicrosoftTeams MicrosoftTeams
+
+<canvas id="signatureCanvas" @ref="canvasRef" style="height: 100px;"></canvas>
+<button class="btn btn-secondary btn-sm" @onclick="ClearCanvas">Clear</button>
+
+@code {
+    private ElementReference canvasRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await InitializeCanvas();
+        }
+    }
+
+    private async Task InitializeCanvas()
+    {
+        await MicrosoftTeams.InitializeCanvas(canvasRef);
+    }
+
+    private async Task ClearCanvas()
+    {
+        await MicrosoftTeams.clearCanvas(canvasRef);
+    }
+
+    private async Task GetImageData()
+    {
+        byte[] data = await MicrosoftTeams.GetCanvasImageData(canvasRef);
+    }
+}

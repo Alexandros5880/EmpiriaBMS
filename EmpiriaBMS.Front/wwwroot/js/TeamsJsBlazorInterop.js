@@ -139,3 +139,55 @@ export function setCookie(key, value) {
 export function getCookie(key) {
     return localStorage.getItem(key);
 }
+
+export function initializeCanvas(canvas) {
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mousedown', setPosition);
+    canvas.addEventListener('mouseenter', setPosition);
+
+    var context = canvas.getContext('2d');
+    var pos = { x: 0, y: 0 };
+
+    function setPosition(e) {
+        pos.x = e.clientX;
+        pos.y = e.clientY;
+    }
+
+    function draw(e) {
+        if (e.buttons !== 1) return; // if mouse is not clicked, do not go further
+
+        var color = "#000000"; // can be set to any color
+        context.beginPath(); // begin the drawing path
+
+        context.lineWidth = 2; // width of line
+        context.lineCap = 'round'; // rounded end cap
+        context.strokeStyle = color; // hex color of line
+
+        context.moveTo(pos.x, pos.y); // from position
+        setPosition(e);
+        context.lineTo(pos.x, pos.y); // to position
+
+        context.stroke(); // draw it!
+    }
+}
+
+export function clearCanvas(canvas) {
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+export function getCanvasImageData(canvas) {
+    var imgData = canvas.toDataURL(); // Get image data as base64 URL
+    var base64 = imgData.replace(/^data:image\/(png|jpeg);base64,/, ""); // Remove header
+    var byteCharacters = atob(base64); // Decode base64 to byte characters
+    var byteNumbers = new Array(byteCharacters.length);
+
+    // Convert byte characters to byte numbers
+    for (var i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    // Create byte array
+    var byteArray = new Uint8Array(byteNumbers);
+    return byteArray;
+}
