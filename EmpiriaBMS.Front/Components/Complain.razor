@@ -83,11 +83,13 @@
         </div>
 
         <div class="form-group mt-2">
-            <label for="isOpen big-checkbox">Is Open:</label>
-            <input id="isOpen" type="checkbox" @bind="_complain.IsOpen" />
+            <div class="row" style="width: 120px;">
+                <label class="col-8" for="isOpen">Is Open</label>
+                <input class="col-4 big-checkbox" id="isOpen" type="checkbox" @bind="_complain.IsOpen" />
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-2">Submit</button>
+        <button type="submit" class="btn btn-primary mt-2 float-end">Add</button>
     </EditForm>
 </div>
 
