@@ -128,6 +128,10 @@ public partial class Dashboard : IDisposable
     // On My Hours Click Dialog
     private FluentDialog? _myHoursDialog;
     private bool _isMyHoursDialogOdepened = false;
+
+    // On My Hours Click Dialog
+    private FluentDialog? _addComplainDialog;
+    private bool _isAddComplainDialogOdepened = false;
     #endregion
 
     protected override void OnInitialized()
@@ -502,6 +506,12 @@ public partial class Dashboard : IDisposable
             Debug.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
+    }
+
+    private void OnAddComplainClick()
+    {
+        _addComplainDialog.Show();
+        _isAddComplainDialogOdepened = true;
     }
     #endregion
 

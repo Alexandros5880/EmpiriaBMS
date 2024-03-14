@@ -120,6 +120,7 @@ else
                                                     <th scope="col" class="sticky-header">Work Package Declared Completed</th>
                                                     <th scope="col" class="sticky-header">Estimated Hours Completed</th>
                                                     <th scope="col" class="sticky-header">Deadline</th>
+                                                    <th scope="col" class="sticky-header">Complain</th>
                                                     @if (AssignPm)
                                                     {
                                                         <th scope="col">PM</th>
@@ -161,6 +162,15 @@ else
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
                                                             <label>@project.DeadlineDisplay</label>
+                                                        </td>
+
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "highlight_1"))">
+                                                            <span class="majesticons--chat-2-text"
+                                                                  @onclick="@OnAddComplainClick">
+                                                            </span>
                                                         </td>
 
                                                         @if (AssignPm)
@@ -722,7 +732,7 @@ else
 
     </FluentDialog>
 
-    <!-- On MyHours Clck Dialog  -->
+    <!-- On MyHours Click Dialog  -->
     <FluentDialog @ref="_myHoursDialog"
                   Hidden="@(!_isMyHoursDialogOdepened || _startLoading)"
                   Modal="false"
@@ -743,6 +753,29 @@ else
                 <div class="col-12 p-2">
 
                     <UserTime LogedUserTimes="@_logedUserTimes" />
+
+                </div>
+            </div>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On AddComplain Click Dialog  -->
+    <FluentDialog @ref="_addComplainDialog"
+                  Hidden="@(!_isAddComplainDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: 400px !important;">
+
+        <div class="dialog-header">
+            <span class="carbon--close-outline float-end" @onclick="CloseMyHoursClick"></span>
+        </div>
+
+        <div class="modal-body row mb-1">
+            <div class="m-1 row justify-content-center">
+                <div class="col-12 p-2">
+
+                    <Complain Project="@_selectedProject" />
 
                 </div>
             </div>
