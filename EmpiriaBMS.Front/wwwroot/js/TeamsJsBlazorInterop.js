@@ -141,12 +141,27 @@ export function getCookie(key) {
 }
 
 export function initializeCanvas(canvas) {
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mousedown', setPosition);
-    canvas.addEventListener('mouseenter', setPosition);
-
     var context = canvas.getContext('2d');
     var pos = { x: 0, y: 0 };
+    var isDrawing = false;
+
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        setPosition(e);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (isDrawing === true) {
+            drawLine(context, pos.x, pos.y, e.offsetX, e.offsetY);
+            setPosition(e);
+        }
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDrawing = false;
+    });
+
+    canvas.addEventListener('mouseenter', setPosition);
 
     function setPosition(e) {
         var rect = canvas.getBoundingClientRect();
@@ -154,21 +169,14 @@ export function initializeCanvas(canvas) {
         pos.y = e.clientY - rect.top;
     }
 
-    function draw(e) {
-        if (e.buttons !== 1) return; // if mouse is not clicked, do not go further
-
-        var color = "#000000"; // can be set to any color
-        context.beginPath(); // begin the drawing path
-
-        context.lineWidth = 2; // width of line
-        context.lineCap = 'round'; // rounded end cap
-        context.strokeStyle = color; // hex color of line
-
-        context.moveTo(pos.x, pos.y); // from position
-        setPosition(e);
-        context.lineTo(pos.x, pos.y); // to position
-
-        context.stroke(); // draw it!
+    function drawLine(context, x1, y1, x2, y2) {
+        context.beginPath();
+        context.strokeStyle = '#000';
+        context.lineWidth = 2;
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.stroke();
+        context.closePath();
     }
 }
 

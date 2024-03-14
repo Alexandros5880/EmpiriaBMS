@@ -64,7 +64,7 @@ public class MicrosoftTeams : InteropModuleBase
 
     public async Task clearCanvas(ElementReference canvasRef)
     {
-        await InvokeVoidAsync("initializeCanvas", canvasRef);
+        await InvokeVoidAsync("clearCanvas", canvasRef);
     }
 
     public async Task<byte[]> GetCanvasImageData(ElementReference canvasRef)
