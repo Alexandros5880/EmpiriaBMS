@@ -513,6 +513,15 @@ public partial class Dashboard : IDisposable
         _addComplainDialog.Show();
         _isAddComplainDialogOdepened = true;
     }
+
+    private void CloseAddComplainClick()
+    {
+        if (_isAddComplainDialogOdepened)
+        {
+            _addComplainDialog.Hide();
+            _isAddComplainDialogOdepened = false;
+        }
+    }
     #endregion
 
     #region Timer

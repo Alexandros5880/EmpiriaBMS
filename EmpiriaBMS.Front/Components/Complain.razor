@@ -11,76 +11,83 @@
 
     <EditForm Model="@_complain" OnValidSubmit="@(async () => await HandleValidSubmit())">
 
-        @* <div class="form-group">
-            <label for="customerId">Customer:</label>
-            <InputText id="customerId" class="form-control">
-                @_customer.LastName &nbsp; @_customer.LastName
-            </InputText>
-        </div> *@
-
-        @* <div class="form-group">
-            <label for="projectId">Project:</label>
-            <InputText id="projectId" class="form-control">
-                @_project.Name
-            </InputText>
-        </div> *@
-
-        <div class="form-group">
-            <label for="ComplaintDate">Complaint Date:</label>
-            <InputDate id="ComplaintDate" @bind-Value="_complain.ComplaintDate" class="form-control" />
+        <div class="row">
+            <div class="col form-group">
+                <label for="customerId">Customer:</label> <br/>
+                <strong id="customerId">@_customer?.LastName &nbsp; @_customer?.LastName</strong>
+            </div>
+            <div class="col form-group">
+                <label for="projectId">Project:</label> <br />
+                <strong id="projectId">@_project?.Name</strong>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="about">About:</label>
-            <InputText id="about" @bind-Value="_complain.About" class="form-control" />
+        <div class="row mt-2">
+            <div class="col form-group">
+                <label for="ComplaintDate">Complaint Date:</label>
+                <InputDate id="ComplaintDate" @bind-Value="_complain.ComplaintDate" class="form-control" />
+            </div>
+
+            <div class="col form-group">
+                <label for="about">About:</label>
+                <InputText id="about" @bind-Value="_complain.About" class="form-control" />
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="description">Description:</label>
-            <InputText id="description" @bind-Value="_complain.Description" class="form-control" />
+        <div class="row mt-2">
+            <div class="col form-group">
+                <label for="description">Description:</label>
+                <InputText id="description" @bind-Value="_complain.Description" class="form-control" />
+            </div>
+
+            <div class="col form-group">
+                <label for="solution">Solution:</label>
+                <InputText id="solution" @bind-Value="_complain.Solution" class="form-control" />
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="solution">Solution:</label>
-            <InputText id="solution" @bind-Value="_complain.Solution" class="form-control" />
+        <div class="row mt-2">
+            <div class="col form-group">
+                <label for="solutionDate">Solution Date:</label>
+                <InputDate id="solutionDate" @bind-Value="_complain.SolutionDate" class="form-control" />
+            </div>
+
+            <div class="col form-group">
+                <label for="evaluation">Evaluation:</label>
+                <InputText id="evaluation" @bind-Value="_complain.Evaluation" class="form-control" />
+            </div>
+        </div>
+        
+        <div class="row mt-2">
+            <div class="col form-group">
+                <label for="verification">Verification:</label>
+                <InputText id="verification" @bind-Value="_complain.Verification" class="form-control" />
+            </div>
+
+            <div class="col form-group">
+                <label for="verificationDate">Verification Date:</label>
+                <InputDate id="verificationDate" @bind-Value="_complain.VerificationDate" class="form-control" />
+            </div>
+        </div>
+        
+        <div class="row mt-2">
+            <div class="col form-group">
+                <label for="verificatorSignature">Verificator Signature:</label>
+                <InputFile id="verificatorSignature" @bind-Value="_complain.VerificatorSignature" class="form-control" />
+            </div>
+
+            <div class="col form-group">
+                <label for="pMSignature">Project Manager Signature:</label>
+                <InputFile id="pMSignature" @bind-Value="_complain.PMSignature" class="form-control" />
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="solutionDate">Solution Date:</label>
-            <InputDate id="solutionDate" @bind-Value="_complain.SolutionDate" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            <label for="evaluation">Evaluation:</label>
-            <InputText id="evaluation" @bind-Value="_complain.Evaluation" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            <label for="verification">Verification:</label>
-            <InputText id="verification" @bind-Value="_complain.Verification" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            <label for="verificationDate">Verification Date:</label>
-            <InputDate id="verificationDate" @bind-Value="_complain.VerificationDate" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            <label for="verificatorSignature">Verificator Signature:</label>
-            <InputFile id="verificatorSignature" @bind-Value="_complain.VerificatorSignature" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            <label for="pMSignature">Project Manager Signature:</label>
-            <InputFile id="pMSignature" @bind-Value="_complain.PMSignature" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            <label for="isOpen">Is Open:</label>
+        <div class="form-group mt-2">
+            <label for="isOpen big-checkbox">Is Open:</label>
             <input id="isOpen" type="checkbox" @bind="_complain.IsOpen" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary mt-2">Submit</button>
     </EditForm>
 </div>
 
