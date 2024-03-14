@@ -149,8 +149,9 @@ export function initializeCanvas(canvas) {
     var pos = { x: 0, y: 0 };
 
     function setPosition(e) {
-        pos.x = e.clientX;
-        pos.y = e.clientY;
+        var rect = canvas.getBoundingClientRect();
+        pos.x = e.clientX - rect.left;
+        pos.y = e.clientY - rect.top;
     }
 
     function draw(e) {
