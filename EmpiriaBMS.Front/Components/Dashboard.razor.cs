@@ -186,6 +186,7 @@ public partial class Dashboard : IDisposable
             //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
 
+            // Get Projects of last month.
             Expression<Func<EmpiriaMS.Models.Models.Project, bool>> expression = p => p.CreatedDate >= DateTime.Now.AddMonths(-1);
             List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(expression, _sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
 
