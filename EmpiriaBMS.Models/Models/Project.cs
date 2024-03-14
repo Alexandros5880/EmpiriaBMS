@@ -18,8 +18,6 @@ public class Project : Entity
 
     public string? Code { get; set; }
 
-    public string? Drawing { get; set; }
-
     public long EstimatedMandays { get; set; }
 
     public long EstimatedHours { get; set; }

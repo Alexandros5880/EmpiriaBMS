@@ -13,7 +13,7 @@ public class AppDbContext : DbContext
 {
 
     //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
-    //const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
+    const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
     //const string azureDB = "Server=tcp:empiriabms.database.windows.net,1433;Initial Catalog=EmpiriaBMS_DB;Persist Security Info=False;User ID=alexandros5880;Password=-Plat123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
     public DbSet<User> Users { get; set; }
@@ -41,7 +41,7 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         //string enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        string connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+        string connectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? localhostDB;
         optionsBuilder.UseSqlServer(connectionString);
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.EnableDetailedErrors();

@@ -48,19 +48,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _drawing;
-    public string? Drawing
-    {
-        get => _drawing;
-        set
-        {
-            if (value == _drawing)
-                return;
-            _drawing = value;
-            NotifyPropertyChanged(nameof(Drawing));
-        }
-    }
-
     private long _estimatedMandays;
     public long EstimatedMandays
     {

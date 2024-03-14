@@ -19,8 +19,6 @@ public class ProjectDto : EntityDto
 
     public string? Code { get; set; }
 
-    public string? Drawing { get; set; }
-
     public long EstimatedMandays { get; set; }
 
     public long EstimatedHours { get; set; }
