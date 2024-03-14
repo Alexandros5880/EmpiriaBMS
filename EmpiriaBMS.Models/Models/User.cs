@@ -59,4 +59,8 @@ public class User : Entity
     public ICollection<DailyTime> TrainingTime { get; set; }
 
     public ICollection<DailyTime> CorporateEventTime { get; set; }
+
+    public ICollection<Complain> CustomerComplains { get; set; }
+
+    public ICollection<Complain> PMComplains { get; set; }
 }

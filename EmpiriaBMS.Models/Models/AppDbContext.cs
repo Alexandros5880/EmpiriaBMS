@@ -39,6 +39,7 @@ public class AppDbContext : DbContext
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
     public DbSet<ProjectPmanager> ProjectsPmanagers { get; set; }
+    public DbSet<Complain> Complains { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

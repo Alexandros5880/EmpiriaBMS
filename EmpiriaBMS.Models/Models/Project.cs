@@ -81,4 +81,6 @@ public class Project : Entity
     public ICollection<Discipline> Disciplines { get; set; }
 
     public ICollection<ProjectPmanager> ProjectsPmanagers { get; set; }
+
+    public ICollection<Complain> Complains { get; set; }
 }

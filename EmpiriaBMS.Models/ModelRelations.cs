@@ -198,5 +198,25 @@ public static class ModelRelations
                     .HasMany(p => p.Projects)
                     .WithOne(c => c.Type)
                     .HasForeignKey(c => c.TypeId);
+
+        // Complain Customer
+        builder.Entity<User>()
+                    .HasMany(p => p.CustomerComplains)
+                    .WithOne(c => c.Customer)
+                    .HasForeignKey(c => c.CustomerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+        // Complain Project
+        builder.Entity<Project>()
+                    .HasMany(p => p.Complains)
+                    .WithOne(c => c.Project)
+                    .HasForeignKey(c => c.ProjectId);
+
+        // Complain ProjectManager
+        builder.Entity<User>()
+                    .HasMany(p => p.PMComplains)
+                    .WithOne(c => c.ProjectManager)
+                    .HasForeignKey(c => c.ProjectManagerId)
+                    .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -14,7 +14,7 @@ public class DailyHourVM : BaseVM
             if (value == _date)
                 return;
             _date = value;
-            NotifyPropertyChanged(nameof(_date));
+            NotifyPropertyChanged(nameof(Date));
         }
     }
 
