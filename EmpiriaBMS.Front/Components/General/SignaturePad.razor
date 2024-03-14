@@ -27,8 +27,8 @@
         await MicrosoftTeams.clearCanvas(canvasRef);
     }
 
-    private async Task GetImageData()
+    public async Task<byte[]> GetImageData()
     {
-        byte[] data = await MicrosoftTeams.GetCanvasImageData(canvasRef);
+        return await MicrosoftTeams.GetCanvasImageData(canvasRef);
     }
 }

@@ -9,7 +9,7 @@
 <div class="h-100">
     <h3>Create Complain</h3>
 
-    <EditForm Model="@_complain" OnValidSubmit="@(async () => await HandleValidSubmit())">
+    <EditForm Model="@_complain">
 
         <div class="row">
             <div class="col form-group">
@@ -73,23 +73,25 @@
         <div class="row mt-2">
             <div class="col form-group">
                 <label for="verificatorSignature">Verificator Signature:</label>
-                <SignaturePad />
+                <SignaturePad @ref="verificatorSignature"/>
             </div>
 
             <div class="col form-group">
                 <label for="pMSignature">Project Manager Signature:</label>
-                <SignaturePad />
+                <SignaturePad @ref="pMSignature" />
             </div>
         </div>
 
         <div class="form-group mt-2">
-            <div class="row" style="width: 120px;">
-                <label class="col-8" for="isOpen">Is Closed</label>
-                <input class="col-4 big-checkbox" id="isOpen" type="checkbox" @bind="_complain.IsClose" />
+            <div class="row" style="width: 134px;">
+                <label class="col-8" for="isClosed">Is Closed</label>
+                <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_complain.IsClose" />
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-2 float-end">Add</button>
+        <button type="submit"
+                class="btn btn-primary mt-2 float-end"
+                @onclick="@(async() => await HandleValidSubmit())">Add</button>
     </EditForm>
 </div>
 
@@ -111,16 +113,26 @@
 
     private UserVM _customer;
 
-    private ComplainVM _complain = new ComplainVM();
+    private ComplainVM _complain = new ComplainVM()
+    {
+        ComplaintDate = DateTime.Now,
+        SolutionDate = DateTime.Now,
+        VerificationDate = DateTime.Now
+    };
 
-
+    SignaturePad verificatorSignature;
+    SignaturePad pMSignature;
 
     private async Task HandleValidSubmit()
     {
-        // TODO: Set ProjectId, CustomerId
+        _complain.VerificatorSignature = await verificatorSignature.GetImageData();
+        _complain.PMSignature = await pMSignature.GetImageData();
+        _complain.ProjectId = _project.Id;
+        _complain.CustomerId = _customer.Id;
+
+        // TODO: Validate And Save Complain
         Console.WriteLine("New Complaint Submitted:");
         Console.WriteLine(JsonSerializer.Serialize(_complain));
-        await Task.Delay(1000);
     }
 
 }
