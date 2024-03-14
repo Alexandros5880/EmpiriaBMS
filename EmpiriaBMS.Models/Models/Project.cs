@@ -28,6 +28,8 @@ public class Project : Entity
 
     public float WorkPackegedCompleted { get; set; }
 
+    public bool Active { get; set; }
+
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime? DeadLine { get; set; }

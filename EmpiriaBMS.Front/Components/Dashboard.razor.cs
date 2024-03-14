@@ -20,6 +20,7 @@ using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Threading;
 
 namespace EmpiriaBMS.Front.Components;
@@ -184,7 +185,9 @@ public partial class Dashboard : IDisposable
             // TODO: Get My Project And Down
             //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
+
+            Expression<Func<EmpiriaMS.Models.Models.Project, bool>> expression = p => p.CreatedDate >= DateTime.Now.AddMonths(-1);
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(expression, _sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);

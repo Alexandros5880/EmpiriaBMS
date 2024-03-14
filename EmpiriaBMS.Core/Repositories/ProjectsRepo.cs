@@ -173,6 +173,71 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
+    public async Task<ICollection<ProjectDto>> GetAll(Expression<Func<Project, bool>> expresion, int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Get User Roles
+            var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => r.UserId == userId)
+                                        .Select(r => r.RoleId)
+                                        .ToListAsync();
+
+            // Get Roles Permissions
+            var permissions = await _context.Set<RolePermission>()
+                                            .Where(pr => roleIds.Contains(pr.RoleId))
+                                            .Include(pr => pr.Permission)
+                                            .Select(pr => pr.Permission)
+                                            .ToListAsync();
+
+            if (permissions.Any(p => p.Ord == 11))
+            {
+                var allProjects = await _context.Set<Project>()
+                                                .Where(expresion)
+                                                .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(allProjects.Distinct().ToList());
+            }
+
+            // Filter Projects
+            var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(de => de.EmployeeId == userId)
+                                             .Select(e => e.DrawingId)
+                                             .ToListAsync();
+
+            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(dd => myDrawingIds.Contains(dd.Id))
+                                                 .Select(e => e.DisciplineId)
+                                                 .ToListAsync();
+
+            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(d => d.EngineerId == userId)
+                                                      .Select(e => e.DisciplineId)
+                                                      .ToListAsync();
+
+            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
+
+            var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                        .Select(dp => dp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
+                                                        .Where(pp => pp.ProjectManagerId == userId)
+                                                        .Select(pp => pp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
+
+            var projects = await _context.Set<Project>()
+                                         .Where(p => projectsIds.Contains(p.Id))
+                                         .Where(expresion)
+                                         .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+        }
+    }
+
     public async Task<ICollection<ProjectDto>> GetAll(int userId, int pageSize = 0, int pageIndex = 0)
     {
         List<Project> projects;

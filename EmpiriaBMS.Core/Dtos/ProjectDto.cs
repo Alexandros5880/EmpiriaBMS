@@ -29,6 +29,8 @@ public class ProjectDto : EntityDto
 
     public float WorkPackegedCompleted { get; set; }
 
+    public bool Active { get; set; }
+
     public DateTime? DeadLine { get; set; }
 
     public DateTime? WorkPackege { get; set; }

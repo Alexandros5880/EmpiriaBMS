@@ -131,7 +131,7 @@ else
                                                 {
                                                     <tr class="align-middle
                                                                 @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-danger" : ""))
-                                                                @(( project.Completed >= 100 ? "table-secondary" : ""))"
+                                                                @(( project.Completed >= 100 || !project.Active ? "table-secondary" : ""))"
                                                         @onclick="@(async () => await OnSelectProject(project.Id))">
                                                     
                                                         <td class="align-middle
@@ -400,7 +400,7 @@ else
                             aria-label="Select Project"
                             @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
                         <option value="0" selected>Select Project</option>
-                        @foreach (var project in _projects)
+                        @foreach (var project in _projects.Where(p => p.Active).ToList())
                         {
                             <option value="@project.Id">
                                 @project.Name
