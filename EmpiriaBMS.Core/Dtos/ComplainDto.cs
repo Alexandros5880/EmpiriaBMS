@@ -40,5 +40,5 @@ public class ComplainDto : EntityDto
 
     public byte[] PMSignature { get; set; }
 
-    public bool IsOpen { get; set; }
+    public bool IsClose { get; set; }
 }

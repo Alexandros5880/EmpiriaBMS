@@ -214,16 +214,16 @@ public class ComplainVM : BaseVM
         }
     }
 
-    private bool _isOpen;
-    public bool IsOpen
+    private bool _isClose;
+    public bool IsClose
     {
-        get => _isOpen;
+        get => _isClose;
         set
         {
-            if (value == _isOpen)
+            if (value == _isClose)
                 return;
-            _isOpen = value;
-            NotifyPropertyChanged(nameof(IsOpen));
+            _isClose = value;
+            NotifyPropertyChanged(nameof(IsClose));
         }
     }
 }
