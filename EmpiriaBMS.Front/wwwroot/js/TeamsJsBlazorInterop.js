@@ -262,7 +262,7 @@ export function clearCanvas(canvas) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-export function getCanvasImageData() {
+export function getCanvasImageData(canvas) {
     var imgData = canvas.toDataURL(); // Get image data as base64 URL
     var base64 = imgData.replace(/^data:image\/(png|jpeg);base64,/, ""); // Remove header
     var byteCharacters = atob(base64); // Decode base64 to byte characters
