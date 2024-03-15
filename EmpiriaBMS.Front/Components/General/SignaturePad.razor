@@ -3,7 +3,8 @@
 
 @inject MicrosoftTeams MicrosoftTeams
 
-<canvas id="signatureCanvas" @ref="canvasRef" style="height: 120px;"></canvas>
+<canvas id="signatureCanvas" @ref="canvasRef"
+        style="width: 100%; height: auto; margin: 0 auto; border: 1px solid black; border-radius: 14px;"></canvas>
 <button class="btn btn-outline-warning" @onclick="ClearCanvas">Clear</button>
 
 @code {

@@ -6,7 +6,7 @@
 
 @inject IMapper Mapper
 
-<div class="h-100">
+<div class="h-100" style="max-height: 500px; overflow-y: auto; overflow-x: hidden;">
     <h3>Create Complain</h3>
 
     <EditForm Model="@_complain">
@@ -71,14 +71,18 @@
         </div>
 
         <div class="row mt-2">
-            <div class="col form-group">
+            <div class="col-lg-6 col-md-12 form-group">
                 <label for="verificatorSignature">Verificator Signature:</label>
-                <SignaturePad @ref="verificatorSignature"/>
+                <div>
+                    <SignaturePad @ref="verificatorSignature" />
+                </div>
             </div>
 
-            <div class="col form-group">
+            <div class="col-lg-6 col-md-12 form-group">
                 <label for="pMSignature">Project Manager Signature:</label>
-                <SignaturePad @ref="pMSignature" />
+                <div>
+                    <SignaturePad @ref="pMSignature" />
+                </div>
             </div>
         </div>
 
