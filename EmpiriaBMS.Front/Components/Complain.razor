@@ -5,6 +5,7 @@
 @using System.Text.Json;
 
 @inject IMapper Mapper
+@inject IDataProvider DataProvider
 
 <div class="h-100" style="max-height: 500px; overflow-y: auto; overflow-x: hidden;">
     <h3>Create Complain</h3>
@@ -134,7 +135,10 @@
         _complain.ProjectId = _project.Id;
         _complain.CustomerId = _customer.Id;
 
+
         // TODO: Validate And Save Complain
+        await DataProvider.Complains.Add(Mapper.Map<ComplainDto>(_complain));
+
         Console.WriteLine("New Complaint Submitted:");
         Console.WriteLine(JsonSerializer.Serialize(_complain));
     }
