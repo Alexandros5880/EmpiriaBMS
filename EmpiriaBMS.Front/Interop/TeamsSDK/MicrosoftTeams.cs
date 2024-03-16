@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.DefaultComponents;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace EmpiriaBMS.Front.Interop.TeamsSDK;
@@ -54,5 +55,20 @@ public class MicrosoftTeams : InteropModuleBase
     public async Task<string> GetCookie(string key)
     {
         return await InvokeAsync<string>("getCooke", key);
+    }
+
+    public async Task InitializeCanvas(ElementReference canvasRef)
+    {
+        await InvokeVoidAsync("initializeCanvas", canvasRef);
+    }
+
+    public async Task clearCanvas(ElementReference canvasRef)
+    {
+        await InvokeVoidAsync("clearCanvas", canvasRef);
+    }
+
+    public async Task<byte[]> GetCanvasImageData(ElementReference canvasRef)
+    {
+        return await InvokeAsync<byte[]>("getCanvasImageData", canvasRef);
     }
 }

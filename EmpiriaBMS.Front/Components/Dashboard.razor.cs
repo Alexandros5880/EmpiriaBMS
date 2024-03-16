@@ -20,6 +20,7 @@ using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Threading;
 
 namespace EmpiriaBMS.Front.Components;
@@ -127,6 +128,11 @@ public partial class Dashboard : IDisposable
     // On My Hours Click Dialog
     private FluentDialog? _myHoursDialog;
     private bool _isMyHoursDialogOdepened = false;
+
+    // On Add Complain Click Dialog
+    private FluentDialog? _addComplainDialog;
+    private bool _isAddComplainDialogOdepened = false;
+    private Complain complainCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -184,7 +190,10 @@ public partial class Dashboard : IDisposable
             // TODO: Get My Project And Down
             //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(_sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
+
+            // Get Projects of last month.
+            Expression<Func<EmpiriaMS.Models.Models.Project, bool>> expression = p => p.CreatedDate >= DateTime.Now.AddMonths(-1);
+            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(expression, _sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
@@ -497,6 +506,22 @@ public partial class Dashboard : IDisposable
         {
             Debug.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
+        }
+    }
+
+    private void OnAddComplainClick()
+    {
+        complainCompoment.Refresh();
+        _addComplainDialog.Show();
+        _isAddComplainDialogOdepened = true;
+    }
+
+    private void CloseAddComplainClick()
+    {
+        if (_isAddComplainDialogOdepened)
+        {
+            _addComplainDialog.Hide();
+            _isAddComplainDialogOdepened = false;
         }
     }
     #endregion
@@ -930,14 +955,11 @@ public partial class Dashboard : IDisposable
 
         _startLoading = true;
 
-        var forDeleteIds = _projectManagers.Where(d => d.IsSelected == null || d.IsSelected == false)
-                                           .Select(d => d.Id)
-                                     .ToList();
-        await DataProvider.Projects.RemoveProjectManager(_selectedProject.Id, forDeleteIds);
+        await DataProvider.Projects.RemoveProjectManager(_selectedProject.Id);
 
         var forAdd = _projectManagers.Where(d => d.IsSelected == true).ToList();
         var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
-        await DataProvider.Projects.AddProjectManager(_selectedProject.Id, forAddDto);
+        await DataProvider.Projects.AddProjectManager(_selectedProject.Id, forAddDto.FirstOrDefault().Id);
 
         _startLoading = false;
     }
@@ -946,6 +968,21 @@ public partial class Dashboard : IDisposable
     {
         _addPMDialog.Hide();
         _isAddPMDialogOdepened = false;
+    }
+    #endregion
+
+    #region On Press Add Complain Dialog Actions
+    public async Task _addComplainDialogAccept()
+    {
+        await complainCompoment.HandleValidSubmit();
+        _addComplainDialog.Hide();
+        _isAddComplainDialogOdepened = false;
+    }
+
+    public void _addComplainDialogCansel()
+    {
+        _addComplainDialog.Hide();
+        _isAddComplainDialogOdepened = false;
     }
     #endregion
 

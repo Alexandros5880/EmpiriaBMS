@@ -19,8 +19,6 @@ public class ProjectDto : EntityDto
 
     public string? Code { get; set; }
 
-    public string? Drawing { get; set; }
-
     public long EstimatedMandays { get; set; }
 
     public long EstimatedHours { get; set; }
@@ -30,6 +28,8 @@ public class ProjectDto : EntityDto
     public float Completed { get; set; }
 
     public float WorkPackegedCompleted { get; set; }
+
+    public bool Active { get; set; }
 
     public DateTime? DeadLine { get; set; }
 
@@ -64,4 +64,6 @@ public class ProjectDto : EntityDto
     public ProjectType Type { get; set; }
 
     public User? SubContractor { get; set; }
+
+    public User? ProjectManager { get; set; }
 }

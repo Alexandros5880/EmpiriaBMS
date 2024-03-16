@@ -139,3 +139,142 @@ export function setCookie(key, value) {
 export function getCookie(key) {
     return localStorage.getItem(key);
 }
+
+// Canvas
+export function initializeCanvas(canvas) {
+    // Touch
+    const contextTouche = canvas.getContext('2d');
+    const ongoingTouches = [];
+    var offsetX;
+    var offsetY;
+
+    // Touch events
+    canvas.addEventListener('touchstart', handleTouchStart);
+    canvas.addEventListener('touchmove', handleTouchMove);
+    canvas.addEventListener('touchend', handleTouchEnd);
+    canvas.addEventListener('touchcancel', handleTouchCancel);
+
+    function handleTouchStart(evt) {
+        evt.preventDefault();
+        const touches = evt.changedTouches;
+        offsetX = canvas.getBoundingClientRect().left;
+        offsetY = canvas.getBoundingClientRect().top;
+        console.log(offsetX, offsetY)
+        for (let i = 0; i < touches.length; i++) {
+            ongoingTouches.push(copyTouch(touches[i]));
+        }
+    }
+    function handleTouchEnd(evt) {
+        evt.preventDefault();
+        const touches = evt.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            const color = document.getElementById('selColor').value;
+            let idx = ongoingTouchIndexById(touches[i].identifier);
+            if (idx >= 0) {
+                contextTouche.lineWidth = document.getElementById('selWidth').value;
+                contextTouche.fillStyle = color;
+                ongoingTouches.splice(idx, 1);  // remove it; we're done
+            }
+        }
+    }
+    function handleTouchCancel(evt) {
+        evt.preventDefault();
+        const touches = evt.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            let idx = ongoingTouchIndexById(touches[i].identifier);
+            ongoingTouches.splice(idx, 1);  // remove it; we're done
+        }
+    }
+    function handleTouchMove(evt) {
+        evt.preventDefault();
+        const touches = evt.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            const idx = ongoingTouchIndexById(touches[i].identifier);
+            if (idx >= 0) {
+                contextTouche.beginPath();
+                contextTouche.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
+                contextTouche.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
+                contextTouche.lineWidth = 2;
+                contextTouche.strokeStyle = '#000';
+                contextTouche.lineJoin = "round";
+                contextTouche.closePath();
+                contextTouche.stroke();
+                ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
+            }
+        }
+    }
+    function copyTouch({ identifier, clientX, clientY }) {
+        return { identifier, clientX, clientY };
+    }
+    function ongoingTouchIndexById(idToFind) {
+        for (let i = 0; i < ongoingTouches.length; i++) {
+            const id = ongoingTouches[i].identifier;
+            if (id === idToFind) {
+                return i;
+            }
+        }
+        return -1;    // not found
+    }
+
+    // Mouse
+    const contextMouse = canvas.getContext('2d');
+    var pos = { x: 0, y: 0 };
+    var isDrawing = false;
+
+    // Mouse Events
+    canvas.addEventListener('mousedown', onMouseDown);
+    canvas.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    canvas.addEventListener('mouseenter', onMouseEnter);
+
+    function onMouseDown(e) {
+        isDrawing = true;
+        onMouseEnter(e);
+    }
+    function onMouseMove(e) {
+        if (isDrawing === true) {
+            let { x, y } = { x: e.offsetX, y: e.offsetY };
+            drawLine(pos.x, pos.y, x, y);
+            onMouseEnter(e);
+        }
+    }
+    function onMouseUp() {
+        isDrawing = false;
+    }
+    function onMouseEnter(e) {
+        var rect = canvas.getBoundingClientRect();
+        pos.x = e.clientX - rect.left;
+        pos.y = e.clientY - rect.top;
+    }
+    function drawLine(x1, y1, x2, y2) {
+        contextMouse.beginPath();
+        contextMouse.strokeStyle = '#000';
+        contextMouse.lineWidth = 2;
+        contextMouse.moveTo(x1, y1);
+        contextMouse.lineTo(x2, y2);
+        contextMouse.stroke();
+        contextMouse.closePath();
+    }
+}
+
+export function clearCanvas(canvas) {
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+export function getCanvasImageData(canvas) {
+    var imgData = canvas.toDataURL(); // Get image data as base64 URL
+    var base64 = imgData.replace(/^data:image\/(png|jpeg);base64,/, ""); // Remove header
+    var byteCharacters = atob(base64); // Decode base64 to byte characters
+    var byteNumbers = new Array(byteCharacters.length);
+
+    // Convert byte characters to byte numbers
+    for (var i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    // Create byte array
+    var byteArray = new Uint8Array(byteNumbers);
+    return byteArray;
+}
+// Canvas

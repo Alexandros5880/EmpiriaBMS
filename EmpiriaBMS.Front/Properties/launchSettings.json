@@ -5,7 +5,8 @@
 			"launchBrowser": true,
 			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
 			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development"
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456"
 			},
 			"dotnetRunMessages": true,
 			"applicationUrl": "https://localhost:44302;http://localhost:2544",
@@ -16,7 +17,8 @@
 			"launchBrowser": true,
 			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
 			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Staging"
+				"ASPNETCORE_ENVIRONMENT": "Staging",
+				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456"
 			},
 			"dotnetRunMessages": true,
 			"applicationUrl": "https://localhost:44302;http://localhost:2544",
@@ -27,7 +29,8 @@
 			"launchBrowser": true,
 			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
 			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Production"
+				"ASPNETCORE_ENVIRONMENT": "Production",
+				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456"
 			},
 			"dotnetRunMessages": true,
 			"applicationUrl": "https://localhost:44302;http://localhost:2544",
@@ -41,7 +44,8 @@
 			"applicationUrl": "https://localhost:44302;http://localhost:2544",
 			"hotReloadProfile": "aspnetcore",
 			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development"
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456"
 			}
 		},
 		"WSL": {
@@ -50,7 +54,8 @@
 			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development",
-				"ASPNETCORE_URLS": "https://localhost:44302;http://localhost:2544"
+				"ASPNETCORE_URLS": "https://localhost:44302;http://localhost:2544",
+				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456"
 			},
 			"distributionName": ""
 		}

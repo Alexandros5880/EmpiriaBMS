@@ -48,19 +48,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _drawing;
-    public string? Drawing
-    {
-        get => _drawing;
-        set
-        {
-            if (value == _drawing)
-                return;
-            _drawing = value;
-            NotifyPropertyChanged(nameof(Drawing));
-        }
-    }
-
     private long _estimatedMandays;
     public long EstimatedMandays
     {
@@ -123,6 +110,19 @@ public class ProjectVM : BaseVM
                 return;
             _workPackegedCompleted = value;
             NotifyPropertyChanged(nameof(WorkPackegedCompleted));
+        }
+    }
+
+    private bool _active;
+    public bool Active
+    {
+        get => _active;
+        set
+        {
+            if (value == _active)
+                return;
+            _active = value;
+            NotifyPropertyChanged(nameof(Active));
         }
     }
 
@@ -344,6 +344,19 @@ public class ProjectVM : BaseVM
                 return;
             _subContractor = value;
             NotifyPropertyChanged(nameof(SubContractor));
+        }
+    }
+
+    private User? _projectManager;
+    public User? ProjectManager
+    {
+        get => _projectManager;
+        set
+        {
+            if (value == _projectManager)
+                return;
+            _projectManager = value;
+            NotifyPropertyChanged(nameof(ProjectManager));
         }
     }
 

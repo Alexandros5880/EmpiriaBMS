@@ -11,12 +11,12 @@ using System.Xml.Linq;
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
 {
-    private readonly IConfiguration _configuration;
-    //private readonly IHostEnvironment _environment;
 
     //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
-    //const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
+    const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
     //const string azureDB = "Server=tcp:empiriabms.database.windows.net,1433;Initial Catalog=EmpiriaBMS_DB;Persist Security Info=False;User ID=alexandros5880;Password=-Plat123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+    const string migrationsDB = localhostDB;
+
 
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -38,21 +38,12 @@ public class AppDbContext : DbContext
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<ProjectPmanager> ProjectsPmanagers { get; set; }
-
-    public AppDbContext(
-        IConfiguration configuration
-        //IHostEnvironment environment
-    ) {
-        _configuration = configuration;
-        //_environment = environment;
-    }
+    public DbSet<Complain> Complains { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        //string environmentName = _environment.EnvironmentName;
-        string connectionString = _configuration.GetConnectionString("DefaultConnection");
-        Debug.WriteLine($"\n\n\n Connection String: {connectionString} \n\n\n");
+        //string enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        string connectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
         optionsBuilder.UseSqlServer(connectionString);
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.EnableDetailedErrors();
@@ -1932,7 +1923,8 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "Buildings",
-            Description = "Buildings Description"
+            Description = "Buildings Description",
+            CanAssignePM = true
         };
         builder.Entity<ProjectType>().HasData(project_type_1);
 
@@ -1944,7 +1936,8 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "Infrastructure",
-            Description = "Infrastructure Description"
+            Description = "Infrastructure Description",
+            CanAssignePM = true
         };
         builder.Entity<ProjectType>().HasData(project_type_2);
 
@@ -1956,7 +1949,8 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "Energy",
-            Description = "Energy Description"
+            Description = "Energy Description",
+            CanAssignePM = true
         };
         builder.Entity<ProjectType>().HasData(project_type_3);
 
@@ -1968,9 +1962,23 @@ public class AppDbContext : DbContext
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "Consulting",
-            Description = "Consulting Description"
+            Description = "Consulting Description",
+            CanAssignePM = true
         };
         builder.Entity<ProjectType>().HasData(project_type_4);
+
+        // Project Production Management
+        var project_type_5_Id = random.Next(123456789, 999999999) + 34;
+        ProjectType project_type_5 = new ProjectType()
+        {
+            Id = project_type_5_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Production Management",
+            Description = "Production Management Description",
+            CanAssignePM = false
+        };
+        builder.Entity<ProjectType>().HasData(project_type_5);
 
         int[] projectTypes = {
             project_type_1_Id,
@@ -2020,7 +2028,7 @@ public class AppDbContext : DbContext
         projectManagers.Add(engineer_10);
         #endregion
 
-        #region Create 4 Projects
+        #region Create 5 Projects
         List<Project> projects = new List<Project>();
         for (var i = 1; i <= projectTypes.Count(); i++)
         {
@@ -2034,7 +2042,6 @@ public class AppDbContext : DbContext
                 Code = "D-22-16" + Convert.ToString(i),
                 Name = "Project_" + Convert.ToString(i),
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
-                Drawing = "KL-" + Convert.ToString(i),
                 DurationDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 EstPaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 PaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
@@ -2048,12 +2055,14 @@ public class AppDbContext : DbContext
                 DaysUntilPayment = (createdDate.AddDays(Convert.ToInt32(Math.Pow(i, 2))) - createdDate).Days,
                 PendingPayments = i,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
-                EstimatedMandays = 100/8,
+                EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
                 Completed = 0,
                 WorkPackegedCompleted = 0,
                 EstimatedCompleted = 0,
-                TypeId = projectTypes[i-1]
+                TypeId = projectTypes[i - 1],
+                Active = i % 2 == 0 ? true : false,
+                ProjectManagerId = projectManagers.Count < i-1 ? projectManagers[i].Id : null
             };
             builder.Entity<Project>().HasData(project);
             projects.Add(project);
@@ -2109,16 +2118,49 @@ public class AppDbContext : DbContext
             };
             builder.Entity<Invoice>().HasData(invoice);
         }
+
+        // // Project Production Management 
+        var projectPmId = random.Next(123456789, 999999999) + 11 * 2;
+        Project projectPM = new Project()
+        {
+            Id = projectPmId,
+            CreatedDate = createdDate,
+            LastUpdatedDate = createdDate,
+            Code = "D-22-16-PM",
+            Name = "Project_PM",
+            Description = "Test Description Project_PM",
+            DurationDate = createdDate.AddMonths(1),
+            EstPaymentDate = createdDate.AddMonths(2),
+            PaymentDate = createdDate.AddMonths(1),
+            DeadLine = createdDate.AddMonths(3),
+            WorkPackege = createdDate.AddMonths(2),
+            DelayInPayment = Convert.ToInt32(Math.Pow(1, 2)),
+            PaymentDetailes = "Payment Detailes For Project_PM",
+            DayCost = 111,
+            Bank = "ALPHA",
+            PaidFee = 45,
+            DaysUntilPayment = (createdDate.AddDays(90) - createdDate).Days,
+            PendingPayments = 2,
+            CalculationDaly = 345,
+            EstimatedMandays = 100 / 8,
+            EstimatedHours = 1500,
+            Completed = 0,
+            WorkPackegedCompleted = 0,
+            EstimatedCompleted = 0,
+            TypeId = project_type_5_Id,
+            Active = true
+        };
+        builder.Entity<Project>().HasData(projectPM);
         #endregion
 
         #region Create Discipline Types
         List<DisciplineType> disciplineTypes = new List<DisciplineType>();
-        string[] dicTypeNames = { 
-            "HVAC", 
-            "Sewage", 
-            "Potable Water", 
-            "Drainage", 
-            "Fire Detection", 
+        string[] dicTypeNames = {
+            "HVAC",
+            "Sewage",
+            "Potable Water",
+            "Drainage",
+            "Fire Detection",
             "Fire Suppression",
             "Elevators",
             "Natural Gas",
@@ -2146,6 +2188,17 @@ public class AppDbContext : DbContext
             builder.Entity<DisciplineType>().HasData(dt);
             disciplineTypes.Add(dt);
         }
+
+        // Add Discipline Type Project Manager Hours.
+        var discipline_pm_hours_type_Id = random.Next(123456789, 999999999);
+        DisciplineType dt_pm_hours = new DisciplineType()
+        {
+            Id = discipline_pm_hours_type_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Project Manager Hours",
+        };
+        builder.Entity<DisciplineType>().HasData(dt_pm_hours);
         #endregion
 
         #region Create 3 Random Disciplines
@@ -2156,7 +2209,7 @@ public class AppDbContext : DbContext
             List<int> randomTypeIndexes = new List<int>();
             for (int j = 0; j < 3; j++)
             {
-                int typeIndex = GetUniqueRandomNumber(random, randomTypeIndexes, 0, disciplineTypes.Count-1);
+                int typeIndex = GetUniqueRandomNumber(random, randomTypeIndexes, 0, disciplineTypes.Count - 1);
                 var discipline_Id = random.Next(123456789, 999999999) * 8;
                 Discipline discipline = new Discipline()
                 {
@@ -2172,6 +2225,20 @@ public class AppDbContext : DbContext
                 disciplines.Add(discipline);
             }
         }
+
+        // Add Discipline Project Manager Hours To Project PM Hours
+        var discipline_pm_hours_Id = random.Next(123456789, 999999999) * 8;
+        Discipline discipline_pm_hours = new Discipline()
+        {
+            Id = discipline_pm_hours_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            TypeId = discipline_pm_hours_type_Id,
+            EstimatedHours = 500,
+            ProjectId = projectPmId,
+            Completed = 0
+        };
+        builder.Entity<Discipline>().HasData(discipline_pm_hours);
         #endregion
 
         #region Create Drawing Types
@@ -2217,6 +2284,24 @@ public class AppDbContext : DbContext
                 drawings.Add(drawing);
             }
         }
+
+        // Create Drawings For Discipline Project Manager Hours
+        for (int j = 0; j < drawingTypes.Count; j++)
+        {
+            var drawing_Id = random.Next(123456789, 999999999);
+            Drawing drawing = new Drawing()
+            {
+                Id = drawing_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                TypeId = drawingTypes[j].Id,
+                DisciplineId = discipline_pm_hours_Id,
+                CompletionEstimation = 0,
+                CompletionDate = DateTime.Now.AddDays(11)
+            };
+            builder.Entity<Drawing>().HasData(drawing);
+            drawings.Add(drawing);
+        }
         #endregion
 
         #region Create Other Types
@@ -2260,29 +2345,23 @@ public class AppDbContext : DbContext
                     CompletionEstimation = 0
                 };
                 builder.Entity<Other>().HasData(other);
-                others.Add(other);
             }
         }
-        #endregion
 
-        #region Connect Project Manager With Every Project
-        var pm_index = 0;
-        for (var i = 0; i < projects.Count; i++)
+        // Create Others For Discipline Project Manager Hours
+        for (int j = 0; j < otherTypes.Count; j++)
         {
-            ProjectPmanager dq_other = new ProjectPmanager()
+            var other_Id = random.Next(123456789, 999999999);
+            Other other = new Other()
             {
-                Id = random.Next(123456789, 999999999) + i,
+                Id = other_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                ProjectId = projects[i].Id,
-                ProjectManagerId = projectManagers[pm_index].Id
+                TypeId = otherTypes[j].Id,
+                DisciplineId = discipline_pm_hours_Id,
+                CompletionEstimation = 0
             };
-            builder.Entity<ProjectPmanager>().HasData(dq_other);
-
-            if (pm_index < projectManagers.Count - 1)
-                pm_index++;
-            else
-                pm_index = 0;
+            builder.Entity<Other>().HasData(other);
         }
         #endregion
 

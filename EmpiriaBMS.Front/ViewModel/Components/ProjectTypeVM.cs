@@ -29,4 +29,17 @@ public class ProjectTypeVM : BaseVM
             NotifyPropertyChanged(nameof(Description));
         }
     }
+
+    private bool _canAssignePM;
+    public bool CanAssignePM
+    {
+        get => _canAssignePM;
+        set
+        {
+            if (value == _canAssignePM)
+                return;
+            _canAssignePM = value;
+            NotifyPropertyChanged(nameof(CanAssignePM));
+        }
+    }
 }

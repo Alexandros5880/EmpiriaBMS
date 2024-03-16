@@ -120,6 +120,7 @@ else
                                                     <th scope="col" class="sticky-header">Work Package Declared Completed</th>
                                                     <th scope="col" class="sticky-header">Estimated Hours Completed</th>
                                                     <th scope="col" class="sticky-header">Deadline</th>
+                                                    <th scope="col" class="sticky-header">Complain</th>
                                                     @if (AssignPm)
                                                     {
                                                         <th scope="col">PM</th>
@@ -130,7 +131,8 @@ else
                                                 @foreach (var project in _projects)
                                                 {
                                                     <tr class="align-middle
-                                                                @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-danger" : ""))"
+                                                                @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-danger" : ""))
+                                                                @(( project.Completed >= 100 || !project.Active ? "table-secondary" : ""))"
                                                         @onclick="@(async () => await OnSelectProject(project.Id))">
                                                     
                                                         <td class="align-middle
@@ -162,19 +164,32 @@ else
                                                             <label>@project.DeadlineDisplay</label>
                                                         </td>
 
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "highlight_1"))">
+                                                            <span class="majesticons--chat-2-text"
+                                                                  @onclick="@OnAddComplainClick">
+                                                            </span>
+                                                        </td>
+
                                                         @if (AssignPm)
                                                         {
                                                             <td class="align-middle">
-                                                                @if (@project.PmName != null) {
-                                                                    <span @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                        @project.PmName
-                                                                    </span>
-                                                                }
-                                                                else
+                                                                @if (project.Type.CanAssignePM)
                                                                 {
-                                                                    <span class="clarity--assign-user-line"
-                                                                            @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                    </span>
+                                                                    @if (@project.PmName != null)
+                                                                    {
+                                                                        <span @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                            @project.PmName
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="clarity--assign-user-line"
+                                                                              @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                        </span>
+                                                                    }
                                                                 }
                                                             </td>
                                                         }
@@ -399,7 +414,7 @@ else
                             aria-label="Select Project"
                             @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
                         <option value="0" selected>Select Project</option>
-                        @foreach (var project in _projects)
+                        @foreach (var project in _projects.Where(p => p.Active).ToList())
                         {
                             <option value="@project.Id">
                                 @project.Name
@@ -717,7 +732,7 @@ else
 
     </FluentDialog>
 
-    <!-- On MyHours Clck Dialog  -->
+    <!-- On MyHours Click Dialog  -->
     <FluentDialog @ref="_myHoursDialog"
                   Hidden="@(!_isMyHoursDialogOdepened || _startLoading)"
                   Modal="false"
@@ -741,6 +756,37 @@ else
 
                 </div>
             </div>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On AddComplain Click Dialog  -->
+    <FluentDialog @ref="_addComplainDialog"
+                  Hidden="@(!_isAddComplainDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: 700px !important;">
+
+        <div class="dialog-header">
+            <span class="carbon--close-outline float-end" @onclick="CloseAddComplainClick"></span>
+        </div>
+
+        <div class="modal-body row mb-1">
+            <div class="col-12 justify-content-center">
+
+                <Complain @ref="@complainCompoment" Project="@_selectedProject" />
+
+            </div>
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addComplainDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addComplainDialogCansel())">
+                Cancel
+            </FluentButton>
         </div>
 
     </FluentDialog>

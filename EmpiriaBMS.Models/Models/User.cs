@@ -38,7 +38,9 @@ public class User : Entity
 
     public ICollection<Email> Emails { get; set; }
 
-    public ICollection<Project> Projects { get; set; }
+    public ICollection<Project> SubConstructorProjects { get; set; }
+    
+    public ICollection<Project> PMProjects { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }
 
@@ -47,8 +49,6 @@ public class User : Entity
     public ICollection<DrawingEmployee> DrawingsEmployees { get; set; }
 
     public ICollection<OtherEmployee> OthersEmployees { get; set; }
-
-    public ICollection<ProjectPmanager> ProjectsPmanagers { get; set; }
 
     public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 
