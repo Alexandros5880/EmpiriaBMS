@@ -347,6 +347,19 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private User? _projectManager;
+    public User? ProjectManager
+    {
+        get => _projectManager;
+        set
+        {
+            if (value == _projectManager)
+                return;
+            _projectManager = value;
+            NotifyPropertyChanged(nameof(ProjectManager));
+        }
+    }
+
     private string? _pmName;
     public string? PmName
     {

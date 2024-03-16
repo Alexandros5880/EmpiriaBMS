@@ -177,18 +177,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
-            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
-                                                        .Where(pp => pp.ProjectManagerId == userId)
-                                                        .Select(pp => pp.ProjectId)
-                                                        .ToArrayAsync();
-
-            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
-
             var projects = await _context.Set<Project>()
                                          .Include(p => p.Type)
                                          .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
-                                         .Where(p => projectsIds.Contains(p.Id))
+                                         .Where(p => projectsFromDisciplineIds.Contains(p.Id) 
+                                                            || p.ProjectManagerId == userId)
                                          .OrderBy(e => !e.Active)
                                          .ThenBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -251,15 +245,9 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
-            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
-                                                        .Where(pp => pp.ProjectManagerId == userId)
-                                                        .Select(pp => pp.ProjectId)
-                                                        .ToArrayAsync();
-
-            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
-
             var projects = await _context.Set<Project>()
-                                         .Where(p => projectsIds.Contains(p.Id))
+                                         .Where(p => projectsFromDisciplineIds.Contains(p.Id)
+                                                            || p.ProjectManagerId == userId)
                                          .Where(expresion)
                                          .Include(p => p.Type)
                                          .Include(r => r.Customer)
@@ -340,17 +328,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
-            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
-                                                        .Where(pp => pp.ProjectManagerId == userId)
-                                                        .Select(pp => pp.ProjectId)
-                                                        .ToArrayAsync();
-
-            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
-
             if (pageSize == 0 || pageIndex == 0)
             {
                 projects = await _context.Set<Project>()
-                                         .Where(p => projectsIds.Contains(p.Id))
+                                         .Where(p => projectsFromDisciplineIds.Contains(p.Id)
+                                                            || p.ProjectManagerId == userId)
                                          .Include(p => p.Type)
                                          .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
@@ -362,7 +344,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             projects = await _context.Set<Project>()
-                                     .Where(p => projectsIds.Contains(p.Id))
+                                     .Where(p => projectsFromDisciplineIds.Contains(p.Id)
+                                                            || p.ProjectManagerId == userId)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
                                      .Include(p => p.Type)
@@ -451,17 +434,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
-            var projectsFromProjectManagerIds = await _context.Set<ProjectPmanager>()
-                                                        .Where(pp => pp.ProjectManagerId == userId)
-                                                        .Select(pp => pp.ProjectId)
-                                                        .ToArrayAsync();
-
-            var projectsIds = projectsFromDisciplineIds.Union(projectsFromProjectManagerIds);
-
             if (pageSize == 0 || pageIndex == 0)
             {
                 projects = await _context.Set<Project>()
-                                         .Where(p => projectsIds.Contains(p.Id))
+                                         .Where(p => projectsFromDisciplineIds.Contains(p.Id)
+                                                            || p.ProjectManagerId == userId)
                                          .Where(expresion)
                                          .Include(p => p.Type)
                                          .Include(r => r.Customer)
@@ -474,7 +451,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             projects = await _context.Set<Project>()
-                                     .Where(p => projectsIds.Contains(p.Id))
+                                     .Where(p => projectsFromDisciplineIds.Contains(p.Id)
+                                                            || p.ProjectManagerId == userId)
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
@@ -564,59 +542,60 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var users = await _context.Set<ProjectPmanager>()
-                                      .Where(de => de.ProjectId == projectId)
-                                      .Include(de => de.ProjectManager)
-                                      .Select(de => de.ProjectManager)
-                                      .ToListAsync();
+            var pm = await _context.Set<Project>()
+                                        .Include(p => p.ProjectManager)
+                                        .Select(p => p.ProjectManager)
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
 
-            return Mapping.Mapper.Map<UserDto>(users.FirstOrDefault());
+            return Mapping.Mapper.Map<UserDto>(pm);
         }
     }
 
-    public async Task AddProjectManager(int projectId, ICollection<UserDto> pms)
+    public async Task AddProjectManager(int projectId, int pmId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            foreach (var e in pms)
-            {
-                ProjectPmanager pm = new ProjectPmanager()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    ProjectId = projectId,
-                    ProjectManagerId = e.Id
-                };
 
-                // Check If Exists
-                var exists = await _context.Set<ProjectPmanager>()
-                    .AnyAsync(pm => pm.ProjectId == projectId && pm.ProjectManagerId == e.Id);
-                if (exists) continue;
+            var project = await _context.Set<Project>()
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
 
-                await _context.Set<ProjectPmanager>().AddAsync(pm);
-                await _context.SaveChangesAsync();
-            }
-        }
-    }
+            if (project == null)
+                throw new NullReferenceException(nameof(project));
 
-    public async Task RemoveProjectManager(int projectId, ICollection<int> projectManagersIds)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var pms = await _context.Set<ProjectPmanager>()
-                                              .Where(d => projectManagersIds.Contains(d.ProjectManagerId)
-                                                                && d.ProjectId == projectId)
-                                              .ToListAsync();
-
-            if (pms == null)
-                throw new NullReferenceException(nameof(pms));
-
-            foreach (var projectManager in pms)
-            {
-                _context.Set<ProjectPmanager>().Remove(projectManager);
-            }
-
+            project.ProjectManagerId = pmId;
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task RemoveProjectManager(int projectId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var project = await _context.Set<Project>()
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            if (project == null)
+                throw new NullReferenceException(nameof(project));
+
+            project.ProjectManagerId = 0;
+            project.ProjectManager = null;
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<ICollection<ComplainDto>> GetComplains(int projectId)
+    {
+        if (projectId == 0)
+            throw new ArgumentNullException(nameof(projectId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var complains = await _context.Set<Complain>()
+                                          .Where(p => p.ProjectId == projectId)
+                                          .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Complain>, List<ComplainDto>>(complains);
+        }
+    }
+
 }

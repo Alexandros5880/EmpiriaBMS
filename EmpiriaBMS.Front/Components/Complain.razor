@@ -93,10 +93,6 @@
                 <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_complain.IsClose" />
             </div>
         </div>
-
-        <button type="submit"
-                class="btn btn-primary mt-2 float-end"
-                @onclick="@(async() => await HandleValidSubmit())">Add</button>
     </EditForm>
 </div>
 
@@ -128,19 +124,68 @@
     SignaturePad verificatorSignature;
     SignaturePad pMSignature;
 
-    private async Task HandleValidSubmit()
+    public void Refresh()
+    {
+        _complain = new ComplainVM()
+        {
+            ComplaintDate = DateTime.Now,
+            SolutionDate = DateTime.Now,
+            VerificationDate = DateTime.Now
+        };
+        StateHasChanged();
+    }
+
+    public async Task HandleValidSubmit()
     {
         _complain.VerificatorSignature = await verificatorSignature.GetImageData();
         _complain.PMSignature = await pMSignature.GetImageData();
         _complain.ProjectId = _project.Id;
         _complain.CustomerId = _customer.Id;
-
+        _complain.ProjectManagerId = _project.ProjectManager.Id;
 
         // TODO: Validate And Save Complain
-        await DataProvider.Complains.Add(Mapper.Map<ComplainDto>(_complain));
+        if (_complain.ComplaintDate <= DateTime.Now.AddDays(-1) || _complain.ComplaintDate == null)
+        {
 
-        Console.WriteLine("New Complaint Submitted:");
-        Console.WriteLine(JsonSerializer.Serialize(_complain));
+        }
+        if (string.IsNullOrEmpty(_complain.About))
+        {
+
+        }
+        if (string.IsNullOrEmpty(_complain.Description))
+        {
+
+        }
+        if (string.IsNullOrEmpty(_complain.Solution))
+        {
+
+        }
+        if (_complain.SolutionDate <= DateTime.Now.AddDays(-1) || _complain.SolutionDate == null)
+        {
+
+        }
+        if (string.IsNullOrEmpty(_complain.Evaluation))
+        {
+
+        }
+        if (string.IsNullOrEmpty(_complain.Verification))
+        {
+
+        }
+        if (_complain.VerificationDate <= DateTime.Now.AddDays(-1) || _complain.VerificationDate == null)
+        {
+
+        }
+        if (_complain.VerificatorSignature.Length == 0)
+        {
+
+        }
+        if (_complain.PMSignature.Length == 0)
+        {
+
+        }
+
+        await DataProvider.Complains.Add(Mapper.Map<ComplainDto>(_complain));
     }
 
 }

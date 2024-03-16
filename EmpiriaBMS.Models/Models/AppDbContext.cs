@@ -38,7 +38,6 @@ public class AppDbContext : DbContext
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<ProjectPmanager> ProjectsPmanagers { get; set; }
     public DbSet<Complain> Complains { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2062,7 +2061,8 @@ public class AppDbContext : DbContext
                 WorkPackegedCompleted = 0,
                 EstimatedCompleted = 0,
                 TypeId = projectTypes[i - 1],
-                Active = i % 2 == 0 ? true : false
+                Active = i % 2 == 0 ? true : false,
+                ProjectManagerId = projectManagers.Count < i-1 ? projectManagers[i].Id : null
             };
             builder.Entity<Project>().HasData(project);
             projects.Add(project);
@@ -2362,27 +2362,6 @@ public class AppDbContext : DbContext
                 CompletionEstimation = 0
             };
             builder.Entity<Other>().HasData(other);
-        }
-        #endregion
-
-        #region Connect Project Manager With Every Project
-        var pm_index = 0;
-        for (var i = 0; i < projects.Count; i++)
-        {
-            ProjectPmanager dq_other = new ProjectPmanager()
-            {
-                Id = random.Next(123456789, 999999999) + i,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                ProjectId = projects[i].Id,
-                ProjectManagerId = projectManagers[pm_index].Id
-            };
-            builder.Entity<ProjectPmanager>().HasData(dq_other);
-
-            if (pm_index < projectManagers.Count - 1)
-                pm_index++;
-            else
-                pm_index = 0;
         }
         #endregion
 

@@ -57,17 +57,12 @@ public static class ModelRelations
                .WithOne(c => c.Type)
                .HasForeignKey(c => c.TypeId);
 
-        // Projects ProjectManagers
-        builder.Entity<ProjectPmanager>()
-               .HasKey(de => new { de.ProjectManagerId, de.ProjectId });
-        builder.Entity<ProjectPmanager>()
-               .HasOne(de => de.ProjectManager)
-               .WithMany(de => de.ProjectsPmanagers)
-               .HasForeignKey(de => de.ProjectManagerId);
-        builder.Entity<ProjectPmanager>()
-               .HasOne(de => de.Project)
-               .WithMany(de => de.ProjectsPmanagers)
-               .HasForeignKey(de => de.ProjectId);
+        // ProjectManager Project
+        builder.Entity<User>()
+               .HasMany(p => p.PMProjects)
+               .WithOne(c => c.ProjectManager)
+               .HasForeignKey(c => c.ProjectManagerId)
+               .OnDelete(DeleteBehavior.Restrict);
 
         // Discipline Draws
         builder.Entity<Discipline>()
@@ -119,9 +114,10 @@ public static class ModelRelations
 
         // SubContractor Project
         builder.Entity<User>()
-                    .HasMany(p => p.Projects)
+                    .HasMany(p => p.SubConstructorProjects)
                     .WithOne(c => c.SubContractor)
-                    .HasForeignKey(c => c.SubContractorId);
+                    .HasForeignKey(c => c.SubContractorId)
+                    .OnDelete(DeleteBehavior.SetNull);
 
         // Engineers Disciplines
         builder.Entity<DisciplineEngineer>()
@@ -173,25 +169,29 @@ public static class ModelRelations
         builder.Entity<Project>()
                     .HasMany(p => p.DailyTime)
                     .WithOne(c => c.Project)
-                    .HasForeignKey(c => c.ProjectId);
+                    .HasForeignKey(c => c.ProjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         // Discipline DailyTime
         builder.Entity<Discipline>()
                     .HasMany(p => p.DailyTime)
                     .WithOne(c => c.Discipline)
-                    .HasForeignKey(c => c.DisciplineId);
+                    .HasForeignKey(c => c.DisciplineId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         // Other DailyTime
         builder.Entity<Other>()
                     .HasMany(p => p.DailyTime)
                     .WithOne(c => c.Other)
-                    .HasForeignKey(c => c.OtherId);
+                    .HasForeignKey(c => c.OtherId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         // Drawing DailyTime
         builder.Entity<Drawing>()
                     .HasMany(p => p.DailyTime)
                     .WithOne(c => c.Drawing)
-                    .HasForeignKey(c => c.DrawingId);
+                    .HasForeignKey(c => c.DrawingId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
         // Projects ProjectType
         builder.Entity<ProjectType>()
@@ -199,24 +199,11 @@ public static class ModelRelations
                     .WithOne(c => c.Type)
                     .HasForeignKey(c => c.TypeId);
 
-        // Complain Customer
-        builder.Entity<User>()
-                    .HasMany(p => p.CustomerComplains)
-                    .WithOne(c => c.Customer)
-                    .HasForeignKey(c => c.CustomerId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
         // Complain Project
         builder.Entity<Project>()
-                    .HasMany(p => p.Complains)
-                    .WithOne(c => c.Project)
-                    .HasForeignKey(c => c.ProjectId);
-
-        // Complain ProjectManager
-        builder.Entity<User>()
-                    .HasMany(p => p.PMComplains)
-                    .WithOne(c => c.ProjectManager)
-                    .HasForeignKey(c => c.ProjectManagerId)
-                    .OnDelete(DeleteBehavior.Restrict);
+               .HasMany(p => p.Complains)
+               .WithOne(c => c.Project)
+               .HasForeignKey(c => c.ProjectId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

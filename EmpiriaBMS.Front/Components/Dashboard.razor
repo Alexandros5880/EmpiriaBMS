@@ -772,13 +772,21 @@ else
         </div>
 
         <div class="modal-body row mb-1">
-            <div class="m-1 row justify-content-center">
-                <div class="col-12 p-2">
+            <div class="col-12 justify-content-center">
 
-                    <Complain Project="@_selectedProject" />
+                <Complain @ref="@complainCompoment" Project="@_selectedProject" />
 
-                </div>
             </div>
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addComplainDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addComplainDialogCansel())">
+                Cancel
+            </FluentButton>
         </div>
 
     </FluentDialog>

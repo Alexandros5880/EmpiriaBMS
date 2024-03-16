@@ -72,6 +72,9 @@ public class Project : Entity
     public int? SubContractorId { get; set; }
     public User? SubContractor { get; set; }
 
+    public int? ProjectManagerId { get; set; }
+    public User? ProjectManager { get; set; }
+
     public User? Customer { get; set; }
 
     public Invoice? Invoice { get; set; }
@@ -79,8 +82,6 @@ public class Project : Entity
     public ICollection<DailyTime> DailyTime { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }
-
-    public ICollection<ProjectPmanager> ProjectsPmanagers { get; set; }
 
     public ICollection<Complain> Complains { get; set; }
 }

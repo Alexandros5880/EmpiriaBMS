@@ -64,4 +64,6 @@ public class ProjectDto : EntityDto
     public ProjectType Type { get; set; }
 
     public User? SubContractor { get; set; }
+
+    public User? ProjectManager { get; set; }
 }
