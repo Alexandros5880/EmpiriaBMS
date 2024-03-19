@@ -306,6 +306,8 @@ public partial class Dashboard : IDisposable
                 d.IsSelected = myPM.Id == d.Id;
                 _projectManagers.Add(d);
             });
+
+            StateHasChanged();
         }
         catch (Exception ex)
         {

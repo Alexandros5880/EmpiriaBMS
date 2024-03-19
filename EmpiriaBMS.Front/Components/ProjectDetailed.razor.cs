@@ -46,6 +46,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
 
     public async Task HandleValidSubmit()
     {
+        // TODO: Update subConstructon and customer validate and save.
         var exists = await DataProvider.Projects.Any(p =>  p.Id == _project.Id);
         if (exists)
             await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_project));
