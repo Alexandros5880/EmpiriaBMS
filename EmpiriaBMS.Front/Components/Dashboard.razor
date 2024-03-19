@@ -110,10 +110,15 @@ else
                                 @if (!_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row">
-                                        <h3 class="col-10">Projects</h3>
+                                        <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Projects</h3>
                                         @if (addProject)
                                         {
-                                            <span class="grommet-icons--add col-2"
+                                            @if(_selectedProject != null)
+                                            {
+                                                <span class="material-symbols--edit-outline col-1"
+                                                      @onclick="@(() => EditProject())" />
+                                            }
+                                            <span class="grommet-icons--add col-1"
                                                   @onclick="@(() => AddProject())" />
                                         }
                                     </div>

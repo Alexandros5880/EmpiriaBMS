@@ -539,6 +539,13 @@ public partial class Dashboard : IDisposable
         _isAddProjectDialogOdepened = true;
     }
 
+    private void EditProject()
+    {
+        projectCompoment.PrepairForEdit(_selectedProject);
+        _addProjectDialog.Show();
+        _isAddProjectDialogOdepened = true;
+    }
+
     private void CloseAddCProjectClick()
     {
         if (_isAddProjectDialogOdepened)
