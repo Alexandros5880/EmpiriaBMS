@@ -13,7 +13,7 @@
     <h3 class="mt-1 mb-1">Project</h3>
 
     <EditForm Model="@_project"
-              class="mb-2 row mt-3 g-1 rounded default-background shadow">
+              class="mb-2 row mt-3 gx-2 rounded default-background shadow">
 
         <div class=" p-2 col-md-6 col-sm-12">
 
@@ -165,20 +165,6 @@
         </div>
 
         <div class="p-2 col-md-6 col-sm-12">
-
-            <div class="row">
-                <div class="col-12">
-                    <!-- Description -->
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea class="form-control"
-                                    name="composeContent"
-                                    id="description"
-                                    row="7"
-                                    @bind="@_project.Description" />
-                    </div>
-                </div>
-            </div>
     
             <div class="row">
                 <div class="col-md-6 col-sm-12">
@@ -287,6 +273,32 @@
                                @bind="@_project.EstPaymentDate">
                     </div>
                 </div>
+            </div>
+
+        </div>
+
+        <!-- Description -->
+        <div class="col-12 row gx-2">
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control"
+                          name="composeContent"
+                          id="description"
+                          row="7"
+                          @bind="@_project.Description" />
+            </div>
+        </div>
+
+        <div class="col-12 row gx-2">
+
+            <!-- Invoice -->
+            <div class="p-2 col-md-6 col-sm-12">
+                <InvoiceDetailed Invoice="@_invoice" />
+            </div>
+
+            <!-- Invoice -->
+            <div class="p-2 col-md-6 col-sm-12">
+
             </div>
 
         </div>

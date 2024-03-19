@@ -4,14 +4,16 @@ using EmpiriaBMS.Core;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
+using EmpiriaBMS.Core.Config;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
-
-    private ProjectVM _project { get; set; } = new ProjectVM();
     List<ProjectTypeDto> projectTypes = new List<ProjectTypeDto>();
+    private InvoiceVM _invoice = new InvoiceVM();
+    private ProjectVM _project = new ProjectVM();
+    
 
     private async Task _getProjectTypes()
     {
@@ -22,6 +24,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     {
         await _getProjectTypes();
         _project = new ProjectVM();
+        _invoice = new InvoiceVM();
         StateHasChanged();
     }
 
@@ -29,6 +32,8 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     {
         await _getProjectTypes();
         _project = project;
+        var invDto = Mapping.Mapper.Map<InvoiceDto>(_project.Invoice);
+        _invoice = Mapper.Map<InvoiceVM>(invDto);
         StateHasChanged();
     }
 
