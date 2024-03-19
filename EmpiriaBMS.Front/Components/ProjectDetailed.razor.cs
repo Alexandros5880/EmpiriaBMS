@@ -13,7 +13,8 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     List<ProjectTypeDto> projectTypes = new List<ProjectTypeDto>();
     private InvoiceVM _invoice = new InvoiceVM();
     private ProjectVM _project = new ProjectVM();
-    
+    private UserVM _customer = new UserVM();
+    private UserVM _subConstructor = new UserVM();
 
     private async Task _getProjectTypes()
     {
@@ -25,6 +26,8 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         await _getProjectTypes();
         _project = new ProjectVM();
         _invoice = new InvoiceVM();
+        _customer = new UserVM();
+        _subConstructor = new UserVM();
         StateHasChanged();
     }
 
@@ -34,6 +37,10 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         _project = project;
         var invDto = Mapping.Mapper.Map<InvoiceDto>(_project.Invoice);
         _invoice = Mapper.Map<InvoiceVM>(invDto);
+        var userDto = Mapping.Mapper.Map<UserDto>(_project.Customer);
+        _customer = Mapper.Map<UserVM>(userDto);
+        var subConstructorDto = Mapping.Mapper.Map<UserDto>(_project.SubContractor);
+        _subConstructor = Mapper.Map<UserVM>(subConstructorDto);
         StateHasChanged();
     }
 
