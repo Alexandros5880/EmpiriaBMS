@@ -194,6 +194,18 @@ public class AppDbContext : DbContext
             Ord = 11
         };
         builder.Entity<Permission>().HasData(per_11);
+
+        // Dashboard Add Project
+        var per_12_id = random.Next(123456789, 999999999);
+        Permission per_12 = new Permission()
+        {
+            Id = per_12_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Add Project On Dashboard",
+            Ord = 12
+        };
+        builder.Entity<Permission>().HasData(per_12);
         #endregion
 
         #region Roles
@@ -711,6 +723,17 @@ public class AppDbContext : DbContext
             PermissionId = per_11_id
         };
         builder.Entity<RolePermission>().HasData(rp_48);
+
+        // CTO || Dashboard Add Project
+        RolePermission rp_60 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_12_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_60);
 
 
         // CEO
@@ -2048,7 +2071,7 @@ public class AppDbContext : DbContext
                 DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 WorkPackege = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 DelayInPayment = Convert.ToInt32(Math.Pow(i, 2)),
-                PaymentDetailes = "Payment Detailes For Project_" + Convert.ToString(i * random.Next(1, 7)),
+                PaymentDetails = "Payment Detailes For Project_" + Convert.ToString(i * random.Next(1, 7)),
                 DayCost = 7 + i - 1 * 2,
                 Bank = i % 2 == 0 ? "ALPHA" : "NBG_IBANK",
                 PaidFee = 7 - 1 * 2,
@@ -2135,7 +2158,7 @@ public class AppDbContext : DbContext
             DeadLine = createdDate.AddMonths(3),
             WorkPackege = createdDate.AddMonths(2),
             DelayInPayment = Convert.ToInt32(Math.Pow(1, 2)),
-            PaymentDetailes = "Payment Detailes For Project_PM",
+            PaymentDetails = "Payment Detailes For Project_PM",
             DayCost = 111,
             Bank = "ALPHA",
             PaidFee = 45,

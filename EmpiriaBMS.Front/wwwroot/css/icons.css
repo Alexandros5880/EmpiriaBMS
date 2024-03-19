@@ -67,9 +67,9 @@
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
 }
-    .codicon--add:hover {
-        transform: scale(1.5);
-    }
+.codicon--add:hover {
+    transform: scale(1.5);
+}
 
 /* Add 2 */
 .mdi--tab-add {

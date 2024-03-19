@@ -204,16 +204,16 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _paymentDetailes;
-    public string? PaymentDetailes
+    private string? _paymentDetails;
+    public string? PaymentDetails
     {
-        get => _paymentDetailes;
+        get => _paymentDetails;
         set
         {
-            if (value == _paymentDetailes)
+            if (value == _paymentDetails)
                 return;
-            _paymentDetailes = value;
-            NotifyPropertyChanged(nameof(PaymentDetailes));
+            _paymentDetails = value;
+            NotifyPropertyChanged(nameof(PaymentDetails));
         }
     }
 
@@ -321,6 +321,19 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private int? _typeId;
+    public int? TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
     private ProjectType _type;
     public ProjectType Type
     {
@@ -380,8 +393,12 @@ public class ProjectVM : BaseVM
 
     public ProjectVM()
     {
-        DurationDate = DateTime.Now.AddYears(1);
-        EstPaymentDate = DateTime.Now.AddYears(1);
-        PaymentDate = DateTime.Now.AddYears(1);
+        var daysUntilPayment = DateTime.Now.AddMonths(1) - DateTime.Now;
+        DeadLine = DateTime.Now.AddMonths(1);
+        WorkPackege = DateTime.Now.AddDays(20);
+        DurationDate = DateTime.Now.AddDays(20);
+        EstPaymentDate = DateTime.Now.AddMonths(1);
+        PaymentDate = DateTime.Now.AddMonths(1);
+        DaysUntilPayment = daysUntilPayment.Days;
     }
 }

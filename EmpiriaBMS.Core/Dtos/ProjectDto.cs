@@ -43,7 +43,7 @@ public class ProjectDto : EntityDto
 
     public int? DelayInPayment { get; set; }
 
-    public string? PaymentDetailes { get; set; }
+    public string? PaymentDetails { get; set; }
 
     public double? DayCost { get; set; }
 
@@ -61,6 +61,7 @@ public class ProjectDto : EntityDto
 
     public Invoice? Invoice { get; set; }
 
+    public int? TypeId { get; set; }
     public ProjectType Type { get; set; }
 
     public User? SubContractor { get; set; }

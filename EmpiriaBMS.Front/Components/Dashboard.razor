@@ -109,8 +109,13 @@ else
                             <div class="col-12">
                                 @if (!_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center">
-                                        <h3>Projects</h3>
+                                    <div class="text-center row">
+                                        <h3 class="col-10">Projects</h3>
+                                        @if (addProject)
+                                        {
+                                            <span class="grommet-icons--add col-2"
+                                                  @onclick="@(() => AddProject())" />
+                                        }
                                     </div>
                                     <div class="table-responsive p-1 table-container">
                                         <table class="table table-hover table-success text-center">
@@ -767,15 +772,12 @@ else
                   DialogType=@DialogType.Panel
                   style="--dialog-width: 700px !important;">
 
-        <div class="dialog-header">
-            <span class="carbon--close-outline float-end" @onclick="CloseAddComplainClick"></span>
-        </div>
-
         <div class="modal-body row mb-1">
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddComplainClick"></span>
+            </div>
             <div class="col-12 justify-content-center">
-
                 <Complain @ref="@complainCompoment" Project="@_selectedProject" />
-
             </div>
         </div>
 
@@ -785,6 +787,38 @@ else
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => _addComplainDialogCansel())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On AddProject Click Dialog  -->
+    <FluentDialog @ref="_addProjectDialog"
+                  Hidden="@(!_isAddProjectDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddCProjectClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <ProjectDetailed @ref="@projectCompoment" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addProjectDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addProjectDialogCansel())">
                 Cancel
             </FluentButton>
         </div>

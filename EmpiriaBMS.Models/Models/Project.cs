@@ -52,7 +52,7 @@ public class Project : Entity
 
     public int? DelayInPayment { get; set; }
 
-    public string? PaymentDetailes { get; set; }
+    public string? PaymentDetails { get; set; }
 
     public double? DayCost { get; set; }
 

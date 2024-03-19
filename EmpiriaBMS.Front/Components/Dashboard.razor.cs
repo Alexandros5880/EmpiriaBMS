@@ -69,6 +69,8 @@ public partial class Dashboard : IDisposable
 
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
     bool getAllDrawings => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
+
+    bool addProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
     #endregion
 
     // General Fields
@@ -133,6 +135,11 @@ public partial class Dashboard : IDisposable
     private FluentDialog? _addComplainDialog;
     private bool _isAddComplainDialogOdepened = false;
     private Complain complainCompoment;
+
+    // On Add Project Click Dialog
+    private FluentDialog? _addProjectDialog;
+    private bool _isAddProjectDialogOdepened = false;
+    private ProjectDetailed projectCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -522,6 +529,22 @@ public partial class Dashboard : IDisposable
         {
             _addComplainDialog.Hide();
             _isAddComplainDialogOdepened = false;
+        }
+    }
+    
+    private void AddProject()
+    {
+        projectCompoment.PrepairForNew();
+        _addProjectDialog.Show();
+        _isAddProjectDialogOdepened = true;
+    }
+
+    private void CloseAddCProjectClick()
+    {
+        if (_isAddProjectDialogOdepened)
+        {
+            _addProjectDialog.Hide();
+            _isAddProjectDialogOdepened = false;
         }
     }
     #endregion
@@ -983,6 +1006,21 @@ public partial class Dashboard : IDisposable
     {
         _addComplainDialog.Hide();
         _isAddComplainDialogOdepened = false;
+    }
+    #endregion
+
+    #region On Press Add Project Dialog Actions
+    public async Task _addProjectDialogAccept()
+    {
+        await projectCompoment.HandleValidSubmit();
+        _addProjectDialog.Hide();
+        _isAddProjectDialogOdepened = false;
+    }
+
+    public void _addProjectDialogCansel()
+    {
+        _addProjectDialog.Hide();
+        _isAddProjectDialogOdepened = false;
     }
     #endregion
 
