@@ -909,6 +909,8 @@ public partial class Dashboard : IDisposable
         // Clear Timer From this User
         TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
+        await authorizeServices.UpdateUserHours();
+
         _startLoading = false;
     }
 

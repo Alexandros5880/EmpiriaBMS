@@ -295,6 +295,19 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private int? _customerId;
+    public int? CustomerId
+    {
+        get => _customerId;
+        set
+        {
+            if (value == _customerId)
+                return;
+            _customerId = value;
+            NotifyPropertyChanged(nameof(CustomerId));
+        }
+    }
+
     private User? _customer;
     public User? Customer
     {
@@ -305,6 +318,19 @@ public class ProjectVM : BaseVM
                 return;
             _customer = value;
             NotifyPropertyChanged(nameof(Customer));
+        }
+    }
+
+    private int? _invoiceId;
+    public int? InvoiceId
+    {
+        get => _invoiceId;
+        set
+        {
+            if (value == _invoiceId)
+                return;
+            _invoiceId = value;
+            NotifyPropertyChanged(nameof(Invoice));
         }
     }
 

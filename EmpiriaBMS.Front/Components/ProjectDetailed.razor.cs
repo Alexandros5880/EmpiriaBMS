@@ -35,11 +35,11 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     {
         await _getProjectTypes();
         _project = project;
-        var invDto = Mapping.Mapper.Map<InvoiceDto>(_project.Invoice);
+        var invDto = await DataProvider.Invoices.Get((int)_project.InvoiceId);
         _invoice = Mapper.Map<InvoiceVM>(invDto);
-        var userDto = Mapping.Mapper.Map<UserDto>(_project.Customer);
+        var userDto = await DataProvider.Users.Get((int)_project.CustomerId);
         _customer = Mapper.Map<UserVM>(userDto);
-        var subConstructorDto = Mapping.Mapper.Map<UserDto>(_project.SubContractor);
+        var subConstructorDto = await DataProvider.Users.Get((int)_project.SubContractorId);
         _subConstructor = Mapper.Map<UserVM>(subConstructorDto);
         StateHasChanged();
     }

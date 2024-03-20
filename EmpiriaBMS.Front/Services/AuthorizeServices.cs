@@ -78,6 +78,9 @@ public class AuthorizeServices
             CallBackOnAuthorize.Invoke();
     }
 
+    public async Task UpdateUserHours() =>
+        _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
+
 
     // TODO: When Fix Authorization with teams Remove that
     private async Task _getLogedUser(string objectId)
