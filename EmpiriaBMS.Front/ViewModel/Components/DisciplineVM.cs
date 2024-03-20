@@ -7,6 +7,45 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class DisciplineVM : BaseVM
 {
+    private bool? _isSelected = false;
+    public bool? IsSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (value == _isSelected)
+                return;
+            _isSelected = value;
+            NotifyPropertyChanged(nameof(IsSelected));
+        }
+    }
+
+    private long _estimatedMandays;
+    public long EstimatedMandays
+    {
+        get => _estimatedMandays;
+        set
+        {
+            if (value == _estimatedMandays)
+                return;
+            _estimatedMandays = value;
+            NotifyPropertyChanged(nameof(EstimatedMandays));
+        }
+    }
+
+    private long _estimatedHours;
+    public long EstimatedHours
+    {
+        get => _estimatedHours;
+        set
+        {
+            if (value == _estimatedHours)
+                return;
+            _estimatedHours = value;
+            NotifyPropertyChanged(nameof(EstimatedHours));
+        }
+    }
+
     private int _typeId;
     public int TypeId
     {
@@ -30,19 +69,6 @@ public class DisciplineVM : BaseVM
                 return;
             _type = value;
             NotifyPropertyChanged(nameof(Type));
-        }
-    }
-
-    private long _estimatedHours;
-    public long EstimatedHours
-    {
-        get => _estimatedHours;
-        set
-        {
-            if (value == _estimatedHours)
-                return;
-            _estimatedHours = value;
-            NotifyPropertyChanged(nameof(EstimatedHours));
         }
     }
 

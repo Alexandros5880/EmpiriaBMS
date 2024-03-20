@@ -11,6 +11,8 @@ namespace EmpiriaBMS.Models.Models;
 
 public class Discipline : Entity
 {
+    public long EstimatedMandays { get; set; }
+
     public long EstimatedHours { get; set; }
 
     public float EstimatedCompleted { get; set; }
