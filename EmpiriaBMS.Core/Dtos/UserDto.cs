@@ -20,6 +20,8 @@ public class UserDto : EntityDto
 
     public string? MidName { get; set; }
 
+    public string? TeamsObjectId { get; set; }
+
     public string Phone1 { get; set; }
 
     public string? Phone2 { get; set; }

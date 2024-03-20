@@ -870,6 +870,17 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_61);
 
+        // CEO || Dashboard Add Project
+        RolePermission rp_62 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_12_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_62);
+
 
         // Guest
         // Guest || See Dashboard Layout
@@ -1009,206 +1020,6 @@ public class AppDbContext : DbContext
             PermissionId = per_11_id
         };
         builder.Entity<RolePermission>().HasData(rp_59);
-        #endregion
-
-        #region Create Random Users With Roles:  Admin, CEO, CTO, COO, Guest,
-        // Admin
-        var adminId = random.Next(123456789, 999999999) + random.Next(0, 333) + 1;
-        User admin = new User()
-        {
-            Id = adminId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "Admin",
-            ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com",
-        };
-        builder.Entity<User>().HasData(admin);
-        Email email_1 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "alexandrosplatanios15@gmail.com",
-            UserId = adminId
-        };
-        builder.Entity<Email>().HasData(email_1);
-        UserRole adminRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = adminId,
-            RoleId = role_9_id
-        };
-        builder.Entity<UserRole>().HasData(adminRole);
-
-        // CEO
-        var ceoId = random.Next(123456789, 999999999) + random.Next(0, 333) + 2;
-        User ceo = new User()
-        {
-            Id = ceoId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "CEO",
-            ProxyAddress = "ceo@gmail.com",
-        };
-        builder.Entity<User>().HasData(ceo);
-        Email email_2 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "ceo@gmail.com",
-            UserId = ceoId
-        };
-        builder.Entity<Email>().HasData(email_2);
-        UserRole ceoRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = ceoId,
-            RoleId = role_6_id
-        };
-        builder.Entity<UserRole>().HasData(ceoRole);
-
-        // CTO
-        var ctoId = random.Next(123456789, 999999999) + random.Next(0, 333) + 3;
-        User cto = new User()
-        {
-            Id = ctoId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "CTO",
-            ProxyAddress = "cto@gmail.com",
-        };
-        builder.Entity<User>().HasData(cto);
-        Email email_3 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "cto@gmail.com",
-            UserId = ctoId
-        };
-        builder.Entity<Email>().HasData(email_3);
-        UserRole ctoRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = ctoId,
-            RoleId = role_5_id
-        };
-        builder.Entity<UserRole>().HasData(ctoRole);
-
-        // COO
-        var cooId = random.Next(123456789, 999999999) + random.Next(0, 333) + 4;
-        User coo = new User()
-        {
-            Id = cooId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "COO",
-            ProxyAddress = "coo@gmail.com",
-        };
-        builder.Entity<User>().HasData(coo);
-        Email email_4 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "coo@gmail.com",
-            UserId = cooId
-        };
-        builder.Entity<Email>().HasData(email_4);
-        UserRole cooRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = cooId,
-            RoleId = role_4_id
-        };
-        builder.Entity<UserRole>().HasData(cooRole);
-
-        // Guest
-        var guestId = random.Next(123456789, 999999999) + random.Next(0, 333) + 5;
-        User guest = new User()
-        {
-            Id = guestId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "Guest",
-            ProxyAddress = "guest@gmail.com",
-        };
-        builder.Entity<User>().HasData(guest);
-        Email email_5 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "guest@gmail.com",
-            UserId = guestId
-        };
-        builder.Entity<Email>().HasData(email_5);
-        UserRole guestRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = guestId,
-            RoleId = role_7_id
-        };
-        builder.Entity<UserRole>().HasData(guestRole);
-
-        // Project Manager
-        var pmId = random.Next(123456789, 999999999) + random.Next(0, 333) + 5;
-        User pm = new User()
-        {
-            Id = pmId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "Project Manager",
-            ProxyAddress = "pm@gmail.com",
-        };
-        builder.Entity<User>().HasData(pm);
-        Email email_27 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "pm@gmail.com",
-            UserId = pmId
-        };
-        builder.Entity<Email>().HasData(email_27);
-        UserRole pmRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = pmId,
-            RoleId = role_3_id
-        };
-        builder.Entity<UserRole>().HasData(pmRole);
         #endregion
 
         #region Create Secretaries
@@ -1543,16 +1354,6 @@ public class AppDbContext : DbContext
             RoleId = role_2_id
         };
         builder.Entity<UserRole>().HasData(engineerRole_5_em);
-        // Admin
-        UserRole engineerRole_5_em_2 = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + 12,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = engineer_5_Id,
-            RoleId = role_9_id
-        };
-        builder.Entity<UserRole>().HasData(engineerRole_5_em_2);
         // CEO
         UserRole engineerRole_5_em_3 = new UserRole()
         {
@@ -2104,40 +1905,6 @@ public class AppDbContext : DbContext
             };
             builder.Entity<Project>().HasData(project);
             projects.Add(project);
-
-            // Customers
-            var customerId = random.Next(123456789, 999999999) + i * 10 + 28;
-            User customer = new User()
-            {
-                Id = customerId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                LastName = "Alexandros_" + Convert.ToString(i),
-                FirstName = "Platanios_Customer_" + Convert.ToString(i),
-                ProxyAddress = "alexpl_{i}@gmail.com",
-                Phone1 = "694927778" + Convert.ToString(i),
-                Description = "Test Description Customer " + Convert.ToString(i),
-                ProjectId = projectId,
-            };
-            builder.Entity<User>().HasData(customer);
-            Email email_28 = new Email()
-            {
-                Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Address = "alexpl_{i}@gmail.com",
-                UserId = customerId
-            };
-            builder.Entity<Email>().HasData(email_28);
-            UserRole userRole_c = new UserRole()
-            {
-                Id = random.Next(123456789, 999999999) + i * 2,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = customerId,
-                RoleId = role_8_id
-            };
-            builder.Entity<UserRole>().HasData(userRole_c);
 
             // Invoices
             var invoiceId = random.Next(123456789, 999999999) + i * 3;

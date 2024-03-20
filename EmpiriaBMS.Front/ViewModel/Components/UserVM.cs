@@ -72,6 +72,19 @@ public class UserVM : BaseVM
         }
     }
 
+    private string? _teamsObjectId;
+    public string? TeamsObjectId
+    {
+        get => _teamsObjectId;
+        set
+        {
+            if (value == _teamsObjectId)
+                return;
+            _teamsObjectId = value;
+            NotifyPropertyChanged(nameof(TeamsObjectId));
+        }
+    }
+
     private string _phone1;
     public string Phone1
     {

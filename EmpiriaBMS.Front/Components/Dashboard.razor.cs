@@ -216,7 +216,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
         _startLoading = false;
@@ -248,7 +248,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
     }
@@ -278,7 +278,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
     }
@@ -323,7 +323,7 @@ public partial class Dashboard : IDisposable
         catch (Exception ex)
         {
             // TODO: Log Error
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             return 0;
         }
     }
@@ -468,7 +468,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
     }
@@ -486,7 +486,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
     }
@@ -510,7 +510,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
     }

@@ -30,14 +30,23 @@ public class AuthorizeServices
         _sharedAuthData = sharedData;
     }
 
-    public async Task Authorize(int roleId = 0, bool runInTeams = true)
+    public async Task Authorize(int userId = 0, bool runInTeams = true)
     {
         _sharedAuthData.Clear();
 
         // TODO: When Fix Authorization with teams Remove that
-        if (roleId != 0)
+        if (userId != 0)
         {
-            await _getRandomUserByRole(roleId);
+            var logedUser = await _dataProvider.Users.Get(userId);
+            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(logedUser);
+            _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
+            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
+                                                    .Select(r => _mapper.Map<RoleVM>(r))
+                                                    .ToList();
+
+            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
+                                                    .ToList();
+            _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
         }
 
         else if (runInTeams)
@@ -66,7 +75,7 @@ public class AuthorizeServices
             else
             {
                 // TODO: When Fix Authorization with teams Remove that
-                await _getRandomUserByRole();
+                await _getRandomUser();
             }
         }
         else
@@ -81,86 +90,27 @@ public class AuthorizeServices
     public async Task UpdateUserHours() =>
         _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
 
-
     // TODO: When Fix Authorization with teams Remove that
-    private async Task _getLogedUser(string objectId)
+    private async Task _getRandomUser()
     {
         try
         {
-            var users = await _dataProvider.Roles.GetUsers(_sharedAuthData.DefaultRoleId);
-            var dbUser = users.FirstOrDefault();
-
-            if (dbUser == null)
-                throw new NullReferenceException(nameof(dbUser));
-
-            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(dbUser);
-
-            _sharedAuthData.LogesUserHours = await _dataProvider.Users
-                            .GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
-
-            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
-                                                        .Select(r => _mapper.Map<RoleVM>(r))
-                                                        .ToList();
-
-            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
-                                                    .ToList();
-            _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
-
-            // if (_loggedUserRoles.Select(r => r.Name).ToList().Contains("Admin"))
-            // {
-
-            // }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private async Task _getRandomUserByRole(int roleId = 0)
-    {
-        try
-        {
-            _sharedAuthData.DefaultRoleId = roleId != 0 ? roleId : await _getRoleId(_sharedAuthData.DefaultRoleName);
-
-            var users = await _dataProvider.Roles.GetUsers(_sharedAuthData.DefaultRoleId);
-            var dbUser = users.FirstOrDefault();
-
-            if (dbUser == null)
-                throw new NullReferenceException(nameof(dbUser));
-
-            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(dbUser);
-
+            var users = await _dataProvider.Users.GetAll();
+            var logedUser = users.FirstOrDefault();
+            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(logedUser);
             _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
+            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
+                                                    .Select(r => _mapper.Map<RoleVM>(r))
+                                                    .ToList();
 
-            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
-                                                        .Select(r => _mapper.Map<RoleVM>(r))
-                                                        .ToList();
-
-            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
+            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
                                                     .ToList();
             _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
-        }
-    }
-
-    private async Task<int> _getRoleId(string roleName)
-    {
-        try
-        {
-            var role = await _dataProvider.Roles.Get(roleName);
-            return role?.Id ?? 0;
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Error
-            Debug.WriteLine($"Exception: {ex.Message}");
-            return 0;
         }
     }
 }

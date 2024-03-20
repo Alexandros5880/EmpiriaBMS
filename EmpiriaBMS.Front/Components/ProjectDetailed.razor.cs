@@ -10,7 +10,7 @@ namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
-    private string defaultValue = "*******";
+    private string defaultCodeValue = "*******";
 
     #region Authorization Properties
     bool seeCode => _sharedAuthData.Permissions.Any(p => p.Ord == 13);

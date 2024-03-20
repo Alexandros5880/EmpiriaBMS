@@ -148,17 +148,17 @@ else
     </div>
 
     <!-- Remove This -->
-    <select class="form-select" @onchange="RoleSelectionChanged"
+    <select class="form-select" @onchange="UsersSelectionChanged"
             style="position:fixed !important; bottom:0px !important; width: 200px; right: 10px;">
-        @foreach (var role in _allRoles)
+        @foreach (var _user in _allUsers)
         {
-            @if (@role.Name.Equals(_sharedAuthData.DefaultRoleName))
+            @if (@_user.Id.Equals(_sharedAuthData.LogedUser.Id))
             {
-                <option value="@role.Id" selected>@role.Name</option>
+                <option value="@_user?.Id" selected>@_user.LastName @_user.FirstName</option>
             }
             else
             {
-                <option value="@role.Id">@role.Name</option>
+                <option value="@_user?.Id">@_user.LastName @_user.FirstName</option>
             }
         }
     </select>
@@ -195,7 +195,7 @@ else
         if (firstRender)
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetAllRoles(); // TODO: Remove This
+            await GetAllUsers(); // TODO: Remove This
             authorizeServices.CallBackOnAuthorize += _afterAuthCallBack;
             await authorizeServices.Authorize(runInTeams: _runInTeams);
         }
@@ -219,24 +219,22 @@ else
     }
 
     // TODO: Remove This
-    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
-    private ICollection<RoleVM> _allRoles = new List<RoleVM>();
+    private ICollection<UserVM> _allUsers = new List<UserVM>();
 
-    private async Task RoleSelectionChanged(ChangeEventArgs e)
+    private async Task UsersSelectionChanged(ChangeEventArgs e)
     {
         isLoading = true;
-        var selectRoleId = Convert.ToInt32(e.Value);
-        await authorizeServices.Authorize(selectRoleId, _runInTeams);
-        _sharedAuthData.DefaultRoleName = _allRoles.FirstOrDefault(r => r.Id == selectRoleId).Name;
+        var selectUserId = Convert.ToInt32(e.Value);
+        await authorizeServices.Authorize(selectUserId, _runInTeams);
         isLoading = false;
         StateHasChanged();
     }
 
-    private async Task GetAllRoles()
+    private async Task GetAllUsers()
     {
-        var rolesDtos = await DataProvider.Roles.GetAll();
-        var roles = Mapper.Map<List<RoleVM>>(rolesDtos);
-        _allRoles.Clear();
-        roles.ForEach(_allRoles.Add);
+        var usersDtos = await DataProvider.Users.GetAll();
+        var users = Mapper.Map<List<UserVM>>(usersDtos);
+        _allUsers.Clear();
+        users.ForEach(_allUsers.Add);
     }
 }

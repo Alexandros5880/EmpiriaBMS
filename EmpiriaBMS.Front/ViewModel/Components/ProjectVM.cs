@@ -344,5 +344,8 @@ public class ProjectVM : BaseVM
         DeadLine = DateTime.Now.AddMonths(1);
         EstimatedDate = DateTime.Now.AddDays(20);
         DurationDate = DateTime.Now.AddDays(20);
+        Name = "";
+        Code = "";
+        Description = "";
     }
 }
