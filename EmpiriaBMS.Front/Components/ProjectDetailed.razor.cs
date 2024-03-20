@@ -10,11 +10,14 @@ namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
+    private string? defaultValue = "*******";
+
+    #region Authorization Properties
+    bool seeCode => _sharedAuthData.Permissions.Any(p => p.Ord == 13);
+    #endregion
+
     List<ProjectTypeDto> projectTypes = new List<ProjectTypeDto>();
-    private InvoiceVM _invoice = new InvoiceVM();
     private ProjectVM _project = new ProjectVM();
-    private UserVM _customer = new UserVM();
-    private UserVM _subConstructor = new UserVM();
 
     private async Task _getProjectTypes()
     {
@@ -25,9 +28,6 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     {
         await _getProjectTypes();
         _project = new ProjectVM();
-        _invoice = new InvoiceVM();
-        _customer = new UserVM();
-        _subConstructor = new UserVM();
         StateHasChanged();
     }
 
@@ -35,12 +35,6 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     {
         await _getProjectTypes();
         _project = project;
-        var invDto = await DataProvider.Invoices.Get((int)_project.InvoiceId);
-        _invoice = Mapper.Map<InvoiceVM>(invDto);
-        var userDto = await DataProvider.Users.Get((int)_project.CustomerId);
-        _customer = Mapper.Map<UserVM>(userDto);
-        var subConstructorDto = await DataProvider.Users.Get((int)_project.SubContractorId);
-        _subConstructor = Mapper.Map<UserVM>(subConstructorDto);
         StateHasChanged();
     }
 

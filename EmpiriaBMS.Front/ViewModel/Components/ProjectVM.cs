@@ -70,7 +70,46 @@ public class ProjectVM : BaseVM
             if (value == _estimatedHours)
                 return;
             _estimatedHours = value;
-            NotifyPropertyChanged(nameof(_estimatedHours));
+            NotifyPropertyChanged(nameof(EstimatedHours));
+        }
+    }
+
+    private double? _fee;
+    public double? Fee
+    {
+        get => _fee;
+        set
+        {
+            if (value == _fee)
+                return;
+            _fee = value;
+            NotifyPropertyChanged(nameof(Fee));
+        }
+    }
+
+    private int? _typeId;
+    public int? TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
+    private ProjectType _type;
+    public ProjectType Type
+    {
+        get => _type;
+        set
+        {
+            if (value == _type)
+                return;
+            _type = value;
+            NotifyPropertyChanged(nameof(Type));
         }
     }
 
@@ -152,133 +191,16 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private DateTime? _workPackege;
-    public DateTime? WorkPackege
+    private DateTime? _estimatedDate;
+    public DateTime? EstimatedDate
     {
-        get => _workPackege;
+        get => _estimatedDate;
         set
         {
-            if (value == _workPackege)
+            if (value == _estimatedDate)
                 return;
-            _workPackege = value;
-            NotifyPropertyChanged(nameof(WorkPackege));
-        }
-    }
-
-    private DateTime? _estPaymentDate;
-    public DateTime? EstPaymentDate
-    {
-        get => _estPaymentDate;
-        set
-        {
-            if (value == _estPaymentDate)
-                return;
-            _estPaymentDate = value;
-            NotifyPropertyChanged(nameof(EstPaymentDate));
-        }
-    }
-
-    private DateTime? _paymentDate;
-    public DateTime? PaymentDate
-    {
-        get => _paymentDate;
-        set
-        {
-            if (value == _paymentDate)
-                return;
-            _paymentDate = value;
-            NotifyPropertyChanged(nameof(PaymentDate));
-        }
-    }
-
-    private int? _delayInPayment;
-    public int? DelayInPayment
-    {
-        get => _delayInPayment;
-        set
-        {
-            if (value == _delayInPayment)
-                return;
-            _delayInPayment = value;
-            NotifyPropertyChanged(nameof(DelayInPayment));
-        }
-    }
-
-    private string? _paymentDetails;
-    public string? PaymentDetails
-    {
-        get => _paymentDetails;
-        set
-        {
-            if (value == _paymentDetails)
-                return;
-            _paymentDetails = value;
-            NotifyPropertyChanged(nameof(PaymentDetails));
-        }
-    }
-
-    private double? _dayCost;
-    public double? DayCost
-    {
-        get => _dayCost;
-        set
-        {
-            if (value == _dayCost)
-                return;
-            _dayCost = value;
-            NotifyPropertyChanged(nameof(DayCost));
-        }
-    }
-
-    private string? _bank;
-    public string? Bank
-    {
-        get => _bank;
-        set
-        {
-            if (value == _bank)
-                return;
-            _bank = value;
-            NotifyPropertyChanged(nameof(Bank));
-        }
-    }
-
-    private double? _paidFee;
-    public double? PaidFee
-    {
-        get => _paidFee;
-        set
-        {
-            if (value == _paidFee)
-                return;
-            _paidFee = value;
-            NotifyPropertyChanged(nameof(PaidFee));
-        }
-    }
-
-    private int? _daysUntilPayment;
-    public int? DaysUntilPayment
-    {
-        get => _daysUntilPayment;
-        set
-        {
-            if (value == _daysUntilPayment)
-                return;
-            _daysUntilPayment = value;
-            NotifyPropertyChanged(nameof(DaysUntilPayment));
-        }
-    }
-
-    private double? _pendingPayments;
-    public double? PendingPayments
-    {
-        get => _pendingPayments;
-        set
-        {
-            if (value == _pendingPayments)
-                return;
-            _pendingPayments = value;
-            NotifyPropertyChanged(nameof(PendingPayments));
+            _estimatedDate = value;
+            NotifyPropertyChanged(nameof(EstimatedDate));
         }
     }
 
@@ -344,32 +266,6 @@ public class ProjectVM : BaseVM
                 return;
             _invoice = value;
             NotifyPropertyChanged(nameof(Invoice));
-        }
-    }
-
-    private int? _typeId;
-    public int? TypeId
-    {
-        get => _typeId;
-        set
-        {
-            if (value == _typeId)
-                return;
-            _typeId = value;
-            NotifyPropertyChanged(nameof(TypeId));
-        }
-    }
-
-    private ProjectType _type;
-    public ProjectType Type
-    {
-        get => _type;
-        set
-        {
-            if (value == _type)
-                return;
-            _type = value;
-            NotifyPropertyChanged(nameof(Type));
         }
     }
 
@@ -445,12 +341,8 @@ public class ProjectVM : BaseVM
 
     public ProjectVM()
     {
-        var daysUntilPayment = DateTime.Now.AddMonths(1) - DateTime.Now;
         DeadLine = DateTime.Now.AddMonths(1);
-        WorkPackege = DateTime.Now.AddDays(20);
+        EstimatedDate = DateTime.Now.AddDays(20);
         DurationDate = DateTime.Now.AddDays(20);
-        EstPaymentDate = DateTime.Now.AddMonths(1);
-        PaymentDate = DateTime.Now.AddMonths(1);
-        DaysUntilPayment = daysUntilPayment.Days;
     }
 }

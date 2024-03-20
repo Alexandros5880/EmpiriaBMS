@@ -8,9 +8,9 @@
 @inject IDataProvider DataProvider
 
 <div class="h-100" style="max-height: 500px; overflow-y: auto; overflow-x: hidden;">
-    <h3>Create Complain</h3>
+    <h3>Create Issue</h3>
 
-    <EditForm Model="@_complain">
+    <EditForm Model="@_issue">
 
         <div class="row">
             <div class="col form-group">
@@ -26,48 +26,48 @@
         <div class="row mt-2">
             <div class="col form-group">
                 <label for="ComplaintDate">Complaint Date:</label>
-                <InputDate id="ComplaintDate" @bind-Value="_complain.ComplaintDate" class="form-control" />
+                <InputDate id="ComplaintDate" @bind-Value="_issue.ComplaintDate" class="form-control" />
             </div>
 
             <div class="col form-group">
                 <label for="about">About:</label>
-                <InputText id="about" @bind-Value="_complain.About" class="form-control" />
+                <InputText id="about" @bind-Value="_issue.About" class="form-control" />
             </div>
         </div>
 
         <div class="row mt-2">
             <div class="col form-group">
                 <label for="description">Description:</label>
-                <InputText id="description" @bind-Value="_complain.Description" class="form-control" />
+                <InputText id="description" @bind-Value="_issue.Description" class="form-control" />
             </div>
 
             <div class="col form-group">
                 <label for="solution">Solution:</label>
-                <InputText id="solution" @bind-Value="_complain.Solution" class="form-control" />
+                <InputText id="solution" @bind-Value="_issue.Solution" class="form-control" />
             </div>
         </div>
 
         <div class="row mt-2">
             <div class="col form-group">
                 <label for="solutionDate">Solution Date:</label>
-                <InputDate id="solutionDate" @bind-Value="_complain.SolutionDate" class="form-control" />
+                <InputDate id="solutionDate" @bind-Value="_issue.SolutionDate" class="form-control" />
             </div>
 
             <div class="col form-group">
                 <label for="evaluation">Evaluation:</label>
-                <InputText id="evaluation" @bind-Value="_complain.Evaluation" class="form-control" />
+                <InputText id="evaluation" @bind-Value="_issue.Evaluation" class="form-control" />
             </div>
         </div>
         
         <div class="row mt-2">
             <div class="col form-group">
                 <label for="verification">Verification:</label>
-                <InputText id="verification" @bind-Value="_complain.Verification" class="form-control" />
+                <InputText id="verification" @bind-Value="_issue.Verification" class="form-control" />
             </div>
 
             <div class="col form-group">
                 <label for="verificationDate">Verification Date:</label>
-                <InputDate id="verificationDate" @bind-Value="_complain.VerificationDate" class="form-control" />
+                <InputDate id="verificationDate" @bind-Value="_issue.VerificationDate" class="form-control" />
             </div>
         </div>
 
@@ -90,7 +90,7 @@
         <div class="form-group mt-2">
             <div class="row" style="width: 134px;">
                 <label class="col-8" for="isClosed">Is Closed</label>
-                <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_complain.IsClose" />
+                <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_issue.IsClose" />
             </div>
         </div>
     </EditForm>
@@ -114,7 +114,7 @@
 
     private UserVM _customer;
 
-    private ComplainVM _complain = new ComplainVM()
+    private IssueVM _issue = new IssueVM()
     {
         ComplaintDate = DateTime.Now,
         SolutionDate = DateTime.Now,
@@ -126,7 +126,7 @@
 
     public void Refresh()
     {
-        _complain = new ComplainVM()
+        _issue = new IssueVM()
         {
             ComplaintDate = DateTime.Now,
             SolutionDate = DateTime.Now,
@@ -137,55 +137,55 @@
 
     public async Task HandleValidSubmit()
     {
-        _complain.VerificatorSignature = await verificatorSignature.GetImageData();
-        _complain.PMSignature = await pMSignature.GetImageData();
-        _complain.ProjectId = _project.Id;
-        _complain.CustomerId = _customer.Id;
-        _complain.ProjectManagerId = _project.ProjectManager.Id;
+        _issue.VerificatorSignature = await verificatorSignature.GetImageData();
+        _issue.PMSignature = await pMSignature.GetImageData();
+        _issue.ProjectId = _project.Id;
+        _issue.CustomerId = _customer.Id;
+        _issue.ProjectManagerId = _project.ProjectManager.Id;
 
         // TODO: Validate And Save Complain
-        if (_complain.ComplaintDate <= DateTime.Now.AddDays(-1) || _complain.ComplaintDate == null)
+        if (_issue.ComplaintDate <= DateTime.Now.AddDays(-1) || _issue.ComplaintDate == null)
         {
 
         }
-        if (string.IsNullOrEmpty(_complain.About))
+        if (string.IsNullOrEmpty(_issue.About))
         {
 
         }
-        if (string.IsNullOrEmpty(_complain.Description))
+        if (string.IsNullOrEmpty(_issue.Description))
         {
 
         }
-        if (string.IsNullOrEmpty(_complain.Solution))
+        if (string.IsNullOrEmpty(_issue.Solution))
         {
 
         }
-        if (_complain.SolutionDate <= DateTime.Now.AddDays(-1) || _complain.SolutionDate == null)
+        if (_issue.SolutionDate <= DateTime.Now.AddDays(-1) || _issue.SolutionDate == null)
         {
 
         }
-        if (string.IsNullOrEmpty(_complain.Evaluation))
+        if (string.IsNullOrEmpty(_issue.Evaluation))
         {
 
         }
-        if (string.IsNullOrEmpty(_complain.Verification))
+        if (string.IsNullOrEmpty(_issue.Verification))
         {
 
         }
-        if (_complain.VerificationDate <= DateTime.Now.AddDays(-1) || _complain.VerificationDate == null)
+        if (_issue.VerificationDate <= DateTime.Now.AddDays(-1) || _issue.VerificationDate == null)
         {
 
         }
-        if (_complain.VerificatorSignature.Length == 0)
+        if (_issue.VerificatorSignature.Length == 0)
         {
 
         }
-        if (_complain.PMSignature.Length == 0)
+        if (_issue.PMSignature.Length == 0)
         {
 
         }
 
-        await DataProvider.Complains.Add(Mapper.Map<ComplainDto>(_complain));
+        await DataProvider.Issues.Add(Mapper.Map<IssueDto>(_issue));
     }
 
 }

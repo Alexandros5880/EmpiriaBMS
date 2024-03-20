@@ -38,7 +38,7 @@ public class AppDbContext : DbContext
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<Complain> Complains { get; set; }
+    public DbSet<Issue> Complains { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -206,6 +206,18 @@ public class AppDbContext : DbContext
             Ord = 12
         };
         builder.Entity<Permission>().HasData(per_12);
+
+        // Display Projects Code
+        var per_13_id = random.Next(123456789, 999999999);
+        Permission per_13 = new Permission()
+        {
+            Id = per_13_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Display Projects Code",
+            Ord = 13
+        };
+        builder.Entity<Permission>().HasData(per_13);
         #endregion
 
         #region Roles
@@ -804,15 +816,15 @@ public class AppDbContext : DbContext
         builder.Entity<RolePermission>().HasData(rp_25);
 
         // CEO || See Admin Layout
-        RolePermission rp_26 = new RolePermission()
-        {
-            Id = random.Next(123456789, 999999999) * 9,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            RoleId = role_6_id,
-            PermissionId = per_7_id
-        };
-        builder.Entity<RolePermission>().HasData(rp_26);
+        //RolePermission rp_26 = new RolePermission()
+        //{
+        //    Id = random.Next(123456789, 999999999) * 9,
+        //    CreatedDate = DateTime.Now,
+        //    LastUpdatedDate = DateTime.Now,
+        //    RoleId = role_6_id,
+        //    PermissionId = per_7_id
+        //};
+        //builder.Entity<RolePermission>().HasData(rp_26);
 
         // CEO || See All Disciplines
         RolePermission rp_39 = new RolePermission()
@@ -836,7 +848,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_44);
 
-        // COO || See All Projects
+        // CEO || See All Projects
         RolePermission rp_47 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -846,6 +858,17 @@ public class AppDbContext : DbContext
             PermissionId = per_11_id
         };
         builder.Entity<RolePermission>().HasData(rp_47);
+
+        // CEO || Display Projects Code
+        RolePermission rp_61 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_13_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_61);
 
 
         // Guest
@@ -2066,17 +2089,9 @@ public class AppDbContext : DbContext
                 Name = "Project_" + Convert.ToString(i),
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 DurationDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                EstPaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                PaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                WorkPackege = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                DelayInPayment = Convert.ToInt32(Math.Pow(i, 2)),
-                PaymentDetails = "Payment Detailes For Project_" + Convert.ToString(i * random.Next(1, 7)),
-                DayCost = 7 + i - 1 * 2,
-                Bank = i % 2 == 0 ? "ALPHA" : "NBG_IBANK",
-                PaidFee = 7 - 1 * 2,
-                DaysUntilPayment = (createdDate.AddDays(Convert.ToInt32(Math.Pow(i, 2))) - createdDate).Days,
-                PendingPayments = i,
+                EstimatedDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                Fee = 10000,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
@@ -2153,17 +2168,8 @@ public class AppDbContext : DbContext
             Name = "Project_PM",
             Description = "Test Description Project_PM",
             DurationDate = createdDate.AddMonths(1),
-            EstPaymentDate = createdDate.AddMonths(2),
-            PaymentDate = createdDate.AddMonths(1),
             DeadLine = createdDate.AddMonths(3),
-            WorkPackege = createdDate.AddMonths(2),
-            DelayInPayment = Convert.ToInt32(Math.Pow(1, 2)),
-            PaymentDetails = "Payment Detailes For Project_PM",
-            DayCost = 111,
-            Bank = "ALPHA",
-            PaidFee = 45,
-            DaysUntilPayment = (createdDate.AddDays(90) - createdDate).Days,
-            PendingPayments = 2,
+            EstimatedDate = createdDate.AddMonths(2),
             CalculationDaly = 345,
             EstimatedMandays = 100 / 8,
             EstimatedHours = 1500,

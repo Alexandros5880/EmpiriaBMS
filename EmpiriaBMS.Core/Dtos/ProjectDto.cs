@@ -23,37 +23,24 @@ public class ProjectDto : EntityDto
 
     public long EstimatedHours { get; set; }
 
-    public float EstimatedCompleted { get; set; }
+    public double? Fee { get; set; }
 
-    public float Completed { get; set; }
-
-    public float WorkPackegedCompleted { get; set; }
+    public int TypeId { get; set; }
+    public ProjectType Type { get; set; }
 
     public bool Active { get; set; }
 
     public DateTime? DeadLine { get; set; }
 
-    public DateTime? WorkPackege { get; set; }
-
     public DateTime? DurationDate { get; set; }
 
-    public DateTime? EstPaymentDate { get; set; }
+    public DateTime? EstimatedDate { get; set; }
 
-    public DateTime? PaymentDate { get; set; }
+    public float EstimatedCompleted { get; set; }
 
-    public int? DelayInPayment { get; set; }
+    public float Completed { get; set; }
 
-    public string? PaymentDetails { get; set; }
-
-    public double? DayCost { get; set; }
-
-    public string? Bank { get; set; }
-
-    public double? PaidFee { get; set; }
-
-    public int? DaysUntilPayment { get; set; }
-
-    public double? PendingPayments { get; set; }
+    public float WorkPackegedCompleted { get; set; }
 
     public int? CalculationDaly { get; set; }
 
@@ -62,9 +49,6 @@ public class ProjectDto : EntityDto
 
     public int? InvoiceId { get; set; }
     public Invoice? Invoice { get; set; }
-
-    public int? TypeId { get; set; }
-    public ProjectType Type { get; set; }
 
     public int? SubContractorId { get; set; }
     public User? SubContractor { get; set; }

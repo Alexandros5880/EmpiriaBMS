@@ -556,18 +556,18 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<ComplainDto>> GetComplains(int projectId)
+    public async Task<ICollection<IssueDto>> GetComplains(int projectId)
     {
         if (projectId == 0)
             throw new ArgumentNullException(nameof(projectId));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var complains = await _context.Set<Complain>()
+            var complains = await _context.Set<Issue>()
                                           .Where(p => p.ProjectId == projectId)
                                           .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Complain>, List<ComplainDto>>(complains);
+            return Mapping.Mapper.Map<List<Issue>, List<IssueDto>>(complains);
         }
     }
 

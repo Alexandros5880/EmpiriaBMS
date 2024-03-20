@@ -772,8 +772,8 @@ else
     </FluentDialog>
 
     <!-- On AddComplain Click Dialog  -->
-    <FluentDialog @ref="_addComplainDialog"
-                  Hidden="@(!_isAddComplainDialogOdepened || _startLoading)"
+    <FluentDialog @ref="_addIssueDialog"
+                  Hidden="@(!_isAddIssueDialogOdepened || _startLoading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: 700px !important;">
@@ -783,16 +783,16 @@ else
                 <span class="carbon--close-outline float-end" @onclick="CloseAddComplainClick"></span>
             </div>
             <div class="col-12 justify-content-center">
-                <Complain @ref="@complainCompoment" Project="@_selectedProject" />
+                <Issue @ref="@issueCompoment" Project="@_selectedProject" />
             </div>
         </div>
 
         <div class="row">
             <FluentButton class="col-6"
-                          OnClick="@(async () => await _addComplainDialogAccept())">
+                          OnClick="@(async () => await _addIssueDialogAccept())">
                 Ok
             </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => _addComplainDialogCansel())">
+            <FluentButton class="col-6" OnClick="@(() => _addIssueDialogCansel())">
                 Cancel
             </FluentButton>
         </div>

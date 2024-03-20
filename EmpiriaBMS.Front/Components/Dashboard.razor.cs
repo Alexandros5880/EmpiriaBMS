@@ -133,9 +133,9 @@ public partial class Dashboard : IDisposable
     private bool _isMyHoursDialogOdepened = false;
 
     // On Add Complain Click Dialog
-    private FluentDialog? _addComplainDialog;
-    private bool _isAddComplainDialogOdepened = false;
-    private Complain complainCompoment;
+    private FluentDialog? _addIssueDialog;
+    private bool _isAddIssueDialogOdepened = false;
+    private Issue issueCompoment;
 
     // On Add Project Click Dialog
     private FluentDialog? _addProjectDialog;
@@ -517,17 +517,17 @@ public partial class Dashboard : IDisposable
 
     private void OnAddComplainClick()
     {
-        complainCompoment.Refresh();
-        _addComplainDialog.Show();
-        _isAddComplainDialogOdepened = true;
+        issueCompoment.Refresh();
+        _addIssueDialog.Show();
+        _isAddIssueDialogOdepened = true;
     }
 
     private void CloseAddComplainClick()
     {
-        if (_isAddComplainDialogOdepened)
+        if (_isAddIssueDialogOdepened)
         {
-            _addComplainDialog.Hide();
-            _isAddComplainDialogOdepened = false;
+            _addIssueDialog.Hide();
+            _isAddIssueDialogOdepened = false;
         }
     }
     
@@ -1002,17 +1002,17 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region On Press Add Complain Dialog Actions
-    public async Task _addComplainDialogAccept()
+    public async Task _addIssueDialogAccept()
     {
-        await complainCompoment.HandleValidSubmit();
-        _addComplainDialog.Hide();
-        _isAddComplainDialogOdepened = false;
+        await issueCompoment.HandleValidSubmit();
+        _addIssueDialog.Hide();
+        _isAddIssueDialogOdepened = false;
     }
 
-    public void _addComplainDialogCansel()
+    public void _addIssueDialogCansel()
     {
-        _addComplainDialog.Hide();
-        _isAddComplainDialogOdepened = false;
+        _addIssueDialog.Hide();
+        _isAddIssueDialogOdepened = false;
     }
     #endregion
 

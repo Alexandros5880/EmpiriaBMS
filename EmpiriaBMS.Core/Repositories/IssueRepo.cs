@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class ComplainRepo : Repository<ComplainDto, Complain>
+public class IssueRepo : Repository<IssueDto, Issue>
 {
-    public ComplainRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public IssueRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 }

@@ -1,12 +1,13 @@
 ﻿@using EmpiriaBMS.Front.ViewModel.Components;
 @using Microsoft.AspNetCore.Components;
-
+@using EmpiriaBMS.Front.Services
 @using EmpiriaBMS.Core.Config;
 @using EmpiriaBMS.Core.Dtos;
 @using System.Text.Json;
 
 @inject IMapper Mapper
 @inject IDataProvider DataProvider
+@inject SharedAuthDataService _sharedAuthData
 
 <div class="w-96 h-100 rounded default-background shadow"
      style="overflow-x: hidden; overflow-y: auto; max-height: 700px;">
@@ -16,7 +17,7 @@
     <EditForm Model="@_project"
               class="row mt-3 gx-2 p-2">
 
-        <div class="p-2 col-lg-6 col-md-12">
+        <div class="p-2 col-12">
 
             <div class="row">
                 <div class="col-lg-6 col-md-12">
@@ -30,77 +31,27 @@
                     <!-- Code -->
                     <div class="form-group">
                         <label for="code">Code</label>
-                        <InputText id="code" @bind-Value="@_project.Code" class="form-control" />
+                        @if (seeCode)
+                        {
+                            <InputText id="code" @bind-Value="@_project.Code" class="form-control" />
+                        }
+                        else
+                        {
+                            <InputText id="code" @bind-Value="@defaultValue" class="form-control" />
+                        }
                     </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <!-- WorkingDays -->
+                    <!-- Fee -->
                     <div class="form-group">
-                        <label for="workingDays">Working Days</label>
+                        <label for="fee">Fee</label>
                         <input type="number"
                                class="form-control"
-                               id="workingDays"
-                               @bind="@_project.EstimatedMandays">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- EstimatedCompleted -->
-                    <div class="form-group">
-                        <label for="estimatedCompleted">Estimated Completed</label>
-                        <input type="number"
-                               class="form-control"
-                               id="estimatedCompleted"
-                               @bind="@_project.EstimatedCompleted">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- Completed -->
-                    <div class="form-group">
-                        <label for="completed">Completed</label>
-                        <div class="input-group">
-                            <input type="number"
-                                   min="0"
-                                   max="100"
-                                   class="form-control completed-input"
-                                   id="completed"
-                                   @bind="@_project.Completed">
-                            <div class="input-group-append">
-                                <span class="input-group-text">%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- WorkPackegedCompleted -->
-                    <div class="form-group">
-                        <label for="workPackegedCompleted">Work Packeged Completed</label>
-                        <div class="input-group">
-                            <input type="number"
-                                   min="0"
-                                   max="100"
-                                   class="form-control completed-input"
-                                   id="workPackegedCompleted"
-                                   @bind="@_project.WorkPackegedCompleted">
-                            <div class="input-group-append">
-                                <span class="input-group-text">%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- Active -->
-                    <div class="row mt-4" style="width: 134px;">
-                        <label class="col-8" for="active">Is Active</label>
-                        <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
+                               id="fee"
+                               @bind="@_project.Fee">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -119,16 +70,6 @@
 
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <!-- WorkPackege -->
-                    <div class="form-group">
-                        <label for="workPackege">WorkPackege</label>
-                        <input type="date"
-                                class="form-control"
-                                   id="workPackege"
-                                   @bind="@_project.WorkPackege">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
                     <!-- DurationDate -->
                     <div class="form-group">
                         <label for="durationDate">DurationDate</label>
@@ -138,145 +79,21 @@
                                @bind="@_project.DurationDate">
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <!-- EstPaymentDate -->
+                    <!-- EstimatedDate -->
                     <div class="form-group">
-                        <label for="estPaymentDate">EstPaymentDate</label>
+                        <label for="estimatedDate">EstimatedDate</label>
                         <input type="date"
                                class="form-control"
-                               id="estPaymentDate"
-                               @bind="@_project.EstPaymentDate">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- PaymentDate -->
-                    <div class="form-group">
-                        <label for="paymentDate">PaymentDate</label>
-                        <input type="date"
-                               class="form-control"
-                               id="paymentDate"
-                               @bind="@_project.PaymentDate">
+                               id="estimatedDate"
+                               @bind="@_project.EstimatedDate">
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <div class="p-2 col-lg-6 col-md-12">
-    
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- DelayInPayment -->
-                    <div class="form-group">
-                        <label for="delayInPayment">DelayInPayment</label>
-                        <input type="number"
-                               class="form-control"
-                               id="delayInPayment"
-                               @bind="@_project.DelayInPayment">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- PaymentDetailes -->
-                    <div class="form-group">
-                        <label for="paymentDetailes">Payment Detailes</label>
-                        <InputText id="paymentDetailes" @bind-Value="@_project.PaymentDetails" class="form-control" />
-                    </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- DayCost -->
-                    <div class="form-group">
-                        <label for="dayCost">DayCost</label>
-                        <input type="number"
-                               class="form-control"
-                               id="dayCost"
-                               @bind="@_project.DayCost">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- Bank -->
-                    <div class="form-group">
-                        <label for="bank">Bank</label>
-                        <InputText id="bank" @bind-Value="@_project.Bank" class="form-control" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- PaidFee -->
-                    <div class="form-group">
-                        <label for="paidFee">PaidFee</label>
-                        <input type="number"
-                               class="form-control"
-                               id="paidFee"
-                               @bind="@_project.PaidFee">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- CalculationDaly -->
-                    <div class="form-group">
-                        <label for="calculationDaly">CalculationDaly</label>
-                        <input type="number"
-                               class="form-control"
-                               id="calculationDaly"
-                               @bind="@_project.CalculationDaly">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- DaysUntilPayment -->
-                    <div class="form-group">
-                        <label for="daysUntilPayment">DaysUntilPayment</label>
-                        <input type="number"
-                               class="form-control"
-                               id="daysUntilPayment"
-                               @bind="@_project.DaysUntilPayment">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- PendingPayments -->
-                    <div class="form-group">
-                        <label for="pendingPayments">PendingPayments</label>
-                        <input type="number"
-                               class="form-control"
-                               id="pendingPayments"
-                               @bind="@_project.PendingPayments">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- DeadLine -->
-                    <div class="form-group">
-                        <label for="deadLine">DeadLine</label>
-                        <input type="date"
-                               class="form-control"
-                               id="deadLine"
-                               @bind="@_project.DeadLine">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- EstPaymentDate -->
-                    <div class="form-group">
-                        <label for="estPaymentDate">EstPaymentDate</label>
-                        <input type="date"
-                               class="form-control"
-                               id="estPaymentDate"
-                               @bind="@_project.EstPaymentDate">
-                    </div>
-                </div>
-            </div>
-
-        </div>
 
         <!-- Description -->
         <div class="col-12 form-group">
@@ -288,9 +105,29 @@
                       @bind="@_project.Description" />
         </div>
 
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <!-- DeadLine -->
+                <div class="form-group">
+                    <label for="deadLine">DeadLine</label>
+                    <input type="date"
+                           class="form-control"
+                           id="deadLine"
+                           @bind="@_project.DeadLine">
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <!-- Active -->
+                <div class="row mt-4 float-end" style="width: 134px;">
+                    <label class="col-8" for="active">Is Active</label>
+                    <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
+                </div>
+            </div>
+        </div>
+
     </EditForm>
 
-    <div class="mb-2 row gx-2" style="margin: 0 auto;">
+@*     <div class="mb-2 row gx-2" style="margin: 0 auto;">
 
         <div class="col-12 row gx-2 gy-2">
 
@@ -317,5 +154,5 @@
 
         </div>
 
-    </div>
+    </div> *@
 </div>
