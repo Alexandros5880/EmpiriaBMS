@@ -67,6 +67,33 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
+    public async Task<ICollection<UserDto>> GetAllWithRoles()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var usersroles = await _context.Set<UserRole>()
+                                           .Include(ur => ur.Role)
+                                           .ToListAsync();
+
+            var users = await _context.Set<User>()
+                                     .ToListAsync();
+
+            var userDto = Mapping.Mapper.Map<List<UserDto>>(users);
+
+            foreach(var u in userDto)
+            {
+                u.Roles = u.Roles ?? new List<RoleDto>();
+                foreach(var ur in usersroles)
+                {
+                    if (u.Id.Equals(ur.UserId))
+                        u.Roles.Add(Mapping.Mapper.Map<RoleDto>(ur.Role));
+                }
+            }
+
+            return userDto;
+        }
+    }
+
     public new async Task<ICollection<UserDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())

@@ -34,4 +34,6 @@ public class UserDto : EntityDto
     public Project? Project { get; set; }
 
     public ICollection<Email> Emails { get; set; }
+
+    public ICollection<RoleDto> Roles { get; set; }
 }

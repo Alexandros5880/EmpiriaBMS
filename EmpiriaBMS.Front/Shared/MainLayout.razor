@@ -1,5 +1,6 @@
 @inherits LayoutComponentBase
 
+@using EmpiriaBMS.Core.Dtos
 @using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
@@ -149,16 +150,30 @@ else
 
     <!-- Remove This -->
     <select class="form-select" @onchange="UsersSelectionChanged"
-            style="position:fixed !important; bottom:0px !important; width: 200px; right: 10px;">
+            style="position:fixed !important; bottom:0px !important; width: auto; right: 10px;">
         @foreach (var _user in _allUsers)
         {
             @if (@_user.Id.Equals(_sharedAuthData.LogedUser.Id))
             {
-                <option value="@_user?.Id" selected>@_user.LastName @_user.FirstName</option>
+                <option value="@_user?.Id" selected>
+                    @_user.LastName @_user.FirstName  -->  [
+                    @foreach (var r in _user.Roles)
+                    {
+                        <span> @r.Name </span>
+                    }
+                    ]
+                </option>
             }
             else
             {
-                <option value="@_user?.Id">@_user.LastName @_user.FirstName</option>
+                <option value="@_user?.Id">
+                    @_user.LastName @_user.FirstName  -->  [
+                    @foreach (var r in _user.Roles)
+                    {
+                        <span> @r.Name </span>
+                    }
+                    ]
+                </option>
             }
         }
     </select>
@@ -219,7 +234,7 @@ else
     }
 
     // TODO: Remove This
-    private ICollection<UserVM> _allUsers = new List<UserVM>();
+    private ICollection<UserDto> _allUsers = new List<UserDto>();
 
     private async Task UsersSelectionChanged(ChangeEventArgs e)
     {
@@ -232,9 +247,8 @@ else
 
     private async Task GetAllUsers()
     {
-        var usersDtos = await DataProvider.Users.GetAll();
-        var users = Mapper.Map<List<UserVM>>(usersDtos);
+        var users = await DataProvider.Users.GetAllWithRoles();
         _allUsers.Clear();
-        users.ForEach(_allUsers.Add);
+        users.ToList().ForEach(_allUsers.Add);
     }
 }
