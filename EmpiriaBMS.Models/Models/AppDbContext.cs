@@ -2085,7 +2085,7 @@ public class AppDbContext : DbContext
                 EstimatedCompleted = 0,
                 TypeId = projectTypes[i - 1],
                 Active = i % 2 == 0 ? true : false,
-                ProjectManagerId = projectManagers.Count < i-1 ? projectManagers[i].Id : null
+                ProjectManagerId = projectManagers.Count < i-1 ? projectManagers[i].Id : projectManagers[i - i + 1].Id
             };
             builder.Entity<Project>().HasData(project);
             projects.Add(project);

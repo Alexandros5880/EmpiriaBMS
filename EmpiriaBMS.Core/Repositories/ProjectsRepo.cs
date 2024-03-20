@@ -542,44 +542,17 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var pm = await _context.Set<Project>()
-                                        .Include(p => p.ProjectManager)
-                                        .Select(p => p.ProjectManager)
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+            var p = await _context.Set<Project>()
+                                  .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            if (p == null)
+                throw new NullReferenceException(nameof(p));
+
+            var pmId = p.ProjectManagerId;
+
+            var pm = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == pmId);
 
             return Mapping.Mapper.Map<UserDto>(pm);
-        }
-    }
-
-    public async Task AddProjectManager(int projectId, int pmId)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-
-            var project = await _context.Set<Project>()
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            if (project == null)
-                throw new NullReferenceException(nameof(project));
-
-            project.ProjectManagerId = pmId;
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task RemoveProjectManager(int projectId)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var project = await _context.Set<Project>()
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            if (project == null)
-                throw new NullReferenceException(nameof(project));
-
-            project.ProjectManagerId = 0;
-            project.ProjectManager = null;
-            await _context.SaveChangesAsync();
         }
     }
 

@@ -83,7 +83,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}");
+            Console.WriteLine($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

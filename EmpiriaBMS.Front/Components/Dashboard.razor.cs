@@ -106,6 +106,7 @@ public partial class Dashboard : IDisposable
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
+    private int _selectedPmId;
     #endregion
 
     #region Dialogs
@@ -295,23 +296,19 @@ public partial class Dashboard : IDisposable
             if (pms == null)
                 throw new NullReferenceException(nameof(pms));
 
-            var myPM = await DataProvider.Projects.GetProjectManager(_selectedProject.Id);
-
             var pmsVM = Mapper.Map<List<UserVM>>(pms);
 
+            var myPM = await DataProvider.Projects.GetProjectManager(_selectedProject.Id);
+            _selectedPmId = myPM.Id;
 
             _projectManagers.Clear();
-            pmsVM.ForEach(d =>
-            {
-                d.IsSelected = myPM.Id == d.Id;
-                _projectManagers.Add(d);
-            });
+            pmsVM.ForEach(_projectManagers.Add);
 
             StateHasChanged();
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
     }
@@ -987,13 +984,12 @@ public partial class Dashboard : IDisposable
 
         _startLoading = true;
 
-        await DataProvider.Projects.RemoveProjectManager(_selectedProject.Id);
-
-        var forAdd = _projectManagers.Where(d => d.IsSelected == true).ToList();
-        var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
-        await DataProvider.Projects.AddProjectManager(_selectedProject.Id, forAddDto.FirstOrDefault().Id);
+        _selectedProject.ProjectManagerId = _selectedPmId;
+        await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_selectedProject));
 
         _startLoading = false;
+
+        await Refresh();
     }
 
     public void _addPMDialogCansel()
