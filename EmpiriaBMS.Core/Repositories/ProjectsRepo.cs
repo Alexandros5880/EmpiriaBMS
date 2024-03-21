@@ -642,6 +642,20 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 else
                 {
                     var savedDiscipline = await _context.Set<Discipline>().AddAsync(Mapping.Mapper.Map<Discipline>(d));
+                    await _context.SaveChangesAsync();
+
+                    var savedDisciplineId = savedDiscipline.Entity.Id;
+
+                    // Create Supportive Works For Every Discipline
+                    foreach (var t in otherTypes)
+                    {
+                        Other other = new Other()
+                        {
+                            TypeId = t.Id,
+                            DisciplineId = savedDisciplineId
+                        };
+                        await _context.Set<Other>().AddAsync(other);
+                    }
                 }
             }
 
