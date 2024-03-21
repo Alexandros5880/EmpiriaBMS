@@ -550,15 +550,24 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (project == null)
                 throw new ArgumentNullException(nameof(project));
 
-            // Calculate Disciplines Estimated Hours Fro Discipline Estimated ManDays
-            // And Update Project Id to every Discipline
-            // If Discipline Exist Update else Create
+            // Calculate Disciplines Estimated Hours, Disciplines Estimated ManDays, Disciplines EstimatedCompleted
             foreach (var d in disciplines)
             {
                 d.EstimatedHours = d.EstimatedMandays * 8;
+
+                // Calculate Discipline EstimatedCompleted
+                var disciplineMenHours = await _context.Set<DailyTime>()
+                                                       .Where(d => d.DisciplineId == d.Id)
+                                                       .Select(d => d.TimeSpan.Hours)
+                                                       .SumAsync();
+                decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours)
+                                                        / Convert.ToDecimal(d.EstimatedHours);
+                d.EstimatedCompleted = (float)divitionDiscResult * 100;
+
+                // Update Discipline Project
                 d.ProjectId = projectId;
 
-                // Update Disciplines
+                // Update Discipline
                 var exists = await _context.Set<Discipline>().AnyAsync(disc => disc.Id == d.Id);
                 if (exists)
                 {
@@ -578,6 +587,15 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var estimatedHoursSum = disciplines.Select(d => d.EstimatedHours).Sum();
             project.EstimatedMandays = estimatedManDaysSum;
             project.EstimatedHours = estimatedHoursSum;
+
+            // Calculate Project EstimatedComplete
+            var projectMenHours = await _context.Set<DailyTime>()
+                                                .Where(d => d.ProjectId == projectId)
+                                                .Select(d => d.TimeSpan.Hours)
+                                                .SumAsync();
+            decimal divitionProResult = Convert.ToDecimal(projectMenHours)
+                                                    / Convert.ToDecimal(project.EstimatedHours);
+            project.EstimatedCompleted = (float)divitionProResult * 100;
 
             // Save Changes
             await _context.SaveChangesAsync();
