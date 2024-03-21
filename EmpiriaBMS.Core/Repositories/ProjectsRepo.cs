@@ -538,6 +538,23 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                  .CountAsync();
     }
 
+    public async Task UpdateDisciplines(int projectId, List<DisciplineDto> disciplines)
+    {
+        if (projectId == 0)
+            throw new ArgumentNullException(nameof(projectId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var project = await _context.Set<Project>().FirstOrDefaultAsync(p => p.Id == projectId);
+
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+
+
+        }
+    }
+
     public async Task<UserDto> GetProjectManager(int projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())

@@ -112,12 +112,16 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
 
     public async Task HandleValidSubmit()
     {
-        // TODO: Update subConstructon and customer validate and save.
+        // Save Project
         var exists = await DataProvider.Projects.Any(p =>  p.Id == _project.Id);
         if (exists)
             await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_project));
         else
             await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(_project));
+
+        // Save Disciplines
+        var disciplinesDtos = Mapper.Map<DisciplineDto>(_disciplines);
+        await DataProvider.Projects.UpdateDisciplines(_project.Id, disciplinesDtos);
     }
 
     protected virtual void Dispose(bool disposing)
