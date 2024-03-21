@@ -1409,6 +1409,16 @@ public class AppDbContext : DbContext
             RoleId = role_4_id
         };
         builder.Entity<UserRole>().HasData(engineerRole_6_em_coo);
+        // CTO
+        UserRole engineerRole_17_em_coo = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6_Id,
+            RoleId = role_5_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_17_em_coo);
 
         // ΤΖΑΝΗΣ ΒΑΣΙΛΕΙΟΣ
         var engineer_7_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 16;
