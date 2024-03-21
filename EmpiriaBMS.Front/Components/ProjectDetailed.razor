@@ -58,7 +58,7 @@
                     <!-- ProjectType -->
                     <div class="form-group">
                         <label for="projectType">ProjectType</label>
-                        <select class="form-select" @bind="_project.TypeId">
+                        <select class="form-select" @onchange="((e) => _updateProjectType(e))">
                             @foreach (var projectType in _projectTypes)
                             {
                                 <option value="@projectType.Id">@projectType.Name</option>

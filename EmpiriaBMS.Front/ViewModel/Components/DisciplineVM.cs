@@ -123,4 +123,12 @@ public class DisciplineVM : BaseVM
             NotifyPropertyChanged(nameof(Completed));
         }
     }
+
+    public DisciplineVM()
+    {
+        EstimatedMandays = 0;
+        EstimatedHours = 0;
+        EstimatedCompleted = 0;
+        Completed = 0;
+    }
 }

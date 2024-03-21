@@ -347,5 +347,11 @@ public class ProjectVM : BaseVM
         Name = "";
         Code = "";
         Description = "";
+        Active = true;
+        EstimatedMandays = 0;
+        EstimatedHours = 0;
+        EstimatedCompleted = 0;
+        Completed = 0;
+        WorkPackegedCompleted = 0;
     }
 }

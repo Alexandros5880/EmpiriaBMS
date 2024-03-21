@@ -94,6 +94,8 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         await _getProjectTypes();
         await _getDisciplineTypes();
         _project = new ProjectVM();
+        _project.Active = true;
+        _project.TypeId = _projectTypes.FirstOrDefault().Id;
         StateHasChanged();
     }
 
@@ -110,18 +112,27 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         StateHasChanged();
     }
 
+    private void _updateProjectType(ChangeEventArgs e)
+    {
+        var projectTypeId = Convert.ToInt32(e.Value);
+        var projectType = _projectTypes.FirstOrDefault(t => t.Id == projectTypeId);
+        _project.TypeId = projectTypeId;
+        _project.Type = null;
+    }
+
     public async Task HandleValidSubmit()
     {
         // Save Project
+        ProjectDto saveProject;
         var exists = await DataProvider.Projects.Any(p =>  p.Id == _project.Id);
         if (exists)
-            await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_project));
+            saveProject = await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_project));
         else
-            await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(_project));
+            saveProject = await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(_project));
 
         // Save Disciplines
         var disciplinesDtos = Mapper.Map<List<DisciplineDto>>(_disciplines);
-        await DataProvider.Projects.UpdateDisciplines(_project.Id, disciplinesDtos);
+        await DataProvider.Projects.UpdateDisciplines(saveProject.Id, disciplinesDtos);
     }
 
     protected virtual void Dispose(bool disposing)

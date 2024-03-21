@@ -298,8 +298,11 @@ public partial class Dashboard : IDisposable
 
             var pmsVM = Mapper.Map<List<UserVM>>(pms);
 
-            var myPM = await DataProvider.Projects.GetProjectManager(_selectedProject.Id);
-            _selectedPmId = myPM.Id;
+            if (_selectedProject.ProjectManagerId != null && _selectedProject.ProjectManagerId != 0)
+            {
+                var myPM = await DataProvider.Projects.GetProjectManager(_selectedProject.Id);
+                _selectedPmId = myPM.Id;
+            }
 
             _projectManagers.Clear();
             pmsVM.ForEach(_projectManagers.Add);
