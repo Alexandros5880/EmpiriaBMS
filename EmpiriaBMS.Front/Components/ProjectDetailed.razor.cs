@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Front.Components.Admin.DisciplinesTypes;
 using System.Linq.Expressions;
+using EmpiriaBMS.Front.Components.Admin.ProjectsTypes;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase, IDisposable
@@ -42,6 +43,9 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     public async void PrepairForNew()
     {
         isNew = true;
+        _projectTypes.Clear();
+        _disciplineTypes.Clear();
+        _disciplines.Clear();
         await _getProjectTypes();
         await _getDisciplineTypes();
         _project = new ProjectVM();
@@ -51,6 +55,9 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     public async void PrepairForEdit(ProjectVM project)
     {
         isNew = false;
+        _projectTypes.Clear();
+        _disciplineTypes.Clear();
+        _disciplines.Clear();
         await _getProjectTypes();
         await _getDisciplineTypes();
         _project = project;

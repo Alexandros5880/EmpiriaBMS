@@ -1,3 +1,6 @@
+### You can open the app oustide of teams:
+`https://localhost:44302/login`
+
 ### MicrosoftTeams User:
 `using MicrosoftUser = Microsoft.Graph.Models.User;`
 

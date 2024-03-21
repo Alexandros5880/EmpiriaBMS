@@ -153,7 +153,7 @@ else
             style="position:fixed !important; bottom:0px !important; width: auto; right: 10px;">
         @foreach (var _user in _allUsers)
         {
-            @if (@_user.Id.Equals(_sharedAuthData.LogedUser.Id))
+            @if (@_user.Id.Equals(_sharedAuthData?.LogedUser?.Id))
             {
                 <option value="@_user?.Id" selected>
                     @_user.LastName @_user.FirstName  -->  [
@@ -212,7 +212,9 @@ else
             _runInTeams = await MicrosoftTeams.IsInTeams();
             await GetAllUsers(); // TODO: Remove This
             authorizeServices.CallBackOnAuthorize += _afterAuthCallBack;
-            await authorizeServices.Authorize(runInTeams: _runInTeams);
+            var result = await authorizeServices.Authorize(runInTeams: _runInTeams);
+            if (!result)
+                NavigationManager.NavigateTo("/login");
         }
     }
 

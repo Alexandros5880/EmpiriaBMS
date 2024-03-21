@@ -139,20 +139,25 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="sticky-header">Discipline</th>
-                                <th scope="col" class="sticky-header">Estimated Discipline Hours</th>
+                                <th scope="col" class="sticky-header">Estimated Mandays</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var discipline in _disciplines)
+                            @foreach (var _discipline in _disciplines)
                             {
                                 <tr class="align-middle">
 
                                     <td class="align-middle">
-                                        <labe>@discipline.Type.Name</labe>
+                                        <labe>@_discipline.Type.Name</labe>
                                     </td>
 
                                     <td class="align-middle text-center">
-                                        <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
+                                        <!-- EstimatedMandays -->
+                                        <input type="number"
+                                               class="form-control"
+                                               id="estimatedMandays"
+                                               @bind="@_discipline.EstimatedMandays"
+                                               style="width: 100px !important; margin: 0 auto;">
                                     </td>
 
                                 </tr>

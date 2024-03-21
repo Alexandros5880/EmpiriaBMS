@@ -30,9 +30,10 @@ public class AuthorizeServices
         _sharedAuthData = sharedData;
     }
 
-    public async Task Authorize(int userId = 0, bool runInTeams = true)
+    public async Task<bool> Authorize(int userId = 0, bool runInTeams = true)
     {
         _sharedAuthData.Clear();
+        bool result = false;
 
         // TODO: When Fix Authorization with teams Remove that
         if (userId != 0)
@@ -47,6 +48,8 @@ public class AuthorizeServices
             _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
                                                     .ToList();
             _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
+
+            result = true;
         }
 
         else if (runInTeams)
@@ -71,20 +74,27 @@ public class AuthorizeServices
                 _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
                                                         .ToList();
                 _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
+
+                result = true;
             }
             else
             {
                 // TODO: When Fix Authorization with teams Remove that
+                // Save User and Display a message to admin to register this user
                 await _getRandomUser();
+
+                result = true;
             }
         }
         else
         {
-            // TODO: Go to login page
+            result = false;
         }
 
         if (CallBackOnAuthorize != null)
             CallBackOnAuthorize.Invoke();
+
+        return result;
     }
 
     public async Task UpdateUserHours() =>
