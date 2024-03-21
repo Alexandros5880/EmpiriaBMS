@@ -545,13 +545,42 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            // Get Project
             var project = await _context.Set<Project>().FirstOrDefaultAsync(p => p.Id == projectId);
-
             if (project == null)
                 throw new ArgumentNullException(nameof(project));
 
+            // Calculate Disciplines Estimated Hours Fro Discipline Estimated ManDays
+            // And Update Project Id to every Discipline
+            // If Discipline Exist Update else Create
+            foreach (var d in disciplines)
+            {
+                d.EstimatedHours = d.EstimatedMandays * 8;
+                d.ProjectId = projectId;
 
+                // Update Disciplines
+                var exists = await _context.Set<Discipline>().AnyAsync(disc => disc.Id == d.Id);
+                if (exists)
+                {
+                    var dbDisc = await _context.Set<Discipline>().FirstOrDefaultAsync(disc => disc.Id == d.Id);
+                    if (dbDisc == null)
+                        throw new NullReferenceException(nameof(dbDisc));
+                    _context.Entry<Discipline>(dbDisc).CurrentValues.SetValues(Mapping.Mapper.Map<Discipline>(d));
+                }
+                else
+                {
+                    await _context.Set<Discipline>().AddAsync(Mapping.Mapper.Map<Discipline>(d));
+                }  
+            }
 
+            // Get Sum EstimatedManDays && EstimatedHours and update Project
+            var estimatedManDaysSum = disciplines.Select(d => d.EstimatedMandays).Sum();
+            var estimatedHoursSum = disciplines.Select(d => d.EstimatedHours).Sum();
+            project.EstimatedMandays = estimatedManDaysSum;
+            project.EstimatedHours = estimatedHoursSum;
+
+            // Save Changes
+            await _context.SaveChangesAsync();
         }
     }
 

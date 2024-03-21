@@ -138,8 +138,8 @@ public partial class Dashboard : IDisposable
     private Issue issueCompoment;
 
     // On Add Project Click Dialog
-    private FluentDialog? _addProjectDialog;
-    private bool _isAddProjectDialogOdepened = false;
+    private FluentDialog? _addEditProjectDialog;
+    private bool _isAddEditProjectDialogOdepened = false;
     private ProjectDetailed projectCompoment;
     #endregion
 
@@ -534,23 +534,23 @@ public partial class Dashboard : IDisposable
     private void AddProject()
     {
         projectCompoment.PrepairForNew();
-        _addProjectDialog.Show();
-        _isAddProjectDialogOdepened = true;
+        _addEditProjectDialog.Show();
+        _isAddEditProjectDialogOdepened = true;
     }
 
     private void EditProject()
     {
         projectCompoment.PrepairForEdit(_selectedProject);
-        _addProjectDialog.Show();
-        _isAddProjectDialogOdepened = true;
+        _addEditProjectDialog.Show();
+        _isAddEditProjectDialogOdepened = true;
     }
 
     private void CloseAddCProjectClick()
     {
-        if (_isAddProjectDialogOdepened)
+        if (_isAddEditProjectDialogOdepened)
         {
-            _addProjectDialog.Hide();
-            _isAddProjectDialogOdepened = false;
+            _addEditProjectDialog.Hide();
+            _isAddEditProjectDialogOdepened = false;
         }
     }
     #endregion
@@ -1017,17 +1017,18 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region On Press Add Project Dialog Actions
-    public async Task _addProjectDialogAccept()
+    public async Task _addEditProjectDialogAccept()
     {
         await projectCompoment.HandleValidSubmit();
-        _addProjectDialog.Hide();
-        _isAddProjectDialogOdepened = false;
+        _addEditProjectDialog.Hide();
+        _isAddEditProjectDialogOdepened = false;
+        await Refresh();
     }
 
-    public void _addProjectDialogCansel()
+    public void _addEditProjectDialogCansel()
     {
-        _addProjectDialog.Hide();
-        _isAddProjectDialogOdepened = false;
+        _addEditProjectDialog.Hide();
+        _isAddEditProjectDialogOdepened = false;
     }
     #endregion
 

@@ -18,6 +18,9 @@ public class DisciplineDto : EntityDto
     public int TypeId { get; set; }
     public DisciplineType Type { get; set; }
 
+    public int ProjectId { get; set; }
+    public Project Project { get; set; }
+
     public float EstimatedCompleted { get; set; }
 
     public float Completed { get; set; }

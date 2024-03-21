@@ -799,9 +799,9 @@ else
 
     </FluentDialog>
 
-    <!-- On AddProject Click Dialog  -->
-    <FluentDialog @ref="_addProjectDialog"
-                  Hidden="@(!_isAddProjectDialogOdepened || _startLoading)"
+    <!-- On Add/Edit Project Click Dialog  -->
+    <FluentDialog @ref="_addEditProjectDialog"
+                  Hidden="@(!_isAddEditProjectDialogOdepened || _startLoading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: auto !important;
@@ -821,10 +821,10 @@ else
 
         <div class="row">
             <FluentButton class="col-6"
-                          OnClick="@(async () => await _addProjectDialogAccept())">
+                          OnClick="@(async () => await _addEditProjectDialogAccept())">
                 Ok
             </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => _addProjectDialogCansel())">
+            <FluentButton class="col-6" OnClick="@(() => _addEditProjectDialogCansel())">
                 Cancel
             </FluentButton>
         </div>
