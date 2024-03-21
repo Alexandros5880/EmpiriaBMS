@@ -136,7 +136,7 @@
                     <span class="grommet-icons--add col-2"
                           @onclick="@(() => _addRow())" />
                 </div>
-                <div class="table-responsive p-1 table-container">
+                <div class="table-responsive p-1">
                     <table class="table table-hover text-center">
                         <thead>
                             <tr>
@@ -151,7 +151,8 @@
                                 <tr class="align-middle">
 
                                     <td class="align-middle">
-                                        <select class="form-select" @bind="_discipline.TypeId">
+                                        <select class="form-select"
+                                                @bind="_discipline.TypeId">
                                             @foreach (var _disciplineType in _disciplineTypes)
                                             {
                                                 @if (_discipline.TypeId.Equals(_disciplineType.Id))
@@ -177,7 +178,7 @@
 
                                     <td class="align-middle text-center">
                                         <span class="fluent--delete-28-regular"
-                                              @onclick="@(() => _removeRow(_discipline.Id))" />
+                                              @onclick="@(() => _removeRow(_discipline.TypeId))" />
                                     </td>
 
                                 </tr>

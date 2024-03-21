@@ -39,20 +39,47 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         Expression<Func<Discipline, bool>> expression = d => d.ProjectId == _project.Id;
         List<DisciplineDto> disc = (await DataProvider.Disciplines.GetAll(expression)).ToList();
         _disciplines = Mapper.Map<List<DisciplineVM>>(disc);
+        _disciplines.ForEach(disc => disc.PropertyChanged += Discipline_PropertyChanged);
     }
 
     private void _addRow()
     {
-        _disciplines.Add(new DisciplineVM());
+        var discipline = new DisciplineVM();
+        discipline.PropertyChanged += Discipline_PropertyChanged;
+        _disciplines.Add(discipline);
         StateHasChanged();
     }
 
-    private void _removeRow(int disciplineId)
+    private void Discipline_PropertyChanged(
+        object sender,
+        System.ComponentModel.PropertyChangedEventArgs e
+    ) {
+        var disc = sender as DisciplineVM;
+        if (_disciplines.Any(d => d.TypeId.Equals(disc.TypeId)))
+        {
+            HashSet<int> uiqueDisciplineTypeIds = new HashSet<int>(_disciplines.Select(d => d.TypeId));
+            var saveDisciplines = new List<DisciplineVM>(_disciplines);
+            _disciplines.Clear();
+
+            foreach(var d in saveDisciplines)
+            {
+                if (uiqueDisciplineTypeIds.Contains(d.TypeId))
+                {
+                    uiqueDisciplineTypeIds.Remove(uiqueDisciplineTypeIds.First(t => t.Equals(d.TypeId)));
+                    _disciplines.Add(d);
+                }
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    private void _removeRow(int disciplineTypeId)
     {
         List<DisciplineVM> disciplines = new List<DisciplineVM>(_disciplines);
         _disciplines.Clear();
         disciplines.ForEach(d => {
-            if (d.Id != disciplineId)
+            if (d.TypeId != disciplineTypeId)
                 _disciplines.Add(d);
         });
         StateHasChanged();
