@@ -120,7 +120,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
             await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(_project));
 
         // Save Disciplines
-        var disciplinesDtos = Mapper.Map<DisciplineDto>(_disciplines);
+        var disciplinesDtos = Mapper.Map<List<DisciplineDto>>(_disciplines);
         await DataProvider.Projects.UpdateDisciplines(_project.Id, disciplinesDtos);
     }
 
