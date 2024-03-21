@@ -8,6 +8,7 @@ using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Front.Components.Admin.DisciplinesTypes;
 using System.Linq.Expressions;
 using EmpiriaBMS.Front.Components.Admin.ProjectsTypes;
+using System.Security.Cryptography;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase, IDisposable
@@ -38,6 +39,23 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         Expression<Func<Discipline, bool>> expression = d => d.ProjectId == _project.Id;
         List<DisciplineDto> disc = (await DataProvider.Disciplines.GetAll(expression)).ToList();
         _disciplines = Mapper.Map<List<DisciplineVM>>(disc);
+    }
+
+    private void _addRow()
+    {
+        _disciplines.Add(new DisciplineVM());
+        StateHasChanged();
+    }
+
+    private void _removeRow(int disciplineId)
+    {
+        List<DisciplineVM> disciplines = new List<DisciplineVM>(_disciplines);
+        _disciplines.Clear();
+        disciplines.ForEach(d => {
+            if (d.Id != disciplineId)
+                _disciplines.Add(d);
+        });
+        StateHasChanged();
     }
 
     public async void PrepairForNew()
