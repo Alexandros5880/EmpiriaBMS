@@ -181,7 +181,8 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
                                           .Where(d => d.DisciplineId == disciplineId)
                                           .Select(d => d.TimeSpan.Hours)
                                           .SumAsync();
-            decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
+            decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) 
+                                                    / Convert.ToDecimal(discipline.EstimatedHours);
             discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
 
             // Get Project && Calculate Estimated Hours
@@ -195,7 +196,8 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
                                           .Where(d => d.ProjectId == projectId)
                                           .Select(d => d.TimeSpan.Hours)
                                           .SumAsync();
-            decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
+            decimal divitionProResult = Convert.ToDecimal(projectMenHours) 
+                                                    / Convert.ToDecimal(project.EstimatedHours);
             project.EstimatedCompleted = (float)divitionProResult * 100;
             
             // Save Changes
