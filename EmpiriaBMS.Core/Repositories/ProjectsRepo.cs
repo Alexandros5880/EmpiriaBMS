@@ -611,6 +611,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (project == null)
                 throw new ArgumentNullException(nameof(project));
 
+            var otherTypes = await _context.Set<OtherType>().ToListAsync();
+
             // Calculate Disciplines Estimated Hours, Disciplines Estimated ManDays, Disciplines EstimatedCompleted
             foreach (var d in disciplines)
             {
@@ -639,8 +641,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 }
                 else
                 {
-                    await _context.Set<Discipline>().AddAsync(Mapping.Mapper.Map<Discipline>(d));
-                }  
+                    var savedDiscipline = await _context.Set<Discipline>().AddAsync(Mapping.Mapper.Map<Discipline>(d));
+                }
             }
 
             // Get Sum EstimatedManDays && EstimatedHours and update Project

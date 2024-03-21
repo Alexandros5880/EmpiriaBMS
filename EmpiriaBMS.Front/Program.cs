@@ -22,7 +22,7 @@ var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
 builder.Services.AddSingleton<TimerService>();
-builder.Services.AddSingleton<SharedAuthDataService>();
+builder.Services.AddScoped<SharedAuthDataService>();
 builder.Services.AddScoped<AuthorizeServices>();
 builder.Services.AddBlazorBootstrap();
 

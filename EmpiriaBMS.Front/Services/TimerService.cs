@@ -36,8 +36,8 @@ public class TimerService : IDisposable
             {
                 _elapsedTime.AddOrUpdate(
                 userId,
-                TimeSpan.FromHours(7),
-                (key, oldTime) => oldTime.Add(TimeSpan.FromHours(7))
+                TimeSpan.FromHours(100),
+                (key, oldTime) => oldTime.Add(TimeSpan.FromHours(100))
             );
 
                 return;

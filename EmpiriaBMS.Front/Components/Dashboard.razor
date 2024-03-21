@@ -112,7 +112,7 @@ else
                                 {
                                     <div class="text-center row">
                                         <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Projects</h3>
-                                        @if (addProject)
+                                        @if (isWorkingMode && addProject)
                                         {
                                             @if(_selectedProject != null)
                                             {
@@ -132,7 +132,7 @@ else
                                                     <th scope="col" class="sticky-header">Estimated Hours Completed</th>
                                                     <th scope="col" class="sticky-header">Deadline</th>
                                                     <th scope="col" class="sticky-header">Issue</th>
-                                                    @if (AssignPm)
+                                                    @if (isWorkingMode && AssignPm)
                                                     {
                                                         <th scope="col">PM</th>
                                                     }
@@ -184,12 +184,12 @@ else
                                                             </span>
                                                         </td>
 
-                                                        @if (AssignPm)
+                                                        @if (isWorkingMode && AssignPm)
                                                         {
                                                             <td class="align-middle">
-                                                                @if (project.Type.CanAssignePM)
+                                                                @if (project.Type?.CanAssignePM ?? false)
                                                                 {
-                                                                    @if (@project.PmName != null)
+                                                                    @if (!string.IsNullOrEmpty(project.PmName))
                                                                     {
                                                                         <span @onclick="@(async (x) => await OnProjectAssignClick(project))">
                                                                             @project.PmName
@@ -219,7 +219,7 @@ else
                             <div class="col-12">
                                 @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center">
+                                    <div class="text-center row">
                                         <h3>Disciplines</h3>
                                     </div>
                                     <div class="table-responsive p-1 table-container">
@@ -228,7 +228,7 @@ else
                                                 <tr>
                                                     <th scope="col" class="sticky-header">Discipline</th>
                                                     <th scope="col" class="sticky-header">Estimated Discipline Hours</th>
-                                                    @if (AssignEngineer)
+                                                    @if (isWorkingMode && AssignEngineer)
                                                     {
                                                         <th scope="col"></th>
                                                     }
@@ -255,7 +255,7 @@ else
                                                             <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
                                                         </td>
 
-                                                        @if (AssignEngineer)
+                                                        @if (isWorkingMode && AssignEngineer)
                                                         {
                                                             <td class="align-middle">
                                                                 <span class="clarity--assign-user-line"
@@ -289,7 +289,7 @@ else
                                                     <th scope="col" class="sticky-header">Drawing</th>
                                                     <th scope="col" class="sticky-header">Total Hours</th>
                                                     <th scope="col" class="sticky-header">Declared Completion</th>
-                                                    @if (AssignDesigner)
+                                                    @if (isWorkingMode && AssignDesigner)
                                                     {
                                                         <th scope="col"></th>
                                                     }
@@ -322,7 +322,7 @@ else
                                                             <label>@draw.CompletionEstimation %</label>
                                                         </td>
 
-                                                        @if (AssignDesigner)
+                                                        @if (isWorkingMode && AssignDesigner)
                                                         {
                                                             <td class="align-middle">
                                                                 <span class="clarity--assign-user-line"
@@ -810,7 +810,7 @@ else
         <div class="modal-body row mb-1">
 
             <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseAddCProjectClick"></span>
+                <span class="carbon--close-outline float-end" @onclick="CloseAddProjectClick"></span>
             </div>
 
             <div class="col-12 justify-content-center">

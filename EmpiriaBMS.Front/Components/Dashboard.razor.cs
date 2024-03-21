@@ -31,45 +31,13 @@ public partial class Dashboard : IDisposable
     private UserTimes _editLogedUserTimes;
 
     #region Authorization Properties
-    public bool AssignDesigner
-    {
-        get
-        {
-            return isWorkingMode && _sharedAuthData.PermissionOrds.Contains(3);
-        }
-    }
-    public bool AssignEngineer
-    {
-        get
-        {
-            return isWorkingMode && _sharedAuthData.PermissionOrds.Contains(4);
-        }
-    }
-    public bool AssignPm
-    {
-        get
-        {
-            return isWorkingMode && _sharedAuthData.PermissionOrds.Contains(5);
-        }
-    }
-    public bool EditMyHours
-    {
-        get
-        {
-            return _sharedAuthData.PermissionOrds.Contains(2);
-        }
-    }
-    public bool SeeMyHours
-    {
-        get
-        {
-            return _sharedAuthData.PermissionOrds.Contains(8);
-        }
-    }
-
+    public bool AssignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
+    public bool AssignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
+    public bool AssignPm => _sharedAuthData.PermissionOrds.Contains(5);
+    public bool EditMyHours => _sharedAuthData.PermissionOrds.Contains(2);
+    public bool SeeMyHours => _sharedAuthData.PermissionOrds.Contains(8);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
     bool getAllDrawings => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
-
     bool addProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
     #endregion
 
@@ -534,6 +502,7 @@ public partial class Dashboard : IDisposable
         }
     }
     
+    // Project Add / Edit
     private void AddProject()
     {
         projectCompoment.PrepairForNew();
@@ -548,7 +517,7 @@ public partial class Dashboard : IDisposable
         _isAddEditProjectDialogOdepened = true;
     }
 
-    private void CloseAddCProjectClick()
+    private void CloseAddProjectClick()
     {
         if (_isAddEditProjectDialogOdepened)
         {
@@ -561,6 +530,8 @@ public partial class Dashboard : IDisposable
     #region Timer
     private void UpdateElapsedTime()
     {
+        if (_sharedAuthData.LogedUser == null) return;
+
         var time = TimerService.GetElapsedTime(_sharedAuthData.LogedUser.Id.ToString());
         timePaused = TimerService.GetPausedTime(_sharedAuthData.LogedUser.Id.ToString());
 
