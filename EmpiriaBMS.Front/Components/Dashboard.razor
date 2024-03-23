@@ -87,10 +87,9 @@ else
                                         <div class="col-lg-3 col-md-4 col-sm-4
                                                 row primary-bg-color rounded-1 text-center"
                                              style="max-height: 70px !important;">
-                                            <span class="mt-3 h5"
-                                                  @onclick="@(() => OnMyHoursClick())">
-                                                <span>My Total Hours This Week: </span>
-                                                <b>@_sharedAuthData.LogesUserHours</b>
+                                            <span class="mt-3 h5">
+                                                <span>My Total Hours This Month: </span>
+                                                <b>@_userTotalHoursThisMonth</b>
                                             </span>
                                         </div>
                                     }
@@ -739,34 +738,6 @@ else
             <FluentButton class="col-6" OnClick="@(() => _addPMDialogCansel())">
                 Cancel
             </FluentButton>
-        </div>
-
-    </FluentDialog>
-
-    <!-- On MyHours Click Dialog  -->
-    <FluentDialog @ref="_myHoursDialog"
-                  Hidden="@(!_isMyHoursDialogOdepened || _startLoading)"
-                  Modal="false"
-                  DialogType=@DialogType.Panel
-                  style="--dialog-width: 400px !important;
-                         --dialog-height: 300px !important;">
-
-        <div class="dialog-header">
-            <span class="carbon--close-outline float-end" @onclick="CloseMyHoursClick"></span>
-        </div>
-
-        <div class="badge text-dark text-wrap fs-5">
-            My Total Hours This Week
-        </div>
-
-        <div class="modal-body row mb-1">
-            <div class="m-1 row justify-content-center">
-                <div class="col-12 p-2">
-
-                    <UserTime LogedUserTimes="@_logedUserTimes" />
-
-                </div>
-            </div>
         </div>
 
     </FluentDialog>

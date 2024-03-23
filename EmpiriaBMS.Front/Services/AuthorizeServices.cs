@@ -40,7 +40,6 @@ public class AuthorizeServices
         {
             var logedUser = await _dataProvider.Users.Get(userId);
             _sharedAuthData.LogedUser = _mapper.Map<UserVM>(logedUser);
-            _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
             _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
                                                     .Select(r => _mapper.Map<RoleVM>(r))
                                                     .ToList();
@@ -66,7 +65,6 @@ public class AuthorizeServices
             {
                 var logedUser = await _dataProvider.Users.Get(teamsUser.PreferredUserName);
                 _sharedAuthData.LogedUser = _mapper.Map<UserVM>(logedUser);
-                _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
                 _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
                                                         .Select(r => _mapper.Map<RoleVM>(r))
                                                         .ToList();
@@ -97,9 +95,6 @@ public class AuthorizeServices
         return result;
     }
 
-    public async Task UpdateUserHours() =>
-        _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
-
     // TODO: When Fix Authorization with teams Remove that
     private async Task _getRandomUser()
     {
@@ -108,7 +103,6 @@ public class AuthorizeServices
             var users = await _dataProvider.Users.GetAll();
             var logedUser = users.FirstOrDefault();
             _sharedAuthData.LogedUser = _mapper.Map<UserVM>(logedUser);
-            _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
             _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
                                                     .Select(r => _mapper.Map<RoleVM>(r))
                                                     .ToList();

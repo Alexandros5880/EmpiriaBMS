@@ -45,6 +45,7 @@ public partial class Dashboard : IDisposable
     private bool disposedValue;
     bool _startLoading = true;
     bool _filterLoading = false;
+    private double _userTotalHoursThisMonth = 0;
 
     #region Working Timer
     Timer timer;
@@ -96,10 +97,6 @@ public partial class Dashboard : IDisposable
     private bool _isAddPMDialogOdepened = false;
     private UserVM _selectedPM = new UserVM();
 
-    // On My Hours Click Dialog
-    private FluentDialog? _myHoursDialog;
-    private bool _isMyHoursDialogOdepened = false;
-
     // On Add Complain Click Dialog
     private FluentDialog? _addIssueDialog;
     private bool _isAddIssueDialogOdepened = false;
@@ -126,7 +123,7 @@ public partial class Dashboard : IDisposable
         if (firstRender)
         {
             //_runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetLogedUserTimes(_sharedAuthData.LogedUser.Id);
+            await GetUserTotalHoursThisMonth();
             await _getProjects();
             _startLoading = false;
             StateHasChanged();
@@ -136,15 +133,16 @@ public partial class Dashboard : IDisposable
     public async Task Refresh()
     {
         _startLoading = true;
+        await GetUserTotalHoursThisMonth();
         await _getProjects();
         _startLoading = false;
         StateHasChanged();
     }
 
     #region Get Records
-    private async Task GetLogedUserTimes(int userId)
+    private async Task GetUserTotalHoursThisMonth()
     {
-        _logedUserTimes = await DataProvider.Users.GetTime(userId, DateTime.Now);
+        _userTotalHoursThisMonth = await DataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
     }
 
     public async Task _getProjects()
@@ -352,22 +350,6 @@ public partial class Dashboard : IDisposable
 
         _endWorkDialog.Show();
         _isEndWorkDialogOdepened = true;
-    }
-
-    private void OnMyHoursClick()
-    {
-        if (!SeeMyHours) return;
-        _myHoursDialog.Show();
-        _isMyHoursDialogOdepened = true;
-    }
-
-    private void CloseMyHoursClick()
-    {
-        if (_isMyHoursDialogOdepened)
-        {
-            _myHoursDialog.Hide();
-            _isMyHoursDialogOdepened = false;
-        }
     }
 
     private async Task OnSelectProject(int projectId)
@@ -883,7 +865,7 @@ public partial class Dashboard : IDisposable
         // Clear Timer From this User
         TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
-        await authorizeServices.UpdateUserHours();
+        await GetUserTotalHoursThisMonth();
 
         _startLoading = false;
     }
