@@ -11,6 +11,7 @@ using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
 using System.ComponentModel.DataAnnotations;
+using EmpiriaBMS.Core.Hellpers;
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -151,18 +152,26 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            DailyTime time = new DailyTime()
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
             {
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Date = DateTime.Now,
-                DailyUserId = userId,
-                ProjectId = projectId,
-                DisciplineId = disciplineId,
-                OtherId = otherId,
-                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds)
-            };
-            await _context.Set<DailyTime>().AddAsync(time);
+                DailyTime time = new DailyTime()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now.AddDays(-i),
+                    DailyUserId = userId,
+                    ProjectId = projectId,
+                    DisciplineId = disciplineId,
+                    DrawingId = otherId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds)
+                };
+                await _context.Set<DailyTime>().AddAsync(time);
+            }
 
             // Save Changes
             await _context.SaveChangesAsync();

@@ -155,18 +155,26 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            DailyTime time = new DailyTime()
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count()-1; i >= 0; i--)
             {
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Date = DateTime.Now,
-                DailyUserId = userId,
-                ProjectId = projectId,
-                DisciplineId = disciplineId,
-                DrawingId = drawId,
-                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds)
-            };
-            await _context.Set<DailyTime>().AddAsync(time);
+                DailyTime time = new DailyTime()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now.AddDays(-i),
+                    DailyUserId = userId,
+                    ProjectId = projectId,
+                    DisciplineId = disciplineId,
+                    DrawingId = drawId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds)
+                };
+                await _context.Set<DailyTime>().AddAsync(time);
+            }
 
             // Save Changes
             await _context.SaveChangesAsync();

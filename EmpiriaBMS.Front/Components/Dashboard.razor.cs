@@ -822,8 +822,6 @@ public partial class Dashboard : IDisposable
         // Update Db
         _startLoading = true;
 
-        TimeSpan sumTime = new TimeSpan();
-
         // Update Draws
         foreach (var draw in _drawsChanged)
         {
@@ -837,7 +835,6 @@ public partial class Dashboard : IDisposable
             else
                 await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
             await DataProvider.Drawings.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
-            sumTime += draw.Time;
         }
 
         // Update Others
@@ -845,11 +842,9 @@ public partial class Dashboard : IDisposable
         {
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
             await DataProvider.Others.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
-            sumTime += other.Time;
         }
 
         // Update User Hours
-        //await DataProvider.Users.AddDailyTime(_sharedAuthData.LogedUser.Id, DateTime.Now, sumTime);
         if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
             await DataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
         if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
