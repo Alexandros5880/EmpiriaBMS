@@ -2119,7 +2119,8 @@ public class AppDbContext : DbContext
             "On-Site",
             "Meetings",
             "Administration",
-            "Soft Copy"
+            "Soft Copy",
+            "Hours To Be Raised"
         };
         for (var i = 0; i < otherTypeNames.Length; i++)
         {

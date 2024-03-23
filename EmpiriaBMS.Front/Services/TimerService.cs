@@ -6,6 +6,9 @@ public class TimerService : IDisposable
 {
     private bool disposedValue;
 
+    // TODO: Time Prefix When Debug ok Set to 0
+    private TimeSpan prefixTime = TimeSpan.FromHours(23);
+
     private readonly Dictionary<string, Timer> _timers = new();
     private readonly ConcurrentDictionary<string, TimeSpan> _elapsedTime = new();
     private readonly ConcurrentDictionary<string, TimeSpan> _pausedTime = new();
@@ -29,21 +32,20 @@ public class TimerService : IDisposable
     {
         var userId = (string)state;
         
-        // TODO: Remove If tiem no exist add 7 hours
-        if (!_pausedTime.ContainsKey(userId) && _elapsedTime.TryGetValue(userId, out TimeSpan elapsedTime))
+        if (!_pausedTime.ContainsKey(userId) 
+            && _elapsedTime.TryGetValue(userId, out TimeSpan elapsedTime))
         {
             if (elapsedTime == TimeSpan.Zero)
             {
                 _elapsedTime.AddOrUpdate(
                 userId,
-                TimeSpan.FromHours(60),
-                (key, oldTime) => oldTime.Add(TimeSpan.FromHours(100))
+                prefixTime,
+                (key, oldTime) => oldTime.Add(prefixTime)
             );
 
                 return;
             }
         }
-        ///
 
         _elapsedTime.AddOrUpdate(
             userId,
