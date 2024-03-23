@@ -1980,6 +1980,7 @@ public class AppDbContext : DbContext
             "Outsource",
             "TenderDocument",
             "Construction Supervision",
+            "DWG Admin/Clearing"
         };
         for (var i = 0; i < dicTypeNames.Length; i++)
         {
@@ -2117,7 +2118,8 @@ public class AppDbContext : DbContext
             "Printing",
             "On-Site",
             "Meetings",
-            "Administration"
+            "Administration",
+            "Soft Copy"
         };
         for (var i = 0; i < otherTypeNames.Length; i++)
         {
