@@ -14,8 +14,7 @@
 
     <h3 class="mt-1 mb-1 ms-3">Deliverable</h3>
 
-@*     <EditForm Model="@_drawing"
-              class="row mt-3 gx-2 p-2">
+    <EditForm Model="@_drawing" class="row mt-3 gx-2 p-2">
 
         <div class="p-2 col-12">
 
@@ -27,7 +26,14 @@
                         <select class="form-select" @onchange="((e) => _updateDrawingType(e))">
                             @foreach (var drawingType in _drawingTypes)
                             {
-                                <option value="@drawingType.Id">@drawingType.Type?.Name</option>
+                                @if (_drawing.TypeId == drawingType.Id)
+                                {
+                                    <option value="@drawingType.Id" selected>@drawingType.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@drawingType.Id">@drawingType.Name</option>
+                                }
                             }
                         </select>
                     </div>
@@ -46,6 +52,6 @@
 
         </div>
 
-    </EditForm> *@
+    </EditForm>
 
 </div>
