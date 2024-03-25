@@ -98,32 +98,37 @@ public partial class Dashboard : IDisposable
     // Add ProjectManager Dialog
     private FluentDialog? _addPMDialog;
     private bool _isAddPMDialogOdepened = false;
-    private UserVM _selectedPM = new UserVM();
 
-    // On Add Complain Click Dialog
+    // On Add Complain Dialog
     private FluentDialog? _addIssueDialog;
     private bool _isAddIssueDialogOdepened = false;
     private Issue issueCompoment;
 
-    // On Add Project Click Dialog
+    // On Add Project Dialog
     private FluentDialog? _addEditProjectDialog;
     private bool _isAddEditProjectDialogOdepened = false;
     private ProjectDetailed projectCompoment;
 
-    // On Add/Edit Discipline Click Dialog
+    // On Add/Edit Discipline Dialog
     private FluentDialog? _addEditDisciplineDialog;
     private bool _isAddEditDisciplineDialogOdepened = false;
     private DisciplineDetailed disciplineCompoment;
 
-    // On Add/Edit Deliverable Click Dialog
+    // On Add/Edit Deliverable Dialog
     private FluentDialog? _addEditDeliverableDialog;
     private bool _isAddEditDeliverableDialogOdepened = false;
     private DrawingDetailed drawingCompoment;
 
-    // On Add/Edit Other Click Dialog
+    // On Add/Edit Other Dialog
     private FluentDialog? _addEditOtherDialog;
     private bool _isAddEditOtherDialogOdepened = false;
     private OtherDetailed otherCompoment;
+
+    // On Delete Dialog
+    private FluentDialog? _deleteDialog;
+    private bool _isDeleteDialogOdepened = false;
+    private string _deleteDialogMsg = "";
+    private string _deleteObj = null;
     #endregion
 
     protected override void OnInitialized()
@@ -526,6 +531,14 @@ public partial class Dashboard : IDisposable
         }
     }
 
+    private void DeleteProject()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedProject.Name}";
+        _deleteObj = nameof(_selectedProject);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+
     // Discipline Add / Edit
     private void AddDiscipline()
     {
@@ -556,6 +569,14 @@ public partial class Dashboard : IDisposable
         _addEditDisciplineDialog.Hide();
         _isAddEditDisciplineDialogOdepened = false;
         await Refresh();
+    }
+
+    private void DeleteDiscipline()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedDiscipline.Type.Name}";
+        _deleteObj = nameof(_selectedDiscipline);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
     }
 
     // Deliverable Add / Edit
@@ -590,6 +611,14 @@ public partial class Dashboard : IDisposable
         await Refresh();
     }
 
+    private void DeleteDeliverable()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedDraw.Type.Name}";
+        _deleteObj = nameof(_selectedDraw);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+
     // Other Add / Edit
     private void AddOther()
     {
@@ -620,6 +649,55 @@ public partial class Dashboard : IDisposable
         _addEditOtherDialog.Hide();
         _isAddEditOtherDialogOdepened = false;
         await Refresh();
+    }
+
+    private void DeleteOther()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedOther.Type.Name}";
+        _deleteObj = nameof(_selectedOther);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+
+    // On Delete Close
+    private async Task OnDeleteAccept()
+    {
+        if (_isDeleteDialogOdepened)
+        {
+            switch (_deleteObj)
+            {
+                case nameof(_selectedProject):
+                    await DataProvider.Projects.Delete(_selectedProject.Id);
+                    break;
+                case nameof(_selectedDiscipline):
+                    await DataProvider.Disciplines.Delete(_selectedDiscipline.Id);
+                    break;
+                case nameof(_selectedDraw):
+                    await DataProvider.Drawings.Delete(_selectedDraw.Id);
+                    break;
+                case nameof(_selectedOther):
+                    await DataProvider.Others.Delete(_selectedOther.Id);
+                    break;
+            }
+
+            _deleteDialogMsg = "";
+            _deleteObj = null;
+            _deleteDialog.Hide();
+            _isDeleteDialogOdepened = false;
+
+            await Refresh();
+        }
+    }
+
+    private void OnDeleteClose()
+    {
+        if (_isDeleteDialogOdepened)
+        {
+            _deleteDialogMsg = "";
+            _deleteObj = null;
+            _deleteDialog.Hide();
+            _isDeleteDialogOdepened = false;
+        }
     }
     #endregion
 

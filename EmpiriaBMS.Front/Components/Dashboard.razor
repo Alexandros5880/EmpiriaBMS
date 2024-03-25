@@ -110,11 +110,13 @@ else
                                 @if (!_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row">
-                                        <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Projects</h3>
+                                        <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Projects</h3>
                                         @if (isWorkingMode && editProject)
                                         {
                                             @if(_selectedProject != null)
                                             {
+                                                <span class="fluent--delete-28-regular col-1"
+                                                      @onclick="@(() => DeleteProject())" />
                                                 <span class="material-symbols--edit-outline col-1"
                                                       @onclick="@(() => EditProject())" />
                                             }
@@ -219,11 +221,13 @@ else
                                 @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row">
-                                        <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Disciplines</h3>
+                                        <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Disciplines</h3>
                                         @if (isWorkingMode && editDiscipline)
                                         {
                                             @if (_selectedDiscipline != null)
                                             {
+                                                <span class="fluent--delete-28-regular col-1"
+                                                      @onclick="@(() => DeleteDiscipline())" />
                                                 <span class="material-symbols--edit-outline col-1"
                                                       @onclick="@(() => EditDiscipline())" />
                                             }
@@ -289,11 +293,13 @@ else
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row">
-                                        <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Deliverables</h3>
+                                        <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Deliverables</h3>
                                         @if (isWorkingMode && editDeliverable)
                                         {
                                             @if (_selectedDraw != null)
                                             {
+                                                <span class="fluent--delete-28-regular col-1"
+                                                      @onclick="@(() => DeleteDeliverable())" />
                                                 <span class="material-symbols--edit-outline col-1"
                                                       @onclick="@(() => EditDeliverable())" />
                                             }
@@ -363,11 +369,13 @@ else
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row">
-                                        <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Supportive Works</h3>
+                                        <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Supportive Works</h3>
                                         @if (isWorkingMode && editOther)
                                         {
                                             @if (_selectedOther != null)
                                             {
+                                                <span class="fluent--delete-28-regular col-1"
+                                                      @onclick="@(() => DeleteOther())" />
                                                 <span class="material-symbols--edit-outline col-1"
                                                       @onclick="@(() => EditOther())" />
                                             }
@@ -427,7 +435,7 @@ else
 
 @if (!_startLoading)
 {
-    <!-- On "Press Work End" Button Click Dialog -->
+    <!-- On "Press Work End" Button Dialog -->
     <FluentDialog @ref="_endWorkDialog"
                   Hidden="@(!_isEndWorkDialogOdepened || _startLoading)"
                   Modal="false"
@@ -602,7 +610,7 @@ else
 
     </FluentDialog>
 
-    <!-- On "Add Designers" Button Click Dialog -->
+    <!-- On "Add Designers" Button Dialog -->
     <FluentDialog @ref="_addDesignerDialog"
                   Hidden="@(!_isAddDesignerDialogOdepened || _startLoading)"
                   Modal="false"
@@ -666,7 +674,7 @@ else
 
     </FluentDialog>
 
-    <!-- On "Add Engineers" Button Click Dialog -->
+    <!-- On "Add Engineers" Button Dialog -->
     <FluentDialog @ref="_addEngineerDialog"
                   Hidden="@(!_isAddEngineerDialogOdepened || _startLoading)"
                   Modal="false"
@@ -730,7 +738,7 @@ else
 
     </FluentDialog>
 
-    <!-- On "Add Project Managers" Button Click Dialog -->
+    <!-- On "Add Project Managers" Button Dialog -->
     <FluentDialog @ref="_addPMDialog"
                   Hidden="@(!_isAddPMDialogOdepened || _startLoading)"
                   Modal="false"
@@ -773,7 +781,7 @@ else
 
     </FluentDialog>
 
-    <!-- On AddComplain Click Dialog  -->
+    <!-- On AddComplain Dialog -->
     <FluentDialog @ref="_addIssueDialog"
                   Hidden="@(!_isAddIssueDialogOdepened || _startLoading)"
                   Modal="true"
@@ -801,7 +809,7 @@ else
 
     </FluentDialog>
 
-    <!-- On Add/Edit Project Click Dialog  -->
+    <!-- On Add/Edit Project Dialog -->
     <FluentDialog @ref="_addEditProjectDialog"
                   Hidden="@(!_isAddEditProjectDialogOdepened || _startLoading)"
                   Modal="true"
@@ -833,7 +841,7 @@ else
 
     </FluentDialog>
 
-    <!-- On Add/Edit Discipline Click Dialog  -->
+    <!-- On Add/Edit Discipline Dialog -->
     <FluentDialog @ref="_addEditDisciplineDialog"
                   Hidden="@(!_isAddEditDisciplineDialogOdepened || _startLoading)"
                   Modal="true"
@@ -872,7 +880,7 @@ else
 
     </FluentDialog>
 
-    <!-- On Add/Edit Deliverable Click Dialog  -->
+    <!-- On Add/Edit Deliverable Dialog -->
     <FluentDialog @ref="_addEditDeliverableDialog"
                   Hidden="@(!_isAddEditDeliverableDialogOdepened || _startLoading)"
                   Modal="true"
@@ -911,7 +919,7 @@ else
 
     </FluentDialog>
 
-    <!-- On Add/Edit Other Click Dialog  -->
+    <!-- On Add/Edit Other Dialog -->
     <FluentDialog @ref="_addEditOtherDialog"
                   Hidden="@(!_isAddEditOtherDialogOdepened || _startLoading)"
                   Modal="true"
@@ -944,6 +952,41 @@ else
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => CloseAddOtherClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Delete Dialog -->
+    <FluentDialog @ref="_deleteDialog"
+                  Hidden="@(!_isDeleteDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header row">
+                <div class="col-10">
+                    <h3>Delete Record</h3>
+                </div>
+                <span class="col-2 carbon--close-outline float-end" @onclick="OnDeleteClose"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <p>@_deleteDialogMsg</p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await OnDeleteAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
                 Cancel
             </FluentButton>
         </div>
