@@ -5,6 +5,19 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class OtherVM : BaseVM
 {
+    private int? _typeId;
+    public int? TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
     private OtherType _type;
     public OtherType Type
     {

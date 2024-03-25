@@ -195,14 +195,14 @@ public class AppDbContext : DbContext
         };
         builder.Entity<Permission>().HasData(per_11);
 
-        // Dashboard Add Project
+        // Dashboard Edit Project
         var per_12_id = random.Next(123456789, 999999999);
         Permission per_12 = new Permission()
         {
             Id = per_12_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Add Project On Dashboard",
+            Name = "Edit Project On Dashboard",
             Ord = 12
         };
         builder.Entity<Permission>().HasData(per_12);
@@ -219,29 +219,41 @@ public class AppDbContext : DbContext
         };
         builder.Entity<Permission>().HasData(per_13);
 
-        // Dashboard Add Discipline
+        // Dashboard Edit Discipline
         var per_14_id = random.Next(123456789, 999999999);
         Permission per_14 = new Permission()
         {
             Id = per_14_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Dashboard Add Discipline",
+            Name = "Dashboard Edit Discipline",
             Ord = 14
         };
         builder.Entity<Permission>().HasData(per_14);
 
-        // Dashboard Add Deliverable
+        // Dashboard Edit Deliverable
         var per_15_id = random.Next(123456789, 999999999);
         Permission per_15 = new Permission()
         {
             Id = per_15_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Dashboard Add Deliverable",
+            Name = "Dashboard Edit Deliverable",
             Ord = 15
         };
         builder.Entity<Permission>().HasData(per_15);
+
+        // Dashboard Edit Other
+        var per_16_id = random.Next(123456789, 999999999);
+        Permission per_16 = new Permission()
+        {
+            Id = per_16_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Dashboard Edit Other",
+            Ord = 16
+        };
+        builder.Entity<Permission>().HasData(per_16);
         #endregion
 
         #region Roles
@@ -760,7 +772,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_48);
 
-        // CTO || Dashboard Add Project
+        // CTO || Dashboard Edit Project
         RolePermission rp_60 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -771,7 +783,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_60);
 
-        // CTO || Dashboard Add Discipline
+        // CTO || Dashboard Edit Discipline
         RolePermission rp_63 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -782,7 +794,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_63);
 
-        // CTO || Dashboard Add Deliverable
+        // CTO || Dashboard Edit Deliverable
         RolePermission rp_64 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -792,6 +804,17 @@ public class AppDbContext : DbContext
             PermissionId = per_15_id
         };
         builder.Entity<RolePermission>().HasData(rp_64);
+
+        // CTO || Dashboard Edit Other
+        RolePermission rp_65 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_16_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_65);
 
 
         // CEO

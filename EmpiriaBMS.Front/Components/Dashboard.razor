@@ -111,7 +111,7 @@ else
                                 {
                                     <div class="text-center row">
                                         <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Projects</h3>
-                                        @if (isWorkingMode && addProject)
+                                        @if (isWorkingMode && editProject)
                                         {
                                             @if(_selectedProject != null)
                                             {
@@ -220,7 +220,7 @@ else
                                 {
                                     <div class="text-center row">
                                         <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Disciplines</h3>
-                                        @if (isWorkingMode && addDiscipline)
+                                        @if (isWorkingMode && editDiscipline)
                                         {
                                             @if (_selectedDiscipline != null)
                                             {
@@ -290,7 +290,7 @@ else
                                 {
                                     <div class="text-center row">
                                         <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Deliverables</h3>
-                                        @if (isWorkingMode && addDeliverable)
+                                        @if (isWorkingMode && editDeliverable)
                                         {
                                             @if (_selectedDraw != null)
                                             {
@@ -362,9 +362,20 @@ else
                             <div class="col-12">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center">
-                                        <h3>Supportive Works</h3>
+                                    <div class="text-center row">
+                                        <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Supportive Works</h3>
+                                        @if (isWorkingMode && editOther)
+                                        {
+                                            @if (_selectedOther != null)
+                                            {
+                                                <span class="material-symbols--edit-outline col-1"
+                                                      @onclick="@(() => EditOther())" />
+                                            }
+                                            <span class="grommet-icons--add col-1"
+                                                  @onclick="@(() => AddOther())" />
+                                        }
                                     </div>
+
                                     <div class="table-responsive p-1 table-container">
                                         <table class="table table-hover table-warning text-center">
                                             <thead>
@@ -894,6 +905,45 @@ else
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => CloseAddDeliverableClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Other Click Dialog  -->
+    <FluentDialog @ref="_addEditOtherDialog"
+                  Hidden="@(!_isAddEditOtherDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddOtherClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                @if (_selectedOther != null)
+                {
+                    <OtherDetailed @ref="@otherCompoment" DisciplineId="@_selectedDiscipline.Id" />
+                }
+                else
+                {
+                    <h3 class="warning">No Discipline Selected!</h3>
+                }
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditOtherDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddOtherClick())">
                 Cancel
             </FluentButton>
         </div>

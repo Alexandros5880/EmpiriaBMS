@@ -38,9 +38,10 @@ public partial class Dashboard : IDisposable
     public bool SeeMyHours => _sharedAuthData.PermissionOrds.Contains(8);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
     bool getAllDrawings => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
-    bool addProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
-    bool addDiscipline => _sharedAuthData.Permissions.Any(p => p.Ord == 14);
-    bool addDeliverable => _sharedAuthData.Permissions.Any(p => p.Ord == 15);
+    bool editProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
+    bool editDiscipline => _sharedAuthData.Permissions.Any(p => p.Ord == 14);
+    bool editDeliverable => _sharedAuthData.Permissions.Any(p => p.Ord == 15);
+    bool editOther => _sharedAuthData.Permissions.Any(p => p.Ord == 16);
     #endregion
 
     // General Fields
@@ -118,6 +119,11 @@ public partial class Dashboard : IDisposable
     private FluentDialog? _addEditDeliverableDialog;
     private bool _isAddEditDeliverableDialogOdepened = false;
     private DrawingDetailed drawingCompoment;
+
+    // On Add/Edit Other Click Dialog
+    private FluentDialog? _addEditOtherDialog;
+    private bool _isAddEditOtherDialogOdepened = false;
+    private OtherDetailed otherCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -584,7 +590,37 @@ public partial class Dashboard : IDisposable
         await Refresh();
     }
 
+    // Other Add / Edit
+    private void AddOther()
+    {
+        otherCompoment.PrepairForNew();
+        _addEditOtherDialog.Show();
+        _isAddEditOtherDialogOdepened = true;
+    }
 
+    private void EditOther()
+    {
+        otherCompoment.PrepairForEdit(_selectedOther);
+        _addEditOtherDialog.Show();
+        _isAddEditOtherDialogOdepened = true;
+    }
+
+    private void CloseAddOtherClick()
+    {
+        if (_isAddEditOtherDialogOdepened)
+        {
+            _addEditOtherDialog.Hide();
+            _isAddEditOtherDialogOdepened = false;
+        }
+    }
+
+    public async Task _addEditOtherDialogAccept()
+    {
+        await otherCompoment.HandleValidSubmit();
+        _addEditOtherDialog.Hide();
+        _isAddEditOtherDialogOdepened = false;
+        await Refresh();
+    }
     #endregion
 
     #region Timer
