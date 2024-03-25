@@ -591,6 +591,16 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
+    public async Task<ICollection<ProjectTypeDto>> GetProjectTypes()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var projectTypes = await _context.Set<ProjectType>()
+                                             .ToListAsync();
+            return Mapping.Mapper.Map<List<ProjectType>, List<ProjectTypeDto>>(projectTypes);
+        }
+    }
+
     public async Task<int> CountDiscipline(int id)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
