@@ -39,6 +39,8 @@ public partial class Dashboard : IDisposable
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
     bool getAllDrawings => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
     bool addProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
+    bool addDiscipline => _sharedAuthData.Permissions.Any(p => p.Ord == 14);
+    bool addDeliverable => _sharedAuthData.Permissions.Any(p => p.Ord == 15);
     #endregion
 
     // General Fields
@@ -106,6 +108,16 @@ public partial class Dashboard : IDisposable
     private FluentDialog? _addEditProjectDialog;
     private bool _isAddEditProjectDialogOdepened = false;
     private ProjectDetailed projectCompoment;
+
+    // On Add/Edit Discipline Click Dialog
+    private FluentDialog? _addEditDisciplineDialog;
+    private bool _isAddEditDisciplineDialogOdepened = false;
+    private DisciplineDetailed disciplineCompoment;
+
+    // On Add/Edit Deliverable Click Dialog
+    private FluentDialog? _addEditDeliverableDialog;
+    private bool _isAddEditDeliverableDialogOdepened = false;
+    private DrawingDetailed drawingCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -507,6 +519,72 @@ public partial class Dashboard : IDisposable
             _isAddEditProjectDialogOdepened = false;
         }
     }
+
+    // Discipline Add / Edit
+    private void AddDiscipline()
+    {
+        //disciplineCompoment.PrepairForNew();
+        _addEditDeliverableDialog.Show();
+        _isAddEditDeliverableDialogOdepened = true;
+    }
+
+    private void EditDiscipline()
+    {
+        //disciplineCompoment.PrepairForEdit(_selectedDraw);
+        _addEditDeliverableDialog.Show();
+        _isAddEditDeliverableDialogOdepened = true;
+    }
+
+    private void CloseAddDisciplineClick()
+    {
+        if (_isAddEditDeliverableDialogOdepened)
+        {
+            _addEditDeliverableDialog.Hide();
+            _isAddEditDeliverableDialogOdepened = false;
+        }
+    }
+
+    public async Task _addEditDisciplineDialogAccept()
+    {
+        //await disciplineCompoment.HandleValidSubmit();
+        _addEditDeliverableDialog.Hide();
+        _isAddEditDeliverableDialogOdepened = false;
+        await Refresh();
+    }
+
+    // Deliverable Add / Edit
+    private void AddDeliverable()
+    {
+        drawingCompoment.PrepairForNew();
+        _addEditDeliverableDialog.Show();
+        _isAddEditDeliverableDialogOdepened = true;
+    }
+
+    private void EditDeliverable()
+    {
+        drawingCompoment.PrepairForEdit(_selectedDraw);
+        _addEditDeliverableDialog.Show();
+        _isAddEditDeliverableDialogOdepened = true;
+    }
+
+    private void CloseAddDeliverableClick()
+    {
+        if (_isAddEditDeliverableDialogOdepened)
+        {
+            _addEditDeliverableDialog.Hide();
+            _isAddEditDeliverableDialogOdepened = false;
+        }
+    }
+
+    public async Task _addEditDeliverableDialogAccept()
+    {
+        await drawingCompoment.HandleValidSubmit();
+        _addEditDeliverableDialog.Hide();
+        _isAddEditDeliverableDialogOdepened = false;
+        await Refresh();
+    }
+
+
     #endregion
 
     #region Timer

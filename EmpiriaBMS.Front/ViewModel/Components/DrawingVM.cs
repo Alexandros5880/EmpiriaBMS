@@ -6,6 +6,19 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class DrawingVM : BaseVM
 {
+    private int? _typeId;
+    public int? TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
     private DrawingType _type;
     public DrawingType Type
     {

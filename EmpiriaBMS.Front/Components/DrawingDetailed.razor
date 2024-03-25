@@ -1,0 +1,51 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Components;
+@using Microsoft.AspNetCore.Components;
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Core.Config;
+@using EmpiriaBMS.Core.Dtos;
+@using System.Text.Json;
+
+@inject IMapper Mapper
+@inject IDataProvider DataProvider
+@inject SharedAuthDataService _sharedAuthData
+
+<div class="w-96 h-100"
+     style="overflow-x: hidden; overflow-y: auto; max-height: 700px;">
+
+    <h3 class="mt-1 mb-1 ms-3">Deliverable</h3>
+
+@*     <EditForm Model="@_drawing"
+              class="row mt-3 gx-2 p-2">
+
+        <div class="p-2 col-12">
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <!-- DrawingTypes -->
+                    <div class="form-group">
+                        <label>DrawingType</label>
+                        <select class="form-select" @onchange="((e) => _updateDrawingType(e))">
+                            @foreach (var drawingType in _drawingTypes)
+                            {
+                                <option value="@drawingType.Id">@drawingType.Type?.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- CompletionDate -->
+                    <div class="form-group">
+                        <label for="completionDate">CompletionDate</label>
+                        <input type="date"
+                               class="form-control"
+                               id="completionDate"
+                               @bind="@_drawing.CompletionDate">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </EditForm> *@
+
+</div>

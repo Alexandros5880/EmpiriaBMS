@@ -219,7 +219,17 @@ else
                                 @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row">
-                                        <h3>Disciplines</h3>
+                                        <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Disciplines</h3>
+                                        @if (isWorkingMode && addDiscipline)
+                                        {
+                                            @if (_selectedDiscipline != null)
+                                            {
+                                                <span class="material-symbols--edit-outline col-1"
+                                                      @onclick="@(() => EditDiscipline())" />
+                                            }
+                                            <span class="grommet-icons--add col-1"
+                                                  @onclick="@(() => AddDiscipline())" />
+                                        }
                                     </div>
                                     <div class="table-responsive p-1 table-container">
                                         <table class="table table-hover table-danger text-center">
@@ -274,12 +284,22 @@ else
 
                         <div class="col row">
                             
-                            <!-- Table Draws -->
+                            <!-- Table Deliverables -->
                             <div class="col-12">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center">
-                                        <h3>Deliverables</h3>
+                                    <div class="text-center row">
+                                        <h3 class="@((_selectedProject != null ? "col-10" : "col-11"))">Deliverables</h3>
+                                        @if (isWorkingMode && addDeliverable)
+                                        {
+                                            @if (_selectedDraw != null)
+                                            {
+                                                <span class="material-symbols--edit-outline col-1"
+                                                      @onclick="@(() => EditDeliverable())" />
+                                            }
+                                            <span class="grommet-icons--add col-1"
+                                                  @onclick="@(() => AddDeliverable())" />
+                                        }
                                     </div>
                                     <div class="table-responsive p-1 table-container">
                                         <table class="table table-hover table-primary text-center">
@@ -795,7 +815,71 @@ else
                           OnClick="@(async () => await _addEditProjectDialogAccept())">
                 Ok
             </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => _addEditProjectDialogCansel())">
+            <FluentButton class="col-6" OnClick="@(() => CloseAddProjectClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Discipline Click Dialog  -->
+    <FluentDialog @ref="_addEditDisciplineDialog"
+                  Hidden="@(!_isAddEditDisciplineDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddDisciplineClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <DisciplineDetailed @ref="@disciplineCompoment"/>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditDisciplineDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddDisciplineClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Deliverable Click Dialog  -->
+    <FluentDialog @ref="_addEditDeliverableDialog"
+                  Hidden="@(!_isAddEditDeliverableDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddDeliverableClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <DrawingDetailed @ref="@drawingCompoment" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditDeliverableDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddDeliverableClick())">
                 Cancel
             </FluentButton>
         </div>
