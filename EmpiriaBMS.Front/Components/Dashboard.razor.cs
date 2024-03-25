@@ -523,32 +523,32 @@ public partial class Dashboard : IDisposable
     // Discipline Add / Edit
     private void AddDiscipline()
     {
-        //disciplineCompoment.PrepairForNew();
-        _addEditDeliverableDialog.Show();
-        _isAddEditDeliverableDialogOdepened = true;
+        disciplineCompoment.PrepairForNew();
+        _addEditDisciplineDialog.Show();
+        _isAddEditDisciplineDialogOdepened = true;
     }
 
     private void EditDiscipline()
     {
-        //disciplineCompoment.PrepairForEdit(_selectedDraw);
-        _addEditDeliverableDialog.Show();
-        _isAddEditDeliverableDialogOdepened = true;
+        disciplineCompoment.PrepairForEdit(_selectedDiscipline);
+        _addEditDisciplineDialog.Show();
+        _isAddEditDisciplineDialogOdepened = true;
     }
 
     private void CloseAddDisciplineClick()
     {
-        if (_isAddEditDeliverableDialogOdepened)
+        if (_isAddEditDisciplineDialogOdepened)
         {
-            _addEditDeliverableDialog.Hide();
-            _isAddEditDeliverableDialogOdepened = false;
+            _addEditDisciplineDialog.Hide();
+            _isAddEditDisciplineDialogOdepened = false;
         }
     }
 
     public async Task _addEditDisciplineDialogAccept()
     {
-        //await disciplineCompoment.HandleValidSubmit();
-        _addEditDeliverableDialog.Hide();
-        _isAddEditDeliverableDialogOdepened = false;
+        await disciplineCompoment.HandleValidSubmit();
+        _addEditDisciplineDialog.Hide();
+        _isAddEditDisciplineDialogOdepened = false;
         await Refresh();
     }
 

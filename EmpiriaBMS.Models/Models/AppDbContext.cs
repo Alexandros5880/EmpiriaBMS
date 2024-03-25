@@ -2070,7 +2070,8 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     TypeId = disciplineTypes[typeIndex].Id,
-                    EstimatedHours = 500,
+                    EstimatedMandays = 50 + j,
+                    EstimatedHours = (50 + j) * 8,
                     ProjectId = projects[i].Id,
                     Completed = 0
                 };

@@ -3,6 +3,7 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.Components;
 
@@ -14,52 +15,52 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
     [Parameter]
     public int ProjectId { get; set; }
 
-    List<DrawingTypeDto> _drawingTypes = new List<DrawingTypeDto>();
-    private DrawingVM _drawing = new DrawingVM();
+    List<DisciplineTypeDto> _disciplineTypes = new List<DisciplineTypeDto>();
+    private DisciplineVM _discipline = new DisciplineVM();
 
-    private async Task _getDrawingTypes()
+    private async Task _getDisciplineTypes()
     {
-        var types = await DataProvider.DrawingsTypes.GetAll();
-        _drawingTypes = types.ToList();
+        var types = await DataProvider.DisciplinesTypes.GetAll();
+        _disciplineTypes = types.ToList();
     }
 
     public async void PrepairForNew()
     {
         isNew = true;
-        _drawingTypes.Clear();
-        await _getDrawingTypes();
-        _drawing = new DrawingVM();
-        _drawing.TypeId = _drawingTypes.FirstOrDefault().Id;
+        _disciplineTypes.Clear();
+        await _getDisciplineTypes();
+        _discipline = new DisciplineVM();
+        _discipline.TypeId = _disciplineTypes.FirstOrDefault().Id;
         StateHasChanged();
     }
 
-    public async void PrepairForEdit(DrawingVM drawing)
+    public async void PrepairForEdit(DisciplineVM discipline)
     {
         isNew = false;
-        _drawingTypes.Clear();
-        await _getDrawingTypes();
-        _drawing = drawing;
+        _disciplineTypes.Clear();
+        await _getDisciplineTypes();
+        _discipline = discipline;
         StateHasChanged();
     }
 
-    private void _updateDrawingType(ChangeEventArgs e)
+    private void _updateDisciplineType(ChangeEventArgs e)
     {
-        var pdrawingTypeId = Convert.ToInt32(e.Value);
-        var drawingType = _drawingTypes.FirstOrDefault(t => t.Id == pdrawingTypeId);
-        _drawing.TypeId = pdrawingTypeId;
-        _drawing.Type = null;
+        var pdisciplineTypeId = Convert.ToInt32(e.Value);
+        var disciplineType = _disciplineTypes.FirstOrDefault(t => t.Id == pdisciplineTypeId);
+        _discipline.TypeId = pdisciplineTypeId;
+        _discipline.Type = null;
     }
 
     public async Task HandleValidSubmit()
     {
-        DrawingDto myDrawing = Mapper.Map<DrawingDto>(_drawing);
-        // Save Drawing
-        DrawingDto saveDrawing;
-        var exists = await DataProvider.Drawings.Any(p => p.Id == _drawing.Id);
+        DisciplineDto myDiscipline = Mapper.Map<DisciplineDto>(_discipline);
+        // Save Discipline
+        DisciplineDto saveDiscipline;
+        var exists = await DataProvider.Disciplines.Any(p => p.Id == _discipline.Id);
         if (exists)
-            saveDrawing = await DataProvider.Drawings.Update(myDrawing);
+            saveDiscipline = await DataProvider.Disciplines.Update(myDiscipline);
         else
-            saveDrawing = await DataProvider.Drawings.Add(myDrawing);
+            saveDiscipline = await DataProvider.Disciplines.Add(myDiscipline);
     }
 
     protected virtual void Dispose(bool disposing)

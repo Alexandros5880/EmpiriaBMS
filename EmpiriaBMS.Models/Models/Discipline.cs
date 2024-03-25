@@ -19,6 +19,7 @@ public class Discipline : Entity
 
     public float Completed { get; set; }
 
+    [Required]
     public int ProjectId { get; set; }
     public Project Project { get; set; }
 
