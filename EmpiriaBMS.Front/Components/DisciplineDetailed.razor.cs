@@ -2,24 +2,17 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Front.Components.Admin.DisciplinesTypes;
-using System.Linq.Expressions;
-using EmpiriaBMS.Front.Components.Admin.ProjectsTypes;
-using System.Security.Cryptography;
-using System.Reflection.Metadata.Ecma335;
 
 namespace EmpiriaBMS.Front.Components;
 
-public partial class DrawingDetailed : ComponentBase, IDisposable
+public partial class DisciplineDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
     private bool isNew = false;
 
     [Parameter]
-    public int DisciplineId { get; set; }
+    public int ProjectId { get; set; }
 
     List<DrawingTypeDto> _drawingTypes = new List<DrawingTypeDto>();
     private DrawingVM _drawing = new DrawingVM();
@@ -86,4 +79,5 @@ public partial class DrawingDetailed : ComponentBase, IDisposable
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
+
 }

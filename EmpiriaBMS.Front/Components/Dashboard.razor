@@ -837,7 +837,14 @@ else
             </div>
 
             <div class="col-12 justify-content-center">
-                <DisciplineDetailed @ref="@disciplineCompoment"/>
+                @if (_selectedProject != null)
+                {
+                    <DisciplineDetailed @ref="@disciplineCompoment" ProjectId="@_selectedProject.Id" />
+                }
+                else
+                {
+                    <h3 class="warning">No Project Selected!</h3>
+                }
             </div>
 
         </div>
@@ -869,7 +876,14 @@ else
             </div>
 
             <div class="col-12 justify-content-center">
-                <DrawingDetailed @ref="@drawingCompoment" />
+                @if(_selectedDiscipline != null)
+                {
+                    <DrawingDetailed @ref="@drawingCompoment" DisciplineId="@_selectedDiscipline.Id" />
+                } 
+                else
+                {
+                    <h3 class="warning">No Discipline Selected!</h3>
+                }
             </div>
 
         </div>
