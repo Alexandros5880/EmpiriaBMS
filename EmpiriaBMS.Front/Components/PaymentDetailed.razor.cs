@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components;
@@ -9,35 +10,30 @@ public partial class PaymentDetailed : ComponentBase, IDisposable
     private bool isNew = false;
 
     [Parameter]
-    public int ProjectId { get; set; }
+    public ProjectVM Project { get; set; }
 
-    public InvoiceVM _invoice { get; set; }
+    [Parameter]
+    public PaymentVM Payment { get; set; }
 
-    public void PrepairForNew()
+    public void Prepair()
     {
-        isNew = true;
-        _invoice = new InvoiceVM();
-        _invoice.ProjectId = ProjectId;
-        StateHasChanged();
-    }
-
-    public void PrepairForEdit(InvoiceVM invoice)
-    {
-        isNew = false;
-        _invoice = invoice;
+        isNew = Project.Payment == null;
+        if (isNew)
+            Payment = new PaymentVM();
+        Payment.ProjectId = Project.Id;
         StateHasChanged();
     }
 
     public async Task HandleValidSubmit()
     {
-        //OtherDto myOther = Mapper.Map<OtherDto>(_other);
-        //// Save Other
-        //OtherDto saveOther;
-        //var exists = await DataProvider.Others.Any(p => p.Id == _other.Id);
-        //if (exists)
-        //    saveOther = await DataProvider.Others.Update(myOther);
-        //else
-        //    saveOther = await DataProvider.Others.Add(myOther);
+        PaymentDto myPayment = Mapper.Map<PaymentDto>(Payment);
+        // Save Payment
+        PaymentDto savePayment;
+        var exists = await DataProvider.Payments.Any(i => i.Id == Payment.Id);
+        if (exists)
+            savePayment = await DataProvider.Payments.Update(myPayment);
+        else
+            savePayment = await DataProvider.Payments.Add(myPayment);
     }
 
     protected virtual void Dispose(bool disposing)

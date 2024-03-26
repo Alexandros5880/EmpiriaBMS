@@ -1070,7 +1070,9 @@ else
             <div class="col-12 justify-content-center">
                 @if (_selectedProject != null)
                 {
-                    <PaymentDetailed @ref="@paymentCompoment" ProjectId="@_selectedProject.Id" />
+                    <PaymentDetailed @ref="@paymentCompoment"
+                                     Project="@_selectedProject"
+                                     Payment="_selectedPayment" />
                 }
                 else
                 {

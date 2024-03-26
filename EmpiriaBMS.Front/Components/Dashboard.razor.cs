@@ -75,6 +75,7 @@ public partial class Dashboard : IDisposable
     #region Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
     private InvoiceVM _selectedInvoice = new InvoiceVM();
+    private PaymentVM _selectedPayment = new PaymentVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
@@ -182,6 +183,20 @@ public partial class Dashboard : IDisposable
         {
             var dto = await DataProvider.Invoices.Get((int)_selectedProject.InvoiceId);
             _selectedInvoice = Mapper.Map<InvoiceVM>(dto);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task _getPayment()
+    {
+        try
+        {
+            var dto = await DataProvider.Payments.Get((int)_selectedProject.PaymentId);
+            _selectedPayment = Mapper.Map<PaymentVM>(dto);
         }
         catch (Exception ex)
         {
@@ -391,9 +406,8 @@ public partial class Dashboard : IDisposable
         foreach (var di in disciplines)
             _disciplines.Add(Mapper.Map<DisciplineVM>(di));
 
-        // Get Selected Invoice
         await _getInvoice();
-
+        await _getPayment();
         await _checkIfHasAnySelections();
 
         StateHasChanged();
@@ -1039,15 +1053,7 @@ public partial class Dashboard : IDisposable
     #region Add Payment Actions
     private void AddEditPayment()
     {
-        var payment = _selectedProject.Payment;
-        //if (payment != null)
-        //{
-        //    var vm = Mapper.Map<PaymentVM>(payment);
-        //    invoiceCompoment.PrepairForEdit(vm);
-        //}
-        //else
-        //    invoiceCompoment.PrepairForNew();
-
+        paymentCompoment.Prepair();
         _addEditPaymentDialog.Show();
         _isAddEditPaymentDialogOdepened = true;
     }
