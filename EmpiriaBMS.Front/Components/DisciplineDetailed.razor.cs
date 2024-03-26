@@ -20,7 +20,7 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
 
     private async Task _getDisciplineTypes()
     {
-        var types = await DataProvider.DisciplinesTypes.GetAll();
+        var types = await DataProvider.DisciplinesTypes.GetDisciplineFreeTypes(ProjectId);
         _disciplineTypes = types.ToList();
     }
 
@@ -43,12 +43,14 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
         StateHasChanged();
     }
 
-    private void _updateDisciplineType(ChangeEventArgs e)
+    private async Task _updateDisciplineType(ChangeEventArgs e)
     {
         var pdisciplineTypeId = Convert.ToInt32(e.Value);
         var disciplineType = _disciplineTypes.FirstOrDefault(t => t.Id == pdisciplineTypeId);
         _discipline.TypeId = pdisciplineTypeId;
         _discipline.Type = null;
+        
+        await _getDisciplineTypes();
     }
 
     public async Task HandleValidSubmit()

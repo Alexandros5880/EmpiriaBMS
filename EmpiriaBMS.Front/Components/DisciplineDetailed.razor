@@ -23,7 +23,7 @@
                     <!-- Discipline Types -->
                     <div class="form-group">
                         <label>Discipline Type</label>
-                        <select class="form-select" @onchange="((e) => _updateDisciplineType(e))">
+                        <select class="form-select" @onchange="(async (e) => await _updateDisciplineType(e))">
                             @foreach (var disciplineType in _disciplineTypes)
                             {
                                 @if (_discipline.TypeId == disciplineType.Id)
