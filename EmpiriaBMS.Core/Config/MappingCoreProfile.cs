@@ -28,5 +28,6 @@ public class MappingCoreProfile : Profile
         CreateMap<DisciplineTypeDto, DisciplineType>().ReverseMap();
         CreateMap<PermissionDto, Permission>().ReverseMap();
         CreateMap<IssueDto, Issue>().ReverseMap();
+        CreateMap<PaymentDto, Payment>().ReverseMap();
     }
 }

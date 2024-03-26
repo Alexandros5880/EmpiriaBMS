@@ -27,6 +27,7 @@ public class DataProvider : IDataProvider, IDisposable
     public DisciplineTypeRepo DisciplinesTypes { get; set; }
     public PermissionRepo Permissions { get; set; }
     public IssueRepo Issues { get; set; }
+    public PaymentRepo Payments { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
         Roles = new RolesRepo(dbFactory);
@@ -42,6 +43,7 @@ public class DataProvider : IDataProvider, IDisposable
         DisciplinesTypes = new DisciplineTypeRepo(dbFactory);
         Permissions = new PermissionRepo(dbFactory);
         Issues = new IssueRepo(dbFactory);
+        Payments = new PaymentRepo(dbFactory);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -63,6 +65,7 @@ public class DataProvider : IDataProvider, IDisposable
                 DisciplinesTypes.Dispose();
                 Permissions.Dispose();
                 Issues.Dispose();
+                Payments.Dispose();
             }
             disposedValue = true;
         }

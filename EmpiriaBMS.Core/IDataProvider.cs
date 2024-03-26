@@ -20,5 +20,6 @@ namespace EmpiriaBMS.Core
         public DisciplineTypeRepo DisciplinesTypes { get; set; }
         public PermissionRepo Permissions { get; set; }
         public IssueRepo Issues { get; set; }
+        public PaymentRepo Payments { get; set; }
     }
 }
