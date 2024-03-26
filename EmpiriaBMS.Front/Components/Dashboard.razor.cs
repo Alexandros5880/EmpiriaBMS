@@ -4,8 +4,6 @@ using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Components.Admin.Roles;
-using EmpiriaBMS.Front.Components.General;
-using EmpiriaBMS.Front.DefaultComponents;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -76,6 +74,7 @@ public partial class Dashboard : IDisposable
 
     #region Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
+    private InvoiceVM _selectedInvoice = new InvoiceVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
@@ -84,55 +83,65 @@ public partial class Dashboard : IDisposable
 
     #region Dialogs
     // Work End Dialog
-    private FluentDialog? _endWorkDialog;
+    private FluentDialog _endWorkDialog;
     private bool _isEndWorkDialogOdepened = false;
     private bool _isEndWorkAcceptDialogDisabled => remainingTime.Hours != 0 || remainingTime.Minutes != 0;
 
     // Add Designer Dialog
-    private FluentDialog? _addDesignerDialog;
+    private FluentDialog _addDesignerDialog;
     private bool _isAddDesignerDialogOdepened = false;
 
     // Add Engineer Dialog
-    private FluentDialog? _addEngineerDialog;
+    private FluentDialog _addEngineerDialog;
     private bool _isAddEngineerDialogOdepened = false;
 
     // Add ProjectManager Dialog
-    private FluentDialog? _addPMDialog;
+    private FluentDialog _addPMDialog;
     private bool _isAddPMDialogOdepened = false;
 
     // On Add Complain Dialog
-    private FluentDialog? _addIssueDialog;
+    private FluentDialog _addIssueDialog;
     private bool _isAddIssueDialogOdepened = false;
     private Issue issueCompoment;
 
     // On Add Project Dialog
-    private FluentDialog? _addEditProjectDialog;
+    private FluentDialog _addEditProjectDialog;
     private bool _isAddEditProjectDialogOdepened = false;
     private ProjectDetailed projectCompoment;
 
     // On Add/Edit Discipline Dialog
-    private FluentDialog? _addEditDisciplineDialog;
+    private FluentDialog _addEditDisciplineDialog;
     private bool _isAddEditDisciplineDialogOdepened = false;
     private DisciplineDetailed disciplineCompoment;
     private bool _hasDisciplinesSelections = true;
 
     // On Add/Edit Deliverable Dialog
-    private FluentDialog? _addEditDeliverableDialog;
+    private FluentDialog _addEditDeliverableDialog;
     private bool _isAddEditDeliverableDialogOdepened = false;
     private DrawingDetailed drawingCompoment;
     private bool _hasDrawingsSelections = true;
 
     // On Add/Edit Other Dialog
-    private FluentDialog? _addEditOtherDialog;
+    private FluentDialog _addEditOtherDialog;
     private bool _isAddEditOtherDialogOdepened = false;
     private OtherDetailed otherCompoment;
     private bool _hasOthersSelections = true;
 
     // On Delete Dialog
-    private FluentDialog? _deleteDialog;
+    private FluentDialog _deleteDialog;
     private bool _isDeleteDialogOdepened = false;
     private string _deleteDialogMsg = "";
     private string _deleteObj = null;
+
+    // On Add/Edit Invoice Dialog
+    private FluentDialog _addEditInvoiceDialog;
+    private bool _isAddEditInvoiceDialogOdepened = false;
+    private InvoiceDetailed invoiceCompoment;
+
+    // On Add/Edit Payment Dialog
+    private FluentDialog _addEditPaymentDialog;
+    private bool _isAddEditPaymentDialogOdepened = false;
+    private PaymentDetailed paymentCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -167,6 +176,20 @@ public partial class Dashboard : IDisposable
     }
 
     #region Get Records
+    private async Task _getInvoice()
+    {
+        try
+        {
+            var dto = await DataProvider.Invoices.Get((int)_selectedProject.InvoiceId);
+            _selectedInvoice = Mapper.Map<InvoiceVM>(dto);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     private async Task _checkIfHasAnySelections()
     {
         if (_selectedProject != null)
@@ -367,6 +390,9 @@ public partial class Dashboard : IDisposable
         _disciplines.Clear();
         foreach (var di in disciplines)
             _disciplines.Add(Mapper.Map<DisciplineVM>(di));
+
+        // Get Selected Invoice
+        await _getInvoice();
 
         await _checkIfHasAnySelections();
 
@@ -981,6 +1007,66 @@ public partial class Dashboard : IDisposable
     {
         _addIssueDialog.Hide();
         _isAddIssueDialogOdepened = false;
+    }
+    #endregion
+
+    #region Add Invoice Actions
+    private void AddEditInvoice()
+    {
+        invoiceCompoment.Prepair();
+        _addEditInvoiceDialog.Show();
+        _isAddEditInvoiceDialogOdepened = true;
+    }
+
+    private void CloseAddInvoiceClick()
+    {
+        if (_isAddEditInvoiceDialogOdepened)
+        {
+            _addEditInvoiceDialog.Hide();
+            _isAddEditInvoiceDialogOdepened = false;
+        }
+    }
+
+    public async Task _addInvoiceDialogAccept()
+    {
+        await invoiceCompoment.HandleValidSubmit();
+        _addEditInvoiceDialog.Hide();
+        _isAddEditInvoiceDialogOdepened = false;
+        await Refresh();
+    }
+    #endregion
+
+    #region Add Payment Actions
+    private void AddEditPayment()
+    {
+        var payment = _selectedProject.Payment;
+        //if (payment != null)
+        //{
+        //    var vm = Mapper.Map<PaymentVM>(payment);
+        //    invoiceCompoment.PrepairForEdit(vm);
+        //}
+        //else
+        //    invoiceCompoment.PrepairForNew();
+
+        _addEditPaymentDialog.Show();
+        _isAddEditPaymentDialogOdepened = true;
+    }
+
+    private void CloseAddPaymentClick()
+    {
+        if (_isAddEditPaymentDialogOdepened)
+        {
+            _addEditPaymentDialog.Hide();
+            _isAddEditPaymentDialogOdepened = false;
+        }
+    }
+
+    public async Task _addPaymentDialogAccept()
+    {
+        await paymentCompoment.HandleValidSubmit();
+        _addEditPaymentDialog.Hide();
+        _isAddEditPaymentDialogOdepened = false;
+        await Refresh();
     }
     #endregion
 

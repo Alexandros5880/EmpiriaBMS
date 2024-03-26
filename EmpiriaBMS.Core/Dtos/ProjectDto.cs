@@ -50,6 +50,9 @@ public class ProjectDto : EntityDto
     public int? InvoiceId { get; set; }
     public Invoice? Invoice { get; set; }
 
+    public int? PaymentId { get; set; }
+    public Payment? Payment { get; set; }
+
     public int? SubContractorId { get; set; }
     public User? SubContractor { get; set; }
 

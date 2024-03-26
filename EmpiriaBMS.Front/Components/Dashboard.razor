@@ -116,9 +116,9 @@ else
                                             @if(_selectedProject != null)
                                             {
                                                 <span class="invoice col-1"
-                                                      @onclick="@(() => DeleteProject())" />
+                                                      @onclick="@(() => AddEditInvoice())" />
                                                 <span class="payment col-1"
-                                                      @onclick="@(() => DeleteProject())" />
+                                                      @onclick="@(() => AddEditPayment())" />
                                                 <span class="fluent--delete-28-regular col-1"
                                                       @onclick="@(() => DeleteProject())" />
                                                 <span class="material-symbols--edit-outline col-1"
@@ -1006,6 +1006,86 @@ else
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Invoice Dialog -->
+    <FluentDialog @ref="_addEditInvoiceDialog"
+                  Hidden="@(!_isAddEditInvoiceDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddInvoiceClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                @if (_selectedProject != null && _selectedInvoice != null)
+                {
+                    <InvoiceDetailed @ref="@invoiceCompoment"
+                                     Project="@_selectedProject"
+                                     Invoice="_selectedInvoice" />
+                }
+                else
+                {
+                    <h3 class="warning">No Project Selected!</h3>
+                }
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addInvoiceDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddInvoiceClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Payment Dialog -->
+    <FluentDialog @ref="_addEditPaymentDialog"
+                  Hidden="@(!_isAddEditPaymentDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddPaymentClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                @if (_selectedProject != null)
+                {
+                    <PaymentDetailed @ref="@paymentCompoment" ProjectId="@_selectedProject.Id" />
+                }
+                else
+                {
+                    <h3 class="warning">No Project Selected!</h3>
+                }
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addPaymentDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddPaymentClick())">
                 Cancel
             </FluentButton>
         </div>

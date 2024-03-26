@@ -1,8 +1,11 @@
 ﻿@using EmpiriaBMS.Front.ViewModel.Components
 
+@inject IDataProvider DataProvider
+@inject IMapper Mapper
+
 <div class="w-100">
 
-    <h3 class="mb-1">Invoice</h3>
+    <h3 class="mb-1">@(isNew ? "Add Invoice" : "Edit Invoice")</h3>
 
     <form class="mb-2">
 
@@ -61,5 +64,6 @@
         </div>
 
     </form>
+
 </div>
 

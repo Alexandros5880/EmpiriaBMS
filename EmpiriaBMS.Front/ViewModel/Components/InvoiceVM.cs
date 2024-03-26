@@ -84,6 +84,19 @@ public class InvoiceVM : BaseVM
         }
     }
 
+    private int _projectId;
+    public int ProjectId
+    {
+        get => _projectId;
+        set
+        {
+            if (value == _projectId)
+                return;
+            _projectId = value;
+            NotifyPropertyChanged(nameof(ProjectId));
+        }
+    }
+
     private Project? _project;
     public Project? Project
     {
