@@ -26,7 +26,7 @@ public partial class DrawingDetailed : ComponentBase, IDisposable
 
     private async Task _getDrawingTypes()
     {
-        var types = await DataProvider.DrawingsTypes.GetAll();
+        var types = await DataProvider.DrawingsTypes.GetDrawingTypesSelections(DisciplineId);
         _drawingTypes = types.ToList();
     }
 
@@ -49,12 +49,14 @@ public partial class DrawingDetailed : ComponentBase, IDisposable
         StateHasChanged();
     }
 
-    private void _updateDrawingType(ChangeEventArgs e)
+    private async Task _updateDrawingType(ChangeEventArgs e)
     {
         var pdrawingTypeId = Convert.ToInt32(e.Value);
         var drawingType = _drawingTypes.FirstOrDefault(t => t.Id == pdrawingTypeId);
         _drawing.TypeId = pdrawingTypeId;
         _drawing.Type = null;
+
+        await _getDrawingTypes();
     }
 
     public async Task HandleValidSubmit()

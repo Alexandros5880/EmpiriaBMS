@@ -21,7 +21,7 @@
             <!-- Other Types -->
             <div class="form-group">
                 <label>Other Type</label>
-                <select class="form-select" @onchange="((e) => _updateOtherType(e))">
+                <select class="form-select" @onchange="(async (e) => await _updateOtherType(e))">
                     @foreach (var otherType in _otherTypes)
                     {
                         @if (_other.TypeId == otherType.Id)

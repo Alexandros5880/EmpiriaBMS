@@ -15,7 +15,7 @@ public class DisciplineTypeRepo : Repository<DisciplineTypeDto, DisciplineType>,
 {
     public DisciplineTypeRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async Task<List<DisciplineTypeDto>> GetDisciplineFreeTypes(int projectId)
+    public async Task<List<DisciplineTypeDto>> GetDisciplineTypesSelections(int projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -50,6 +50,28 @@ public class DisciplineTypeRepo : Repository<DisciplineTypeDto, DisciplineType>,
 
                 return Mapping.Mapper.Map<List<DisciplineTypeDto>>(noDisciplineTypes);
             }
+        }
+    }
+
+    public async Task<bool> HasDisciplineTypesSelections(int projectId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            if (projectId == 0)
+                throw new ArgumentNullException(nameof(projectId));
+
+            var disciplineTypesIds = await _context.Set<Discipline>()
+                                                   .Where(d => d.ProjectId == projectId)
+                                                   .Select(d => d.TypeId)
+                                                   .ToListAsync();
+
+            if (disciplineTypesIds == null)
+                throw new NullReferenceException(nameof(disciplineTypesIds));
+
+            var result = await _context.Set<DisciplineType>()
+                                       .AnyAsync(t => !disciplineTypesIds.Contains(t.Id));
+
+            return result;
         }
     }
 }

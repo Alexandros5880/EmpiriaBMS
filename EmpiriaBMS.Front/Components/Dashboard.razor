@@ -231,8 +231,11 @@ else
                                                 <span class="material-symbols--edit-outline col-1"
                                                       @onclick="@(() => EditDiscipline())" />
                                             }
-                                            <span class="grommet-icons--add col-1"
-                                                  @onclick="@(() => AddDiscipline())" />
+                                            @if (_hasDisciplinesSelections)
+                                            {
+                                                <span class="grommet-icons--add col-1"
+                                                      @onclick="@(() => AddDiscipline())" />
+                                            }
                                         }
                                     </div>
                                     <div class="table-responsive p-1 table-container">
@@ -300,11 +303,17 @@ else
                                             {
                                                 <span class="fluent--delete-28-regular col-1"
                                                       @onclick="@(() => DeleteDeliverable())" />
-                                                <span class="material-symbols--edit-outline col-1"
-                                                      @onclick="@(() => EditDeliverable())" />
+                                                @if (_hasDrawingsSelections)
+                                                {
+                                                    <span class="material-symbols--edit-outline col-1"
+                                                          @onclick="@(() => EditDeliverable())" />
+                                                }
                                             }
-                                            <span class="grommet-icons--add col-1"
-                                                  @onclick="@(() => AddDeliverable())" />
+                                            @if (_hasDrawingsSelections)
+                                            {
+                                                <span class="grommet-icons--add col-1"
+                                                      @onclick="@(() => AddDeliverable())" />
+                                            }
                                         }
                                     </div>
                                     <div class="table-responsive p-1 table-container">
@@ -376,11 +385,17 @@ else
                                             {
                                                 <span class="fluent--delete-28-regular col-1"
                                                       @onclick="@(() => DeleteOther())" />
-                                                <span class="material-symbols--edit-outline col-1"
-                                                      @onclick="@(() => EditOther())" />
+                                                @if (_hasOthersSelections)
+                                                {
+                                                    <span class="material-symbols--edit-outline col-1"
+                                                          @onclick="@(() => EditOther())" />
+                                                }
                                             }
-                                            <span class="grommet-icons--add col-1"
-                                                  @onclick="@(() => AddOther())" />
+                                            @if (_hasOthersSelections)
+                                            {
+                                                <span class="grommet-icons--add col-1"
+                                                      @onclick="@(() => AddOther())" />
+                                            }
                                         }
                                     </div>
 

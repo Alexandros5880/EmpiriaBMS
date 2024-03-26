@@ -23,7 +23,7 @@
                     <!-- DrawingTypes -->
                     <div class="form-group">
                         <label>Drawing Type</label>
-                        <select class="form-select" @onchange="((e) => _updateDrawingType(e))">
+                        <select class="form-select" @onchange="(async (e) => await _updateDrawingType(e))">
                             @foreach (var drawingType in _drawingTypes)
                             {
                                 @if (_drawing.TypeId == drawingType.Id)

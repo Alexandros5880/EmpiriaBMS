@@ -20,7 +20,7 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
 
     private async Task _getDisciplineTypes()
     {
-        var types = await DataProvider.DisciplinesTypes.GetDisciplineFreeTypes(ProjectId);
+        var types = await DataProvider.DisciplinesTypes.GetDisciplineTypesSelections(ProjectId);
         _disciplineTypes = types.ToList();
     }
 

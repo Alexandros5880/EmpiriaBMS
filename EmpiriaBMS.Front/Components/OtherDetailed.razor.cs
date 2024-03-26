@@ -17,7 +17,7 @@ public partial class OtherDetailed : ComponentBase, IDisposable
 
     private async Task _getOtherTypes()
     {
-        var types = await DataProvider.OthersTypes.GetAll();
+        var types = await DataProvider.OthersTypes.GetOtherTypesSelections(DisciplineId);
         _otherTypes = types.ToList();
     }
 
@@ -40,12 +40,14 @@ public partial class OtherDetailed : ComponentBase, IDisposable
         StateHasChanged();
     }
 
-    private void _updateOtherType(ChangeEventArgs e)
+    private async Task _updateOtherType(ChangeEventArgs e)
     {
         var pdrawingTypeId = Convert.ToInt32(e.Value);
         var drawingType = _otherTypes.FirstOrDefault(t => t.Id == pdrawingTypeId);
         _other.TypeId = pdrawingTypeId;
         _other.Type = null;
+
+        await _getOtherTypes();
     }
 
     public async Task HandleValidSubmit()

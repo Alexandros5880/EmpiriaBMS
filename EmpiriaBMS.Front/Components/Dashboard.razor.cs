@@ -113,16 +113,19 @@ public partial class Dashboard : IDisposable
     private FluentDialog? _addEditDisciplineDialog;
     private bool _isAddEditDisciplineDialogOdepened = false;
     private DisciplineDetailed disciplineCompoment;
+    private bool _hasDisciplinesSelections = true;
 
     // On Add/Edit Deliverable Dialog
     private FluentDialog? _addEditDeliverableDialog;
     private bool _isAddEditDeliverableDialogOdepened = false;
     private DrawingDetailed drawingCompoment;
+    private bool _hasDrawingsSelections = true;
 
     // On Add/Edit Other Dialog
     private FluentDialog? _addEditOtherDialog;
     private bool _isAddEditOtherDialogOdepened = false;
     private OtherDetailed otherCompoment;
+    private bool _hasOthersSelections = true;
 
     // On Delete Dialog
     private FluentDialog? _deleteDialog;
@@ -163,6 +166,17 @@ public partial class Dashboard : IDisposable
     }
 
     #region Get Records
+    private async Task _checkIfHasAnySelections()
+    {
+        if (_selectedProject != null)
+            _hasDisciplinesSelections = await DataProvider.DisciplinesTypes.HasDisciplineTypesSelections(_selectedProject.Id);
+        if (_selectedDiscipline != null)
+        {
+            _hasDrawingsSelections = await DataProvider.DrawingsTypes.HasDrawingTypesSelections(_selectedDiscipline.Id);
+            _hasOthersSelections = await DataProvider.OthersTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
+        }
+    }
+
     private async Task GetUserTotalHoursThisMonth()
     {
         _userTotalHoursThisMonth = await DataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
@@ -394,6 +408,8 @@ public partial class Dashboard : IDisposable
         foreach (var di in disciplines)
             _disciplines.Add(Mapper.Map<DisciplineVM>(di));
 
+        await _checkIfHasAnySelections();
+
         StateHasChanged();
     }
 
@@ -413,6 +429,8 @@ public partial class Dashboard : IDisposable
         _others.Clear();
         foreach (var di in others)
             _others.Add(Mapper.Map<OtherVM>(di));
+
+        await _checkIfHasAnySelections();
 
         StateHasChanged();
     }
