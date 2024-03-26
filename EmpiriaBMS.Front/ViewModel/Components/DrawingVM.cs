@@ -71,6 +71,19 @@ public class DrawingVM : BaseVM
         }
     }
 
+    private int? __disciplineId;
+    public int? DisciplineId
+    {
+        get => __disciplineId;
+        set
+        {
+            if (value == __disciplineId)
+                return;
+            __disciplineId = value;
+            NotifyPropertyChanged(nameof(DisciplineId));
+        }
+    }
+
     private Discipline _discipline;
     public Discipline Discipline
     {

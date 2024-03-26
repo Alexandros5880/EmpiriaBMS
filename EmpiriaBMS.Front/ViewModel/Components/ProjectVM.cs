@@ -113,6 +113,32 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private int? _projectId;
+    public int? ProjectId
+    {
+        get => _projectId;
+        set
+        {
+            if (value == _projectId)
+                return;
+            _projectId = value;
+            NotifyPropertyChanged(nameof(ProjectId));
+        }
+    }
+
+    private Project _project;
+    public Project Project
+    {
+        get => _project;
+        set
+        {
+            if (value == _project)
+                return;
+            _project = value;
+            NotifyPropertyChanged(nameof(Project));
+        }
+    }
+
     private float _estimatedCompleted;
     public float EstimatedCompleted
     {

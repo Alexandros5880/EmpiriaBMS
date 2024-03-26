@@ -27,6 +27,7 @@ public partial class OtherDetailed : ComponentBase, IDisposable
         _otherTypes.Clear();
         await _getOtherTypes();
         _other = new OtherVM();
+        _other.DisciplineId = DisciplineId;
         _other.TypeId = _otherTypes.FirstOrDefault().Id;
         StateHasChanged();
     }

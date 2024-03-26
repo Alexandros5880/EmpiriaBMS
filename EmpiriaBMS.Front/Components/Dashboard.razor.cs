@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core;
+﻿using AutoMapper;
+using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
@@ -347,48 +348,7 @@ public partial class Dashboard : IDisposable
         DataProvider.Others.GetMenHours(otherId);
     #endregion
 
-    #region Actions Functions
-    private void StartWorkClick()
-    {
-        isWorkingMode = true;
-        StartTimer();
-        StateHasChanged();
-    }
-
-    private async Task StopWorkClick()
-    {
-        if (!EditMyHours)
-        {
-            return;
-        }
-
-        isWorkingMode = false;
-        remainingTime = StopTimer();
-
-        _editLogedUserTimes = new UserTimes()
-        {
-            DailyTime = TimeSpan.Zero,
-            PersonalTime = TimeSpan.Zero,
-            TrainingTime = TimeSpan.Zero,
-            CorporateEventTime = TimeSpan.Zero,
-        };
-
-        _projects.Clear();
-        _others.Clear();
-        _draws.Clear();
-        _disciplines.Clear();
-        _selectedOther = null;
-        _selectedDraw = null;
-        _selectedDiscipline = null;
-        _selectedProject = null;
-        await _getProjects();
-
-        StateHasChanged();
-
-        _endWorkDialog.Show();
-        _isEndWorkDialogOdepened = true;
-    }
-
+    #region When Row Selected Update Data
     private async Task OnSelectProject(int projectId)
     {
         if (projectId == 0 || projectId == _selectedProject?.Id) return;
@@ -448,275 +408,6 @@ public partial class Dashboard : IDisposable
         _selectedOther = doc;
         StateHasChanged();
     }
-
-    private async Task OnDrawingAssignClick(DrawingVM draw)
-    {
-        if (!isWorkingMode) return;
-        try
-        {
-            _selectedDraw = draw;
-            await _getDesigners();
-            StateHasChanged();
-            _addDesignerDialog.Show();
-            _isAddDesignerDialogOdepened = true;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private async Task OnDesciplineAssignClick(DisciplineVM discipline)
-    {
-        if (!isWorkingMode) return;
-        try
-        {
-            _selectedDiscipline = discipline;
-            await _getEngineers();
-            StateHasChanged();
-            _addEngineerDialog.Show();
-            _isAddEngineerDialogOdepened = true;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    // Projects Manager Selection
-    void ToggleSelection(UserVM pm, string selectedValue)
-    {
-        pm.IsSelected = !_projectManagers.First(p => p.Id.ToString() == selectedValue).IsSelected;
-    }
-
-    private async Task OnProjectAssignClick(ProjectVM project)
-    {
-        if (!isWorkingMode) return;
-        try
-        {
-            _selectedProject = project;
-            await _getProjectManagers();
-            StateHasChanged();
-            _addPMDialog.Show();
-            _isAddPMDialogOdepened = true;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private void OnAddComplainClick()
-    {
-        issueCompoment.Refresh();
-        _addIssueDialog.Show();
-        _isAddIssueDialogOdepened = true;
-    }
-
-    private void CloseAddComplainClick()
-    {
-        if (_isAddIssueDialogOdepened)
-        {
-            _addIssueDialog.Hide();
-            _isAddIssueDialogOdepened = false;
-        }
-    }
-    
-    // Project Add / Edit
-    private void AddProject()
-    {
-        projectCompoment.PrepairForNew();
-        _addEditProjectDialog.Show();
-        _isAddEditProjectDialogOdepened = true;
-    }
-
-    private void EditProject()
-    {
-        projectCompoment.PrepairForEdit(_selectedProject);
-        _addEditProjectDialog.Show();
-        _isAddEditProjectDialogOdepened = true;
-    }
-
-    private void CloseAddProjectClick()
-    {
-        if (_isAddEditProjectDialogOdepened)
-        {
-            _addEditProjectDialog.Hide();
-            _isAddEditProjectDialogOdepened = false;
-        }
-    }
-
-    private void DeleteProject()
-    {
-        _deleteDialogMsg = $"Are you sure you want delete {_selectedProject.Name}";
-        _deleteObj = nameof(_selectedProject);
-        _deleteDialog.Show();
-        _isDeleteDialogOdepened = true;
-    }
-
-    // Discipline Add / Edit
-    private void AddDiscipline()
-    {
-        disciplineCompoment.PrepairForNew();
-        _addEditDisciplineDialog.Show();
-        _isAddEditDisciplineDialogOdepened = true;
-    }
-
-    private void EditDiscipline()
-    {
-        disciplineCompoment.PrepairForEdit(_selectedDiscipline);
-        _addEditDisciplineDialog.Show();
-        _isAddEditDisciplineDialogOdepened = true;
-    }
-
-    private void CloseAddDisciplineClick()
-    {
-        if (_isAddEditDisciplineDialogOdepened)
-        {
-            _addEditDisciplineDialog.Hide();
-            _isAddEditDisciplineDialogOdepened = false;
-        }
-    }
-
-    public async Task _addEditDisciplineDialogAccept()
-    {
-        await disciplineCompoment.HandleValidSubmit();
-        _addEditDisciplineDialog.Hide();
-        _isAddEditDisciplineDialogOdepened = false;
-        await Refresh();
-    }
-
-    private void DeleteDiscipline()
-    {
-        _deleteDialogMsg = $"Are you sure you want delete {_selectedDiscipline.Type.Name}";
-        _deleteObj = nameof(_selectedDiscipline);
-        _deleteDialog.Show();
-        _isDeleteDialogOdepened = true;
-    }
-
-    // Deliverable Add / Edit
-    private void AddDeliverable()
-    {
-        drawingCompoment.PrepairForNew();
-        _addEditDeliverableDialog.Show();
-        _isAddEditDeliverableDialogOdepened = true;
-    }
-
-    private void EditDeliverable()
-    {
-        drawingCompoment.PrepairForEdit(_selectedDraw);
-        _addEditDeliverableDialog.Show();
-        _isAddEditDeliverableDialogOdepened = true;
-    }
-
-    private void CloseAddDeliverableClick()
-    {
-        if (_isAddEditDeliverableDialogOdepened)
-        {
-            _addEditDeliverableDialog.Hide();
-            _isAddEditDeliverableDialogOdepened = false;
-        }
-    }
-
-    public async Task _addEditDeliverableDialogAccept()
-    {
-        await drawingCompoment.HandleValidSubmit();
-        _addEditDeliverableDialog.Hide();
-        _isAddEditDeliverableDialogOdepened = false;
-        await Refresh();
-    }
-
-    private void DeleteDeliverable()
-    {
-        _deleteDialogMsg = $"Are you sure you want delete {_selectedDraw.Type.Name}";
-        _deleteObj = nameof(_selectedDraw);
-        _deleteDialog.Show();
-        _isDeleteDialogOdepened = true;
-    }
-
-    // Other Add / Edit
-    private void AddOther()
-    {
-        otherCompoment.PrepairForNew();
-        _addEditOtherDialog.Show();
-        _isAddEditOtherDialogOdepened = true;
-    }
-
-    private void EditOther()
-    {
-        otherCompoment.PrepairForEdit(_selectedOther);
-        _addEditOtherDialog.Show();
-        _isAddEditOtherDialogOdepened = true;
-    }
-
-    private void CloseAddOtherClick()
-    {
-        if (_isAddEditOtherDialogOdepened)
-        {
-            _addEditOtherDialog.Hide();
-            _isAddEditOtherDialogOdepened = false;
-        }
-    }
-
-    public async Task _addEditOtherDialogAccept()
-    {
-        await otherCompoment.HandleValidSubmit();
-        _addEditOtherDialog.Hide();
-        _isAddEditOtherDialogOdepened = false;
-        await Refresh();
-    }
-
-    private void DeleteOther()
-    {
-        _deleteDialogMsg = $"Are you sure you want delete {_selectedOther.Type.Name}";
-        _deleteObj = nameof(_selectedOther);
-        _deleteDialog.Show();
-        _isDeleteDialogOdepened = true;
-    }
-
-    // On Delete Close
-    private async Task OnDeleteAccept()
-    {
-        if (_isDeleteDialogOdepened)
-        {
-            switch (_deleteObj)
-            {
-                case nameof(_selectedProject):
-                    await DataProvider.Projects.Delete(_selectedProject.Id);
-                    break;
-                case nameof(_selectedDiscipline):
-                    await DataProvider.Disciplines.Delete(_selectedDiscipline.Id);
-                    break;
-                case nameof(_selectedDraw):
-                    await DataProvider.Drawings.Delete(_selectedDraw.Id);
-                    break;
-                case nameof(_selectedOther):
-                    await DataProvider.Others.Delete(_selectedOther.Id);
-                    break;
-            }
-
-            _deleteDialogMsg = "";
-            _deleteObj = null;
-            _deleteDialog.Hide();
-            _isDeleteDialogOdepened = false;
-
-            await Refresh();
-        }
-    }
-
-    private void OnDeleteClose()
-    {
-        if (_isDeleteDialogOdepened)
-        {
-            _deleteDialogMsg = "";
-            _deleteObj = null;
-            _deleteDialog.Hide();
-            _isDeleteDialogOdepened = false;
-        }
-    }
     #endregion
 
     #region Timer
@@ -750,7 +441,48 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Work End Dialog Actions
+    #region Start Stop Work Actions
+    private void StartWorkClick()
+    {
+        isWorkingMode = true;
+        StartTimer();
+        StateHasChanged();
+    }
+
+    private async Task StopWorkClick()
+    {
+        if (!EditMyHours)
+        {
+            return;
+        }
+
+        isWorkingMode = false;
+        remainingTime = StopTimer();
+
+        _editLogedUserTimes = new UserTimes()
+        {
+            DailyTime = TimeSpan.Zero,
+            PersonalTime = TimeSpan.Zero,
+            TrainingTime = TimeSpan.Zero,
+            CorporateEventTime = TimeSpan.Zero,
+        };
+
+        _projects.Clear();
+        _others.Clear();
+        _draws.Clear();
+        _disciplines.Clear();
+        _selectedOther = null;
+        _selectedDraw = null;
+        _selectedDiscipline = null;
+        _selectedProject = null;
+        await _getProjects();
+
+        StateHasChanged();
+
+        _endWorkDialog.Show();
+        _isEndWorkDialogOdepened = true;
+    }
+
     private void _onDrawTimeChanged(DrawingVM draw, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, remainingTime
@@ -759,12 +491,12 @@ public partial class Dashboard : IDisposable
         var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
         var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
 
-        var updatedHours = hoursChanged ? 
-                                          newTimeSpan.Hours < previusTime.Hours ? 
-                                                          -(previusTime.Hours - newTimeSpan.Hours) 
-                                                        : newTimeSpan.Hours 
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
                                         : 0;
-        var updatedMinutes = minutesChanged ? 
+        var updatedMinutes = minutesChanged ?
                                           newTimeSpan.Minutes < previusTime.Minutes ?
                                                           -(previusTime.Minutes - newTimeSpan.Minutes)
                                                         : newTimeSpan.Minutes
@@ -1085,7 +817,25 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Add Designer Dialog Actions
+    #region Drawings Assign Actions (Deliverable Assign)
+    private async Task OnDrawingAssignClick(DrawingVM draw)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedDraw = draw;
+            await _getDesigners();
+            StateHasChanged();
+            _addDesignerDialog.Show();
+            _isAddDesignerDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     public async Task _addDesignerDialogAccept()
     {
         _addDesignerDialog.Hide();
@@ -1112,7 +862,25 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Add Engineer Dialog Actions
+    #region Engineers Assign Actions (Discipline Assign)
+    private async Task OnDesciplineAssignClick(DisciplineVM discipline)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedDiscipline = discipline;
+            await _getEngineers();
+            StateHasChanged();
+            _addEngineerDialog.Show();
+            _isAddEngineerDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     public async Task _addEngineerDialogAccept()
     {
         _addEngineerDialog.Hide();
@@ -1139,7 +907,30 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Add Project Manager Dialog Actions
+    #region Projects Managers Assign Actions (Project Assign)
+    void ToggleSelection(UserVM pm, string selectedValue)
+    {
+        pm.IsSelected = !_projectManagers.First(p => p.Id.ToString() == selectedValue).IsSelected;
+    }
+
+    private async Task OnProjectAssignClick(ProjectVM project)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedProject = project;
+            await _getProjectManagers();
+            StateHasChanged();
+            _addPMDialog.Show();
+            _isAddPMDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     public async Task _addPMDialogAccept()
     {
         _addPMDialog.Hide();
@@ -1162,7 +953,23 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Add Complain Dialog Actions
+    #region Add Complain Actions
+    private void OnAddComplainClick()
+    {
+        issueCompoment.Refresh();
+        _addIssueDialog.Show();
+        _isAddIssueDialogOdepened = true;
+    }
+
+    private void CloseAddComplainClick()
+    {
+        if (_isAddIssueDialogOdepened)
+        {
+            _addIssueDialog.Hide();
+            _isAddIssueDialogOdepened = false;
+        }
+    }
+
     public async Task _addIssueDialogAccept()
     {
         await issueCompoment.HandleValidSubmit();
@@ -1177,7 +984,38 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Add Project Dialog Actions
+    #region Add/Edit/Delete Project Actions
+    private void AddProject()
+    {
+        projectCompoment.PrepairForNew();
+        _addEditProjectDialog.Show();
+        _isAddEditProjectDialogOdepened = true;
+    }
+
+    private void EditProject()
+    {
+        projectCompoment.PrepairForEdit(_selectedProject);
+        _addEditProjectDialog.Show();
+        _isAddEditProjectDialogOdepened = true;
+    }
+
+    private void CloseAddProjectClick()
+    {
+        if (_isAddEditProjectDialogOdepened)
+        {
+            _addEditProjectDialog.Hide();
+            _isAddEditProjectDialogOdepened = false;
+        }
+    }
+
+    private void DeleteProject()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedProject.Name}";
+        _deleteObj = nameof(_selectedProject);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+
     public async Task _addEditProjectDialogAccept()
     {
         await projectCompoment.HandleValidSubmit();
@@ -1190,6 +1028,171 @@ public partial class Dashboard : IDisposable
     {
         _addEditProjectDialog.Hide();
         _isAddEditProjectDialogOdepened = false;
+    }
+    #endregion
+
+    #region Add/Edit/Delete Discipline Actions
+    private void AddDiscipline()
+    {
+        disciplineCompoment.PrepairForNew();
+        _addEditDisciplineDialog.Show();
+        _isAddEditDisciplineDialogOdepened = true;
+    }
+
+    private void EditDiscipline()
+    {
+        disciplineCompoment.PrepairForEdit(_selectedDiscipline);
+        _addEditDisciplineDialog.Show();
+        _isAddEditDisciplineDialogOdepened = true;
+    }
+
+    private void CloseAddDisciplineClick()
+    {
+        if (_isAddEditDisciplineDialogOdepened)
+        {
+            _addEditDisciplineDialog.Hide();
+            _isAddEditDisciplineDialogOdepened = false;
+        }
+    }
+
+    public async Task _addEditDisciplineDialogAccept()
+    {
+        await disciplineCompoment.HandleValidSubmit();
+        _addEditDisciplineDialog.Hide();
+        _isAddEditDisciplineDialogOdepened = false;
+        await Refresh();
+    }
+
+    private void DeleteDiscipline()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedDiscipline.Type.Name}";
+        _deleteObj = nameof(_selectedDiscipline);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+    #endregion
+
+    #region Add/Edit/Delete Deliverable Actions
+    private void AddDeliverable()
+    {
+        drawingCompoment.PrepairForNew();
+        _addEditDeliverableDialog.Show();
+        _isAddEditDeliverableDialogOdepened = true;
+    }
+
+    private void EditDeliverable()
+    {
+        drawingCompoment.PrepairForEdit(_selectedDraw);
+        _addEditDeliverableDialog.Show();
+        _isAddEditDeliverableDialogOdepened = true;
+    }
+
+    private void CloseAddDeliverableClick()
+    {
+        if (_isAddEditDeliverableDialogOdepened)
+        {
+            _addEditDeliverableDialog.Hide();
+            _isAddEditDeliverableDialogOdepened = false;
+        }
+    }
+
+    public async Task _addEditDeliverableDialogAccept()
+    {
+        await drawingCompoment.HandleValidSubmit();
+        _addEditDeliverableDialog.Hide();
+        _isAddEditDeliverableDialogOdepened = false;
+        await Refresh();
+    }
+
+    private void DeleteDeliverable()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedDraw.Type.Name}";
+        _deleteObj = nameof(_selectedDraw);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+    #endregion
+
+    #region Add/Edit/Delete Other Actions
+    private void AddOther()
+    {
+        otherCompoment.PrepairForNew();
+        _addEditOtherDialog.Show();
+        _isAddEditOtherDialogOdepened = true;
+    }
+
+    private void EditOther()
+    {
+        otherCompoment.PrepairForEdit(_selectedOther);
+        _addEditOtherDialog.Show();
+        _isAddEditOtherDialogOdepened = true;
+    }
+
+    private void CloseAddOtherClick()
+    {
+        if (_isAddEditOtherDialogOdepened)
+        {
+            _addEditOtherDialog.Hide();
+            _isAddEditOtherDialogOdepened = false;
+        }
+    }
+
+    public async Task _addEditOtherDialogAccept()
+    {
+        await otherCompoment.HandleValidSubmit();
+        _addEditOtherDialog.Hide();
+        _isAddEditOtherDialogOdepened = false;
+        await Refresh();
+    }
+
+    private void DeleteOther()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedOther.Type.Name}";
+        _deleteObj = nameof(_selectedOther);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+    #endregion
+
+    #region Delete Dialog Actions
+    private async Task OnDeleteAccept()
+    {
+        if (_isDeleteDialogOdepened)
+        {
+            switch (_deleteObj)
+            {
+                case nameof(_selectedProject):
+                    await DataProvider.Projects.Delete(_selectedProject.Id);
+                    break;
+                case nameof(_selectedDiscipline):
+                    await DataProvider.Disciplines.Delete(_selectedDiscipline.Id);
+                    break;
+                case nameof(_selectedDraw):
+                    await DataProvider.Drawings.Delete(_selectedDraw.Id);
+                    break;
+                case nameof(_selectedOther):
+                    await DataProvider.Others.Delete(_selectedOther.Id);
+                    break;
+            }
+
+            _deleteDialogMsg = "";
+            _deleteObj = null;
+            _deleteDialog.Hide();
+            _isDeleteDialogOdepened = false;
+
+            await Refresh();
+        }
+    }
+
+    private void OnDeleteClose()
+    {
+        if (_isDeleteDialogOdepened)
+        {
+            _deleteDialogMsg = "";
+            _deleteObj = null;
+            _deleteDialog.Hide();
+            _isDeleteDialogOdepened = false;
+        }
     }
     #endregion
 

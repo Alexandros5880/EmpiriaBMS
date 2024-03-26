@@ -30,6 +30,7 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
         _disciplineTypes.Clear();
         await _getDisciplineTypes();
         _discipline = new DisciplineVM();
+        _discipline.ProjectId = ProjectId;
         _discipline.TypeId = _disciplineTypes.FirstOrDefault().Id;
         StateHasChanged();
     }

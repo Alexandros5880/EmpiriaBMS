@@ -36,6 +36,7 @@ public partial class DrawingDetailed : ComponentBase, IDisposable
         _drawingTypes.Clear();
         await _getDrawingTypes();
         _drawing = new DrawingVM();
+        _drawing.DisciplineId = DisciplineId;
         _drawing.TypeId = _drawingTypes.FirstOrDefault().Id;
         StateHasChanged();
     }
