@@ -110,11 +110,15 @@ else
                                 @if (!_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row">
-                                        <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Projects</h3>
+                                        <h3 class="@((_selectedProject != null ? "col-7" : "col-11"))">Projects</h3>
                                         @if (isWorkingMode && editProject)
                                         {
                                             @if(_selectedProject != null)
                                             {
+                                                <span class="invoice col-1"
+                                                      @onclick="@(() => DeleteProject())" />
+                                                <span class="payment col-1"
+                                                      @onclick="@(() => DeleteProject())" />
                                                 <span class="fluent--delete-28-regular col-1"
                                                       @onclick="@(() => DeleteProject())" />
                                                 <span class="material-symbols--edit-outline col-1"
@@ -796,7 +800,7 @@ else
 
     </FluentDialog>
 
-    <!-- On AddComplain Dialog -->
+    <!-- On Add Complain Dialog -->
     <FluentDialog @ref="_addIssueDialog"
                   Hidden="@(!_isAddIssueDialogOdepened || _startLoading)"
                   Modal="true"
