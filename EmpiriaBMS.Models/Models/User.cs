@@ -24,6 +24,8 @@ public class User : Entity
 
     public string? MidName { get; set; }
 
+    public string? TeamsObjectId { get; set; }
+
     [Required]
     public string Phone1 { get; set; }
 

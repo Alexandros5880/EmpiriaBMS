@@ -6,6 +6,7 @@
     <RuntimeFrameworkVersion>6.0.10</RuntimeFrameworkVersion>
     <UserSecretsId>f4fdf5df-fb9b-4826-b7e2-e6f29985ddc8</UserSecretsId>
     <Configurations>Development;Staging;Production;Release</Configurations>
+    <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

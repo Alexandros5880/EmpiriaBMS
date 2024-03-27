@@ -11,19 +11,12 @@ public class SharedAuthDataService
     public ICollection<PermissionDto> Permissions { get; set; } = new List<PermissionDto>();
     public ICollection<int> PermissionOrds { get; set; } = new List<int>();
     public UserVM LogedUser { get; set; }
-    public double LogesUserHours { get; set; }
-
-    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
-    public string DefaultRoleName { get; set; } = "Admin";
-    public int DefaultRoleId { get; set; } = 0;
     public string LogedUserObjectId { get; set; } = null;
 
     public void Clear()
     {
         TeamsLogedUser = null;
         LogedUser = null;
-        LogesUserHours = 0.0;
-        DefaultRoleId = 0;
         LogedUserObjectId = null;
         LoggedUserRoles.Clear();
         Permissions.Clear();

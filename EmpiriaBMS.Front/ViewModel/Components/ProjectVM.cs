@@ -70,7 +70,72 @@ public class ProjectVM : BaseVM
             if (value == _estimatedHours)
                 return;
             _estimatedHours = value;
-            NotifyPropertyChanged(nameof(_estimatedHours));
+            NotifyPropertyChanged(nameof(EstimatedHours));
+        }
+    }
+
+    private double? _fee;
+    public double? Fee
+    {
+        get => _fee;
+        set
+        {
+            if (value == _fee)
+                return;
+            _fee = value;
+            NotifyPropertyChanged(nameof(Fee));
+        }
+    }
+
+    private int? _typeId;
+    public int? TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
+    private ProjectType _type;
+    public ProjectType Type
+    {
+        get => _type;
+        set
+        {
+            if (value == _type)
+                return;
+            _type = value;
+            NotifyPropertyChanged(nameof(Type));
+        }
+    }
+
+    private int? _projectId;
+    public int? ProjectId
+    {
+        get => _projectId;
+        set
+        {
+            if (value == _projectId)
+                return;
+            _projectId = value;
+            NotifyPropertyChanged(nameof(ProjectId));
+        }
+    }
+
+    private Project _project;
+    public Project Project
+    {
+        get => _project;
+        set
+        {
+            if (value == _project)
+                return;
+            _project = value;
+            NotifyPropertyChanged(nameof(Project));
         }
     }
 
@@ -152,133 +217,16 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private DateTime? _workPackege;
-    public DateTime? WorkPackege
+    private DateTime? _estimatedDate;
+    public DateTime? EstimatedDate
     {
-        get => _workPackege;
+        get => _estimatedDate;
         set
         {
-            if (value == _workPackege)
+            if (value == _estimatedDate)
                 return;
-            _workPackege = value;
-            NotifyPropertyChanged(nameof(WorkPackege));
-        }
-    }
-
-    private DateTime? _estPaymentDate;
-    public DateTime? EstPaymentDate
-    {
-        get => _estPaymentDate;
-        set
-        {
-            if (value == _estPaymentDate)
-                return;
-            _estPaymentDate = value;
-            NotifyPropertyChanged(nameof(EstPaymentDate));
-        }
-    }
-
-    private DateTime? _paymentDate;
-    public DateTime? PaymentDate
-    {
-        get => _paymentDate;
-        set
-        {
-            if (value == _paymentDate)
-                return;
-            _paymentDate = value;
-            NotifyPropertyChanged(nameof(PaymentDate));
-        }
-    }
-
-    private int? _delayInPayment;
-    public int? DelayInPayment
-    {
-        get => _delayInPayment;
-        set
-        {
-            if (value == _delayInPayment)
-                return;
-            _delayInPayment = value;
-            NotifyPropertyChanged(nameof(DelayInPayment));
-        }
-    }
-
-    private string? _paymentDetailes;
-    public string? PaymentDetailes
-    {
-        get => _paymentDetailes;
-        set
-        {
-            if (value == _paymentDetailes)
-                return;
-            _paymentDetailes = value;
-            NotifyPropertyChanged(nameof(PaymentDetailes));
-        }
-    }
-
-    private double? _dayCost;
-    public double? DayCost
-    {
-        get => _dayCost;
-        set
-        {
-            if (value == _dayCost)
-                return;
-            _dayCost = value;
-            NotifyPropertyChanged(nameof(DayCost));
-        }
-    }
-
-    private string? _bank;
-    public string? Bank
-    {
-        get => _bank;
-        set
-        {
-            if (value == _bank)
-                return;
-            _bank = value;
-            NotifyPropertyChanged(nameof(Bank));
-        }
-    }
-
-    private double? _paidFee;
-    public double? PaidFee
-    {
-        get => _paidFee;
-        set
-        {
-            if (value == _paidFee)
-                return;
-            _paidFee = value;
-            NotifyPropertyChanged(nameof(PaidFee));
-        }
-    }
-
-    private int? _daysUntilPayment;
-    public int? DaysUntilPayment
-    {
-        get => _daysUntilPayment;
-        set
-        {
-            if (value == _daysUntilPayment)
-                return;
-            _daysUntilPayment = value;
-            NotifyPropertyChanged(nameof(DaysUntilPayment));
-        }
-    }
-
-    private double? _pendingPayments;
-    public double? PendingPayments
-    {
-        get => _pendingPayments;
-        set
-        {
-            if (value == _pendingPayments)
-                return;
-            _pendingPayments = value;
-            NotifyPropertyChanged(nameof(PendingPayments));
+            _estimatedDate = value;
+            NotifyPropertyChanged(nameof(EstimatedDate));
         }
     }
 
@@ -295,6 +243,19 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private int? _customerId;
+    public int? CustomerId
+    {
+        get => _customerId;
+        set
+        {
+            if (value == _customerId)
+                return;
+            _customerId = value;
+            NotifyPropertyChanged(nameof(CustomerId));
+        }
+    }
+
     private User? _customer;
     public User? Customer
     {
@@ -305,6 +266,19 @@ public class ProjectVM : BaseVM
                 return;
             _customer = value;
             NotifyPropertyChanged(nameof(Customer));
+        }
+    }
+
+    private int? _invoiceId;
+    public int? InvoiceId
+    {
+        get => _invoiceId;
+        set
+        {
+            if (value == _invoiceId)
+                return;
+            _invoiceId = value;
+            NotifyPropertyChanged(nameof(Invoice));
         }
     }
 
@@ -321,16 +295,42 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private ProjectType _type;
-    public ProjectType Type
+    private int? _paymentId;
+    public int? PaymentId
     {
-        get => _type;
+        get => _paymentId;
         set
         {
-            if (value == _type)
+            if (value == _paymentId)
                 return;
-            _type = value;
-            NotifyPropertyChanged(nameof(Type));
+            _paymentId = value;
+            NotifyPropertyChanged(nameof(PaymentId));
+        }
+    }
+
+    private Payment? _payment;
+    public Payment? Payment
+    {
+        get => _payment;
+        set
+        {
+            if (value == _payment)
+                return;
+            _payment = value;
+            NotifyPropertyChanged(nameof(Payment));
+        }
+    }
+
+    private int? _subContractorId;
+    public int? SubContractorId
+    {
+        get => _subContractorId;
+        set
+        {
+            if (value == _subContractorId)
+                return;
+            _subContractorId = value;
+            NotifyPropertyChanged(nameof(SubContractorId));
         }
     }
 
@@ -344,6 +344,19 @@ public class ProjectVM : BaseVM
                 return;
             _subContractor = value;
             NotifyPropertyChanged(nameof(SubContractor));
+        }
+    }
+
+    private int? _projectManagerId;
+    public int? ProjectManagerId
+    {
+        get => _projectManagerId;
+        set
+        {
+            if (value == _projectManagerId)
+                return;
+            _projectManagerId = value;
+            NotifyPropertyChanged(nameof(ProjectManagerId));
         }
     }
 
@@ -380,8 +393,17 @@ public class ProjectVM : BaseVM
 
     public ProjectVM()
     {
-        DurationDate = DateTime.Now.AddYears(1);
-        EstPaymentDate = DateTime.Now.AddYears(1);
-        PaymentDate = DateTime.Now.AddYears(1);
+        DeadLine = DateTime.Now.AddMonths(1);
+        EstimatedDate = DateTime.Now.AddDays(20);
+        DurationDate = DateTime.Now.AddDays(20);
+        Name = "";
+        Code = "";
+        Description = "";
+        Active = true;
+        EstimatedMandays = 0;
+        EstimatedHours = 0;
+        EstimatedCompleted = 0;
+        Completed = 0;
+        WorkPackegedCompleted = 0;
     }
 }

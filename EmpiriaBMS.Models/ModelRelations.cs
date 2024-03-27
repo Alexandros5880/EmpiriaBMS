@@ -64,6 +64,13 @@ public static class ModelRelations
                .HasForeignKey(c => c.ProjectManagerId)
                .OnDelete(DeleteBehavior.Restrict);
 
+        // SubContractor Project
+        builder.Entity<User>()
+                    .HasMany(p => p.SubConstructorProjects)
+                    .WithOne(c => c.SubContractor)
+                    .HasForeignKey(c => c.SubContractorId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
         // Discipline Draws
         builder.Entity<Discipline>()
                .HasMany(p => p.Drawings)
@@ -112,13 +119,6 @@ public static class ModelRelations
                .WithMany(de => de.OthersEmployees)
                .HasForeignKey(de => de.EmployeeId);
 
-        // SubContractor Project
-        builder.Entity<User>()
-                    .HasMany(p => p.SubConstructorProjects)
-                    .WithOne(c => c.SubContractor)
-                    .HasForeignKey(c => c.SubContractorId)
-                    .OnDelete(DeleteBehavior.SetNull);
-
         // Engineers Disciplines
         builder.Entity<DisciplineEngineer>()
                .HasKey(de => new { de.DisciplineId, de.EngineerId });
@@ -136,6 +136,12 @@ public static class ModelRelations
                .HasOne(p => p.Invoice)
                .WithOne(c => c.Project)
                .HasForeignKey<Invoice>(c => c.ProjectId);
+
+        // Project Payment
+        builder.Entity<Project>()
+               .HasOne(p => p.Payment)
+               .WithOne(c => c.Project)
+               .HasForeignKey<Payment>(c => c.ProjectId);
 
         // User DailyTime
         builder.Entity<User>()

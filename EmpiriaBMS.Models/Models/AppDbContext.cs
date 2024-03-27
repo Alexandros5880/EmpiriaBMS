@@ -14,8 +14,8 @@ public class AppDbContext : DbContext
 
     //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
     const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
-    //const string azureDB = "Server=tcp:empiriabms.database.windows.net,1433;Initial Catalog=EmpiriaBMS_DB;Persist Security Info=False;User ID=alexandros5880;Password=-Plat123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-    const string migrationsDB = localhostDB;
+    const string azure_staging_DB = "Data Source=empiriabms-staging.database.windows.net;Initial Catalog=EmpiriaBMS-Staging;User Id=admin-user;Password=!@#$123456asdfgh";
+    const string migrationsDB = azure_staging_DB;
 
 
     public DbSet<User> Users { get; set; }
@@ -38,7 +38,7 @@ public class AppDbContext : DbContext
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<Complain> Complains { get; set; }
+    public DbSet<Issue> Complains { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -194,6 +194,66 @@ public class AppDbContext : DbContext
             Ord = 11
         };
         builder.Entity<Permission>().HasData(per_11);
+
+        // Dashboard Edit Project
+        var per_12_id = random.Next(123456789, 999999999);
+        Permission per_12 = new Permission()
+        {
+            Id = per_12_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Edit Project On Dashboard",
+            Ord = 12
+        };
+        builder.Entity<Permission>().HasData(per_12);
+
+        // Display Projects Code
+        var per_13_id = random.Next(123456789, 999999999);
+        Permission per_13 = new Permission()
+        {
+            Id = per_13_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Display Projects Code",
+            Ord = 13
+        };
+        builder.Entity<Permission>().HasData(per_13);
+
+        // Dashboard Edit Discipline
+        var per_14_id = random.Next(123456789, 999999999);
+        Permission per_14 = new Permission()
+        {
+            Id = per_14_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Dashboard Edit Discipline",
+            Ord = 14
+        };
+        builder.Entity<Permission>().HasData(per_14);
+
+        // Dashboard Edit Deliverable
+        var per_15_id = random.Next(123456789, 999999999);
+        Permission per_15 = new Permission()
+        {
+            Id = per_15_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Dashboard Edit Deliverable",
+            Ord = 15
+        };
+        builder.Entity<Permission>().HasData(per_15);
+
+        // Dashboard Edit Other
+        var per_16_id = random.Next(123456789, 999999999);
+        Permission per_16 = new Permission()
+        {
+            Id = per_16_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Dashboard Edit Other",
+            Ord = 16
+        };
+        builder.Entity<Permission>().HasData(per_16);
         #endregion
 
         #region Roles
@@ -712,6 +772,50 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_48);
 
+        // CTO || Dashboard Edit Project
+        RolePermission rp_60 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_12_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_60);
+
+        // CTO || Dashboard Edit Discipline
+        RolePermission rp_63 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_14_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_63);
+
+        // CTO || Dashboard Edit Deliverable
+        RolePermission rp_64 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_15_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_64);
+
+        // CTO || Dashboard Edit Other
+        RolePermission rp_65 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_16_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_65);
+
 
         // CEO
         // CEO || See Dashboard Layout
@@ -781,15 +885,15 @@ public class AppDbContext : DbContext
         builder.Entity<RolePermission>().HasData(rp_25);
 
         // CEO || See Admin Layout
-        RolePermission rp_26 = new RolePermission()
-        {
-            Id = random.Next(123456789, 999999999) * 9,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            RoleId = role_6_id,
-            PermissionId = per_7_id
-        };
-        builder.Entity<RolePermission>().HasData(rp_26);
+        //RolePermission rp_26 = new RolePermission()
+        //{
+        //    Id = random.Next(123456789, 999999999) * 9,
+        //    CreatedDate = DateTime.Now,
+        //    LastUpdatedDate = DateTime.Now,
+        //    RoleId = role_6_id,
+        //    PermissionId = per_7_id
+        //};
+        //builder.Entity<RolePermission>().HasData(rp_26);
 
         // CEO || See All Disciplines
         RolePermission rp_39 = new RolePermission()
@@ -813,7 +917,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_44);
 
-        // COO || See All Projects
+        // CEO || See All Projects
         RolePermission rp_47 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -823,6 +927,28 @@ public class AppDbContext : DbContext
             PermissionId = per_11_id
         };
         builder.Entity<RolePermission>().HasData(rp_47);
+
+        // CEO || Display Projects Code
+        RolePermission rp_61 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_13_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_61);
+
+        // CEO || Dashboard Add Project
+        RolePermission rp_62 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_12_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_62);
 
 
         // Guest
@@ -963,206 +1089,6 @@ public class AppDbContext : DbContext
             PermissionId = per_11_id
         };
         builder.Entity<RolePermission>().HasData(rp_59);
-        #endregion
-
-        #region Create Random Users With Roles:  Admin, CEO, CTO, COO, Guest,
-        // Admin
-        var adminId = random.Next(123456789, 999999999) + random.Next(0, 333) + 1;
-        User admin = new User()
-        {
-            Id = adminId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "Admin",
-            ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com",
-        };
-        builder.Entity<User>().HasData(admin);
-        Email email_1 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "alexandrosplatanios15@gmail.com",
-            UserId = adminId
-        };
-        builder.Entity<Email>().HasData(email_1);
-        UserRole adminRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = adminId,
-            RoleId = role_9_id
-        };
-        builder.Entity<UserRole>().HasData(adminRole);
-
-        // CEO
-        var ceoId = random.Next(123456789, 999999999) + random.Next(0, 333) + 2;
-        User ceo = new User()
-        {
-            Id = ceoId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "CEO",
-            ProxyAddress = "ceo@gmail.com",
-        };
-        builder.Entity<User>().HasData(ceo);
-        Email email_2 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "ceo@gmail.com",
-            UserId = ceoId
-        };
-        builder.Entity<Email>().HasData(email_2);
-        UserRole ceoRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = ceoId,
-            RoleId = role_6_id
-        };
-        builder.Entity<UserRole>().HasData(ceoRole);
-
-        // CTO
-        var ctoId = random.Next(123456789, 999999999) + random.Next(0, 333) + 3;
-        User cto = new User()
-        {
-            Id = ctoId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "CTO",
-            ProxyAddress = "cto@gmail.com",
-        };
-        builder.Entity<User>().HasData(cto);
-        Email email_3 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "cto@gmail.com",
-            UserId = ctoId
-        };
-        builder.Entity<Email>().HasData(email_3);
-        UserRole ctoRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = ctoId,
-            RoleId = role_5_id
-        };
-        builder.Entity<UserRole>().HasData(ctoRole);
-
-        // COO
-        var cooId = random.Next(123456789, 999999999) + random.Next(0, 333) + 4;
-        User coo = new User()
-        {
-            Id = cooId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "COO",
-            ProxyAddress = "coo@gmail.com",
-        };
-        builder.Entity<User>().HasData(coo);
-        Email email_4 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "coo@gmail.com",
-            UserId = cooId
-        };
-        builder.Entity<Email>().HasData(email_4);
-        UserRole cooRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = cooId,
-            RoleId = role_4_id
-        };
-        builder.Entity<UserRole>().HasData(cooRole);
-
-        // Guest
-        var guestId = random.Next(123456789, 999999999) + random.Next(0, 333) + 5;
-        User guest = new User()
-        {
-            Id = guestId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "Guest",
-            ProxyAddress = "guest@gmail.com",
-        };
-        builder.Entity<User>().HasData(guest);
-        Email email_5 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "guest@gmail.com",
-            UserId = guestId
-        };
-        builder.Entity<Email>().HasData(email_5);
-        UserRole guestRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = guestId,
-            RoleId = role_7_id
-        };
-        builder.Entity<UserRole>().HasData(guestRole);
-
-        // Project Manager
-        var pmId = random.Next(123456789, 999999999) + random.Next(0, 333) + 5;
-        User pm = new User()
-        {
-            Id = pmId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "Project Manager",
-            ProxyAddress = "pm@gmail.com",
-        };
-        builder.Entity<User>().HasData(pm);
-        Email email_27 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "pm@gmail.com",
-            UserId = pmId
-        };
-        builder.Entity<Email>().HasData(email_27);
-        UserRole pmRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = pmId,
-            RoleId = role_3_id
-        };
-        builder.Entity<UserRole>().HasData(pmRole);
         #endregion
 
         #region Create Secretaries
@@ -1497,16 +1423,6 @@ public class AppDbContext : DbContext
             RoleId = role_2_id
         };
         builder.Entity<UserRole>().HasData(engineerRole_5_em);
-        // Admin
-        UserRole engineerRole_5_em_2 = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + 12,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = engineer_5_Id,
-            RoleId = role_9_id
-        };
-        builder.Entity<UserRole>().HasData(engineerRole_5_em_2);
         // CEO
         UserRole engineerRole_5_em_3 = new UserRole()
         {
@@ -1562,6 +1478,16 @@ public class AppDbContext : DbContext
             RoleId = role_4_id
         };
         builder.Entity<UserRole>().HasData(engineerRole_6_em_coo);
+        // CTO
+        UserRole engineerRole_17_em_coo = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6_Id,
+            RoleId = role_5_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_17_em_coo);
 
         // ΤΖΑΝΗΣ ΒΑΣΙΛΕΙΟΣ
         var engineer_7_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 16;
@@ -2043,17 +1969,9 @@ public class AppDbContext : DbContext
                 Name = "Project_" + Convert.ToString(i),
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 DurationDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                EstPaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                PaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                WorkPackege = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                DelayInPayment = Convert.ToInt32(Math.Pow(i, 2)),
-                PaymentDetailes = "Payment Detailes For Project_" + Convert.ToString(i * random.Next(1, 7)),
-                DayCost = 7 + i - 1 * 2,
-                Bank = i % 2 == 0 ? "ALPHA" : "NBG_IBANK",
-                PaidFee = 7 - 1 * 2,
-                DaysUntilPayment = (createdDate.AddDays(Convert.ToInt32(Math.Pow(i, 2))) - createdDate).Days,
-                PendingPayments = i,
+                EstimatedDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                Fee = 10000,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
@@ -2062,44 +1980,10 @@ public class AppDbContext : DbContext
                 EstimatedCompleted = 0,
                 TypeId = projectTypes[i - 1],
                 Active = i % 2 == 0 ? true : false,
-                ProjectManagerId = projectManagers.Count < i-1 ? projectManagers[i].Id : null
+                ProjectManagerId = projectManagers.Count < i-1 ? projectManagers[i].Id : projectManagers[i - i + 1].Id
             };
             builder.Entity<Project>().HasData(project);
             projects.Add(project);
-
-            // Customers
-            var customerId = random.Next(123456789, 999999999) + i * 10 + 28;
-            User customer = new User()
-            {
-                Id = customerId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                LastName = "Alexandros_" + Convert.ToString(i),
-                FirstName = "Platanios_Customer_" + Convert.ToString(i),
-                ProxyAddress = "alexpl_{i}@gmail.com",
-                Phone1 = "694927778" + Convert.ToString(i),
-                Description = "Test Description Customer " + Convert.ToString(i),
-                ProjectId = projectId,
-            };
-            builder.Entity<User>().HasData(customer);
-            Email email_28 = new Email()
-            {
-                Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Address = "alexpl_{i}@gmail.com",
-                UserId = customerId
-            };
-            builder.Entity<Email>().HasData(email_28);
-            UserRole userRole_c = new UserRole()
-            {
-                Id = random.Next(123456789, 999999999) + i * 2,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = customerId,
-                RoleId = role_8_id
-            };
-            builder.Entity<UserRole>().HasData(userRole_c);
 
             // Invoices
             var invoiceId = random.Next(123456789, 999999999) + i * 3;
@@ -2130,17 +2014,8 @@ public class AppDbContext : DbContext
             Name = "Project_PM",
             Description = "Test Description Project_PM",
             DurationDate = createdDate.AddMonths(1),
-            EstPaymentDate = createdDate.AddMonths(2),
-            PaymentDate = createdDate.AddMonths(1),
             DeadLine = createdDate.AddMonths(3),
-            WorkPackege = createdDate.AddMonths(2),
-            DelayInPayment = Convert.ToInt32(Math.Pow(1, 2)),
-            PaymentDetailes = "Payment Detailes For Project_PM",
-            DayCost = 111,
-            Bank = "ALPHA",
-            PaidFee = 45,
-            DaysUntilPayment = (createdDate.AddDays(90) - createdDate).Days,
-            PendingPayments = 2,
+            EstimatedDate = createdDate.AddMonths(2),
             CalculationDaly = 345,
             EstimatedMandays = 100 / 8,
             EstimatedHours = 1500,
@@ -2174,6 +2049,7 @@ public class AppDbContext : DbContext
             "Outsource",
             "TenderDocument",
             "Construction Supervision",
+            "DWG Admin/Clearing"
         };
         for (var i = 0; i < dicTypeNames.Length; i++)
         {
@@ -2217,7 +2093,8 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     TypeId = disciplineTypes[typeIndex].Id,
-                    EstimatedHours = 500,
+                    EstimatedMandays = 50 + j,
+                    EstimatedHours = (50 + j) * 8,
                     ProjectId = projects[i].Id,
                     Completed = 0
                 };
@@ -2311,7 +2188,9 @@ public class AppDbContext : DbContext
             "Printing",
             "On-Site",
             "Meetings",
-            "Administration"
+            "Administration",
+            "Soft Copy",
+            "Hours To Be Raised"
         };
         for (var i = 0; i < otherTypeNames.Length; i++)
         {

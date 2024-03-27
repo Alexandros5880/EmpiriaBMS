@@ -40,15 +40,17 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 ds = await _context.Set<Discipline>()
-                                     .ToListAsync();
+                                   .Include(d => d.Type)
+                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
             }
 
             ds = await _context.Set<Discipline>()
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+                               .Include(d => d.Type)
+                               .Skip((pageIndex - 1) * pageSize)
+                               .Take(pageSize)
+                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
         }
@@ -65,13 +67,15 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 ds = await _context.Set<Discipline>()
-                                     .Where(expresion)
-                                     .ToListAsync();
+                                   .Include(d => d.Type)
+                                   .Where(expresion)
+                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
             }
 
             ds = await _context.Set<Discipline>()
+                               .Include(d => d.Type)
                                .Where(expresion)
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)

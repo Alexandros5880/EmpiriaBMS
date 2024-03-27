@@ -1,19 +1,23 @@
-﻿using EmpiriaMS.Models.Models;
-using EmpiriaMS.Models.Models.Base;
+﻿using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaBMS.Models.Models;
+using EmpiriaMS.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmpiriaBMS.Models.Models;
+namespace EmpiriaBMS.Core.Dtos;
 
-public class Complain : Entity
+public class IssueDto : EntityDto
 {
+    public int CustomerId { get; set; }
+    public User Customer { get; set; }
+
     public DateTime ComplaintDate { get; set; }
 
     public int ProjectId { get; set; }
-    public Project? Project { get; set; }
+    public Project Project { get; set; }
 
     public string About { get; set; }
 
@@ -30,6 +34,9 @@ public class Complain : Entity
     public DateTime VerificationDate { get; set; }
 
     public byte[] VerificatorSignature { get; set; }
+
+    public int ProjectManagerId { get; set; }
+    public User ProjectManager { get; set; }
 
     public byte[] PMSignature { get; set; }
 

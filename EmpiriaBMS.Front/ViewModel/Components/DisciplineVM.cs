@@ -7,6 +7,45 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class DisciplineVM : BaseVM
 {
+    private bool? _isSelected = false;
+    public bool? IsSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (value == _isSelected)
+                return;
+            _isSelected = value;
+            NotifyPropertyChanged(nameof(IsSelected));
+        }
+    }
+
+    private long _estimatedMandays;
+    public long EstimatedMandays
+    {
+        get => _estimatedMandays;
+        set
+        {
+            if (value == _estimatedMandays)
+                return;
+            _estimatedMandays = value;
+            NotifyPropertyChanged(nameof(EstimatedMandays));
+        }
+    }
+
+    private long _estimatedHours;
+    public long EstimatedHours
+    {
+        get => _estimatedHours;
+        set
+        {
+            if (value == _estimatedHours)
+                return;
+            _estimatedHours = value;
+            NotifyPropertyChanged(nameof(EstimatedHours));
+        }
+    }
+
     private int _typeId;
     public int TypeId
     {
@@ -33,16 +72,29 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private long _estimatedHours;
-    public long EstimatedHours
+    private int _projectId;
+    public int ProjectId
     {
-        get => _estimatedHours;
+        get => _projectId;
         set
         {
-            if (value == _estimatedHours)
+            if (value == _projectId)
                 return;
-            _estimatedHours = value;
-            NotifyPropertyChanged(nameof(EstimatedHours));
+            _projectId = value;
+            NotifyPropertyChanged(nameof(ProjectId));
+        }
+    }
+
+    private Project _project;
+    public Project Project
+    {
+        get => _project;
+        set
+        {
+            if (value == _project)
+                return;
+            _project = value;
+            NotifyPropertyChanged(nameof(Project));
         }
     }
 
@@ -70,5 +122,13 @@ public class DisciplineVM : BaseVM
             _completed = value;
             NotifyPropertyChanged(nameof(Completed));
         }
+    }
+
+    public DisciplineVM()
+    {
+        EstimatedMandays = 0;
+        EstimatedHours = 0;
+        EstimatedCompleted = 0;
+        Completed = 0;
     }
 }

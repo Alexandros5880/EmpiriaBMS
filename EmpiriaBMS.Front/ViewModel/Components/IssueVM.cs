@@ -4,7 +4,7 @@ using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class ComplainVM : BaseVM
+public class IssueVM : BaseVM
 {
     private int _customerId;
     public int CustomerId

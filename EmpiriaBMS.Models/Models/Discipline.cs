@@ -11,12 +11,15 @@ namespace EmpiriaBMS.Models.Models;
 
 public class Discipline : Entity
 {
+    public long EstimatedMandays { get; set; }
+
     public long EstimatedHours { get; set; }
 
     public float EstimatedCompleted { get; set; }
 
     public float Completed { get; set; }
 
+    [Required]
     public int ProjectId { get; set; }
     public Project Project { get; set; }
 

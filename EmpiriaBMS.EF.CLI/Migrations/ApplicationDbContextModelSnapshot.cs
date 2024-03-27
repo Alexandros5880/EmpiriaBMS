@@ -22,70 +22,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.Complain", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("About")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ComplaintDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Evaluation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsClose")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("PMSignature")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Solution")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SolutionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Verification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("VerificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("VerificatorSignature")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("Complains");
-                });
-
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DailyTime", b =>
                 {
                     b.Property<int>("Id")
@@ -173,6 +109,9 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<long>("EstimatedHours")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("EstimatedMandays")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -198,146 +137,159 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = -1378459520,
+                            Id = -1312329040,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7655),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9644),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7656),
-                            ProjectId = 445143759,
-                            TypeId = 428195479
+                            EstimatedHours = 400L,
+                            EstimatedMandays = 50L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9645),
+                            ProjectId = 776914543,
+                            TypeId = 421159882
                         },
                         new
                         {
-                            Id = -1831516064,
+                            Id = -1595621368,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7680),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9669),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7681),
-                            ProjectId = 445143759,
-                            TypeId = 747356566
+                            EstimatedHours = 408L,
+                            EstimatedMandays = 51L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9670),
+                            ProjectId = 776914543,
+                            TypeId = 648092441
                         },
                         new
                         {
-                            Id = 42697200,
+                            Id = -1492539104,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7694),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9684),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7695),
-                            ProjectId = 445143759,
-                            TypeId = 146063663
+                            EstimatedHours = 416L,
+                            EstimatedMandays = 52L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9685),
+                            ProjectId = 776914543,
+                            TypeId = 167926921
                         },
                         new
                         {
-                            Id = 78577000,
+                            Id = 1142935016,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7708),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9697),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7710),
-                            ProjectId = 306257293,
-                            TypeId = 149077241
+                            EstimatedHours = 400L,
+                            EstimatedMandays = 50L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9698),
+                            ProjectId = 264754523,
+                            TypeId = 333795694
                         },
                         new
                         {
-                            Id = -1660529528,
+                            Id = -1522909840,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7723),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9710),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7724),
-                            ProjectId = 306257293,
-                            TypeId = 799215159
+                            EstimatedHours = 408L,
+                            EstimatedMandays = 51L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9711),
+                            ProjectId = 264754523,
+                            TypeId = 929882248
                         },
                         new
                         {
-                            Id = 240582328,
+                            Id = -846811648,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7737),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9724),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7738),
-                            ProjectId = 306257293,
-                            TypeId = 428195479
+                            EstimatedHours = 416L,
+                            EstimatedMandays = 52L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9725),
+                            ProjectId = 264754523,
+                            TypeId = 363806183
                         },
                         new
                         {
-                            Id = 82819888,
+                            Id = 2062609040,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7751),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9737),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7752),
-                            ProjectId = 282399733,
-                            TypeId = 671625631
+                            EstimatedHours = 400L,
+                            EstimatedMandays = 50L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9738),
+                            ProjectId = 893813857,
+                            TypeId = 541849282
                         },
                         new
                         {
-                            Id = 1316815352,
+                            Id = 1397120936,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7764),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9749),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7766),
-                            ProjectId = 282399733,
-                            TypeId = 477983693
+                            EstimatedHours = 408L,
+                            EstimatedMandays = 51L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9751),
+                            ProjectId = 893813857,
+                            TypeId = 548868269
                         },
                         new
                         {
-                            Id = -1703774184,
+                            Id = 665865888,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7777),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9762),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7778),
-                            ProjectId = 282399733,
-                            TypeId = 790380741
+                            EstimatedHours = 416L,
+                            EstimatedMandays = 52L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9763),
+                            ProjectId = 893813857,
+                            TypeId = 176563775
                         },
                         new
                         {
-                            Id = 2006586200,
+                            Id = -1273567776,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7792),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9777),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7793),
-                            ProjectId = 561990111,
-                            TypeId = 606948020
+                            EstimatedHours = 400L,
+                            EstimatedMandays = 50L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9779),
+                            ProjectId = 386018162,
+                            TypeId = 359884378
                         },
                         new
                         {
-                            Id = -257937256,
+                            Id = 1183334216,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7809),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9790),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7810),
-                            ProjectId = 561990111,
-                            TypeId = 524393079
+                            EstimatedHours = 408L,
+                            EstimatedMandays = 51L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9791),
+                            ProjectId = 386018162,
+                            TypeId = 939316762
                         },
                         new
                         {
-                            Id = 214577552,
+                            Id = -586049128,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7822),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9802),
                             EstimatedCompleted = 0f,
-                            EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7823),
-                            ProjectId = 561990111,
-                            TypeId = 359391870
+                            EstimatedHours = 416L,
+                            EstimatedMandays = 52L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9803),
+                            ProjectId = 386018162,
+                            TypeId = 806025373
                         },
                         new
                         {
-                            Id = 1518936840,
+                            Id = -1235945912,
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7835),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9815),
                             EstimatedCompleted = 0f,
                             EstimatedHours = 500L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7836),
-                            ProjectId = 710349608,
-                            TypeId = 176075020
+                            EstimatedMandays = 0L,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9816),
+                            ProjectId = 491960751,
+                            TypeId = 941757881
                         });
                 });
 
@@ -367,1539 +319,1539 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9385),
-                            Id = 596960508,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9386)
+                            DisciplineId = -1312329040,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1855),
+                            Id = 207323883,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1856)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9410),
-                            Id = 207995306,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9411)
+                            DisciplineId = -1312329040,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1876),
+                            Id = 887867875,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1877)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9423),
-                            Id = 709981370,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9424)
+                            DisciplineId = -1312329040,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1888),
+                            Id = 443746715,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1889)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9436),
-                            Id = 523588151,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9437)
+                            DisciplineId = -1312329040,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1900),
+                            Id = 471068966,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1901)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9450),
-                            Id = 954510616,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9451)
+                            DisciplineId = -1312329040,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1912),
+                            Id = 929216778,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1913)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9464),
-                            Id = 764422429,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9465)
+                            DisciplineId = -1312329040,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1924),
+                            Id = 276721134,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1925)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9477),
-                            Id = 136140207,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9478)
+                            DisciplineId = -1312329040,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1937),
+                            Id = 878481791,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1938)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9490),
-                            Id = 369212969,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9491)
+                            DisciplineId = -1312329040,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1949),
+                            Id = 743373727,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1951)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9506),
-                            Id = 245975102,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9507)
+                            DisciplineId = -1312329040,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1962),
+                            Id = 674962226,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1963)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9520),
-                            Id = 463298278,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9521)
+                            DisciplineId = -1312329040,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1974),
+                            Id = 426926422,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1975)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9533),
-                            Id = 695192252,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9534)
+                            DisciplineId = -1312329040,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1986),
+                            Id = 566733670,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1987)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9546),
-                            Id = 421115961,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9547)
+                            DisciplineId = -1312329040,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1998),
+                            Id = 946612411,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1999)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9559),
-                            Id = 229985362,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9560)
+                            DisciplineId = -1312329040,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2010),
+                            Id = 925332062,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2011)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9571),
-                            Id = 673728529,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9572)
+                            DisciplineId = -1312329040,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2047),
+                            Id = 892278129,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2048)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9584),
-                            Id = 460251838,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9585)
+                            DisciplineId = -1312329040,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2059),
+                            Id = 558897391,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2060)
                         },
                         new
                         {
-                            DisciplineId = -1378459520,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9596),
-                            Id = 530797140,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9597)
+                            DisciplineId = -1312329040,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2071),
+                            Id = 443402154,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2073)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9609),
-                            Id = 574452873,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9610)
+                            DisciplineId = -1595621368,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2084),
+                            Id = 879959983,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2085)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9623),
-                            Id = 265261083,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9624)
+                            DisciplineId = -1595621368,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2097),
+                            Id = 900268560,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2098)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9635),
-                            Id = 323953129,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9636)
+                            DisciplineId = -1595621368,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2109),
+                            Id = 802093776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2110)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9648),
-                            Id = 986113417,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9649)
+                            DisciplineId = -1595621368,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2121),
+                            Id = 545708487,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2122)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9660),
-                            Id = 226313332,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9661)
+                            DisciplineId = -1595621368,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2134),
+                            Id = 890485739,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2135)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9672),
-                            Id = 910122332,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9673)
+                            DisciplineId = -1595621368,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2146),
+                            Id = 556957443,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2147)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9685),
-                            Id = 586283791,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9686)
+                            DisciplineId = -1595621368,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2159),
+                            Id = 966691099,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2160)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9697),
-                            Id = 489409285,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9698)
+                            DisciplineId = -1595621368,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2171),
+                            Id = 929392614,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2172)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9709),
-                            Id = 949204163,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9710)
+                            DisciplineId = -1595621368,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2183),
+                            Id = 572806837,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2184)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9722),
-                            Id = 349866196,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9723)
+                            DisciplineId = -1595621368,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2195),
+                            Id = 678833674,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2196)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9735),
-                            Id = 632765817,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9736)
+                            DisciplineId = -1595621368,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2206),
+                            Id = 237994233,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2207)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9748),
-                            Id = 726015775,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9749)
+                            DisciplineId = -1595621368,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2218),
+                            Id = 413792772,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2219)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9761),
-                            Id = 433892735,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9762)
+                            DisciplineId = -1595621368,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2230),
+                            Id = 714851508,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2231)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9774),
-                            Id = 368734403,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9775)
+                            DisciplineId = -1595621368,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2242),
+                            Id = 163793438,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2243)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9787),
-                            Id = 403180101,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9788)
+                            DisciplineId = -1595621368,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2255),
+                            Id = 860686418,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2256)
                         },
                         new
                         {
-                            DisciplineId = -1831516064,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9800),
-                            Id = 648890569,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9801)
+                            DisciplineId = -1595621368,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2266),
+                            Id = 284785209,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2267)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9813),
-                            Id = 360661160,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9814)
+                            DisciplineId = -1492539104,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2278),
+                            Id = 798422948,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2279)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9827),
-                            Id = 584194490,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9828)
+                            DisciplineId = -1492539104,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2291),
+                            Id = 411213871,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2293)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9840),
-                            Id = 519965336,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9841)
+                            DisciplineId = -1492539104,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2304),
+                            Id = 346321717,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2305)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9855),
-                            Id = 799017484,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9857)
+                            DisciplineId = -1492539104,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2316),
+                            Id = 127085665,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2317)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9869),
-                            Id = 256329815,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9870)
+                            DisciplineId = -1492539104,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2328),
+                            Id = 446200016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2329)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9882),
-                            Id = 869043672,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9883)
+                            DisciplineId = -1492539104,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2340),
+                            Id = 858149170,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2341)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9894),
-                            Id = 124593845,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9895)
+                            DisciplineId = -1492539104,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2352),
+                            Id = 845718621,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2353)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9907),
-                            Id = 467447490,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9908)
+                            DisciplineId = -1492539104,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2364),
+                            Id = 556589848,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2366)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9919),
-                            Id = 362887774,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9921)
+                            DisciplineId = -1492539104,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2377),
+                            Id = 704954149,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2378)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9932),
-                            Id = 382615388,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9933)
+                            DisciplineId = -1492539104,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2413),
+                            Id = 892999867,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2414)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9944),
-                            Id = 574728828,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9946)
+                            DisciplineId = -1492539104,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2425),
+                            Id = 269149999,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2427)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9957),
-                            Id = 729569761,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9958)
+                            DisciplineId = -1492539104,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2438),
+                            Id = 434123761,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2439)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9970),
-                            Id = 603830965,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9971)
+                            DisciplineId = -1492539104,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2450),
+                            Id = 418438304,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2451)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9982),
-                            Id = 382300633,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9984)
+                            DisciplineId = -1492539104,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2462),
+                            Id = 943955386,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2463)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9995),
-                            Id = 293361925,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9996)
+                            DisciplineId = -1492539104,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2474),
+                            Id = 475035398,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2475)
                         },
                         new
                         {
-                            DisciplineId = 42697200,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(8),
-                            Id = 196994008,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(9)
+                            DisciplineId = -1492539104,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2486),
+                            Id = 929084941,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2487)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(21),
-                            Id = 427100908,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(22)
+                            DisciplineId = 1142935016,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2498),
+                            Id = 910690632,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2500)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(33),
-                            Id = 435375376,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(34)
+                            DisciplineId = 1142935016,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2511),
+                            Id = 922481652,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2512)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(46),
-                            Id = 473349748,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(47)
+                            DisciplineId = 1142935016,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2523),
+                            Id = 690809514,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2524)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(59),
-                            Id = 935663677,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(60)
+                            DisciplineId = 1142935016,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2535),
+                            Id = 436852776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2536)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(71),
-                            Id = 952374985,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(73)
+                            DisciplineId = 1142935016,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2547),
+                            Id = 267996400,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2548)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(84),
-                            Id = 695542647,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(85)
+                            DisciplineId = 1142935016,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2559),
+                            Id = 127975272,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2560)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(97),
-                            Id = 365428178,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(98)
+                            DisciplineId = 1142935016,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2571),
+                            Id = 295690588,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2572)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(110),
-                            Id = 674816154,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(111)
+                            DisciplineId = 1142935016,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2583),
+                            Id = 366833820,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2584)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(122),
-                            Id = 881398948,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(123)
+                            DisciplineId = 1142935016,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2595),
+                            Id = 930149973,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2596)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(135),
-                            Id = 524216361,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(136)
+                            DisciplineId = 1142935016,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2607),
+                            Id = 260664946,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2608)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(147),
-                            Id = 315768753,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(148)
+                            DisciplineId = 1142935016,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2620),
+                            Id = 486956157,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2621)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(160),
-                            Id = 257627192,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(161)
+                            DisciplineId = 1142935016,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2632),
+                            Id = 753945870,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2633)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(173),
-                            Id = 882145578,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(174)
+                            DisciplineId = 1142935016,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2644),
+                            Id = 598779153,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2645)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(186),
-                            Id = 771879536,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(187)
+                            DisciplineId = 1142935016,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2656),
+                            Id = 723638995,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2657)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(198),
-                            Id = 571795796,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(199)
+                            DisciplineId = 1142935016,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2668),
+                            Id = 594410319,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2669)
                         },
                         new
                         {
-                            DisciplineId = 78577000,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(210),
-                            Id = 449500494,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(212)
+                            DisciplineId = 1142935016,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2680),
+                            Id = 940471407,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2681)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(223),
-                            Id = 170282909,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(224)
+                            DisciplineId = -1522909840,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2692),
+                            Id = 156072622,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2693)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(239),
-                            Id = 510455582,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(241)
+                            DisciplineId = -1522909840,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2705),
+                            Id = 217735117,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2706)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(253),
-                            Id = 867013283,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(254)
+                            DisciplineId = -1522909840,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2717),
+                            Id = 333124642,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2719)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(265),
-                            Id = 696791257,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(267)
+                            DisciplineId = -1522909840,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2761),
+                            Id = 265656373,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2763)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(278),
-                            Id = 732668314,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(279)
+                            DisciplineId = -1522909840,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2776),
+                            Id = 827639151,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2777)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(291),
-                            Id = 357173789,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(292)
+                            DisciplineId = -1522909840,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2788),
+                            Id = 640588217,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2789)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(303),
-                            Id = 743499924,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(304)
+                            DisciplineId = -1522909840,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2800),
+                            Id = 713190407,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2801)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(316),
-                            Id = 141895215,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(317)
+                            DisciplineId = -1522909840,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2813),
+                            Id = 442140810,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2814)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(329),
-                            Id = 783330213,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(330)
+                            DisciplineId = -1522909840,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2825),
+                            Id = 224293691,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2826)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(342),
-                            Id = 899139662,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(343)
+                            DisciplineId = -1522909840,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2837),
+                            Id = 403532008,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2838)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(354),
-                            Id = 892150548,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(355)
+                            DisciplineId = -1522909840,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2850),
+                            Id = 711052814,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2851)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(367),
-                            Id = 682003375,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(368)
+                            DisciplineId = -1522909840,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2862),
+                            Id = 356859053,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2863)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(379),
-                            Id = 420961889,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(380)
+                            DisciplineId = -1522909840,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2874),
+                            Id = 980399674,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2875)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(392),
-                            Id = 562872403,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(393)
+                            DisciplineId = -1522909840,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2887),
+                            Id = 278988098,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2888)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(404),
-                            Id = 991547664,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(405)
+                            DisciplineId = -1522909840,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2899),
+                            Id = 590972096,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2900)
                         },
                         new
                         {
-                            DisciplineId = -1660529528,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(417),
-                            Id = 320967641,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(418)
+                            DisciplineId = -1522909840,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2911),
+                            Id = 596744450,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2912)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(429),
-                            Id = 721533828,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(430)
+                            DisciplineId = -846811648,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2924),
+                            Id = 691415661,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2925)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(442),
-                            Id = 340610457,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(443)
+                            DisciplineId = -846811648,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2936),
+                            Id = 661537992,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2937)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(454),
-                            Id = 915967321,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(456)
+                            DisciplineId = -846811648,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2948),
+                            Id = 151097502,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2950)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(467),
-                            Id = 433582867,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(468)
+                            DisciplineId = -846811648,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2961),
+                            Id = 780157760,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2962)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(479),
-                            Id = 898103690,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(480)
+                            DisciplineId = -846811648,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2973),
+                            Id = 470682980,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2974)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(492),
-                            Id = 320910990,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(493)
+                            DisciplineId = -846811648,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2985),
+                            Id = 324264225,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2986)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(505),
-                            Id = 462992905,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(506)
+                            DisciplineId = -846811648,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2997),
+                            Id = 634119992,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2998)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(517),
-                            Id = 357291488,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(518)
+                            DisciplineId = -846811648,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3009),
+                            Id = 422835682,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3010)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(530),
-                            Id = 488606292,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(531)
+                            DisciplineId = -846811648,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3021),
+                            Id = 990642539,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3022)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(542),
-                            Id = 656861375,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(543)
+                            DisciplineId = -846811648,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3033),
+                            Id = 569705122,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3034)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(555),
-                            Id = 633415917,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(556)
+                            DisciplineId = -846811648,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3045),
+                            Id = 590973955,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3046)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(567),
-                            Id = 717284510,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(568)
+                            DisciplineId = -846811648,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3058),
+                            Id = 293024107,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3059)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(580),
-                            Id = 356823526,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(581)
+                            DisciplineId = -846811648,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3070),
+                            Id = 741955644,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3071)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(596),
-                            Id = 846024898,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(597)
+                            DisciplineId = -846811648,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3082),
+                            Id = 524964859,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3083)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(609),
-                            Id = 587879456,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(611)
+                            DisciplineId = -846811648,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3094),
+                            Id = 998259345,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3095)
                         },
                         new
                         {
-                            DisciplineId = 240582328,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(622),
-                            Id = 470376833,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(623)
+                            DisciplineId = -846811648,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3106),
+                            Id = 547529397,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3108)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(635),
-                            Id = 888169030,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(636)
+                            DisciplineId = 2062609040,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3119),
+                            Id = 447146566,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3120)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(648),
-                            Id = 180130152,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(649)
+                            DisciplineId = 2062609040,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3131),
+                            Id = 743092766,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3133)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(660),
-                            Id = 942423596,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(661)
+                            DisciplineId = 2062609040,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3166),
+                            Id = 925664406,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3168)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(673),
-                            Id = 158305149,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(674)
+                            DisciplineId = 2062609040,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3179),
+                            Id = 759264012,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3181)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(685),
-                            Id = 968234057,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(686)
+                            DisciplineId = 2062609040,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3192),
+                            Id = 759103018,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3193)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(698),
-                            Id = 409063765,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(699)
+                            DisciplineId = 2062609040,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3204),
+                            Id = 839785208,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3206)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(710),
-                            Id = 140509661,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(711)
+                            DisciplineId = 2062609040,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3217),
+                            Id = 676592980,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3218)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(723),
-                            Id = 934394230,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(724)
+                            DisciplineId = 2062609040,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3229),
+                            Id = 354779822,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3230)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(736),
-                            Id = 224327395,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(737)
+                            DisciplineId = 2062609040,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3241),
+                            Id = 194177988,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3242)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(748),
-                            Id = 550933200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(749)
+                            DisciplineId = 2062609040,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3253),
+                            Id = 782551756,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3254)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(761),
-                            Id = 700357587,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(762)
+                            DisciplineId = 2062609040,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3265),
+                            Id = 396390203,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3266)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(773),
-                            Id = 348509432,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(775)
+                            DisciplineId = 2062609040,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3277),
+                            Id = 773304418,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3278)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(786),
-                            Id = 400939397,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(787)
+                            DisciplineId = 2062609040,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3290),
+                            Id = 984142174,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3291)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(798),
-                            Id = 449758791,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(799)
+                            DisciplineId = 2062609040,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3302),
+                            Id = 468034655,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3303)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(811),
-                            Id = 972141753,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(812)
+                            DisciplineId = 2062609040,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3314),
+                            Id = 568500386,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3315)
                         },
                         new
                         {
-                            DisciplineId = 82819888,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(824),
-                            Id = 594109576,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(825)
+                            DisciplineId = 2062609040,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3326),
+                            Id = 128308370,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3327)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(836),
-                            Id = 308091007,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(837)
+                            DisciplineId = 1397120936,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3338),
+                            Id = 711998052,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3339)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(849),
-                            Id = 621934252,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(850)
+                            DisciplineId = 1397120936,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3350),
+                            Id = 133643138,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3351)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(861),
-                            Id = 205044342,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(863)
+                            DisciplineId = 1397120936,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3362),
+                            Id = 562890714,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3363)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(875),
-                            Id = 913650453,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(876)
+                            DisciplineId = 1397120936,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3374),
+                            Id = 537831706,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3375)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(887),
-                            Id = 539960477,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(888)
+                            DisciplineId = 1397120936,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3386),
+                            Id = 763021753,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3387)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(899),
-                            Id = 480739298,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(900)
+                            DisciplineId = 1397120936,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3399),
+                            Id = 689280014,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3400)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(912),
-                            Id = 917073947,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(913)
+                            DisciplineId = 1397120936,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3410),
+                            Id = 492999352,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3412)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(924),
-                            Id = 497502898,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(925)
+                            DisciplineId = 1397120936,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3422),
+                            Id = 655842256,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3423)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(937),
-                            Id = 292920692,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(938)
+                            DisciplineId = 1397120936,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3435),
+                            Id = 773623420,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3436)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(950),
-                            Id = 502566809,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(951)
+                            DisciplineId = 1397120936,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3447),
+                            Id = 961111361,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3448)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(962),
-                            Id = 998586553,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(963)
+                            DisciplineId = 1397120936,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3459),
+                            Id = 236460877,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3461)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(975),
-                            Id = 792414497,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(976)
+                            DisciplineId = 1397120936,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3472),
+                            Id = 530724171,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3473)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(990),
-                            Id = 849232538,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(991)
+                            DisciplineId = 1397120936,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3484),
+                            Id = 485823142,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3485)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1003),
-                            Id = 195021192,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1004)
+                            DisciplineId = 1397120936,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3496),
+                            Id = 330621995,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3497)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1015),
-                            Id = 512837020,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1016)
+                            DisciplineId = 1397120936,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3508),
+                            Id = 928474351,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3509)
                         },
                         new
                         {
-                            DisciplineId = 1316815352,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1028),
-                            Id = 137472661,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1029)
+                            DisciplineId = 1397120936,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3521),
+                            Id = 319599962,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3522)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1041),
-                            Id = 601455169,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1042)
+                            DisciplineId = 665865888,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3533),
+                            Id = 378983018,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3534)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1054),
-                            Id = 997852271,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1056)
+                            DisciplineId = 665865888,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3570),
+                            Id = 217797835,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3571)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1067),
-                            Id = 973195224,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1068)
+                            DisciplineId = 665865888,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3584),
+                            Id = 578273052,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3585)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1080),
-                            Id = 943010505,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1081)
+                            DisciplineId = 665865888,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3596),
+                            Id = 676373949,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3597)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1093),
-                            Id = 517452407,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1094)
+                            DisciplineId = 665865888,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3608),
+                            Id = 614131661,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3609)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1105),
-                            Id = 476476166,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1106)
+                            DisciplineId = 665865888,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3621),
+                            Id = 838898248,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3622)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1117),
-                            Id = 340904841,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1119)
+                            DisciplineId = 665865888,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3633),
+                            Id = 866286376,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3634)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1130),
-                            Id = 648865324,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1131)
+                            DisciplineId = 665865888,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3645),
+                            Id = 753054989,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3646)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1142),
-                            Id = 575704063,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1144)
+                            DisciplineId = 665865888,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3657),
+                            Id = 688807854,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3658)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1155),
-                            Id = 561269597,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1156)
+                            DisciplineId = 665865888,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3670),
+                            Id = 799894330,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3671)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1168),
-                            Id = 678722158,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1169)
+                            DisciplineId = 665865888,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3682),
+                            Id = 927083911,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3683)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1180),
-                            Id = 902348166,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1181)
+                            DisciplineId = 665865888,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3694),
+                            Id = 665332225,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3695)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1193),
-                            Id = 317544116,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1194)
+                            DisciplineId = 665865888,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3706),
+                            Id = 187529212,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3707)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1205),
-                            Id = 472151345,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1206)
+                            DisciplineId = 665865888,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3718),
+                            Id = 394317594,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3719)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1218),
-                            Id = 573921285,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1219)
+                            DisciplineId = 665865888,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3730),
+                            Id = 633377737,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3731)
                         },
                         new
                         {
-                            DisciplineId = -1703774184,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1231),
-                            Id = 700794724,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1232)
+                            DisciplineId = 665865888,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3742),
+                            Id = 418510587,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3743)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1243),
-                            Id = 255837517,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1244)
+                            DisciplineId = -1273567776,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3754),
+                            Id = 255190957,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3755)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1256),
-                            Id = 834251759,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1257)
+                            DisciplineId = -1273567776,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3767),
+                            Id = 658429640,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3768)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1269),
-                            Id = 170695986,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1270)
+                            DisciplineId = -1273567776,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3779),
+                            Id = 245622258,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3780)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1285),
-                            Id = 307443337,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1286)
+                            DisciplineId = -1273567776,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3790),
+                            Id = 451271710,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3792)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1297),
-                            Id = 243479498,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1298)
+                            DisciplineId = -1273567776,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3802),
+                            Id = 156943680,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3803)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1310),
-                            Id = 600048985,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1311)
+                            DisciplineId = -1273567776,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3814),
+                            Id = 194413861,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3816)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1323),
-                            Id = 628769960,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1324)
+                            DisciplineId = -1273567776,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3826),
+                            Id = 626583486,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3827)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1336),
-                            Id = 451611107,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1337)
+                            DisciplineId = -1273567776,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3839),
+                            Id = 429616510,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3840)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1348),
-                            Id = 691792947,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1349)
+                            DisciplineId = -1273567776,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3873),
+                            Id = 648645412,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3875)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1362),
-                            Id = 483165810,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1363)
+                            DisciplineId = -1273567776,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3886),
+                            Id = 241417162,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3888)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1374),
-                            Id = 779655118,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1375)
+                            DisciplineId = -1273567776,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3899),
+                            Id = 960583220,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3900)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1387),
-                            Id = 993556618,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1388)
+                            DisciplineId = -1273567776,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3911),
+                            Id = 373313998,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3912)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1399),
-                            Id = 802672392,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1400)
+                            DisciplineId = -1273567776,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3923),
+                            Id = 677777398,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3924)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1412),
-                            Id = 795608533,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1413)
+                            DisciplineId = -1273567776,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3935),
+                            Id = 792889252,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3936)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1424),
-                            Id = 236315744,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1425)
+                            DisciplineId = -1273567776,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3947),
+                            Id = 354582653,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3948)
                         },
                         new
                         {
-                            DisciplineId = 2006586200,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1436),
-                            Id = 758186460,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1438)
+                            DisciplineId = -1273567776,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3959),
+                            Id = 617421810,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3960)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1449),
-                            Id = 303358452,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1450)
+                            DisciplineId = 1183334216,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3972),
+                            Id = 397840129,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3973)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1462),
-                            Id = 604429951,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1463)
+                            DisciplineId = 1183334216,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3984),
+                            Id = 868069365,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3985)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1474),
-                            Id = 701990805,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1475)
+                            DisciplineId = 1183334216,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3996),
+                            Id = 685069043,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(3997)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1486),
-                            Id = 861099721,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1487)
+                            DisciplineId = 1183334216,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4008),
+                            Id = 355503840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4009)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1499),
-                            Id = 918703840,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1500)
+                            DisciplineId = 1183334216,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4020),
+                            Id = 797797028,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4021)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1511),
-                            Id = 221702348,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1512)
+                            DisciplineId = 1183334216,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4032),
+                            Id = 389257784,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4033)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1524),
-                            Id = 593885118,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1525)
+                            DisciplineId = 1183334216,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4043),
+                            Id = 574799794,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4045)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1536),
-                            Id = 685336126,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1537)
+                            DisciplineId = 1183334216,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4056),
+                            Id = 405672364,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4057)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1549),
-                            Id = 219840171,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1550)
+                            DisciplineId = 1183334216,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4067),
+                            Id = 280950745,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4069)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1561),
-                            Id = 187727341,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1562)
+                            DisciplineId = 1183334216,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4080),
+                            Id = 331893811,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4081)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1574),
-                            Id = 295016579,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1575)
+                            DisciplineId = 1183334216,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4092),
+                            Id = 235557410,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4094)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1587),
-                            Id = 996785506,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1588)
+                            DisciplineId = 1183334216,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4105),
+                            Id = 692647993,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4106)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1599),
-                            Id = 886004443,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1600)
+                            DisciplineId = 1183334216,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4117),
+                            Id = 961148122,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4118)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1612),
-                            Id = 490394433,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1613)
+                            DisciplineId = 1183334216,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4128),
+                            Id = 572011345,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4130)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1624),
-                            Id = 903346302,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1625)
+                            DisciplineId = 1183334216,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4140),
+                            Id = 655273177,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4141)
                         },
                         new
                         {
-                            DisciplineId = -257937256,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1636),
-                            Id = 822979046,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1637)
+                            DisciplineId = 1183334216,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4152),
+                            Id = 506715641,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4154)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1649),
-                            Id = 966872372,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1650)
+                            DisciplineId = -586049128,
+                            EngineerId = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4165),
+                            Id = 846779709,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4166)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1662),
-                            Id = 412243009,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1663)
+                            DisciplineId = -586049128,
+                            EngineerId = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4177),
+                            Id = 380621072,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4178)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1678),
-                            Id = 215702834,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1680)
+                            DisciplineId = -586049128,
+                            EngineerId = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4189),
+                            Id = 198175024,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4190)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1691),
-                            Id = 877098338,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1692)
+                            DisciplineId = -586049128,
+                            EngineerId = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4200),
+                            Id = 707048770,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4202)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1703),
-                            Id = 557520776,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1704)
+                            DisciplineId = -586049128,
+                            EngineerId = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4212),
+                            Id = 626456780,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4213)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1716),
-                            Id = 448048642,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1717)
+                            DisciplineId = -586049128,
+                            EngineerId = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4224),
+                            Id = 975324276,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4225)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1729),
-                            Id = 775990370,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1730)
+                            DisciplineId = -586049128,
+                            EngineerId = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4236),
+                            Id = 280213504,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4237)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1741),
-                            Id = 636219813,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1742)
+                            DisciplineId = -586049128,
+                            EngineerId = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4270),
+                            Id = 611212882,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4272)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1753),
-                            Id = 268665438,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1755)
+                            DisciplineId = -586049128,
+                            EngineerId = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4284),
+                            Id = 695391061,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4285)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1766),
-                            Id = 326748327,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1767)
+                            DisciplineId = -586049128,
+                            EngineerId = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4296),
+                            Id = 883204213,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4297)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1779),
-                            Id = 431359121,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1780)
+                            DisciplineId = -586049128,
+                            EngineerId = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4308),
+                            Id = 157624840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4309)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1791),
-                            Id = 750588274,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1792)
+                            DisciplineId = -586049128,
+                            EngineerId = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4320),
+                            Id = 805487479,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4321)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1804),
-                            Id = 929016320,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1805)
+                            DisciplineId = -586049128,
+                            EngineerId = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4333),
+                            Id = 811988083,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4334)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1817),
-                            Id = 235741099,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1818)
+                            DisciplineId = -586049128,
+                            EngineerId = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4345),
+                            Id = 586640112,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4346)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1830),
-                            Id = 943955602,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1831)
+                            DisciplineId = -586049128,
+                            EngineerId = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4357),
+                            Id = 265762298,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4358)
                         },
                         new
                         {
-                            DisciplineId = 214577552,
-                            EngineerId = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1843),
-                            Id = 136329171,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 849, DateTimeKind.Local).AddTicks(1844)
+                            DisciplineId = -586049128,
+                            EngineerId = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4369),
+                            Id = 382425679,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4370)
                         });
                 });
 
@@ -1928,135 +1880,142 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 994730490,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7391),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7392),
+                            Id = 648092441,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9371),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9372),
                             Name = "HVAC"
                         },
                         new
                         {
-                            Id = 790380741,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7413),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7414),
+                            Id = 806025373,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9389),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9390),
                             Name = "Sewage"
                         },
                         new
                         {
-                            Id = 671625631,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7425),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7426),
+                            Id = 589024398,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9401),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9402),
                             Name = "Potable Water"
                         },
                         new
                         {
-                            Id = 748398614,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7437),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7438),
+                            Id = 541849282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9413),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9414),
                             Name = "Drainage"
                         },
                         new
                         {
-                            Id = 428195479,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7448),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7449),
+                            Id = 126511258,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9425),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9426),
                             Name = "Fire Detection"
                         },
                         new
                         {
-                            Id = 682623075,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7462),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7463),
+                            Id = 421159882,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9442),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9443),
                             Name = "Fire Suppression"
                         },
                         new
                         {
-                            Id = 923767835,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7474),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7475),
+                            Id = 479642008,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9454),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9455),
                             Name = "Elevators"
                         },
                         new
                         {
-                            Id = 477983693,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7489),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7490),
+                            Id = 939316762,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9466),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9467),
                             Name = "Natural Gas"
                         },
                         new
                         {
-                            Id = 524393079,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7501),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7502),
+                            Id = 176563775,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9478),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9479),
                             Name = "Power Distribution"
                         },
                         new
                         {
-                            Id = 149077241,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7514),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7515),
+                            Id = 405790386,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9492),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9493),
                             Name = "Structured Cabling"
                         },
                         new
                         {
-                            Id = 747356566,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7526),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7527),
+                            Id = 359884378,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9504),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9505),
                             Name = "Burglar Alarm"
                         },
                         new
                         {
-                            Id = 359391870,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7538),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7539),
+                            Id = 929882248,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9516),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9517),
                             Name = "CCTV"
                         },
                         new
                         {
-                            Id = 829723767,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7550),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7551),
+                            Id = 548868269,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9528),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9529),
                             Name = "BMS"
                         },
                         new
                         {
-                            Id = 146063663,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7562),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7563),
+                            Id = 569127840,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9540),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9541),
                             Name = "Photovoltaics"
                         },
                         new
                         {
-                            Id = 799215159,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7573),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7574),
+                            Id = 363806183,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9552),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9553),
                             Name = "Energy Efficiency"
                         },
                         new
                         {
-                            Id = 686468757,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7585),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7586),
+                            Id = 167926921,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9564),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9565),
                             Name = "Outsource"
                         },
                         new
                         {
-                            Id = 606948020,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7597),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7598),
+                            Id = 333795694,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9576),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9577),
                             Name = "TenderDocument"
                         },
                         new
                         {
-                            Id = 967781929,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7610),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7611),
+                            Id = 765294899,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9589),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9591),
                             Name = "Construction Supervision"
                         },
                         new
                         {
-                            Id = 176075020,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7623),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7624),
+                            Id = 486840292,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9602),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9603),
+                            Name = "DWG Admin/Clearing"
+                        },
+                        new
+                        {
+                            Id = 941757881,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9614),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9615),
                             Name = "Project Manager Hours"
                         });
                 });
@@ -2098,393 +2057,393 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 700350530,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7903),
+                            Id = 956800172,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(4),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7899),
-                            DisciplineId = -1378459520,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7901),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(2),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 169594488,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7921),
+                            Id = 552085651,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(23),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7918),
-                            DisciplineId = -1378459520,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7919),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(20),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(22),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 433024304,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7935),
+                            Id = 641651460,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(37),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7932),
-                            DisciplineId = -1378459520,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7934),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(34),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(35),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 895481079,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7950),
+                            Id = 982960525,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(50),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7947),
-                            DisciplineId = -1831516064,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7948),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(48),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(49),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 288638791,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7964),
+                            Id = 592590148,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(63),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7961),
-                            DisciplineId = -1831516064,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7962),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(61),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(62),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 496568399,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7979),
+                            Id = 134833068,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(78),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7977),
-                            DisciplineId = -1831516064,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7978),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(76),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(77),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 426298401,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7993),
+                            Id = 325302911,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(93),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7991),
-                            DisciplineId = 42697200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7992),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(90),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(91),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 951758939,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8007),
+                            Id = 831669626,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(106),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8005),
-                            DisciplineId = 42697200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8006),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(103),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(104),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 599351184,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8021),
+                            Id = 155379667,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(118),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8019),
-                            DisciplineId = 42697200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8020),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(116),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(117),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 993383854,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8036),
+                            Id = 382438075,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(133),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8034),
-                            DisciplineId = 78577000,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8035),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(130),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(131),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 282646252,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8050),
+                            Id = 904082750,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(146),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8048),
-                            DisciplineId = 78577000,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8049),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(144),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(145),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 861825421,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8064),
+                            Id = 519234978,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(159),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8061),
-                            DisciplineId = 78577000,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8062),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(157),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(158),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 823156228,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8078),
+                            Id = 746066412,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(172),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8075),
-                            DisciplineId = -1660529528,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8077),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(170),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(171),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 338375516,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8092),
+                            Id = 305645074,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(185),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8090),
-                            DisciplineId = -1660529528,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8091),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(183),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(184),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 797450495,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8105),
+                            Id = 245708622,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(199),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8103),
-                            DisciplineId = -1660529528,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8104),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(196),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(197),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 724231813,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8119),
+                            Id = 742720923,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(212),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8116),
-                            DisciplineId = 240582328,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8118),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(210),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(211),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 795827105,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8132),
+                            Id = 858736510,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(225),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8130),
-                            DisciplineId = 240582328,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8131),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(223),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(224),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 603987877,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8152),
+                            Id = 943115349,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(240),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8149),
-                            DisciplineId = 240582328,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8151),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(238),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(239),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 435313254,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8166),
+                            Id = 412766151,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(253),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8164),
-                            DisciplineId = 82819888,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8165),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(251),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(252),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 546218483,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8180),
+                            Id = 896713394,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(266),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8177),
-                            DisciplineId = 82819888,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8179),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(264),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(265),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 128680142,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8194),
+                            Id = 737058323,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(279),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8191),
-                            DisciplineId = 82819888,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8193),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(277),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(278),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 860441852,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8208),
+                            Id = 978248686,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(316),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8206),
-                            DisciplineId = 1316815352,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8207),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(313),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(314),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 454296271,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8222),
+                            Id = 993163412,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(329),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8219),
-                            DisciplineId = 1316815352,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8220),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(327),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(328),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 465453171,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8235),
+                            Id = 891454356,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(343),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8233),
-                            DisciplineId = 1316815352,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8234),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(341),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(342),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 853390700,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8249),
+                            Id = 514139356,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(356),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8247),
-                            DisciplineId = -1703774184,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8248),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(354),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(355),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 415515837,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8263),
+                            Id = 621833018,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(369),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8261),
-                            DisciplineId = -1703774184,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8262),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(367),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(368),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 408311341,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8277),
+                            Id = 517507459,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(383),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8275),
-                            DisciplineId = -1703774184,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8276),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(380),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(381),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 899165814,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8291),
+                            Id = 225159259,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(396),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8289),
-                            DisciplineId = 2006586200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8290),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(393),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(395),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 384377672,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8305),
+                            Id = 876991758,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(409),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8303),
-                            DisciplineId = 2006586200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8304),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(407),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(408),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 710807546,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8319),
+                            Id = 675705877,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(422),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8317),
-                            DisciplineId = 2006586200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8318),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(420),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(421),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 984998611,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8333),
+                            Id = 944628368,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(435),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8331),
-                            DisciplineId = -257937256,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8332),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(433),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(434),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 618204666,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8347),
+                            Id = 956322989,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(448),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8345),
-                            DisciplineId = -257937256,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8346),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(446),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(447),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 721313547,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8361),
+                            Id = 330648498,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(462),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8359),
-                            DisciplineId = -257937256,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8360),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(459),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(460),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 374716784,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8377),
+                            Id = 973656850,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(477),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8375),
-                            DisciplineId = 214577552,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8376),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(474),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(475),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 946649919,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8391),
+                            Id = 788420405,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(490),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8388),
-                            DisciplineId = 214577552,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8390),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(487),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(488),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 487041080,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8404),
+                            Id = 762792072,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(502),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8402),
-                            DisciplineId = 214577552,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8403),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(500),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(501),
+                            TypeId = 543611290
                         },
                         new
                         {
-                            Id = 606969688,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8421),
+                            Id = 891573354,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(517),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8418),
-                            DisciplineId = 1518936840,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8419),
-                            TypeId = 381883916
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(514),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(515),
+                            TypeId = 967576680
                         },
                         new
                         {
-                            Id = 993283540,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8436),
+                            Id = 515527425,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(532),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8434),
-                            DisciplineId = 1518936840,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8435),
-                            TypeId = 559030193
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(529),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(530),
+                            TypeId = 262630033
                         },
                         new
                         {
-                            Id = 814551906,
-                            CompletionDate = new DateTime(2024, 3, 27, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8450),
+                            Id = 570920580,
+                            CompletionDate = new DateTime(2024, 4, 5, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(544),
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8447),
-                            DisciplineId = 1518936840,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8449),
-                            TypeId = 507002765
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(542),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(543),
+                            TypeId = 543611290
                         });
                 });
 
@@ -2537,23 +2496,23 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 381883916,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7850),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7851),
+                            Id = 967576680,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9831),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9832),
                             Name = "Documents"
                         },
                         new
                         {
-                            Id = 559030193,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7870),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7871),
+                            Id = 262630033,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9973),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9974),
                             Name = "Calculations"
                         },
                         new
                         {
-                            Id = 507002765,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7884),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7885),
+                            Id = 543611290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9986),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9987),
                             Name = "Drawings"
                         });
                 });
@@ -2588,252 +2547,236 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 445065387,
-                            Address = "alexandrosplatanios15@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5617),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5618),
-                            UserId = 164246084
-                        },
-                        new
-                        {
-                            Id = 554733607,
-                            Address = "ceo@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5671),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5672),
-                            UserId = 470649085
-                        },
-                        new
-                        {
-                            Id = 555890154,
-                            Address = "cto@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5714),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5716),
-                            UserId = 667258335
-                        },
-                        new
-                        {
-                            Id = 877328086,
-                            Address = "coo@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5761),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5763),
-                            UserId = 742824100
-                        },
-                        new
-                        {
-                            Id = 862640062,
-                            Address = "guest@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5805),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5806),
-                            UserId = 197662225
-                        },
-                        new
-                        {
-                            Id = 639818974,
-                            Address = "pm@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5850),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5851),
-                            UserId = 723800143
-                        },
-                        new
-                        {
-                            Id = 240459026,
+                            Id = 382808819,
                             Address = "embiria@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5897),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5899),
-                            UserId = 167711265
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8157),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8158),
+                            UserId = 261256047
                         },
                         new
                         {
-                            Id = 173496349,
+                            Id = 416796298,
                             Address = "akonstantinidou@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5913),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5914),
-                            UserId = 167711265
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8177),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8178),
+                            UserId = 261256047
                         },
                         new
                         {
-                            Id = 659576535,
+                            Id = 503779342,
                             Address = "gdoug@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5959),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5960),
-                            UserId = 621207024
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8228),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8229),
+                            UserId = 935326469
                         },
                         new
                         {
-                            Id = 437750046,
+                            Id = 713991978,
                             Address = "dtsa@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6004),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6006),
-                            UserId = 128458272
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8270),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8271),
+                            UserId = 776576941
                         },
                         new
                         {
-                            Id = 378479448,
+                            Id = 804089354,
                             Address = "dtsa@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6049),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6050),
-                            UserId = 141488269
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8311),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8312),
+                            UserId = 215091664
                         },
                         new
                         {
-                            Id = 236298906,
+                            Id = 404972677,
                             Address = "vpax@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6096),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6097),
-                            UserId = 355643372
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8355),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8356),
+                            UserId = 427479300
                         },
                         new
                         {
-                            Id = 377759894,
+                            Id = 298081850,
                             Address = "xmanarolis@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6138),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6140),
-                            UserId = 946249654
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8396),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8398),
+                            UserId = 432257301
                         },
                         new
                         {
-                            Id = 520979921,
+                            Id = 238178777,
                             Address = "sparisis@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6180),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6182),
-                            UserId = 802373452
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8441),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8442),
+                            UserId = 569251687
                         },
                         new
                         {
-                            Id = 767950776,
+                            Id = 386372675,
                             Address = "chkovras@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6223),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6225),
-                            UserId = 609178691
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8483),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8485),
+                            UserId = 131461425
                         },
                         new
                         {
-                            Id = 499467328,
+                            Id = 579709442,
                             Address = "ngal@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6288),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6289),
-                            UserId = 888094041
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8527),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8529),
+                            UserId = 538867006
                         },
                         new
                         {
-                            Id = 281578776,
+                            Id = 775754328,
                             Address = "kkotsoni@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6363),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6365),
-                            UserId = 907870427
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8583),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8584),
+                            UserId = 939204178
                         },
                         new
                         {
-                            Id = 242971002,
+                            Id = 202396211,
                             Address = "vtza@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6424),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6425),
-                            UserId = 410969392
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8651),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8652),
+                            UserId = 487546115
                         },
                         new
                         {
-                            Id = 221874232,
+                            Id = 817498837,
                             Address = "agretos@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6472),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6474),
-                            UserId = 288526387
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8692),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8693),
+                            UserId = 440825486
                         },
                         new
                         {
-                            Id = 653558617,
+                            Id = 275206853,
                             Address = "kmargeti@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6516),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6517),
-                            UserId = 503764598
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8733),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8734),
+                            UserId = 648305951
                         },
                         new
                         {
-                            Id = 947746910,
+                            Id = 919411985,
                             Address = "haris@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6558),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6560),
-                            UserId = 510400043
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8781),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8782),
+                            UserId = 831887282
                         },
                         new
                         {
-                            Id = 606722296,
+                            Id = 917744877,
                             Address = "pfokianou@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6601),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6603),
-                            UserId = 800212641
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8824),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8825),
+                            UserId = 921520134
                         },
                         new
                         {
-                            Id = 632045547,
+                            Id = 617838948,
                             Address = "ogiannoglou@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6647),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6648),
-                            UserId = 836486281
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8868),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8869),
+                            UserId = 594156751
                         },
                         new
                         {
-                            Id = 369137705,
+                            Id = 301142410,
                             Address = "blekou@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6690),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6692),
-                            UserId = 270680498
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8910),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8912),
+                            UserId = 293710541
                         },
                         new
                         {
-                            Id = 336573927,
+                            Id = 321055566,
                             Address = "vchontos@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6734),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6736),
-                            UserId = 879227760
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8951),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8952),
+                            UserId = 206533006
                         },
                         new
                         {
-                            Id = 705697482,
+                            Id = 486461149,
                             Address = "panperivollari@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6777),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6778),
-                            UserId = 279336811
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8992),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8994),
+                            UserId = 422454290
                         },
                         new
                         {
-                            Id = 179009162,
+                            Id = 752908561,
                             Address = "ntriantafyllou@embiria.gr",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6823),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6825),
-                            UserId = 497122066
-                        },
-                        new
-                        {
-                            Id = 727555347,
-                            Address = "alexpl_{i}@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7065),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7066),
-                            UserId = 863225184
-                        },
-                        new
-                        {
-                            Id = 458925898,
-                            Address = "alexpl_{i}@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7162),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7163),
-                            UserId = 435626679
-                        },
-                        new
-                        {
-                            Id = 627970793,
-                            Address = "alexpl_{i}@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7245),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7246),
-                            UserId = 600227926
-                        },
-                        new
-                        {
-                            Id = 191471205,
-                            Address = "alexpl_{i}@gmail.com",
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7321),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7322),
-                            UserId = 492551523
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9033),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9034),
+                            UserId = 259810206
                         });
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.Issue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("About")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ComplaintDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Evaluation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsClose")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("PMSignature")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Solution")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SolutionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Verification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("VerificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("VerificatorSignature")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Complains");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Other", b =>
@@ -2870,588 +2813,822 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 181800309,
+                            Id = 929516805,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8541),
-                            DisciplineId = -1378459520,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8543),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(680),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(681),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 466021370,
+                            Id = 979919388,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8560),
-                            DisciplineId = -1378459520,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8561),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(696),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(697),
+                            TypeId = 944263992
                         },
                         new
                         {
-                            Id = 527641498,
+                            Id = 587399760,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8573),
-                            DisciplineId = -1378459520,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8574),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(708),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(709),
+                            TypeId = 752753312
                         },
                         new
                         {
-                            Id = 807876717,
+                            Id = 205282481,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8586),
-                            DisciplineId = -1378459520,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8587),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(720),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(721),
+                            TypeId = 298865232
                         },
                         new
                         {
-                            Id = 762970455,
+                            Id = 559599719,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8599),
-                            DisciplineId = -1378459520,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8600),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(732),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(733),
+                            TypeId = 280170162
                         },
                         new
                         {
-                            Id = 653170905,
+                            Id = 398204816,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8612),
-                            DisciplineId = -1831516064,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8613),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(744),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(745),
+                            TypeId = 828810783
                         },
                         new
                         {
-                            Id = 407612253,
+                            Id = 914485874,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8625),
-                            DisciplineId = -1831516064,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8626),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(757),
+                            DisciplineId = -1312329040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(758),
+                            TypeId = 544632982
                         },
                         new
                         {
-                            Id = 363789276,
+                            Id = 632946322,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8638),
-                            DisciplineId = -1831516064,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8639),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(769),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(770),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 619784113,
+                            Id = 903441006,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8650),
-                            DisciplineId = -1831516064,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8652),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(781),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(782),
+                            TypeId = 944263992
                         },
                         new
                         {
-                            Id = 570589353,
+                            Id = 684500019,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8664),
-                            DisciplineId = -1831516064,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8665),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(794),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(795),
+                            TypeId = 752753312
                         },
                         new
                         {
-                            Id = 338475424,
+                            Id = 586355778,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8677),
-                            DisciplineId = 42697200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8678),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(806),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(807),
+                            TypeId = 298865232
                         },
                         new
                         {
-                            Id = 230898972,
+                            Id = 748974569,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8689),
-                            DisciplineId = 42697200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8690),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(817),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(818),
+                            TypeId = 280170162
                         },
                         new
                         {
-                            Id = 289371664,
+                            Id = 284808389,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8702),
-                            DisciplineId = 42697200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8703),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(829),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(830),
+                            TypeId = 828810783
                         },
                         new
                         {
-                            Id = 347811567,
+                            Id = 885586377,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8714),
-                            DisciplineId = 42697200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8715),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(841),
+                            DisciplineId = -1595621368,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(842),
+                            TypeId = 544632982
                         },
                         new
                         {
-                            Id = 230508943,
+                            Id = 510036251,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8727),
-                            DisciplineId = 42697200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8728),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(853),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(854),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 611979566,
+                            Id = 788882835,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8739),
-                            DisciplineId = 78577000,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8741),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(865),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(866),
+                            TypeId = 944263992
                         },
                         new
                         {
-                            Id = 705073165,
+                            Id = 238051141,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8752),
-                            DisciplineId = 78577000,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8753),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(876),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(878),
+                            TypeId = 752753312
                         },
                         new
                         {
-                            Id = 706919616,
+                            Id = 397977141,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8766),
-                            DisciplineId = 78577000,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8767),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(889),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(890),
+                            TypeId = 298865232
                         },
                         new
                         {
-                            Id = 943827325,
+                            Id = 811026121,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8779),
-                            DisciplineId = 78577000,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8780),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(901),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(903),
+                            TypeId = 280170162
                         },
                         new
                         {
-                            Id = 949766153,
+                            Id = 138938003,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8791),
-                            DisciplineId = 78577000,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8792),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(913),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(914),
+                            TypeId = 828810783
                         },
                         new
                         {
-                            Id = 818437728,
+                            Id = 628782156,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8804),
-                            DisciplineId = -1660529528,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8805),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(925),
+                            DisciplineId = -1492539104,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(926),
+                            TypeId = 544632982
                         },
                         new
                         {
-                            Id = 617130436,
+                            Id = 332789912,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8820),
-                            DisciplineId = -1660529528,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8821),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(937),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(938),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 302211933,
+                            Id = 402412151,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8833),
-                            DisciplineId = -1660529528,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8834),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(948),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(950),
+                            TypeId = 944263992
                         },
                         new
                         {
-                            Id = 942277905,
+                            Id = 170049920,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8846),
-                            DisciplineId = -1660529528,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8847),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(961),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(962),
+                            TypeId = 752753312
                         },
                         new
                         {
-                            Id = 310609509,
+                            Id = 745842753,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8858),
-                            DisciplineId = -1660529528,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8859),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(996),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(997),
+                            TypeId = 298865232
                         },
                         new
                         {
-                            Id = 605485931,
+                            Id = 179140892,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8871),
-                            DisciplineId = 240582328,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8872),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1009),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1010),
+                            TypeId = 280170162
                         },
                         new
                         {
-                            Id = 542329620,
+                            Id = 665930534,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8884),
-                            DisciplineId = 240582328,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8885),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1021),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1022),
+                            TypeId = 828810783
                         },
                         new
                         {
-                            Id = 518041107,
+                            Id = 208875180,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8896),
-                            DisciplineId = 240582328,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8897),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1033),
+                            DisciplineId = 1142935016,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1034),
+                            TypeId = 544632982
                         },
                         new
                         {
-                            Id = 490405699,
+                            Id = 756671352,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8908),
-                            DisciplineId = 240582328,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8910),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1045),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1046),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 388474134,
+                            Id = 463573900,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8921),
-                            DisciplineId = 240582328,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8922),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1057),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1058),
+                            TypeId = 944263992
                         },
                         new
                         {
-                            Id = 458895120,
+                            Id = 375982854,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8933),
-                            DisciplineId = 82819888,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8935),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1069),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1070),
+                            TypeId = 752753312
                         },
                         new
                         {
-                            Id = 672803331,
+                            Id = 521973945,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8946),
-                            DisciplineId = 82819888,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8947),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1080),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1082),
+                            TypeId = 298865232
                         },
                         new
                         {
-                            Id = 665135104,
+                            Id = 459281791,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8959),
-                            DisciplineId = 82819888,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8960),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1092),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1093),
+                            TypeId = 280170162
                         },
                         new
                         {
-                            Id = 880677764,
+                            Id = 580125102,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8972),
-                            DisciplineId = 82819888,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8973),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1105),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1106),
+                            TypeId = 828810783
                         },
                         new
                         {
-                            Id = 490493225,
+                            Id = 357971520,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8985),
-                            DisciplineId = 82819888,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8986),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1117),
+                            DisciplineId = -1522909840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1118),
+                            TypeId = 544632982
                         },
                         new
                         {
-                            Id = 232927726,
+                            Id = 491930125,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8998),
-                            DisciplineId = 1316815352,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8999),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1129),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1130),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 250160432,
+                            Id = 443078122,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9011),
-                            DisciplineId = 1316815352,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9012),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1141),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1142),
+                            TypeId = 944263992
                         },
                         new
                         {
-                            Id = 399635393,
+                            Id = 875510758,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9023),
-                            DisciplineId = 1316815352,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9024),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1153),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1154),
+                            TypeId = 752753312
                         },
                         new
                         {
-                            Id = 142824792,
+                            Id = 637218384,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9036),
-                            DisciplineId = 1316815352,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9037),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1165),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1166),
+                            TypeId = 298865232
                         },
                         new
                         {
-                            Id = 916530735,
+                            Id = 838060140,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9049),
-                            DisciplineId = 1316815352,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9050),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1177),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1178),
+                            TypeId = 280170162
                         },
                         new
                         {
-                            Id = 538476025,
+                            Id = 271798594,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9061),
-                            DisciplineId = -1703774184,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9062),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1189),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1190),
+                            TypeId = 828810783
                         },
                         new
                         {
-                            Id = 508483924,
+                            Id = 318070389,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9074),
-                            DisciplineId = -1703774184,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9075),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1201),
+                            DisciplineId = -846811648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1202),
+                            TypeId = 544632982
                         },
                         new
                         {
-                            Id = 130323837,
+                            Id = 534094737,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9087),
-                            DisciplineId = -1703774184,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9088),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1213),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1214),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 686799243,
+                            Id = 917729993,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9099),
-                            DisciplineId = -1703774184,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9100),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1225),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1226),
+                            TypeId = 944263992
                         },
                         new
                         {
-                            Id = 746893325,
+                            Id = 308305999,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9112),
-                            DisciplineId = -1703774184,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9113),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1237),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1238),
+                            TypeId = 752753312
                         },
                         new
                         {
-                            Id = 580484540,
+                            Id = 429936504,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9125),
-                            DisciplineId = 2006586200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9126),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1248),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1250),
+                            TypeId = 298865232
                         },
                         new
                         {
-                            Id = 406938532,
+                            Id = 886639873,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9137),
-                            DisciplineId = 2006586200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9138),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1260),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1262),
+                            TypeId = 280170162
                         },
                         new
                         {
-                            Id = 580552655,
+                            Id = 164627471,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9149),
-                            DisciplineId = 2006586200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9150),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1272),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1273),
+                            TypeId = 828810783
                         },
                         new
                         {
-                            Id = 499884198,
+                            Id = 208008572,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9165),
-                            DisciplineId = 2006586200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9166),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1284),
+                            DisciplineId = 2062609040,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1285),
+                            TypeId = 544632982
                         },
                         new
                         {
-                            Id = 821859833,
+                            Id = 276502825,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9178),
-                            DisciplineId = 2006586200,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9179),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1296),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1297),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 659220882,
+                            Id = 905374107,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9190),
-                            DisciplineId = -257937256,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9191),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1308),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1309),
+                            TypeId = 944263992
                         },
                         new
                         {
-                            Id = 909758402,
+                            Id = 551855825,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9203),
-                            DisciplineId = -257937256,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9204),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1345),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1347),
+                            TypeId = 752753312
                         },
                         new
                         {
-                            Id = 190036240,
+                            Id = 836470114,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9215),
-                            DisciplineId = -257937256,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9216),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1358),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1359),
+                            TypeId = 298865232
                         },
                         new
                         {
-                            Id = 203692961,
+                            Id = 341026240,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9227),
-                            DisciplineId = -257937256,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9228),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1370),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1371),
+                            TypeId = 280170162
                         },
                         new
                         {
-                            Id = 536733636,
+                            Id = 912639349,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9240),
-                            DisciplineId = -257937256,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9241),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1381),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1383),
+                            TypeId = 828810783
                         },
                         new
                         {
-                            Id = 901714284,
+                            Id = 588470862,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9253),
-                            DisciplineId = 214577552,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9254),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1393),
+                            DisciplineId = 1397120936,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1394),
+                            TypeId = 544632982
                         },
                         new
                         {
-                            Id = 306122256,
+                            Id = 327205976,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9265),
-                            DisciplineId = 214577552,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9266),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1405),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1406),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 146536915,
+                            Id = 656849990,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9277),
-                            DisciplineId = 214577552,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9279),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1417),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1418),
+                            TypeId = 944263992
                         },
                         new
                         {
-                            Id = 277706880,
+                            Id = 264851043,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9290),
-                            DisciplineId = 214577552,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9291),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1429),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1430),
+                            TypeId = 752753312
                         },
                         new
                         {
-                            Id = 191313030,
+                            Id = 256198166,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9302),
-                            DisciplineId = 214577552,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9303),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1441),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1442),
+                            TypeId = 298865232
                         },
                         new
                         {
-                            Id = 297897771,
+                            Id = 981463263,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9316),
-                            DisciplineId = 1518936840,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9317),
-                            TypeId = 499888698
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1453),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1454),
+                            TypeId = 280170162
                         },
                         new
                         {
-                            Id = 889230696,
+                            Id = 801864435,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9330),
-                            DisciplineId = 1518936840,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9332),
-                            TypeId = 508256876
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1464),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1466),
+                            TypeId = 828810783
                         },
                         new
                         {
-                            Id = 669124990,
+                            Id = 425980237,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9344),
-                            DisciplineId = 1518936840,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9346),
-                            TypeId = 996509883
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1476),
+                            DisciplineId = 665865888,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1477),
+                            TypeId = 544632982
                         },
                         new
                         {
-                            Id = 443099991,
+                            Id = 457663508,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9357),
-                            DisciplineId = 1518936840,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9358),
-                            TypeId = 137148909
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1488),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1489),
+                            TypeId = 634901506
                         },
                         new
                         {
-                            Id = 732274548,
+                            Id = 790636650,
                             CompletionEstimation = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9369),
-                            DisciplineId = 1518936840,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(9370),
-                            TypeId = 411147833
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1500),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1501),
+                            TypeId = 944263992
+                        },
+                        new
+                        {
+                            Id = 646046119,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1513),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1514),
+                            TypeId = 752753312
+                        },
+                        new
+                        {
+                            Id = 279407346,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1525),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1526),
+                            TypeId = 298865232
+                        },
+                        new
+                        {
+                            Id = 404062658,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1537),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1538),
+                            TypeId = 280170162
+                        },
+                        new
+                        {
+                            Id = 626803895,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1549),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1550),
+                            TypeId = 828810783
+                        },
+                        new
+                        {
+                            Id = 778350370,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1561),
+                            DisciplineId = -1273567776,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1562),
+                            TypeId = 544632982
+                        },
+                        new
+                        {
+                            Id = 927504759,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1573),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1574),
+                            TypeId = 634901506
+                        },
+                        new
+                        {
+                            Id = 164911946,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1584),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1586),
+                            TypeId = 944263992
+                        },
+                        new
+                        {
+                            Id = 412814291,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1596),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1597),
+                            TypeId = 752753312
+                        },
+                        new
+                        {
+                            Id = 260050402,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1608),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1609),
+                            TypeId = 298865232
+                        },
+                        new
+                        {
+                            Id = 945234885,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1620),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1621),
+                            TypeId = 280170162
+                        },
+                        new
+                        {
+                            Id = 426790060,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1660),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1661),
+                            TypeId = 828810783
+                        },
+                        new
+                        {
+                            Id = 438383347,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1672),
+                            DisciplineId = 1183334216,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1673),
+                            TypeId = 544632982
+                        },
+                        new
+                        {
+                            Id = 322981495,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1684),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1685),
+                            TypeId = 634901506
+                        },
+                        new
+                        {
+                            Id = 909389178,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1696),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1697),
+                            TypeId = 944263992
+                        },
+                        new
+                        {
+                            Id = 512860640,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1708),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1709),
+                            TypeId = 752753312
+                        },
+                        new
+                        {
+                            Id = 312516624,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1719),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1721),
+                            TypeId = 298865232
+                        },
+                        new
+                        {
+                            Id = 764660350,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1731),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1732),
+                            TypeId = 280170162
+                        },
+                        new
+                        {
+                            Id = 858245607,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1743),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1744),
+                            TypeId = 828810783
+                        },
+                        new
+                        {
+                            Id = 600899272,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1755),
+                            DisciplineId = -586049128,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1756),
+                            TypeId = 544632982
+                        },
+                        new
+                        {
+                            Id = 422115403,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1768),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1769),
+                            TypeId = 634901506
+                        },
+                        new
+                        {
+                            Id = 655529313,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1781),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1782),
+                            TypeId = 944263992
+                        },
+                        new
+                        {
+                            Id = 511123677,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1793),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1794),
+                            TypeId = 752753312
+                        },
+                        new
+                        {
+                            Id = 511150236,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1805),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1806),
+                            TypeId = 298865232
+                        },
+                        new
+                        {
+                            Id = 182529839,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1816),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1818),
+                            TypeId = 280170162
+                        },
+                        new
+                        {
+                            Id = 653640239,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1829),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1830),
+                            TypeId = 828810783
+                        },
+                        new
+                        {
+                            Id = 257892621,
+                            CompletionEstimation = 0f,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1841),
+                            DisciplineId = -1235945912,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(1842),
+                            TypeId = 544632982
                         });
                 });
 
@@ -3504,39 +3681,103 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 499888698,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8463),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8464),
+                            Id = 634901506,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(558),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(559),
                             Name = "Communications"
                         },
                         new
                         {
-                            Id = 508256876,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8487),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8488),
+                            Id = 944263992,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(580),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(581),
                             Name = "Printing"
                         },
                         new
                         {
-                            Id = 996509883,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8501),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8502),
+                            Id = 752753312,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(593),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(594),
                             Name = "On-Site"
                         },
                         new
                         {
-                            Id = 137148909,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8513),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8515),
+                            Id = 298865232,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(605),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(606),
                             Name = "Meetings"
                         },
                         new
                         {
-                            Id = 411147833,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8526),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(8527),
+                            Id = 280170162,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(617),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(618),
                             Name = "Administration"
+                        },
+                        new
+                        {
+                            Id = 828810783,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(654),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(655),
+                            Name = "Soft Copy"
+                        },
+                        new
+                        {
+                            Id = 544632982,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(666),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 649, DateTimeKind.Local).AddTicks(668),
+                            Name = "Hours To Be Raised"
                         });
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Bank")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("DayCost")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("DaysUntilPayment")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DelayInPayment")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EstPaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("PendingPayments")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId")
+                        .IsUnique()
+                        .HasFilter("[ProjectId] IS NOT NULL");
+
+                    b.ToTable("Payment");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Permission", b =>
@@ -3567,91 +3808,131 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4413),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4415),
+                            Id = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6852),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6854),
                             Name = "See Dashboard Layout",
                             Ord = 1
                         },
                         new
                         {
-                            Id = 268419821,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4502),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4504),
+                            Id = 971138762,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6952),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6953),
                             Name = "Dashboard Edit My Hours",
                             Ord = 2
                         },
                         new
                         {
-                            Id = 438965231,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4519),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4521),
+                            Id = 883422907,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6967),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6968),
                             Name = "Dashboard Assign Designer",
                             Ord = 3
                         },
                         new
                         {
-                            Id = 358350555,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4534),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4535),
+                            Id = 756403516,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6981),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6982),
                             Name = "Dashboard Assign Engineer",
                             Ord = 4
                         },
                         new
                         {
-                            Id = 272575096,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4548),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4549),
+                            Id = 215018941,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6995),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(6996),
                             Name = "Dashboard Assign Project Manager",
                             Ord = 5
                         },
                         new
                         {
-                            Id = 686193747,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4564),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4565),
+                            Id = 815145926,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7010),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7011),
                             Name = "Dashboard Add Project",
                             Ord = 6
                         },
                         new
                         {
-                            Id = 943519933,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4579),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4580),
+                            Id = 290839984,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7023),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7025),
                             Name = "See Admin Layout",
                             Ord = 7
                         },
                         new
                         {
-                            Id = 978453863,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4592),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4594),
+                            Id = 247978500,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7037),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7038),
                             Name = "Dashboard See My Hours",
                             Ord = 8
                         },
                         new
                         {
-                            Id = 568828302,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4607),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4608),
+                            Id = 801915825,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7050),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7051),
                             Name = "See All Disciplines",
                             Ord = 9
                         },
                         new
                         {
-                            Id = 591823479,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4622),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4623),
+                            Id = 599717445,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7065),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7066),
                             Name = "See All Drawings",
                             Ord = 10
                         },
                         new
                         {
-                            Id = 687574474,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4636),
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4637),
+                            Id = 753234189,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7079),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7080),
                             Name = "See All Projects",
                             Ord = 11
+                        },
+                        new
+                        {
+                            Id = 899945478,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7093),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7094),
+                            Name = "Edit Project On Dashboard",
+                            Ord = 12
+                        },
+                        new
+                        {
+                            Id = 620496979,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7107),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7108),
+                            Name = "Display Projects Code",
+                            Ord = 13
+                        },
+                        new
+                        {
+                            Id = 144101904,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7120),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7121),
+                            Name = "Dashboard Edit Discipline",
+                            Ord = 14
+                        },
+                        new
+                        {
+                            Id = 704000156,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7133),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7135),
+                            Name = "Dashboard Edit Deliverable",
+                            Ord = 15
+                        },
+                        new
+                        {
+                            Id = 485548789,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7147),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7148),
+                            Name = "Dashboard Edit Other",
+                            Ord = 16
                         });
                 });
 
@@ -3685,47 +3966,47 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 571573384,
+                            Id = 704281487,
                             CanAssignePM = true,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6853),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9061),
                             Description = "Buildings Description",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6854),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9062),
                             Name = "Buildings"
                         },
                         new
                         {
-                            Id = 911511267,
+                            Id = 996407014,
                             CanAssignePM = true,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6871),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9076),
                             Description = "Infrastructure Description",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6872),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9077),
                             Name = "Infrastructure"
                         },
                         new
                         {
-                            Id = 958502534,
+                            Id = 511198496,
                             CanAssignePM = true,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6885),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9089),
                             Description = "Energy Description",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6886),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9090),
                             Name = "Energy"
                         },
                         new
                         {
-                            Id = 345324720,
+                            Id = 167037412,
                             CanAssignePM = true,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6899),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9102),
                             Description = "Consulting Description",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6900),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9103),
                             Name = "Consulting"
                         },
                         new
                         {
-                            Id = 168957340,
+                            Id = 529533827,
                             CanAssignePM = false,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6913),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9118),
                             Description = "Production Management Description",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6914),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9120),
                             Name = "Production Management"
                         });
                 });
@@ -3756,435 +4037,475 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = 136143054,
-                            PermissionId = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4809),
-                            Id = -553730368,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4810)
+                            RoleId = 983035965,
+                            PermissionId = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7310),
+                            Id = -1857975529,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7311)
                         },
                         new
                         {
-                            RoleId = 136143054,
-                            PermissionId = 268419821,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4833),
-                            Id = -1823938019,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4834)
+                            RoleId = 983035965,
+                            PermissionId = 971138762,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7334),
+                            Id = -273761797,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7335)
                         },
                         new
                         {
-                            RoleId = 136143054,
-                            PermissionId = 978453863,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4847),
-                            Id = -322451207,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4848)
+                            RoleId = 983035965,
+                            PermissionId = 247978500,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7348),
+                            Id = -871116587,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7349)
                         },
                         new
                         {
-                            RoleId = 954913108,
-                            PermissionId = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4862),
-                            Id = -2055389660,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4863)
+                            RoleId = 706379986,
+                            PermissionId = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7362),
+                            Id = -1418689538,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7363)
                         },
                         new
                         {
-                            RoleId = 954913108,
-                            PermissionId = 268419821,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4876),
-                            Id = 1952689010,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4877)
+                            RoleId = 706379986,
+                            PermissionId = 971138762,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7375),
+                            Id = 403509695,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7377)
                         },
                         new
                         {
-                            RoleId = 954913108,
-                            PermissionId = 438965231,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4891),
-                            Id = 158477180,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4892)
+                            RoleId = 706379986,
+                            PermissionId = 883422907,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7390),
+                            Id = 621484466,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7391)
                         },
                         new
                         {
-                            RoleId = 954913108,
-                            PermissionId = 978453863,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4905),
-                            Id = -179575195,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4906)
+                            RoleId = 706379986,
+                            PermissionId = 247978500,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7404),
+                            Id = -641022376,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7405)
                         },
                         new
                         {
-                            RoleId = 954913108,
-                            PermissionId = 568828302,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4924),
-                            Id = -106566871,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4925)
+                            RoleId = 706379986,
+                            PermissionId = 801915825,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7417),
+                            Id = 1524914964,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7419)
                         },
                         new
                         {
-                            RoleId = 954913108,
-                            PermissionId = 591823479,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4938),
-                            Id = 1850796954,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4939)
+                            RoleId = 706379986,
+                            PermissionId = 599717445,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7431),
+                            Id = -1323045197,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7432)
                         },
                         new
                         {
-                            RoleId = 666843609,
-                            PermissionId = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4953),
-                            Id = 2109008885,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4955)
+                            RoleId = 942305441,
+                            PermissionId = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7445),
+                            Id = 367432385,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7446)
                         },
                         new
                         {
-                            RoleId = 666843609,
-                            PermissionId = 268419821,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4967),
-                            Id = 1429494341,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4968)
+                            RoleId = 942305441,
+                            PermissionId = 971138762,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7460),
+                            Id = -453575425,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7461)
                         },
                         new
                         {
-                            RoleId = 666843609,
-                            PermissionId = 358350555,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4981),
-                            Id = 1782571307,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4982)
+                            RoleId = 942305441,
+                            PermissionId = 756403516,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7474),
+                            Id = 2099621237,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7475)
                         },
                         new
                         {
-                            RoleId = 666843609,
-                            PermissionId = 978453863,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4995),
-                            Id = 1330430243,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4996)
+                            RoleId = 942305441,
+                            PermissionId = 247978500,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7487),
+                            Id = -572840081,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7488)
                         },
                         new
                         {
-                            RoleId = 666843609,
-                            PermissionId = 568828302,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5009),
-                            Id = 843817262,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5011)
+                            RoleId = 942305441,
+                            PermissionId = 801915825,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7500),
+                            Id = 1432767227,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7502)
                         },
                         new
                         {
-                            RoleId = 666843609,
-                            PermissionId = 591823479,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5023),
-                            Id = -1013292431,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5024)
+                            RoleId = 942305441,
+                            PermissionId = 599717445,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7514),
+                            Id = -1995892555,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7515)
                         },
                         new
                         {
-                            RoleId = 208908936,
-                            PermissionId = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5037),
-                            Id = -339860191,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5038)
+                            RoleId = 726210607,
+                            PermissionId = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7527),
+                            Id = -1438229407,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7529)
                         },
                         new
                         {
-                            RoleId = 208908936,
-                            PermissionId = 268419821,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5051),
-                            Id = -955431431,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5052)
+                            RoleId = 726210607,
+                            PermissionId = 971138762,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7541),
+                            Id = -128533679,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7543)
                         },
                         new
                         {
-                            RoleId = 208908936,
-                            PermissionId = 438965231,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5066),
-                            Id = -1828500083,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5067)
+                            RoleId = 726210607,
+                            PermissionId = 883422907,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7556),
+                            Id = -140187595,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7557)
                         },
                         new
                         {
-                            RoleId = 208908936,
-                            PermissionId = 358350555,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5081),
-                            Id = 218017684,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5082)
+                            RoleId = 726210607,
+                            PermissionId = 756403516,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7569),
+                            Id = 1452804309,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7571)
                         },
                         new
                         {
-                            RoleId = 208908936,
-                            PermissionId = 272575096,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5095),
-                            Id = -1029488444,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5096)
+                            RoleId = 726210607,
+                            PermissionId = 215018941,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7583),
+                            Id = -456461275,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7584)
                         },
                         new
                         {
-                            RoleId = 208908936,
-                            PermissionId = 978453863,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5109),
-                            Id = -193821902,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5110)
+                            RoleId = 726210607,
+                            PermissionId = 247978500,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7597),
+                            Id = 1245524058,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7598)
                         },
                         new
                         {
-                            RoleId = 208908936,
-                            PermissionId = 568828302,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5123),
-                            Id = -507046868,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5124)
+                            RoleId = 726210607,
+                            PermissionId = 801915825,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7610),
+                            Id = 1056842681,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7611)
                         },
                         new
                         {
-                            RoleId = 208908936,
-                            PermissionId = 591823479,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5137),
-                            Id = 210939638,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5138)
+                            RoleId = 726210607,
+                            PermissionId = 599717445,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7624),
+                            Id = -405880991,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7625)
                         },
                         new
                         {
-                            RoleId = 208908936,
-                            PermissionId = 687574474,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5151),
-                            Id = -1946194861,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5152)
+                            RoleId = 726210607,
+                            PermissionId = 753234189,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7637),
+                            Id = -1488746600,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7639)
                         },
                         new
                         {
-                            RoleId = 833716015,
-                            PermissionId = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5165),
-                            Id = -247710388,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5166)
+                            RoleId = 339666364,
+                            PermissionId = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7651),
+                            Id = 1502540546,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7652)
                         },
                         new
                         {
-                            RoleId = 833716015,
-                            PermissionId = 268419821,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5179),
-                            Id = -1259836055,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5180)
+                            RoleId = 339666364,
+                            PermissionId = 971138762,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7664),
+                            Id = 542397722,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7665)
                         },
                         new
                         {
-                            RoleId = 833716015,
-                            PermissionId = 272575096,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5192),
-                            Id = -1967702116,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5194)
+                            RoleId = 339666364,
+                            PermissionId = 215018941,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7678),
+                            Id = -1550569711,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7679)
                         },
                         new
                         {
-                            RoleId = 833716015,
-                            PermissionId = 686193747,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5206),
-                            Id = -770331248,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5207)
+                            RoleId = 339666364,
+                            PermissionId = 815145926,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7694),
+                            Id = 1572361187,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7696)
                         },
                         new
                         {
-                            RoleId = 833716015,
-                            PermissionId = 978453863,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5220),
-                            Id = -678225307,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5221)
+                            RoleId = 339666364,
+                            PermissionId = 247978500,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7708),
+                            Id = -1349783648,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7709)
                         },
                         new
                         {
-                            RoleId = 833716015,
-                            PermissionId = 568828302,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5234),
-                            Id = -402294761,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5235)
+                            RoleId = 339666364,
+                            PermissionId = 801915825,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7721),
+                            Id = -324744056,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7722)
                         },
                         new
                         {
-                            RoleId = 833716015,
-                            PermissionId = 591823479,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5248),
-                            Id = 1224210006,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5250)
+                            RoleId = 339666364,
+                            PermissionId = 599717445,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7735),
+                            Id = -1434990397,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7736)
                         },
                         new
                         {
-                            RoleId = 833716015,
-                            PermissionId = 687574474,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5262),
-                            Id = -1478218963,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5264)
+                            RoleId = 339666364,
+                            PermissionId = 753234189,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7748),
+                            Id = 303055295,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7749)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5277),
-                            Id = 187718923,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5279)
+                            RoleId = 339666364,
+                            PermissionId = 899945478,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7762),
+                            Id = -1627097044,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7764)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 268419821,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5293),
-                            Id = 303680741,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5294)
+                            RoleId = 339666364,
+                            PermissionId = 144101904,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7777),
+                            Id = 762563345,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7778)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 438965231,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5311),
-                            Id = -1108152278,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5312)
+                            RoleId = 339666364,
+                            PermissionId = 704000156,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7790),
+                            Id = 15228541,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7792)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 358350555,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5325),
-                            Id = -2115273397,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5326)
+                            RoleId = 339666364,
+                            PermissionId = 485548789,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7804),
+                            Id = -863470768,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7805)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 272575096,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5339),
-                            Id = -1050771455,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5341)
+                            RoleId = 788532921,
+                            PermissionId = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7817),
+                            Id = -241934908,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7818)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 686193747,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5353),
-                            Id = -2089810997,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5355)
+                            RoleId = 788532921,
+                            PermissionId = 971138762,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7831),
+                            Id = 468080960,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7833)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 943519933,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5367),
-                            Id = -1274700005,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5368)
+                            RoleId = 788532921,
+                            PermissionId = 883422907,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7845),
+                            Id = -8045369,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7846)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 568828302,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5381),
-                            Id = -970115359,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5382)
+                            RoleId = 788532921,
+                            PermissionId = 756403516,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7858),
+                            Id = 630547943,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7859)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 591823479,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5395),
-                            Id = -368730013,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5396)
+                            RoleId = 788532921,
+                            PermissionId = 215018941,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7871),
+                            Id = -1884131194,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7873)
                         },
                         new
                         {
-                            RoleId = 204995557,
-                            PermissionId = 687574474,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5410),
-                            Id = -1777300357,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5411)
+                            RoleId = 788532921,
+                            PermissionId = 815145926,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7885),
+                            Id = -2054669215,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7887)
                         },
                         new
                         {
-                            RoleId = 333429261,
-                            PermissionId = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5424),
-                            Id = -1589800234,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5425)
+                            RoleId = 788532921,
+                            PermissionId = 801915825,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7899),
+                            Id = 869768483,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7900)
                         },
                         new
                         {
-                            RoleId = 438134464,
-                            PermissionId = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5438),
-                            Id = -889783964,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5439)
+                            RoleId = 788532921,
+                            PermissionId = 599717445,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7912),
+                            Id = 1424533829,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7914)
                         },
                         new
                         {
-                            RoleId = 277799047,
-                            PermissionId = 943519933,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5452),
-                            Id = -1109566813,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5454)
+                            RoleId = 788532921,
+                            PermissionId = 753234189,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7927),
+                            Id = -89023603,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7928)
                         },
                         new
                         {
-                            RoleId = 277799047,
-                            PermissionId = 568828302,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5466),
-                            Id = -632809849,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5468)
+                            RoleId = 788532921,
+                            PermissionId = 620496979,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7941),
+                            Id = 1884046964,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7942)
                         },
                         new
                         {
-                            RoleId = 277799047,
-                            PermissionId = 591823479,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5480),
-                            Id = -1481589688,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5482)
+                            RoleId = 788532921,
+                            PermissionId = 899945478,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7954),
+                            Id = 247607479,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7956)
                         },
                         new
                         {
-                            RoleId = 277799047,
-                            PermissionId = 687574474,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5495),
-                            Id = -645964478,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5496)
+                            RoleId = 768521671,
+                            PermissionId = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7968),
+                            Id = 526652411,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7969)
                         },
                         new
                         {
-                            RoleId = 773548819,
-                            PermissionId = 287922488,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5509),
-                            Id = 85812625,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5510)
+                            RoleId = 624039796,
+                            PermissionId = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7981),
+                            Id = 40061228,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7983)
                         },
                         new
                         {
-                            RoleId = 773548819,
-                            PermissionId = 268419821,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5523),
-                            Id = -1387825289,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5524)
+                            RoleId = 727160196,
+                            PermissionId = 290839984,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7995),
+                            Id = 1891206369,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7996)
                         },
                         new
                         {
-                            RoleId = 773548819,
-                            PermissionId = 978453863,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5538),
-                            Id = 1841558409,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5539)
+                            RoleId = 727160196,
+                            PermissionId = 801915825,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8008),
+                            Id = -1672003574,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8009)
                         },
                         new
                         {
-                            RoleId = 773548819,
-                            PermissionId = 568828302,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5551),
-                            Id = 1296062946,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5553)
+                            RoleId = 727160196,
+                            PermissionId = 599717445,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8022),
+                            Id = -1058084419,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8023)
                         },
                         new
                         {
-                            RoleId = 773548819,
-                            PermissionId = 591823479,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5567),
-                            Id = -514003922,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5568)
+                            RoleId = 727160196,
+                            PermissionId = 753234189,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8035),
+                            Id = -681435305,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8037)
                         },
                         new
                         {
-                            RoleId = 773548819,
-                            PermissionId = 687574474,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5581),
-                            Id = -998484317,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5582)
+                            RoleId = 291106305,
+                            PermissionId = 228048480,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8049),
+                            Id = 1937132118,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8050)
+                        },
+                        new
+                        {
+                            RoleId = 291106305,
+                            PermissionId = 971138762,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8062),
+                            Id = -256156609,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8063)
+                        },
+                        new
+                        {
+                            RoleId = 291106305,
+                            PermissionId = 247978500,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8078),
+                            Id = 342752297,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8080)
+                        },
+                        new
+                        {
+                            RoleId = 291106305,
+                            PermissionId = 801915825,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8093),
+                            Id = 990230441,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8094)
+                        },
+                        new
+                        {
+                            RoleId = 291106305,
+                            PermissionId = 599717445,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8106),
+                            Id = -2058282944,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8108)
+                        },
+                        new
+                        {
+                            RoleId = 291106305,
+                            PermissionId = 753234189,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8120),
+                            Id = -1268518229,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8121)
                         });
                 });
 
@@ -4264,6 +4585,9 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TeamsObjectId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId")
@@ -4275,337 +4599,223 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 164246084,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5597),
-                            Description = "Admin",
-                            FirstName = "Platanios",
-                            LastName = "Alexandros",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5598),
-                            Phone1 = "694927778",
-                            ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com"
-                        },
-                        new
-                        {
-                            Id = 470649085,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5656),
-                            Description = "CEO",
-                            FirstName = "Platanios",
-                            LastName = "Alexandros",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5657),
-                            Phone1 = "694927778",
-                            ProxyAddress = "ceo@gmail.com"
-                        },
-                        new
-                        {
-                            Id = 667258335,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5700),
-                            Description = "CTO",
-                            FirstName = "Platanios",
-                            LastName = "Alexandros",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5701),
-                            Phone1 = "694927778",
-                            ProxyAddress = "cto@gmail.com"
-                        },
-                        new
-                        {
-                            Id = 742824100,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5746),
-                            Description = "COO",
-                            FirstName = "Platanios",
-                            LastName = "Alexandros",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5748),
-                            Phone1 = "694927778",
-                            ProxyAddress = "coo@gmail.com"
-                        },
-                        new
-                        {
-                            Id = 197662225,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5789),
-                            Description = "Guest",
-                            FirstName = "Platanios",
-                            LastName = "Alexandros",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5790),
-                            Phone1 = "694927778",
-                            ProxyAddress = "guest@gmail.com"
-                        },
-                        new
-                        {
-                            Id = 723800143,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5834),
-                            Description = "Project Manager",
-                            FirstName = "Platanios",
-                            LastName = "Alexandros",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5835),
-                            Phone1 = "694927778",
-                            ProxyAddress = "pm@gmail.com"
-                        },
-                        new
-                        {
-                            Id = 167711265,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5879),
+                            Id = 261256047,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8136),
                             Description = "ΓΡΑΜΜΑΤΕΙΑ",
                             FirstName = "ΑΘΗΝΑ",
                             LastName = "ΚΩΝΣΤΑΝΤΙΝΙΔΟΥ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5880),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8137),
                             Phone1 = "694927778",
                             ProxyAddress = "embiria@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 621207024,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5943),
+                            Id = 935326469,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8212),
                             Description = "ΕΦΚΑ - ΣΧΕΔΙΑΣΤΗΣ",
                             FirstName = "ΓΡΗΓΟΡΗΣ",
                             LastName = "ΔΟΥΓΑΛΕΡΗΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5944),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8214),
                             Phone1 = "694927778",
                             ProxyAddress = "dtsa@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 128458272,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5987),
+                            Id = 776576941,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8256),
                             Description = "ΕΦΚΑ - ΣΧΕΔΙΑΣΤΗΣ",
                             FirstName = "ΔΗΜΗΤΡΗΣ",
                             LastName = "ΤΣΑΛΑΜΑΓΚΑΚΗΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5989),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8258),
                             Phone1 = "694927778",
                             ProxyAddress = "dtsa@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 141488269,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6034),
+                            Id = 215091664,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8297),
                             Description = "ΕΦΚΑ - ΣΧΕΔΙΑΣΤΗΣ",
                             FirstName = "ΜΑΝΩΛΗΣ",
                             LastName = "ΧΑΤΖΑΚΗΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6035),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8298),
                             Phone1 = "694927778",
                             ProxyAddress = "mhatzakis@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 355643372,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6080),
+                            Id = 427479300,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8339),
                             Description = "ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Y.",
                             FirstName = "ΕΥΑΓΓΕΛΟΣ",
                             LastName = "ΠΑΞΙΝΟΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6082),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8341),
                             Phone1 = "694927778",
                             ProxyAddress = "vpax@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 946249654,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6123),
+                            Id = 432257301,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8383),
                             Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΞΕΝΟΦΩΝ",
                             LastName = "ΜΑΝΑΡΩΛΗΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6124),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8384),
                             Phone1 = "694927778",
                             ProxyAddress = "xmanarolis@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 802373452,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6166),
+                            Id = 569251687,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8424),
                             Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
                             FirstName = "ΣΤΕΦΑΝΟΣ",
                             LastName = "ΠΑΡΙΣΗΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6167),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8425),
                             Phone1 = "694927778",
                             ProxyAddress = "sparisis@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 609178691,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6208),
+                            Id = 131461425,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8469),
                             Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΜΠΑΜΠΗΣ",
                             LastName = "ΚΟΒΡΑΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6210),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8471),
                             Phone1 = "694927778",
                             ProxyAddress = "chkovras@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 888094041,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6252),
+                            Id = 538867006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8512),
                             Description = "ΔΙΑΧΕΙΡΙΣΤΗΣ - ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΝΙΚΗΦΟΡΟΣ",
                             LastName = "ΓΑΛΑΝΗΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6254),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8513),
                             Phone1 = "694927778",
                             ProxyAddress = "ngal@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 907870427,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6348),
+                            Id = 939204178,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8569),
                             Description = "ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΚΑΤΕΡΙΝΑ",
                             LastName = "ΚΟΤΣΩΝΗ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6349),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8571),
                             Phone1 = "694927778",
                             ProxyAddress = "kkotsoni@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 410969392,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6407),
+                            Id = 487546115,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8637),
                             Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΒΑΣΙΛΕΙΟΣ",
                             LastName = "ΤΖΑΝΗΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6409),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8638),
                             Phone1 = "694927778",
                             ProxyAddress = "vtza@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 288526387,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6457),
+                            Id = 440825486,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8678),
                             Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΑΝΔΡΕΑΣ",
                             LastName = "ΓΡΕΤΟΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6458),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8679),
                             Phone1 = "694927778",
                             ProxyAddress = "agretos@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 503764598,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6500),
+                            Id = 648305951,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8718),
                             Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
                             FirstName = "ΚΑΤΕΡΙΝΑ",
                             LastName = "ΜΑΡΓΕΤΗ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6501),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8720),
                             Phone1 = "694927778",
                             ProxyAddress = "kmargeti@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 510400043,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6544),
+                            Id = 831887282,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8760),
                             Description = "ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΧΑΡΗΣ",
                             LastName = "ΠΛΑΤΑΝΙΟΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6545),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8761),
                             Phone1 = "694927778",
                             ProxyAddress = "haris@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 800212641,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6587),
+                            Id = 921520134,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8810),
                             Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΠΕΓΚΥ",
                             LastName = "ΦΩΚΙΑΝΟΥ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6588),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8811),
                             Phone1 = "694927778",
                             ProxyAddress = "pfokianou@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 836486281,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6630),
+                            Id = 594156751,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8852),
                             Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
                             FirstName = "ΟΛΓΑ",
                             LastName = "ΓΙΑΝΝΟΓΛΟΥ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6631),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8853),
                             Phone1 = "694927778",
                             ProxyAddress = "ogiannoglou@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 270680498,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6675),
+                            Id = 293710541,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8896),
                             Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΒΑΡΒΑΡΑ",
                             LastName = "ΛΕΚΟΥ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6677),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8897),
                             Phone1 = "694927778",
                             ProxyAddress = "blekou@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 879227760,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6719),
+                            Id = 206533006,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8937),
                             Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
                             FirstName = "ΒΑΣΙΛΕΙΟΣ",
                             LastName = "ΧΟΝΤΟΣ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6721),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8938),
                             Phone1 = "694927778",
                             ProxyAddress = "vchontos@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 279336811,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6762),
+                            Id = 422454290,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8978),
                             Description = "ΜΗΧΑΝΙΚΟΣ ΤΕΙ - ΕΦΚΑ",
                             FirstName = "ΠΑΝΑΓΙΩΤΑ",
                             LastName = "ΠΕΡΙΒΟΛΛΑΡΗ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6763),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8979),
                             Phone1 = "694927778",
                             ProxyAddress = "panperivollari@embiria.onmicrosoft.com"
                         },
                         new
                         {
-                            Id = 497122066,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6805),
+                            Id = 259810206,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9019),
                             Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
                             FirstName = "ΝΙΚΟΛΑΟΣ",
                             LastName = "ΤΡΙΑΝΤΑΦΥΛΛΟΥ",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6806),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9020),
                             Phone1 = "694927778",
                             ProxyAddress = "ntriantafyllou@embiria.onmicrosoft.com"
-                        },
-                        new
-                        {
-                            Id = 863225184,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7046),
-                            Description = "Test Description Customer 1",
-                            FirstName = "Platanios_Customer_1",
-                            LastName = "Alexandros_1",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7047),
-                            Phone1 = "6949277781",
-                            ProjectId = 445143759,
-                            ProxyAddress = "alexpl_{i}@gmail.com"
-                        },
-                        new
-                        {
-                            Id = 435626679,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7147),
-                            Description = "Test Description Customer 2",
-                            FirstName = "Platanios_Customer_2",
-                            LastName = "Alexandros_2",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7148),
-                            Phone1 = "6949277782",
-                            ProjectId = 306257293,
-                            ProxyAddress = "alexpl_{i}@gmail.com"
-                        },
-                        new
-                        {
-                            Id = 600227926,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7231),
-                            Description = "Test Description Customer 3",
-                            FirstName = "Platanios_Customer_3",
-                            LastName = "Alexandros_3",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7232),
-                            Phone1 = "6949277783",
-                            ProjectId = 282399733,
-                            ProxyAddress = "alexpl_{i}@gmail.com"
-                        },
-                        new
-                        {
-                            Id = 492551523,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7307),
-                            Description = "Test Description Customer 4",
-                            FirstName = "Platanios_Customer_4",
-                            LastName = "Alexandros_4",
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7308),
-                            Phone1 = "6949277784",
-                            ProjectId = 561990111,
-                            ProxyAddress = "alexpl_{i}@gmail.com"
                         });
                 });
 
@@ -4635,291 +4845,211 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = 164246084,
-                            RoleId = 277799047,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5634),
-                            Id = 457575846,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5635)
+                            UserId = 261256047,
+                            RoleId = 291106305,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8191),
+                            Id = 456463111,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8192)
                         },
                         new
                         {
-                            UserId = 470649085,
-                            RoleId = 204995557,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5686),
-                            Id = 710772097,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5687)
+                            UserId = 935326469,
+                            RoleId = 983035965,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8242),
+                            Id = 316348715,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8244)
                         },
                         new
                         {
-                            UserId = 667258335,
-                            RoleId = 833716015,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5732),
-                            Id = 226214909,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5733)
+                            UserId = 776576941,
+                            RoleId = 983035965,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8283),
+                            Id = 896165840,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8285)
                         },
                         new
                         {
-                            UserId = 742824100,
-                            RoleId = 208908936,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5775),
-                            Id = 475746702,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5776)
+                            UserId = 215091664,
+                            RoleId = 983035965,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8325),
+                            Id = 327463757,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8326)
                         },
                         new
                         {
-                            UserId = 197662225,
-                            RoleId = 333429261,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5819),
-                            Id = 755114329,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5820)
+                            UserId = 427479300,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8368),
+                            Id = 882451698,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8369)
                         },
                         new
                         {
-                            UserId = 723800143,
-                            RoleId = 666843609,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5863),
-                            Id = 538956378,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5865)
+                            UserId = 432257301,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8410),
+                            Id = 893854026,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8411)
                         },
                         new
                         {
-                            UserId = 167711265,
-                            RoleId = 773548819,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5926),
-                            Id = 139433244,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5928)
+                            UserId = 569251687,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8455),
+                            Id = 725429046,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8456)
                         },
                         new
                         {
-                            UserId = 621207024,
-                            RoleId = 136143054,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5973),
-                            Id = 213826298,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(5974)
+                            UserId = 131461425,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8498),
+                            Id = 219763156,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8499)
                         },
                         new
                         {
-                            UserId = 128458272,
-                            RoleId = 136143054,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6018),
-                            Id = 513876514,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6020)
+                            UserId = 538867006,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8541),
+                            Id = 656878626,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8542)
                         },
                         new
                         {
-                            UserId = 141488269,
-                            RoleId = 136143054,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6063),
-                            Id = 569630751,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6064)
+                            UserId = 538867006,
+                            RoleId = 788532921,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8555),
+                            Id = 576989118,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8557)
                         },
                         new
                         {
-                            UserId = 355643372,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6109),
-                            Id = 764387223,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6110)
+                            UserId = 939204178,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8597),
+                            Id = 386991630,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8598)
                         },
                         new
                         {
-                            UserId = 946249654,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6151),
-                            Id = 224562681,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6153)
+                            UserId = 939204178,
+                            RoleId = 726210607,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8610),
+                            Id = 944770677,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8611)
                         },
                         new
                         {
-                            UserId = 802373452,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6194),
-                            Id = 857167649,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6195)
+                            UserId = 939204178,
+                            RoleId = 339666364,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8624),
+                            Id = 667055691,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8625)
                         },
                         new
                         {
-                            UserId = 609178691,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6237),
-                            Id = 385802211,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6238)
+                            UserId = 487546115,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8665),
+                            Id = 636050184,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8666)
                         },
                         new
                         {
-                            UserId = 888094041,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6302),
-                            Id = 727388958,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6303)
+                            UserId = 440825486,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8705),
+                            Id = 571751760,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8706)
                         },
                         new
                         {
-                            UserId = 888094041,
-                            RoleId = 277799047,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6317),
-                            Id = 620587335,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6318)
+                            UserId = 648305951,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8746),
+                            Id = 796732276,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8747)
                         },
                         new
                         {
-                            UserId = 888094041,
-                            RoleId = 204995557,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6332),
-                            Id = 267900570,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6333)
+                            UserId = 831887282,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8795),
+                            Id = 838068710,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8796)
                         },
                         new
                         {
-                            UserId = 907870427,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6378),
-                            Id = 566850717,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6379)
+                            UserId = 921520134,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8838),
+                            Id = 801635359,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8839)
                         },
                         new
                         {
-                            UserId = 907870427,
-                            RoleId = 208908936,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6393),
-                            Id = 128725111,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6394)
+                            UserId = 594156751,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8882),
+                            Id = 699018921,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8883)
                         },
                         new
                         {
-                            UserId = 410969392,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6438),
-                            Id = 282756330,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6439)
+                            UserId = 293710541,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8924),
+                            Id = 432139793,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8925)
                         },
                         new
                         {
-                            UserId = 288526387,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6486),
-                            Id = 889437953,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6487)
+                            UserId = 206533006,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8964),
+                            Id = 828278922,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(8965)
                         },
                         new
                         {
-                            UserId = 503764598,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6529),
-                            Id = 290449281,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6530)
+                            UserId = 422454290,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9006),
+                            Id = 150513347,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9007)
                         },
                         new
                         {
-                            UserId = 510400043,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6572),
-                            Id = 493780028,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6574)
+                            UserId = 259810206,
+                            RoleId = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9046),
+                            Id = 717121002,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9047)
                         },
                         new
                         {
-                            UserId = 800212641,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6615),
-                            Id = 988942645,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6616)
+                            UserId = 427479300,
+                            RoleId = 942305441,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9133),
+                            Id = 63540048,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9134)
                         },
                         new
                         {
-                            UserId = 836486281,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6660),
-                            Id = 813689343,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6661)
+                            UserId = 939204178,
+                            RoleId = 942305441,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9148),
+                            Id = 259575326,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9149)
                         },
                         new
                         {
-                            UserId = 270680498,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6704),
-                            Id = 470820520,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6705)
-                        },
-                        new
-                        {
-                            UserId = 879227760,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6748),
-                            Id = 706106807,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6749)
-                        },
-                        new
-                        {
-                            UserId = 279336811,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6790),
-                            Id = 449150625,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6791)
-                        },
-                        new
-                        {
-                            UserId = 497122066,
-                            RoleId = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6838),
-                            Id = 486940193,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6839)
-                        },
-                        new
-                        {
-                            UserId = 355643372,
-                            RoleId = 666843609,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6929),
-                            Id = 310454707,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6930)
-                        },
-                        new
-                        {
-                            UserId = 907870427,
-                            RoleId = 666843609,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6945),
-                            Id = 85510561,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6946)
-                        },
-                        new
-                        {
-                            UserId = 510400043,
-                            RoleId = 666843609,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6959),
-                            Id = 293041918,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(6960)
-                        },
-                        new
-                        {
-                            UserId = 863225184,
-                            RoleId = 438134464,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7078),
-                            Id = 752984394,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7080)
-                        },
-                        new
-                        {
-                            UserId = 435626679,
-                            RoleId = 438134464,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7174),
-                            Id = 549859576,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7175)
-                        },
-                        new
-                        {
-                            UserId = 600227926,
-                            RoleId = 438134464,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7257),
-                            Id = 788232300,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7259)
-                        },
-                        new
-                        {
-                            UserId = 492551523,
-                            RoleId = 438134464,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7333),
-                            Id = 328025988,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7334)
+                            UserId = 831887282,
+                            RoleId = 942305441,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9162),
+                            Id = 314050324,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9163)
                         });
                 });
 
@@ -4969,53 +5099,53 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 616356404,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7095),
-                            Date = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7098),
+                            Id = 140821583,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9226),
+                            Date = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9229),
                             Fee = 3010.0,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7097),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9227),
                             Mark = "Signature 142346",
-                            Number = 12269,
-                            ProjectId = 445143759,
+                            Number = 30890,
+                            ProjectId = 776914543,
                             Total = 1.0,
                             Vat = 17.0
                         },
                         new
                         {
-                            Id = 939242587,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7191),
-                            Date = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7194),
+                            Id = 272243414,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9270),
+                            Date = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9273),
                             Fee = 3100.0,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7193),
-                            Mark = "Signature 1423410",
-                            Number = 69104,
-                            ProjectId = 306257293,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9272),
+                            Mark = "Signature 142346",
+                            Number = 62995,
+                            ProjectId = 264754523,
                             Total = 2.0,
                             Vat = 24.0
                         },
                         new
                         {
-                            Id = 373310979,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7271),
-                            Date = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7274),
+                            Id = 762513186,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9304),
+                            Date = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9306),
                             Fee = 4000.0,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7272),
-                            Mark = "Signature 1423412",
-                            Number = 88559,
-                            ProjectId = 282399733,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9305),
+                            Mark = "Signature 1423418",
+                            Number = 55822,
+                            ProjectId = 893813857,
                             Total = 3.0,
                             Vat = 17.0
                         },
                         new
                         {
-                            Id = 748932614,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7347),
-                            Date = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7349),
+                            Id = 576158203,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9337),
+                            Date = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9339),
                             Fee = 13000.0,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(7348),
-                            Mark = "Signature 1423412",
-                            Number = 59894,
-                            ProjectId = 561990111,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(9338),
+                            Mark = "Signature 1423424",
+                            Number = 83727,
+                            ProjectId = 386018162,
                             Total = 4.0,
                             Vat = 24.0
                         });
@@ -5032,9 +5162,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Bank")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("CalculationDaly")
                         .HasColumnType("int");
 
@@ -5047,17 +5174,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double?>("DayCost")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("DaysUntilPayment")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("DeadLine")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("DelayInPayment")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -5065,11 +5183,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime?>("DurationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("EstPaymentDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<float>("EstimatedCompleted")
                         .HasColumnType("real");
+
+                    b.Property<DateTime?>("EstimatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("EstimatedHours")
                         .HasColumnType("bigint");
@@ -5077,24 +5195,15 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<long>("EstimatedMandays")
                         .HasColumnType("bigint");
 
+                    b.Property<double?>("Fee")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("PaidFee")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentDetailes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("PendingPayments")
-                        .HasColumnType("float");
 
                     b.Property<int?>("ProjectManagerId")
                         .HasColumnType("int");
@@ -5104,9 +5213,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("WorkPackege")
-                        .HasColumnType("datetime2");
 
                     b.Property<float>("WorkPackegedCompleted")
                         .HasColumnType("real");
@@ -5124,147 +5230,110 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 445143759,
+                            Id = 776914543,
                             Active = false,
-                            Bank = "NBG_IBANK",
                             CalculationDaly = 1,
                             Code = "D-22-161",
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DayCost = 6.0,
-                            DaysUntilPayment = 1,
-                            DeadLine = new DateTime(2024, 4, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DelayInPayment = 1,
-                            Description = "Test Description Project_6",
-                            DurationDate = new DateTime(2024, 4, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            EstPaymentDate = new DateTime(2024, 4, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
+                            DeadLine = new DateTime(2024, 4, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
+                            Description = "Test Description Project_2",
+                            DurationDate = new DateTime(2024, 4, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedCompleted = 0f,
+                            EstimatedDate = new DateTime(2024, 4, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedHours = 1500L,
                             EstimatedMandays = 12L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            Fee = 10000.0,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             Name = "Project_1",
-                            PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 4, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            PaymentDetailes = "Payment Detailes For Project_6",
-                            PendingPayments = 1.0,
-                            TypeId = 571573384,
-                            WorkPackege = new DateTime(2024, 4, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            ProjectManagerId = 939204178,
+                            TypeId = 704281487,
                             WorkPackegedCompleted = 0f
                         },
                         new
                         {
-                            Id = 306257293,
+                            Id = 264754523,
                             Active = true,
-                            Bank = "ALPHA",
                             CalculationDaly = 2,
                             Code = "D-22-162",
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DayCost = 7.0,
-                            DaysUntilPayment = 4,
-                            DeadLine = new DateTime(2024, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DelayInPayment = 4,
-                            Description = "Test Description Project_4",
-                            DurationDate = new DateTime(2024, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            EstPaymentDate = new DateTime(2024, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
+                            DeadLine = new DateTime(2024, 7, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
+                            Description = "Test Description Project_10",
+                            DurationDate = new DateTime(2024, 7, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedCompleted = 0f,
+                            EstimatedDate = new DateTime(2024, 7, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedHours = 1500L,
                             EstimatedMandays = 12L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            Fee = 10000.0,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             Name = "Project_2",
-                            PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            PaymentDetailes = "Payment Detailes For Project_2",
-                            PendingPayments = 2.0,
-                            TypeId = 911511267,
-                            WorkPackege = new DateTime(2024, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            ProjectManagerId = 939204178,
+                            TypeId = 996407014,
                             WorkPackegedCompleted = 0f
                         },
                         new
                         {
-                            Id = 282399733,
+                            Id = 893813857,
                             Active = false,
-                            Bank = "NBG_IBANK",
                             CalculationDaly = 3,
                             Code = "D-22-163",
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DayCost = 8.0,
-                            DaysUntilPayment = 9,
-                            DeadLine = new DateTime(2024, 12, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DelayInPayment = 9,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
+                            DeadLine = new DateTime(2024, 12, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             Description = "Test Description Project_6",
-                            DurationDate = new DateTime(2024, 12, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            EstPaymentDate = new DateTime(2024, 12, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            DurationDate = new DateTime(2024, 12, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedCompleted = 0f,
+                            EstimatedDate = new DateTime(2024, 12, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedHours = 1500L,
                             EstimatedMandays = 12L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            Fee = 10000.0,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             Name = "Project_3",
-                            PaidFee = 5.0,
-                            PaymentDate = new DateTime(2024, 12, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            PaymentDetailes = "Payment Detailes For Project_9",
-                            PendingPayments = 3.0,
-                            TypeId = 958502534,
-                            WorkPackege = new DateTime(2024, 12, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            ProjectManagerId = 939204178,
+                            TypeId = 511198496,
                             WorkPackegedCompleted = 0f
                         },
                         new
                         {
-                            Id = 561990111,
+                            Id = 386018162,
                             Active = true,
-                            Bank = "ALPHA",
                             CalculationDaly = 4,
                             Code = "D-22-164",
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DayCost = 9.0,
-                            DaysUntilPayment = 16,
-                            DeadLine = new DateTime(2025, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DelayInPayment = 16,
-                            Description = "Test Description Project_16",
-                            DurationDate = new DateTime(2025, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            EstPaymentDate = new DateTime(2025, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
+                            DeadLine = new DateTime(2025, 7, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
+                            Description = "Test Description Project_8",
+                            DurationDate = new DateTime(2025, 7, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedCompleted = 0f,
+                            EstimatedDate = new DateTime(2025, 7, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedHours = 1500L,
                             EstimatedMandays = 12L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            Fee = 10000.0,
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             Name = "Project_4",
-                            PaidFee = 5.0,
-                            PaymentDate = new DateTime(2025, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            PaymentDetailes = "Payment Detailes For Project_20",
-                            PendingPayments = 4.0,
-                            TypeId = 345324720,
-                            WorkPackege = new DateTime(2025, 7, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            ProjectManagerId = 939204178,
+                            TypeId = 167037412,
                             WorkPackegedCompleted = 0f
                         },
                         new
                         {
-                            Id = 710349608,
+                            Id = 491960751,
                             Active = true,
-                            Bank = "ALPHA",
                             CalculationDaly = 345,
                             Code = "D-22-16-PM",
                             Completed = 0f,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DayCost = 111.0,
-                            DaysUntilPayment = 90,
-                            DeadLine = new DateTime(2024, 6, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            DelayInPayment = 1,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
+                            DeadLine = new DateTime(2024, 6, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             Description = "Test Description Project_PM",
-                            DurationDate = new DateTime(2024, 4, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            EstPaymentDate = new DateTime(2024, 5, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            DurationDate = new DateTime(2024, 4, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedCompleted = 0f,
+                            EstimatedDate = new DateTime(2024, 5, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             EstimatedHours = 1500L,
                             EstimatedMandays = 12L,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 634, DateTimeKind.Local).AddTicks(4163),
                             Name = "Project_PM",
-                            PaidFee = 45.0,
-                            PaymentDate = new DateTime(2024, 4, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
-                            PaymentDetailes = "Payment Detailes For Project_PM",
-                            PendingPayments = 2.0,
-                            TypeId = 168957340,
-                            WorkPackege = new DateTime(2024, 5, 16, 17, 24, 15, 836, DateTimeKind.Local).AddTicks(9539),
+                            TypeId = 529533827,
                             WorkPackegedCompleted = 0f
                         });
                 });
@@ -5300,105 +5369,94 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 136143054,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4651),
+                            Id = 983035965,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7161),
                             IsEditable = false,
                             IsEmployee = true,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4653),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7162),
                             Name = "Designer"
                         },
                         new
                         {
-                            Id = 954913108,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4676),
+                            Id = 706379986,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7183),
                             IsEditable = false,
                             IsEmployee = true,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4677),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7184),
                             Name = "Engineer"
                         },
                         new
                         {
-                            Id = 666843609,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4690),
+                            Id = 942305441,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7197),
                             IsEditable = false,
                             IsEmployee = true,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4692),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7198),
                             Name = "Project Manager"
                         },
                         new
                         {
-                            Id = 208908936,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4705),
+                            Id = 726210607,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7211),
                             IsEditable = false,
                             IsEmployee = true,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4706),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7212),
                             Name = "COO"
                         },
                         new
                         {
-                            Id = 833716015,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4719),
+                            Id = 339666364,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7224),
                             IsEditable = false,
                             IsEmployee = true,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4721),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7225),
                             Name = "CTO"
                         },
                         new
                         {
-                            Id = 204995557,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4734),
+                            Id = 788532921,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7238),
                             IsEditable = false,
                             IsEmployee = true,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4736),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7239),
                             Name = "CEO"
                         },
                         new
                         {
-                            Id = 333429261,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4750),
+                            Id = 768521671,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7251),
                             IsEditable = false,
                             IsEmployee = false,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4751),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7252),
                             Name = "Guest"
                         },
                         new
                         {
-                            Id = 438134464,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4764),
+                            Id = 624039796,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7264),
                             IsEditable = false,
                             IsEmployee = false,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4765),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7265),
                             Name = "Customer"
                         },
                         new
                         {
-                            Id = 277799047,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4778),
+                            Id = 727160196,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7277),
                             IsEditable = false,
                             IsEmployee = false,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4780),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7278),
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = 773548819,
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4794),
+                            Id = 291106305,
+                            CreatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7296),
                             IsEditable = false,
                             IsEmployee = false,
-                            LastUpdatedDate = new DateTime(2024, 3, 16, 17, 24, 15, 848, DateTimeKind.Local).AddTicks(4795),
+                            LastUpdatedDate = new DateTime(2024, 3, 25, 17, 24, 27, 648, DateTimeKind.Local).AddTicks(7297),
                             Name = "Secretariat"
                         });
-                });
-
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.Complain", b =>
-                {
-                    b.HasOne("EmpiriaMS.Models.Models.Project", "Project")
-                        .WithMany("Complains")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DailyTime", b =>
@@ -5559,6 +5617,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.Issue", b =>
+                {
+                    b.HasOne("EmpiriaMS.Models.Models.Project", "Project")
+                        .WithMany("Complains")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Other", b =>
                 {
                     b.HasOne("EmpiriaBMS.Models.Models.Discipline", "Discipline")
@@ -5595,6 +5664,15 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Other");
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.Payment", b =>
+                {
+                    b.HasOne("EmpiriaMS.Models.Models.Project", "Project")
+                        .WithOne("Payment")
+                        .HasForeignKey("EmpiriaBMS.Models.Models.Payment", "ProjectId");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.RolePermission", b =>
@@ -5663,7 +5741,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.User", "SubContractor")
                         .WithMany("SubConstructorProjects")
                         .HasForeignKey("SubContractorId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EmpiriaBMS.Models.Models.ProjectType", "Type")
                         .WithMany("Projects")
@@ -5766,6 +5844,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("Disciplines");
 
                     b.Navigation("Invoice");
+
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("EmpiriaMS.Models.Models.Role", b =>

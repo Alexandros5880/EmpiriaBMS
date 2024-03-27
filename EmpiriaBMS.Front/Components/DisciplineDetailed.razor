@@ -1,0 +1,57 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Components;
+@using Microsoft.AspNetCore.Components;
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Core.Config;
+@using EmpiriaBMS.Core.Dtos;
+@using System.Text.Json;
+
+@inject IMapper Mapper
+@inject IDataProvider DataProvider
+@inject SharedAuthDataService _sharedAuthData
+
+<div class="w-96 h-100"
+     style="overflow-x: hidden; overflow-y: auto; max-height: 700px;">
+
+    <h3 class="mt-1 mb-1 ms-3">Discipline</h3>
+
+    <EditForm Model="@_discipline" class="row mt-3 gx-2 p-2">
+
+        <div class="p-2 col-12">
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <!-- Discipline Types -->
+                    <div class="form-group">
+                        <label>Discipline Type</label>
+                        <select class="form-select" @onchange="(async (e) => await _updateDisciplineType(e))">
+                            @foreach (var disciplineType in _disciplineTypes)
+                            {
+                                @if (_discipline.TypeId == disciplineType.Id)
+                                {
+                                    <option value="@disciplineType.Id" selected>@disciplineType.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@disciplineType.Id">@disciplineType.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- EstimatedMandays -->
+                    <div class="form-group">
+                        <label for="completionDate">Estimated Mandays</label>
+                        <input type="number"
+                               class="form-control"
+                               id="completionDate"
+                               @bind="@_discipline.EstimatedMandays">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </EditForm>
+
+</div>

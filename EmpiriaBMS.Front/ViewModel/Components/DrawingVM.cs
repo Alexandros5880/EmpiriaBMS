@@ -6,6 +6,19 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class DrawingVM : BaseVM
 {
+    private int? _typeId;
+    public int? TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
     private DrawingType _type;
     public DrawingType Type
     {
@@ -55,6 +68,19 @@ public class DrawingVM : BaseVM
                 return;
             _completionDate = value;
             NotifyPropertyChanged(nameof(CompletionDate));
+        }
+    }
+
+    private int? __disciplineId;
+    public int? DisciplineId
+    {
+        get => __disciplineId;
+        set
+        {
+            if (value == __disciplineId)
+                return;
+            __disciplineId = value;
+            NotifyPropertyChanged(nameof(DisciplineId));
         }
     }
 

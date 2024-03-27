@@ -22,21 +22,12 @@ public class Project : Entity
 
     public long EstimatedHours { get; set; }
 
-    public float EstimatedCompleted { get; set; }
+    public double? Fee { get; set; }
 
-    public float Completed { get; set; }
-
-    public float WorkPackegedCompleted { get; set; }
+    public int TypeId { get; set; }
+    public ProjectType Type { get; set; }
 
     public bool Active { get; set; }
-
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime? DeadLine { get; set; }
-
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime? WorkPackege { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
@@ -44,30 +35,19 @@ public class Project : Entity
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
-    public DateTime? EstPaymentDate { get; set; }
+    public DateTime? DeadLine { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
-    public DateTime? PaymentDate { get; set; }
+    public DateTime? EstimatedDate { get; set; }
 
-    public int? DelayInPayment { get; set; }
+    public float EstimatedCompleted { get; set; }
 
-    public string? PaymentDetailes { get; set; }
+    public float Completed { get; set; }
 
-    public double? DayCost { get; set; }
-
-    public string? Bank { get; set; }
-
-    public double? PaidFee { get; set; }
-
-    public int? DaysUntilPayment { get; set; }
-
-    public double? PendingPayments { get; set; }
+    public float WorkPackegedCompleted { get; set; }
 
     public int? CalculationDaly { get; set; }
-
-    public int TypeId { get; set; }
-    public ProjectType Type { get; set; }
 
     public int? SubContractorId { get; set; }
     public User? SubContractor { get; set; }
@@ -79,9 +59,11 @@ public class Project : Entity
 
     public Invoice? Invoice { get; set; }
 
+    public Payment? Payment { get; set; }
+
     public ICollection<DailyTime> DailyTime { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }
 
-    public ICollection<Complain> Complains { get; set; }
+    public ICollection<Issue> Complains { get; set; }
 }

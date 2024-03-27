@@ -67,6 +67,33 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
+    public async Task<ICollection<UserDto>> GetAllWithRoles()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var usersroles = await _context.Set<UserRole>()
+                                           .Include(ur => ur.Role)
+                                           .ToListAsync();
+
+            var users = await _context.Set<User>()
+                                     .ToListAsync();
+
+            var userDto = Mapping.Mapper.Map<List<UserDto>>(users);
+
+            foreach(var u in userDto)
+            {
+                u.Roles = u.Roles ?? new List<RoleDto>();
+                foreach(var ur in usersroles)
+                {
+                    if (u.Id.Equals(ur.UserId))
+                        u.Roles.Add(Mapping.Mapper.Map<RoleDto>(ur.Role));
+                }
+            }
+
+            return userDto;
+        }
+    }
+
     public new async Task<ICollection<UserDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -334,46 +361,24 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<double> GetUserHours(int userId, DateTime date)
+    public async Task<double> GetUserTotalHoursThisMonth(int userId)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
 
-        if (date > DateTime.Now)
-            throw new ArgumentException(nameof(date));
+        // Get current date
+        DateTime currentDate = DateTime.Now;
+
+        // Get date for a month later
+        DateTime dateOneMonthLater = currentDate.AddMonths(-1);
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var dailyHours = await _context.Set<DailyTime>()
-                                     .Where(u => u.DailyUserId == userId)
-                                     .ToListAsync();
-            
-            var dailyHour = dailyHours.FirstOrDefault(d => d.Date.CompareTo(date) == 0);
-            
-            return dailyHour.TimeSpan.Hours;
-        }
-    }
-
-    public async Task<double> GetUserHoursFromLastMonday(int userId, DateTime date)
-    {
-        if (userId == 0)
-            throw new ArgumentException(nameof(userId));
-
-        if (date > DateTime.Now)
-            throw new ArgumentException(nameof(date));
-
-        if (date.DayOfWeek == DayOfWeek.Monday)
-            return 0.0;
-
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var lastMondaysDate = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
-
             return await _context.Set<DailyTime>()
-                                           .Where(u => u.DailyUserId == userId)
-                                           .Where(u => u.Date.CompareTo(lastMondaysDate) > 0)
-                                           .Select(u => u.TimeSpan.Hours)
-                                           .SumAsync();
+                                 .Where(u => u.DailyUserId == userId)
+                                 .Where(u => u.Date.CompareTo(dateOneMonthLater) > 0)
+                                 .Select(u => u.TimeSpan.Hours)
+                                 .SumAsync();
         }
     }
 

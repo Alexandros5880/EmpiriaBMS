@@ -1,0 +1,102 @@
+﻿@page "/createComplain"
+
+@using EmpiriaBMS.Core.Config;
+@using EmpiriaBMS.Core.Dtos;
+@using System.Text.Json;
+@using EmpiriaBMS.Front.Services
+
+@inject IMapper Mapper
+@inject IDataProvider DataProvider
+@inject SharedAuthDataService _sharedAuthData
+
+<div class="h-100" style="max-height: 700px; max-height: 694px; overflow-y: auto; overflow-x: hidden;">
+    <h3>Create Issue</h3>
+
+    <EditForm Model="@_issue">
+
+        <div class="row">
+            <div class="col form-group">
+                <label for="customerId">Customer:</label> <br/>
+                <strong id="customerId">@_customer?.LastName &nbsp; @_customer?.LastName</strong>
+            </div>
+            <div class="col form-group">
+                <label for="projectId">Project:</label> <br />
+                <strong id="projectId">@_project?.Name</strong>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col form-group">
+                <label for="ComplaintDate">Complaint Date:</label>
+                <InputDate id="ComplaintDate" @bind-Value="_issue.ComplaintDate" class="form-control" />
+            </div>
+
+            <div class="col form-group">
+                <label for="about">About:</label>
+                <InputText id="about" @bind-Value="_issue.About" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col form-group">
+                <label for="description">Description:</label>
+                <InputText id="description" @bind-Value="_issue.Description" class="form-control" />
+            </div>
+
+            <div class="col form-group">
+                <label for="solution">Solution:</label>
+                <InputText id="solution" @bind-Value="_issue.Solution" class="form-control" />
+            </div>
+        </div>
+        
+        <div class="row mt-2">
+            <div class="col form-group">
+                <label for="verification">Verification:</label>
+                <InputText id="verification" @bind-Value="_issue.Verification" class="form-control" />
+            </div>
+
+            <div class="col form-group">
+                <label for="verificationDate">Verification Date:</label>
+                <InputDate id="verificationDate" @bind-Value="_issue.VerificationDate" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-lg-6 col-md-12 form-group">
+                <label for="verificatorSignature">Verificator Signature:</label>
+                <div>
+                    <SignaturePad @ref="verificatorSignature" />
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12 form-group">
+                <label for="pMSignature">Project Manager Signature:</label>
+                <div>
+                    <SignaturePad @ref="pMSignature" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col form-group">
+                <label for="evaluation">Evaluation:</label>
+                <InputText id="evaluation" @bind-Value="_issue.Evaluation" class="form-control" />
+            </div>
+
+            <div class="col form-group"> 
+                @if (_issue.IsClose)
+                {
+                    <label for="solutionDate">Solution Date:</label>
+                    <InputDate id="solutionDate" @bind-Value="_issue.SolutionDate" class="form-control" />
+                }
+            </div>
+        </div>
+
+        <div class="form-group mt-2">
+            <div class="row" style="width: 134px;">
+                <label class="col-8" for="isClosed">Is Closed</label>
+                <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_issue.IsClose" />
+            </div>
+        </div>
+    </EditForm>
+</div>

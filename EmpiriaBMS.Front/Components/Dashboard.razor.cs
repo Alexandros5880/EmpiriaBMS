@@ -1,10 +1,9 @@
-﻿using EmpiriaBMS.Core;
+﻿using AutoMapper;
+using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Components.Admin.Roles;
-using EmpiriaBMS.Front.Components.General;
-using EmpiriaBMS.Front.DefaultComponents;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -31,50 +30,24 @@ public partial class Dashboard : IDisposable
     private UserTimes _editLogedUserTimes;
 
     #region Authorization Properties
-    public bool AssignDesigner
-    {
-        get
-        {
-            return isWorkingMode && _sharedAuthData.PermissionOrds.Contains(3);
-        }
-    }
-    public bool AssignEngineer
-    {
-        get
-        {
-            return isWorkingMode && _sharedAuthData.PermissionOrds.Contains(4);
-        }
-    }
-    public bool AssignPm
-    {
-        get
-        {
-            return isWorkingMode && _sharedAuthData.PermissionOrds.Contains(5);
-        }
-    }
-    public bool EditMyHours
-    {
-        get
-        {
-            return _sharedAuthData.PermissionOrds.Contains(2);
-        }
-    }
-    public bool SeeMyHours
-    {
-        get
-        {
-            return _sharedAuthData.PermissionOrds.Contains(8);
-        }
-    }
-
+    public bool AssignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
+    public bool AssignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
+    public bool AssignPm => _sharedAuthData.PermissionOrds.Contains(5);
+    public bool EditMyHours => _sharedAuthData.PermissionOrds.Contains(2);
+    public bool SeeMyHours => _sharedAuthData.PermissionOrds.Contains(8);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
     bool getAllDrawings => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
+    bool editProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
+    bool editDiscipline => _sharedAuthData.Permissions.Any(p => p.Ord == 14);
+    bool editDeliverable => _sharedAuthData.Permissions.Any(p => p.Ord == 15);
+    bool editOther => _sharedAuthData.Permissions.Any(p => p.Ord == 16);
     #endregion
 
     // General Fields
     private bool disposedValue;
     bool _startLoading = true;
     bool _filterLoading = false;
+    private double _userTotalHoursThisMonth = 0;
 
     #region Working Timer
     Timer timer;
@@ -101,38 +74,75 @@ public partial class Dashboard : IDisposable
 
     #region Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
+    private InvoiceVM _selectedInvoice = new InvoiceVM();
+    private PaymentVM _selectedPayment = new PaymentVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
+    private int _selectedPmId;
     #endregion
 
     #region Dialogs
     // Work End Dialog
-    private FluentDialog? _endWorkDialog;
+    private FluentDialog _endWorkDialog;
     private bool _isEndWorkDialogOdepened = false;
     private bool _isEndWorkAcceptDialogDisabled => remainingTime.Hours != 0 || remainingTime.Minutes != 0;
 
     // Add Designer Dialog
-    private FluentDialog? _addDesignerDialog;
+    private FluentDialog _addDesignerDialog;
     private bool _isAddDesignerDialogOdepened = false;
 
     // Add Engineer Dialog
-    private FluentDialog? _addEngineerDialog;
+    private FluentDialog _addEngineerDialog;
     private bool _isAddEngineerDialogOdepened = false;
 
     // Add ProjectManager Dialog
-    private FluentDialog? _addPMDialog;
+    private FluentDialog _addPMDialog;
     private bool _isAddPMDialogOdepened = false;
-    private UserVM _selectedPM = new UserVM();
 
-    // On My Hours Click Dialog
-    private FluentDialog? _myHoursDialog;
-    private bool _isMyHoursDialogOdepened = false;
+    // On Add Complain Dialog
+    private FluentDialog _addIssueDialog;
+    private bool _isAddIssueDialogOdepened = false;
+    private Issue issueCompoment;
 
-    // On Add Complain Click Dialog
-    private FluentDialog? _addComplainDialog;
-    private bool _isAddComplainDialogOdepened = false;
-    private Complain complainCompoment;
+    // On Add Project Dialog
+    private FluentDialog _addEditProjectDialog;
+    private bool _isAddEditProjectDialogOdepened = false;
+    private ProjectDetailed projectCompoment;
+
+    // On Add/Edit Discipline Dialog
+    private FluentDialog _addEditDisciplineDialog;
+    private bool _isAddEditDisciplineDialogOdepened = false;
+    private DisciplineDetailed disciplineCompoment;
+    private bool _hasDisciplinesSelections = true;
+
+    // On Add/Edit Deliverable Dialog
+    private FluentDialog _addEditDeliverableDialog;
+    private bool _isAddEditDeliverableDialogOdepened = false;
+    private DrawingDetailed drawingCompoment;
+    private bool _hasDrawingsSelections = true;
+
+    // On Add/Edit Other Dialog
+    private FluentDialog _addEditOtherDialog;
+    private bool _isAddEditOtherDialogOdepened = false;
+    private OtherDetailed otherCompoment;
+    private bool _hasOthersSelections = true;
+
+    // On Delete Dialog
+    private FluentDialog _deleteDialog;
+    private bool _isDeleteDialogOdepened = false;
+    private string _deleteDialogMsg = "";
+    private string _deleteObj = null;
+
+    // On Add/Edit Invoice Dialog
+    private FluentDialog _addEditInvoiceDialog;
+    private bool _isAddEditInvoiceDialogOdepened = false;
+    private InvoiceDetailed invoiceCompoment;
+
+    // On Add/Edit Payment Dialog
+    private FluentDialog _addEditPaymentDialog;
+    private bool _isAddEditPaymentDialogOdepened = false;
+    private PaymentDetailed paymentCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -150,7 +160,7 @@ public partial class Dashboard : IDisposable
         if (firstRender)
         {
             //_runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetLogedUserTimes(_sharedAuthData.LogedUser.Id);
+            await GetUserTotalHoursThisMonth();
             await _getProjects();
             _startLoading = false;
             StateHasChanged();
@@ -160,15 +170,55 @@ public partial class Dashboard : IDisposable
     public async Task Refresh()
     {
         _startLoading = true;
+        await GetUserTotalHoursThisMonth();
         await _getProjects();
         _startLoading = false;
         StateHasChanged();
     }
 
     #region Get Records
-    private async Task GetLogedUserTimes(int userId)
+    private async Task _getInvoice()
     {
-        _logedUserTimes = await DataProvider.Users.GetTime(userId, DateTime.Now);
+        try
+        {
+            var dto = await DataProvider.Invoices.Get((int)_selectedProject.InvoiceId);
+            _selectedInvoice = Mapper.Map<InvoiceVM>(dto);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task _getPayment()
+    {
+        try
+        {
+            var dto = await DataProvider.Payments.Get((int)_selectedProject.PaymentId);
+            _selectedPayment = Mapper.Map<PaymentVM>(dto);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
+    private async Task _checkIfHasAnySelections()
+    {
+        if (_selectedProject != null)
+            _hasDisciplinesSelections = await DataProvider.DisciplinesTypes.HasDisciplineTypesSelections(_selectedProject.Id);
+        if (_selectedDiscipline != null)
+        {
+            _hasDrawingsSelections = await DataProvider.DrawingsTypes.HasDrawingTypesSelections(_selectedDiscipline.Id);
+            _hasOthersSelections = await DataProvider.OthersTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
+        }
+    }
+
+    private async Task GetUserTotalHoursThisMonth()
+    {
+        _userTotalHoursThisMonth = await DataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
     }
 
     public async Task _getProjects()
@@ -208,7 +258,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
         _startLoading = false;
@@ -240,7 +290,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
     }
@@ -270,7 +320,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
     }
@@ -288,21 +338,22 @@ public partial class Dashboard : IDisposable
             if (pms == null)
                 throw new NullReferenceException(nameof(pms));
 
-            var myPM = await DataProvider.Projects.GetProjectManager(_selectedProject.Id);
-
             var pmsVM = Mapper.Map<List<UserVM>>(pms);
 
+            if (_selectedProject.ProjectManagerId != null && _selectedProject.ProjectManagerId != 0)
+            {
+                var myPM = await DataProvider.Projects.GetProjectManager(_selectedProject.Id);
+                _selectedPmId = myPM.Id;
+            }
 
             _projectManagers.Clear();
-            pmsVM.ForEach(d =>
-            {
-                d.IsSelected = myPM.Id == d.Id;
-                _projectManagers.Add(d);
-            });
+            pmsVM.ForEach(_projectManagers.Add);
+
+            StateHasChanged();
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
         }
     }
@@ -317,7 +368,7 @@ public partial class Dashboard : IDisposable
         catch (Exception ex)
         {
             // TODO: Log Error
-            Debug.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Exception: {ex.Message}");
             return 0;
         }
     }
@@ -335,7 +386,102 @@ public partial class Dashboard : IDisposable
         DataProvider.Others.GetMenHours(otherId);
     #endregion
 
-    #region Actions Functions
+    #region When Row Selected Update Data
+    private async Task OnSelectProject(int projectId)
+    {
+        if (projectId == 0 || projectId == _selectedProject?.Id) return;
+
+        var project = _projects.FirstOrDefault(p => p.Id == projectId);
+        _draws.Clear();
+        _others.Clear();
+        _disciplines.Clear();
+        _selectedProject = project;
+        _selectedDiscipline = null;
+        _selectedDraw = null;
+        _selectedOther = null;
+
+        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, _sharedAuthData.LogedUser.Id, getAllDisciplines);
+
+        _disciplines.Clear();
+        foreach (var di in disciplines)
+            _disciplines.Add(Mapper.Map<DisciplineVM>(di));
+
+        await _getInvoice();
+        await _getPayment();
+        await _checkIfHasAnySelections();
+
+        StateHasChanged();
+    }
+
+    private async Task OnSelectDiscipline(int disciplineId)
+    {
+        if (disciplineId == 0 || disciplineId == _selectedDiscipline?.Id) return;
+
+        _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
+
+        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, getAllDrawings);
+        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, true);
+
+        _draws.Clear();
+        foreach (var di in draws)
+            _draws.Add(Mapper.Map<DrawingVM>(di));
+
+        _others.Clear();
+        foreach (var di in others)
+            _others.Add(Mapper.Map<OtherVM>(di));
+
+        await _checkIfHasAnySelections();
+
+        StateHasChanged();
+    }
+
+    private void OnSelectDraw(DrawingVM draw)
+    {
+        if (draw == null || draw.Id == _selectedDraw?.Id) return;
+        _selectedDraw = draw;
+        StateHasChanged();
+    }
+
+    private void OnSelectDoc(OtherVM doc)
+    {
+        if (doc == null || doc.Id == _selectedOther?.Id) return;
+        _selectedOther = doc;
+        StateHasChanged();
+    }
+    #endregion
+
+    #region Timer
+    private void UpdateElapsedTime()
+    {
+        if (_sharedAuthData.LogedUser == null) return;
+
+        var time = TimerService.GetElapsedTime(_sharedAuthData.LogedUser.Id.ToString());
+        timePaused = TimerService.GetPausedTime(_sharedAuthData.LogedUser.Id.ToString());
+
+        var timePlusPaused = time;
+
+        if (timePaused != TimeSpan.Zero)
+            timePlusPaused = time + timePaused;
+
+        if (TimerService.IsRunning(_sharedAuthData.LogedUser.Id.ToString()))
+        {
+            elapsedTime = timePlusPaused;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void StartTimer()
+    {
+        TimerService.StartTimer(_sharedAuthData.LogedUser.Id.ToString());
+    }
+
+    private TimeSpan StopTimer()
+    {
+        return TimerService.StopTimer(_sharedAuthData.LogedUser.Id.ToString());
+    }
+    #endregion
+
+    #region Start Stop Work Actions
     private void StartWorkClick()
     {
         isWorkingMode = true;
@@ -377,185 +523,6 @@ public partial class Dashboard : IDisposable
         _isEndWorkDialogOdepened = true;
     }
 
-    private void OnMyHoursClick()
-    {
-        if (!SeeMyHours) return;
-        _myHoursDialog.Show();
-        _isMyHoursDialogOdepened = true;
-    }
-
-    private void CloseMyHoursClick()
-    {
-        if (_isMyHoursDialogOdepened)
-        {
-            _myHoursDialog.Hide();
-            _isMyHoursDialogOdepened = false;
-        }
-    }
-
-    private async Task OnSelectProject(int projectId)
-    {
-        if (projectId == 0 || projectId == _selectedProject?.Id) return;
-
-        var project = _projects.FirstOrDefault(p => p.Id == projectId);
-        _draws.Clear();
-        _others.Clear();
-        _disciplines.Clear();
-        _selectedProject = project;
-        _selectedDiscipline = null;
-        _selectedDraw = null;
-        _selectedOther = null;
-
-        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, _sharedAuthData.LogedUser.Id, getAllDisciplines);
-
-        _disciplines.Clear();
-        foreach (var di in disciplines)
-            _disciplines.Add(Mapper.Map<DisciplineVM>(di));
-
-        StateHasChanged();
-    }
-
-    private async Task OnSelectDiscipline(int disciplineId)
-    {
-        if (disciplineId == 0 || disciplineId == _selectedDiscipline?.Id) return;
-
-        _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
-
-        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, getAllDrawings);
-        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, true);
-
-        _draws.Clear();
-        foreach (var di in draws)
-            _draws.Add(Mapper.Map<DrawingVM>(di));
-
-        _others.Clear();
-        foreach (var di in others)
-            _others.Add(Mapper.Map<OtherVM>(di));
-
-        StateHasChanged();
-    }
-
-    private void OnSelectDraw(DrawingVM draw)
-    {
-        if (draw == null || draw.Id == _selectedDraw?.Id) return;
-        _selectedDraw = draw;
-        StateHasChanged();
-    }
-
-    private void OnSelectDoc(OtherVM doc)
-    {
-        if (doc == null || doc.Id == _selectedOther?.Id) return;
-        _selectedOther = doc;
-        StateHasChanged();
-    }
-
-    private async Task OnDrawingAssignClick(DrawingVM draw)
-    {
-        if (!isWorkingMode) return;
-        try
-        {
-            _selectedDraw = draw;
-            await _getDesigners();
-            StateHasChanged();
-            _addDesignerDialog.Show();
-            _isAddDesignerDialogOdepened = true;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private async Task OnDesciplineAssignClick(DisciplineVM discipline)
-    {
-        if (!isWorkingMode) return;
-        try
-        {
-            _selectedDiscipline = discipline;
-            await _getEngineers();
-            StateHasChanged();
-            _addEngineerDialog.Show();
-            _isAddEngineerDialogOdepened = true;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    // Projects Manager Selection
-    void ToggleSelection(UserVM pm, string selectedValue)
-    {
-        pm.IsSelected = !_projectManagers.First(p => p.Id.ToString() == selectedValue).IsSelected;
-    }
-
-    private async Task OnProjectAssignClick(ProjectVM project)
-    {
-        if (!isWorkingMode) return;
-        try
-        {
-            _selectedProject = project;
-            await _getProjectManagers();
-            StateHasChanged();
-            _addPMDialog.Show();
-            _isAddPMDialogOdepened = true;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private void OnAddComplainClick()
-    {
-        complainCompoment.Refresh();
-        _addComplainDialog.Show();
-        _isAddComplainDialogOdepened = true;
-    }
-
-    private void CloseAddComplainClick()
-    {
-        if (_isAddComplainDialogOdepened)
-        {
-            _addComplainDialog.Hide();
-            _isAddComplainDialogOdepened = false;
-        }
-    }
-    #endregion
-
-    #region Timer
-    private void UpdateElapsedTime()
-    {
-        var time = TimerService.GetElapsedTime(_sharedAuthData.LogedUser.Id.ToString());
-        timePaused = TimerService.GetPausedTime(_sharedAuthData.LogedUser.Id.ToString());
-
-        var timePlusPaused = time;
-
-        if (timePaused != TimeSpan.Zero)
-            timePlusPaused = time + timePaused;
-
-        if (TimerService.IsRunning(_sharedAuthData.LogedUser.Id.ToString()))
-        {
-            elapsedTime = timePlusPaused;
-            InvokeAsync(StateHasChanged);
-        }
-    }
-
-    private void StartTimer()
-    {
-        TimerService.StartTimer(_sharedAuthData.LogedUser.Id.ToString());
-    }
-
-    private TimeSpan StopTimer()
-    {
-        return TimerService.StopTimer(_sharedAuthData.LogedUser.Id.ToString());
-    }
-    #endregion
-
-    #region On Press Work End Dialog Actions
     private void _onDrawTimeChanged(DrawingVM draw, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, remainingTime
@@ -564,12 +531,12 @@ public partial class Dashboard : IDisposable
         var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
         var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
 
-        var updatedHours = hoursChanged ? 
-                                          newTimeSpan.Hours < previusTime.Hours ? 
-                                                          -(previusTime.Hours - newTimeSpan.Hours) 
-                                                        : newTimeSpan.Hours 
+        var updatedHours = hoursChanged ?
+                                          newTimeSpan.Hours < previusTime.Hours ?
+                                                          -(previusTime.Hours - newTimeSpan.Hours)
+                                                        : newTimeSpan.Hours
                                         : 0;
-        var updatedMinutes = minutesChanged ? 
+        var updatedMinutes = minutesChanged ?
                                           newTimeSpan.Minutes < previusTime.Minutes ?
                                                           -(previusTime.Minutes - newTimeSpan.Minutes)
                                                         : newTimeSpan.Minutes
@@ -837,8 +804,6 @@ public partial class Dashboard : IDisposable
         // Update Db
         _startLoading = true;
 
-        TimeSpan sumTime = new TimeSpan();
-
         // Update Draws
         foreach (var draw in _drawsChanged)
         {
@@ -852,7 +817,6 @@ public partial class Dashboard : IDisposable
             else
                 await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
             await DataProvider.Drawings.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
-            sumTime += draw.Time;
         }
 
         // Update Others
@@ -860,11 +824,9 @@ public partial class Dashboard : IDisposable
         {
             //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
             await DataProvider.Others.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
-            sumTime += other.Time;
         }
 
         // Update User Hours
-        //await DataProvider.Users.AddDailyTime(_sharedAuthData.LogedUser.Id, DateTime.Now, sumTime);
         if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
             await DataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
         if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
@@ -880,6 +842,8 @@ public partial class Dashboard : IDisposable
         // Clear Timer From this User
         TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
+        await GetUserTotalHoursThisMonth();
+
         _startLoading = false;
     }
 
@@ -893,7 +857,25 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Add Designer Dialog Actions
+    #region Drawings Assign Actions (Deliverable Assign)
+    private async Task OnDrawingAssignClick(DrawingVM draw)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedDraw = draw;
+            await _getDesigners();
+            StateHasChanged();
+            _addDesignerDialog.Show();
+            _isAddDesignerDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     public async Task _addDesignerDialogAccept()
     {
         _addDesignerDialog.Hide();
@@ -920,7 +902,25 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Add Engineer Dialog Actions
+    #region Engineers Assign Actions (Discipline Assign)
+    private async Task OnDesciplineAssignClick(DisciplineVM discipline)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedDiscipline = discipline;
+            await _getEngineers();
+            StateHasChanged();
+            _addEngineerDialog.Show();
+            _isAddEngineerDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     public async Task _addEngineerDialogAccept()
     {
         _addEngineerDialog.Hide();
@@ -947,7 +947,30 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Add Project Manager Dialog Actions
+    #region Projects Managers Assign Actions (Project Assign)
+    void ToggleSelection(UserVM pm, string selectedValue)
+    {
+        pm.IsSelected = !_projectManagers.First(p => p.Id.ToString() == selectedValue).IsSelected;
+    }
+
+    private async Task OnProjectAssignClick(ProjectVM project)
+    {
+        if (!isWorkingMode) return;
+        try
+        {
+            _selectedProject = project;
+            await _getProjectManagers();
+            StateHasChanged();
+            _addPMDialog.Show();
+            _isAddPMDialogOdepened = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     public async Task _addPMDialogAccept()
     {
         _addPMDialog.Hide();
@@ -955,13 +978,12 @@ public partial class Dashboard : IDisposable
 
         _startLoading = true;
 
-        await DataProvider.Projects.RemoveProjectManager(_selectedProject.Id);
-
-        var forAdd = _projectManagers.Where(d => d.IsSelected == true).ToList();
-        var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
-        await DataProvider.Projects.AddProjectManager(_selectedProject.Id, forAddDto.FirstOrDefault().Id);
+        _selectedProject.ProjectManagerId = _selectedPmId;
+        await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_selectedProject));
 
         _startLoading = false;
+
+        await Refresh();
     }
 
     public void _addPMDialogCansel()
@@ -971,18 +993,298 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Press Add Complain Dialog Actions
-    public async Task _addComplainDialogAccept()
+    #region Add Complain Actions
+    private void OnAddComplainClick()
     {
-        await complainCompoment.HandleValidSubmit();
-        _addComplainDialog.Hide();
-        _isAddComplainDialogOdepened = false;
+        issueCompoment.Refresh();
+        _addIssueDialog.Show();
+        _isAddIssueDialogOdepened = true;
     }
 
-    public void _addComplainDialogCansel()
+    private void CloseAddComplainClick()
     {
-        _addComplainDialog.Hide();
-        _isAddComplainDialogOdepened = false;
+        if (_isAddIssueDialogOdepened)
+        {
+            _addIssueDialog.Hide();
+            _isAddIssueDialogOdepened = false;
+        }
+    }
+
+    public async Task _addIssueDialogAccept()
+    {
+        await issueCompoment.HandleValidSubmit();
+        _addIssueDialog.Hide();
+        _isAddIssueDialogOdepened = false;
+    }
+
+    public void _addIssueDialogCansel()
+    {
+        _addIssueDialog.Hide();
+        _isAddIssueDialogOdepened = false;
+    }
+    #endregion
+
+    #region Add Invoice Actions
+    private void AddEditInvoice()
+    {
+        invoiceCompoment.Prepair();
+        _addEditInvoiceDialog.Show();
+        _isAddEditInvoiceDialogOdepened = true;
+    }
+
+    private void CloseAddInvoiceClick()
+    {
+        if (_isAddEditInvoiceDialogOdepened)
+        {
+            _addEditInvoiceDialog.Hide();
+            _isAddEditInvoiceDialogOdepened = false;
+        }
+    }
+
+    public async Task _addInvoiceDialogAccept()
+    {
+        await invoiceCompoment.HandleValidSubmit();
+        _addEditInvoiceDialog.Hide();
+        _isAddEditInvoiceDialogOdepened = false;
+        await Refresh();
+    }
+    #endregion
+
+    #region Add Payment Actions
+    private void AddEditPayment()
+    {
+        paymentCompoment.Prepair();
+        _addEditPaymentDialog.Show();
+        _isAddEditPaymentDialogOdepened = true;
+    }
+
+    private void CloseAddPaymentClick()
+    {
+        if (_isAddEditPaymentDialogOdepened)
+        {
+            _addEditPaymentDialog.Hide();
+            _isAddEditPaymentDialogOdepened = false;
+        }
+    }
+
+    public async Task _addPaymentDialogAccept()
+    {
+        await paymentCompoment.HandleValidSubmit();
+        _addEditPaymentDialog.Hide();
+        _isAddEditPaymentDialogOdepened = false;
+        await Refresh();
+    }
+    #endregion
+
+    #region Add/Edit/Delete Project Actions
+    private void AddProject()
+    {
+        projectCompoment.PrepairForNew();
+        _addEditProjectDialog.Show();
+        _isAddEditProjectDialogOdepened = true;
+    }
+
+    private void EditProject()
+    {
+        projectCompoment.PrepairForEdit(_selectedProject);
+        _addEditProjectDialog.Show();
+        _isAddEditProjectDialogOdepened = true;
+    }
+
+    private void CloseAddProjectClick()
+    {
+        if (_isAddEditProjectDialogOdepened)
+        {
+            _addEditProjectDialog.Hide();
+            _isAddEditProjectDialogOdepened = false;
+        }
+    }
+
+    private void DeleteProject()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedProject.Name}";
+        _deleteObj = nameof(_selectedProject);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+
+    public async Task _addEditProjectDialogAccept()
+    {
+        await projectCompoment.HandleValidSubmit();
+        _addEditProjectDialog.Hide();
+        _isAddEditProjectDialogOdepened = false;
+        await Refresh();
+    }
+
+    public void _addEditProjectDialogCansel()
+    {
+        _addEditProjectDialog.Hide();
+        _isAddEditProjectDialogOdepened = false;
+    }
+    #endregion
+
+    #region Add/Edit/Delete Discipline Actions
+    private void AddDiscipline()
+    {
+        disciplineCompoment.PrepairForNew();
+        _addEditDisciplineDialog.Show();
+        _isAddEditDisciplineDialogOdepened = true;
+    }
+
+    private void EditDiscipline()
+    {
+        disciplineCompoment.PrepairForEdit(_selectedDiscipline);
+        _addEditDisciplineDialog.Show();
+        _isAddEditDisciplineDialogOdepened = true;
+    }
+
+    private void CloseAddDisciplineClick()
+    {
+        if (_isAddEditDisciplineDialogOdepened)
+        {
+            _addEditDisciplineDialog.Hide();
+            _isAddEditDisciplineDialogOdepened = false;
+        }
+    }
+
+    public async Task _addEditDisciplineDialogAccept()
+    {
+        await disciplineCompoment.HandleValidSubmit();
+        _addEditDisciplineDialog.Hide();
+        _isAddEditDisciplineDialogOdepened = false;
+        await Refresh();
+    }
+
+    private void DeleteDiscipline()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedDiscipline.Type.Name}";
+        _deleteObj = nameof(_selectedDiscipline);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+    #endregion
+
+    #region Add/Edit/Delete Deliverable Actions
+    private void AddDeliverable()
+    {
+        drawingCompoment.PrepairForNew();
+        _addEditDeliverableDialog.Show();
+        _isAddEditDeliverableDialogOdepened = true;
+    }
+
+    private void EditDeliverable()
+    {
+        drawingCompoment.PrepairForEdit(_selectedDraw);
+        _addEditDeliverableDialog.Show();
+        _isAddEditDeliverableDialogOdepened = true;
+    }
+
+    private void CloseAddDeliverableClick()
+    {
+        if (_isAddEditDeliverableDialogOdepened)
+        {
+            _addEditDeliverableDialog.Hide();
+            _isAddEditDeliverableDialogOdepened = false;
+        }
+    }
+
+    public async Task _addEditDeliverableDialogAccept()
+    {
+        await drawingCompoment.HandleValidSubmit();
+        _addEditDeliverableDialog.Hide();
+        _isAddEditDeliverableDialogOdepened = false;
+        await Refresh();
+    }
+
+    private void DeleteDeliverable()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedDraw.Type.Name}";
+        _deleteObj = nameof(_selectedDraw);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+    #endregion
+
+    #region Add/Edit/Delete Other Actions
+    private void AddOther()
+    {
+        otherCompoment.PrepairForNew();
+        _addEditOtherDialog.Show();
+        _isAddEditOtherDialogOdepened = true;
+    }
+
+    private void EditOther()
+    {
+        otherCompoment.PrepairForEdit(_selectedOther);
+        _addEditOtherDialog.Show();
+        _isAddEditOtherDialogOdepened = true;
+    }
+
+    private void CloseAddOtherClick()
+    {
+        if (_isAddEditOtherDialogOdepened)
+        {
+            _addEditOtherDialog.Hide();
+            _isAddEditOtherDialogOdepened = false;
+        }
+    }
+
+    public async Task _addEditOtherDialogAccept()
+    {
+        await otherCompoment.HandleValidSubmit();
+        _addEditOtherDialog.Hide();
+        _isAddEditOtherDialogOdepened = false;
+        await Refresh();
+    }
+
+    private void DeleteOther()
+    {
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedOther.Type.Name}";
+        _deleteObj = nameof(_selectedOther);
+        _deleteDialog.Show();
+        _isDeleteDialogOdepened = true;
+    }
+    #endregion
+
+    #region Delete Dialog Actions
+    private async Task OnDeleteAccept()
+    {
+        if (_isDeleteDialogOdepened)
+        {
+            switch (_deleteObj)
+            {
+                case nameof(_selectedProject):
+                    await DataProvider.Projects.Delete(_selectedProject.Id);
+                    break;
+                case nameof(_selectedDiscipline):
+                    await DataProvider.Disciplines.Delete(_selectedDiscipline.Id);
+                    break;
+                case nameof(_selectedDraw):
+                    await DataProvider.Drawings.Delete(_selectedDraw.Id);
+                    break;
+                case nameof(_selectedOther):
+                    await DataProvider.Others.Delete(_selectedOther.Id);
+                    break;
+            }
+
+            _deleteDialogMsg = "";
+            _deleteObj = null;
+            _deleteDialog.Hide();
+            _isDeleteDialogOdepened = false;
+
+            await Refresh();
+        }
+    }
+
+    private void OnDeleteClose()
+    {
+        if (_isDeleteDialogOdepened)
+        {
+            _deleteDialogMsg = "";
+            _deleteObj = null;
+            _deleteDialog.Hide();
+            _isDeleteDialogOdepened = false;
+        }
     }
     #endregion
 

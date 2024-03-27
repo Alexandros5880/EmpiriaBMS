@@ -34,10 +34,10 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            await _context.Set<U>().AddAsync(Mapping.Mapper.Map<U>(entity));
+            var result = await _context.Set<U>().AddAsync(Mapping.Mapper.Map<U>(entity));
             await _context.SaveChangesAsync();
 
-            return entity;
+            return Mapping.Mapper.Map<T>(result.Entity);
         }
     }
 
@@ -77,13 +77,13 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
                     _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<U>(entity));
                     await _context.SaveChangesAsync();
                 }
-            }
 
-            return entity;
+                return Mapping.Mapper.Map<T>(entry);
+            }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}");
+            Console.WriteLine($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

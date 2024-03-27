@@ -9,6 +9,7 @@ namespace EmpiriaBMS.Core.Hellpers;
 
 public static class TimeHelper
 {
+
     public static TimeSpan CalculateTotalTime(ICollection<DailyTime> dailyTimes)
     {
         TimeSpan totalTime = TimeSpan.Zero;
@@ -26,4 +27,23 @@ public static class TimeHelper
 
         return totalTime;
     }
+
+    public static TimeSpan[] SplitTimeSpanToDays(TimeSpan totalTime)
+    {
+        int totalDays = (int)totalTime.TotalDays;
+
+        if (totalDays == 0)
+            return new TimeSpan[1] { totalTime };
+
+        TimeSpan[] timeSpans = new TimeSpan[totalDays];
+
+        for (int i = 0; i < totalDays; i++)
+        {
+            timeSpans[i] = new TimeSpan(1, totalTime.Hours, totalTime.Minutes, 0);
+            totalTime = totalTime.Subtract(new TimeSpan(1, totalTime.Hours, totalTime.Minutes, 0));
+        }
+
+        return timeSpans;
+    }
+
 }

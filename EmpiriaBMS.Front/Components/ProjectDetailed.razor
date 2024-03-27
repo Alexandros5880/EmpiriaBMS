@@ -1,0 +1,229 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Components;
+@using Microsoft.AspNetCore.Components;
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Core.Config;
+@using EmpiriaBMS.Core.Dtos;
+@using System.Text.Json;
+
+@inject IMapper Mapper
+@inject IDataProvider DataProvider
+@inject SharedAuthDataService _sharedAuthData
+
+<div class="w-96 h-100"
+     style="overflow-x: hidden; overflow-y: auto; max-height: 700px;">
+
+    <h3 class="mt-1 mb-1 ms-3">Project</h3>
+
+    <EditForm Model="@_project"
+              class="row mt-3 gx-2 p-2">
+
+        <div class="p-2 col-12">
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <!-- Name -->
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <InputText id="name" @bind-Value="@_project.Name" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- Code -->
+                    <div class="form-group">
+                        <label for="code">Code</label>
+                        @if (seeCode)
+                        {
+                            <InputText id="code" @bind-Value="@_project.Code" class="form-control" />
+                        }
+                        else
+                        {
+                            <InputText id="code" @bind-Value="@defaultCodeValue" class="form-control" disabled />
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <!-- Fee -->
+                    <div class="form-group">
+                        <label for="fee">Fee</label>
+                        <input type="number"
+                               class="form-control"
+                               id="fee"
+                               @bind="@_project.Fee">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- ProjectType -->
+                    <div class="form-group">
+                        <label for="projectType">ProjectType</label>
+                        <select class="form-select" @onchange="((e) => _updateProjectType(e))">
+                            @foreach (var projectType in _projectTypes)
+                            {
+                                @if (_project.TypeId == projectType.Id)
+                                {
+                                    <option value="@projectType.Id" selected>@projectType.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@projectType.Id">@projectType.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <!-- DurationDate -->
+                    <div class="form-group">
+                        <label for="durationDate">DurationDate</label>
+                        <input type="date"
+                               class="form-control"
+                               id="durationDate"
+                               @bind="@_project.DurationDate">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- EstimatedDate -->
+                    <div class="form-group">
+                        <label for="estimatedDate">EstimatedDate</label>
+                        <input type="date"
+                               class="form-control"
+                               id="estimatedDate"
+                               @bind="@_project.EstimatedDate">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12 form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control"
+                          name="composeContent"
+                          id="description"
+                          row="7"
+                          @bind="@_project.Description" />
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <!-- DeadLine -->
+                    <div class="form-group">
+                        <label for="deadLine">DeadLine</label>
+                        <input type="date"
+                               class="form-control"
+                               id="deadLine"
+                               @bind="@_project.DeadLine">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- Active -->
+                    <div class="row mt-4 float-end" style="width: 134px;">
+                        <label class="col-8" for="active">Is Active</label>
+                        <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </EditForm>
+
+    <!-- Disciplines -->
+@*     <div class="mb-2 row gx-2" style="margin: 0 auto;">
+        <div class="col-12">
+            @if (_project != null)
+            {
+                <div class="row">
+                    <h3 class="col-10">Disciplines</h3>
+                    <span class="grommet-icons--add col-2"
+                          @onclick="@(() => _addRow())" />
+                </div>
+                <div class="table-responsive p-1">
+                    <table class="table table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="sticky-header">Discipline</th>
+                                <th scope="col" class="sticky-header">Estimated Mandays</th>
+                                <th scope="col" class="sticky-header">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var _discipline in _disciplines)
+                            {
+                                <tr class="align-middle">
+
+                                    <td class="align-middle">
+                                        <select class="form-select"
+                                                @bind="_discipline.TypeId">
+                                            @foreach (var _disciplineType in _disciplineTypes)
+                                            {
+                                                @if (_discipline.TypeId.Equals(_disciplineType.Id))
+                                                {
+                                                    <option value="@_disciplineType.Id" selected>@_disciplineType.Name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@_disciplineType.Id">@_disciplineType.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+
+                                    <td class="align-middle text-center">
+                                        <!-- EstimatedMandays -->
+                                        <input type="number"
+                                               class="form-control"
+                                               id="estimatedMandays"
+                                               @bind="@_discipline.EstimatedMandays"
+                                               style="width: 100px !important; margin: 0 auto;">
+                                    </td>
+
+                                    <td class="align-middle text-center">
+                                        <span class="fluent--delete-28-regular"
+                                              @onclick="@(() => _removeRow(_discipline.TypeId))" />
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div> *@
+
+    @*
+    <div class="mb-2 row gx-2" style="margin: 0 auto;">
+
+        <div class="col-12 row gx-2 gy-2">
+
+            <!-- Invoice -->
+            <div class="col-lg col-md-12">
+                <div class="card h-100 m-1 p-1">
+                    <InvoiceDetailed Invoice="@_invoice"/>
+                </div>
+            </div>
+
+            <!-- SubConstructor -->
+            <div class="col-lg col-md-12">
+                <div class="card h-100 m-1 p-1">
+                    <UserDetailed Title="Sub Constructor" User="@_subConstructor"/>
+                </div>
+            </div>
+
+            <!-- Customer -->
+            <div class="col-lg col-md-12">
+                <div class="card h-100 m-1 p-1">
+                    <UserDetailed Title="Customer" User="@_customer" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    *@
+</div>

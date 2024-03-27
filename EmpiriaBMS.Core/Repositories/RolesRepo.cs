@@ -159,10 +159,15 @@ public class RolesRepo : Repository<RoleDto, Role>
 
             var roleIds = roles.Select(r => r.Id);
 
-            var permissions = await _context.Set<RolePermission>()
+            var permissionsIdsAll = await _context.Set<RolePermission>()
                                             .Where(rp => roleIds.Contains(rp.RoleId))
-                                            .Include(rp => rp.Permission)
-                                            .Select(rp => rp.Permission)
+                                            .Select(rp => rp.PermissionId)
+                                            .ToListAsync();
+
+            var permissionsIdsUnique = new HashSet<int>(permissionsIdsAll);
+
+            var permissions = await _context.Set<Permission>()
+                                            .Where(p => permissionsIdsUnique.Contains(p.Id))
                                             .ToListAsync();
 
             return Mapping.Mapper.Map<List<Permission>, List<PermissionDto>>(permissions);

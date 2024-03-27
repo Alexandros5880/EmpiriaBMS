@@ -34,7 +34,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                              .Set<Project>()
                              .Include(r => r.Customer)
                              .Include(r => r.Invoice)
-                             .Include(r => r.Complains)
+                             .Include(p => p.Type)
+                             .Include(p => p.ProjectManager)
+                             .Include(p => p.SubContractor)
+                             .Include(p => p.Customer)
+                             .Include(p => p.Payment)
                              .Select(r => Mapping.Mapper.Map<ProjectDto>(r))
                              .FirstOrDefaultAsync(r => r.Id == id);
         }
@@ -49,6 +53,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Include(r => r.Customer)
                                       .Include(r => r.Invoice)
                                       .Include(p => p.Type)
+                                      .Include(p => p.ProjectManager)
+                                      .Include(p => p.SubContractor)
+                                      .Include(p => p.Customer)
+                                      .Include(p => p.Payment)
                                       .OrderBy(e => !e.Active)
                                       .ThenBy(e => e.DeadLine)
                                       .ToListAsync();
@@ -68,6 +76,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
                                          .Include(p => p.Type)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.Customer)
+                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -80,6 +92,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Include(r => r.Customer)
                                       .Include(r => r.Invoice)
                                       .Include(p => p.Type)
+                                      .Include(p => p.ProjectManager)
+                                      .Include(p => p.SubContractor)
+                                      .Include(p => p.Customer)
+                                      .Include(p => p.Payment)
                                       .OrderBy(e => !e.Active)
                                       .ThenBy(e => e.DeadLine)
                                       .ToListAsync();
@@ -103,6 +119,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
                                          .Include(p => p.Type)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.Customer)
+                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -116,6 +136,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(r => r.Customer)
                                      .Include(r => r.Invoice)
                                      .Include(p => p.Type)
+                                     .Include(p => p.ProjectManager)
+                                     .Include(p => p.SubContractor)
+                                     .Include(p => p.Customer)
+                                     .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
                                      .ThenBy(e => e.DeadLine)
                                      .ToListAsync();
@@ -144,9 +168,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (permissions.Any(p => p.Ord == 11))
             {
                 var allProjects = await _context.Set<Project>()
-                                                .Include(p => p.Type)
                                                 .Include(r => r.Customer)
                                                 .Include(r => r.Invoice)
+                                                .Include(p => p.Type)
+                                                .Include(p => p.ProjectManager)
+                                                .Include(p => p.SubContractor)
+                                                .Include(p => p.Customer)
+                                                .Include(p => p.Payment)
                                                 .OrderBy(e => !e.Active)
                                                 .ThenBy(e => e.DeadLine)
                                                 .ToListAsync();
@@ -178,9 +206,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                         .ToArrayAsync();
 
             var projects = await _context.Set<Project>()
-                                         .Include(p => p.Type)
                                          .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
+                                         .Include(p => p.Type)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.Customer)
+                                         .Include(p => p.Payment)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id) 
                                                             || p.ProjectManagerId == userId)
                                          .OrderBy(e => !e.Active)
@@ -212,9 +244,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Where(expresion)
-                                                .Include(p => p.Type)
                                                 .Include(r => r.Customer)
                                                 .Include(r => r.Invoice)
+                                                .Include(p => p.Type)
+                                                .Include(p => p.ProjectManager)
+                                                .Include(p => p.SubContractor)
+                                                .Include(p => p.Customer)
+                                                .Include(p => p.Payment)
                                                 .OrderBy(e => !e.Active)
                                                 .ThenBy(e => e.DeadLine)
                                                 .ToListAsync();
@@ -249,9 +285,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id)
                                                             || p.ProjectManagerId == userId)
                                          .Where(expresion)
-                                         .Include(p => p.Type)
                                          .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
+                                         .Include(p => p.Type)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.Customer)
+                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -295,9 +335,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 projects = await _context.Set<Project>()
                                          .Skip((pageIndex - 1) * pageSize)
                                          .Take(pageSize)
-                                         .Include(p => p.Type)
-                                         .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
+                                         .Include(p => p.Type)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.Customer)
+                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -333,9 +376,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 projects = await _context.Set<Project>()
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id)
                                                             || p.ProjectManagerId == userId)
-                                         .Include(p => p.Type)
-                                         .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
+                                         .Include(p => p.Type)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.Customer)
+                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -348,9 +394,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                             || p.ProjectManagerId == userId)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
-                                     .Include(p => p.Type)
-                                     .Include(r => r.Customer)
                                      .Include(r => r.Invoice)
+                                     .Include(p => p.Type)
+                                     .Include(p => p.ProjectManager)
+                                     .Include(p => p.SubContractor)
+                                     .Include(p => p.Customer)
+                                     .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
                                      .ThenBy(e => e.DeadLine)
                                      .ToListAsync();
@@ -387,9 +436,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 {
                     projects = await _context.Set<Project>()
                                              .Where(expresion)
-                                             .Include(p => p.Type)
-                                             .Include(r => r.Customer)
                                              .Include(r => r.Invoice)
+                                             .Include(p => p.Type)
+                                             .Include(p => p.ProjectManager)
+                                             .Include(p => p.SubContractor)
+                                             .Include(p => p.Customer)
+                                             .Include(p => p.Payment)
                                              .OrderBy(e => !e.Active)
                                              .ThenBy(e => e.DeadLine)
                                              .ToListAsync();
@@ -401,9 +453,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Where(expresion)
                                          .Skip((pageIndex - 1) * pageSize)
                                          .Take(pageSize)
-                                         .Include(p => p.Type)
-                                         .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
+                                         .Include(p => p.Type)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.Customer)
+                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -440,9 +495,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id)
                                                             || p.ProjectManagerId == userId)
                                          .Where(expresion)
-                                         .Include(p => p.Type)
-                                         .Include(r => r.Customer)
                                          .Include(r => r.Invoice)
+                                         .Include(p => p.Type)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.Customer)
+                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenBy(e => e.DeadLine)
                                          .ToListAsync();
@@ -456,9 +514,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
-                                     .Include(p => p.Type)
-                                     .Include(r => r.Customer)
                                      .Include(r => r.Invoice)
+                                     .Include(p => p.Type)
+                                     .Include(p => p.ProjectManager)
+                                     .Include(p => p.SubContractor)
+                                     .Include(p => p.Customer)
+                                     .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
                                      .ThenBy(e => e.DeadLine)
                                      .ToListAsync();
@@ -538,63 +599,116 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                  .CountAsync();
     }
 
-    public async Task<UserDto> GetProjectManager(int projectId)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var pm = await _context.Set<Project>()
-                                        .Include(p => p.ProjectManager)
-                                        .Select(p => p.ProjectManager)
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            return Mapping.Mapper.Map<UserDto>(pm);
-        }
-    }
-
-    public async Task AddProjectManager(int projectId, int pmId)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-
-            var project = await _context.Set<Project>()
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            if (project == null)
-                throw new NullReferenceException(nameof(project));
-
-            project.ProjectManagerId = pmId;
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task RemoveProjectManager(int projectId)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var project = await _context.Set<Project>()
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            if (project == null)
-                throw new NullReferenceException(nameof(project));
-
-            project.ProjectManagerId = 0;
-            project.ProjectManager = null;
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task<ICollection<ComplainDto>> GetComplains(int projectId)
+    public async Task UpdateDisciplines(int projectId, List<DisciplineDto> disciplines)
     {
         if (projectId == 0)
             throw new ArgumentNullException(nameof(projectId));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var complains = await _context.Set<Complain>()
+            // Get Project
+            var project = await _context.Set<Project>().FirstOrDefaultAsync(p => p.Id == projectId);
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+            var otherTypes = await _context.Set<OtherType>().ToListAsync();
+
+            // Calculate Disciplines Estimated Hours, Disciplines Estimated ManDays, Disciplines EstimatedCompleted
+            foreach (var d in disciplines)
+            {
+                d.EstimatedHours = d.EstimatedMandays * 8;
+
+                // Calculate Discipline EstimatedCompleted
+                var disciplineMenHours = await _context.Set<DailyTime>()
+                                                       .Where(d => d.DisciplineId == d.Id)
+                                                       .Select(d => d.TimeSpan.Hours)
+                                                       .SumAsync();
+                decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours)
+                                                        / Convert.ToDecimal(d.EstimatedHours);
+                d.EstimatedCompleted = (float)divitionDiscResult * 100;
+
+                // Update Discipline Project
+                d.ProjectId = projectId;
+
+                // Update Discipline
+                var exists = await _context.Set<Discipline>().AnyAsync(disc => disc.Id == d.Id);
+                if (exists)
+                {
+                    var dbDisc = await _context.Set<Discipline>().FirstOrDefaultAsync(disc => disc.Id == d.Id);
+                    if (dbDisc == null)
+                        throw new NullReferenceException(nameof(dbDisc));
+                    _context.Entry<Discipline>(dbDisc).CurrentValues.SetValues(Mapping.Mapper.Map<Discipline>(d));
+                }
+                else
+                {
+                    var savedDiscipline = await _context.Set<Discipline>().AddAsync(Mapping.Mapper.Map<Discipline>(d));
+                    await _context.SaveChangesAsync();
+
+                    var savedDisciplineId = savedDiscipline.Entity.Id;
+
+                    // Create Supportive Works For Every Discipline
+                    foreach (var t in otherTypes)
+                    {
+                        Other other = new Other()
+                        {
+                            TypeId = t.Id,
+                            DisciplineId = savedDisciplineId
+                        };
+                        await _context.Set<Other>().AddAsync(other);
+                    }
+                }
+            }
+
+            // Get Sum EstimatedManDays && EstimatedHours and update Project
+            var estimatedManDaysSum = disciplines.Select(d => d.EstimatedMandays).Sum();
+            var estimatedHoursSum = disciplines.Select(d => d.EstimatedHours).Sum();
+            project.EstimatedMandays = estimatedManDaysSum;
+            project.EstimatedHours = estimatedHoursSum;
+
+            // Calculate Project EstimatedComplete
+            var projectMenHours = await _context.Set<DailyTime>()
+                                                .Where(d => d.ProjectId == projectId)
+                                                .Select(d => d.TimeSpan.Hours)
+                                                .SumAsync();
+            decimal divitionProResult = Convert.ToDecimal(projectMenHours)
+                                                    / Convert.ToDecimal(project.EstimatedHours);
+            project.EstimatedCompleted = (float)divitionProResult * 100;
+
+            // Save Changes
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<UserDto> GetProjectManager(int projectId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var p = await _context.Set<Project>()
+                                  .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            if (p == null)
+                throw new NullReferenceException(nameof(p));
+
+            var pmId = p.ProjectManagerId;
+
+            var pm = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == pmId);
+
+            return Mapping.Mapper.Map<UserDto>(pm);
+        }
+    }
+
+    public async Task<ICollection<IssueDto>> GetComplains(int projectId)
+    {
+        if (projectId == 0)
+            throw new ArgumentNullException(nameof(projectId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var complains = await _context.Set<Issue>()
                                           .Where(p => p.ProjectId == projectId)
                                           .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Complain>, List<ComplainDto>>(complains);
+            return Mapping.Mapper.Map<List<Issue>, List<IssueDto>>(complains);
         }
     }
 

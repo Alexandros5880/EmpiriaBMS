@@ -1,5 +1,6 @@
 @inherits LayoutComponentBase
 
+@using EmpiriaBMS.Core.Dtos
 @using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
@@ -148,17 +149,31 @@ else
     </div>
 
     <!-- Remove This -->
-    <select class="form-select" @onchange="RoleSelectionChanged"
-            style="position:fixed !important; bottom:0px !important; width: 200px; right: 10px;">
-        @foreach (var role in _allRoles)
+    <select class="form-select" @onchange="UsersSelectionChanged"
+            style="position:fixed !important; bottom:0px !important; width: auto; right: 10px;">
+        @foreach (var _user in _allUsers)
         {
-            @if (@role.Name.Equals(_sharedAuthData.DefaultRoleName))
+            @if (@_user.Id.Equals(_sharedAuthData?.LogedUser?.Id))
             {
-                <option value="@role.Id" selected>@role.Name</option>
+                <option value="@_user?.Id" selected>
+                    @_user.LastName @_user.FirstName  -->  [
+                    @foreach (var r in _user.Roles)
+                    {
+                        <span>&nbsp; &nbsp; @r.Name &nbsp; &nbsp;</span>
+                    }
+                    ]
+                </option>
             }
             else
             {
-                <option value="@role.Id">@role.Name</option>
+                <option value="@_user?.Id">
+                    @_user.LastName @_user.FirstName  -->  [
+                    @foreach (var r in _user.Roles)
+                    {
+                        <span>&nbsp; &nbsp; @r.Name &nbsp; &nbsp;</span>
+                    }
+                    ]
+                </option>
             }
         }
     </select>
@@ -195,9 +210,11 @@ else
         if (firstRender)
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetAllRoles(); // TODO: Remove This
+            await GetAllUsers(); // TODO: Remove This
             authorizeServices.CallBackOnAuthorize += _afterAuthCallBack;
-            await authorizeServices.Authorize(runInTeams: _runInTeams);
+            var result = await authorizeServices.Authorize(runInTeams: _runInTeams);
+            if (!result)
+                NavigationManager.NavigateTo("/login");
         }
     }
 
@@ -219,24 +236,21 @@ else
     }
 
     // TODO: Remove This
-    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
-    private ICollection<RoleVM> _allRoles = new List<RoleVM>();
+    private ICollection<UserDto> _allUsers = new List<UserDto>();
 
-    private async Task RoleSelectionChanged(ChangeEventArgs e)
+    private async Task UsersSelectionChanged(ChangeEventArgs e)
     {
         isLoading = true;
-        var selectRoleId = Convert.ToInt32(e.Value);
-        await authorizeServices.Authorize(selectRoleId, _runInTeams);
-        _sharedAuthData.DefaultRoleName = _allRoles.FirstOrDefault(r => r.Id == selectRoleId).Name;
+        var selectUserId = Convert.ToInt32(e.Value);
+        await authorizeServices.Authorize(selectUserId, _runInTeams);
         isLoading = false;
         StateHasChanged();
     }
 
-    private async Task GetAllRoles()
+    private async Task GetAllUsers()
     {
-        var rolesDtos = await DataProvider.Roles.GetAll();
-        var roles = Mapper.Map<List<RoleVM>>(rolesDtos);
-        _allRoles.Clear();
-        roles.ForEach(_allRoles.Add);
+        var users = await DataProvider.Users.GetAllWithRoles();
+        _allUsers.Clear();
+        users.ToList().ForEach(_allUsers.Add);
     }
 }
