@@ -136,7 +136,10 @@ else
                                                     <th scope="col" class="sticky-header">Work Package Declared Completed</th>
                                                     <th scope="col" class="sticky-header">Estimated Hours Completed</th>
                                                     <th scope="col" class="sticky-header">Deadline</th>
-                                                    <th scope="col" class="sticky-header">Issue</th>
+                                                    @if (isWorkingMode)
+                                                    {
+                                                        <th scope="col" class="sticky-header">Issue</th>
+                                                    }
                                                     @if (isWorkingMode && AssignPm)
                                                     {
                                                         <th scope="col">PM</th>
@@ -180,14 +183,17 @@ else
                                                             <label>@project.DeadlineDisplay</label>
                                                         </td>
 
-                                                        <td class="align-middle
-                                                            @((_selectedProject == null ||
+                                                        @if (isWorkingMode)
+                                                        {
+                                                            <td class="align-middle
+                                                                @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
-                                                            <span class="majesticons--chat-2-text"
-                                                                  @onclick="@OnAddComplainClick">
-                                                            </span>
-                                                        </td>
+                                                                <span class="majesticons--chat-2-text"
+                                                                      @onclick="@OnAddComplainClick">
+                                                                </span>
+                                                            </td>
+                                                        }
 
                                                         @if (isWorkingMode && AssignPm)
                                                         {

@@ -46,6 +46,18 @@
 				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456"
 			},
 			"distributionName": ""
+		},
+		"Microsoft Teams (browser)": {
+			"commandName": "Project",
+			"dotnetRunMessages": true,
+			"launchBrowser": true,
+			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+			"applicationUrl": "https://localhost:44302;http://localhost:2544",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456"
+			},
+			"hotReloadProfile": "aspnetcore"
 		}
 	}
 }
