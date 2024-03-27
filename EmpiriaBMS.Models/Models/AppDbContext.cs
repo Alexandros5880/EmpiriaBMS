@@ -14,8 +14,8 @@ public class AppDbContext : DbContext
 
     //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
     const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
-    //const string azureDB = "Server=tcp:empiriabms.database.windows.net,1433;Initial Catalog=EmpiriaBMS_DB;Persist Security Info=False;User ID=alexandros5880;Password=-Plat123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-    const string migrationsDB = localhostDB;
+    const string azure_staging_DB = "Data Source=empiriabms-staging.database.windows.net;Initial Catalog=EmpiriaBMS-Staging;User Id=admin-user;Password=!@#$123456asdfgh";
+    const string migrationsDB = azure_staging_DB;
 
 
     public DbSet<User> Users { get; set; }
