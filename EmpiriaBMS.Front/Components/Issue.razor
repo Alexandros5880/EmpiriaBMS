@@ -3,11 +3,13 @@
 @using EmpiriaBMS.Core.Config;
 @using EmpiriaBMS.Core.Dtos;
 @using System.Text.Json;
+@using EmpiriaBMS.Front.Services
 
 @inject IMapper Mapper
 @inject IDataProvider DataProvider
+@inject SharedAuthDataService _sharedAuthData
 
-<div class="h-100" style="max-height: 700px; overflow-y: auto; overflow-x: hidden;">
+<div class="h-100" style="max-height: 700px; max-height: 694px; overflow-y: auto; overflow-x: hidden;">
     <h3>Create Issue</h3>
 
     <EditForm Model="@_issue">

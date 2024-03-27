@@ -64,6 +64,9 @@ public partial class Issue : ComponentBase, IDisposable
 
     public async Task HandleValidSubmit()
     {
+        //TODO: Setup Visible Users
+
+
         _issue.VerificatorSignature = await verificatorSignature.GetImageData();
         _issue.PMSignature = await pMSignature.GetImageData();
         _issue.ProjectId = _project.Id;
