@@ -45,6 +45,32 @@ public class IssueVM : BaseVM
         }
     }
 
+    private int _roleId;
+    public int RoleId
+    {
+        get => _roleId;
+        set
+        {
+            if (value == _roleId)
+                return;
+            _roleId = value;
+            NotifyPropertyChanged(nameof(RoleId));
+        }
+    }
+
+    private Role _role;
+    public Role Role
+    {
+        get => _role;
+        set
+        {
+            if (value == _role)
+                return;
+            _role = value;
+            NotifyPropertyChanged(nameof(Role));
+        }
+    }
+
     private string _about;
     public string About
     {

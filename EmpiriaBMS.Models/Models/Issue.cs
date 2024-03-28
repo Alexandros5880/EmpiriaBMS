@@ -15,6 +15,9 @@ public class Issue : Entity
     public int ProjectId { get; set; }
     public Project? Project { get; set; }
 
+    public int RoleId { get; set; }
+    public Role Role { get; set; }
+
     public string About { get; set; }
 
     public string Description { get; set; }

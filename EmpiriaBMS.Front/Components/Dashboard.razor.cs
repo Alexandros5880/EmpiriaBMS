@@ -143,6 +143,10 @@ public partial class Dashboard : IDisposable
     private FluentDialog _addEditPaymentDialog;
     private bool _isAddEditPaymentDialogOdepened = false;
     private PaymentDetailed paymentCompoment;
+
+    // On Add/Edit Payment Dialog
+    private FluentDialog _displayIssuesDialog;
+    private bool _isDisplayIssuesDialogOdepened = false;
     #endregion
 
     protected override void OnInitialized()
@@ -857,6 +861,23 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
+    #region Display Issues
+    private void OpenIssuesClick()
+    {
+        _displayIssuesDialog.Show();
+        _isDisplayIssuesDialogOdepened = true;
+    }
+
+    private void CloseIssuesClick()
+    {
+        if (_isAddEditPaymentDialogOdepened)
+        {
+            _displayIssuesDialog.Hide();
+            _isDisplayIssuesDialogOdepened = false;
+        }
+    }
+    #endregion
+
     #region Drawings Assign Actions (Deliverable Assign)
     private async Task OnDrawingAssignClick(DrawingVM draw)
     {
@@ -996,7 +1017,9 @@ public partial class Dashboard : IDisposable
     #region Add Complain Actions
     private void OnAddComplainClick()
     {
+        _startLoading = true;
         issueCompoment.Refresh();
+        _startLoading = false;
         _addIssueDialog.Show();
         _isAddIssueDialogOdepened = true;
     }

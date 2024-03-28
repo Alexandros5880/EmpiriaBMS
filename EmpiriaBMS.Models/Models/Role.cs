@@ -30,4 +30,6 @@ public class Role : Entity
     public ICollection<UserRole> UserRoles { get; set; }
 
     public ICollection<RolePermission> RolesPermissions { get; set; }
+
+    public ICollection<Issue> Issues { get; set; }
 }

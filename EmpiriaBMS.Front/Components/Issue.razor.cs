@@ -66,7 +66,7 @@ public partial class Issue : ComponentBase, IDisposable
     {
         // TODO: Setup Visible Users
         var parentRole = _sharedAuthData.LoggedUserParentRole;
-
+        _issue.RoleId = parentRole.Id;
         _issue.VerificatorSignature = await verificatorSignature.GetImageData();
         _issue.PMSignature = await pMSignature.GetImageData();
         _issue.ProjectId = _project.Id;

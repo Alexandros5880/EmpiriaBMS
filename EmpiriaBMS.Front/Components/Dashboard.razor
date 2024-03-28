@@ -85,12 +85,20 @@ else
                                     @if (SeeMyHours)
                                     {
                                         <div class="col-lg-3 col-md-4 col-sm-4
-                                                row primary-bg-color rounded-1 text-center"
+                                                    d-flex justify-content-between"
                                              style="max-height: 70px !important;">
-                                            <span class="mt-3 h5">
-                                                <span>My Total Hours This Month: </span>
-                                                <b>@_userTotalHoursThisMonth</b>
+
+                                            <span class="issue mt-3"
+                                                  @onclick="@(() => OpenIssuesClick())">
                                             </span>
+
+                                            <div class="primary-bg-color rounded">
+                                                <span class="h5 text-center m-2">
+                                                    <span class="align-middle">My Total Hours This Month: </span>
+                                                    <b class="align-middle">@_userTotalHoursThisMonth</b>
+                                                </span>
+                                            </div>
+                                            
                                         </div>
                                     }
                             
@@ -1096,6 +1104,28 @@ else
             <FluentButton class="col-6" OnClick="@(() => CloseAddPaymentClick())">
                 Cancel
             </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Display Issues Dialog -->
+    <FluentDialog @ref="_displayIssuesDialog"
+                  Hidden="@(!_isDisplayIssuesDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseIssuesClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <h3>Display My Issues</h3>
+            </div>
+
         </div>
 
     </FluentDialog>
