@@ -38,6 +38,12 @@ public static class ModelRelations
                .WithMany(c => c.UserRoles)
                .HasForeignKey(sc => sc.RoleId);
 
+        // Roles Parent And Children
+        builder.Entity<Role>()
+               .HasOne(r => r.ParentRole)
+               .WithMany(r => r.ChildRoles)
+               .HasForeignKey(r => r.ParentRoleId);
+
         // User Emails
         builder.Entity<Email>()
                .HasOne(e => e.User)

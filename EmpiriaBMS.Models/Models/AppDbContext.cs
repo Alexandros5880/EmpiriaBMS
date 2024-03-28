@@ -15,7 +15,7 @@ public class AppDbContext : DbContext
     //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
     const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
     const string azure_staging_DB = "Data Source=empiriabms-staging.database.windows.net;Initial Catalog=EmpiriaBMS-Staging;User Id=admin-user;Password=!@#$123456asdfgh";
-    const string migrationsDB = azure_staging_DB;
+    const string migrationsDB = localhostDB;
 
 
     public DbSet<User> Users { get; set; }
@@ -38,7 +38,7 @@ public class AppDbContext : DbContext
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<Issue> Complains { get; set; }
+    public DbSet<Issue> Issues { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -257,71 +257,6 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Roles
-        // Designer
-        var role_1_id = random.Next(123456789, 999999999);
-        Role role_1 = new()
-        {
-            Id = role_1_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Designer",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_1);
-
-        // Engineer
-        var role_2_id = random.Next(123456789, 999999999);
-        Role role_2 = new()
-        {
-            Id = role_2_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Engineer",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_2);
-
-        // Project Manager
-        var role_3_id = random.Next(123456789, 999999999);
-        Role role_3 = new()
-        {
-            Id = role_3_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Project Manager",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_3);
-
-        // COO
-        var role_4_id = random.Next(123456789, 999999999);
-        Role role_4 = new()
-        {
-            Id = role_4_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "COO",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_4);
-
-        // CTO
-        var role_5_id = random.Next(123456789, 999999999);
-        Role role_5 = new()
-        {
-            Id = role_5_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "CTO",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_5);
-
         // CEO
         var role_6_id = random.Next(123456789, 999999999);
         Role role_6 = new()
@@ -334,6 +269,90 @@ public class AppDbContext : DbContext
             IsEditable = false
         };
         builder.Entity<Role>().HasData(role_6);
+
+        // COO
+        var role_4_id = random.Next(123456789, 999999999);
+        Role role_4 = new()
+        {
+            Id = role_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "COO",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_6_id
+        };
+        builder.Entity<Role>().HasData(role_4);
+
+        // CTO
+        var role_5_id = random.Next(123456789, 999999999);
+        Role role_5 = new()
+        {
+            Id = role_5_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "CTO",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_4_id
+        };
+        builder.Entity<Role>().HasData(role_5);
+
+        // Secretariat
+        var role_10_id = random.Next(123456789, 999999999);
+        Role role_10 = new()
+        {
+            Id = role_10_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Secretariat",
+            IsEmployee = false,
+            IsEditable = false,
+            ParentRoleId = role_5_id
+        };
+        builder.Entity<Role>().HasData(role_10);
+
+        // Project Manager
+        var role_3_id = random.Next(123456789, 999999999);
+        Role role_3 = new()
+        {
+            Id = role_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Project Manager",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_5_id
+        };
+        builder.Entity<Role>().HasData(role_3);
+
+        // Engineer
+        var role_2_id = random.Next(123456789, 999999999);
+        Role role_2 = new()
+        {
+            Id = role_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Engineer",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_3_id
+        };
+        builder.Entity<Role>().HasData(role_2);
+
+        // Designer
+        var role_1_id = random.Next(123456789, 999999999);
+        Role role_1 = new()
+        {
+            Id = role_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Designer",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_2_id
+        };
+        builder.Entity<Role>().HasData(role_1);
 
         // Guest
         var role_7_id = random.Next(123456789, 999999999);
@@ -373,19 +392,6 @@ public class AppDbContext : DbContext
             IsEditable = false
         };
         builder.Entity<Role>().HasData(role_9);
-
-        // Secretariat
-        var role_10_id = random.Next(123456789, 999999999);
-        Role role_10 = new()
-        {
-            Id = role_10_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Secretariat",
-            IsEmployee = false,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_10);
         #endregion
 
         #region Create Prmissions Roles Connection
