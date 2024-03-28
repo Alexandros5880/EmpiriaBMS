@@ -6,32 +6,6 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class IssueVM : BaseVM
 {
-    private int _customerId;
-    public int CustomerId
-    {
-        get => _customerId;
-        set
-        {
-            if (value == _customerId)
-                return;
-            _customerId = value;
-            NotifyPropertyChanged(nameof(CustomerId));
-        }
-    }
-
-    private User _customer;
-    public User Customer
-    {
-        get => _customer;
-        set
-        {
-            if (value == _customer)
-                return;
-            _customer = value;
-            NotifyPropertyChanged(nameof(Customer));
-        }
-    }
-
     private DateTime _complaintDate;
     public DateTime ComplaintDate
     {
@@ -172,32 +146,6 @@ public class IssueVM : BaseVM
                 return;
             _verificatorSignature = value;
             NotifyPropertyChanged(nameof(VerificatorSignature));
-        }
-    }
-
-    private int _projectManagerId;
-    public int ProjectManagerId
-    {
-        get => _projectManagerId;
-        set
-        {
-            if (value == _projectManagerId)
-                return;
-            _projectManagerId = value;
-            NotifyPropertyChanged(nameof(ProjectManagerId));
-        }
-    }
-
-    private User _projectManager;
-    public User ProjectManager
-    {
-        get => _projectManager;
-        set
-        {
-            if (value == _projectManager)
-                return;
-            _projectManager = value;
-            NotifyPropertyChanged(nameof(ProjectManager));
         }
     }
 

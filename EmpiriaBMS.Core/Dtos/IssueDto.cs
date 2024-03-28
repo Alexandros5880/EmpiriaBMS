@@ -11,13 +11,10 @@ namespace EmpiriaBMS.Core.Dtos;
 
 public class IssueDto : EntityDto
 {
-    public int CustomerId { get; set; }
-    public User Customer { get; set; }
-
     public DateTime ComplaintDate { get; set; }
 
     public int ProjectId { get; set; }
-    public Project Project { get; set; }
+    public Project? Project { get; set; }
 
     public string About { get; set; }
 
@@ -34,9 +31,6 @@ public class IssueDto : EntityDto
     public DateTime VerificationDate { get; set; }
 
     public byte[] VerificatorSignature { get; set; }
-
-    public int ProjectManagerId { get; set; }
-    public User ProjectManager { get; set; }
 
     public byte[] PMSignature { get; set; }
 

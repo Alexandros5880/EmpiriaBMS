@@ -64,14 +64,12 @@ public partial class Issue : ComponentBase, IDisposable
 
     public async Task HandleValidSubmit()
     {
-        //TODO: Setup Visible Users
-
+        // TODO: Setup Visible Users
+        var parentRole = _sharedAuthData.LoggedUserParentRole;
 
         _issue.VerificatorSignature = await verificatorSignature.GetImageData();
         _issue.PMSignature = await pMSignature.GetImageData();
         _issue.ProjectId = _project.Id;
-        _issue.CustomerId = _customer.Id;
-        _issue.ProjectManagerId = _project.ProjectManager.Id;
 
         // TODO: Validate And Save Complain
         if (_issue.ComplaintDate <= DateTime.Now.AddDays(-1) || _issue.ComplaintDate == null)
