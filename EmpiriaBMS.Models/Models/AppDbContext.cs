@@ -257,6 +257,18 @@ public class AppDbContext : DbContext
                 Ord = 16
             };
             builder.Entity<Permission>().HasData(per_16);
+
+            // Dashboard See KPIS
+            var per_17_id = random.Next(123456789, 999999999);
+            Permission per_17 = new Permission()
+            {
+                Id = per_17_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Dashboard See KPIS",
+                Ord = 17
+            };
+            builder.Entity<Permission>().HasData(per_17);
             #endregion
 
             #region Roles
@@ -825,6 +837,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_65);
 
+            // CTO || Dashboard See KPIS
+            RolePermission rp_66 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_17_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_66);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -959,6 +982,16 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_62);
 
+            // CEO || Dashboard See KPIS
+            RolePermission rp_67 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_17_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_67);
 
             // Guest
             // Guest || See Dashboard Layout
