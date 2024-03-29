@@ -2,7 +2,7 @@
 @import "variables";
 
 :root {
-    --warning: #ffc107;
+    --warning: #ffcc00;
     --main-bg-color: #f5f5f5;
     --selected_1-row-bg-color: rgba(209, 231, 221, 0.5);
     --selected_2-row-bg-color: rgba(248,215,218, 0.5);

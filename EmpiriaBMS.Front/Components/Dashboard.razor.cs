@@ -870,7 +870,7 @@ public partial class Dashboard : IDisposable
 
     private void CloseIssuesClick()
     {
-        if (_isAddEditPaymentDialogOdepened)
+        if (_isDisplayIssuesDialogOdepened)
         {
             _displayIssuesDialog.Hide();
             _isDisplayIssuesDialogOdepened = false;
