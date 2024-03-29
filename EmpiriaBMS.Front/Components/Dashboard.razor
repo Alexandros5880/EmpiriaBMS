@@ -62,59 +62,54 @@ else
                                     </div>
                                 </div>
 
-                                @if (!_isEndWorkDialogOdepened)
-                                {
-
-                                    <!-- Start / Stop Buttons -->
-                                    <div class="col-lg-5 col-md-8 col-sm-8">
-                                        <div class="d-grid">
-                                            @if (EditMyHours)
+                                <!-- Start / Stop Buttons -->
+                                <div class="col-lg-5 col-md-8 col-sm-8">
+                                    <div class="d-grid">
+                                        @if (EditMyHours && !_isEndWorkDialogOdepened)
+                                        {
+                                            @if (isWorkingMode)
                                             {
-                                                @if (isWorkingMode)
-                                                {
-                                                    <button type="button" class="btn btn-danger btn-lg w-50"
-                                                            @onclick="@(async () => await StopWorkClick())">
-                                                        <span>@elapsedTime.ToString(@"hh\:mm\:ss")</span>
-                                                    </button>
-                                                }
-                                                else
-                                                {
-                                                    <button type="button" class="btn btn-success btn-lg w-50"
-                                                            @onclick="@StartWorkClick">
-                                                        Press Work Start
-                                                    </button>
-                                                }
+                                                <button type="button" class="btn btn-danger btn-lg w-50"
+                                                        @onclick="@(async () => await StopWorkClick())">
+                                                    <span>@elapsedTime.ToString(@"hh\:mm\:ss")</span>
+                                                </button>
                                             }
-                                        </div>
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-success btn-lg w-50"
+                                                        @onclick="@StartWorkClick">
+                                                    Press Work Start
+                                                </button>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Issues / Display Hours Passed -->
+                                <div class="col-lg-3 col-md-4 col-sm-4
+                                            d-flex justify-content-between"
+                                        style="max-height: 50px !important;">
+
+                                    <div style="width: 50px;">
+                                        @if (isWorkingMode && _issues.Count > 0)
+                                        {
+                                            <span class="issue mt-2"
+                                                    @onclick="@(() => OpenIssuesClick())">
+                                            </span>
+                                        }
                                     </div>
 
-                                    <!-- Issues / Display Hours Passed -->
                                     @if (SeeMyHours)
                                     {
-                                        <div class="col-lg-3 col-md-4 col-sm-4
-                                                    d-flex justify-content-between"
-                                             style="max-height: 50px !important;">
-
-                                            <div style="width: 50px;">
-                                                @if (_issues.Count > 0)
-                                                {
-                                                    <span class="issue mt-2"
-                                                          @onclick="@(() => OpenIssuesClick())">
-                                                    </span>
-                                                }
+                                        <div class="primary-bg-color rounded float-end">
+                                            <div class="h5 text-center m-2">
+                                                <span class="align-middle">My Total Hours This Month: </span>
+                                                <b class="align-middle">@_userTotalHoursThisMonth</b>
                                             </div>
-
-                                            <div class="primary-bg-color rounded float-end">
-                                                <div class="h5 text-center m-2">
-                                                    <span class="align-middle">My Total Hours This Month: </span>
-                                                    <b class="align-middle">@_userTotalHoursThisMonth</b>
-                                                </div>
-                                            </div>
-                                            
                                         </div>
                                     }
-                            
-                                }
+                                            
+                                </div>
 
                             </div>
                         }
