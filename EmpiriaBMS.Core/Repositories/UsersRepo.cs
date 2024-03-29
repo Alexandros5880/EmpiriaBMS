@@ -712,6 +712,8 @@ public class UsersRepo : Repository<UserDto, User>
 
             var issues = await _context.Set<Issue>()
                                 .Where(i => rolesIds.Contains(i.RoleId))
+                                .Include(i => i.Project)
+                                .Include(i => i.Role)
                                 .ToListAsync();
 
             return Mapping.Mapper.Map<List<Issue>, List<IssueDto>>(issues);

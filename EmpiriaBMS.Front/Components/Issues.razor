@@ -1,2 +1,62 @@
-﻿<h3>Issues</h3>
+﻿<h3>My Issues</h3>
 
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th scope="col">Project</th>
+                <th scope="col">Closed</th>
+                <th scope="col">About</th>
+                <th scope="col">Description</th>
+                <th scope="col">Evaluation</th>
+                <th scope="col">Verification</th>
+                <th scope="col">VerificationDate</th>
+                <th scope="col">Solution</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var issue in Source)
+            {
+                <tr>
+                    <td>
+                        @(Source.IndexOf(issue) + 1)
+                    </td>
+
+                    <td>
+                        <input class="form-check-input big-checkbox" type="checkbox" @bind="issue.IsClose" />
+                    </td>
+
+                    <td>
+                        <label>@(issue.Project?.Name ?? "--")</label>
+                    </td>
+
+                    <td>
+                        <label>@issue.About</label>
+                    </td>
+
+
+                    <td>
+                        <label>@issue.Description</label>
+                    </td>
+
+                    <td>
+                        <label>@issue.Evaluation</label>
+                    </td>
+
+                    <td>
+                        <label>@issue.Verification</label>
+                    </td>
+
+                    <td>
+                        <label>@issue.VerificationDate.ToString("yyyy-MM-dd HH:mm:ss")</label>
+                    </td>
+
+                    <td>
+                        <textarea class="form-control" rows="1" @bind="@issue.Solution"></textarea>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
