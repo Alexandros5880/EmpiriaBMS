@@ -46,7 +46,6 @@ public partial class Dashboard : IDisposable
     // General Fields
     private bool disposedValue;
     bool _startLoading = true;
-    bool _filterLoading = false;
     private double _userTotalHoursThisMonth = 0;
 
     #region Working Timer
@@ -70,6 +69,7 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
+    private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
     #endregion
 
     #region Selected Models
@@ -100,10 +100,14 @@ public partial class Dashboard : IDisposable
     private FluentDialog _addPMDialog;
     private bool _isAddPMDialogOdepened = false;
 
-    // On Add Complain Dialog
+    // On Add Issue Dialog
     private FluentDialog _addIssueDialog;
     private bool _isAddIssueDialogOdepened = false;
-    private Issue issueCompoment;
+    private IssueDetailed issueCompoment;
+
+    // On Add/Edit Issues Dialog
+    private FluentDialog _displayIssuesDialog;
+    private bool _isDisplayIssuesDialogOdepened = false;
 
     // On Add Project Dialog
     private FluentDialog _addEditProjectDialog;
@@ -159,24 +163,39 @@ public partial class Dashboard : IDisposable
 
         if (firstRender)
         {
-            //_runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetUserTotalHoursThisMonth();
-            await _getProjects();
-            _startLoading = false;
-            StateHasChanged();
+            var runInTeams = await MicrosoftTeams.IsInTeams();
+
+            await Refresh();
         }
     }
 
     public async Task Refresh()
     {
         _startLoading = true;
-        await GetUserTotalHoursThisMonth();
+        await _getUserTotalHoursThisMonth();
+        await _getIssues();
         await _getProjects();
         _startLoading = false;
         StateHasChanged();
     }
 
     #region Get Records
+    private async Task _getIssues()
+    {
+        try
+        {
+            var issuesDtos = await DataProvider.Users.GetOpenIssues((int)_sharedAuthData.LogedUser.Id);
+            var issuesVms = Mapper.Map<List<IssueVM>>(issuesDtos);
+            _issues.Clear();
+            issuesVms.ForEach(_issues.Add);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     private async Task _getInvoice()
     {
         try
@@ -216,7 +235,7 @@ public partial class Dashboard : IDisposable
         }
     }
 
-    private async Task GetUserTotalHoursThisMonth()
+    private async Task _getUserTotalHoursThisMonth()
     {
         _userTotalHoursThisMonth = await DataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
     }
@@ -231,7 +250,6 @@ public partial class Dashboard : IDisposable
         _draws.Clear();
         _others.Clear();
 
-        _filterLoading = !_startLoading ? true : _filterLoading;
         try
         {
             // Todo: Find a way to add this in to PaginatorVM
@@ -262,7 +280,6 @@ public partial class Dashboard : IDisposable
             // TODO: Log Error
         }
         _startLoading = false;
-        _filterLoading = !_startLoading ? false : _filterLoading;
     }
 
     private async Task _getDesigners()
@@ -842,7 +859,7 @@ public partial class Dashboard : IDisposable
         // Clear Timer From this User
         TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
-        await GetUserTotalHoursThisMonth();
+        await _getUserTotalHoursThisMonth();
 
         _startLoading = false;
     }
@@ -993,15 +1010,17 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Add Complain Actions
-    private void OnAddComplainClick()
+    #region Add Issue Actions
+    private void OnAddIssueClick()
     {
+        _startLoading = true;
         issueCompoment.Refresh();
+        _startLoading = false;
         _addIssueDialog.Show();
         _isAddIssueDialogOdepened = true;
     }
 
-    private void CloseAddComplainClick()
+    private void CloseAddIssueClick()
     {
         if (_isAddIssueDialogOdepened)
         {
@@ -1021,6 +1040,24 @@ public partial class Dashboard : IDisposable
     {
         _addIssueDialog.Hide();
         _isAddIssueDialogOdepened = false;
+    }
+    #endregion
+
+    #region Display Issues
+    private void OpenIssuesClick()
+    {
+        _displayIssuesDialog.Show();
+        _isDisplayIssuesDialogOdepened = true;
+    }
+
+    private async Task CloseIssuesClick()
+    {
+        if (_isDisplayIssuesDialogOdepened)
+        {
+            _displayIssuesDialog.Hide();
+            _isDisplayIssuesDialogOdepened = false;
+            await _getIssues();
+        }
     }
     #endregion
 

@@ -6,32 +6,6 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class IssueVM : BaseVM
 {
-    private int _customerId;
-    public int CustomerId
-    {
-        get => _customerId;
-        set
-        {
-            if (value == _customerId)
-                return;
-            _customerId = value;
-            NotifyPropertyChanged(nameof(CustomerId));
-        }
-    }
-
-    private User _customer;
-    public User Customer
-    {
-        get => _customer;
-        set
-        {
-            if (value == _customer)
-                return;
-            _customer = value;
-            NotifyPropertyChanged(nameof(Customer));
-        }
-    }
-
     private DateTime _complaintDate;
     public DateTime ComplaintDate
     {
@@ -58,8 +32,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private Project _project;
-    public Project Project
+    private Project? _project;
+    public Project? Project
     {
         get => _project;
         set
@@ -68,6 +42,58 @@ public class IssueVM : BaseVM
                 return;
             _project = value;
             NotifyPropertyChanged(nameof(Project));
+        }
+    }
+
+    private int _roleId;
+    public int RoleId
+    {
+        get => _roleId;
+        set
+        {
+            if (value == _roleId)
+                return;
+            _roleId = value;
+            NotifyPropertyChanged(nameof(RoleId));
+        }
+    }
+
+    private Role? _role;
+    public Role? Role
+    {
+        get => _role;
+        set
+        {
+            if (value == _role)
+                return;
+            _role = value;
+            NotifyPropertyChanged(nameof(Role));
+        }
+    }
+
+    private int _creatorId;
+    public int CreatorId
+    {
+        get => _creatorId;
+        set
+        {
+            if (value == _creatorId)
+                return;
+            _creatorId = value;
+            NotifyPropertyChanged(nameof(CreatorId));
+        }
+    }
+
+    private User? _creator;
+    public User? Creator
+    {
+        get => _creator;
+        set
+        {
+            if (value == _creator)
+                return;
+            _creator = value;
+            NotifyPropertyChanged(nameof(Creator));
         }
     }
 
@@ -97,8 +123,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string _solution;
-    public string Solution
+    private string? _solution;
+    public string? Solution
     {
         get => _solution;
         set
@@ -110,8 +136,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private DateTime _solutionDate;
-    public DateTime SolutionDate
+    private DateTime? _solutionDate;
+    public DateTime? SolutionDate
     {
         get => _solutionDate;
         set
@@ -123,8 +149,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string _evaluation;
-    public string Evaluation
+    private string? _evaluation;
+    public string? Evaluation
     {
         get => _evaluation;
         set
@@ -136,8 +162,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string _verification;
-    public string Verification
+    private string? _verification;
+    public string? Verification
     {
         get => _verification;
         set
@@ -149,8 +175,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private DateTime _verificationDate;
-    public DateTime VerificationDate
+    private DateTime? _verificationDate;
+    public DateTime? VerificationDate
     {
         get => _verificationDate;
         set
@@ -162,8 +188,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private byte[] _verificatorSignature;
-    public byte[] VerificatorSignature
+    private byte[]? _verificatorSignature;
+    public byte[]? VerificatorSignature
     {
         get => _verificatorSignature;
         set
@@ -175,34 +201,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private int _projectManagerId;
-    public int ProjectManagerId
-    {
-        get => _projectManagerId;
-        set
-        {
-            if (value == _projectManagerId)
-                return;
-            _projectManagerId = value;
-            NotifyPropertyChanged(nameof(ProjectManagerId));
-        }
-    }
-
-    private User _projectManager;
-    public User ProjectManager
-    {
-        get => _projectManager;
-        set
-        {
-            if (value == _projectManager)
-                return;
-            _projectManager = value;
-            NotifyPropertyChanged(nameof(ProjectManager));
-        }
-    }
-
-    private byte[] _pMSignature;
-    public byte[] PMSignature
+    private byte[]? _pMSignature;
+    public byte[]? PMSignature
     {
         get => _pMSignature;
         set

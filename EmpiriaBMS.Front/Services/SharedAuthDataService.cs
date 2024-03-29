@@ -8,6 +8,7 @@ public class SharedAuthDataService
 {
     public UserInfo TeamsLogedUser { get; set; }
     public ICollection<RoleVM> LoggedUserRoles { get; set; } = new List<RoleVM>();
+    public RoleVM LoggedUserParentRole { get; set; } = null;
     public ICollection<PermissionDto> Permissions { get; set; } = new List<PermissionDto>();
     public ICollection<int> PermissionOrds { get; set; } = new List<int>();
     public UserVM LogedUser { get; set; }

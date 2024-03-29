@@ -43,7 +43,8 @@ public class AuthorizeServices
             _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
                                                     .Select(r => _mapper.Map<RoleVM>(r))
                                                     .ToList();
-
+            var parentRole = await _dataProvider.Roles.GetParentRole(logedUser.Id);
+            _sharedAuthData.LoggedUserParentRole = _mapper.Map<RoleVM>(parentRole);
             _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
                                                     .ToList();
             _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
@@ -68,7 +69,8 @@ public class AuthorizeServices
                 _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
                                                         .Select(r => _mapper.Map<RoleVM>(r))
                                                         .ToList();
-
+                var parentRole = await _dataProvider.Roles.GetParentRole(logedUser.Id);
+                _sharedAuthData.LoggedUserParentRole = _mapper.Map<RoleVM>(parentRole);
                 _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
                                                         .ToList();
                 _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
@@ -106,7 +108,8 @@ public class AuthorizeServices
             _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
                                                     .Select(r => _mapper.Map<RoleVM>(r))
                                                     .ToList();
-
+            var parentRole = await _dataProvider.Roles.GetParentRole(logedUser.Id);
+            _sharedAuthData.LoggedUserParentRole = _mapper.Map<RoleVM>(parentRole);
             _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
                                                     .ToList();
             _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();

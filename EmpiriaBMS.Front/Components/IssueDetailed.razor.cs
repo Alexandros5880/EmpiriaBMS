@@ -3,14 +3,15 @@ using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using System.Text.Json;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Front.Components.General;
 using System.ComponentModel;
+using EmpiriaBMS.Front.Components.General;
 
 namespace EmpiriaBMS.Front.Components;
 
-public partial class Issue : ComponentBase, IDisposable
+public partial class IssueDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
+
     private ProjectVM _project;
     [Parameter]
     public ProjectVM Project
@@ -26,6 +27,9 @@ public partial class Issue : ComponentBase, IDisposable
             }
         }
     }
+
+    [Parameter]
+    public bool DisplayBaseInfo { get; set; }
 
     private UserVM _customer;
 
@@ -64,58 +68,25 @@ public partial class Issue : ComponentBase, IDisposable
 
     public async Task HandleValidSubmit()
     {
-        //TODO: Setup Visible Users
-
-
-        _issue.VerificatorSignature = await verificatorSignature.GetImageData();
-        _issue.PMSignature = await pMSignature.GetImageData();
+        // TODO: Setup Visible Users
+        var parentRole = _sharedAuthData.LoggedUserParentRole;
+        _issue.RoleId = parentRole.Id;
+        _issue.VerificatorSignature = verificatorSignature != null ? await verificatorSignature.GetImageData() : null;
+        _issue.PMSignature = pMSignature != null ? await pMSignature.GetImageData() : null;
         _issue.ProjectId = _project.Id;
-        _issue.CustomerId = _customer.Id;
-        _issue.ProjectManagerId = _project.ProjectManager.Id;
+        _issue.CreatorId = _sharedAuthData.LogedUser.Id;
+        _issue.IsClose = false;
 
-        // TODO: Validate And Save Complain
-        if (_issue.ComplaintDate <= DateTime.Now.AddDays(-1) || _issue.ComplaintDate == null)
+        try
         {
-
+            var dto = Mapper.Map<IssueDto>(_issue);
+            await DataProvider.Issues.Add(dto);
         }
-        if (string.IsNullOrEmpty(_issue.About))
+        catch (Exception ex)
         {
-
+            Console.WriteLine($"Exception IssueDetailed.HandleValidSubmit() \"await DataProvider.Issues.Add(dto);\" \n Exception: {ex.Message}  ->  \n InnerException: ");
+            Console.Write(ex.InnerException.Message);
         }
-        if (string.IsNullOrEmpty(_issue.Description))
-        {
-
-        }
-        if (string.IsNullOrEmpty(_issue.Solution))
-        {
-
-        }
-        if (_issue.SolutionDate <= DateTime.Now.AddDays(-1) || _issue.SolutionDate == null)
-        {
-
-        }
-        if (string.IsNullOrEmpty(_issue.Evaluation))
-        {
-
-        }
-        if (string.IsNullOrEmpty(_issue.Verification))
-        {
-
-        }
-        if (_issue.VerificationDate <= DateTime.Now.AddDays(-1) || _issue.VerificationDate == null)
-        {
-
-        }
-        if (_issue.VerificatorSignature.Length == 0)
-        {
-
-        }
-        if (_issue.PMSignature.Length == 0)
-        {
-
-        }
-
-        await DataProvider.Issues.Add(Mapper.Map<IssueDto>(_issue));
     }
 
     protected virtual void Dispose(bool disposing)

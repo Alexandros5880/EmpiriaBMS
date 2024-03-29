@@ -147,6 +147,70 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
+    public async Task<RoleDto> GetParentRole(int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var rolesIds = await _context.Set<UserRole>()
+                                 .Where(ur => ur.UserId == userId)
+                                 .Include(ur => ur.Role)
+                                 .Select(ur => ur.RoleId)
+                                 .ToListAsync();
+
+            var parentRolesids = await _context.Set<Role>()
+                                            .Where(r => rolesIds.Contains(r.Id))
+                                            .Select(r => r.ParentRoleId)
+                                            .ToListAsync();
+
+            // Use Distinct to get unique parent role ids
+            var distinctParentRoleIds = parentRolesids.Distinct();
+
+
+
+            var parentRoles = await _context.Set<Role>()
+                                            .Where(r => distinctParentRoleIds.Contains(r.Id))
+                                            .Include(r => r.ParentRole)
+                                            .Select(r => r.ParentRole)
+                                            .Where(r => r != null)
+                                            .ToListAsync();
+
+
+            if (parentRoles.Any(r => r.ParentRoleId == null))
+                return Mapping.Mapper.Map<RoleDto>(parentRoles.FirstOrDefault(r => r.ParentRoleId == null));
+
+            // TODO: RolesRepo.GetParentRole -> Get The Most Paowerfull Role!
+                                    ///
+
+            // Returns the parrent roles with the most permissions
+            var rolesPermissions = await _context.Set<RolePermission>()
+                                             .Where(rp => distinctParentRoleIds.Contains(rp.RoleId))
+                                             .ToListAsync();
+
+            // Group RolePermissions by RoleId
+            var rolePermissionsGrouped = rolesPermissions.GroupBy(rp => rp.RoleId);
+
+            Role parentRole = null;
+            int permisionsCount = 0;
+
+            // Iterate over groups and map permissions to roles
+            foreach (var group in rolePermissionsGrouped)
+            {
+                var roleId = group.Key;
+                var role = await _context.Set<Role>().FirstOrDefaultAsync(r => r.Id == roleId);
+                var permissions = group.Select(rp => rp.Permission).ToList();
+
+                if (permisionsCount < permissions.Count)
+                {
+                    permisionsCount = permissions.Count;
+                    parentRole = role;
+                }
+                
+            }
+
+            return Mapping.Mapper.Map<RoleDto>(parentRole);
+        }
+    }
+
     public async Task<ICollection<PermissionDto>> GetPermissions(int userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())

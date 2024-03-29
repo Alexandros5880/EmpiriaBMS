@@ -2,6 +2,7 @@
 @import "variables";
 
 :root {
+    --warning: #ffcc00;
     --main-bg-color: #f5f5f5;
     --selected_1-row-bg-color: rgba(209, 231, 221, 0.5);
     --selected_2-row-bg-color: rgba(248,215,218, 0.5);
@@ -10,6 +11,7 @@
     --hover-row-bg-color: rgb(251, 252, 252);
     --primary-accent-color: #5A5C91;
     --primary-bg-color: rgb(68,71,145, 0.3);
+    --primary-hover-bg-color: rgb(68,71,145, 0.5);
     --primary-hover-bg-color: rgb(68,71,145, 0.5);
 }
 
