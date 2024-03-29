@@ -269,6 +269,66 @@ public class AppDbContext : DbContext
                 Ord = 17
             };
             builder.Entity<Permission>().HasData(per_17);
+
+            // See Hours Per Role KPI
+            var per_18_id = random.Next(123456789, 999999999);
+            Permission per_18 = new Permission()
+            {
+                Id = per_18_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Hours Per Role KPI",
+                Ord = 18
+            };
+            builder.Entity<Permission>().HasData(per_18);
+
+            // See Active Delayed Projects KPI
+            var per_19_id = random.Next(123456789, 999999999);
+            Permission per_19 = new Permission()
+            {
+                Id = per_19_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Active Delayed Projects KPI",
+                Ord = 19
+            };
+            builder.Entity<Permission>().HasData(per_19);
+
+            // See All Projects Missed DeadLine KPI
+            var per_20_id = random.Next(123456789, 999999999);
+            Permission per_20 = new Permission()
+            {
+                Id = per_20_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See All Projects Missed DeadLine KPI",
+                Ord = 20
+            };
+            builder.Entity<Permission>().HasData(per_20);
+
+            // See Employee Turnover KPI
+            var per_21_id = random.Next(123456789, 999999999);
+            Permission per_21 = new Permission()
+            {
+                Id = per_21_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Employee Turnover KPI",
+                Ord = 21
+            };
+            builder.Entity<Permission>().HasData(per_21);
+
+            // See My Projects Missed DeadLine KPI
+            var per_22_id = random.Next(123456789, 999999999);
+            Permission per_22 = new Permission()
+            {
+                Id = per_22_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See My Projects Missed DeadLine KPI",
+                Ord = 22
+            };
+            builder.Entity<Permission>().HasData(per_22);
             #endregion
 
             #region Roles
@@ -580,6 +640,28 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_43);
 
+            // Project Manager || Dashboard See KPIS
+            RolePermission rp_68 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_3_id,
+                PermissionId = per_17_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_68);
+
+            // Project Manager || See My Projects Missed DeadLine KPI
+            RolePermission rp_69 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_3_id,
+                PermissionId = per_22_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_69);
+
 
             // COO
             // COO || See Dashboard Layout
@@ -848,6 +930,39 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_66);
 
+            // CTO || See Hours Per Role KPI
+            RolePermission rp_70 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_18_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_70);
+
+            // CTO || See Active Delayed Projects KPI
+            RolePermission rp_71 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_19_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_71);
+
+            // CTO || See All Projects Missed DeadLine KPI
+            RolePermission rp_72 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_20_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_72);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -992,6 +1107,51 @@ public class AppDbContext : DbContext
                 PermissionId = per_17_id
             };
             builder.Entity<RolePermission>().HasData(rp_67);
+
+            // CEO || See Hours Per Role KPI
+            RolePermission rp_73 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_18_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_73);
+
+            // CEO || See Active Delayed Projects KPI
+            RolePermission rp_74 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_19_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_74);
+
+            // CEO || See All Projects Missed DeadLine KPI
+            RolePermission rp_75 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_20_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_75);
+
+            // CEO || See Employee Turnover KPI
+            RolePermission rp_76 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_21_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_76);
+
 
             // Guest
             // Guest || See Dashboard Layout

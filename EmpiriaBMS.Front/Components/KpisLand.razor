@@ -1,3 +1,124 @@
-﻿<h3>Key Performance Indicators (KPIS)</h3>
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+
+<div class="container-fluid m-2">
+
+    <h3>Key Performance Indicators (KPIS)</h3>
 
 
+    @if (_loading)
+    {
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px;">
+            <FluentProgressRing />
+        </div>
+        @*
+            <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+                <FilterProgressRing FilterLoading="@_startLoading" />
+            </div>
+        *@
+    }
+    else {
+        <div class="row">
+
+            <!-- Hours Per Role -->
+            @if (SeeHoursPerRoleKPI)
+            {
+                <div class="col table-responsive">
+                    <table class="table table-hover table-success text-center caption-top">
+                        <caption>Hours per role kpi:</caption>
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>Hours</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in _hoursPerRole)
+                            {
+                                <tr>
+                                    <td>@item.Key</td>
+                                    <td>@item.Value</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <!-- Get active delayed projects -->
+            @if (SeeActiveDelayedProjectsKPI)
+            {
+                <div class="col table-responsive">
+                    <table class="table table-hover table-success text-center caption-top">
+                        <caption>Get active delayed projects kpi:</caption>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Active</th>
+                                <th>Delayed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in _delayedProjects)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.Active</td>
+                                    <td>@_displayTimeMissed(item.DeadLine)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <!-- Employee Turnover -->
+            @if (SeeEmployeeTurnoverKPI)
+            {
+                <div class="col table-responsive">
+                    <table class="table table-hover table-success text-center caption-top">
+                        <caption>Employee turnover kpi:</caption>
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Turnover</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>--</td>
+                                <td>No Ready Yet</td>
+                            </tr>
+                            @* @foreach (var item in _delayedProjects)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.Active</td>
+                                </tr>
+                            } *@
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <!-- Projects missed deadline -->
+            @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
+            {
+                <div class="col row mt-5" style="max-width: 30vw !important;">
+                    <div class="col-11">
+                        <h5>Projects missed deadline: </h5>
+                    </div>
+                    <div class="col-1">
+                        <h6>@_missedDeadLineProject</h6>
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

@@ -185,7 +185,7 @@ public partial class Dashboard : IDisposable
     {
         try
         {
-            var issuesDtos = await DataProvider.Users.GetOpenIssues((int)_sharedAuthData.LogedUser.Id);
+            var issuesDtos = await _dataProvider.Users.GetOpenIssues((int)_sharedAuthData.LogedUser.Id);
             var issuesVms = Mapper.Map<List<IssueVM>>(issuesDtos);
             _issues.Clear();
             issuesVms.ForEach(_issues.Add);
@@ -201,7 +201,7 @@ public partial class Dashboard : IDisposable
     {
         try
         {
-            var dto = await DataProvider.Invoices.Get((int)_selectedProject.InvoiceId);
+            var dto = await _dataProvider.Invoices.Get((int)_selectedProject.InvoiceId);
             _selectedInvoice = Mapper.Map<InvoiceVM>(dto);
         }
         catch (Exception ex)
@@ -215,7 +215,7 @@ public partial class Dashboard : IDisposable
     {
         try
         {
-            var dto = await DataProvider.Payments.Get((int)_selectedProject.PaymentId);
+            var dto = await _dataProvider.Payments.Get((int)_selectedProject.PaymentId);
             _selectedPayment = Mapper.Map<PaymentVM>(dto);
         }
         catch (Exception ex)
@@ -228,17 +228,17 @@ public partial class Dashboard : IDisposable
     private async Task _checkIfHasAnySelections()
     {
         if (_selectedProject != null)
-            _hasDisciplinesSelections = await DataProvider.DisciplinesTypes.HasDisciplineTypesSelections(_selectedProject.Id);
+            _hasDisciplinesSelections = await _dataProvider.DisciplinesTypes.HasDisciplineTypesSelections(_selectedProject.Id);
         if (_selectedDiscipline != null)
         {
-            _hasDrawingsSelections = await DataProvider.DrawingsTypes.HasDrawingTypesSelections(_selectedDiscipline.Id);
-            _hasOthersSelections = await DataProvider.OthersTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
+            _hasDrawingsSelections = await _dataProvider.DrawingsTypes.HasDrawingTypesSelections(_selectedDiscipline.Id);
+            _hasOthersSelections = await _dataProvider.OthersTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
         }
     }
 
     private async Task _getUserTotalHoursThisMonth()
     {
-        _userTotalHoursThisMonth = await DataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
+        _userTotalHoursThisMonth = await _dataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
     }
 
     public async Task _getProjects()
@@ -254,15 +254,15 @@ public partial class Dashboard : IDisposable
         try
         {
             // Todo: Find a way to add this in to PaginatorVM
-            //_paginator.SetRecordsLength(await DataProvider.Projects.Count());
+            //_paginator.SetRecordsLength(await _dataProvider.Projects.Count());
 
             // TODO: Get My Project And Down
-            //List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
+            //List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
             //                                                           .ToList<ProjectDto>();
 
             // Get Projects of last month.
             Expression<Func<EmpiriaMS.Models.Models.Project, bool>> expression = p => p.CreatedDate >= DateTime.Now.AddMonths(-1);
-            List<ProjectDto> projectsDto = (await DataProvider.Projects.GetAll(expression, _sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
+            List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetAll(expression, _sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
@@ -270,7 +270,7 @@ public partial class Dashboard : IDisposable
             _projects.Clear();
             foreach(var p in projectsVm)
             {
-                var pm = await DataProvider.Projects.GetProjectManager(p.Id);
+                var pm = await _dataProvider.Projects.GetProjectManager(p.Id);
                 p.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
                 _projects.Add(p);
             }
@@ -291,12 +291,12 @@ public partial class Dashboard : IDisposable
             if (defaultRoleId == 0)
                 throw new Exception("Exception `Designer` role not exists!");
 
-            var disigners = await DataProvider.Roles.GetUsers(defaultRoleId);
+            var disigners = await _dataProvider.Roles.GetUsers(defaultRoleId);
 
             if (disigners == null)
                 throw new NullReferenceException(nameof(disigners));
 
-            var myDesignersIds = (await DataProvider.Drawings.GetDesigners(_selectedDraw.Id)).Select(d => d.Id);
+            var myDesignersIds = (await _dataProvider.Drawings.GetDesigners(_selectedDraw.Id)).Select(d => d.Id);
 
             var disignersVM = Mapper.Map<List<UserVM>>(disigners);
             _designers.Clear();
@@ -321,12 +321,12 @@ public partial class Dashboard : IDisposable
             if (defaultRoleId == 0)
                 throw new Exception("Exception `Engineer` role not exists!");
 
-            var engineers = await DataProvider.Roles.GetUsers(defaultRoleId);
+            var engineers = await _dataProvider.Roles.GetUsers(defaultRoleId);
 
             if (engineers == null)
                 throw new NullReferenceException(nameof(engineers));
 
-            var myEngineersIds = (await DataProvider.Disciplines.GetEngineers(_selectedDiscipline.Id)).Select(d => d.Id);
+            var myEngineersIds = (await _dataProvider.Disciplines.GetEngineers(_selectedDiscipline.Id)).Select(d => d.Id);
 
             var engineersVM = Mapper.Map<List<UserVM>>(engineers);
             _engineers.Clear();
@@ -351,7 +351,7 @@ public partial class Dashboard : IDisposable
             if (defaultRoleId == 0)
                 throw new Exception("Exception `Project Manager` role not exists!");
 
-            var pms = await DataProvider.Roles.GetUsers(defaultRoleId);
+            var pms = await _dataProvider.Roles.GetUsers(defaultRoleId);
 
             if (pms == null)
                 throw new NullReferenceException(nameof(pms));
@@ -360,7 +360,7 @@ public partial class Dashboard : IDisposable
 
             if (_selectedProject.ProjectManagerId != null && _selectedProject.ProjectManagerId != 0)
             {
-                var myPM = await DataProvider.Projects.GetProjectManager(_selectedProject.Id);
+                var myPM = await _dataProvider.Projects.GetProjectManager(_selectedProject.Id);
                 _selectedPmId = myPM.Id;
             }
 
@@ -380,7 +380,7 @@ public partial class Dashboard : IDisposable
     {
         try
         {
-            var role = await DataProvider.Roles.Get(roleName);
+            var role = await _dataProvider.Roles.Get(roleName);
             return role?.Id ?? 0;
         }
         catch (Exception ex)
@@ -392,16 +392,16 @@ public partial class Dashboard : IDisposable
     }
 
     private long GetProjectMenHours(int projecId) =>
-        DataProvider.Projects.GetMenHours(projecId);
+        _dataProvider.Projects.GetMenHours(projecId);
 
     private long GetDisciplineMenHours(int disciplineId) =>
-        DataProvider.Disciplines.GetMenHours(disciplineId);
+        _dataProvider.Disciplines.GetMenHours(disciplineId);
 
     private long GetDrawingMenHours(int drawingId) =>
-        DataProvider.Drawings.GetMenHours(drawingId);
+        _dataProvider.Drawings.GetMenHours(drawingId);
 
     private long GetOtherMenHours(int otherId) =>
-        DataProvider.Others.GetMenHours(otherId);
+        _dataProvider.Others.GetMenHours(otherId);
     #endregion
 
     #region When Row Selected Update Data
@@ -418,7 +418,7 @@ public partial class Dashboard : IDisposable
         _selectedDraw = null;
         _selectedOther = null;
 
-        var disciplines = await DataProvider.Projects.GetDisciplines(project.Id, _sharedAuthData.LogedUser.Id, getAllDisciplines);
+        var disciplines = await _dataProvider.Projects.GetDisciplines(project.Id, _sharedAuthData.LogedUser.Id, getAllDisciplines);
 
         _disciplines.Clear();
         foreach (var di in disciplines)
@@ -437,8 +437,8 @@ public partial class Dashboard : IDisposable
 
         _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
-        var draws = await DataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, getAllDrawings);
-        var others = await DataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, true);
+        var draws = await _dataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, getAllDrawings);
+        var others = await _dataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, true);
 
         _draws.Clear();
         foreach (var di in draws)
@@ -833,24 +833,24 @@ public partial class Dashboard : IDisposable
                 return;
             }
             else
-                await DataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            await DataProvider.Drawings.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+                await _dataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
+            await _dataProvider.Drawings.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
         }
 
         // Update Others
         foreach (var other in _othersChanged)
         {
-            //await DataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-            await DataProvider.Others.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+            //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
+            await _dataProvider.Others.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
         }
 
         // Update User Hours
         if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-            await DataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
+            await _dataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
         if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-            await DataProvider.Users.AddTraningTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
+            await _dataProvider.Users.AddTraningTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
         if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-            await DataProvider.Users.AddCorporateEventTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+            await _dataProvider.Users.AddCorporateEventTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
 
         _drawsChanged.Clear();
         _othersChanged.Clear();
@@ -904,11 +904,11 @@ public partial class Dashboard : IDisposable
         var forDeleteIds = _designers.Where(d => d.IsSelected == null || d.IsSelected == false)
                                      .Select(d => d.Id)
                                      .ToList();
-        await DataProvider.Drawings.RemoveDesigners(_selectedDraw.Id, forDeleteIds);
+        await _dataProvider.Drawings.RemoveDesigners(_selectedDraw.Id, forDeleteIds);
 
         var forAdd = _designers.Where(d => d.IsSelected == true).ToList();
         var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
-        await DataProvider.Drawings.AddDesigners(_selectedDraw.Id, forAddDto);
+        await _dataProvider.Drawings.AddDesigners(_selectedDraw.Id, forAddDto);
 
         _startLoading = false;
     }
@@ -949,11 +949,11 @@ public partial class Dashboard : IDisposable
         var forDeleteIds = _engineers.Where(d => d.IsSelected == null || d.IsSelected == false)
                                      .Select(d => d.Id)
                                      .ToList();
-        await DataProvider.Disciplines.RemoveEngineers(_selectedDiscipline.Id, forDeleteIds);
+        await _dataProvider.Disciplines.RemoveEngineers(_selectedDiscipline.Id, forDeleteIds);
 
         var forAdd = _engineers.Where(d => d.IsSelected == true).ToList();
         var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
-        await DataProvider.Disciplines.AddEngineers(_selectedDiscipline.Id, forAddDto);
+        await _dataProvider.Disciplines.AddEngineers(_selectedDiscipline.Id, forAddDto);
 
         _startLoading = false;
     }
@@ -997,7 +997,7 @@ public partial class Dashboard : IDisposable
         _startLoading = true;
 
         _selectedProject.ProjectManagerId = _selectedPmId;
-        await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_selectedProject));
+        await _dataProvider.Projects.Update(Mapper.Map<ProjectDto>(_selectedProject));
 
         _startLoading = false;
 
@@ -1292,16 +1292,16 @@ public partial class Dashboard : IDisposable
             switch (_deleteObj)
             {
                 case nameof(_selectedProject):
-                    await DataProvider.Projects.Delete(_selectedProject.Id);
+                    await _dataProvider.Projects.Delete(_selectedProject.Id);
                     break;
                 case nameof(_selectedDiscipline):
-                    await DataProvider.Disciplines.Delete(_selectedDiscipline.Id);
+                    await _dataProvider.Disciplines.Delete(_selectedDiscipline.Id);
                     break;
                 case nameof(_selectedDraw):
-                    await DataProvider.Drawings.Delete(_selectedDraw.Id);
+                    await _dataProvider.Drawings.Delete(_selectedDraw.Id);
                     break;
                 case nameof(_selectedOther):
-                    await DataProvider.Others.Delete(_selectedOther.Id);
+                    await _dataProvider.Others.Delete(_selectedOther.Id);
                     break;
             }
 

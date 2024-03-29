@@ -14,7 +14,7 @@
 @inject IWebHostEnvironment HostEnvironment
 @inject IConfiguration Configuration
 @inject NavigationManager MyNavigationManager
-@inject IDataProvider DataProvider
+@inject IDataProvider _dataProvider
 @inject IMapper Mapper
 @inject TimerService TimerService
 @inject AuthorizeServices authorizeServices
@@ -471,10 +471,11 @@ else
     </div>
 }
 
-<FluentDivider/>
+<FluentDivider />
 
 <!-- KPIS -->
-@if(seeKpis) {
+@if (seeKpis)
+{
     <div class="mt-3">
         <KpisLand />
     </div>
