@@ -70,6 +70,7 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
+    private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
     #endregion
 
     #region Selected Models
@@ -163,24 +164,39 @@ public partial class Dashboard : IDisposable
 
         if (firstRender)
         {
-            //_runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetUserTotalHoursThisMonth();
-            await _getProjects();
-            _startLoading = false;
-            StateHasChanged();
+            var runInTeams = await MicrosoftTeams.IsInTeams();
+
+            await Refresh();
         }
     }
 
     public async Task Refresh()
     {
         _startLoading = true;
-        await GetUserTotalHoursThisMonth();
+        await _getUserTotalHoursThisMonth();
+        await _getIssues();
         await _getProjects();
         _startLoading = false;
         StateHasChanged();
     }
 
     #region Get Records
+    private async Task _getIssues()
+    {
+        try
+        {
+            var issuesDtos = await DataProvider.Users.GetIssues((int)_sharedAuthData.LogedUser.Id);
+            var issuesVms = Mapper.Map<List<IssueVM>>(issuesDtos);
+            _issues.Clear();
+            issuesVms.ForEach(_issues.Add);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     private async Task _getInvoice()
     {
         try
@@ -220,7 +236,7 @@ public partial class Dashboard : IDisposable
         }
     }
 
-    private async Task GetUserTotalHoursThisMonth()
+    private async Task _getUserTotalHoursThisMonth()
     {
         _userTotalHoursThisMonth = await DataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
     }
@@ -846,7 +862,7 @@ public partial class Dashboard : IDisposable
         // Clear Timer From this User
         TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
-        await GetUserTotalHoursThisMonth();
+        await _getUserTotalHoursThisMonth();
 
         _startLoading = false;
     }

@@ -699,4 +699,22 @@ public class UsersRepo : Repository<UserDto, User>
             };
         }
     }
+
+    public async Task<ICollection<IssueDto>> GetIssues(int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var rolesIds = await _context.Set<UserRole>()
+                                 .Where(ur => ur.UserId == userId)
+                                 .Include(ur => ur.Role)
+                                 .Select(ur => ur.RoleId)
+                                 .ToListAsync();
+
+            var issues = await _context.Set<Issue>()
+                                .Where(i => rolesIds.Contains(i.RoleId))
+                                .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Issue>, List<IssueDto>>(issues);
+        }
+    }
 }

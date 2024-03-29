@@ -81,18 +81,21 @@ else
                                         </div>
                                     </div>
 
-                                    <!-- Display Hours Passed -->
+                                    <!-- Issues / Display Hours Passed -->
                                     @if (SeeMyHours)
                                     {
                                         <div class="col-lg-3 col-md-4 col-sm-4
                                                     d-flex justify-content-between"
                                              style="max-height: 50px !important;">
 
-                                            <span class="issue mt-2"
-                                                  @onclick="@(() => OpenIssuesClick())">
-                                            </span>
+                                            @if (_issues.Count > 0)
+                                            {
+                                                <span class="issue mt-2"
+                                                      @onclick="@(() => OpenIssuesClick())">
+                                                </span>
+                                            }
 
-                                            <div class="primary-bg-color rounded">
+                                            <div class="primary-bg-color rounded float-end">
                                                 <div class="h5 text-center m-2">
                                                     <span class="align-middle">My Total Hours This Month: </span>
                                                     <b class="align-middle">@_userTotalHoursThisMonth</b>
