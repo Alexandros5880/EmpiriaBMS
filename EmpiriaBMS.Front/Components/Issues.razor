@@ -1,4 +1,9 @@
-﻿<h3>My Issues</h3>
+﻿@using EmpiriaBMS.Front.Services
+
+@inject IMapper Mapper
+@inject IDataProvider DataProvider
+
+<h3>My Issues</h3>
 
 <div>
     <table class="table table-hover">
@@ -12,6 +17,7 @@
                 <th scope="col">Evaluation</th>
                 <th scope="col">Verification</th>
                 <th scope="col">VerificationDate</th>
+                <th scope="col">Solution Date</th>
                 <th scope="col">Solution</th>
             </tr>
         </thead>
@@ -49,14 +55,29 @@
                     </td>
 
                     <td>
-                        <label>@issue.VerificationDate.ToString("yyyy-MM-dd HH:mm:ss")</label>
+                        <label>@issue.VerificationDate?.ToString("yyyy-MM-dd HH:mm:ss")</label>
                     </td>
 
                     <td>
-                        <textarea class="form-control" rows="1" @bind="@issue.Solution"></textarea>
+                        <label>@issue.SolutionDate?.ToString("yyyy-MM-dd HH:mm:ss")</label>
+                    </td>
+
+                    <td>
+                        <textarea class="form-control"
+                                  rows="1"
+                                  @bind="@issue.Solution"
+                                  style="min-width: 200px;">
+                        </textarea>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <div class="d-flex flex-row-reverse bd-highlight">
+        <button type="button" class="btn btn-light" @onclick=@(async () => await HandleValidSubmit())>
+            Save
+        </button>
+    </div>
+
 </div>

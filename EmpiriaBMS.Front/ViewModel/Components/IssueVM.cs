@@ -32,8 +32,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private Project _project;
-    public Project Project
+    private Project? _project;
+    public Project? Project
     {
         get => _project;
         set
@@ -58,8 +58,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private Role _role;
-    public Role Role
+    private Role? _role;
+    public Role? Role
     {
         get => _role;
         set
@@ -68,6 +68,32 @@ public class IssueVM : BaseVM
                 return;
             _role = value;
             NotifyPropertyChanged(nameof(Role));
+        }
+    }
+
+    private int _creatorId;
+    public int CreatorId
+    {
+        get => _creatorId;
+        set
+        {
+            if (value == _creatorId)
+                return;
+            _creatorId = value;
+            NotifyPropertyChanged(nameof(CreatorId));
+        }
+    }
+
+    private User? _creator;
+    public User? Creator
+    {
+        get => _creator;
+        set
+        {
+            if (value == _creator)
+                return;
+            _creator = value;
+            NotifyPropertyChanged(nameof(Creator));
         }
     }
 
@@ -97,8 +123,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string _solution;
-    public string Solution
+    private string? _solution;
+    public string? Solution
     {
         get => _solution;
         set
@@ -110,8 +136,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private DateTime _solutionDate;
-    public DateTime SolutionDate
+    private DateTime? _solutionDate;
+    public DateTime? SolutionDate
     {
         get => _solutionDate;
         set
@@ -123,8 +149,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string _evaluation;
-    public string Evaluation
+    private string? _evaluation;
+    public string? Evaluation
     {
         get => _evaluation;
         set
@@ -136,8 +162,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string _verification;
-    public string Verification
+    private string? _verification;
+    public string? Verification
     {
         get => _verification;
         set
@@ -149,8 +175,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private DateTime _verificationDate;
-    public DateTime VerificationDate
+    private DateTime? _verificationDate;
+    public DateTime? VerificationDate
     {
         get => _verificationDate;
         set
@@ -162,8 +188,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private byte[] _verificatorSignature;
-    public byte[] VerificatorSignature
+    private byte[]? _verificatorSignature;
+    public byte[]? VerificatorSignature
     {
         get => _verificatorSignature;
         set
@@ -175,8 +201,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private byte[] _pMSignature;
-    public byte[] PMSignature
+    private byte[]? _pMSignature;
+    public byte[]? PMSignature
     {
         get => _pMSignature;
         set

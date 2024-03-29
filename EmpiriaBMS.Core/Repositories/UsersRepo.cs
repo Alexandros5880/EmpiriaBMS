@@ -700,7 +700,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<ICollection<IssueDto>> GetIssues(int userId)
+    public async Task<ICollection<IssueDto>> GetOpenIssues(int userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -712,6 +712,7 @@ public class UsersRepo : Repository<UserDto, User>
 
             var issues = await _context.Set<Issue>()
                                 .Where(i => rolesIds.Contains(i.RoleId))
+                                .Where(i => i.IsClose == false)
                                 .Include(i => i.Project)
                                 .Include(i => i.Role)
                                 .ToListAsync();

@@ -46,7 +46,6 @@ public partial class Dashboard : IDisposable
     // General Fields
     private bool disposedValue;
     bool _startLoading = true;
-    bool _filterLoading = false;
     private double _userTotalHoursThisMonth = 0;
 
     #region Working Timer
@@ -185,7 +184,7 @@ public partial class Dashboard : IDisposable
     {
         try
         {
-            var issuesDtos = await DataProvider.Users.GetIssues((int)_sharedAuthData.LogedUser.Id);
+            var issuesDtos = await DataProvider.Users.GetOpenIssues((int)_sharedAuthData.LogedUser.Id);
             var issuesVms = Mapper.Map<List<IssueVM>>(issuesDtos);
             _issues.Clear();
             issuesVms.ForEach(_issues.Add);
@@ -251,7 +250,6 @@ public partial class Dashboard : IDisposable
         _draws.Clear();
         _others.Clear();
 
-        _filterLoading = !_startLoading ? true : _filterLoading;
         try
         {
             // Todo: Find a way to add this in to PaginatorVM
@@ -282,7 +280,6 @@ public partial class Dashboard : IDisposable
             // TODO: Log Error
         }
         _startLoading = false;
-        _filterLoading = !_startLoading ? false : _filterLoading;
     }
 
     private async Task _getDesigners()
@@ -1053,12 +1050,13 @@ public partial class Dashboard : IDisposable
         _isDisplayIssuesDialogOdepened = true;
     }
 
-    private void CloseIssuesClick()
+    private async Task CloseIssuesClick()
     {
         if (_isDisplayIssuesDialogOdepened)
         {
             _displayIssuesDialog.Hide();
             _isDisplayIssuesDialogOdepened = false;
+            await _getIssues();
         }
     }
     #endregion

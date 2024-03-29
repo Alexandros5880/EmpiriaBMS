@@ -12,7 +12,7 @@
 <div class="h-100" style="max-height: 700px; max-height: 694px; overflow-y: auto; overflow-x: hidden;">
     <h3>Create Issue</h3>
 
-    <EditForm Model="@_issue">
+    <EditForm Model="@_issue" class="m-2">
 
         <div class="row">
             <div class="col form-group">
@@ -38,14 +38,13 @@
         </div>
 
         <div class="row mt-2">
-            <div class="col form-group">
+            <div class="col-12 form-group">
                 <label for="description">Description:</label>
-                <InputText id="description" @bind-Value="_issue.Description" class="form-control" />
-            </div>
-
-            <div class="col form-group">
-                <label for="solution">Solution:</label>
-                <InputText id="solution" @bind-Value="_issue.Solution" class="form-control" />
+                <textarea class="form-control"
+                          id="description"
+                          rows="3"
+                          @bind="_issue.Description">
+                </textarea>
             </div>
         </div>
         
@@ -65,38 +64,53 @@
             <div class="col-lg-6 col-md-12 form-group">
                 <label for="verificatorSignature">Verificator Signature:</label>
                 <div>
-                    <SignaturePad @ref="verificatorSignature" />
+                    <SignaturePad @ref="verificatorSignature" Id="verificatorSignature" />
                 </div>
             </div>
 
             <div class="col-lg-6 col-md-12 form-group">
                 <label for="pMSignature">Project Manager Signature:</label>
                 <div>
-                    <SignaturePad @ref="pMSignature" />
+                    <SignaturePad @ref="pMSignature" Id="pMSignature" />
                 </div>
             </div>
         </div>
 
-        <div class="row mt-2">
-            <div class="col form-group">
-                <label for="evaluation">Evaluation:</label>
-                <InputText id="evaluation" @bind-Value="_issue.Evaluation" class="form-control" />
+        @if (!DisplayBaseInfo)
+        {
+            <div class="row mt-2">
+                <div class="col-12 form-group">
+                    <label for="solution">Solution:</label>
+                    <textarea class="form-control"
+                              id="solution"
+                              rows="3"
+                              @bind="_issue.Solution">
+                    </textarea>
+                </div>
             </div>
 
-            <div class="col form-group"> 
-                @if (_issue.IsClose)
-                {
-                    <label for="solutionDate">Solution Date:</label>
-                    <InputDate id="solutionDate" @bind-Value="_issue.SolutionDate" class="form-control" />
-                }
-            </div>
-        </div>
+            <div class="row mt-2">
+                <div class="col form-group">
+                    <label for="evaluation">Evaluation:</label>
+                    <InputText id="evaluation" @bind-Value="_issue.Evaluation" class="form-control" />
+                </div>
 
-        <div class="form-group mt-2">
-            <div class="row" style="width: 134px;">
-                <label class="col-8" for="isClosed">Is Closed</label>
-                <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_issue.IsClose" />
+                <div class="col form-group"> 
+                    @if (_issue.IsClose)
+                    {
+                        <label for="solutionDate">Solution Date:</label>
+                        <InputDate id="solutionDate" @bind-Value="_issue.SolutionDate" class="form-control" />
+                    }
+                </div>
             </div>
-        </div>
+
+            <div class="form-group mt-2">
+                <div class="row" style="width: 134px;">
+                    <label class="col-8" for="isClosed">Is Closed</label>
+                    <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_issue.IsClose" />
+                </div>
+            </div>
+        }
+        
     </EditForm>
 </div>

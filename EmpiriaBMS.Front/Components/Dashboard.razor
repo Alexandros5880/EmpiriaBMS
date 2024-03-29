@@ -22,8 +22,14 @@
 
 @if (_startLoading)
 {
+    @*
     <div style="display: flex; justify-content: center; align-items: center; margin-top: 20%;">
         <FluentProgressRing />
+    </div>
+    *@
+
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <FilterProgressRing FilterLoading="@_startLoading" />
     </div>
 }
 else
@@ -89,12 +95,14 @@ else
                                                     d-flex justify-content-between"
                                              style="max-height: 50px !important;">
 
-                                            @if (_issues.Count > 0)
-                                            {
-                                                <span class="issue mt-2"
-                                                      @onclick="@(() => OpenIssuesClick())">
-                                                </span>
-                                            }
+                                            <div style="width: 50px;">
+                                                @if (_issues.Count > 0)
+                                                {
+                                                    <span class="issue mt-2"
+                                                          @onclick="@(() => OpenIssuesClick())">
+                                                    </span>
+                                                }
+                                            </div>
 
                                             <div class="primary-bg-color rounded float-end">
                                                 <div class="h5 text-center m-2">
@@ -468,8 +476,6 @@ else
     </div>
 }
 
-<FilterProgressRing FilterLoading="@_filterLoading" />
-
 @if (!_startLoading)
 {
     <!-- On "Press Work End" Button Dialog -->
@@ -830,7 +836,7 @@ else
                 <span class="carbon--close-outline float-end" @onclick="CloseAddIssueClick"></span>
             </div>
             <div class="col-12 justify-content-center">
-                <IssueDetailed @ref="@issueCompoment" Project="@_selectedProject" />
+                <IssueDetailed @ref="@issueCompoment" Project="@_selectedProject" DisplayBaseInfo="@true" />
             </div>
         </div>
 
@@ -857,11 +863,11 @@ else
         <div class="modal-body row mb-1">
 
             <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseIssuesClick"></span>
+                <span class="carbon--close-outline float-end" @onclick="@(async() => await CloseIssuesClick())"></span>
             </div>
 
             <div class="col-12 justify-content-center">
-                <Issues Source="@_issues" />
+                <Issues Source="@_issues" OnSave="@(async() => await CloseIssuesClick())" />
             </div>
 
         </div>
