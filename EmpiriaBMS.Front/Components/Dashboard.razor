@@ -4,6 +4,7 @@
 
 @using Microsoft.Fast.Components.FluentUI
 @using EmpiriaBMS.Front.Components.General
+@using EmpiriaBMS.Front.Components
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
 
@@ -201,7 +202,7 @@ else
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
                                                                 <span class="majesticons--chat-2-text"
-                                                                      @onclick="@OnAddComplainClick">
+                                                                      @onclick="@OnAddIssueClick">
                                                                 </span>
                                                             </td>
                                                         }
@@ -817,7 +818,7 @@ else
 
     </FluentDialog>
 
-    <!-- On Add Complain Dialog -->
+    <!-- On Add Issues Dialog -->
     <FluentDialog @ref="_addIssueDialog"
                   Hidden="@(!_isAddIssueDialogOdepened || _startLoading)"
                   Modal="true"
@@ -826,10 +827,10 @@ else
 
         <div class="modal-body row mb-1">
             <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseAddComplainClick"></span>
+                <span class="carbon--close-outline float-end" @onclick="CloseAddIssueClick"></span>
             </div>
             <div class="col-12 justify-content-center">
-                <Issue @ref="@issueCompoment" Project="@_selectedProject" />
+                <IssueDetailed @ref="@issueCompoment" Project="@_selectedProject" />
             </div>
         </div>
 
@@ -841,6 +842,28 @@ else
             <FluentButton class="col-6" OnClick="@(() => _addIssueDialogCansel())">
                 Cancel
             </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Display Issues Dialog -->
+    <FluentDialog @ref="_displayIssuesDialog"
+                  Hidden="@(!_isDisplayIssuesDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseIssuesClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <Issues Source="@_issues" />
+            </div>
+
         </div>
 
     </FluentDialog>
@@ -1107,28 +1130,6 @@ else
             <FluentButton class="col-6" OnClick="@(() => CloseAddPaymentClick())">
                 Cancel
             </FluentButton>
-        </div>
-
-    </FluentDialog>
-
-    <!-- On Display Issues Dialog -->
-    <FluentDialog @ref="_displayIssuesDialog"
-                  Hidden="@(!_isDisplayIssuesDialogOdepened || _startLoading)"
-                  Modal="true"
-                  DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
-                         --dialog-width: auto !important;">
-
-        <div class="modal-body row mb-1">
-
-            <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseIssuesClick"></span>
-            </div>
-
-            <div class="col-12 justify-content-center">
-                <h3>Display My Issues</h3>
-            </div>
-
         </div>
 
     </FluentDialog>

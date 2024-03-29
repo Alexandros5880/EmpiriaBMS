@@ -101,10 +101,14 @@ public partial class Dashboard : IDisposable
     private FluentDialog _addPMDialog;
     private bool _isAddPMDialogOdepened = false;
 
-    // On Add Complain Dialog
+    // On Add Issue Dialog
     private FluentDialog _addIssueDialog;
     private bool _isAddIssueDialogOdepened = false;
-    private Issue issueCompoment;
+    private IssueDetailed issueCompoment;
+
+    // On Add/Edit Issues Dialog
+    private FluentDialog _displayIssuesDialog;
+    private bool _isDisplayIssuesDialogOdepened = false;
 
     // On Add Project Dialog
     private FluentDialog _addEditProjectDialog;
@@ -144,10 +148,6 @@ public partial class Dashboard : IDisposable
     private FluentDialog _addEditPaymentDialog;
     private bool _isAddEditPaymentDialogOdepened = false;
     private PaymentDetailed paymentCompoment;
-
-    // On Add/Edit Payment Dialog
-    private FluentDialog _displayIssuesDialog;
-    private bool _isDisplayIssuesDialogOdepened = false;
     #endregion
 
     protected override void OnInitialized()
@@ -877,23 +877,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Display Issues
-    private void OpenIssuesClick()
-    {
-        _displayIssuesDialog.Show();
-        _isDisplayIssuesDialogOdepened = true;
-    }
-
-    private void CloseIssuesClick()
-    {
-        if (_isDisplayIssuesDialogOdepened)
-        {
-            _displayIssuesDialog.Hide();
-            _isDisplayIssuesDialogOdepened = false;
-        }
-    }
-    #endregion
-
     #region Drawings Assign Actions (Deliverable Assign)
     private async Task OnDrawingAssignClick(DrawingVM draw)
     {
@@ -1030,8 +1013,8 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Add Complain Actions
-    private void OnAddComplainClick()
+    #region Add Issue Actions
+    private void OnAddIssueClick()
     {
         _startLoading = true;
         issueCompoment.Refresh();
@@ -1040,7 +1023,7 @@ public partial class Dashboard : IDisposable
         _isAddIssueDialogOdepened = true;
     }
 
-    private void CloseAddComplainClick()
+    private void CloseAddIssueClick()
     {
         if (_isAddIssueDialogOdepened)
         {
@@ -1060,6 +1043,23 @@ public partial class Dashboard : IDisposable
     {
         _addIssueDialog.Hide();
         _isAddIssueDialogOdepened = false;
+    }
+    #endregion
+
+    #region Display Issues
+    private void OpenIssuesClick()
+    {
+        _displayIssuesDialog.Show();
+        _isDisplayIssuesDialogOdepened = true;
+    }
+
+    private void CloseIssuesClick()
+    {
+        if (_isDisplayIssuesDialogOdepened)
+        {
+            _displayIssuesDialog.Hide();
+            _isDisplayIssuesDialogOdepened = false;
+        }
     }
     #endregion
 

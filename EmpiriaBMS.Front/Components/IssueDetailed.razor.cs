@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace EmpiriaBMS.Front.Components;
 
-public partial class Issue : ComponentBase, IDisposable
+public partial class IssueDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
     private ProjectVM _project;
