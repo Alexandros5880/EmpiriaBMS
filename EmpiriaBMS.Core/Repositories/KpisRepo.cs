@@ -87,7 +87,7 @@ public class KpisRepo : IDisposable
                                                 .Include(p => p.SubContractor)
                                                 .Include(p => p.Customer)
                                                 .Include(p => p.Payment)
-                                                .Where(p => p.DeadLine < DateTime.Now)
+                                                //.Where(p => p.DeadLine < DateTime.Now)
                                                 .OrderBy(e => !e.Active)
                                                 .ThenBy(e => e.DeadLine)
                                                 .ToListAsync();
@@ -128,7 +128,7 @@ public class KpisRepo : IDisposable
                                          .Include(p => p.Payment)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id)
                                                             || p.ProjectManagerId == userId)
-                                         .Where(p => p.DeadLine < DateTime.Now)
+                                         //.Where(p => p.DeadLine < DateTime.Now)
                                          .OrderBy(e => !e.Active)
                                          .ThenBy(e => e.DeadLine)
                                          .ToListAsync();
