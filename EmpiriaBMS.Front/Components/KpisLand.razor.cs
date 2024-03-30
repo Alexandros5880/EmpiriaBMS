@@ -32,7 +32,7 @@ public partial class KpisLand : ComponentBase, IDisposable
     bool SeeMyProjectsMissedDeadLineKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 22);
     #endregion
 
-    private int _missedDeadLineProject = 0;
+    private decimal _missedDeadLineProject = 0;
     private Dictionary<string, long> _employeesTurnover = null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -45,8 +45,7 @@ public partial class KpisLand : ComponentBase, IDisposable
             await _initilizeDelayedProjectsChart();
             await _initilizeDelayedProjectsTypesChart();
 
-
-            await _getActiveDelayedProjects();
+            await _getMissedDeadLineProjects();
             await _getEmployeesTurnover();
 
             _loading = false;

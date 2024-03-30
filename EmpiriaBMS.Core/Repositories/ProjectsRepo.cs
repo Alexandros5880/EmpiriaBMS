@@ -58,7 +58,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Include(p => p.Customer)
                                       .Include(p => p.Payment)
                                       .OrderBy(e => !e.Active)
-                                      .ThenBy(e => e.DeadLine)
+                                      .ThenByDescending(e => e.DeadLine)
                                       .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -81,7 +81,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Customer)
                                          .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
-                                         .ThenBy(e => e.DeadLine)
+                                         .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
@@ -97,7 +97,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Include(p => p.Customer)
                                       .Include(p => p.Payment)
                                       .OrderBy(e => !e.Active)
-                                      .ThenBy(e => e.DeadLine)
+                                      .ThenByDescending(e => e.DeadLine)
                                       .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -124,7 +124,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Customer)
                                          .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
-                                         .ThenBy(e => e.DeadLine)
+                                         .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
             }
@@ -141,7 +141,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.Customer)
                                      .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
-                                     .ThenBy(e => e.DeadLine)
+                                     .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -176,7 +176,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                 .Include(p => p.Customer)
                                                 .Include(p => p.Payment)
                                                 .OrderBy(e => !e.Active)
-                                                .ThenBy(e => e.DeadLine)
+                                                .ThenByDescending(e => e.DeadLine)
                                                 .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(allProjects.Distinct().ToList());
@@ -216,7 +216,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id) 
                                                             || p.ProjectManagerId == userId)
                                          .OrderBy(e => !e.Active)
-                                         .ThenBy(e => e.DeadLine)
+                                         .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -252,7 +252,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                 .Include(p => p.Customer)
                                                 .Include(p => p.Payment)
                                                 .OrderBy(e => !e.Active)
-                                                .ThenBy(e => e.DeadLine)
+                                                .ThenByDescending(e => e.DeadLine)
                                                 .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(allProjects.Distinct().ToList());
@@ -293,7 +293,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Customer)
                                          .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
-                                         .ThenBy(e => e.DeadLine)
+                                         .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -326,7 +326,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 {
                     projects = await _context.Set<Project>()
                                              .OrderBy(e => !e.Active)
-                                             .ThenBy(e => e.DeadLine)
+                                             .ThenByDescending(e => e.DeadLine)
                                              .ToListAsync();
 
                     return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -342,7 +342,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Customer)
                                          .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
-                                         .ThenBy(e => e.DeadLine)
+                                         .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -383,7 +383,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Customer)
                                          .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
-                                         .ThenBy(e => e.DeadLine)
+                                         .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -401,7 +401,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.Customer)
                                      .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
-                                     .ThenBy(e => e.DeadLine)
+                                     .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -443,7 +443,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                              .Include(p => p.Customer)
                                              .Include(p => p.Payment)
                                              .OrderBy(e => !e.Active)
-                                             .ThenBy(e => e.DeadLine)
+                                             .ThenByDescending(e => e.DeadLine)
                                              .ToListAsync();
 
                     return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -460,7 +460,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Customer)
                                          .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
-                                         .ThenBy(e => e.DeadLine)
+                                         .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -502,7 +502,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Customer)
                                          .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
-                                         .ThenBy(e => e.DeadLine)
+                                         .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
@@ -521,7 +521,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.Customer)
                                      .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
-                                     .ThenBy(e => e.DeadLine)
+                                     .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());

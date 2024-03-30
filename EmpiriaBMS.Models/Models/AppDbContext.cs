@@ -2154,11 +2154,11 @@ public class AppDbContext : DbContext
             builder.Entity<ProjectType>().HasData(project_type_5);
 
             int[] projectTypes = {
-            project_type_1_Id,
-            project_type_2_Id,
-            project_type_3_Id,
-            project_type_4_Id
-        };
+                project_type_1_Id,
+                project_type_2_Id,
+                project_type_3_Id,
+                project_type_4_Id
+            };
             #endregion
 
             #region Create 3 Project Managers
@@ -2275,8 +2275,12 @@ public class AppDbContext : DbContext
             builder.Entity<Project>().HasData(projectPM);
             #endregion
 
-            #region Create 5 Projects Missed DeadLine
-            for (var i = 1; i <= projectTypes.Count(); i++)
+            #region Create 7 Projects Missed DeadLine
+            var projectManagersLength = projectManagers.Count();
+            var projectManagersIndex = 0;
+            var typesLength = projectTypes.Count();
+            var typesIndex = 0;
+            for (var i = 1; i <= 7; i++)
             {
                 // Projects 
                 var projectId = random.Next(123456789, 999999999) + i * 22;
@@ -2298,9 +2302,9 @@ public class AppDbContext : DbContext
                     Completed = 0,
                     WorkPackegedCompleted = 0,
                     EstimatedCompleted = 0,
-                    TypeId = projectTypes[i - 1],
+                    TypeId = projectTypes[typesIndex],
                     Active = i % 2 == 0 ? true : false,
-                    ProjectManagerId = projectManagers.Count < i - 1 ? projectManagers[i].Id : projectManagers[i - i + 1].Id
+                    ProjectManagerId = projectManagers[projectManagersIndex].Id
                 };
                 builder.Entity<Project>().HasData(project);
                 projects.Add(project);
@@ -2321,6 +2325,14 @@ public class AppDbContext : DbContext
                     ProjectId = projectId,
                 };
                 builder.Entity<Invoice>().HasData(invoice);
+
+                projectManagersIndex++;
+                if (projectManagersIndex >= projectManagersLength)
+                    projectManagersIndex = 0;
+
+                typesIndex++;
+                if (typesIndex >= typesLength)
+                    typesIndex = 0;
             }
             #endregion
 

@@ -20,7 +20,7 @@ public class KpisRepo : IDisposable
     public KpisRepo(IDbContextFactory<AppDbContext> dbFactory) =>
         _dbContextFactory = dbFactory;
 
-    public async Task<int> GetMissedDeadLineProjects()
+    public async Task<decimal> GetMissedDeadLineProjects()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -31,7 +31,9 @@ public class KpisRepo : IDisposable
                                                .Where(p => p.DeadLine < DateTime.Now)
                                                .CountAsync();
 
-            return (missedDeadline / all) * 100;
+            decimal division = Convert.ToDecimal(missedDeadline) / Convert.ToDecimal(all);
+            decimal result = Convert.ToDecimal(division * 100);
+            return result;
         }  
     }
 
