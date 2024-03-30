@@ -329,6 +329,18 @@ public class AppDbContext : DbContext
                 Ord = 22
             };
             builder.Entity<Permission>().HasData(per_22);
+
+            // See Active Delayed Project Types Counter KPI
+            var per_23_id = random.Next(123456789, 999999999);
+            Permission per_23 = new Permission()
+            {
+                Id = per_23_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Active Delayed Project Types Counter KPI",
+                Ord = 23
+            };
+            builder.Entity<Permission>().HasData(per_23);
             #endregion
 
             #region Roles
@@ -662,6 +674,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_69);
 
+            // Project Manager || See Active Delayed Project Types Counter KPI
+            RolePermission rp_77 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_3_id,
+                PermissionId = per_23_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_77);
+
 
             // COO
             // COO || See Dashboard Layout
@@ -963,6 +986,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_72);
 
+            // CTO || See Active Delayed Project Types Counter KPI
+            RolePermission rp_78 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_23_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_78);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -1151,6 +1185,17 @@ public class AppDbContext : DbContext
                 PermissionId = per_21_id
             };
             builder.Entity<RolePermission>().HasData(rp_76);
+
+            // CEO || See Active Delayed Project Types Counter KPI
+            RolePermission rp_79 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_23_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_79);
 
 
             // Guest
@@ -2228,6 +2273,55 @@ public class AppDbContext : DbContext
                 Active = true
             };
             builder.Entity<Project>().HasData(projectPM);
+            #endregion
+
+            #region Create 5 Projects Missed DeadLine
+            for (var i = 1; i <= projectTypes.Count(); i++)
+            {
+                // Projects 
+                var projectId = random.Next(123456789, 999999999) + i * 22;
+                Project project = new Project()
+                {
+                    Id = projectId,
+                    CreatedDate = createdDate,
+                    LastUpdatedDate = createdDate,
+                    Code = "D-22-16" + Convert.ToString(i+2),
+                    Name = "Project_Missed_DeadLine_" + Convert.ToString(i+2),
+                    Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
+                    DurationDate = createdDate.AddDays(-i),
+                    DeadLine = createdDate.AddMonths(-i),
+                    EstimatedDate = createdDate.AddDays(-i),
+                    Fee = 1325,
+                    CalculationDaly = i < 5 ? i : i - (i - 1),
+                    EstimatedMandays = 100 / 8,
+                    EstimatedHours = 1500,
+                    Completed = 0,
+                    WorkPackegedCompleted = 0,
+                    EstimatedCompleted = 0,
+                    TypeId = projectTypes[i - 1],
+                    Active = i % 2 == 0 ? true : false,
+                    ProjectManagerId = projectManagers.Count < i - 1 ? projectManagers[i].Id : projectManagers[i - i + 1].Id
+                };
+                builder.Entity<Project>().HasData(project);
+                projects.Add(project);
+
+                // Invoices
+                var invoiceId = random.Next(123456789, 999999999) + i * 3;
+                Invoice invoice = new Invoice()
+                {
+                    Id = invoiceId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now,
+                    Total = i * Math.Pow(1, 3),
+                    Vat = i % 2 == 0 ? 24 : 17,
+                    Fee = 3000 + Math.Pow(10, i),
+                    Number = random.Next(10000, 90000),
+                    Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
+                    ProjectId = projectId,
+                };
+                builder.Entity<Invoice>().HasData(invoice);
+            }
             #endregion
 
             #region Create Discipline Types

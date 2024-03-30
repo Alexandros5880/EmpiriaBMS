@@ -137,6 +137,84 @@ public class KpisRepo : IDisposable
         }
     }
 
+    public async Task<Dictionary<string, int>> GetActiveDelayedProjectTypesCountByType(int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Get User Roles
+            var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => r.UserId == userId)
+                                        .Select(r => r.RoleId)
+                                        .ToListAsync();
+
+            // Get Roles Permissions
+            var permissions = await _context.Set<RolePermission>()
+                                            .Where(pr => roleIds.Contains(pr.RoleId))
+                                            .Include(pr => pr.Permission)
+                                            .Select(pr => pr.Permission)
+                                            .ToListAsync();
+
+            Dictionary<string, int> projectTypesWithDeadLines;
+
+            if (permissions.Any(p => p.Ord == 20))
+            {
+                var allProjects = await _context.Set<Project>()
+                                                .Include(p => p.Type)
+                                                .Where(p => p.DeadLine < DateTime.Now)
+                                                .ToListAsync();
+
+                projectTypesWithDeadLines = allProjects
+                                                .GroupBy(p => p.Type.Name)
+                                                .ToDictionary(
+                                                    g => g.Key ?? "Uknown Type",
+                                                    g => allProjects.Where(p => p.Type.Name.Equals(g.Key)).Count()
+                                                );
+
+
+                return projectTypesWithDeadLines;
+            }
+
+            // Filter Projects
+            var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(de => de.EmployeeId == userId)
+                                             .Select(e => e.DrawingId)
+                                             .ToListAsync();
+
+            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(dd => myDrawingIds.Contains(dd.Id))
+                                                 .Select(e => e.DisciplineId)
+                                                 .ToListAsync();
+
+            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(d => d.EngineerId == userId)
+                                                      .Select(e => e.DisciplineId)
+                                                      .ToListAsync();
+
+            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
+
+            var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                        .Select(dp => dp.ProjectId)
+                                                        .ToArrayAsync();
+
+            var projects = await _context.Set<Project>()
+                                         .Include(p => p.Type)
+                                         .Where(p => projectsFromDisciplineIds.Contains(p.Id)
+                                                            || p.ProjectManagerId == userId)
+                                         .Where(p => p.DeadLine < DateTime.Now)
+                                         .ToListAsync();
+
+            projectTypesWithDeadLines = projects.GroupBy(p => p.Type.Name)
+                                                .ToDictionary(
+                                                    g => g.Key ?? "Uknown Type",
+                                                    g => projects.Where(p => p.Type.Name.Equals(g.Key)).Count()
+                                                );
+
+
+            return projectTypesWithDeadLines;
+        }
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposedValue)

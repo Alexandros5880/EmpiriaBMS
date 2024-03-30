@@ -26,6 +26,7 @@ public partial class KpisLand : ComponentBase, IDisposable
     #region Authorization Properties
     bool SeeHoursPerRoleKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 18);
     bool SeeActiveDelayedProjectsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 19);
+    bool SeeActiveDelayedProjectsTypesCounterKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 23);
     bool SeeAllProjectsMissedDeadLineKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 20);
     bool SeeEmployeeTurnoverKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 21);
     bool SeeMyProjectsMissedDeadLineKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 22);
@@ -42,6 +43,7 @@ public partial class KpisLand : ComponentBase, IDisposable
         {
             await _initilizeHoursPerRoleChart();
             await _initilizeDelayedProjectsChart();
+            await _initilizeDelayedProjectsTypesChart();
 
 
             await _getActiveDelayedProjects();
@@ -158,7 +160,7 @@ public partial class KpisLand : ComponentBase, IDisposable
                 {
                     Display = true,
                     Text = "Delayed Projects",
-                    Position = ChartEnums.Position.Right,
+                    Position = ChartEnums.Position.Left,
                     FontSize = 24
                 },
                 Scales = new BarScales
@@ -198,7 +200,7 @@ public partial class KpisLand : ComponentBase, IDisposable
         var days = _delayedProjects.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Days).ToList();
         BarDataset<int> dayesDataSet = new BarDataset<int>(days, false)
         {
-            Label = "Dayes Dealied",
+            Label = "Days Dealied",
             BackgroundColor = "rgba(0,94,160, 1)",
             BorderWidth = 0,
             HoverBackgroundColor = "rgba(0,94,160, 0.5)",
@@ -248,6 +250,81 @@ public partial class KpisLand : ComponentBase, IDisposable
         var userId = _sharedAuthData.LogedUser.Id;
         var dtos = await _dataProvider.KPIS.GetActiveDelayedProjects(userId);
         _delayedProjects = _mapper.Map<List<ProjectVM>>(dtos);
+    }
+    #endregion
+
+    #region Initialize ProjectTypes Missed DeadLine Chart
+    private Dictionary<string, int> _delayedProjectsTypesCountByType = null;
+    private BarConfig _delayedProjectsTypesBarConfig;
+
+    private async Task _initilizeDelayedProjectsTypesChart()
+    {
+        await _getActiveDelayedProjectsTypesCountByType();
+
+        _delayedProjectsTypesBarConfig = new BarConfig
+        {
+            Options = new BarOptions
+            {
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Count Delayed Projects By Type",
+                    Position = ChartEnums.Position.Right,
+                    FontSize = 24
+                },
+                Scales = new BarScales
+                {
+                    XAxes = new List<CartesianAxis>
+                    {
+                        new BarCategoryAxis
+                        {
+                            BarPercentage = 0.5,
+                            BarThickness = BarThickness.Flex
+                        }
+                    },
+                    YAxes = new List<CartesianAxis>
+                    {
+                        new BarLinearCartesianAxis
+                        {
+                            Ticks = new LinearCartesianTicks
+                            {
+                                BeginAtZero = true,
+                                StepSize = 0.5,
+                                //SuggestedMax = 100
+                            }
+                        }
+                    }
+                },
+                Responsive = true,
+
+            }
+        };
+
+        foreach (string key in _delayedProjectsTypesCountByType.Keys)
+            _delayedProjectsTypesBarConfig.Data.Labels.Add(key);
+
+        // Values Dataset
+        var values = _delayedProjectsTypesCountByType.Values;
+        BarDataset<int> dataset = new BarDataset<int>(values, false)
+        {
+            Label = "Project Type",
+            BackgroundColor = "rgba(187,216,172, 1)",
+            BorderWidth = 0,
+            HoverBackgroundColor = "rgba(187,216,172, 0.5)",
+            HoverBorderColor = "rgba(187,216,172, 1)",
+            HoverBorderWidth = 1,
+            BorderColor = "rgba(187,216,172, 1)",
+            BarPercentage = 0.5,
+
+        };
+        _delayedProjectsTypesBarConfig.Data.Datasets.Add(dataset);
+
+    }
+
+    private async Task _getActiveDelayedProjectsTypesCountByType()
+    {
+        var userId = _sharedAuthData.LogedUser.Id;
+        _delayedProjectsTypesCountByType = await _dataProvider.KPIS.GetActiveDelayedProjectTypesCountByType(userId);
     }
     #endregion
 
