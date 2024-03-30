@@ -71,7 +71,7 @@ public partial class KpisLand : ComponentBase, IDisposable
         return diff.ToString(@"d'd h'h m'm s's");
     }
 
-    private TimeSpan _displayTimeMissed(DateTime? date) => (TimeSpan)(date - DateTime.Now);
+    private TimeSpan _displayTimeMissed(DateTime? date) => (TimeSpan)(DateTime.Now - date);
 
     #region Initialize HoursPerRole Chart
     private Dictionary<string, long> _hoursPerRole = null;
