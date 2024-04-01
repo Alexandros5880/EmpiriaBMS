@@ -15,7 +15,7 @@ public class AppDbContext : DbContext
     //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
     const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
     const string azure_staging_DB = "Data Source=empiriabms-staging.database.windows.net;Initial Catalog=EmpiriaBMS-Staging;User Id=admin-user;Password=!@#$123456asdfgh";
-    const string migrationsDB = azure_staging_DB;
+    const string migrationsDB = localhostDB;
 
 
     public DbSet<User> Users { get; set; }
@@ -2199,6 +2199,53 @@ public class AppDbContext : DbContext
             };
             builder.Entity<UserRole>().HasData(pmRole_3);
             projectManagers.Add(engineer_10);
+            #endregion
+
+            #region Create 2 Admins
+            // Alexandros Platanios
+            var admin_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+            User admin_1 = new User()
+            {
+                Id = admin_1_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                LastName = "Platanios",
+                FirstName = "Alexandros",
+                Phone1 = "694927778",
+                Description = "Admin",
+                ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com"
+            };
+            builder.Entity<User>().HasData(admin_1);
+            Email email_admin_1 = new Email()
+            {
+                Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Address = "empiriasoft@empiriasoftplat.onmicrosoft.com",
+                UserId = admin_1_Id
+            };
+            builder.Entity<Email>().HasData(email_admin_1);
+            // Admin
+            UserRole admin_role_1 = new UserRole()
+            {
+                Id = random.Next(123456789, 999999999) / 3,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                UserId = admin_1_Id,
+                RoleId = role_9_id
+            };
+            builder.Entity<UserRole>().HasData(admin_role_1);
+
+            // ΚΟΤΣΩΝΗ ΚΑΤΕΡΙΝΑ
+            UserRole admin_2 = new UserRole()
+            {
+                Id = random.Next(123456789, 999999999) / 3,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                UserId = engineer_6.Id,
+                RoleId = role_9_id
+            };
+            builder.Entity<UserRole>().HasData(admin_2);
             #endregion
 
             #region Create 5 Projects
