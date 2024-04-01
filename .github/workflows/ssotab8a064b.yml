@@ -1,8 +1,8 @@
 name: Build and deploy .NET Core application to Web App ssotab8a064b
 on:
   push:
-    branches:
-    - 8-kpis
+    tags:
+      - '*-staging'
 env:
   AZURE_WEBAPP_NAME: ssotab8a064b
   AZURE_WEBAPP_PACKAGE_PATH: EmpiriaBMS.Front\published
