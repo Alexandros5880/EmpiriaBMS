@@ -1,6 +1,6 @@
 ### Git CD/CI
-1. When push tag '*-staging' deploy to azure staging server
-2. When push tag '*-prod' deploy to azure production server
+1. When push tag ****-staging*** deploy to azure staging server
+2. When push tag ****-prod*** deploy to azure production server
 
 ### You can open the app oustide of teams:
 `https://localhost:44302/login`
