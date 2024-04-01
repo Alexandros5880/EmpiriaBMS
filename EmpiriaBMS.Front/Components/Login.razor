@@ -1,7 +1,25 @@
 ﻿@page "/login"
 
+@inject MicrosoftTeams MicrosoftTeams
+
 <h3>Login</h3>
+
+<div class="mt-3">
+    <h5>Run In Teams:  </h5> @_runInTeams
+</div>
+
 
 @code {
 
+    public bool _runInTeams { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            _runInTeams = await MicrosoftTeams.IsInTeams();
+        }
+    }
 }
