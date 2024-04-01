@@ -4,7 +4,6 @@ using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 
-using BlazorBootstrap;
 using ChartJs.Blazor.PieChart;
 using ChartJs.Blazor.Common;
 using ChartJs.Blazor.Util;
@@ -15,6 +14,9 @@ using ChartJs.Blazor.Common.Axes.Ticks;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Azure;
 using Microsoft.Recognizers.Definitions;
+using static Microsoft.Fast.Components.FluentUI.Emojis.FoodDrink.Color.Default;
+using ChartJs.Blazor;
+using EmpiriaBMS.Front.Horizontal;
 
 namespace EmpiriaBMS.Front.Components;
 
@@ -42,6 +44,7 @@ public partial class KpisLand : ComponentBase, IDisposable
         if (firstRender)
         {
             await _initilizeHoursPerRoleChart();
+            _initilizeHoursPerRolePieChart();
             await _initilizeDelayedProjectsChart();
             await _initilizeDelayedProjectsTypesChart();
 
@@ -88,7 +91,7 @@ public partial class KpisLand : ComponentBase, IDisposable
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Hours Per Role",
+                    Text = "Hours Per Role Bar Chart",
                     Position = ChartEnums.Position.Left,
                     FontSize = 24
                 },
@@ -125,13 +128,14 @@ public partial class KpisLand : ComponentBase, IDisposable
 
         BarDataset<long> dataset = new BarDataset<long>(_hoursPerRole.Values)
         {
-            Label = "Roles",
-            BackgroundColor = "rgba(0,128,128, 1)",
+            //Label = "Roles",
+            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 650, 699, 1),
             BorderWidth = 0,
-            HoverBackgroundColor = "rgba(0,128,128, 0.5)",
-            HoverBorderColor = "rgba(0,128,128, 1)",
+            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
+            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
             HoverBorderWidth = 1,
-            BorderColor = "rgba(0,128,128, 1)",
+            BorderColor = ChartJsHelper.GetPreviusRgb(1),
             BarPercentage = 0.5,
 
         };
@@ -141,9 +145,50 @@ public partial class KpisLand : ComponentBase, IDisposable
 
     private async Task _getHoursPerRole() =>
         _hoursPerRole = await _dataProvider.KPIS.GetHoursPerRole();
+
+    // Pie Chart
+    private PieConfig _hoursPerRolePieConfig;
+
+    private void _initilizeHoursPerRolePieChart()
+    {
+        //await _getActiveDelayedProjects();
+
+        _hoursPerRolePieConfig = new PieConfig()
+        {
+            Options = new PieOptions()
+            {
+                CutoutPercentage = 50, // 50 = Doughnut  ||  0 = Pie
+                Responsive = true,
+                Title = new OptionsTitle()
+                {
+                    Display = true,
+                    Text = "Hours Per Role Pie Chart",
+                    Position = ChartEnums.Position.Right,
+                    FontSize = 24
+                }
+            }
+        };
+
+        foreach (string key in _hoursPerRole.Keys)
+            _hoursPerRolePieConfig.Data.Labels.Add(key);
+
+
+        PieDataset<long> dataset = new PieDataset<long>(_hoursPerRole.Values)
+        {
+            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 550, 599, 1),
+            BorderWidth = 0,
+            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
+            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
+            HoverBorderWidth = 1,
+            BorderColor = ChartJsHelper.GetPreviusRgb(1),
+        };
+
+        _hoursPerRolePieConfig.Data.Datasets.Add(dataset);
+    }
     #endregion
 
-    #region Initialize DelayedProjects Chart
+    #region Initialize DelayedProjects Bar Chart
     private List<ProjectVM> _delayedProjects = null;
     private BarConfig _delayedProjectsBarConfig;
 
@@ -158,7 +203,7 @@ public partial class KpisLand : ComponentBase, IDisposable
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Delayed Projects",
+                    Text = "Delayed Projects Bar Chart",
                     Position = ChartEnums.Position.Left,
                     FontSize = 24
                 },
@@ -179,7 +224,7 @@ public partial class KpisLand : ComponentBase, IDisposable
                             Ticks = new LinearCartesianTicks
                             {
                                 BeginAtZero = true,
-                                StepSize = 0.5,
+                                StepSize = 5.0,
                                 //SuggestedMax = 100
                             }
                         }
@@ -306,13 +351,14 @@ public partial class KpisLand : ComponentBase, IDisposable
         var values = _delayedProjectsTypesCountByType.Values;
         BarDataset<int> dataset = new BarDataset<int>(values, false)
         {
-            Label = "Project Type",
-            BackgroundColor = "rgba(187,216,172, 1)",
+            //Label = "Project Type",
+            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 685, 700, 1),
             BorderWidth = 0,
-            HoverBackgroundColor = "rgba(187,216,172, 0.5)",
-            HoverBorderColor = "rgba(187,216,172, 1)",
+            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
+            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
             HoverBorderWidth = 1,
-            BorderColor = "rgba(187,216,172, 1)",
+            BorderColor = ChartJsHelper.GetPreviusRgb(1),
             BarPercentage = 0.5,
 
         };

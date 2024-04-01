@@ -25,7 +25,7 @@
     else {
         <div class="row">
 
-            <!-- Hours Per Role -->
+            <!-- Hours Per RoleBar Chart-->
             @if (SeeHoursPerRoleKPI)
             {
                 <div class="col-lg-6 col-md-12" style="min-height: 300px;">
@@ -33,7 +33,23 @@
                 </div>
             }
 
-            <!-- Get active delayed projects Counter By Type -->
+            <!-- Get active delayed projects Counter By Type Pie Chart -->
+            @if (SeeHoursPerRoleKPI)
+            {
+                <div class="col-lg-6 col-md-12" style="min-height: 300px;">
+                    <Chart Config="_hoursPerRolePieConfig"></Chart>
+                </div>
+            }
+
+            <!-- Get active delayed projects Bar Chart -->
+            @if (SeeActiveDelayedProjectsKPI)
+            {
+                <div class="col-lg-12 col-md-12" style="min-height: 300px;">
+                    <Chart Config="_delayedProjectsBarConfig"></Chart>
+                </div>
+            }
+
+            <!-- Get active delayed projects Counter By Type Bar Chart-->
             @if (SeeActiveDelayedProjectsTypesCounterKPI)
             {
                 <div class="col-lg-6 col-md-12" style="min-height: 300px;">
@@ -41,11 +57,16 @@
                 </div>
             }
 
-            <!-- Get active delayed projects -->
-            @if (SeeActiveDelayedProjectsKPI)
+            <!-- Projects missed deadline -->
+            @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
             {
-                <div class="col-lg-6 col-md-12" style="min-height: 300px;">
-                    <Chart Config="_delayedProjectsBarConfig"></Chart>
+                <div class="col row mt-5" style="max-width: 30vw !important;">
+                    <div class="col-11">
+                        <h5>Projects missed deadline: </h5>
+                    </div>
+                    <div class="col-1">
+                        <h6>@_missedDeadLineProject.ToString("N2")%</h6>
+                    </div>
                 </div>
             }
 
@@ -78,18 +99,7 @@
                 </div>
             }
 
-            <!-- Projects missed deadline -->
-            @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
-            {
-                <div class="col row mt-5" style="max-width: 30vw !important;">
-                    <div class="col-11">
-                        <h5>Projects missed deadline: </h5>
-                    </div>
-                    <div class="col-1">
-                        <h6>@_missedDeadLineProject.ToString("N2")%</h6>
-                    </div>
-                </div>
-            }
+            
 
         </div>
     }
