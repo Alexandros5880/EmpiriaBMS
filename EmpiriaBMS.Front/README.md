@@ -1,3 +1,7 @@
+### Git CD/CI
+1. When push tag ****-staging*** deploy to azure staging server
+2. When push tag ****-prod*** deploy to azure production server
+
 ### You can open the app oustide of teams:
 `https://localhost:44302/login`
 
@@ -17,17 +21,27 @@
 ***9*** -> ***See All Disciplines***
 ***10*** -> ***See All Drawings***
 ***11*** -> ***See All Projects***
-***12*** -> ***Dashboard Add Project***
+***12*** -> ***Dashboard Edit Project***
 ***13*** -> ***Display Projects Code***
+***14*** -> ***Dashboard Edit Discipline***
+***15*** -> ***Dashboard Edit Deliverable***
+***16*** -> ***Dashboard Edit Other***
+***17*** -> ***Dashboard See KPIS***
+***18*** -> ***See Hours Per Role KPI***
+***19*** -> ***See Active Delayed Projects KPI***
+***20*** -> ***See All Projects Missed DeadLine KPI***
+***21*** -> ***See Employee Turnover KPI***
+***22*** -> ***See My Projects Missed DeadLine KPI***
+***23*** -> ***See Active Delayed Project Types Counter KPI***
 
 
 ### Roles -> Permissions Ords:
 ***Role[ Designer ]*** -----------> ***[ 1, 2, 8 ]***
 ***Role[ Engineer ]*** -----------> ***[ 1, 2, 3, 8, 9, 10 ]***
-***Role[ Project Manager ]*** --> ***[ 1, 2, 4, 8, 9, 10 ]***
+***Role[ Project Manager ]*** --> ***[ 1, 2, 4, 8, 9, 10, 17, 22, 23 ]***
 ***Role[ COO ]*** ---------------> ***[ 1, 2, 3, 4, 5, 8, 9, 10, 11 ]***
-***Role[ CTO ]*** ----------------> ***[ 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12 ]***
-***Role[ CEO ]*** ----------------> ***[ 1, 3, 4, 5, 9, 10, 11, 3 ]***
+***Role[ CTO ]*** ----------------> ***[ 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 23 ]***
+***Role[ CEO ]*** ----------------> ***[ 1, 3, 4, 5, 9, 10, 11, 13, 12, 17, 18, 19, 20, 21, 23 ]***
 ***Role[ Guest ]*** --------------> ***[ 1 ]***
 ***Role[ Customer ]*** ----------> ***[ 1 ]***
 ***Role[ Admin ]*** -------------> ***[ 7, 9, 10, 11 ]***
