@@ -2539,14 +2539,14 @@ public class AppDbContext : DbContext
             #region Create Other Types
             List<OtherType> otherTypes = new List<OtherType>();
             string[] otherTypeNames = {
-            "Communications",
-            "Printing",
-            "On-Site",
-            "Meetings",
-            "Administration",
-            "Soft Copy",
-            "Hours To Be Raised"
-        };
+                "Communications",
+                "Printing",
+                "On-Site",
+                "Meetings",
+                "Administration",
+                "Soft Copy",
+                "Hours To Be Erased"
+            };
             for (var i = 0; i < otherTypeNames.Length; i++)
             {
                 var other_type_Id = random.Next(123456789, 999999999);

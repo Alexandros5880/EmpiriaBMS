@@ -682,25 +682,23 @@ else
 
                     <div class="mt-1 p-2 modal-content">
                         <div class="d-flex justify-content-around">
-                            <div class="table-responsive p-1 w-100 h-100 m-3">
-                                <div class="text-center">
-                                    <h3>Select Designers</h3>
-                                </div>
-                                <table class="table table-borderless rounded-3">
+                            <div class="table-responsive p-1 w-100 h-100"
+                                 style="max-height: 300px !important; overflow-y: auto;">
+                                <table class="bg-transparent">
                                     <tbody>
                                         @foreach (var designer in _designers)
                                         {
                                             <tr clss="align-middle d-flex">
                                                 <td class="align-middle">
-                                                    <input class="form-check-input big-checkbox"
+                                                    <input class="form-check-input big-checkbox mt-2"
                                                            type="checkbox"
                                                            id="isSelectedDesigner"
                                                            @bind=@designer.IsSelected>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <label>
+                                                    <div class="ms-3 mt-2">
                                                         @designer.LastName &nbsp; @designer.FirstName
-                                                    </label>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         }
@@ -746,25 +744,23 @@ else
 
                     <div class="mt-1 p-2 modal-content">
                         <div class="d-flex justify-content-around">
-                            <div class="table-responsive p-1 w-100 h-100 m-3">
-                                <div class="text-center">
-                                    <h3>Select Engineers</h3>
-                                </div>
-                                <table class="table table-borderless rounded-3">
+                            <div class="table-responsive p-1 w-100 h-100"
+                                 style="max-height: 300px !important; overflow-y: auto;">
+                                <table class="bg-transparent">
                                     <tbody>
                                         @foreach (var engineer in _engineers)
                                         {
                                             <tr clss="align-middle d-flex">
                                                 <td class="align-middle">
-                                                    <input class="form-check-input big-checkbox"
+                                                    <input class="form-check-input big-checkbox mt-2"
                                                            type="checkbox"
                                                            id="isSelectedDesigner"
                                                            @bind=@engineer.IsSelected>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <label>
+                                                    <div class="ms-3 mt-2">
                                                         @engineer.LastName &nbsp; @engineer.FirstName
-                                                    </label>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         }
@@ -806,7 +802,6 @@ else
         <div class="modal-body row">
             <div class="m-1 row justify-content-center">
                 <div class="col-12 p-2">
-
                     <select class="form-select form-select-lg" @bind="_selectedPmId">
                         @foreach (var pm in _projectManagers)
                         {

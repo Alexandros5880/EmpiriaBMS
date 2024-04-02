@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EmpiriaBMS.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6435976744c8ac52bdad1be24d2a529b3d133d83")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9931384d9dae581a1ea185f6b81d72f3beaae4ae")]
 [assembly: System.Reflection.AssemblyProductAttribute("EmpiriaBMS.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EmpiriaBMS.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
