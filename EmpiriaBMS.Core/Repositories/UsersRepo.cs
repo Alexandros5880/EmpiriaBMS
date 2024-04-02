@@ -374,11 +374,16 @@ public class UsersRepo : Repository<UserDto, User>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<DailyTime>()
-                                 .Where(u => u.DailyUserId == userId)
+            var sumHours = await _context.Set<DailyTime>()
+                                 .Where(u => u.DailyUserId == userId 
+                                        || u.PersonalUserId == userId 
+                                        || u.TrainingUserId == userId 
+                                        || u.CorporateUserId == userId)
                                  .Where(u => u.Date.CompareTo(dateOneMonthLater) > 0)
                                  .Select(u => u.TimeSpan.Hours)
                                  .SumAsync();
+
+            return sumHours;
         }
     }
 
@@ -466,6 +471,8 @@ public class UsersRepo : Repository<UserDto, User>
                     }
                 );
 
+                await _context.SaveChangesAsync();
+
                 return result.Entity;
             }
         }
@@ -509,7 +516,7 @@ public class UsersRepo : Repository<UserDto, User>
             else
             {
                 var result = await _context.Set<DailyTime>()
-                                       .AddAsync(
+                .AddAsync(
                     new DailyTime
                     {
                         PersonalUserId = userId,
@@ -522,6 +529,8 @@ public class UsersRepo : Repository<UserDto, User>
                         )
                     }
                 );
+
+                await _context.SaveChangesAsync();
 
                 return result.Entity;
             }
@@ -580,6 +589,8 @@ public class UsersRepo : Repository<UserDto, User>
                     }
                 );
 
+                await _context.SaveChangesAsync();
+
                 return result.Entity;
             }
         }
@@ -636,6 +647,8 @@ public class UsersRepo : Repository<UserDto, User>
                         )
                     }
                 );
+
+                await _context.SaveChangesAsync();
 
                 return result.Entity;
             }

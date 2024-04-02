@@ -163,7 +163,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                     DailyUserId = userId,
                     ProjectId = projectId,
                     DisciplineId = disciplineId,
-                    DrawingId = otherId,
+                    OtherId = otherId,
                     TimeSpan = new Timespan(
                         timeSpans[i].Days,
                         timeSpans[i].Hours,

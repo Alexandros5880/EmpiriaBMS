@@ -257,6 +257,90 @@ public class AppDbContext : DbContext
                 Ord = 16
             };
             builder.Entity<Permission>().HasData(per_16);
+
+            // Dashboard See KPIS
+            var per_17_id = random.Next(123456789, 999999999);
+            Permission per_17 = new Permission()
+            {
+                Id = per_17_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Dashboard See KPIS",
+                Ord = 17
+            };
+            builder.Entity<Permission>().HasData(per_17);
+
+            // See Hours Per Role KPI
+            var per_18_id = random.Next(123456789, 999999999);
+            Permission per_18 = new Permission()
+            {
+                Id = per_18_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Hours Per Role KPI",
+                Ord = 18
+            };
+            builder.Entity<Permission>().HasData(per_18);
+
+            // See Active Delayed Projects KPI
+            var per_19_id = random.Next(123456789, 999999999);
+            Permission per_19 = new Permission()
+            {
+                Id = per_19_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Active Delayed Projects KPI",
+                Ord = 19
+            };
+            builder.Entity<Permission>().HasData(per_19);
+
+            // See All Projects Missed DeadLine KPI
+            var per_20_id = random.Next(123456789, 999999999);
+            Permission per_20 = new Permission()
+            {
+                Id = per_20_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See All Projects Missed DeadLine KPI",
+                Ord = 20
+            };
+            builder.Entity<Permission>().HasData(per_20);
+
+            // See Employee Turnover KPI
+            var per_21_id = random.Next(123456789, 999999999);
+            Permission per_21 = new Permission()
+            {
+                Id = per_21_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Employee Turnover KPI",
+                Ord = 21
+            };
+            builder.Entity<Permission>().HasData(per_21);
+
+            // See My Projects Missed DeadLine KPI
+            var per_22_id = random.Next(123456789, 999999999);
+            Permission per_22 = new Permission()
+            {
+                Id = per_22_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See My Projects Missed DeadLine KPI",
+                Ord = 22
+            };
+            builder.Entity<Permission>().HasData(per_22);
+
+            // See Active Delayed Project Types Counter KPI
+            var per_23_id = random.Next(123456789, 999999999);
+            Permission per_23 = new Permission()
+            {
+                Id = per_23_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Active Delayed Project Types Counter KPI",
+                Ord = 23
+            };
+            builder.Entity<Permission>().HasData(per_23);
             #endregion
 
             #region Roles
@@ -568,6 +652,39 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_43);
 
+            // Project Manager || Dashboard See KPIS
+            RolePermission rp_68 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_3_id,
+                PermissionId = per_17_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_68);
+
+            // Project Manager || See My Projects Missed DeadLine KPI
+            RolePermission rp_69 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_3_id,
+                PermissionId = per_22_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_69);
+
+            // Project Manager || See Active Delayed Project Types Counter KPI
+            RolePermission rp_77 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_3_id,
+                PermissionId = per_23_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_77);
+
 
             // COO
             // COO || See Dashboard Layout
@@ -825,6 +942,61 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_65);
 
+            // CTO || Dashboard See KPIS
+            RolePermission rp_66 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_17_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_66);
+
+            // CTO || See Hours Per Role KPI
+            RolePermission rp_70 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_18_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_70);
+
+            // CTO || See Active Delayed Projects KPI
+            RolePermission rp_71 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_19_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_71);
+
+            // CTO || See All Projects Missed DeadLine KPI
+            RolePermission rp_72 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_20_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_72);
+
+            // CTO || See Active Delayed Project Types Counter KPI
+            RolePermission rp_78 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_23_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_78);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -958,6 +1130,72 @@ public class AppDbContext : DbContext
                 PermissionId = per_12_id
             };
             builder.Entity<RolePermission>().HasData(rp_62);
+
+            // CEO || Dashboard See KPIS
+            RolePermission rp_67 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_17_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_67);
+
+            // CEO || See Hours Per Role KPI
+            RolePermission rp_73 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_18_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_73);
+
+            // CEO || See Active Delayed Projects KPI
+            RolePermission rp_74 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_19_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_74);
+
+            // CEO || See All Projects Missed DeadLine KPI
+            RolePermission rp_75 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_20_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_75);
+
+            // CEO || See Employee Turnover KPI
+            RolePermission rp_76 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_21_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_76);
+
+            // CEO || See Active Delayed Project Types Counter KPI
+            RolePermission rp_79 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_23_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_79);
 
 
             // Guest
@@ -1916,11 +2154,11 @@ public class AppDbContext : DbContext
             builder.Entity<ProjectType>().HasData(project_type_5);
 
             int[] projectTypes = {
-            project_type_1_Id,
-            project_type_2_Id,
-            project_type_3_Id,
-            project_type_4_Id
-        };
+                project_type_1_Id,
+                project_type_2_Id,
+                project_type_3_Id,
+                project_type_4_Id
+            };
             #endregion
 
             #region Create 3 Project Managers
@@ -1961,6 +2199,53 @@ public class AppDbContext : DbContext
             };
             builder.Entity<UserRole>().HasData(pmRole_3);
             projectManagers.Add(engineer_10);
+            #endregion
+
+            #region Create 2 Admins
+            // Alexandros Platanios
+            var admin_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+            User admin_1 = new User()
+            {
+                Id = admin_1_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                LastName = "Platanios",
+                FirstName = "Alexandros",
+                Phone1 = "694927778",
+                Description = "Admin",
+                ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com"
+            };
+            builder.Entity<User>().HasData(admin_1);
+            Email email_admin_1 = new Email()
+            {
+                Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Address = "empiriasoft@empiriasoftplat.onmicrosoft.com",
+                UserId = admin_1_Id
+            };
+            builder.Entity<Email>().HasData(email_admin_1);
+            // Admin
+            UserRole admin_role_1 = new UserRole()
+            {
+                Id = random.Next(123456789, 999999999) / 3,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                UserId = admin_1_Id,
+                RoleId = role_9_id
+            };
+            builder.Entity<UserRole>().HasData(admin_role_1);
+
+            // ΚΟΤΣΩΝΗ ΚΑΤΕΡΙΝΑ
+            UserRole admin_2 = new UserRole()
+            {
+                Id = random.Next(123456789, 999999999) / 3,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                UserId = engineer_6.Id,
+                RoleId = role_9_id
+            };
+            builder.Entity<UserRole>().HasData(admin_2);
             #endregion
 
             #region Create 5 Projects
@@ -2035,6 +2320,67 @@ public class AppDbContext : DbContext
                 Active = true
             };
             builder.Entity<Project>().HasData(projectPM);
+            #endregion
+
+            #region Create 7 Projects Missed DeadLine
+            var projectManagersLength = projectManagers.Count();
+            var projectManagersIndex = 0;
+            var typesLength = projectTypes.Count();
+            var typesIndex = 0;
+            for (var i = 1; i <= 7; i++)
+            {
+                // Projects 
+                var projectId = random.Next(123456789, 999999999) + i * 22;
+                Project project = new Project()
+                {
+                    Id = projectId,
+                    CreatedDate = createdDate,
+                    LastUpdatedDate = createdDate,
+                    Code = "D-22-16" + Convert.ToString(i+2),
+                    Name = "Project_Missed_DeadLine_" + Convert.ToString(i+2),
+                    Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
+                    DurationDate = createdDate.AddDays(-i),
+                    DeadLine = createdDate.AddMonths(-i),
+                    EstimatedDate = createdDate.AddDays(-i),
+                    Fee = 1325,
+                    CalculationDaly = i < 5 ? i : i - (i - 1),
+                    EstimatedMandays = 100 / 8,
+                    EstimatedHours = 1500,
+                    Completed = 0,
+                    WorkPackegedCompleted = 0,
+                    EstimatedCompleted = 0,
+                    TypeId = projectTypes[typesIndex],
+                    Active = i % 2 == 0 ? true : false,
+                    ProjectManagerId = projectManagers[projectManagersIndex].Id
+                };
+                builder.Entity<Project>().HasData(project);
+                projects.Add(project);
+
+                // Invoices
+                var invoiceId = random.Next(123456789, 999999999) + i * 3;
+                Invoice invoice = new Invoice()
+                {
+                    Id = invoiceId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now,
+                    Total = i * Math.Pow(1, 3),
+                    Vat = i % 2 == 0 ? 24 : 17,
+                    Fee = 3000 + Math.Pow(10, i),
+                    Number = random.Next(10000, 90000),
+                    Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
+                    ProjectId = projectId,
+                };
+                builder.Entity<Invoice>().HasData(invoice);
+
+                projectManagersIndex++;
+                if (projectManagersIndex >= projectManagersLength)
+                    projectManagersIndex = 0;
+
+                typesIndex++;
+                if (typesIndex >= typesLength)
+                    typesIndex = 0;
+            }
             #endregion
 
             #region Create Discipline Types
@@ -2193,14 +2539,14 @@ public class AppDbContext : DbContext
             #region Create Other Types
             List<OtherType> otherTypes = new List<OtherType>();
             string[] otherTypeNames = {
-            "Communications",
-            "Printing",
-            "On-Site",
-            "Meetings",
-            "Administration",
-            "Soft Copy",
-            "Hours To Be Raised"
-        };
+                "Communications",
+                "Printing",
+                "On-Site",
+                "Meetings",
+                "Administration",
+                "Soft Copy",
+                "Hours To Be Erased"
+            };
             for (var i = 0; i < otherTypeNames.Length; i++)
             {
                 var other_type_Id = random.Next(123456789, 999999999);
