@@ -25,8 +25,6 @@ using System.Threading;
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
 {
-
-    private UserTimes _logedUserTimes;
     private UserTimes _editLogedUserTimes;
 
     #region Authorization Properties
@@ -670,7 +668,7 @@ public partial class Dashboard : IDisposable
 
     private void _onPersonalTimeChanged(TimeSpan newTimeSpan)
     {
-        var previusTime = _logedUserTimes.PersonalTime;
+        var previusTime = _editLogedUserTimes.PersonalTime;
         var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
         var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
 
@@ -709,14 +707,14 @@ public partial class Dashboard : IDisposable
             remainingTime -= updatedTime;
         }
 
-        _logedUserTimes.PersonalTime = newTimeSpan;
+        _editLogedUserTimes.PersonalTime = newTimeSpan;
 
         StateHasChanged();
     }
 
     private void _onTrainingTimeChanged(TimeSpan newTimeSpan)
     {
-        var previusTime = _logedUserTimes.TrainingTime;
+        var previusTime = _editLogedUserTimes.TrainingTime;
         var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
         var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
 
@@ -755,14 +753,14 @@ public partial class Dashboard : IDisposable
             remainingTime -= updatedTime;
         }
 
-        _logedUserTimes.TrainingTime = newTimeSpan;
+        _editLogedUserTimes.TrainingTime = newTimeSpan;
 
         StateHasChanged();
     }
 
     private void _onCorporateTimeChanged(TimeSpan newTimeSpan)
     {
-        var previusTime = _logedUserTimes.CorporateEventTime;
+        var previusTime = _editLogedUserTimes.CorporateEventTime;
         var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
         var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
 
@@ -801,66 +799,75 @@ public partial class Dashboard : IDisposable
             remainingTime -= updatedTime;
         }
 
-        _logedUserTimes.CorporateEventTime = newTimeSpan;
+        _editLogedUserTimes.CorporateEventTime = newTimeSpan;
 
         StateHasChanged();
     }
 
     public async Task _endWorkDialogAccept()
     {
-        _endWorkDialog.Hide();
-        _isEndWorkDialogOdepened = false;
-
-        // Validate
-        if (remainingTime.Hours > 0)
+        try
         {
-            // TODO: Display a message to update his hours.
-            return;
-        }
+            _endWorkDialog.Hide();
+            _isEndWorkDialogOdepened = false;
 
-
-        // Update Db
-        _startLoading = true;
-
-        // Update Draws
-        foreach (var draw in _drawsChanged)
-        {
-            var old = _draws.FirstOrDefault(d => d.Id == draw.Id);
-            if (old.CompletionEstimation > draw.CompletionEstimation)
+            // Validate
+            if (remainingTime.Hours > 0)
             {
-                //TODO: Display Msg
-
+                // TODO: Display a message to update his hours.
                 return;
             }
-            else
-                await _dataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-            await _dataProvider.Drawings.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
-        }
 
-        // Update Others
-        foreach (var other in _othersChanged)
+
+            // Update Db
+            _startLoading = true;
+
+            // Update Draws
+            foreach (var draw in _drawsChanged)
+            {
+                var old = _draws.FirstOrDefault(d => d.Id == draw.Id);
+                if (old.CompletionEstimation > draw.CompletionEstimation)
+                {
+                    //TODO: Display Msg
+
+                    return;
+                }
+                else
+                    await _dataProvider.Drawings.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
+                await _dataProvider.Drawings.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+            }
+
+            // Update Others
+            foreach (var other in _othersChanged)
+            {
+                //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
+                await _dataProvider.Others.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+            }
+
+            // Update User Hours
+            if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
+                await _dataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
+            if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
+                await _dataProvider.Users.AddTraningTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
+            if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
+                await _dataProvider.Users.AddCorporateEventTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+
+            _drawsChanged.Clear();
+            _othersChanged.Clear();
+
+            await _getProjects();
+
+            // Clear Timer From this User
+            TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
+
+            await _getUserTotalHoursThisMonth();
+        }
+        catch(Exception ex)
         {
-            //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-            await _dataProvider.Others.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+            // TODO Exception Log
+            Console.WriteLine($"\n\nException: {ex.Message}");
+            Console.WriteLine($"\nException Inner: {ex.InnerException.Message}");
         }
-
-        // Update User Hours
-        if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-            await _dataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
-        if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-            await _dataProvider.Users.AddTraningTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
-        if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-            await _dataProvider.Users.AddCorporateEventTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
-
-        _drawsChanged.Clear();
-        _othersChanged.Clear();
-
-        await _getProjects();
-
-        // Clear Timer From this User
-        TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
-
-        await _getUserTotalHoursThisMonth();
 
         _startLoading = false;
     }
