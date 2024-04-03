@@ -45,29 +45,29 @@ public class IssueVM : BaseVM
         }
     }
 
-    private int _roleId;
-    public int RoleId
+    private int _displayedRoleId;
+    public int DisplayedRoleId
     {
-        get => _roleId;
+        get => _displayedRoleId;
         set
         {
-            if (value == _roleId)
+            if (value == _displayedRoleId)
                 return;
-            _roleId = value;
-            NotifyPropertyChanged(nameof(RoleId));
+            _displayedRoleId = value;
+            NotifyPropertyChanged(nameof(DisplayedRoleId));
         }
     }
 
-    private Role? _role;
-    public Role? Role
+    private Role? _displayedRole;
+    public Role? DisplayedRole
     {
-        get => _role;
+        get => _displayedRole;
         set
         {
-            if (value == _role)
+            if (value == _displayedRole)
                 return;
-            _role = value;
-            NotifyPropertyChanged(nameof(Role));
+            _displayedRole = value;
+            NotifyPropertyChanged(nameof(DisplayedRole));
         }
     }
 
@@ -97,18 +97,7 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string _about;
-    public string About
-    {
-        get => _about;
-        set
-        {
-            if (value == _about)
-                return;
-            _about = value;
-            NotifyPropertyChanged(nameof(About));
-        }
-    }
+    public ICollection<Document> Documents { get; set; }
 
     private string _description;
     public string Description

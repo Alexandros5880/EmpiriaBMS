@@ -32,8 +32,8 @@
             </div>
 
             <div class="col form-group">
-                <label for="about">About:</label>
-                <InputText id="about" @bind-Value="_issue.About" class="form-control" />
+                <label for="documents">Relative Documents:</label>
+                <InputFile id="documents" OnChange="@HandleFileUploadDoc" multiple />
             </div>
         </div>
 
@@ -47,70 +47,201 @@
                 </textarea>
             </div>
         </div>
-        
-        <div class="row mt-2">
-            <div class="col form-group">
-                <label for="verification">Verification:</label>
-                <InputText id="verification" @bind-Value="_issue.Verification" class="form-control" />
+
+        <!-- Parrent Accordion -->
+        <div class="accordion mt-3" id="parrentAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingParrentOne">
+                    <button class="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseParrentOne"
+                            aria-expanded="true"
+                            aria-controls="collapseParrentOne">
+                        Iso2001
+                    </button>
+                </h2>
+                <div id="collapseParrentOne"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="headingOne"
+                     data-bs-parent="#parrentAccordion">
+                    <div class="accordion-body">
+
+                        <!-- Inner Accordion -->
+                        <div class="accordion" id="issueAccordion">
+
+                            <!-- Solution -->
+                            <div class="accordion-item mt-3">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne"
+                                            aria-expanded="true"
+                                            aria-controls="collapseOne">
+                                        Solution:
+                                    </button>
+                                </h4>
+                                <div id="collapseOne"
+                                     class="accordion-collapse collapse"
+                                     aria-labelledby="headingOne"
+                                     data-bs-parent="#issueAccordion">
+                                    <div class="accordion-body">
+
+                                        <div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 form-group">
+                                                    <label for="solution">Solution:</label>
+                                                    <textarea class="form-control"
+                                                              id="solution"
+                                                              rows="3"
+                                                              @bind="_issue.Solution">
+                                                    </textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col form-group">
+                                                    <label for="solutionDate">SolutionDate:</label>
+                                                    <InputDate id="solutionDate" @bind-Value="_issue.SolutionDate" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Evaluation -->
+                            <div class="accordion-item mt-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseTow"
+                                            aria-expanded="true"
+                                            aria-controls="collapseTow">
+                                        Evaluation:
+                                    </button>
+                                </h4>
+                                <div id="collapseTow"
+                                     class="accordion-collapse collapse"
+                                     aria-labelledby="headingTow"
+                                     data-bs-parent="#issueAccordion">
+                                    <div class="accordion-body">
+
+                                        <div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 form-group">
+                                                    <label for="evaluation">Evaluation:</label>
+                                                    <textarea class="form-control"
+                                                              id="evaluation"
+                                                              rows="3"
+                                                              @bind="_issue.Evaluation">
+                                        </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Verification -->
+                            <div class="accordion-item mt-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseThree"
+                                            aria-expanded="true"
+                                            aria-controls="collapseThree">
+                                        Verification:
+                                    </button>
+                                </h4>
+                                <div id="collapseThree"
+                                     class="accordion-collapse collapse"
+                                     aria-labelledby="headingThree"
+                                     data-bs-parent="#issueAccordion">
+                                    <div class="accordion-body">
+
+                                        <div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 form-group">
+                                                    <label for="verification">Verification:</label>
+                                                    <textarea class="form-control"
+                                                              id="verification"
+                                                              rows="3"
+                                                              @bind="_issue.Verification">
+                                            </textarea>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class="col form-group">
+                                                        <label for="verificationDate">VerificationDate:</label>
+                                                        <InputDate id="verificationDate" @bind-Value="_issue.VerificationDate" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-12 form-group">
+                                                    <label for="verificatorSignature">Verificator Signature:</label>
+                                                    <div>
+                                                        <SignaturePad @ref="verificatorSignature" Id="verificatorSignature" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit -->
+                            <div class="accordion-item mt-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseFour"
+                                            aria-expanded="true"
+                                            aria-controls="collapseFour">
+                                        Submit:
+                                    </button>
+                                </h4>
+                                <div id="collapseFour"
+                                     class="accordion-collapse collapse"
+                                     aria-labelledby="headingFour"
+                                     data-bs-parent="#issueAccordion">
+                                    <div class="accordion-body">
+
+                                        <div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 form-group">
+                                                    <label for="pMSignature">Project Manager Signature:</label>
+                                                    <div>
+                                                        <SignaturePad @ref="pMSignature" Id="pMSignature" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 form-group mt-2">
+                                                <div class="row" style="width: 134px;">
+                                                    <label class="col-8" for="isClosed">Is Closed</label>
+                                                    <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_issue.IsClose" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
-            <div class="col form-group">
-                <label for="verificationDate">Verification Date:</label>
-                <InputDate id="verificationDate" @bind-Value="_issue.VerificationDate" class="form-control" />
-            </div>
         </div>
 
-        <div class="row mt-2">
-            <div class="col-lg-6 col-md-12 form-group">
-                <label for="verificatorSignature">Verificator Signature:</label>
-                <div>
-                    <SignaturePad @ref="verificatorSignature" Id="verificatorSignature" />
-                </div>
-            </div>
-
-            <div class="col-lg-6 col-md-12 form-group">
-                <label for="pMSignature">Project Manager Signature:</label>
-                <div>
-                    <SignaturePad @ref="pMSignature" Id="pMSignature" />
-                </div>
-            </div>
-        </div>
-
-        @if (!DisplayBaseInfo)
-        {
-            <div class="row mt-2">
-                <div class="col-12 form-group">
-                    <label for="solution">Solution:</label>
-                    <textarea class="form-control"
-                              id="solution"
-                              rows="3"
-                              @bind="_issue.Solution">
-                    </textarea>
-                </div>
-            </div>
-
-            <div class="row mt-2">
-                <div class="col form-group">
-                    <label for="evaluation">Evaluation:</label>
-                    <InputText id="evaluation" @bind-Value="_issue.Evaluation" class="form-control" />
-                </div>
-
-                <div class="col form-group"> 
-                    @if (_issue.IsClose)
-                    {
-                        <label for="solutionDate">Solution Date:</label>
-                        <InputDate id="solutionDate" @bind-Value="_issue.SolutionDate" class="form-control" />
-                    }
-                </div>
-            </div>
-
-            <div class="form-group mt-2">
-                <div class="row" style="width: 134px;">
-                    <label class="col-8" for="isClosed">Is Closed</label>
-                    <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_issue.IsClose" />
-                </div>
-            </div>
-        }
         
+
     </EditForm>
 </div>

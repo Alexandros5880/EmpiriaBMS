@@ -12,7 +12,7 @@
                 <th>#</th>
                 <th scope="col">Project</th>
                 <th scope="col">Closed</th>
-                <th scope="col">About</th>
+                @* <th scope="col">About</th> *@
                 <th scope="col">Description</th>
                 <th scope="col">Evaluation</th>
                 <th scope="col">Verification</th>
@@ -37,10 +37,9 @@
                         <label>@(issue.Project?.Name ?? "--")</label>
                     </td>
 
-                    <td>
+                    @* <td>
                         <label>@issue.About</label>
-                    </td>
-
+                    </td> *@
 
                     <td>
                         <label>@issue.Description</label>

@@ -39,6 +39,7 @@ public class AppDbContext : DbContext
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
     public DbSet<Issue> Issues { get; set; }
+    public DbSet<Document> Documents { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -2262,9 +2263,8 @@ public class AppDbContext : DbContext
                     Code = "D-22-16" + Convert.ToString(i),
                     Name = "Project_" + Convert.ToString(i),
                     Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
-                    DurationDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                    StartDate = createdDate,
                     DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                    EstimatedDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                     Fee = 10000,
                     CalculationDaly = i < 5 ? i : i - (i - 1),
                     EstimatedMandays = 100 / 8,
@@ -2307,9 +2307,8 @@ public class AppDbContext : DbContext
                 Code = "D-22-16-PM",
                 Name = "Project_PM",
                 Description = "Test Description Project_PM",
-                DurationDate = createdDate.AddMonths(1),
+                StartDate = createdDate,
                 DeadLine = createdDate.AddMonths(3),
-                EstimatedDate = createdDate.AddMonths(2),
                 CalculationDaly = 345,
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
@@ -2339,9 +2338,8 @@ public class AppDbContext : DbContext
                     Code = "D-22-16" + Convert.ToString(i+2),
                     Name = "Project_Missed_DeadLine_" + Convert.ToString(i+2),
                     Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
-                    DurationDate = createdDate.AddDays(-i),
+                    StartDate = createdDate.AddMonths(-(i*2)),
                     DeadLine = createdDate.AddMonths(-i),
-                    EstimatedDate = createdDate.AddDays(-i),
                     Fee = 1325,
                     CalculationDaly = i < 5 ? i : i - (i - 1),
                     EstimatedMandays = 100 / 8,

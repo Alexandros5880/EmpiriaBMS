@@ -204,29 +204,16 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private DateTime? _durationDate;
-    public DateTime? DurationDate
+    private DateTime? _startDate;
+    public DateTime? StartDate
     {
-        get => _durationDate;
+        get => _startDate;
         set
         {
-            if (value == _durationDate)
+            if (value == _startDate)
                 return;
-            _durationDate = value;
-            NotifyPropertyChanged(nameof(DurationDate));
-        }
-    }
-
-    private DateTime? _estimatedDate;
-    public DateTime? EstimatedDate
-    {
-        get => _estimatedDate;
-        set
-        {
-            if (value == _estimatedDate)
-                return;
-            _estimatedDate = value;
-            NotifyPropertyChanged(nameof(EstimatedDate));
+            _startDate = value;
+            NotifyPropertyChanged(nameof(StartDate));
         }
     }
 
@@ -394,8 +381,7 @@ public class ProjectVM : BaseVM
     public ProjectVM()
     {
         DeadLine = DateTime.Now.AddMonths(1);
-        EstimatedDate = DateTime.Now.AddDays(20);
-        DurationDate = DateTime.Now.AddDays(20);
+        StartDate = DateTime.Now;
         Name = "";
         Code = "";
         Description = "";

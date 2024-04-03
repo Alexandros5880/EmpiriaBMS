@@ -47,66 +47,69 @@ else
                         </a>
                         <ul class="nav nav-pills flex-column 
                                    mb-auto
-                                   align-items-start align-items-md-start align-items-sm-center align-items-xs-center"
+                                   align-items-start
+                                   align-items-md-start
+                                   align-items-sm-center
+                                   align-items-xs-center"
                             id="menu">
                             @if (SeeDashboard)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-white mb-2 align-middle px-0"
+                                    <a class="nav-link d-flex justify-content-start"
                                        herf="/dashboard"
                                        @onclick="@(() => selectUrl("/dashboard"))">
                                         <span class="arcticons--nextcloud-tables"></span>
-                                        <span class="ms-1 d-none d-md-inline">Dashboard</span>
+                                        <b class="ms-1 d-none d-md-inline nav-link-text">Dashboard</b>
                                     </a>
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
+                                <a class="nav-link d-flex justify-content-start"
                                    @onclick="@(() => selectUrl("/mvc/Admin/Projects/Table"))">
                                     <span class="file-icons--microsoft-project"></span>
-                                    <span class="ms-1 d-none d-md-inline">Projects</span>
+                                    <b class="ms-1 d-none d-md-inline nav-link-text">Projects</b>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
+                                <a class="nav-link d-flex justify-content-start"
                                    @onclick="@(() => selectUrl("/mvc/Admin/Users/Table"))">
                                     <span class="ph--users-four-light"></span>
-                                    <span class="ms-1 d-none d-md-inline">Users</span>
+                                    <b class="ms-1 d-none d-md-inline nav-link-text">Users</b>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
+                                <a class="nav-link d-flex justify-content-start"
                                    @onclick="@(() => selectUrl("/mvc/Admin/Roles/Table"))">
                                     <span class="oui--app-users-roles"></span>
-                                    <span class="ms-1 d-none d-md-inline">Roles</span>
+                                    <b class="ms-1 d-none d-md-inline nav-link-text">Roles</b>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
+                                <a class="nav-link d-flex justify-content-start"
                                    @onclick="@(() => selectUrl("/mvc/Admin/ProjectTypes/Table"))">
                                     <span class="arcticons--ptv"></span>
-                                    <span class="ms-1 d-none d-md-inline">Project Types</span>
+                                    <b class="ms-1 d-none d-md-inline nav-link-text">Project Types</b>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
+                                <a class="nav-link d-flex justify-content-start"
                                    @onclick="@(() => selectUrl("/mvc/Admin/DisciplineTypes/Table"))">
                                     <span class="gala--layer"></span>
-                                    <span class="ms-1 d-none d-md-inline">Disciplines Types</span>
+                                    <b class="ms-1 d-none d-md-inline nav-link-text">Disciplines Types</b>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
+                                <a class="nav-link d-flex justify-content-start"
                                    @onclick="@(() => selectUrl("/mvc/Admin/DrawingTypes/Table"))">
                                     <span class="streamline--hand-held-tablet-drawing"></span>
-                                    <span class="ms-1 d-none d-md-inline">Drawing Types</span>
+                                    <b class="ms-1 d-none d-md-inline nav-link-text">Deliverable Types</b>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
+                                <a class="nav-link d-flex justify-content-start"
                                    @onclick="@(() => selectUrl("/mvc/Admin/OtherTypes/Table"))">
                                     <span class="material-symbols--other-admission-outline-sharp"></span>
-                                    <span class="ms-1 d-none d-md-inline">Other Types</span>
+                                    <b class="ms-1 d-none d-md-inline nav-link-text">Supportive Work Types</b>
                                 </a>
                             </li>
                         </ul>

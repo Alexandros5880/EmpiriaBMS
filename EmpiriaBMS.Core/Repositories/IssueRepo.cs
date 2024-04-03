@@ -2,10 +2,12 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
+using Document = EmpiriaBMS.Models.Models.Document;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,21 +17,31 @@ public class IssueRepo : Repository<IssueDto, Issue>
 {
     public IssueRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async new Task<IssueDto> Add(IssueDto entity, bool update = false)
+    public async new Task<IssueDto> Add(IssueDto entity, List<DocumentDto> documents)
     {
         if (entity == null)
             throw new ArgumentNullException(nameof(entity));
 
-        entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+        entity.CreatedDate = DateTime.Now.ToUniversalTime();
         entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             Issue issue = Mapping.Mapper.Map<Issue>(entity);
-            issue.Role = null;
+            List<Document> docs = Mapping.Mapper.Map<List<Document>>(documents);
+            issue.DisplayedRole = null;
             issue.Project = null;
             issue.Creator = null;
             var result = await _context.Set<Issue>().AddAsync(issue);
+
+            await _context.SaveChangesAsync();
+
+            foreach (var doc in docs)
+            {
+                doc.IssueId = result.Entity.Id;
+                await _context.Set<Document>().AddAsync(doc);
+            }
+
             await _context.SaveChangesAsync();
 
             return Mapping.Mapper.Map<IssueDto>(result.Entity);
