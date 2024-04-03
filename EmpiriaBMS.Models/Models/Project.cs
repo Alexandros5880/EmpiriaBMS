@@ -31,15 +31,11 @@ public class Project : Entity
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
-    public DateTime? DurationDate { get; set; }
+    public DateTime? StartDate { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime? DeadLine { get; set; }
-
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime? EstimatedDate { get; set; }
 
     public float EstimatedCompleted { get; set; }
 

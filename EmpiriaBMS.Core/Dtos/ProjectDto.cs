@@ -30,11 +30,9 @@ public class ProjectDto : EntityDto
 
     public bool Active { get; set; }
 
+    public DateTime? StartDate { get; set; }
+
     public DateTime? DeadLine { get; set; }
-
-    public DateTime? DurationDate { get; set; }
-
-    public DateTime? EstimatedDate { get; set; }
 
     public float EstimatedCompleted { get; set; }
 
