@@ -50,7 +50,6 @@ public partial class Dashboard : IDisposable
     #region Working Timer
     Timer timer;
     bool isWorkingMode = false;
-    TimeSpan StartWorkTime = TimeSpan.Zero;
     TimeSpan elapsedTime = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
     TimeSpan remainingTime = TimeSpan.Zero;

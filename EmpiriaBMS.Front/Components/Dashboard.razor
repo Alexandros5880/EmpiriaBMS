@@ -684,7 +684,7 @@ else
                         <div class="d-flex justify-content-around">
                             <div class="table-responsive p-1 w-100 h-100"
                                  style="max-height: 300px !important; overflow-y: auto;">
-                                <table class="bg-transparent">
+                                 <table class="bg-transparent">
                                     <tbody>
                                         @foreach (var designer in _designers)
                                         {
@@ -841,7 +841,7 @@ else
                 <span class="carbon--close-outline float-end" @onclick="CloseAddIssueClick"></span>
             </div>
             <div class="col-12 justify-content-center">
-                <IssueDetailed @ref="@issueCompoment" Project="@_selectedProject" DisplayBaseInfo="@true" />
+                <IssueDetailed @ref="@issueCompoment" Project="@_selectedProject"/>
             </div>
         </div>
 
