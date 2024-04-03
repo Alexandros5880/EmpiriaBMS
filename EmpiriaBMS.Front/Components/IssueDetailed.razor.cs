@@ -31,9 +31,6 @@ public partial class IssueDetailed : ComponentBase, IDisposable
         }
     }
 
-    [Parameter]
-    public bool DisplayBaseInfo { get; set; }
-
     private UserVM _customer;
 
     private IssueVM _issue = new IssueVM()

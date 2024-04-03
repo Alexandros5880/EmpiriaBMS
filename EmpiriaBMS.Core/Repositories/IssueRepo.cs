@@ -17,12 +17,12 @@ public class IssueRepo : Repository<IssueDto, Issue>
 {
     public IssueRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async new Task<IssueDto> Add(IssueDto entity, List<DocumentDto> documents, bool update = false)
+    public async new Task<IssueDto> Add(IssueDto entity, List<DocumentDto> documents)
     {
         if (entity == null)
             throw new ArgumentNullException(nameof(entity));
 
-        entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+        entity.CreatedDate = DateTime.Now.ToUniversalTime();
         entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
         using (var _context = _dbContextFactory.CreateDbContext())
