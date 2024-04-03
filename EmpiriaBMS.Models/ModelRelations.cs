@@ -48,8 +48,8 @@ public static class ModelRelations
         // Role Issues
         builder.Entity<Role>()
                .HasMany(p => p.Issues)
-               .WithOne(c => c.Role)
-               .HasForeignKey(c => c.RoleId)
+               .WithOne(c => c.DisplayedRole)
+               .HasForeignKey(c => c.DisplayedRoleId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // User Issues
@@ -240,6 +240,13 @@ public static class ModelRelations
                .HasMany(p => p.Complains)
                .WithOne(c => c.Project)
                .HasForeignKey(c => c.ProjectId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Issue Documents
+        builder.Entity<Document>()
+               .HasOne(d => d.Issue)
+               .WithMany(i => i.Documents)
+               .HasForeignKey(d => d.IssueId)
                .OnDelete(DeleteBehavior.Cascade);
     }
 }

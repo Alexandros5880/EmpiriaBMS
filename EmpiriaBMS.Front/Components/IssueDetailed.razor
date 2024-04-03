@@ -32,8 +32,8 @@
             </div>
 
             <div class="col form-group">
-                <label for="about">About:</label>
-                <InputText id="about" @bind-Value="_issue.About" class="form-control" />
+                <label for="documents">Relative Documents:</label>
+                <InputFile id="documents" OnChange="@HandleFileUploadDoc" multiple />
             </div>
         </div>
 

@@ -29,5 +29,6 @@ public class MappingCoreProfile : Profile
         CreateMap<PermissionDto, Permission>().ReverseMap();
         CreateMap<IssueDto, Issue>().ReverseMap();
         CreateMap<PaymentDto, Payment>().ReverseMap();
+        CreateMap<DocumentDto, Document>().ReverseMap();
     }
 }

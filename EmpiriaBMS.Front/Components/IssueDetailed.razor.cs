@@ -5,6 +5,9 @@ using System.Text.Json;
 using EmpiriaBMS.Front.ViewModel.Components;
 using System.ComponentModel;
 using EmpiriaBMS.Front.Components.General;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.Components;
 
@@ -43,6 +46,8 @@ public partial class IssueDetailed : ComponentBase, IDisposable
     SignaturePad verificatorSignature;
     SignaturePad pMSignature;
 
+    private List<DocumentVM> _documents =  new List<DocumentVM>();
+
     public void Refresh()
     {
         _issue = new IssueVM()
@@ -66,11 +71,31 @@ public partial class IssueDetailed : ComponentBase, IDisposable
         }
     }
 
+    private async Task HandleFileUploadDoc(InputFileChangeEventArgs e)
+    {
+        foreach (var file in e.GetMultipleFiles())
+        {
+            // Read file content
+            using var stream = file.OpenReadStream();
+            var buffer = new byte[file.Size];
+            await stream.ReadAsync(buffer, 0, (int)file.Size);
+
+            // Create Documents
+            var document = new DocumentVM()
+            {
+                FileName = file.Name,
+                ContentType = file.ContentType,
+                Content = buffer,
+                IssueId = _issue.Id
+            };
+            _documents.Add(document);
+        }
+    }
+
     public async Task HandleValidSubmit()
     {
-        // TODO: Setup Visible Users
         var parentRole = _sharedAuthData.LoggedUserParentRole;
-        _issue.RoleId = parentRole.Id;
+        _issue.DisplayedRoleId = parentRole.Id;
         _issue.VerificatorSignature = verificatorSignature != null ? await verificatorSignature.GetImageData() : null;
         _issue.PMSignature = pMSignature != null ? await pMSignature.GetImageData() : null;
         _issue.ProjectId = _project.Id;
@@ -80,12 +105,13 @@ public partial class IssueDetailed : ComponentBase, IDisposable
         try
         {
             var dto = Mapper.Map<IssueDto>(_issue);
-            await DataProvider.Issues.Add(dto);
+            var documentsDtos = Mapper.Map<List<DocumentDto>>(_documents);
+            await DataProvider.Issues.Add(dto, documentsDtos);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception IssueDetailed.HandleValidSubmit() \"await DataProvider.Issues.Add(dto);\" \n Exception: {ex.Message}  ->  \n InnerException: ");
-            Console.Write(ex.InnerException.Message);
+            Console.WriteLine($"Exception IssueDetailed.HandleValidSubmit() \"await DataProvider.Issues.Add(dto);\" \n Exception: {ex?.Message ?? "No Exception Msg"}  ->  \n InnerException: ");
+            Console.Write(ex?.InnerException?.Message ?? "No Exception Msg");
         }
     }
 

@@ -15,13 +15,13 @@ public class Issue : Entity
     public int ProjectId { get; set; }
     public Project? Project { get; set; }
 
-    public int RoleId { get; set; }
-    public Role? Role { get; set; }
+    public int DisplayedRoleId { get; set; }
+    public Role? DisplayedRole { get; set; }
 
     public int CreatorId { get; set; }
     public User? Creator { get; set; }
 
-    public string About { get; set; }
+    public ICollection<Document> Documents { get; set; }
 
     public string Description { get; set; }
 

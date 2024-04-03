@@ -724,10 +724,10 @@ public class UsersRepo : Repository<UserDto, User>
                                  .ToListAsync();
 
             var issues = await _context.Set<Issue>()
-                                .Where(i => rolesIds.Contains(i.RoleId))
+                                .Where(i => rolesIds.Contains(i.DisplayedRoleId))
                                 .Where(i => i.IsClose == false)
                                 .Include(i => i.Project)
-                                .Include(i => i.Role)
+                                .Include(i => i.DisplayedRole)
                                 .ToListAsync();
 
             return Mapping.Mapper.Map<List<Issue>, List<IssueDto>>(issues);
