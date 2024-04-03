@@ -112,6 +112,13 @@ code {
 }
 /* | Scrollbar */
 
+.nav-link-text {
+    color: var(--admin-nav-bar-color);
+}
+.nav-link-text:hover {
+    color: var(--admin-nav-bar-hover-color);
+}
+
 .sticky-header {
     position: sticky;
     top: 0;
@@ -120,7 +127,7 @@ code {
 }
 
 .table-container {
-    min-height: 34vh;
+    min-height: 11vh;
     max-height: 50vh;
     overflow-x: hidden;
     overflow-y: auto;
