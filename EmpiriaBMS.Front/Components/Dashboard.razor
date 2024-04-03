@@ -118,7 +118,7 @@ else
                     </div>
 
                     <div class="row mt-4 p-1
-                                gx-xl-2 gx-lg-2 gx-md-2 gx-sm-2
+                                gx-xl-1 gx-lg-1 gx-md-1 gx-sm-1
                                 gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
                         
                         <div class="col row">
@@ -145,7 +145,8 @@ else
                                                   @onclick="@(() => AddProject())" />
                                         }
                                     </div>
-                                    <div class="table-responsive p-1 table-container">
+                                    <div class="table-responsive p-1 table-container"
+                                         style="overflow-x: hidden !important;">
                                         <table class="table table-hover table-success text-center">
                                             <thead>
                                                 <tr>
@@ -159,7 +160,7 @@ else
                                                     }
                                                     @if (isWorkingMode && AssignPm)
                                                     {
-                                                        <th scope="col">PM</th>
+                                                        <th scope="col" class="sticky-header">PM</th>
                                                     }
                                                 </tr>
                                             </thead>
@@ -208,7 +209,7 @@ else
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
                                                                 <span class="majesticons--chat-2-text"
-                                                                      @onclick="@OnAddIssueClick">
+                                                                @onclick="@OnAddIssueClick">
                                                                 </span>
                                                             </td>
                                                         }
@@ -220,9 +221,10 @@ else
                                                                 {
                                                                     @if (!string.IsNullOrEmpty(project.PmName))
                                                                     {
-                                                                        <span @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                        <button type="button" class="btn btn-outline-info"
+                                                                                @onclick="@(async (x) => await OnProjectAssignClick(project))">
                                                                             @project.PmName
-                                                                        </span>
+                                                                        </button>
                                                                     }
                                                                     else
                                                                     {

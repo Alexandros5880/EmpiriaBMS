@@ -728,6 +728,7 @@ public class UsersRepo : Repository<UserDto, User>
                                 .Where(i => i.IsClose == false)
                                 .Include(i => i.Project)
                                 .Include(i => i.DisplayedRole)
+                                .Include(i => i.Documents)
                                 .ToListAsync();
 
             return Mapping.Mapper.Map<List<Issue>, List<IssueDto>>(issues);
