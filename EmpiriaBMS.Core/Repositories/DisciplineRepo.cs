@@ -219,40 +219,40 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task UpdateCompleted(int projectId, int disciplineId, float completed)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            // Calculate Parent Discipline Completed
-            var discipline = await _context.Set<Discipline>()
-                                           .Include(d => d.Project)
-                                           .Include(d => d.Drawings)
-                                           .Include(d => d.Others)
-                                           .FirstOrDefaultAsync(d => d.Id == disciplineId);
-            if (discipline == null)
-                throw new NullReferenceException(nameof(discipline));
-            var allDrawings = discipline.Drawings;
-            var sumComplitionOfDrawings = allDrawings
-                                          .Select(d => d.CompletionEstimation)
-                                          .Sum();
+    //public async Task UpdateCompleted(int projectId, int disciplineId, float completed)
+    //{
+    //    using (var _context = _dbContextFactory.CreateDbContext())
+    //    {
+    //        // Calculate Parent Discipline Completed
+    //        var discipline = await _context.Set<Discipline>()
+    //                                       .Include(d => d.Project)
+    //                                       .Include(d => d.Drawings)
+    //                                       .Include(d => d.Others)
+    //                                       .FirstOrDefaultAsync(d => d.Id == disciplineId);
+    //        if (discipline == null)
+    //            throw new NullReferenceException(nameof(discipline));
+    //        var allDrawings = discipline.Drawings;
+    //        var sumComplitionOfDrawings = allDrawings
+    //                                      .Select(d => d.CompletionEstimation)
+    //                                      .Sum();
 
-            sumComplitionOfDrawings += completed;
+    //        sumComplitionOfDrawings += completed;
 
-            var drawsCounter = allDrawings.Count();
-            discipline.Completed = sumComplitionOfDrawings / drawsCounter;
+    //        var drawsCounter = allDrawings.Count();
+    //        discipline.Completed = sumComplitionOfDrawings / drawsCounter;
 
-            // Calculate Parent Project Complition
-            var disciplines = await _context.Set<Discipline>()
-                                            .Where(d => d.ProjectId == projectId)
-                                            .ToListAsync();
-            var project = discipline.Project;
-            var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
-            var disciplinesCounter = disciplines.Count();
-            project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
+    //        // Calculate Parent Project Complition
+    //        var disciplines = await _context.Set<Discipline>()
+    //                                        .Where(d => d.ProjectId == projectId)
+    //                                        .ToListAsync();
+    //        var project = discipline.Project;
+    //        var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
+    //        var disciplinesCounter = disciplines.Count();
+    //        project.WorkPackegedDeclaredCompleted = sumCompplitionOfDisciplines / disciplinesCounter;
 
-            await _context.SaveChangesAsync();
-        }
-    }
+    //        await _context.SaveChangesAsync();
+    //    }
+    //}
 
     public async Task AddTime(int userId, int projectId, int disciplineId, TimeSpan timespan)
     {

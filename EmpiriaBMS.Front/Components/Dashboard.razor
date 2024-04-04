@@ -170,7 +170,7 @@ else
                                                     <tr class="align-middle
                                                                 @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-warning" : ""))
                                                                 @(( project.DeadLine < DateTime.Now ? "table-danger" : ""))
-                                                                @(( project.Completed >= 100 || !project.Active ? "table-secondary" : ""))"
+                                                                @(( project.EstimatedCompleted >= 100 || !project.Active ? "table-secondary" : ""))"
                                                         @onclick="@(async () => await OnSelectProject(project.Id))">
                                                     
                                                         <td class="align-middle
