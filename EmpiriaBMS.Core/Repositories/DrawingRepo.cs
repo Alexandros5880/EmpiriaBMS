@@ -135,7 +135,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
                                           .Select(d => d.CompletionEstimation)
                                           .Sum();
             var drawsCounter = allDrawings.Count();
-            discipline.Completed = sumComplitionOfDrawings / drawsCounter;
+            discipline.DeclaredCompleted = sumComplitionOfDrawings / drawsCounter;
 
             // Calculate Parent Project Complition
             var disciplines = await _context.Set<Discipline>()
@@ -143,9 +143,9 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
                                             .Include(d => d.Project)
                                             .ToListAsync();
             var project = discipline.Project;
-            var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
+            var sumCompplitionOfDisciplines = disciplines.Select(d => d.DeclaredCompleted).Sum();
             var disciplinesCounter = disciplines.Count();
-            project.WorkPackegedDeclaredCompleted = sumCompplitionOfDisciplines / disciplinesCounter;
+            project.DeclaredCompleted = sumCompplitionOfDisciplines / disciplinesCounter;
 
             await _context.SaveChangesAsync();
         }

@@ -23,5 +23,5 @@ public class DisciplineDto : EntityDto
 
     public float EstimatedCompleted { get; set; }
 
-    public float Completed { get; set; }
+    public float DeclaredCompleted { get; set; }
 }

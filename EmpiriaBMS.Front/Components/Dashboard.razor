@@ -126,7 +126,7 @@ else
                             <div class="col-12">
                                 @if (!_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center row">
+                                    <div class="text-center row me-2">
                                         <h3 class="@((_selectedProject != null ? "col-7" : "col-11"))">Projects</h3>
                                         @if (isWorkingMode && editProject)
                                         {
@@ -185,7 +185,7 @@ else
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
-                                                            <label>@(project.WorkPackegedDeclaredCompleted.ToString("##0.0")) %</label>
+                                                            <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
                                                         </td>
                                                     
                                                         <td class="align-middle
@@ -250,7 +250,7 @@ else
                             <div class="col-12">
                                 @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center row">
+                                    <div class="text-center row me-2">
                                         <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Disciplines</h3>
                                         @if (isWorkingMode && editDiscipline)
                                         {
@@ -325,7 +325,7 @@ else
                             <div class="col-12">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center row">
+                                    <div class="text-center row me-2">
                                         <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Deliverables</h3>
                                         @if (isWorkingMode && editDeliverable)
                                         {
@@ -407,7 +407,7 @@ else
                             <div class="col-12">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center row">
+                                    <div class="text-center row me-2">
                                         <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Supportive Works</h3>
                                         @if (isWorkingMode && editOther)
                                         {

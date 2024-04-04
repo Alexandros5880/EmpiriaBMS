@@ -111,16 +111,16 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private float _completed;
-    public float Completed
+    private float _declaredCompleted;
+    public float DeclaredCompleted
     {
-        get => _completed;
+        get => _declaredCompleted;
         set
         {
-            if (value == _completed)
+            if (value == _declaredCompleted)
                 return;
-            _completed = value;
-            NotifyPropertyChanged(nameof(Completed));
+            _declaredCompleted = value;
+            NotifyPropertyChanged(nameof(DeclaredCompleted));
         }
     }
 
@@ -129,6 +129,6 @@ public class DisciplineVM : BaseVM
         EstimatedMandays = 0;
         EstimatedHours = 0;
         EstimatedCompleted = 0;
-        Completed = 0;
+        DeclaredCompleted = 0;
     }
 }

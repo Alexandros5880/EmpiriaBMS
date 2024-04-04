@@ -860,6 +860,8 @@ public partial class Dashboard : IDisposable
             TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
             await _getUserTotalHoursThisMonth();
+
+            StateHasChanged();
         }
         catch(Exception ex)
         {

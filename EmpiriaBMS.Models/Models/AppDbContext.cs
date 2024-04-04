@@ -2269,7 +2269,7 @@ public class AppDbContext : DbContext
                     CalculationDaly = i < 5 ? i : i - (i - 1),
                     EstimatedMandays = 100 / 8,
                     EstimatedHours = 1500,
-                    WorkPackegedDeclaredCompleted = 0,
+                    DeclaredCompleted = 0,
                     EstimatedCompleted = 0,
                     TypeId = projectTypes[i - 1],
                     Active = i % 2 == 0 ? true : false,
@@ -2311,7 +2311,7 @@ public class AppDbContext : DbContext
                 CalculationDaly = 345,
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
-                WorkPackegedDeclaredCompleted = 0,
+                DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
                 TypeId = project_type_5_Id,
                 Active = true
@@ -2342,7 +2342,7 @@ public class AppDbContext : DbContext
                     CalculationDaly = i < 5 ? i : i - (i - 1),
                     EstimatedMandays = 100 / 8,
                     EstimatedHours = 1500,
-                    WorkPackegedDeclaredCompleted = 0,
+                    DeclaredCompleted = 0,
                     EstimatedCompleted = 0,
                     TypeId = projectTypes[typesIndex],
                     Active = i % 2 == 0 ? true : false,
@@ -2446,7 +2446,7 @@ public class AppDbContext : DbContext
                         EstimatedMandays = 50 + j,
                         EstimatedHours = (50 + j) * 8,
                         ProjectId = projects[i].Id,
-                        Completed = 0
+                        DeclaredCompleted = 0
                     };
                     builder.Entity<Discipline>().HasData(discipline);
                     disciplines.Add(discipline);
@@ -2463,7 +2463,7 @@ public class AppDbContext : DbContext
                 TypeId = discipline_pm_hours_type_Id,
                 EstimatedHours = 500,
                 ProjectId = projectPmId,
-                Completed = 0
+                DeclaredCompleted = 0
             };
             builder.Entity<Discipline>().HasData(discipline_pm_hours);
             #endregion

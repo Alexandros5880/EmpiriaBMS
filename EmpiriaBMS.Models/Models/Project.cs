@@ -39,7 +39,7 @@ public class Project : Entity
 
     public float EstimatedCompleted { get; set; }
 
-    public float WorkPackegedDeclaredCompleted { get; set; }
+    public float DeclaredCompleted { get; set; }
 
     public int? CalculationDaly { get; set; }
 
