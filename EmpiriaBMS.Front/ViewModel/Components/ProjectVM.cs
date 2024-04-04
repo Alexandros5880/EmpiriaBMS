@@ -165,16 +165,16 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private float _workPackegedCompleted;
-    public float WorkPackegedCompleted
+    private float _workPackegedDeclaredCompleted;
+    public float WorkPackegedDeclaredCompleted
     {
-        get => _workPackegedCompleted;
+        get => _workPackegedDeclaredCompleted;
         set
         {
-            if (value == _workPackegedCompleted)
+            if (value == _workPackegedDeclaredCompleted)
                 return;
-            _workPackegedCompleted = value;
-            NotifyPropertyChanged(nameof(WorkPackegedCompleted));
+            _workPackegedDeclaredCompleted = value;
+            NotifyPropertyChanged(nameof(WorkPackegedDeclaredCompleted));
         }
     }
 
@@ -390,6 +390,6 @@ public class ProjectVM : BaseVM
         EstimatedHours = 0;
         EstimatedCompleted = 0;
         Completed = 0;
-        WorkPackegedCompleted = 0;
+        WorkPackegedDeclaredCompleted = 0;
     }
 }

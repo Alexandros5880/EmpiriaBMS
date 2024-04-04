@@ -38,7 +38,7 @@ public class ProjectDto : EntityDto
 
     public float Completed { get; set; }
 
-    public float WorkPackegedCompleted { get; set; }
+    public float WorkPackegedDeclaredCompleted { get; set; }
 
     public int? CalculationDaly { get; set; }
 

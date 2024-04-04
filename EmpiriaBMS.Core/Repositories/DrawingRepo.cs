@@ -145,7 +145,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
             var project = discipline.Project;
             var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
             var disciplinesCounter = disciplines.Count();
-            project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
+            project.WorkPackegedDeclaredCompleted = sumCompplitionOfDisciplines / disciplinesCounter;
 
             await _context.SaveChangesAsync();
         }
