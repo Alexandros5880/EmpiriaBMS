@@ -191,7 +191,9 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                                        .ToListAsync();
             }
 
-            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+            var result = Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+
+            return result.OrderBy(d => d.Type?.Name).ToList();
         }
     }
 
