@@ -35,12 +35,7 @@ public class User : Entity
 
     public string? Description { get; set; }
 
-    public int? ProjectId { get; set; }
-    public Project? Project { get; set; }
-
     public ICollection<Email> Emails { get; set; }
-
-    public ICollection<Project> SubConstructorProjects { get; set; }
     
     public ICollection<Project> PMProjects { get; set; }
 
@@ -63,4 +58,6 @@ public class User : Entity
     public ICollection<DailyTime> CorporateEventTime { get; set; }
 
     public ICollection<Issue> MyIssues { get; set; }
+
+    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 }
