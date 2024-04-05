@@ -295,32 +295,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _subContractorId;
-    public int? SubContractorId
-    {
-        get => _subContractorId;
-        set
-        {
-            if (value == _subContractorId)
-                return;
-            _subContractorId = value;
-            NotifyPropertyChanged(nameof(SubContractorId));
-        }
-    }
-
-    private User? _subContractor;
-    public User? SubContractor
-    {
-        get => _subContractor;
-        set
-        {
-            if (value == _subContractor)
-                return;
-            _subContractor = value;
-            NotifyPropertyChanged(nameof(SubContractor));
-        }
-    }
-
     private int? _projectManagerId;
     public int? ProjectManagerId
     {
@@ -361,6 +335,8 @@ public class ProjectVM : BaseVM
     }
 
     public List<Project> Projects { get; set; }
+
+    public List<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 
     public ProjectVM()
     {
