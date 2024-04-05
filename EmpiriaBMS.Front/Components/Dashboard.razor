@@ -45,16 +45,21 @@ else
                         @if (_sharedAuthData.LogedUser != null)
                         {
                             <div class="row ms-2 me-8" style="overflow:hidden;">
-                                
+
                                 <!-- User Name + Roles + Current Date -->
                                 <div class="col-lg-4 col-md-8 col-sm-8 row">
                                     <div class="col">
                                         <h4 class="mt-3">
-                                            @_sharedAuthData.LogedUser.LastName
-                                            @foreach (var role in _sharedAuthData.LoggedUserRoles)
-                                            {
-                                                <span>&nbsp;&nbsp; @role.Name</span>
+                                            @{
+                                                var rolesNames = "";
+                                                foreach (var role in _sharedAuthData.LoggedUserRoles)
+                                                {
+                                                    rolesNames += $"   {role.Name}";
+                                                }
                                             }
+                                            <span class="my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@rolesNames">
+                                                @_sharedAuthData.LogedUser.LastName &ensp; @_sharedAuthData.LogedUser.FirstName
+                                            </span>
                                         </h4>
                                     </div>
                                     <div class="col mt-3">
@@ -63,7 +68,7 @@ else
                                 </div>
 
                                 <!-- Start / Stop Buttons -->
-                                <div class="col-lg-4 col-md-7 col-sm-7">
+                                <div class="col-lg-5 col-md-7 col-sm-7">
                                     <div class="d-grid">
                                         @if (EditMyHours && !_isEndWorkDialogOdepened)
                                         {
@@ -86,7 +91,7 @@ else
                                 </div>
 
                                 <!-- Issues / Display Hours Passed -->
-                                <div class="col-lg-4 col-md-5 col-sm-5">
+                                <div class="col-lg-3 col-md-5 col-sm-5">
                                     <div class="d-flex justify-content-between"
                                          style="height: auto !important;">
 
@@ -111,7 +116,6 @@ else
 
                                     </div>
                                 </div>
-                                
 
                             </div>
                         }
@@ -199,7 +203,7 @@ else
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
-                                                            <label>@project.DeadlineDisplay</label>
+                                                            <label>@project.DeadLine?.ToString("dd/MM/yyyy")</label>
                                                         </td>
 
                                                         @if (isWorkingMode)
