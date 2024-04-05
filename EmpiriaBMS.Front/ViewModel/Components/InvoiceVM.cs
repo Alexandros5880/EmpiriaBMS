@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
@@ -84,31 +85,7 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private int _projectId;
-    public int ProjectId
-    {
-        get => _projectId;
-        set
-        {
-            if (value == _projectId)
-                return;
-            _projectId = value;
-            NotifyPropertyChanged(nameof(ProjectId));
-        }
-    }
-
-    private Project? _project;
-    public Project? Project
-    {
-        get => _project;
-        set
-        {
-            if (value == _project)
-                return;
-            _project = value;
-            NotifyPropertyChanged(nameof(Project));
-        }
-    }
+    public List<ProjectInvoice> ProjectsInvoices { get; set; }
 
     public InvoiceVM()
     {

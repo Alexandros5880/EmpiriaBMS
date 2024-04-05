@@ -11,6 +11,7 @@ namespace EmpiriaMS.Models.Models.Base;
 public class Entity : IEntity
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Required]

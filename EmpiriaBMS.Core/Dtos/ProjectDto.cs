@@ -43,9 +43,6 @@ public class ProjectDto : EntityDto
     public int? CustomerId { get; set; }
     public User? Customer { get; set; }
 
-    public int? InvoiceId { get; set; }
-    public Invoice? Invoice { get; set; }
-
     public int? PaymentId { get; set; }
     public Payment? Payment { get; set; }
 
@@ -53,4 +50,6 @@ public class ProjectDto : EntityDto
     public User? ProjectManager { get; set; }
 
     public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+
+    public ICollection<ProjectInvoice> ProjectsInvoices { get; set; }
 }

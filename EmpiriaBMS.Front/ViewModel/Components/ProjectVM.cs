@@ -256,19 +256,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private Invoice? _invoice;
-    public Invoice? Invoice
-    {
-        get => _invoice;
-        set
-        {
-            if (value == _invoice)
-                return;
-            _invoice = value;
-            NotifyPropertyChanged(nameof(Invoice));
-        }
-    }
-
     private int? _paymentId;
     public int? PaymentId
     {
@@ -337,6 +324,8 @@ public class ProjectVM : BaseVM
     public List<Project> Projects { get; set; }
 
     public List<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+
+    public List<ProjectInvoice> ProjectsInvoices { get; set; }
 
     public ProjectVM()
     {

@@ -21,18 +21,16 @@ public partial class InvoiceDetailed : ComponentBase, IDisposable
 
     public void Prepair()
     {
-        isNew = Project.Invoice == null;
-        if (isNew)
-        {
-            Invoice = new InvoiceVM();
-            Invoice.ProjectId = Project.Id;
-        }
+        isNew = Project.ProjectsInvoices == null || Project.ProjectsInvoices.Count == 0;
+        Invoice = new InvoiceVM();
+        Invoice.ProjectsInvoices = new List<ProjectInvoice>();
         StateHasChanged();
     }
 
     public async Task HandleValidSubmit()
     {
         InvoiceDto myInvoice = Mapper.Map<InvoiceDto>(Invoice);
+        
         // Save Invoice
         InvoiceDto saveInvoice;
         var exists = await DataProvider.Invoices.Any(i => i.Id == Invoice.Id);
@@ -40,6 +38,9 @@ public partial class InvoiceDetailed : ComponentBase, IDisposable
             saveInvoice = await DataProvider.Invoices.Update(myInvoice);
         else
             saveInvoice = await DataProvider.Invoices.Add(myInvoice);
+
+        // Connect Invoice To Project
+        await DataProvider.Projects.AddInvoice(Project.Id, saveInvoice.Id);
     }
 
     protected virtual void Dispose(bool disposing)
