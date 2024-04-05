@@ -1084,11 +1084,9 @@ else
             </div>
 
             <div class="col-12 justify-content-center">
-                @if (_selectedProject != null && _selectedInvoice != null)
+                @if (_selectedProject != null)
                 {
-                    <InvoiceDetailed @ref="@invoiceCompoment"
-                                     Project="@_selectedProject"
-                                     Invoice="_selectedInvoice" />
+                    <Invoices Project="@_selectedProject" />
                 }
                 else
                 {
@@ -1127,9 +1125,7 @@ else
             <div class="col-12 justify-content-center">
                 @if (_selectedProject != null)
                 {
-                    <PaymentDetailed @ref="@paymentCompoment"
-                                     Project="@_selectedProject"
-                                     Payment="_selectedPayment" />
+                    <Payments Project="@_selectedProject" />
                 }
                 else
                 {

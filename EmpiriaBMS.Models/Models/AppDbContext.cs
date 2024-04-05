@@ -35,11 +35,15 @@ public class AppDbContext : DbContext
     public DbSet<DailyTime> ParsonalTime { get; set; }
     public DbSet<DailyTime> TrainingTime { get; set; }
     public DbSet<DailyTime> CorporateEventTime { get; set; }
+    public DbSet<Issue> Issues { get; set; }
+    public DbSet<Document> Documents { get; set; }
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<Issue> Issues { get; set; }
-    public DbSet<Document> Documents { get; set; }
+    public DbSet<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public DbSet<ProjectInvoice> ProjectsInvoices { get; set; }
+    public DbSet<InvoicePayment> InvoicesPayments { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

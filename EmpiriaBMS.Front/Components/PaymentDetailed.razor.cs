@@ -17,11 +17,11 @@ public partial class PaymentDetailed : ComponentBase, IDisposable
 
     public void Prepair()
     {
-        isNew = Project.Payment == null;
-        if (isNew)
-            Payment = new PaymentVM();
-        Payment.ProjectId = Project.Id;
-        StateHasChanged();
+        //isNew = Project?.Invoice == null;
+        //if (isNew)
+        //    Payment = new PaymentVM();
+        //Payment.ProjectId = Project.Id;
+        //StateHasChanged();
     }
 
     public async Task HandleValidSubmit()

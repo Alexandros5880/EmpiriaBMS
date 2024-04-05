@@ -37,7 +37,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                              .Include(p => p.Type)
                              .Include(p => p.ProjectManager)
                              .Include(p => p.ProjectsSubConstructors)
-                             .Include(p => p.Payment)
                              .Select(r => Mapping.Mapper.Map<ProjectDto>(r))
                              .FirstOrDefaultAsync(r => r.Id == id);
         }
@@ -54,7 +53,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Include(p => p.Type)
                                       .Include(p => p.ProjectManager)
                                       .Include(p => p.ProjectsSubConstructors)
-                                      .Include(p => p.Payment)
                                       .OrderBy(e => !e.Active)
                                       .ThenByDescending(e => e.DeadLine)
                                       .ToListAsync();
@@ -76,7 +74,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -91,7 +88,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Include(p => p.Type)
                                       .Include(p => p.ProjectManager)
                                       .Include(p => p.ProjectsSubConstructors)
-                                      .Include(p => p.Payment)
                                       .OrderBy(e => !e.Active)
                                       .ThenByDescending(e => e.DeadLine)
                                       .ToListAsync();
@@ -117,7 +113,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -133,7 +128,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.Type)
                                      .Include(p => p.ProjectManager)
                                      .Include(p => p.ProjectsSubConstructors)
-                                     .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
                                      .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
@@ -167,7 +161,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                 .Include(p => p.Type)
                                                 .Include(p => p.ProjectManager)
                                                 .Include(p => p.ProjectsSubConstructors)
-                                                .Include(p => p.Payment)
                                                 .OrderBy(e => !e.Active)
                                                 .ThenByDescending(e => e.DeadLine)
                                                 .ToListAsync();
@@ -204,7 +197,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
-                                         .Include(p => p.Payment)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
@@ -240,7 +232,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                 .Include(p => p.Type)
                                                 .Include(p => p.ProjectManager)
                                                 .Include(p => p.ProjectsSubConstructors)
-                                                .Include(p => p.Payment)
                                                 .OrderBy(e => !e.Active)
                                                 .ThenByDescending(e => e.DeadLine)
                                                 .ToListAsync();
@@ -279,7 +270,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -328,7 +318,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -368,7 +357,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -385,7 +373,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.ProjectManager)
                                      .Include(p => p.ProjectsSubConstructors)
                                      .Include(p => p.Customer)
-                                     .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
                                      .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
@@ -428,7 +415,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                              .Include(p => p.ProjectManager)
                                              .Include(p => p.ProjectsSubConstructors)
                                              .Include(p => p.Customer)
-                                             .Include(p => p.Payment)
                                              .OrderBy(e => !e.Active)
                                              .ThenByDescending(e => e.DeadLine)
                                              .ToListAsync();
@@ -445,7 +431,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -487,7 +472,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -505,7 +489,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.ProjectManager)
                                      .Include(p => p.ProjectsSubConstructors)
                                      .Include(p => p.Customer)
-                                     .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
                                      .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();

@@ -43,9 +43,6 @@ public class ProjectDto : EntityDto
     public int? CustomerId { get; set; }
     public User? Customer { get; set; }
 
-    public int? PaymentId { get; set; }
-    public Payment? Payment { get; set; }
-
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 

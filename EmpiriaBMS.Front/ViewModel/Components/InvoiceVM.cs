@@ -87,6 +87,8 @@ public class InvoiceVM : BaseVM
 
     public List<ProjectInvoice> ProjectsInvoices { get; set; }
 
+    public List<InvoicePayment> InvoicesPayments { get; set; }
+
     public InvoiceVM()
     {
         Date = DateTime.Now;

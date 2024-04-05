@@ -48,8 +48,6 @@ public class Project : Entity
 
     public User? Customer { get; set; }
 
-    public Payment? Payment { get; set; }
-
     public ICollection<DailyTime> DailyTime { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }

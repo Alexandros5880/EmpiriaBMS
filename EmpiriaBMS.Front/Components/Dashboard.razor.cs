@@ -68,12 +68,12 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
+    private ObservableCollection<InvoiceVM> _invoices = new ObservableCollection<InvoiceVM>();
+    private ObservableCollection<PaymentVM> _payments = new ObservableCollection<PaymentVM>();
     #endregion
 
     #region Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
-    private InvoiceVM _selectedInvoice = new InvoiceVM();
-    private PaymentVM _selectedPayment = new PaymentVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
@@ -139,12 +139,10 @@ public partial class Dashboard : IDisposable
     // On Add/Edit Invoice Dialog
     private FluentDialog _addEditInvoiceDialog;
     private bool _isAddEditInvoiceDialogOdepened = false;
-    private InvoiceDetailed invoiceCompoment;
 
     // On Add/Edit Payment Dialog
     private FluentDialog _addEditPaymentDialog;
     private bool _isAddEditPaymentDialogOdepened = false;
-    private PaymentDetailed paymentCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -194,12 +192,14 @@ public partial class Dashboard : IDisposable
         }
     }
 
-    private async Task _getInvoice()
+    private async Task _getInvoices()
     {
         try
         {
-            var dto = await _dataProvider.Invoices.Get((int)_selectedProject.InvoiceId);
-            _selectedInvoice = Mapper.Map<InvoiceVM>(dto);
+            var dtos = await _dataProvider.Projects.GetInvoices(_selectedProject.Id);
+            var invoices = Mapper.Map<List<InvoiceVM>>(dtos);
+            _invoices.Clear();
+            invoices.ForEach(_invoices.Add);
         }
         catch (Exception ex)
         {
@@ -208,12 +208,12 @@ public partial class Dashboard : IDisposable
         }
     }
 
-    private async Task _getPayment()
+    private async Task _getPayments()
     {
         try
         {
-            var dto = await _dataProvider.Payments.Get((int)_selectedProject.PaymentId);
-            _selectedPayment = Mapper.Map<PaymentVM>(dto);
+            //var dto = await _dataProvider.Payments.Get((int)_selectedProject.PaymentId);
+            //_selectedPayment = Mapper.Map<PaymentVM>(dto);
         }
         catch (Exception ex)
         {
@@ -421,8 +421,8 @@ public partial class Dashboard : IDisposable
         foreach (var di in disciplines)
             _disciplines.Add(Mapper.Map<DisciplineVM>(di));
 
-        await _getInvoice();
-        await _getPayment();
+        await _getInvoices();
+        await _getPayments();
         await _checkIfHasAnySelections();
 
         StateHasChanged();
@@ -1073,7 +1073,6 @@ public partial class Dashboard : IDisposable
     #region Add Invoice Actions
     private void AddEditInvoice()
     {
-        invoiceCompoment.Prepair();
         _addEditInvoiceDialog.Show();
         _isAddEditInvoiceDialogOdepened = true;
     }
@@ -1089,7 +1088,6 @@ public partial class Dashboard : IDisposable
 
     public async Task _addInvoiceDialogAccept()
     {
-        await invoiceCompoment.HandleValidSubmit();
         _addEditInvoiceDialog.Hide();
         _isAddEditInvoiceDialogOdepened = false;
         await Refresh();
@@ -1099,7 +1097,6 @@ public partial class Dashboard : IDisposable
     #region Add Payment Actions
     private void AddEditPayment()
     {
-        paymentCompoment.Prepair();
         _addEditPaymentDialog.Show();
         _isAddEditPaymentDialogOdepened = true;
     }
@@ -1115,7 +1112,6 @@ public partial class Dashboard : IDisposable
 
     public async Task _addPaymentDialogAccept()
     {
-        await paymentCompoment.HandleValidSubmit();
         _addEditPaymentDialog.Hide();
         _isAddEditPaymentDialogOdepened = false;
         await Refresh();

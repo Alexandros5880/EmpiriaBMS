@@ -256,32 +256,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _paymentId;
-    public int? PaymentId
-    {
-        get => _paymentId;
-        set
-        {
-            if (value == _paymentId)
-                return;
-            _paymentId = value;
-            NotifyPropertyChanged(nameof(PaymentId));
-        }
-    }
-
-    private Payment? _payment;
-    public Payment? Payment
-    {
-        get => _payment;
-        set
-        {
-            if (value == _payment)
-                return;
-            _payment = value;
-            NotifyPropertyChanged(nameof(Payment));
-        }
-    }
-
     private int? _projectManagerId;
     public int? ProjectManagerId
     {

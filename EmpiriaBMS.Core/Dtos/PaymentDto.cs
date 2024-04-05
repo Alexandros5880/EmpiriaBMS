@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Dtos;
 
@@ -28,6 +29,5 @@ public class PaymentDto : EntityDto
 
     public double? PendingPayments { get; set; }
 
-    public int? ProjectId { get; set; }
-    public Project? Project { get; set; }
+    public ICollection<InvoicePayment> InvoicesPayments { get; set; }
 }

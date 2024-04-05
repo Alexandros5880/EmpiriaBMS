@@ -26,4 +26,6 @@ public class Invoice : Entity
     public DateTime Date { get; set; }
 
     public ICollection<ProjectInvoice> ProjectsInvoices { get; set; }
+
+    public ICollection<InvoicePayment> InvoicesPayments { get; set; }
 }

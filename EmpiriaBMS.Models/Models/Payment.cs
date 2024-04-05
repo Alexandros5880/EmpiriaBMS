@@ -32,6 +32,5 @@ public class Payment : Entity
 
     public double? PendingPayments { get; set; }
 
-    public int? ProjectId { get; set; }
-    public Project? Project { get; set; }
+    public ICollection<InvoicePayment> InvoicesPayments { get; set; }
 }

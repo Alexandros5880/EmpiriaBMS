@@ -62,6 +62,18 @@ public static class ModelRelations
                .WithMany(i => i.ProjectsInvoices)
                .HasForeignKey(pi => pi.ProjectId);
 
+        // Invoices Payments
+        builder.Entity<InvoicePayment>()
+               .HasKey(ip => new { ip.InvoiceId, ip.PaymentId });
+        builder.Entity<InvoicePayment>()
+               .HasOne(ip => ip.Invoice)
+               .WithMany(ip => ip.InvoicesPayments)
+               .HasForeignKey(ip => ip.InvoiceId);
+        builder.Entity<InvoicePayment>()
+               .HasOne(ip => ip.Payment)
+               .WithMany(ip => ip.InvoicesPayments)
+               .HasForeignKey(ip => ip.PaymentId);
+
         // Roles Parent And Children
         builder.Entity<Role>()
                .HasOne(r => r.ParentRole)
@@ -174,13 +186,6 @@ public static class ModelRelations
                .HasOne(de => de.Discipline)
                .WithMany(de => de.DisciplinesEngineers)
                .HasForeignKey(de => de.DisciplineId);
-
-        // Project Payment
-        builder.Entity<Project>()
-               .HasOne(p => p.Payment)
-               .WithOne(c => c.Project)
-               .HasForeignKey<Payment>(c => c.ProjectId)
-               .OnDelete(DeleteBehavior.Cascade);
 
         // User DailyTime
         builder.Entity<User>()
