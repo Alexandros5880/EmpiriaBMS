@@ -139,7 +139,7 @@ else
                                                 <span class="invoice col-1"
                                                       @onclick="@(async () => await AddEditInvoice())" />
                                                 <span class="payment col-1"
-                                                      @onclick="@(() => AddEditPayment())" />
+                                                      @onclick="@(async () => await AddEditPayment())" />
                                                 <span class="fluent--delete-28-regular col-1"
                                                       @onclick="@(() => DeleteProject())" />
                                                 <span class="material-symbols--edit-outline col-1"
@@ -1096,7 +1096,6 @@ else
 
         </div>
 
-
     </FluentDialog>
 
     <!-- On Add/Edit Payment Dialog -->
@@ -1116,7 +1115,7 @@ else
             <div class="col-12 justify-content-center">
                 @if (_selectedProject != null)
                 {
-                    <Payments @ref="@_ppaymentsCompoment" Project="@_selectedProject" />
+                    <Payments @ref="@_paymentsCompoment" Project="@_selectedProject" />
                 }
                 else
                 {
@@ -1124,16 +1123,6 @@ else
                 }
             </div>
 
-        </div>
-
-        <div class="row">
-            <FluentButton class="col-6"
-                          OnClick="@(async () => await _addPaymentDialogAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => CloseAddPaymentClick())">
-                Cancel
-            </FluentButton>
         </div>
 
     </FluentDialog>

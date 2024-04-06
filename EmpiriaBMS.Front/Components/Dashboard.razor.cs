@@ -142,7 +142,7 @@ public partial class Dashboard : IDisposable
     // On Add/Edit Payment Dialog
     private FluentDialog _addEditPaymentDialog;
     private bool _isAddEditPaymentDialogOdepened = false;
-    private Payments _ppaymentsCompoment;
+    private Payments _paymentsCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -1054,18 +1054,12 @@ public partial class Dashboard : IDisposable
             _isAddEditInvoiceDialogOdepened = false;
         }
     }
-
-    public async Task _addInvoiceDialogAccept()
-    {
-        _addEditInvoiceDialog.Hide();
-        _isAddEditInvoiceDialogOdepened = false;
-        await Refresh();
-    }
     #endregion
 
     #region Add Payment Actions
-    private void AddEditPayment()
+    private async Task AddEditPayment()
     {
+        await _paymentsCompoment.Prepair();
         _addEditPaymentDialog.Show();
         _isAddEditPaymentDialogOdepened = true;
     }
@@ -1077,13 +1071,6 @@ public partial class Dashboard : IDisposable
             _addEditPaymentDialog.Hide();
             _isAddEditPaymentDialogOdepened = false;
         }
-    }
-
-    public async Task _addPaymentDialogAccept()
-    {
-        _addEditPaymentDialog.Hide();
-        _isAddEditPaymentDialogOdepened = false;
-        await Refresh();
     }
     #endregion
 

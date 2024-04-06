@@ -161,4 +161,27 @@ public class PaymentVM : BaseVM
             NotifyPropertyChanged(nameof(Invoice));
         }
     }
+
+    public PaymentVM()
+    {
+        EstPaymentDate = DateTime.Now;
+        PaymentDate = DateTime.Now;
+    }
+
+    public PaymentVM(PaymentVM payment)
+    {
+        EstPaymentDate = payment.EstPaymentDate;
+        PaymentDate = payment.PaymentDate;
+        DelayInPayment = payment.DelayInPayment;
+        PaymentDetails = payment.PaymentDetails;
+        DayCost = payment.DayCost;
+        Bank = payment.Bank;
+        DaysUntilPayment = payment.DaysUntilPayment;
+        PendingPayments = payment.PendingPayments;
+        TypeId = payment.TypeId;
+        Type = null;
+        InvoiceId = payment.InvoiceId;
+        Invoice = null;
+    }
+
 }

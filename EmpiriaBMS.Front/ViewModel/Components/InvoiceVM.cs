@@ -147,6 +147,7 @@ public class InvoiceVM : BaseVM
 
     public InvoiceVM(InvoiceVM invoice)
     {
+        Date = invoice.Date;
         Total = invoice.Total;
         Vat = invoice.Vat;
         Fee = invoice.Fee;

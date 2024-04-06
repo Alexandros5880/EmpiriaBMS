@@ -107,14 +107,14 @@ public partial class Invoices : ComponentBase, IDisposable
         }
     }
 
-    private async Task _deleteInvoice(InvoiceVM invoice)
+    private void _deleteInvoice(InvoiceVM invoice)
     {
         if (invoice.Id != 0)
             _deleted.Add(invoice);
         _projectsInvoices.Remove(invoice);
     }
 
-    private async Task _addInvoice()
+    private void _addInvoice()
     {
         _projectsInvoices.Add(new InvoiceVM()
         {
@@ -127,37 +127,45 @@ public partial class Invoices : ComponentBase, IDisposable
 
     private async Task _save()
     {
-        // For Delete
-        if (_deleted.Count > 0)
+        try
         {
-            foreach (var invoice in _deleted)
+            // For Delete
+            if (_deleted.Count > 0)
             {
-                await _dataProvider.Invoices.Delete(invoice.Id);
+                foreach (var invoice in _deleted)
+                {
+                    await _dataProvider.Invoices.Delete(invoice.Id);
+                }
+            }
+
+            // For Update
+            var updatedInvoices = _projectsInvoices.Where(i => i.Id != 0).ToList();
+            if (updatedInvoices.Count() > 0)
+            {
+                foreach (var invoice in updatedInvoices)
+                {
+                    invoice.Type = null;
+                    var dto = _mapper.Map<InvoiceDto>(invoice);
+                    await _dataProvider.Invoices.Update(dto);
+                }
+            }
+
+            // For Add
+            if (_projectsInvoices.Any(i => i.Id == 0))
+            {
+                var newInvoices = _projectsInvoices.Where(i => i.Id == 0).ToList();
+                foreach (var invoice in newInvoices)
+                {
+                    invoice.Type = null;
+                    var dto = _mapper.Map<InvoiceDto>(invoice);
+                    await _dataProvider.Invoices.Add(dto);
+                }
             }
         }
-
-        // For Update
-        var updatedInvoices = _projectsInvoices.Where(i => i.Id != 0).ToList();
-        if (updatedInvoices.Count() > 0)
+        catch (Exception ex)
         {
-            foreach (var invoice in updatedInvoices)
-            {
-                invoice.Type = null;
-                var dto = _mapper.Map<InvoiceDto>(invoice);
-                await _dataProvider.Invoices.Update(dto);
-            }
-        }
-
-        // For Add
-        if (_projectsInvoices.Any(i => i.Id == 0))
-        {
-            var newInvoices = _projectsInvoices.Where(i => i.Id == 0).ToList();
-            foreach (var invoice in newInvoices)
-            {
-                invoice.Type = null;
-                var dto = _mapper.Map<InvoiceDto>(invoice);
-                await _dataProvider.Invoices.Add(dto);
-            }
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
         }
 
         await Prepair();

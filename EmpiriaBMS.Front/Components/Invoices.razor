@@ -32,7 +32,7 @@
 </div>
 
 <div class="table-responsive p-1 table-container"
-     style="overflow-x: hidden !important; max-width: 1000px !important;">
+     style="max-width: 1000px !important;">
     <table class="table table-hover text-center">
         <thead class="table-success">
             <tr>
@@ -51,7 +51,7 @@
             {
                 <tr class="align-middle">
 
-                    <td>
+                    <td style="min-width: 150px;">
                         <select class="form-select" @bind="@invoice.TypeId" style="min-width: 150px;">
                             @foreach(var type in @_types)
                             {
@@ -62,51 +62,51 @@
                         </select>
                     </td>
 
-                    <td>
+                    <td style="min-width: 150px;">
                         <input type="date"
                                class="form-control"
                                id="invoiceDate"
                                @bind="@invoice.Date">
                     </td>
 
-                    <td>
+                    <td style="min-width: 150px;">
                         <input type="text"
                                class="form-control"
                                id="invoiceMark"
                                @bind="@invoice.Mark">
                     </td>
 
-                    <td>
+                    <td style="min-width: 150px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceNumber"
                                @bind="@invoice.Number">
                     </td>
 
-                    <td>
+                    <td style="min-width: 150px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceTotal"
                                @bind="@invoice.Total">
                     </td>
 
-                    <td>
+                    <td style="min-width: 150px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceVat"
                                @bind="@invoice.Vat">
                     </td>
 
-                    <td>
+                    <td style="min-width: 150px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceFee"
                                @bind="@invoice.Fee">
                     </td>
 
-                    <td>
+                    <td style="min-width: 50px;">
                         <span class="fluent--delete-28-regular"
-                              @onclick="@(async () => await _deleteInvoice(invoice))" />
+                              @onclick="@(() => _deleteInvoice(invoice))" />
                     </td>
 
                 </tr>

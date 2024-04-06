@@ -88,4 +88,20 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
         }
     }
+
+    public async Task<ICollection<PaymentDto>> GetInvoicesPayments(int invoiceId)
+    {
+        if (invoiceId == 0)
+            throw new ArgumentNullException(nameof(invoiceId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var payments = await _context.Set<Payment>()
+                                         .Where(i => i.InvoiceId == invoiceId)
+                                         .ToListAsync();
+
+            var dtos = Mapping.Mapper.Map<List<PaymentDto>>(payments);
+            return dtos;
+        }
+    }
 }
