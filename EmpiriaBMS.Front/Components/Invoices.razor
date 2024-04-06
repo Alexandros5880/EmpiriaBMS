@@ -4,7 +4,8 @@
 @inject IMapper _mapper
 
 
-<div class="text-center row me-2">
+<div class="text-center row me-2"
+     style="max-width: 1000px !important; margin: 0 auto;">
     
     <!-- Title -->
     <h3 class="col-6 text-start">Invoices</h3>
@@ -32,7 +33,7 @@
 </div>
 
 <div class="table-responsive p-1 table-container"
-     style="max-width: 1000px !important;">
+     style="max-width: 1000px !important; margin: 0 auto;">
     <table class="table table-hover text-center">
         <thead class="table-success">
             <tr>
@@ -69,35 +70,35 @@
                                @bind="@invoice.Date">
                     </td>
 
-                    <td style="min-width: 150px;">
+                    <td style="min-width: 200px;">
                         <input type="text"
                                class="form-control"
                                id="invoiceMark"
                                @bind="@invoice.Mark">
                     </td>
 
-                    <td style="min-width: 150px;">
+                    <td style="min-width: 60px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceNumber"
                                @bind="@invoice.Number">
                     </td>
 
-                    <td style="min-width: 150px;">
+                    <td style="min-width: 60px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceTotal"
                                @bind="@invoice.Total">
                     </td>
 
-                    <td style="min-width: 150px;">
+                    <td style="min-width: 60px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceVat"
                                @bind="@invoice.Vat">
                     </td>
 
-                    <td style="min-width: 150px;">
+                    <td style="min-width: 65px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceFee"
