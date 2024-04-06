@@ -137,7 +137,7 @@ else
                                             @if(_selectedProject != null)
                                             {
                                                 <span class="invoice col-1"
-                                                      @onclick="@(() => AddEditInvoice())" />
+                                                      @onclick="@(async () => await AddEditInvoice())" />
                                                 <span class="payment col-1"
                                                       @onclick="@(() => AddEditPayment())" />
                                                 <span class="fluent--delete-28-regular col-1"
@@ -1074,7 +1074,7 @@ else
                   Hidden="@(!_isAddEditInvoiceDialogOdepened || _startLoading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
+                  style="--dialog-width: 70vw !important;
                          --dialog-width: auto !important;">
 
         <div class="modal-body row mb-1">
@@ -1086,7 +1086,7 @@ else
             <div class="col-12 justify-content-center">
                 @if (_selectedProject != null)
                 {
-                    <Invoices Project="@_selectedProject" />
+                    <Invoices @ref="@_invoicesCompoment" Project="@_selectedProject" />
                 }
                 else
                 {
@@ -1096,15 +1096,6 @@ else
 
         </div>
 
-        <div class="row">
-            <FluentButton class="col-6"
-                          OnClick="@(async () => await _addInvoiceDialogAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => CloseAddInvoiceClick())">
-                Cancel
-            </FluentButton>
-        </div>
 
     </FluentDialog>
 
@@ -1125,7 +1116,7 @@ else
             <div class="col-12 justify-content-center">
                 @if (_selectedProject != null)
                 {
-                    <Payments Project="@_selectedProject" />
+                    <Payments @ref="@_ppaymentsCompoment" Project="@_selectedProject" />
                 }
                 else
                 {

@@ -48,6 +48,8 @@ public class Project : Entity
 
     public User? Customer { get; set; }
 
+    public ICollection<Invoice> Invoices { get; set; }
+
     public ICollection<DailyTime> DailyTime { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }
@@ -55,6 +57,4 @@ public class Project : Entity
     public ICollection<Issue> Complains { get; set; }
 
     public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
-    
-    public ICollection<ProjectInvoice> ProjectsInvoices { get; set; }
 }

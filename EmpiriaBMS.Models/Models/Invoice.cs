@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EmpiriaMS.Models.Models.Base;
 using EmpiriaBMS.Models.Models;
+using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaMS.Models.Models;
 public class Invoice : Entity
@@ -21,11 +22,15 @@ public class Invoice : Entity
 
     public string? Mark { get; set; }
 
+    public InvoiceType Type { get; set; }
+
+    public int ProjectId { get; set; }
+
+    public Project Project { get; set; }
+
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
-    public ICollection<ProjectInvoice> ProjectsInvoices { get; set; }
-
-    public ICollection<InvoicePayment> InvoicesPayments { get; set; }
+    public ICollection<Payment> Payments { get; set; }
 }

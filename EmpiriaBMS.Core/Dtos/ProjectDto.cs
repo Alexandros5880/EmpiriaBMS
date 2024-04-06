@@ -46,7 +46,7 @@ public class ProjectDto : EntityDto
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 
-    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public ICollection<Invoice> Invoices { get; set; }
 
-    public ICollection<ProjectInvoice> ProjectsInvoices { get; set; }
+    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 }

@@ -21,9 +21,9 @@ public partial class InvoiceDetailed : ComponentBase, IDisposable
 
     public void Prepair()
     {
-        isNew = Project.ProjectsInvoices == null || Project.ProjectsInvoices.Count == 0;
-        Invoice = new InvoiceVM();
-        Invoice.ProjectsInvoices = new List<ProjectInvoice>();
+        //isNew = Project.ProjectsInvoices == null || Project.ProjectsInvoices.Count == 0;
+        //Invoice = new InvoiceVM();
+        //Invoice.ProjectsInvoices = new List<ProjectInvoice>();
         StateHasChanged();
     }
 
@@ -40,7 +40,7 @@ public partial class InvoiceDetailed : ComponentBase, IDisposable
             saveInvoice = await DataProvider.Invoices.Add(myInvoice);
 
         // Connect Invoice To Project
-        await DataProvider.Projects.AddInvoice(Project.Id, saveInvoice.Id);
+        //await DataProvider.Projects.AddInvoice(Project.Id, saveInvoice.Id);
     }
 
     protected virtual void Dispose(bool disposing)

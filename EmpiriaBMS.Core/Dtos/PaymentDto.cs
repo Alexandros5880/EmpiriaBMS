@@ -29,5 +29,7 @@ public class PaymentDto : EntityDto
 
     public double? PendingPayments { get; set; }
 
-    public ICollection<InvoicePayment> InvoicesPayments { get; set; }
+    public int InvoiceId { get; set; }
+
+    public Invoice Invoice { get; set; }
 }

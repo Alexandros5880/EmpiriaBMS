@@ -1,3 +1,123 @@
-﻿<h3>Invoices</h3>
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Models.Enum;
+
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
 
 
+<div class="text-center row me-2">
+    
+    <!-- Title -->
+    <h3 class="col-6 text-start">Invoices</h3>
+    
+    <!-- Add From All Invoices List -->
+    <div class="col-4">
+        @{var freeInvoices = _allInvoices.Where(i => !_projectsInvoices.Select(pi => pi.Id).Contains(i.Id));}
+        @if (freeInvoices.Count() > 0)
+        {
+            <select class="form-select" @onchange="@_onInvoiceSelected">
+                @foreach (var invoice in @freeInvoices)
+                {
+                    <option value="@invoice.Id">
+                        <span>@invoice.Date &ensp; @invoice.Mark &ensp; @invoice.Number &ensp; @invoice.Total &ensp; @invoice.Vat &ensp; @invoice.Fee</span>
+                    </option>
+                }
+            </select>
+        }
+    </div>
+
+    <!-- Add New Invoice -->
+    <span class="grommet-icons--add text-end col-2"
+          @onclick="@(() => _addInvoice())" />
+
+</div>
+
+<div class="table-responsive p-1 table-container"
+     style="overflow-x: hidden !important; max-width: 1000px !important;">
+    <table class="table table-hover text-center">
+        <thead class="table-success">
+            <tr>
+                <th scope="col" class="sticky-header">Type</th>
+                <th scope="col" class="sticky-header">Date</th>
+                <th scope="col" class="sticky-header">Mark</th>
+                <th scope="col" class="sticky-header">Number</th>
+                <th scope="col" class="sticky-header">Total</th>
+                <th scope="col" class="sticky-header">Vat</th>
+                <th scope="col" class="sticky-header">Fee</th>
+                <th scope="col" class="sticky-header">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var invoice in _projectsInvoices)
+            {
+                <tr class="align-middle">
+
+                    <td>
+                        <select class="form-select" @bind="@invoice.Type" style="min-width: 150px;">
+                            <option value="@InvoiceType.Expenses">
+                                <span>Expenses</span>
+                            </option>
+                            <option value="@InvoiceType.Income">
+                                <span>Income</span>
+                            </option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <input type="date"
+                               class="form-control"
+                               id="invoiceDate"
+                               @bind="@invoice.Date">
+                    </td>
+
+                    <td>
+                        <input type="text"
+                               class="form-control"
+                               id="invoiceMark"
+                               @bind="@invoice.Mark">
+                    </td>
+
+                    <td>
+                        <input type="number"
+                               class="form-control"
+                               id="invoiceNumber"
+                               @bind="@invoice.Number">
+                    </td>
+
+                    <td>
+                        <input type="number"
+                               class="form-control"
+                               id="invoiceTotal"
+                               @bind="@invoice.Total">
+                    </td>
+
+                    <td>
+                        <input type="number"
+                               class="form-control"
+                               id="invoiceVat"
+                               @bind="@invoice.Vat">
+                    </td>
+
+                    <td>
+                        <input type="number"
+                               class="form-control"
+                               id="invoiceFee"
+                               @bind="@invoice.Fee">
+                    </td>
+
+                    <td>
+                        <span class="fluent--delete-28-regular"
+                              @onclick="@(async () => await _deleteInvoice(invoice))" />
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-12 text-end">
+        <button type="button" class="btn btn-outline-secondary" @onclick="@(async () => await _save())">Save</button>
+    </div>
+</div>

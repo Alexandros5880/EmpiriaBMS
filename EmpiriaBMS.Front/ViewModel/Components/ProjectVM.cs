@@ -295,11 +295,11 @@ public class ProjectVM : BaseVM
         }
     }
 
-    public List<Project> Projects { get; set; }
+    public ICollection<Project> Projects { get; set; } // TODO: ProjectVM -> Projects ???
 
-    public List<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public ICollection<Invoice> Invoices { get; set; }
 
-    public List<ProjectInvoice> ProjectsInvoices { get; set; }
+    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 
     public ProjectVM()
     {

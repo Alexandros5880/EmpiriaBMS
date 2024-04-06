@@ -41,8 +41,6 @@ public class AppDbContext : DbContext
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
     public DbSet<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
-    public DbSet<ProjectInvoice> ProjectsInvoices { get; set; }
-    public DbSet<InvoicePayment> InvoicesPayments { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2295,20 +2293,9 @@ public class AppDbContext : DbContext
                     Fee = 3000 + Math.Pow(10, i),
                     Number = random.Next(10000, 90000),
                     Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
+                    ProjectId = projectId
                 };
                 builder.Entity<Invoice>().HasData(invoice);
-
-                // Poject Invoice
-                var pi_id = random.Next(123456789, 999999999) + i * 3;
-                ProjectInvoice pi = new ProjectInvoice()
-                {
-                    Id = pi_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    ProjectId = projectId,
-                    InvoiceId = invoiceId
-                };
-                builder.Entity<ProjectInvoice>().HasData(pi);
             }
 
             // // Project Production Management 
@@ -2378,21 +2365,10 @@ public class AppDbContext : DbContext
                     Vat = i % 2 == 0 ? 24 : 17,
                     Fee = 3000 + Math.Pow(10, i),
                     Number = random.Next(10000, 90000),
-                    Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7))
+                    Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
+                    ProjectId = projectId
                 };
                 builder.Entity<Invoice>().HasData(invoice);
-
-                // Poject Invoice
-                var pi_id = random.Next(123456789, 999999999) + i * 3;
-                ProjectInvoice pi = new ProjectInvoice()
-                {
-                    Id = pi_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    ProjectId = projectId,
-                    InvoiceId = invoiceId
-                };
-                builder.Entity<ProjectInvoice>().HasData(pi);
 
                 projectManagersIndex++;
                 if (projectManagersIndex >= projectManagersLength)

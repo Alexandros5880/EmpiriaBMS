@@ -110,5 +110,29 @@ public class PaymentVM : BaseVM
         }
     }
 
-    public List<InvoicePayment> InvoicesPayments { get; set; }
+    private int _invoiceId { get; set; }
+    public int InvoiceId
+    {
+        get => _invoiceId;
+        set
+        {
+            if (value == _invoiceId)
+                return;
+            _invoiceId = value;
+            NotifyPropertyChanged(nameof(InvoiceId));
+        }
+    }
+
+    private Invoice _invoice { get; set; }
+    public Invoice Invoice
+    {
+        get => _invoice;
+        set
+        {
+            if (value == _invoice)
+                return;
+            _invoice = value;
+            NotifyPropertyChanged(nameof(Invoice));
+        }
+    }
 }

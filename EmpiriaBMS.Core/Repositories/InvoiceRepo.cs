@@ -27,7 +27,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
         {
             var i = await _context
                              .Set<Invoice>()
-                             .Include(r => r.ProjectsInvoices)
+                             .Include(r => r.Project)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<InvoiceDto>(i);
@@ -43,7 +43,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 i = await _context.Set<Invoice>()
-                                  .Include(r => r.ProjectsInvoices)
+                                  .Include(r => r.Project)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -52,7 +52,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
             i = await _context.Set<Invoice>()
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
-                                 .Include(r => r.ProjectsInvoices)
+                                 .Include(r => r.Project)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -72,7 +72,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
             {
                 i = await _context.Set<Invoice>()
                                   .Where(expresion)
-                                  .Include(r => r.ProjectsInvoices)
+                                  .Include(r => r.Project)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -82,7 +82,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
                               .Where(expresion)
                               .Skip((pageIndex - 1) * pageSize)
                               .Take(pageSize)
-                              .Include(r => r.ProjectsInvoices)
+                              .Include(r => r.Project)
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);

@@ -83,7 +83,7 @@ public class KpisRepo : IDisposable
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Include(r => r.Customer)
-                                                .Include(r => r.ProjectsInvoices)
+                                                .Include(r => r.Invoices)
                                                 .Include(p => p.Type)
                                                 .Include(p => p.ProjectManager)
                                                 .Include(p => p.ProjectsSubConstructors)
@@ -120,7 +120,7 @@ public class KpisRepo : IDisposable
 
             var projects = await _context.Set<Project>()
                                          .Include(r => r.Customer)
-                                         .Include(r => r.ProjectsInvoices)
+                                         .Include(r => r.Invoices)
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
