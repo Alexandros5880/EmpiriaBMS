@@ -1,5 +1,4 @@
 ﻿@using EmpiriaBMS.Front.Services
-@using EmpiriaBMS.Models.Enum;
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
@@ -53,13 +52,13 @@
                 <tr class="align-middle">
 
                     <td>
-                        <select class="form-select" @bind="@invoice.Type" style="min-width: 150px;">
-                            <option value="@InvoiceType.Expenses">
-                                <span>Expenses</span>
-                            </option>
-                            <option value="@InvoiceType.Income">
-                                <span>Income</span>
-                            </option>
+                        <select class="form-select" @bind="@invoice.TypeId" style="min-width: 150px;">
+                            @foreach(var type in @_types)
+                            {
+                                <option value="@type.Id">
+                                    <span>@type.Name</span>
+                                </option>
+                            }
                         </select>
                     </td>
 

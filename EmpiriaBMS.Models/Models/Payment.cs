@@ -12,6 +12,10 @@ namespace EmpiriaBMS.Models.Models;
 
 public class Payment : Entity
 {
+    [Required]
+    public int TypeId { get; set; }
+    public PaymentType Type { get; set; }
+
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime? EstPaymentDate { get; set; }

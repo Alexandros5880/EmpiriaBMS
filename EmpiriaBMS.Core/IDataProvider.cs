@@ -21,6 +21,8 @@ namespace EmpiriaBMS.Core
         public PermissionRepo Permissions { get; set; }
         public IssueRepo Issues { get; set; }
         public PaymentRepo Payments { get; set; }
+        public InvoiceTypeRepo InvoiceTypes { get; set; }
+        public PaymentTypeRepo PaymentTypes { get; set; }
         public KpisRepo KPIS { get; set; }
     }
 }

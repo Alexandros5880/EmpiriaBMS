@@ -29,7 +29,10 @@ public class PaymentDto : EntityDto
 
     public double? PendingPayments { get; set; }
 
+    public int TypeId { get; set; }
+    public PaymentTypeDto Type { get; set; }
+
     public int InvoiceId { get; set; }
 
-    public Invoice Invoice { get; set; }
+    public InvoiceDto Invoice { get; set; }
 }

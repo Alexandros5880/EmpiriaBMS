@@ -7,11 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using EmpiriaMS.Models.Models.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaMS.Models.Models;
 public class Invoice : Entity
 {
+    [Required]
+    public int TypeId { get; set; }
+    public InvoiceType Type { get; set; }
+
     public double? Total { get; set; }
 
     public double? Vat { get; set; }
@@ -21,8 +24,6 @@ public class Invoice : Entity
     public int? Number { get; set; }
 
     public string? Mark { get; set; }
-
-    public InvoiceType Type { get; set; }
 
     public int ProjectId { get; set; }
 

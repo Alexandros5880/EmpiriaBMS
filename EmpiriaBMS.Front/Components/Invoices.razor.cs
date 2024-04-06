@@ -2,7 +2,6 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Models.Enum;
 using EmpiriaMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
@@ -17,6 +16,7 @@ public partial class Invoices : ComponentBase, IDisposable
 {
     private bool disposedValue;
 
+    private ObservableCollection<InvoiceTypeVM> _types = new ObservableCollection<InvoiceTypeVM>();
     private ObservableCollection<InvoiceVM> _allInvoices = new ObservableCollection<InvoiceVM>();
     private ObservableCollection<InvoiceVM> _projectsInvoices = new ObservableCollection<InvoiceVM>();
     private List<InvoiceVM> _deleted = new List<InvoiceVM>();
@@ -26,10 +26,28 @@ public partial class Invoices : ComponentBase, IDisposable
 
     public async Task Prepair()
     {
+        await _getInvoicesTypes();
         await _getProjectsInvoices();
         await _getAllInvoices();
 
         StateHasChanged();
+    }
+
+    private async Task _getInvoicesTypes()
+    {
+        try
+        {
+            // Get My Invoices
+            var dtos = await _dataProvider.InvoiceTypes.GetAll();
+            var invoiceTypes = _mapper.Map<List<InvoiceTypeVM>>(dtos);
+            _types.Clear();
+            invoiceTypes.ForEach(_types.Add);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
     }
 
     private async Task _getAllInvoices()
@@ -40,7 +58,11 @@ public partial class Invoices : ComponentBase, IDisposable
             var dtos = await _dataProvider.Invoices.GetAll();
             var invoices = _mapper.Map<List<InvoiceVM>>(dtos);
             _allInvoices.Clear();
-            invoices.ForEach(_allInvoices.Add);
+            invoices.ForEach(i => {
+                i.Type = null;
+                i.Project = null;
+                _allInvoices.Add(i);
+            });
         }
         catch (Exception ex)
         {
@@ -57,7 +79,11 @@ public partial class Invoices : ComponentBase, IDisposable
             var dtos = await _dataProvider.Projects.GetInvoices(Project.Id);
             var invoices = _mapper.Map<List<InvoiceVM>>(dtos);
             _projectsInvoices.Clear();
-            invoices.ForEach(_projectsInvoices.Add);
+            invoices.ForEach(i => {
+                i.Type = null;
+                i.Project = null;
+                _projectsInvoices.Add(i);
+            });
         }
         catch (Exception ex)
         {
@@ -73,9 +99,11 @@ public partial class Invoices : ComponentBase, IDisposable
         if (selectedInvoice != null)
         {
             var newInvoice = new InvoiceVM(selectedInvoice);
+            newInvoice.Project = null;
+            newInvoice.Type = null;
             newInvoice.ProjectId = Project.Id;
             newInvoice.Id = 0;
-            _projectsInvoices.Add(selectedInvoice);
+            _projectsInvoices.Add(newInvoice);
         }
     }
 
@@ -91,7 +119,7 @@ public partial class Invoices : ComponentBase, IDisposable
         _projectsInvoices.Add(new InvoiceVM()
         {
             ProjectId = Project.Id,
-            Type = InvoiceType.Income,
+            TypeId = _types.FirstOrDefault().Id,
             Date = DateTime.Now,
             Vat = 24,
         });
@@ -109,22 +137,30 @@ public partial class Invoices : ComponentBase, IDisposable
         }
 
         // For Update
-        foreach (var invoice in _projectsInvoices.Where(i => i.Id != 0))
+        var updatedInvoices = _projectsInvoices.Where(i => i.Id != 0).ToList();
+        if (updatedInvoices.Count() > 0)
         {
-            var dto = _mapper.Map<InvoiceDto>(invoice);
-            await _dataProvider.Invoices.Update(dto);
+            foreach (var invoice in updatedInvoices)
+            {
+                invoice.Type = null;
+                var dto = _mapper.Map<InvoiceDto>(invoice);
+                await _dataProvider.Invoices.Update(dto);
+            }
         }
 
         // For Add
         if (_projectsInvoices.Any(i => i.Id == 0))
         {
-            foreach (var invoice in _projectsInvoices.Where(i => i.Id == 0))
+            var newInvoices = _projectsInvoices.Where(i => i.Id == 0).ToList();
+            foreach (var invoice in newInvoices)
             {
+                invoice.Type = null;
                 var dto = _mapper.Map<InvoiceDto>(invoice);
                 await _dataProvider.Invoices.Add(dto);
             }
         }
-        
+
+        await Prepair();
     }
 
     protected virtual void Dispose(bool disposing)

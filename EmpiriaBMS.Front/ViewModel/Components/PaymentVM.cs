@@ -110,6 +110,32 @@ public class PaymentVM : BaseVM
         }
     }
 
+    private int _typeId { get; set; }
+    public int TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
+    private PaymentType _type { get; set; }
+    public PaymentType Type
+    {
+        get => _type;
+        set
+        {
+            if (value == _type)
+                return;
+            _type = value;
+            NotifyPropertyChanged(nameof(Type));
+        }
+    }
+
     private int _invoiceId { get; set; }
     public int InvoiceId
     {
