@@ -6,8 +6,8 @@
            value="@Time.Hours"
            placeholder="HH"
            style="min-width: 45px !important; max-width: 45px !important;"
-           min="@MinHours"
-           max="@MaxHours"
+           min="@MinTime.Hours"
+           max="@MaxTime.Hours"
            onmousewheel="if(e.deltaY > 1) value++; else if (e.deltaY < -1) value--;"
            onkeyup="if(value<min) value=min; if(value>max) value=max;"
            @onchange=@((e) => _onHoursChanged(e)) />
@@ -21,8 +21,8 @@
            value="@Time.Minutes"
            placeholder="MM"
            style="min-width: 45px !important; max-width: 45px !important;"
-           min="@MinMinutes"
-           max="@MaxMinutes"
+           min="@MinTime.Minutes"
+           max="@MaxTime.Minutes"
            onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
            onkeyup="if(value<min) value=min; if(value>max) value=max;"
            @onchange=@((e) => _onMinutesChanged(e)) />
@@ -33,51 +33,27 @@
     [Parameter]
     public TimeSpan Time { get; set; }
 
-    private int _minHours = 0;
+    private TimeSpan _minTime = new TimeSpan(0, 0, 0, 0);
     [Parameter]
-    public int MinHours
+    public TimeSpan MinTime
     {
-        get => _minHours;
+        get => _minTime;
         set
         {
-            if (value == _minHours) return;
-            _minHours = value;
+            if (value == _minTime) return;
+            _minTime = value;
         }
     }
 
-    private int _maxHours = 24;
+    private TimeSpan _maxTime = new TimeSpan(0, 23, 60, 0);
     [Parameter]
-    public int MaxHours
+    public TimeSpan MaxTime
     {
-        get => _maxHours;
+        get => _maxTime;
         set
         {
-            if (value == _maxHours) return;
-            _maxHours = value;
-        }
-    }
-
-    private int _minMinutes = 0;
-    [Parameter]
-    public int MinMinutes
-    {
-        get => _minMinutes;
-        set
-        {
-            if (value == _minMinutes) return;
-            _minMinutes = value;
-        }
-    }
-
-    private int _maxMinutes = 60;
-    [Parameter]
-    public int MaxMinutes
-    {
-        get => _maxMinutes;
-        set
-        {
-            if (value == _maxMinutes) return;
-            _maxMinutes = value;
+            if (value == _maxTime) return;
+            _maxTime = value;
         }
     }
 

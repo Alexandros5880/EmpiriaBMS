@@ -576,10 +576,8 @@ else
                                             <div class="align-middle h-100"><labe>@_draw.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
-                                            <TimeInput MinHours="0"
-                                                       MaxHours="@remainingTime.Hours"
-                                                       MinMinutes="0"
-                                                       MaxMinutes="60"
+                                            <TimeInput MinTime="TimeSpan.Zero"
+                                                       MaxTime="@remainingTime"
                                                        Time="_draw.Time"
                                                        OnPropertyChanged=@((time) => _onDrawTimeChanged(_draw, time)) />
                                         </td>
@@ -628,10 +626,8 @@ else
                                             <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
-                                            <TimeInput MinHours="0"
-                                                       MaxHours="@remainingTime.Hours"
-                                                       MinMinutes="0"
-                                                       MaxMinutes="60"
+                                            <TimeInput MinTime="TimeSpan.Zero"
+                                                       MaxTime="@remainingTime"
                                                        Time="@_other.Time"
                                                        OnPropertyChanged=@((time) => _onOtherTimeChanged(_other, time)) />
                                         </td>
