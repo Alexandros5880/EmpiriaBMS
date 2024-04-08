@@ -511,43 +511,10 @@ public partial class Dashboard : IDisposable
         // previusTime, updatedTime, remainingTime
 
         var previusTime = draw.Time;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        //Console.WriteLine($"\n\n RemainingTime: {remainingTime} \nPreviusTime: {previusTime} \nNewTimeSpan: {newTimeSpan} \nUpdatedTime: {updatedTime}");
 
         draw.Time = newTimeSpan;
 
