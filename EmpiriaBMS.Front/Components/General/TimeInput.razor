@@ -60,15 +60,15 @@
 
     private TimeSpan _remainingTime;
 
-    private double _prevHours;
-    private double _hours;
-    public double Hours
+    private int _prevHours;
+    private int _hours;
+    public int Hours
     {
         get => _hours;
         set
         {
-            value = value > _remainingTime.TotalHours ? _remainingTime.TotalHours : value;
-            value = value < MinTime.TotalHours ? MinTime.TotalHours : value;
+            value = value > (int)_remainingTime.TotalHours ? (int)_remainingTime.TotalHours : value;
+            value = value < (int)MinTime.TotalHours ? (int)MinTime.TotalHours : value;
             _hours = value;
 
             var time = TimeSpan.FromHours(_hours - _prevHours);
@@ -79,16 +79,16 @@
         }
     }
 
-    private double _prevMinutes;
-    private double _minutes;
-    public double Minutes
+    private int _prevMinutes;
+    private int _minutes;
+    public int Minutes
     {
         get => _minutes;
         set
         {
-            value = value > _remainingTime.TotalMinutes ? _remainingTime.TotalMinutes : value;
-            value = value > 60 ? 60 : value;
-            value = value < MinTime.TotalMinutes ? MinTime.TotalMinutes : value;
+            var totalMinutesRemaining = (int)_remainingTime.TotalMinutes > 60 ? 60 : (int)_remainingTime.TotalMinutes;
+            value = value > totalMinutesRemaining ? totalMinutesRemaining : value;
+            value = value < (int)MinTime.TotalMinutes ? (int)MinTime.TotalMinutes : value;
             _minutes = value;
 
             var time = TimeSpan.FromMinutes(_minutes - _prevMinutes);

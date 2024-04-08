@@ -514,8 +514,6 @@ public partial class Dashboard : IDisposable
         var updatedTime = newTimeSpan - previusTime;
         remainingTime += (-updatedTime);
 
-        //Console.WriteLine($"\n\n RemainingTime: {remainingTime} \nPreviusTime: {previusTime} \nNewTimeSpan: {newTimeSpan} \nUpdatedTime: {updatedTime}");
-
         draw.Time = newTimeSpan;
 
         if (_drawsChanged.Any(d => d.Id == draw.Id))
@@ -549,50 +547,15 @@ public partial class Dashboard : IDisposable
         // previusTime, updatedTime, remainingTime
 
         var previusTime = other.Time;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
-
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
         other.Time = newTimeSpan;
 
-        if (_othersChanged.Any(o => o.Id == other.Id))
+        if (_othersChanged.Any(d => d.Id == other.Id))
         {
-            var o = _othersChanged.FirstOrDefault(o => o.Id == other.Id);
-            o.Time = other.Time;
+            var d = _othersChanged.FirstOrDefault(d => d.Id == other.Id);
+            d.Time = other.Time;
         }
         else
             _othersChanged.Add(other);
@@ -602,44 +565,11 @@ public partial class Dashboard : IDisposable
 
     private void _onPersonalTimeChanged(TimeSpan newTimeSpan)
     {
+        // previusTime, updatedTime, remainingTime
+
         var previusTime = _editLogedUserTimes.PersonalTime;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
-
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
         _editLogedUserTimes.PersonalTime = newTimeSpan;
 
@@ -648,44 +578,11 @@ public partial class Dashboard : IDisposable
 
     private void _onTrainingTimeChanged(TimeSpan newTimeSpan)
     {
+        // previusTime, updatedTime, remainingTime
+
         var previusTime = _editLogedUserTimes.TrainingTime;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
-
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
         _editLogedUserTimes.TrainingTime = newTimeSpan;
 
@@ -694,44 +591,11 @@ public partial class Dashboard : IDisposable
 
     private void _onCorporateTimeChanged(TimeSpan newTimeSpan)
     {
+        // previusTime, updatedTime, remainingTime
+
         var previusTime = _editLogedUserTimes.CorporateEventTime;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
-
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
         _editLogedUserTimes.CorporateEventTime = newTimeSpan;
 
