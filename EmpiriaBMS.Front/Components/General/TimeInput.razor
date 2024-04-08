@@ -21,7 +21,7 @@
            placeholder="M"
            style="min-width: 45px !important; max-width: 45px !important;"
            min="@MinTime.Minutes"
-           max="@_remainingTime.TotalMinutes"
+           max="60"
            @onmousewheel="@((WheelEventArgs e) => HandleMouseWheel(e, "minutes"))"
            @onfocus="@(() => _remainingTime = MaxTime)" />
 
@@ -69,11 +69,7 @@
         {
             value = value > _remainingTime.TotalHours ? _remainingTime.TotalHours : value;
             value = value < MinTime.TotalHours ? MinTime.TotalHours : value;
-
-            var days = value > 24 ? value / 24 : 0;
-            _hours = value > 24 ? value % 24 : value;
-
-            Console.WriteLine($"Hours: {_hours} of {_remainingTime.TotalHours}");
+            _hours = value;
 
             var time = TimeSpan.FromHours(_hours - _prevHours);
             _prevHours = _hours;
@@ -91,11 +87,9 @@
         set
         {
             value = value > _remainingTime.TotalMinutes ? _remainingTime.TotalMinutes : value;
+            value = value > 60 ? 60 : value;
             value = value < MinTime.TotalMinutes ? MinTime.TotalMinutes : value;
-
             _minutes = value;
-
-            Console.WriteLine($"Minutes: {_minutes} of {_remainingTime.TotalMinutes}");
 
             var time = TimeSpan.FromMinutes(_minutes - _prevMinutes);
             _prevMinutes = _minutes;

@@ -85,6 +85,8 @@ export function navigateToAdmin(url, objectId) {
     });
 }
 
+
+// Cookies
 export function setCookie(key, value) {
     localStorage.setItem(key, value);
 }
@@ -92,6 +94,8 @@ export function setCookie(key, value) {
 export function getCookie(key) {
     return localStorage.getItem(key);
 }
+// Cookies
+
 
 // Canvas
 export function initializeCanvas(canvas) {
