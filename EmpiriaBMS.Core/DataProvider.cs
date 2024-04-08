@@ -28,6 +28,8 @@ public class DataProvider : IDataProvider, IDisposable
     public PermissionRepo Permissions { get; set; }
     public IssueRepo Issues { get; set; }
     public PaymentRepo Payments { get; set; }
+    public InvoiceTypeRepo InvoiceTypes { get; set; }
+    public PaymentTypeRepo PaymentTypes { get; set; }
     public KpisRepo KPIS { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
@@ -45,6 +47,8 @@ public class DataProvider : IDataProvider, IDisposable
         Permissions = new PermissionRepo(dbFactory);
         Issues = new IssueRepo(dbFactory);
         Payments = new PaymentRepo(dbFactory);
+        InvoiceTypes = new InvoiceTypeRepo(dbFactory);
+        PaymentTypes = new PaymentTypeRepo(dbFactory);
         KPIS = new KpisRepo(dbFactory);
     }
 
@@ -68,6 +72,8 @@ public class DataProvider : IDataProvider, IDisposable
                 Permissions.Dispose();
                 Issues.Dispose();
                 Payments.Dispose();
+                InvoiceTypes.Dispose();
+                PaymentTypes.Dispose();
                 KPIS.Dispose();
             }
             disposedValue = true;

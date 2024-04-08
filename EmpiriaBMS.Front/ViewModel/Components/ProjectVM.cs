@@ -152,29 +152,16 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private float _completed;
-    public float Completed
+    private float _declaredCompleted;
+    public float DeclaredCompleted
     {
-        get => _completed;
+        get => _declaredCompleted;
         set
         {
-            if (value == _completed)
+            if (value == _declaredCompleted)
                 return;
-            _completed = value;
-            NotifyPropertyChanged(nameof(Completed));
-        }
-    }
-
-    private float _workPackegedCompleted;
-    public float WorkPackegedCompleted
-    {
-        get => _workPackegedCompleted;
-        set
-        {
-            if (value == _workPackegedCompleted)
-                return;
-            _workPackegedCompleted = value;
-            NotifyPropertyChanged(nameof(WorkPackegedCompleted));
+            _declaredCompleted = value;
+            NotifyPropertyChanged(nameof(DeclaredCompleted));
         }
     }
 
@@ -269,71 +256,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private Invoice? _invoice;
-    public Invoice? Invoice
-    {
-        get => _invoice;
-        set
-        {
-            if (value == _invoice)
-                return;
-            _invoice = value;
-            NotifyPropertyChanged(nameof(Invoice));
-        }
-    }
-
-    private int? _paymentId;
-    public int? PaymentId
-    {
-        get => _paymentId;
-        set
-        {
-            if (value == _paymentId)
-                return;
-            _paymentId = value;
-            NotifyPropertyChanged(nameof(PaymentId));
-        }
-    }
-
-    private Payment? _payment;
-    public Payment? Payment
-    {
-        get => _payment;
-        set
-        {
-            if (value == _payment)
-                return;
-            _payment = value;
-            NotifyPropertyChanged(nameof(Payment));
-        }
-    }
-
-    private int? _subContractorId;
-    public int? SubContractorId
-    {
-        get => _subContractorId;
-        set
-        {
-            if (value == _subContractorId)
-                return;
-            _subContractorId = value;
-            NotifyPropertyChanged(nameof(SubContractorId));
-        }
-    }
-
-    private User? _subContractor;
-    public User? SubContractor
-    {
-        get => _subContractor;
-        set
-        {
-            if (value == _subContractor)
-                return;
-            _subContractor = value;
-            NotifyPropertyChanged(nameof(SubContractor));
-        }
-    }
-
     private int? _projectManagerId;
     public int? ProjectManagerId
     {
@@ -373,10 +295,11 @@ public class ProjectVM : BaseVM
         }
     }
 
-    public List<Project> Projects { get; set; }
+    public ICollection<Project> Projects { get; set; } // TODO: ProjectVM -> Projects ???
 
-    [NotMapped]
-    public string DeadlineDisplay => $"{DeadLine.Value.Day}/{DeadLine.Value.Month}/{DeadLine.Value.Year}";
+    public ICollection<Invoice> Invoices { get; set; }
+
+    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 
     public ProjectVM()
     {
@@ -389,7 +312,6 @@ public class ProjectVM : BaseVM
         EstimatedMandays = 0;
         EstimatedHours = 0;
         EstimatedCompleted = 0;
-        Completed = 0;
-        WorkPackegedCompleted = 0;
+        _declaredCompleted = 0;
     }
 }

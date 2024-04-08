@@ -45,16 +45,21 @@ else
                         @if (_sharedAuthData.LogedUser != null)
                         {
                             <div class="row ms-2 me-8" style="overflow:hidden;">
-                                
+
                                 <!-- User Name + Roles + Current Date -->
                                 <div class="col-lg-4 col-md-8 col-sm-8 row">
                                     <div class="col">
                                         <h4 class="mt-3">
-                                            @_sharedAuthData.LogedUser.LastName
-                                            @foreach (var role in _sharedAuthData.LoggedUserRoles)
-                                            {
-                                                <span>&nbsp;&nbsp; @role.Name</span>
+                                            @{
+                                                var rolesNames = "";
+                                                foreach (var role in _sharedAuthData.LoggedUserRoles)
+                                                {
+                                                    rolesNames += $"   {role.Name}";
+                                                }
                                             }
+                                            <span class="my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@rolesNames">
+                                                @_sharedAuthData.LogedUser.LastName &ensp; @_sharedAuthData.LogedUser.FirstName
+                                            </span>
                                         </h4>
                                     </div>
                                     <div class="col mt-3">
@@ -63,7 +68,7 @@ else
                                 </div>
 
                                 <!-- Start / Stop Buttons -->
-                                <div class="col-lg-4 col-md-7 col-sm-7">
+                                <div class="col-lg-5 col-md-7 col-sm-7">
                                     <div class="d-grid">
                                         @if (EditMyHours && !_isEndWorkDialogOdepened)
                                         {
@@ -86,7 +91,7 @@ else
                                 </div>
 
                                 <!-- Issues / Display Hours Passed -->
-                                <div class="col-lg-4 col-md-5 col-sm-5">
+                                <div class="col-lg-3 col-md-5 col-sm-5">
                                     <div class="d-flex justify-content-between"
                                          style="height: auto !important;">
 
@@ -111,7 +116,6 @@ else
 
                                     </div>
                                 </div>
-                                
 
                             </div>
                         }
@@ -126,16 +130,16 @@ else
                             <div class="col-12">
                                 @if (!_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center row">
+                                    <div class="text-center row me-2">
                                         <h3 class="@((_selectedProject != null ? "col-7" : "col-11"))">Projects</h3>
                                         @if (isWorkingMode && editProject)
                                         {
                                             @if(_selectedProject != null)
                                             {
                                                 <span class="invoice col-1"
-                                                      @onclick="@(() => AddEditInvoice())" />
+                                                      @onclick="@(async () => await AddEditInvoice())" />
                                                 <span class="payment col-1"
-                                                      @onclick="@(() => AddEditPayment())" />
+                                                      @onclick="@(async () => await AddEditPayment())" />
                                                 <span class="fluent--delete-28-regular col-1"
                                                       @onclick="@(() => DeleteProject())" />
                                                 <span class="material-symbols--edit-outline col-1"
@@ -170,7 +174,7 @@ else
                                                     <tr class="align-middle
                                                                 @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-warning" : ""))
                                                                 @(( project.DeadLine < DateTime.Now ? "table-danger" : ""))
-                                                                @(( project.Completed >= 100 || !project.Active ? "table-secondary" : ""))"
+                                                                @(( project.EstimatedCompleted >= 100 || !project.Active ? "table-secondary" : ""))"
                                                         @onclick="@(async () => await OnSelectProject(project.Id))">
                                                     
                                                         <td class="align-middle
@@ -185,7 +189,7 @@ else
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
-                                                            <label>@(project.WorkPackegedCompleted.ToString("##0.0")) %</label>
+                                                            <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
                                                         </td>
                                                     
                                                         <td class="align-middle
@@ -199,7 +203,7 @@ else
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
-                                                            <label>@project.DeadlineDisplay</label>
+                                                            <label>@project.DeadLine?.ToEuropeFormat()</label>
                                                         </td>
 
                                                         @if (isWorkingMode)
@@ -250,7 +254,7 @@ else
                             <div class="col-12">
                                 @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center row">
+                                    <div class="text-center row me-2">
                                         <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Disciplines</h3>
                                         @if (isWorkingMode && editDiscipline)
                                         {
@@ -325,7 +329,7 @@ else
                             <div class="col-12">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center row">
+                                    <div class="text-center row me-2">
                                         <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Deliverables</h3>
                                         @if (isWorkingMode && editDeliverable)
                                         {
@@ -407,7 +411,7 @@ else
                             <div class="col-12">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
-                                    <div class="text-center row">
+                                    <div class="text-center row me-2">
                                         <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Supportive Works</h3>
                                         @if (isWorkingMode && editOther)
                                         {
@@ -572,10 +576,8 @@ else
                                             <div class="align-middle h-100"><labe>@_draw.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
-                                            <TimeInput MinHours="0"
-                                                       MaxHours="@remainingTime.Hours"
-                                                       MinMinutes="0"
-                                                       MaxMinutes="60"
+                                            <TimeInput MinTime="TimeSpan.Zero"
+                                                       MaxTime="@remainingTime"
                                                        Time="_draw.Time"
                                                        OnPropertyChanged=@((time) => _onDrawTimeChanged(_draw, time)) />
                                         </td>
@@ -624,10 +626,8 @@ else
                                             <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
-                                            <TimeInput MinHours="0"
-                                                       MaxHours="@remainingTime.Hours"
-                                                       MinMinutes="0"
-                                                       MaxMinutes="60"
+                                            <TimeInput MinTime="TimeSpan.Zero"
+                                                       MaxTime="@remainingTime"
                                                        Time="@_other.Time"
                                                        OnPropertyChanged=@((time) => _onOtherTimeChanged(_other, time)) />
                                         </td>
@@ -1070,7 +1070,7 @@ else
                   Hidden="@(!_isAddEditInvoiceDialogOdepened || _startLoading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
+                  style="--dialog-width: 70vw !important;
                          --dialog-width: auto !important;">
 
         <div class="modal-body row mb-1">
@@ -1080,11 +1080,9 @@ else
             </div>
 
             <div class="col-12 justify-content-center">
-                @if (_selectedProject != null && _selectedInvoice != null)
+                @if (_selectedProject != null)
                 {
-                    <InvoiceDetailed @ref="@invoiceCompoment"
-                                     Project="@_selectedProject"
-                                     Invoice="_selectedInvoice" />
+                    <Invoices @ref="@_invoicesCompoment" Project="@_selectedProject" />
                 }
                 else
                 {
@@ -1092,16 +1090,6 @@ else
                 }
             </div>
 
-        </div>
-
-        <div class="row">
-            <FluentButton class="col-6"
-                          OnClick="@(async () => await _addInvoiceDialogAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => CloseAddInvoiceClick())">
-                Cancel
-            </FluentButton>
         </div>
 
     </FluentDialog>
@@ -1123,9 +1111,7 @@ else
             <div class="col-12 justify-content-center">
                 @if (_selectedProject != null)
                 {
-                    <PaymentDetailed @ref="@paymentCompoment"
-                                     Project="@_selectedProject"
-                                     Payment="_selectedPayment" />
+                    <Payments @ref="@_paymentsCompoment" Project="@_selectedProject" />
                 }
                 else
                 {
@@ -1133,16 +1119,6 @@ else
                 }
             </div>
 
-        </div>
-
-        <div class="row">
-            <FluentButton class="col-6"
-                          OnClick="@(async () => await _addPaymentDialogAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => CloseAddPaymentClick())">
-                Cancel
-            </FluentButton>
         </div>
 
     </FluentDialog>

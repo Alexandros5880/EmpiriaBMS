@@ -12,6 +12,10 @@ namespace EmpiriaBMS.Models.Models;
 
 public class Payment : Entity
 {
+    [Required]
+    public int TypeId { get; set; }
+    public PaymentType Type { get; set; }
+
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime? EstPaymentDate { get; set; }
@@ -32,6 +36,7 @@ public class Payment : Entity
 
     public double? PendingPayments { get; set; }
 
-    public int? ProjectId { get; set; }
-    public Project? Project { get; set; }
+    public int InvoiceId { get; set; }
+
+    public Invoice Invoice { get; set; }
 }

@@ -17,7 +17,7 @@ public class Discipline : Entity
 
     public float EstimatedCompleted { get; set; }
 
-    public float Completed { get; set; }
+    public float DeclaredCompleted { get; set; }
 
     [Required]
     public int ProjectId { get; set; }

@@ -35,11 +35,13 @@ public class AppDbContext : DbContext
     public DbSet<DailyTime> ParsonalTime { get; set; }
     public DbSet<DailyTime> TrainingTime { get; set; }
     public DbSet<DailyTime> CorporateEventTime { get; set; }
+    public DbSet<Issue> Issues { get; set; }
+    public DbSet<Document> Documents { get; set; }
     public DbSet<UserRole> UsersRoles { get; set; }
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<Issue> Issues { get; set; }
-    public DbSet<Document> Documents { get; set; }
+    public DbSet<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -1339,6 +1341,120 @@ public class AppDbContext : DbContext
             builder.Entity<RolePermission>().HasData(rp_59);
             #endregion
 
+            #region Create 4 ProjectTypes
+            // Project Type Buildings
+            var project_type_1_Id = random.Next(123456789, 999999999) + 33;
+            ProjectType project_type_1 = new ProjectType()
+            {
+                Id = project_type_1_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Buildings",
+                Description = "Buildings Description",
+                CanAssignePM = true
+            };
+            builder.Entity<ProjectType>().HasData(project_type_1);
+
+            // Project Type Infrastructure
+            var project_type_2_Id = random.Next(123456789, 999999999) + 33;
+            ProjectType project_type_2 = new ProjectType()
+            {
+                Id = project_type_2_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Infrastructure",
+                Description = "Infrastructure Description",
+                CanAssignePM = true
+            };
+            builder.Entity<ProjectType>().HasData(project_type_2);
+
+            // Project Type Energy
+            var project_type_3_Id = random.Next(123456789, 999999999) + 33;
+            ProjectType project_type_3 = new ProjectType()
+            {
+                Id = project_type_3_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Energy",
+                Description = "Energy Description",
+                CanAssignePM = true
+            };
+            builder.Entity<ProjectType>().HasData(project_type_3);
+
+            // Project Type Consulting
+            var project_type_4_Id = random.Next(123456789, 999999999) + 33;
+            ProjectType project_type_4 = new ProjectType()
+            {
+                Id = project_type_4_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Consulting",
+                Description = "Consulting Description",
+                CanAssignePM = true
+            };
+            builder.Entity<ProjectType>().HasData(project_type_4);
+
+            // Project Production Management
+            var project_type_5_Id = random.Next(123456789, 999999999) + 34;
+            ProjectType project_type_5 = new ProjectType()
+            {
+                Id = project_type_5_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Production Management",
+                Description = "Production Management Description",
+                CanAssignePM = false
+            };
+            builder.Entity<ProjectType>().HasData(project_type_5);
+
+            int[] projectTypes = {
+                project_type_1_Id,
+                project_type_2_Id,
+                project_type_3_Id,
+                project_type_4_Id
+            };
+            #endregion
+
+            #region Create InvoiceTypes
+            // InvoiceType Expenses
+            var it_01_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+            InvoiceType it_01 = new InvoiceType()
+            {
+                Id = it_01_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Expenses"
+            };
+            builder.Entity<InvoiceType>().HasData(it_01);
+
+            // InvoiceType Incomes
+            var it_02_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+            InvoiceType it_02 = new InvoiceType()
+            {
+                Id = it_02_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Incomes"
+            };
+            builder.Entity<InvoiceType>().HasData(it_02);
+            #endregion
+
+            #region Create 5 PaymentTypes
+            for (int i = 1; i <= 5; i++)
+            {
+                // PaymentType 01
+                var pmt_id = random.Next(123456789, 999999999) + random.Next(0, 333) + (10 * i);
+                PaymentType pmt = new PaymentType()
+                {
+                    Id = pmt_id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = $"Payment Type {i}"
+                };
+                builder.Entity<PaymentType>().HasData(pmt);
+            }
+            #endregion
+
             #region Create Secretaries
             List<User> secretaries = new List<User>();
 
@@ -2088,80 +2204,6 @@ public class AppDbContext : DbContext
             builder.Entity<UserRole>().HasData(engineerRole_16_em);
             #endregion
 
-            #region Create 4 Project Types
-            // Project Type Buildings
-            var project_type_1_Id = random.Next(123456789, 999999999) + 33;
-            ProjectType project_type_1 = new ProjectType()
-            {
-                Id = project_type_1_Id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = "Buildings",
-                Description = "Buildings Description",
-                CanAssignePM = true
-            };
-            builder.Entity<ProjectType>().HasData(project_type_1);
-
-            // Project Type Infrastructure
-            var project_type_2_Id = random.Next(123456789, 999999999) + 33;
-            ProjectType project_type_2 = new ProjectType()
-            {
-                Id = project_type_2_Id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = "Infrastructure",
-                Description = "Infrastructure Description",
-                CanAssignePM = true
-            };
-            builder.Entity<ProjectType>().HasData(project_type_2);
-
-            // Project Type Energy
-            var project_type_3_Id = random.Next(123456789, 999999999) + 33;
-            ProjectType project_type_3 = new ProjectType()
-            {
-                Id = project_type_3_Id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = "Energy",
-                Description = "Energy Description",
-                CanAssignePM = true
-            };
-            builder.Entity<ProjectType>().HasData(project_type_3);
-
-            // Project Type Consulting
-            var project_type_4_Id = random.Next(123456789, 999999999) + 33;
-            ProjectType project_type_4 = new ProjectType()
-            {
-                Id = project_type_4_Id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = "Consulting",
-                Description = "Consulting Description",
-                CanAssignePM = true
-            };
-            builder.Entity<ProjectType>().HasData(project_type_4);
-
-            // Project Production Management
-            var project_type_5_Id = random.Next(123456789, 999999999) + 34;
-            ProjectType project_type_5 = new ProjectType()
-            {
-                Id = project_type_5_Id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = "Production Management",
-                Description = "Production Management Description",
-                CanAssignePM = false
-            };
-            builder.Entity<ProjectType>().HasData(project_type_5);
-
-            int[] projectTypes = {
-                project_type_1_Id,
-                project_type_2_Id,
-                project_type_3_Id,
-                project_type_4_Id
-            };
-            #endregion
-
             #region Create 3 Project Managers
             List<User> projectManagers = new List<User>();
 
@@ -2269,8 +2311,7 @@ public class AppDbContext : DbContext
                     CalculationDaly = i < 5 ? i : i - (i - 1),
                     EstimatedMandays = 100 / 8,
                     EstimatedHours = 1500,
-                    Completed = 0,
-                    WorkPackegedCompleted = 0,
+                    DeclaredCompleted = 0,
                     EstimatedCompleted = 0,
                     TypeId = projectTypes[i - 1],
                     Active = i % 2 == 0 ? true : false,
@@ -2293,6 +2334,7 @@ public class AppDbContext : DbContext
                     Number = random.Next(10000, 90000),
                     Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
                     ProjectId = projectId,
+                    TypeId = it_01_id
                 };
                 builder.Entity<Invoice>().HasData(invoice);
             }
@@ -2312,8 +2354,7 @@ public class AppDbContext : DbContext
                 CalculationDaly = 345,
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
-                Completed = 0,
-                WorkPackegedCompleted = 0,
+                DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
                 TypeId = project_type_5_Id,
                 Active = true
@@ -2344,8 +2385,7 @@ public class AppDbContext : DbContext
                     CalculationDaly = i < 5 ? i : i - (i - 1),
                     EstimatedMandays = 100 / 8,
                     EstimatedHours = 1500,
-                    Completed = 0,
-                    WorkPackegedCompleted = 0,
+                    DeclaredCompleted = 0,
                     EstimatedCompleted = 0,
                     TypeId = projectTypes[typesIndex],
                     Active = i % 2 == 0 ? true : false,
@@ -2368,6 +2408,7 @@ public class AppDbContext : DbContext
                     Number = random.Next(10000, 90000),
                     Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
                     ProjectId = projectId,
+                    TypeId = it_01_id
                 };
                 builder.Entity<Invoice>().HasData(invoice);
 
@@ -2449,7 +2490,7 @@ public class AppDbContext : DbContext
                         EstimatedMandays = 50 + j,
                         EstimatedHours = (50 + j) * 8,
                         ProjectId = projects[i].Id,
-                        Completed = 0
+                        DeclaredCompleted = 0
                     };
                     builder.Entity<Discipline>().HasData(discipline);
                     disciplines.Add(discipline);
@@ -2466,7 +2507,7 @@ public class AppDbContext : DbContext
                 TypeId = discipline_pm_hours_type_Id,
                 EstimatedHours = 500,
                 ProjectId = projectPmId,
-                Completed = 0
+                DeclaredCompleted = 0
             };
             builder.Entity<Discipline>().HasData(discipline_pm_hours);
             #endregion

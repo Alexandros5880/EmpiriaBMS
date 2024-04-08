@@ -6,28 +6,22 @@
     <div class="row gx-3 m-2 ">
         <div class="col-4 text-center">
             <span class="mb-2 fs-5">Personal</span>
-            <TimeInput MinHours="0"
-                       MaxHours="@RemainingTime.Hours"
-                       MinMinutes="0"
-                       MaxMinutes="60"
+            <TimeInput MinTime="TimeSpan.Zero"
+                       MaxTime="@RemainingTime"
                        Time="LogedUserTimes.PersonalTime"
                        OnPropertyChanged=@(async (time) => await OnPersonalTimeChanged.InvokeAsync(time)) />
         </div>
         <div class="col-4 text-center">
             <span class="mb-2 fs-5">Training</span>
-            <TimeInput MinHours="0"
-                       MaxHours="@RemainingTime.Hours"
-                       MinMinutes="0"
-                       MaxMinutes="60"
+            <TimeInput MinTime="TimeSpan.Zero"
+                       MaxTime="@RemainingTime"
                        Time="LogedUserTimes.TrainingTime"
                        OnPropertyChanged=@(async (time) => await OnTrainingTimeChanged.InvokeAsync(time)) />
         </div>
         <div class="col-4 text-center">
             <span class="mb-2 fs-5">Corporate Event</span>
-            <TimeInput MinHours="0"
-                       MaxHours="@RemainingTime.Hours"
-                       MinMinutes="0"
-                       MaxMinutes="60"
+            <TimeInput MinTime="TimeSpan.Zero"
+                       MaxTime="@RemainingTime"
                        Time="LogedUserTimes.CorporateEventTime"
                        OnPropertyChanged=@(async (time) => await OnCorporateTimeChanged.InvokeAsync(time)) />
         </div>
@@ -35,7 +29,6 @@
 }
 
 @code {
-    
 
     [Parameter]
     public UserTimes LogedUserTimes { get; set; }

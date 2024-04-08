@@ -19,6 +19,10 @@ body {
     background-color: var(--main-bg-color)  !important;
 }
 
+.my-tooltip:hover {
+    cursor: help;
+}
+
 canvas {
     width: 100%;
     height: 100%;

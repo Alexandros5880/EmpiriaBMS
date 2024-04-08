@@ -30,10 +30,9 @@ public class UserDto : EntityDto
 
     public string? Description { get; set; }
 
-    public int? ProjectId { get; set; }
-    public Project? Project { get; set; }
-
     public ICollection<Email> Emails { get; set; }
 
     public ICollection<RoleDto> Roles { get; set; }
+
+    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Dtos;
 
@@ -24,6 +25,13 @@ public class InvoiceDto : EntityDto
 
     public DateTime Date { get; set; }
 
-    public int? ProjectId { get; set; }
-    public Project? Project { get; set; }
+    public int TypeId { get; set; }
+
+    public InvoiceTypeDto? Type { get; set; }
+
+    public int ProjectId { get; set; }
+
+    public ProjectDto? Project { get; set; }
+
+    public ICollection<PaymentDto>? Payments { get; set; }
 }

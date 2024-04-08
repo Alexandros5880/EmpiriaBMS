@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Models;
+using EmpiriaBMS.Core.Dtos;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
@@ -84,7 +86,33 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private int _projectId;
+    private int _typeId { get; set; }
+    public int TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
+    private InvoiceTypeVM _type { get; set; }
+    public InvoiceTypeVM Type
+    {
+        get => _type;
+        set
+        {
+            if (value == _type)
+                return;
+            _type = value;
+            NotifyPropertyChanged(nameof(Type));
+        }
+    }
+
+    private int _projectId { get; set; }
     public int ProjectId
     {
         get => _projectId;
@@ -97,8 +125,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private Project? _project;
-    public Project? Project
+    private ProjectVM _project { get; set; }
+    public ProjectVM Project
     {
         get => _project;
         set
@@ -110,8 +138,26 @@ public class InvoiceVM : BaseVM
         }
     }
 
+    public ICollection<PaymentVM> Payments { get; set; }
+
     public InvoiceVM()
     {
         Date = DateTime.Now;
+    }
+
+    public InvoiceVM(InvoiceVM invoice)
+    {
+        Date = invoice.Date;
+        Total = invoice.Total;
+        Vat = invoice.Vat;
+        Fee = invoice.Fee;
+        Number = invoice.Number;
+        Mark = invoice.Mark;
+        Date = invoice.Date;
+        TypeId = invoice.TypeId;
+        Type = null;
+        ProjectId = invoice.ProjectId;
+        Project = null;
+        Payments = invoice.Payments;
     }
 }

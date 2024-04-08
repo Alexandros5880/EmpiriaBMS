@@ -137,18 +137,7 @@ public class UserVM : BaseVM
         }
     }
 
-    private Project _project;
-    public Project Project
-    {
-        get => _project;
-        set
-        {
-            if (value == _project)
-                return;
-            _project = value;
-            NotifyPropertyChanged(nameof(Project));
-        }
-    }
-
     public ICollection<Email> Emails { get; set; }
+
+    public List<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 }

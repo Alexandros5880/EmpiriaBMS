@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
@@ -109,29 +110,78 @@ public class PaymentVM : BaseVM
         }
     }
 
-    private int? _projectId;
-    public int? ProjectId
+    private int _typeId { get; set; }
+    public int TypeId
     {
-        get => _projectId;
+        get => _typeId;
         set
         {
-            if (value == _projectId)
+            if (value == _typeId)
                 return;
-            _projectId = value;
-            NotifyPropertyChanged(nameof(ProjectId));
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
         }
     }
 
-    private Project _project;
-    public Project Project
+    private PaymentType _type { get; set; }
+    public PaymentType Type
     {
-        get => _project;
+        get => _type;
         set
         {
-            if (value == _project)
+            if (value == _type)
                 return;
-            _project = value;
-            NotifyPropertyChanged(nameof(Project));
+            _type = value;
+            NotifyPropertyChanged(nameof(Type));
         }
     }
+
+    private int _invoiceId { get; set; }
+    public int InvoiceId
+    {
+        get => _invoiceId;
+        set
+        {
+            if (value == _invoiceId)
+                return;
+            _invoiceId = value;
+            NotifyPropertyChanged(nameof(InvoiceId));
+        }
+    }
+
+    private Invoice _invoice { get; set; }
+    public Invoice Invoice
+    {
+        get => _invoice;
+        set
+        {
+            if (value == _invoice)
+                return;
+            _invoice = value;
+            NotifyPropertyChanged(nameof(Invoice));
+        }
+    }
+
+    public PaymentVM()
+    {
+        EstPaymentDate = DateTime.Now;
+        PaymentDate = DateTime.Now;
+    }
+
+    public PaymentVM(PaymentVM payment)
+    {
+        EstPaymentDate = payment.EstPaymentDate;
+        PaymentDate = payment.PaymentDate;
+        DelayInPayment = payment.DelayInPayment;
+        PaymentDetails = payment.PaymentDetails;
+        DayCost = payment.DayCost;
+        Bank = payment.Bank;
+        DaysUntilPayment = payment.DaysUntilPayment;
+        PendingPayments = payment.PendingPayments;
+        TypeId = payment.TypeId;
+        Type = null;
+        InvoiceId = payment.InvoiceId;
+        Invoice = null;
+    }
+
 }

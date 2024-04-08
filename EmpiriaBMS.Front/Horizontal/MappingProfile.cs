@@ -27,5 +27,7 @@ public class MappingProfile : Profile
         CreateMap<IssueDto, IssueVM>().ReverseMap();
         CreateMap<PaymentDto, PaymentVM>().ReverseMap();
         CreateMap<DocumentDto, DocumentVM>().ReverseMap();
+        CreateMap<InvoiceTypeDto, InvoiceTypeVM>().ReverseMap();
+        CreateMap<PaymentTypeDto, PaymentTypeVM>().ReverseMap();
     }
 }

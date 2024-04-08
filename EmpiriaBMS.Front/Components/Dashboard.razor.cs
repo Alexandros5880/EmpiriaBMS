@@ -72,8 +72,6 @@ public partial class Dashboard : IDisposable
 
     #region Selected Models
     private ProjectVM _selectedProject = new ProjectVM();
-    private InvoiceVM _selectedInvoice = new InvoiceVM();
-    private PaymentVM _selectedPayment = new PaymentVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
@@ -139,12 +137,12 @@ public partial class Dashboard : IDisposable
     // On Add/Edit Invoice Dialog
     private FluentDialog _addEditInvoiceDialog;
     private bool _isAddEditInvoiceDialogOdepened = false;
-    private InvoiceDetailed invoiceCompoment;
+    private Invoices _invoicesCompoment;
 
     // On Add/Edit Payment Dialog
     private FluentDialog _addEditPaymentDialog;
     private bool _isAddEditPaymentDialogOdepened = false;
-    private PaymentDetailed paymentCompoment;
+    private Payments _paymentsCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -186,34 +184,6 @@ public partial class Dashboard : IDisposable
             var issuesVms = Mapper.Map<List<IssueVM>>(issuesDtos);
             _issues.Clear();
             issuesVms.ForEach(_issues.Add);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private async Task _getInvoice()
-    {
-        try
-        {
-            var dto = await _dataProvider.Invoices.Get((int)_selectedProject.InvoiceId);
-            _selectedInvoice = Mapper.Map<InvoiceVM>(dto);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private async Task _getPayment()
-    {
-        try
-        {
-            var dto = await _dataProvider.Payments.Get((int)_selectedProject.PaymentId);
-            _selectedPayment = Mapper.Map<PaymentVM>(dto);
         }
         catch (Exception ex)
         {
@@ -421,8 +391,6 @@ public partial class Dashboard : IDisposable
         foreach (var di in disciplines)
             _disciplines.Add(Mapper.Map<DisciplineVM>(di));
 
-        await _getInvoice();
-        await _getPayment();
         await _checkIfHasAnySelections();
 
         StateHasChanged();
@@ -543,43 +511,8 @@ public partial class Dashboard : IDisposable
         // previusTime, updatedTime, remainingTime
 
         var previusTime = draw.Time;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
-
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
         draw.Time = newTimeSpan;
 
@@ -614,50 +547,15 @@ public partial class Dashboard : IDisposable
         // previusTime, updatedTime, remainingTime
 
         var previusTime = other.Time;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
-
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
         other.Time = newTimeSpan;
 
-        if (_othersChanged.Any(o => o.Id == other.Id))
+        if (_othersChanged.Any(d => d.Id == other.Id))
         {
-            var o = _othersChanged.FirstOrDefault(o => o.Id == other.Id);
-            o.Time = other.Time;
+            var d = _othersChanged.FirstOrDefault(d => d.Id == other.Id);
+            d.Time = other.Time;
         }
         else
             _othersChanged.Add(other);
@@ -667,44 +565,11 @@ public partial class Dashboard : IDisposable
 
     private void _onPersonalTimeChanged(TimeSpan newTimeSpan)
     {
+        // previusTime, updatedTime, remainingTime
+
         var previusTime = _editLogedUserTimes.PersonalTime;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
-
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
         _editLogedUserTimes.PersonalTime = newTimeSpan;
 
@@ -713,44 +578,11 @@ public partial class Dashboard : IDisposable
 
     private void _onTrainingTimeChanged(TimeSpan newTimeSpan)
     {
+        // previusTime, updatedTime, remainingTime
+
         var previusTime = _editLogedUserTimes.TrainingTime;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
-
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
         _editLogedUserTimes.TrainingTime = newTimeSpan;
 
@@ -759,44 +591,11 @@ public partial class Dashboard : IDisposable
 
     private void _onCorporateTimeChanged(TimeSpan newTimeSpan)
     {
+        // previusTime, updatedTime, remainingTime
+
         var previusTime = _editLogedUserTimes.CorporateEventTime;
-        var hoursChanged = previusTime.Hours != newTimeSpan.Hours;
-        var minutesChanged = previusTime.Minutes != newTimeSpan.Minutes;
-
-        var updatedHours = hoursChanged ?
-                                          newTimeSpan.Hours < previusTime.Hours ?
-                                                          -(previusTime.Hours - newTimeSpan.Hours)
-                                                        : newTimeSpan.Hours
-                                        : 0;
-        var updatedMinutes = minutesChanged ?
-                                          newTimeSpan.Minutes < previusTime.Minutes ?
-                                                          -(previusTime.Minutes - newTimeSpan.Minutes)
-                                                        : newTimeSpan.Minutes
-                                        : 0;
-
-        // TODO: Can save somewhere the extra hours and miutes
-        if (remainingTime.Hours < updatedHours)
-        {
-            updatedHours = remainingTime.Hours;
-            newTimeSpan = new TimeSpan(remainingTime.Hours, newTimeSpan.Minutes, newTimeSpan.Seconds);
-        }
-        if (remainingTime.Minutes < updatedMinutes && remainingTime.Hours == 0)
-        {
-            updatedMinutes = remainingTime.Minutes;
-            newTimeSpan = new TimeSpan(newTimeSpan.Hours, remainingTime.Minutes, newTimeSpan.Seconds);
-        }
-
-        var updatedTime = new TimeSpan(updatedHours, updatedMinutes, 0);
-
-        TimeSpan difference = remainingTime - updatedTime;
-        if (difference < TimeSpan.Zero)
-        {
-            remainingTime += updatedTime;
-        }
-        else
-        {
-            remainingTime -= updatedTime;
-        }
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
 
         _editLogedUserTimes.CorporateEventTime = newTimeSpan;
 
@@ -860,6 +659,8 @@ public partial class Dashboard : IDisposable
             TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
             await _getUserTotalHoursThisMonth();
+
+            StateHasChanged();
         }
         catch(Exception ex)
         {
@@ -1069,9 +870,9 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Add Invoice Actions
-    private void AddEditInvoice()
+    private async Task AddEditInvoice()
     {
-        invoiceCompoment.Prepair();
+        await _invoicesCompoment.Prepair();
         _addEditInvoiceDialog.Show();
         _isAddEditInvoiceDialogOdepened = true;
     }
@@ -1084,20 +885,12 @@ public partial class Dashboard : IDisposable
             _isAddEditInvoiceDialogOdepened = false;
         }
     }
-
-    public async Task _addInvoiceDialogAccept()
-    {
-        await invoiceCompoment.HandleValidSubmit();
-        _addEditInvoiceDialog.Hide();
-        _isAddEditInvoiceDialogOdepened = false;
-        await Refresh();
-    }
     #endregion
 
     #region Add Payment Actions
-    private void AddEditPayment()
+    private async Task AddEditPayment()
     {
-        paymentCompoment.Prepair();
+        await _paymentsCompoment.Prepair();
         _addEditPaymentDialog.Show();
         _isAddEditPaymentDialogOdepened = true;
     }
@@ -1109,14 +902,6 @@ public partial class Dashboard : IDisposable
             _addEditPaymentDialog.Hide();
             _isAddEditPaymentDialogOdepened = false;
         }
-    }
-
-    public async Task _addPaymentDialogAccept()
-    {
-        await paymentCompoment.HandleValidSubmit();
-        _addEditPaymentDialog.Hide();
-        _isAddEditPaymentDialogOdepened = false;
-        await Refresh();
     }
     #endregion
 

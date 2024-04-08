@@ -133,16 +133,16 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                           .Select(d => d.CompletionEstimation)
                                           .Sum();
             var othersCounter = allOthers.Count();
-            discipline.Completed = sumComplitionOfOthers / othersCounter;
+            discipline.DeclaredCompleted = sumComplitionOfOthers / othersCounter;
 
             // Calculate Parent Project Complition
             var disciplines = await _context.Set<Discipline>()
                                             .Where(d => d.ProjectId == projectId)
                                             .ToListAsync();
             var project = discipline.Project;
-            var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
+            var sumCompplitionOfDisciplines = disciplines.Select(d => d.DeclaredCompleted).Sum();
             var disciplinesCounter = disciplines.Count();
-            project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
+            project.DeclaredCompleted = sumCompplitionOfDisciplines / disciplinesCounter;
 
             await _context.SaveChangesAsync();
         }

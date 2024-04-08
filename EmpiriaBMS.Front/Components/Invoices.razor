@@ -1,0 +1,123 @@
+﻿@using EmpiriaBMS.Front.Services
+
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
+
+
+<div class="text-center row me-2"
+     style="max-width: 1000px !important; margin: 0 auto;">
+    
+    <!-- Title -->
+    <h3 class="col-6 text-start">Invoices</h3>
+    
+    <!-- Add From All Invoices List -->
+    <div class="col-4">
+        @{var freeInvoices = _allInvoices.Where(i => !_projectsInvoices.Select(pi => pi.Id).Contains(i.Id));}
+        @if (freeInvoices.Count() > 0)
+        {
+            <select class="form-select" @onchange="@_onInvoiceSelected">
+                @foreach (var invoice in @freeInvoices)
+                {
+                    <option value="@invoice.Id">
+                        <span>@invoice.Date &ensp; @invoice.Mark &ensp; @invoice.Number &ensp; @invoice.Total &ensp; @invoice.Vat &ensp; @invoice.Fee</span>
+                    </option>
+                }
+            </select>
+        }
+    </div>
+
+    <!-- Add New Invoice -->
+    <span class="grommet-icons--add text-end col-2"
+          @onclick="@(() => _addInvoice())" />
+
+</div>
+
+<div class="table-responsive p-1 table-container"
+     style="max-width: 1000px !important; margin: 0 auto;">
+    <table class="table table-hover text-center">
+        <thead class="table-success">
+            <tr>
+                <th scope="col" class="sticky-header">Type</th>
+                <th scope="col" class="sticky-header">Date</th>
+                <th scope="col" class="sticky-header">Mark</th>
+                <th scope="col" class="sticky-header">Number</th>
+                <th scope="col" class="sticky-header">Total</th>
+                <th scope="col" class="sticky-header">Vat</th>
+                <th scope="col" class="sticky-header">Fee</th>
+                <th scope="col" class="sticky-header">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var invoice in _projectsInvoices)
+            {
+                <tr class="align-middle">
+
+                    <td style="min-width: 150px;">
+                        <select class="form-select" @bind="@invoice.TypeId" style="min-width: 150px;">
+                            @foreach(var type in @_types)
+                            {
+                                <option value="@type.Id">
+                                    <span>@type.Name</span>
+                                </option>
+                            }
+                        </select>
+                    </td>
+
+                    <td style="min-width: 150px;">
+                        <input type="date"
+                               class="form-control"
+                               id="invoiceDate"
+                               @bind="@invoice.Date">
+                    </td>
+
+                    <td style="min-width: 200px;">
+                        <input type="text"
+                               class="form-control"
+                               id="invoiceMark"
+                               @bind="@invoice.Mark">
+                    </td>
+
+                    <td style="min-width: 60px;">
+                        <input type="number"
+                               class="form-control"
+                               id="invoiceNumber"
+                               @bind="@invoice.Number">
+                    </td>
+
+                    <td style="min-width: 60px;">
+                        <input type="number"
+                               class="form-control"
+                               id="invoiceTotal"
+                               @bind="@invoice.Total">
+                    </td>
+
+                    <td style="min-width: 60px;">
+                        <input type="number"
+                               class="form-control"
+                               id="invoiceVat"
+                               @bind="@invoice.Vat">
+                    </td>
+
+                    <td style="min-width: 65px;">
+                        <input type="number"
+                               class="form-control"
+                               id="invoiceFee"
+                               @bind="@invoice.Fee">
+                    </td>
+
+                    <td style="min-width: 50px;">
+                        <span class="fluent--delete-28-regular"
+                              @onclick="@(() => _deleteInvoice(invoice))" />
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-12 text-end">
+        <button type="button" class="btn btn-outline-secondary" @onclick="@(async () => await _save())">Save</button>
+    </div>
+</div>

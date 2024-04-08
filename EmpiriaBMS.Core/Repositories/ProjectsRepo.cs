@@ -33,12 +33,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return await _context
                              .Set<Project>()
                              .Include(r => r.Customer)
-                             .Include(r => r.Invoice)
+                             .Include(r => r.Invoices)
                              .Include(p => p.Type)
                              .Include(p => p.ProjectManager)
-                             .Include(p => p.SubContractor)
-                             .Include(p => p.Customer)
-                             .Include(p => p.Payment)
+                             .Include(p => p.ProjectsSubConstructors)
                              .Select(r => Mapping.Mapper.Map<ProjectDto>(r))
                              .FirstOrDefaultAsync(r => r.Id == id);
         }
@@ -51,12 +49,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         {
             projects = await _context.Set<Project>()
                                       .Include(r => r.Customer)
-                                      .Include(r => r.Invoice)
+                                      .Include(r => r.Invoices)
                                       .Include(p => p.Type)
                                       .Include(p => p.ProjectManager)
-                                      .Include(p => p.SubContractor)
-                                      .Include(p => p.Customer)
-                                      .Include(p => p.Payment)
+                                      .Include(p => p.ProjectsSubConstructors)
                                       .OrderBy(e => !e.Active)
                                       .ThenByDescending(e => e.DeadLine)
                                       .ToListAsync();
@@ -74,12 +70,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 projects = await _context.Set<Project>()
                                          .Include(r => r.Customer)
-                                         .Include(r => r.Invoice)
+                                         .Include(r => r.Invoices)
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
-                                         .Include(p => p.SubContractor)
-                                         .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -90,12 +84,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Skip((pageIndex - 1) * pageSize)
                                       .Take(pageSize)
                                       .Include(r => r.Customer)
-                                      .Include(r => r.Invoice)
+                                      .Include(r => r.Invoices)
                                       .Include(p => p.Type)
                                       .Include(p => p.ProjectManager)
-                                      .Include(p => p.SubContractor)
-                                      .Include(p => p.Customer)
-                                      .Include(p => p.Payment)
+                                      .Include(p => p.ProjectsSubConstructors)
                                       .OrderBy(e => !e.Active)
                                       .ThenByDescending(e => e.DeadLine)
                                       .ToListAsync();
@@ -117,12 +109,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 projects = await _context.Set<Project>()
                                          .Where(expresion)
                                          .Include(r => r.Customer)
-                                         .Include(r => r.Invoice)
+                                         .Include(r => r.Invoices)
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
-                                         .Include(p => p.SubContractor)
-                                         .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -134,12 +124,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
                                      .Include(r => r.Customer)
-                                     .Include(r => r.Invoice)
+                                     .Include(r => r.Invoices)
                                      .Include(p => p.Type)
                                      .Include(p => p.ProjectManager)
-                                     .Include(p => p.SubContractor)
-                                     .Include(p => p.Customer)
-                                     .Include(p => p.Payment)
+                                     .Include(p => p.ProjectsSubConstructors)
                                      .OrderBy(e => !e.Active)
                                      .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
@@ -169,12 +157,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Include(r => r.Customer)
-                                                .Include(r => r.Invoice)
+                                                .Include(r => r.Invoices)
                                                 .Include(p => p.Type)
                                                 .Include(p => p.ProjectManager)
-                                                .Include(p => p.SubContractor)
-                                                .Include(p => p.Customer)
-                                                .Include(p => p.Payment)
+                                                .Include(p => p.ProjectsSubConstructors)
                                                 .OrderBy(e => !e.Active)
                                                 .ThenByDescending(e => e.DeadLine)
                                                 .ToListAsync();
@@ -207,12 +193,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var projects = await _context.Set<Project>()
                                          .Include(r => r.Customer)
-                                         .Include(r => r.Invoice)
+                                         .Include(r => r.Invoices)
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
-                                         .Include(p => p.SubContractor)
-                                         .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
@@ -244,12 +228,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 var allProjects = await _context.Set<Project>()
                                                 .Where(expresion)
                                                 .Include(r => r.Customer)
-                                                .Include(r => r.Invoice)
+                                                .Include(r => r.Invoices)
                                                 .Include(p => p.Type)
                                                 .Include(p => p.ProjectManager)
-                                                .Include(p => p.SubContractor)
-                                                .Include(p => p.Customer)
-                                                .Include(p => p.Payment)
+                                                .Include(p => p.ProjectsSubConstructors)
                                                 .OrderBy(e => !e.Active)
                                                 .ThenByDescending(e => e.DeadLine)
                                                 .ToListAsync();
@@ -284,12 +266,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                          .Where(expresion)
                                          .Include(r => r.Customer)
-                                         .Include(r => r.Invoice)
+                                         .Include(r => r.Invoices)
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
-                                         .Include(p => p.SubContractor)
-                                         .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -333,12 +313,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 projects = await _context.Set<Project>()
                                          .Skip((pageIndex - 1) * pageSize)
                                          .Take(pageSize)
-                                         .Include(r => r.Invoice)
+                                         .Include(r => r.Invoices)
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
-                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -373,12 +352,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 projects = await _context.Set<Project>()
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
-                                         .Include(r => r.Invoice)
+                                         .Include(r => r.Invoices)
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
-                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -390,12 +368,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
-                                     .Include(r => r.Invoice)
+                                     .Include(r => r.Invoices)
                                      .Include(p => p.Type)
                                      .Include(p => p.ProjectManager)
-                                     .Include(p => p.SubContractor)
+                                     .Include(p => p.ProjectsSubConstructors)
                                      .Include(p => p.Customer)
-                                     .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
                                      .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
@@ -433,12 +410,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 {
                     projects = await _context.Set<Project>()
                                              .Where(expresion)
-                                             .Include(r => r.Invoice)
+                                             .Include(r => r.Invoices)
                                              .Include(p => p.Type)
                                              .Include(p => p.ProjectManager)
-                                             .Include(p => p.SubContractor)
+                                             .Include(p => p.ProjectsSubConstructors)
                                              .Include(p => p.Customer)
-                                             .Include(p => p.Payment)
                                              .OrderBy(e => !e.Active)
                                              .ThenByDescending(e => e.DeadLine)
                                              .ToListAsync();
@@ -450,12 +426,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Where(expresion)
                                          .Skip((pageIndex - 1) * pageSize)
                                          .Take(pageSize)
-                                         .Include(r => r.Invoice)
+                                         .Include(r => r.Invoices)
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
-                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -492,12 +467,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 projects = await _context.Set<Project>()
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                          .Where(expresion)
-                                         .Include(r => r.Invoice)
+                                         .Include(r => r.Invoices)
                                          .Include(p => p.Type)
                                          .Include(p => p.ProjectManager)
-                                         .Include(p => p.SubContractor)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Customer)
-                                         .Include(p => p.Payment)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -510,12 +484,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
-                                     .Include(r => r.Invoice)
+                                     .Include(r => r.Invoices)
                                      .Include(p => p.Type)
                                      .Include(p => p.ProjectManager)
-                                     .Include(p => p.SubContractor)
+                                     .Include(p => p.ProjectsSubConstructors)
                                      .Include(p => p.Customer)
-                                     .Include(p => p.Payment)
                                      .OrderBy(e => !e.Active)
                                      .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
@@ -708,4 +681,19 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
+    public async Task<ICollection<InvoiceDto>> GetInvoices(int projectId)
+    {
+        if (projectId == 0)
+            throw new ArgumentNullException(nameof(projectId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var invoices = await _context.Set<Invoice>()
+                                         .Where(i => i.ProjectId == projectId)
+                                         .ToListAsync();
+
+            var dtos = Mapping.Mapper.Map<List<InvoiceDto>>(invoices);
+            return dtos;
+        }
+    }
 }

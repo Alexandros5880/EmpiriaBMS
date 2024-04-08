@@ -39,27 +39,22 @@ public class Project : Entity
 
     public float EstimatedCompleted { get; set; }
 
-    public float Completed { get; set; }
-
-    public float WorkPackegedCompleted { get; set; }
+    public float DeclaredCompleted { get; set; }
 
     public int? CalculationDaly { get; set; }
-
-    public int? SubContractorId { get; set; }
-    public User? SubContractor { get; set; }
 
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 
     public User? Customer { get; set; }
 
-    public Invoice? Invoice { get; set; }
-
-    public Payment? Payment { get; set; }
+    public ICollection<Invoice> Invoices { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }
 
     public ICollection<Issue> Complains { get; set; }
+
+    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 }
