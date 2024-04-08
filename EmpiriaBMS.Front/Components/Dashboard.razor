@@ -203,7 +203,7 @@ else
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))">
-                                                            <label>@project.DeadLine?.ToString("dd/MM/yyyy")</label>
+                                                            <label>@project.DeadLine?.ToEuropeFormat()</label>
                                                         </td>
 
                                                         @if (isWorkingMode)

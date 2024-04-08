@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.ExtensionMethods;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Core.Hellpers;
 
