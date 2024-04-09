@@ -58,9 +58,12 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         _createdGroup = new ProjectGroupVM();
         _project = new ProjectVM();
         _project.Active = true;
-        _project.GroupId = _projectGroups.FirstOrDefault().Id;
-        _project.StageId = _projectStages.FirstOrDefault().Id;
-        _project.TypeId = _projectTypes.FirstOrDefault().Id;
+        //_project.GroupId = _projectGroups.FirstOrDefault().Id;
+        //_project.StageId = _projectStages.FirstOrDefault().Id;
+        //_project.TypeId = _projectTypes.FirstOrDefault().Id;
+        _project.GroupId = 0;
+        _project.StageId = 0;
+        _project.TypeId = 0;
         StateHasChanged();
     }
 

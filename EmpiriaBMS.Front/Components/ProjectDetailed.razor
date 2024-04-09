@@ -43,6 +43,10 @@
                         <div class="col-12 form-group">
                             <label>Project Group</label>
                             <select class="form-select" @onchange="((e) => _updateProjectGroup(e))">
+                                @if (_project.GroupId == 0)
+                                {
+                                    <option value="0" selected>Selecte Group</option>
+                                }
                                 @foreach (var projectGroup in _projectGroups)
                                 {
                                     @if (_project.GroupId == projectGroup.Id)
@@ -96,6 +100,10 @@
                     <div class="form-group">
                         <label>Project Stage</label>
                         <select class="form-select" @onchange="((e) => _updateProjectStage(e))">
+                            @if (_project.StageId == 0)
+                            {
+                                <option value="0" selected>Selecte Stage</option>
+                            }
                             @foreach (var projectStage in _projectStages)
                             {
                                 @if (_project.StageId == projectStage.Id)
@@ -115,6 +123,10 @@
                     <div class="form-group">
                         <label>ProjectType</label>
                         <select class="form-select" @onchange="((e) => _updateProjectType(e))">
+                            @if (_project.TypeId == 0)
+                            {
+                                <option value="0" selected>Selecte Type</option>
+                            }
                             @foreach (var projectType in _projectTypes)
                             {
                                 @if (_project.TypeId == projectType.Id)
@@ -188,98 +200,4 @@
 
     </EditForm>
 
-    <!-- Disciplines -->
-@*     <div class="mb-2 row gx-2" style="margin: 0 auto;">
-        <div class="col-12">
-            @if (_project != null)
-            {
-                <div class="row">
-                    <h3 class="col-10">Disciplines</h3>
-                    <span class="grommet-icons--add col-2"
-                          @onclick="@(() => _addRow())" />
-                </div>
-                <div class="table-responsive p-1">
-                    <table class="table table-hover text-center">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="sticky-header">Discipline</th>
-                                <th scope="col" class="sticky-header">Estimated Mandays</th>
-                                <th scope="col" class="sticky-header">Remove</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var _discipline in _disciplines)
-                            {
-                                <tr class="align-middle">
-
-                                    <td class="align-middle">
-                                        <select class="form-select"
-                                                @bind="_discipline.TypeId">
-                                            @foreach (var _disciplineType in _disciplineTypes)
-                                            {
-                                                @if (_discipline.TypeId.Equals(_disciplineType.Id))
-                                                {
-                                                    <option value="@_disciplineType.Id" selected>@_disciplineType.Name</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@_disciplineType.Id">@_disciplineType.Name</option>
-                                                }
-                                            }
-                                        </select>
-                                    </td>
-
-                                    <td class="align-middle text-center">
-                                        <!-- EstimatedMandays -->
-                                        <input type="number"
-                                               class="form-control"
-                                               id="estimatedMandays"
-                                               @bind="@_discipline.EstimatedMandays"
-                                               style="width: 100px !important; margin: 0 auto;">
-                                    </td>
-
-                                    <td class="align-middle text-center">
-                                        <span class="fluent--delete-28-regular"
-                                              @onclick="@(() => _removeRow(_discipline.TypeId))" />
-                                    </td>
-
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-        </div>
-    </div> *@
-
-    @*
-    <div class="mb-2 row gx-2" style="margin: 0 auto;">
-
-        <div class="col-12 row gx-2 gy-2">
-
-            <!-- Invoice -->
-            <div class="col-lg col-md-12">
-                <div class="card h-100 m-1 p-1">
-                    <InvoiceDetailed Invoice="@_invoice"/>
-                </div>
-            </div>
-
-            <!-- SubConstructor -->
-            <div class="col-lg col-md-12">
-                <div class="card h-100 m-1 p-1">
-                    <UserDetailed Title="Sub Constructor" User="@_subConstructor"/>
-                </div>
-            </div>
-
-            <!-- Customer -->
-            <div class="col-lg col-md-12">
-                <div class="card h-100 m-1 p-1">
-                    <UserDetailed Title="Customer" User="@_customer" />
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-    *@
 </div>
