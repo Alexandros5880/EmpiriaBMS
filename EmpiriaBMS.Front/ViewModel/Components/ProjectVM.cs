@@ -152,8 +152,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private Address _address;
-    public Address Address
+    private Address? _address;
+    public Address? Address
     {
         get => _address;
         set
