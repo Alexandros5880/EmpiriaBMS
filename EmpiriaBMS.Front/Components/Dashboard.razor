@@ -263,12 +263,12 @@ else
                                                 <span class="fluent--delete-28-regular col-1"
                                                       @onclick="@(() => DeleteDiscipline())" />
                                                 <span class="material-symbols--edit-outline col-1"
-                                                      @onclick="@(() => EditDiscipline())" />
+                                                      @onclick="@(async () => await EditDiscipline())" />
                                             }
                                             @if (_hasDisciplinesSelections)
                                             {
                                                 <span class="grommet-icons--add col-1"
-                                                      @onclick="@(() => AddDiscipline())" />
+                                                      @onclick="@(async () => await AddDiscipline())" />
                                             }
                                         }
                                     </div>

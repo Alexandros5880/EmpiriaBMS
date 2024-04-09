@@ -953,16 +953,16 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Add/Edit/Delete Discipline Actions
-    private void AddDiscipline()
+    private async Task AddDiscipline()
     {
-        disciplineCompoment.PrepairForNew();
+        await disciplineCompoment.PrepairForNew();
         _addEditDisciplineDialog.Show();
         _isAddEditDisciplineDialogOdepened = true;
     }
 
-    private void EditDiscipline()
+    private async Task EditDiscipline()
     {
-        disciplineCompoment.PrepairForEdit(_selectedDiscipline);
+        await disciplineCompoment.PrepairForEdit(_selectedDiscipline);
         _addEditDisciplineDialog.Show();
         _isAddEditDisciplineDialogOdepened = true;
     }

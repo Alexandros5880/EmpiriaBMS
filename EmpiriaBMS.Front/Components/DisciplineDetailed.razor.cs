@@ -20,11 +20,11 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
 
     private async Task _getDisciplineTypes()
     {
-        var types = await DataProvider.DisciplinesTypes.GetDisciplineTypesSelections(ProjectId);
+        var types = await DataProvider.DisciplinesTypes.GetAll();
         _disciplineTypes = types.ToList();
     }
 
-    public async void PrepairForNew()
+    public async Task PrepairForNew()
     {
         isNew = true;
         _disciplineTypes.Clear();
@@ -35,7 +35,7 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
         StateHasChanged();
     }
 
-    public async void PrepairForEdit(DisciplineVM discipline)
+    public async Task PrepairForEdit(DisciplineVM discipline)
     {
         isNew = false;
         _disciplineTypes.Clear();
