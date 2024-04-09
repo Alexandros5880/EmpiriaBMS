@@ -28,6 +28,12 @@ public class ProjectDto : EntityDto
     public int TypeId { get; set; }
     public ProjectType Type { get; set; }
 
+    public int StageId { get; set; }
+    public ProjectStage Stage { get; set; }
+
+    public int AddressId { get; set; }
+    public Address Address { get; set; }
+
     public bool Active { get; set; }
 
     public DateTime? StartDate { get; set; }
