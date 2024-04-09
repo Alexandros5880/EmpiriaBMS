@@ -32,5 +32,7 @@ public class MappingCoreProfile : Profile
         CreateMap<DocumentDto, Document>().ReverseMap();
         CreateMap<InvoiceTypeDto, InvoiceType>().ReverseMap();
         CreateMap<PaymentTypeDto, PaymentType>().ReverseMap();
+        CreateMap<ProjectStageDto, ProjectStage>().ReverseMap();
+        CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap();
     }
 }

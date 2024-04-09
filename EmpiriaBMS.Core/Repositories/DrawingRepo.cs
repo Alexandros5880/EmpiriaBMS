@@ -17,7 +17,7 @@ using AutoMapper;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class DrawingRepo : Repository<DrawingDto, Drawing>, IDisposable
+public class DrawingRepo : Repository<DrawingDto, Drawing>
 {
     public DrawingRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 

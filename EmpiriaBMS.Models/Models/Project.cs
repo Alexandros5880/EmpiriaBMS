@@ -24,6 +24,9 @@ public class Project : Entity
 
     public double? Fee { get; set; }
 
+    public int? GroupId { get; set; }
+    public ProjectGroup Group { get; set; }
+
     public int TypeId { get; set; }
     public ProjectType Type { get; set; }
 

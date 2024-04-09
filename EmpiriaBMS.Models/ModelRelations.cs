@@ -247,6 +247,13 @@ public static class ModelRelations
                .HasForeignKey(c => c.DrawingId)
                .OnDelete(DeleteBehavior.Cascade);
 
+        // Projects Group
+        builder.Entity<ProjectGroup>()
+               .HasMany(p => p.Projects)
+               .WithOne(c => c.Group)
+               .HasForeignKey(c => c.GroupId)
+               .OnDelete(DeleteBehavior.Cascade);
+
         // Projects Address
         builder.Entity<Address>()
                .HasMany(p => p.Projects)

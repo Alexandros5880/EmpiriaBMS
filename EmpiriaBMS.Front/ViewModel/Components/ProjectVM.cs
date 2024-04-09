@@ -87,6 +87,32 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private int? _groupId;
+    public int? GroupId
+    {
+        get => _groupId;
+        set
+        {
+            if (value == _groupId)
+                return;
+            _groupId = value;
+            NotifyPropertyChanged(nameof(GroupId));
+        }
+    }
+
+    private ProjectGroup _group;
+    public ProjectGroup Group
+    {
+        get => _group;
+        set
+        {
+            if (value == _group)
+                return;
+            _group = value;
+            NotifyPropertyChanged(nameof(Group));
+        }
+    }
+
     private int? _typeId;
     public int? TypeId
     {
