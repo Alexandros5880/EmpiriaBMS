@@ -5,7 +5,7 @@ using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
-public class UserVM : BaseVM
+public class UserVM : BaseValidator
 {
     private bool? _isSelected = false;
     public bool? IsSelected

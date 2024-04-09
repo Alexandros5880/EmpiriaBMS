@@ -21,6 +21,53 @@
 
             <div class="row">
                 <div class="col-lg-6 col-md-12">
+                    <!-- New Group -->
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            <label for="cgroup">Create Group</label>
+                            <InputText id="cgroup" 
+                                       @bind-Value="@_createdGroup.Name"
+                                       @oninput="_onGroupNameChange"
+                                       class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="btn btn-light mt-1 float-end"
+                                    disabled="@(!_validator.CreateGroupValid)"
+                                    @onclick="@(async () => await _createGroup())">Create</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- Project Group -->
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            <label>Project Group</label>
+                            <select class="form-select" @onchange="((e) => _updateProjectGroup(e))">
+                                @foreach (var projectGroup in _projectGroups)
+                                {
+                                    @if (_project.GroupId == projectGroup.Id)
+                                    {
+                                        <option value="@projectGroup.Id" selected>@projectGroup.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@projectGroup.Id">@projectGroup.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            @if (!_validator.GroupIdValid)
+                            {
+                                <label class="error float-start">@_validator.GroupIdErr</label>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
                     <!-- Name -->
                     <div class="form-group">
                         <label for="name">Name</label>
@@ -135,15 +182,6 @@
                           id="description"
                           row="7"
                           @bind="@_project.Description" />
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    
-                </div>
             </div>
 
         </div>

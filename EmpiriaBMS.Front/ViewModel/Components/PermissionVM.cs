@@ -3,7 +3,7 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class PermissionVM : BaseVM
+public class PermissionVM : BaseValidator
 {
     private bool? _isSelected;
     public bool? IsSelected

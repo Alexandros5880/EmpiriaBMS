@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Front.ViewModel.Components.Base;
-public class BaseVM : BNotifyPropertyChanged
+public class BaseValidator : BNotifyPropertyChanged
 {
     private int _id;
     public int Id
@@ -43,7 +43,7 @@ public class BaseVM : BNotifyPropertyChanged
         }
     }
 
-    public BaseVM()
+    public BaseValidator()
     {
         CreatedDate = DateTime.Now;
         LastUpdatedDate = DateTime.Now;

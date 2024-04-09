@@ -3,7 +3,7 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DailyHourVM : BaseVM
+public class DailyHourVM : BaseValidator
 {
     private DateTime _date;
     public DateTime Date

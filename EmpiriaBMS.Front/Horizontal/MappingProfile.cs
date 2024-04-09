@@ -29,7 +29,7 @@ public class MappingProfile : Profile
         CreateMap<DocumentDto, DocumentVM>().ReverseMap();
         CreateMap<InvoiceTypeDto, InvoiceTypeVM>().ReverseMap();
         CreateMap<PaymentTypeDto, PaymentTypeVM>().ReverseMap();
-        CreateMap<ProjectStageDto, ProjectStage>().ReverseMap();
-        CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap();
+        CreateMap<ProjectStageDto, ProjectStageVM>().ReverseMap();
+        CreateMap<ProjectGroupDto, ProjectGroupVM>().ReverseMap();
     }
 }
