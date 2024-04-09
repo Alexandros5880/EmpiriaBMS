@@ -1000,6 +1000,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_78);
 
+            // CTO || Display Projects Code
+            RolePermission rp_80 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_13_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_80);
+
 
             // CEO
             // CEO || See Dashboard Layout

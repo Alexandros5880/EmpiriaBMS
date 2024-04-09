@@ -22,79 +22,26 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     #endregion
 
     List<ProjectTypeDto> _projectTypes = new List<ProjectTypeDto>();
+    List<ProjectStageDto> _projectStages = new List<ProjectStageDto>();
     private ProjectVM _project = new ProjectVM();
-    //List<DisciplineTypeDto> _disciplineTypes = new List<DisciplineTypeDto>();
-    //List<DisciplineVM> _disciplines = new List<DisciplineVM>();
 
-    private async Task _getProjectTypes() =>
+    private async Task _getProjectTypes()
+    {
+        _projectTypes.Clear();
         _projectTypes = (await DataProvider.ProjectsTypes.GetAll()).ToList();
+    } 
 
-    #region Comment Discipline Functions
-    //private async Task _getDisciplineTypes() =>
-    //    _disciplineTypes = (await DataProvider.DisciplinesTypes.GetAll()).ToList();
-
-    //private async Task _getMyDisciplines()
-    //{
-    //    if (_project == null)
-    //        throw new NullReferenceException(nameof(_project));
-    //    Expression<Func<Discipline, bool>> expression = d => d.ProjectId == _project.Id;
-    //    List<DisciplineDto> disc = (await DataProvider.Disciplines.GetAll(expression)).ToList();
-    //    _disciplines = Mapper.Map<List<DisciplineVM>>(disc);
-    //    _disciplines.ForEach(disc => disc.PropertyChanged += Discipline_PropertyChanged);
-    //}
-
-    //private void _addRow()
-    //{
-    //    var discipline = new DisciplineVM();
-    //    discipline.PropertyChanged += Discipline_PropertyChanged;
-    //    _disciplines.Add(discipline);
-    //    StateHasChanged();
-    //}
-
-    //private void Discipline_PropertyChanged(
-    //    object sender,
-    //    System.ComponentModel.PropertyChangedEventArgs e
-    //) {
-    //    var disc = sender as DisciplineVM;
-    //    if (_disciplines.Any(d => d.TypeId.Equals(disc.TypeId)))
-    //    {
-    //        HashSet<int> uiqueDisciplineTypeIds = new HashSet<int>(_disciplines.Select(d => d.TypeId));
-    //        var saveDisciplines = new List<DisciplineVM>(_disciplines);
-    //        _disciplines.Clear();
-
-    //        foreach(var d in saveDisciplines)
-    //        {
-    //            if (uiqueDisciplineTypeIds.Contains(d.TypeId))
-    //            {
-    //                uiqueDisciplineTypeIds.Remove(uiqueDisciplineTypeIds.First(t => t.Equals(d.TypeId)));
-    //                _disciplines.Add(d);
-    //            }
-    //        }
-
-    //        StateHasChanged();
-    //    }
-    //}
-
-    //private void _removeRow(int disciplineTypeId)
-    //{
-    //    List<DisciplineVM> disciplines = new List<DisciplineVM>(_disciplines);
-    //    _disciplines.Clear();
-    //    disciplines.ForEach(d => {
-    //        if (d.TypeId != disciplineTypeId)
-    //            _disciplines.Add(d);
-    //    });
-    //    StateHasChanged();
-    //}
-    #endregion
+    private async Task _getProjectStages()
+    {
+        _projectStages.Clear();
+        _projectStages = (await DataProvider.ProjectStages.GetAll()).ToList();
+    }  
 
     public async void PrepairForNew()
     {
         isNew = true;
-        _projectTypes.Clear();
-        //_disciplineTypes.Clear();
-        //_disciplines.Clear();
         await _getProjectTypes();
-        //await _getDisciplineTypes();
+        await _getProjectStages();
         _project = new ProjectVM();
         _project.Active = true;
         _project.TypeId = _projectTypes.FirstOrDefault().Id;
@@ -104,22 +51,24 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     public async void PrepairForEdit(ProjectVM project)
     {
         isNew = false;
-        _projectTypes.Clear();
-        //_disciplineTypes.Clear();
-        //_disciplines.Clear();
         await _getProjectTypes();
-        //await _getDisciplineTypes();
+        await _getProjectStages();
         _project = project;
-        //await _getMyDisciplines();
         StateHasChanged();
     }
 
     private void _updateProjectType(ChangeEventArgs e)
     {
         var projectTypeId = Convert.ToInt32(e.Value);
-        var projectType = _projectTypes.FirstOrDefault(t => t.Id == projectTypeId);
         _project.TypeId = projectTypeId;
         _project.Type = null;
+    }
+
+    private void _updateProjectStage(ChangeEventArgs e)
+    {
+        var projectStageId = Convert.ToInt32(e.Value);
+        _project.StageId = projectStageId;
+        _project.Stage = null;
     }
 
     public async Task HandleValidSubmit()
@@ -131,10 +80,6 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
             saveProject = await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_project));
         else
             saveProject = await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(_project));
-
-        //// Save Disciplines
-        //var disciplinesDtos = Mapper.Map<List<DisciplineDto>>(_disciplines);
-        //await DataProvider.Projects.UpdateDisciplines(saveProject.Id, disciplinesDtos);
     }
 
     protected virtual void Dispose(bool disposing)

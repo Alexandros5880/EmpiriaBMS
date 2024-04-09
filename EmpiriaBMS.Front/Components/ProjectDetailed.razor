@@ -45,19 +45,28 @@
 
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <!-- Fee -->
+                    <!-- Project Stage -->
                     <div class="form-group">
-                        <label for="fee">Fee</label>
-                        <input type="number"
-                               class="form-control"
-                               id="fee"
-                               @bind="@_project.Fee">
+                        <label>Project Stage</label>
+                        <select class="form-select" @onchange="((e) => _updateProjectStage(e))">
+                            @foreach (var projectStage in _projectStages)
+                            {
+                                @if (_project.StageId == projectStage.Id)
+                                {
+                                    <option value="@projectStage.Id" selected>@projectStage.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@projectStage.Id">@projectStage.Name</option>
+                                }
+                            }
+                        </select>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <!-- ProjectType -->
                     <div class="form-group">
-                        <label for="projectType">ProjectType</label>
+                        <label>ProjectType</label>
                         <select class="form-select" @onchange="((e) => _updateProjectType(e))">
                             @foreach (var projectType in _projectTypes)
                             {
@@ -71,6 +80,26 @@
                                 }
                             }
                         </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <!-- Fee -->
+                    <div class="form-group">
+                        <label for="fee">Fee</label>
+                        <input type="number"
+                               class="form-control"
+                               id="fee"
+                               @bind="@_project.Fee">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- Active -->
+                    <div class="row mt-4 float-end" style="width: 134px;">
+                        <label class="col-8" for="active">Is Active</label>
+                        <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
                     </div>
                 </div>
             </div>
@@ -113,11 +142,7 @@
                     
                 </div>
                 <div class="col-lg-6 col-md-12">
-                    <!-- Active -->
-                    <div class="row mt-4 float-end" style="width: 134px;">
-                        <label class="col-8" for="active">Is Active</label>
-                        <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
-                    </div>
+                    
                 </div>
             </div>
 
