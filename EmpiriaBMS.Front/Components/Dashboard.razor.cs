@@ -906,6 +906,13 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Add/Edit/Delete Project Actions
+    private async Task NavigateOnMap(Address address)
+    {
+        if (address == null) return;
+        var directionsUrl = $"https://www.google.com/maps/dir/?api=1&destination={address.Latitude},{address.Longitude}&travelmode=driving&dir_action=navigate";
+        await MicrosoftTeams.OpenDirectionsInNewWindow(directionsUrl);
+    }
+
     private void AddProject()
     {
         projectCompoment.PrepairForNew();

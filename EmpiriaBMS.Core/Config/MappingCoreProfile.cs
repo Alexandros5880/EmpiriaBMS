@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Services.GooglePlaces.ViewModels;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using System;
@@ -34,5 +35,9 @@ public class MappingCoreProfile : Profile
         CreateMap<PaymentTypeDto, PaymentType>().ReverseMap();
         CreateMap<ProjectStageDto, ProjectStage>().ReverseMap();
         CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap();
+        CreateMap<AddressDto, Address>().ReverseMap();
+
+        // ViewModels
+        CreateMap<Address, AddressVM>().ReverseMap();
     }
 }

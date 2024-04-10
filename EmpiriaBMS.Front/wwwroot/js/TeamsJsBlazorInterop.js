@@ -235,3 +235,46 @@ export function getCanvasImageData(canvas) {
     return byteArray;
 }
 // Canvas
+
+// Google Maps Api
+export function displayAddress(mapElementId, address) {
+    var map = new google.maps.Map(document.getElementById(mapElementId), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8
+    });
+    var geocoder = new google.maps.Geocoder();
+
+    address.forEach(function (add) {
+        geocoder.geocode({ 'address': add }, function (results, status) {
+            if (status === 'OK') {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                console.log('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    });
+}
+
+// Navigate
+export function openDirectionsInNewWindow(directionsUrl) {
+    window.open(directionsUrl, '_blank');
+};
+
+// Autocomplete
+export function initializeAutocomplete(inputElementId) {
+    const input = document.getElementById(inputElementId);
+    const autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) {
+            // Place details not found for the input.
+            return;
+        }
+        // Handle place details (if needed)
+    });
+};
+// Google Maps Api

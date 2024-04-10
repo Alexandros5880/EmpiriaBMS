@@ -25,6 +25,7 @@ namespace EmpiriaBMS.Core
         public PaymentTypeRepo PaymentTypes { get; set; }
         public ProjectStageRepo ProjectStages { get; set; }
         public ProjectGroupRepo ProjectsGroups { get; set; }
+        public AddressRepo Address { get; set; }
         public KpisRepo KPIS { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using EmpiriaBMS.Front.ViewModel.Validation;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Components.Web;
+using EmpiriaBMS.Front.Components.General;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase, IDisposable
@@ -19,6 +20,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     private bool disposedValue;
     private bool isNew = false;
     private string defaultCodeValue = "*******";
+    private Map _map;
 
     #region Authorization Properties
     bool seeCode => _sharedAuthData.Permissions.Any(p => p.Ord == 13);
@@ -64,6 +66,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         _project.GroupId = 0;
         _project.StageId = 0;
         _project.TypeId = 0;
+        await _map.Search(null);
         StateHasChanged();
     }
 
@@ -75,6 +78,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         await _getProjectTypes();
         _createdGroup = new ProjectGroupVM();
         _project = project;
+        await _map.SetAddress(project.Address);
         StateHasChanged();
     }
 
@@ -113,6 +117,13 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         StateHasChanged();
     }
 
+    private void _onSearchAddressChange()
+    {
+        var address = _map.GetAddress();
+        if (address != null)
+            _project.Address = address;
+    }
+
     private async Task _createGroup()
     {
         try
@@ -147,6 +158,19 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
             _project.Group = null;
             _project.Stage = null;
             _project.Type = null;
+
+            // If Addres Save Address
+            if(_project?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(_project.Address.PlaceId))))
+            {
+                var dto = Mapping.Mapper.Map<AddressDto>(_project.Address);
+                var address = await DataProvider.Address.Add(dto);
+                _project.AddressId = address.Id;
+            }
+            else if (_project?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(_project.Address.PlaceId))))
+            {
+                var dto = Mapping.Mapper.Map<AddressDto>(_project.Address);
+                var address = await DataProvider.Address.Update(dto);
+            }
 
             // Save Project
             ProjectDto saveProject;

@@ -1,0 +1,99 @@
+﻿@using EmpiriaBMS.Core.Services.GooglePlaces
+@using EmpiriaBMS.Models.Models
+@using EmpiriaBMS.Core.Config;
+@using EmpiriaBMS.Core.Services.GooglePlaces.ViewModels
+
+@inject MicrosoftTeams MicrosoftTeams
+@inject GooglePlacesService GooglePlacesService
+
+<div class="row">
+    <div class="col-12">
+        @if (AutoCompeteId != null)
+        {
+            <!-- Search Address -->
+            <div class="row mb-1" style="margin-left: 2px; margin-right: 2px;">
+                <div class="col-12 form-group">
+                    <label for="searchaddress">Search Address</label>
+                    <input class="form-control"
+                           id="@AutoCompeteId"
+                           type="text"
+                           value="@(Address != null ? Address.FormattedAddress : "")"
+                           @oninput="@(async(e) => await _autoCompeteSearchInputOnInput(e))" />
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-12">
+        @if (Id != null)
+        {
+            <div id="@Id" style="@((displayMap ? "height: 400px !important; display:block;" : "display:none;"))"></div>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string AutoCompeteId { get; set; }
+
+    [Parameter]
+    public EventCallback<Address> OnFindAddress { get; set; }
+
+    public AddressVM Address { get; set; }
+
+    private bool displayMap = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (string.IsNullOrEmpty(AutoCompeteId))
+                await MicrosoftTeams.InitializeAutocomplete(AutoCompeteId);
+        }
+    }
+
+    public async Task SetAddress(Address add)
+    {
+        if (add == null) return;
+        Address = Mapping.Mapper.Map<AddressVM>(add);
+        await Search(Address.FormattedAddress);
+    }
+
+    public Address GetAddress() => Mapping.Mapper.Map<Address>(Address);
+
+    public async Task Search(string address)
+    {
+        if (!string.IsNullOrEmpty(address))
+        {
+            var add = await GooglePlacesService.GetPlaceDetailsByAddressAsync(address);
+            if (add != null)
+            {
+                displayMap = true;
+                Address = Mapping.Mapper.Map<AddressVM>(add);
+                await MicrosoftTeams.DisplayAddress(Id, new string[] { address });
+                await OnFindAddress.InvokeAsync(add);
+            }
+            else
+            {
+                displayMap = false;
+                Address = null;
+            }
+
+        }
+        else
+        {
+            displayMap = false;
+            Address = null;
+        }
+    }
+
+    private async Task _autoCompeteSearchInputOnInput(ChangeEventArgs e)
+    {
+        var address = e.Value.ToString();
+        await Search(address);
+    }
+    
+}
