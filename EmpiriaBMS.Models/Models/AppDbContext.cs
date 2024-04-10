@@ -1000,6 +1000,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_78);
 
+            // CTO || Display Projects Code
+            RolePermission rp_80 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_13_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_80);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -1341,6 +1352,66 @@ public class AppDbContext : DbContext
             builder.Entity<RolePermission>().HasData(rp_59);
             #endregion
 
+            #region Create ProjectGroups
+            var project_group_1_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_1 = new ProjectGroup()
+            {
+                Id = project_group_1_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Project Group 1",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_1);
+
+            var project_group_2_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_2 = new ProjectGroup()
+            {
+                Id = project_group_2_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Project Group 2",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_2);
+
+            var project_group_3_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_3 = new ProjectGroup()
+            {
+                Id = project_group_3_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Project Group 3",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_3);
+
+            var project_group_4_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_4 = new ProjectGroup()
+            {
+                Id = project_group_4_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Project Group 4",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_4);
+
+            var project_group_5_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_5 = new ProjectGroup()
+            {
+                Id = project_group_5_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Project Group 5",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_5);
+
+            int[] projectGroups = {
+                project_group_1_Id,
+                project_group_2_Id,
+                project_group_3_Id,
+                project_group_4_Id,
+                project_group_5_Id
+            };
+            #endregion
+
             #region Create 4 ProjectTypes
             // Project Type Buildings
             var project_type_1_Id = random.Next(123456789, 999999999) + 33;
@@ -1412,6 +1483,69 @@ public class AppDbContext : DbContext
                 project_type_2_Id,
                 project_type_3_Id,
                 project_type_4_Id
+            };
+            #endregion
+
+            #region Create ProjectStages
+
+            var project_stage_1_Id = random.Next(123456789, 999999999) + 33;
+            ProjectStage project_stage_1 = new ProjectStage()
+            {
+                Id = project_stage_1_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Buildings",
+            };
+            builder.Entity<ProjectStage>().HasData(project_stage_1);
+
+            var project_stage_2_Id = random.Next(123456789, 999999999) + 33;
+            ProjectStage project_stage_2 = new ProjectStage()
+            {
+                Id = project_stage_2_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Final Design",
+            };
+            builder.Entity<ProjectStage>().HasData(project_stage_2);
+
+            var project_stage_3_Id = random.Next(123456789, 999999999) + 33;
+            ProjectStage project_stage_3 = new ProjectStage()
+            {
+                Id = project_stage_3_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Detailed Design",
+            };
+            builder.Entity<ProjectStage>().HasData(project_stage_3);
+
+            var project_stage_4_Id = random.Next(123456789, 999999999) + 33;
+            ProjectStage project_stage_4 = new ProjectStage()
+            {
+                Id = project_stage_4_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Construction Supervision",
+            };
+            builder.Entity<ProjectStage>().HasData(project_stage_4);
+
+            var project_stage_5_Id = random.Next(123456789, 999999999) + 33;
+            ProjectStage project_stage_5 = new ProjectStage()
+            {
+                Id = project_stage_5_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Us Build Joins",
+            };
+            builder.Entity<ProjectStage>().HasData(project_stage_5);
+
+
+
+            int[] projectStages = {
+                project_stage_1_Id,
+                project_stage_2_Id,
+                project_stage_3_Id,
+                project_stage_4_Id,
+                project_stage_5_Id
             };
             #endregion
 
@@ -2314,6 +2448,8 @@ public class AppDbContext : DbContext
                     DeclaredCompleted = 0,
                     EstimatedCompleted = 0,
                     TypeId = projectTypes[i - 1],
+                    StageId = projectStages[i-1],
+                    GroupId = projectGroups[i-1],
                     Active = i % 2 == 0 ? true : false,
                     ProjectManagerId = projectManagers.Count < i - 1 ? projectManagers[i].Id : projectManagers[i - i + 1].Id
                 };
@@ -2357,6 +2493,8 @@ public class AppDbContext : DbContext
                 DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
                 TypeId = project_type_5_Id,
+                StageId = projectStages[4],
+                GroupId = projectGroups[4],
                 Active = true
             };
             builder.Entity<Project>().HasData(projectPM);
@@ -2388,6 +2526,8 @@ public class AppDbContext : DbContext
                     DeclaredCompleted = 0,
                     EstimatedCompleted = 0,
                     TypeId = projectTypes[typesIndex],
+                    StageId = projectStages[typesIndex],
+                    GroupId = projectGroups[typesIndex],
                     Active = i % 2 == 0 ? true : false,
                     ProjectManagerId = projectManagers[projectManagersIndex].Id
                 };

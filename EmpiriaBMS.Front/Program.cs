@@ -2,6 +2,7 @@ using AutoMapper;
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Repositories;
+using EmpiriaBMS.Core.Services.GooglePlaces;
 using EmpiriaBMS.Front;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
@@ -41,6 +42,9 @@ var mapperConfig = new MapperConfiguration(mc =>
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
+
+// Google PLaces Api Service
+builder.Services.AddScoped<GooglePlacesService>();
 
 
 builder.Services.AddFluentUIComponents();

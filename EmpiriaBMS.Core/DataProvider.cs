@@ -30,6 +30,9 @@ public class DataProvider : IDataProvider, IDisposable
     public PaymentRepo Payments { get; set; }
     public InvoiceTypeRepo InvoiceTypes { get; set; }
     public PaymentTypeRepo PaymentTypes { get; set; }
+    public ProjectStageRepo ProjectStages { get; set; }
+    public ProjectGroupRepo ProjectsGroups { get; set; }
+    public AddressRepo Address { get; set; }
     public KpisRepo KPIS { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
@@ -49,6 +52,9 @@ public class DataProvider : IDataProvider, IDisposable
         Payments = new PaymentRepo(dbFactory);
         InvoiceTypes = new InvoiceTypeRepo(dbFactory);
         PaymentTypes = new PaymentTypeRepo(dbFactory);
+        ProjectStages = new ProjectStageRepo(dbFactory);
+        ProjectsGroups = new ProjectGroupRepo(dbFactory);
+        Address = new AddressRepo(dbFactory);
         KPIS = new KpisRepo(dbFactory);
     }
 
@@ -74,6 +80,9 @@ public class DataProvider : IDataProvider, IDisposable
                 Payments.Dispose();
                 InvoiceTypes.Dispose();
                 PaymentTypes.Dispose();
+                ProjectStages.Dispose();
+                ProjectsGroups.Dispose();
+                Address.Dispose();
                 KPIS.Dispose();
             }
             disposedValue = true;

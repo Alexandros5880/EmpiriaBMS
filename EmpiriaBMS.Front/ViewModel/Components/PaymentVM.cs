@@ -4,7 +4,7 @@ using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class PaymentVM : BaseVM
+public class PaymentVM : BaseValidator
 {
     private DateTime? _estPaymentDate;
     public DateTime? EstPaymentDate

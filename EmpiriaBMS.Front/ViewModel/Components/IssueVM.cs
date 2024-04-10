@@ -4,7 +4,7 @@ using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class IssueVM : BaseVM
+public class IssueVM : BaseValidator
 {
     private DateTime _complaintDate;
     public DateTime ComplaintDate

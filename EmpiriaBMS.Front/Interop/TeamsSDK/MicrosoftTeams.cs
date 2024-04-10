@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.DefaultComponents;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -71,5 +72,22 @@ public class MicrosoftTeams : InteropModuleBase
     public async Task<byte[]> GetCanvasImageData(ElementReference canvasRef)
     {
         return await InvokeAsync<byte[]>("getCanvasImageData", canvasRef);
+    }
+
+    // Google Maps
+    public async Task DisplayAddress(string mapElementId, string[] address)
+    {
+        await InvokeVoidAsync("displayAddress", mapElementId, address);
+    }
+
+    public async Task OpenDirectionsInNewWindow(string url)
+    {
+        await InvokeVoidAsync("openDirectionsInNewWindow", url);
+    }
+
+    // Google Maps Autocomplete
+    public async Task InitializeAutocomplete(string inputElementId)
+    {
+        await InvokeVoidAsync("initializeAutocomplete", inputElementId);
     }
 }

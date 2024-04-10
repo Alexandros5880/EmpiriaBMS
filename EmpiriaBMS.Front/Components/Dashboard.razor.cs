@@ -906,6 +906,13 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Add/Edit/Delete Project Actions
+    private async Task NavigateOnMap(Address address)
+    {
+        if (address == null) return;
+        var directionsUrl = $"https://www.google.com/maps/dir/?api=1&destination={address.Latitude},{address.Longitude}&travelmode=driving&dir_action=navigate";
+        await MicrosoftTeams.OpenDirectionsInNewWindow(directionsUrl);
+    }
+
     private void AddProject()
     {
         projectCompoment.PrepairForNew();
@@ -953,16 +960,16 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Add/Edit/Delete Discipline Actions
-    private void AddDiscipline()
+    private async Task AddDiscipline()
     {
-        disciplineCompoment.PrepairForNew();
+        await disciplineCompoment.PrepairForNew();
         _addEditDisciplineDialog.Show();
         _isAddEditDisciplineDialogOdepened = true;
     }
 
-    private void EditDiscipline()
+    private async Task EditDiscipline()
     {
-        disciplineCompoment.PrepairForEdit(_selectedDiscipline);
+        await disciplineCompoment.PrepairForEdit(_selectedDiscipline);
         _addEditDisciplineDialog.Show();
         _isAddEditDisciplineDialogOdepened = true;
     }

@@ -15,44 +15,6 @@ public class DisciplineTypeRepo : Repository<DisciplineTypeDto, DisciplineType>,
 {
     public DisciplineTypeRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async Task<List<DisciplineTypeDto>> GetDisciplineTypesSelections(int projectId)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            if (projectId == 0)
-            {
-                var noDisciplineTypes = await _context.Set<DisciplineType>()
-                                                      .ToListAsync();
-
-                return Mapping.Mapper.Map<List<DisciplineTypeDto>>(noDisciplineTypes);
-            }
-            else
-            {
-                var disciplineTypesIds = await _context.Set<Discipline>()
-                                                       .Where(d => d.ProjectId == projectId)
-                                                       .Select(d => d.TypeId)
-                                                       .ToListAsync();
-
-                if (disciplineTypesIds == null)
-                    throw new NullReferenceException(nameof(disciplineTypesIds));
-
-                if (disciplineTypesIds.Count() == 0)
-                {
-                    var allDisciplineTypes = await _context.Set<DisciplineType>()
-                                                      .ToListAsync();
-
-                    return Mapping.Mapper.Map<List<DisciplineTypeDto>>(allDisciplineTypes);
-                }
-
-                var noDisciplineTypes = await _context.Set<DisciplineType>()
-                                                      .Where(t => !disciplineTypesIds.Contains(t.Id))
-                                                      .ToListAsync();
-
-                return Mapping.Mapper.Map<List<DisciplineTypeDto>>(noDisciplineTypes);
-            }
-        }
-    }
-
     public async Task<bool> HasDisciplineTypesSelections(int projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())

@@ -7,7 +7,7 @@ using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
-public class ProjectVM : BaseVM
+public class ProjectVM : BaseValidator
 {
     private string? _name;
     public string? Name
@@ -87,6 +87,32 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private int? _groupId;
+    public int? GroupId
+    {
+        get => _groupId;
+        set
+        {
+            if (value == _groupId)
+                return;
+            _groupId = value;
+            NotifyPropertyChanged(nameof(GroupId));
+        }
+    }
+
+    private ProjectGroup _group;
+    public ProjectGroup Group
+    {
+        get => _group;
+        set
+        {
+            if (value == _group)
+                return;
+            _group = value;
+            NotifyPropertyChanged(nameof(Group));
+        }
+    }
+
     private int? _typeId;
     public int? TypeId
     {
@@ -110,6 +136,58 @@ public class ProjectVM : BaseVM
                 return;
             _type = value;
             NotifyPropertyChanged(nameof(Type));
+        }
+    }
+
+    private int? _stageId;
+    public int? StageId
+    {
+        get => _stageId;
+        set
+        {
+            if (value == _stageId)
+                return;
+            _stageId = value;
+            NotifyPropertyChanged(nameof(StageId));
+        }
+    }
+
+    private ProjectStage _stage;
+    public ProjectStage Stage
+    {
+        get => _stage;
+        set
+        {
+            if (value == _stage)
+                return;
+            _stage = value;
+            NotifyPropertyChanged(nameof(Stage));
+        }
+    }
+
+    private int? _addressId;
+    public int? AddressId
+    {
+        get => _addressId;
+        set
+        {
+            if (value == _addressId)
+                return;
+            _addressId = value;
+            NotifyPropertyChanged(nameof(AddressId));
+        }
+    }
+
+    private Address? _address;
+    public Address? Address
+    {
+        get => _address;
+        set
+        {
+            if (value == _address)
+                return;
+            _address = value;
+            NotifyPropertyChanged(nameof(Address));
         }
     }
 

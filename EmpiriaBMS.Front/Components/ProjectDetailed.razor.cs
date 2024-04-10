@@ -9,6 +9,10 @@ using EmpiriaBMS.Front.Components.Admin.DisciplinesTypes;
 using System.Linq.Expressions;
 using EmpiriaBMS.Front.Components.Admin.ProjectsTypes;
 using System.Security.Cryptography;
+using EmpiriaBMS.Front.ViewModel.Validation;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Components.Web;
+using EmpiriaBMS.Front.Components.General;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase, IDisposable
@@ -16,125 +20,174 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     private bool disposedValue;
     private bool isNew = false;
     private string defaultCodeValue = "*******";
+    private Map _map;
 
     #region Authorization Properties
     bool seeCode => _sharedAuthData.Permissions.Any(p => p.Ord == 13);
     #endregion
 
-    List<ProjectTypeDto> _projectTypes = new List<ProjectTypeDto>();
+    private ProjectGroupVM _createdGroup = new ProjectGroupVM();
+    private ProjectValidator _validator = new ProjectValidator();
+    private List<ProjectGroupDto> _projectGroups = new List<ProjectGroupDto>();
+    private List<ProjectStageDto> _projectStages = new List<ProjectStageDto>();
+    private List<ProjectTypeDto> _projectTypes = new List<ProjectTypeDto>();
     private ProjectVM _project = new ProjectVM();
-    //List<DisciplineTypeDto> _disciplineTypes = new List<DisciplineTypeDto>();
-    //List<DisciplineVM> _disciplines = new List<DisciplineVM>();
 
-    private async Task _getProjectTypes() =>
+    private async Task _getProjectGroups()
+    {
+        _projectGroups.Clear();
+        _projectGroups = (await DataProvider.ProjectsGroups.GetAll()).ToList();
+    }
+
+    private async Task _getProjectStages()
+    {
+        _projectStages.Clear();
+        _projectStages = (await DataProvider.ProjectStages.GetAll()).ToList();
+    }
+
+    private async Task _getProjectTypes()
+    {
+        _projectTypes.Clear();
         _projectTypes = (await DataProvider.ProjectsTypes.GetAll()).ToList();
-
-    #region Comment Discipline Functions
-    //private async Task _getDisciplineTypes() =>
-    //    _disciplineTypes = (await DataProvider.DisciplinesTypes.GetAll()).ToList();
-
-    //private async Task _getMyDisciplines()
-    //{
-    //    if (_project == null)
-    //        throw new NullReferenceException(nameof(_project));
-    //    Expression<Func<Discipline, bool>> expression = d => d.ProjectId == _project.Id;
-    //    List<DisciplineDto> disc = (await DataProvider.Disciplines.GetAll(expression)).ToList();
-    //    _disciplines = Mapper.Map<List<DisciplineVM>>(disc);
-    //    _disciplines.ForEach(disc => disc.PropertyChanged += Discipline_PropertyChanged);
-    //}
-
-    //private void _addRow()
-    //{
-    //    var discipline = new DisciplineVM();
-    //    discipline.PropertyChanged += Discipline_PropertyChanged;
-    //    _disciplines.Add(discipline);
-    //    StateHasChanged();
-    //}
-
-    //private void Discipline_PropertyChanged(
-    //    object sender,
-    //    System.ComponentModel.PropertyChangedEventArgs e
-    //) {
-    //    var disc = sender as DisciplineVM;
-    //    if (_disciplines.Any(d => d.TypeId.Equals(disc.TypeId)))
-    //    {
-    //        HashSet<int> uiqueDisciplineTypeIds = new HashSet<int>(_disciplines.Select(d => d.TypeId));
-    //        var saveDisciplines = new List<DisciplineVM>(_disciplines);
-    //        _disciplines.Clear();
-
-    //        foreach(var d in saveDisciplines)
-    //        {
-    //            if (uiqueDisciplineTypeIds.Contains(d.TypeId))
-    //            {
-    //                uiqueDisciplineTypeIds.Remove(uiqueDisciplineTypeIds.First(t => t.Equals(d.TypeId)));
-    //                _disciplines.Add(d);
-    //            }
-    //        }
-
-    //        StateHasChanged();
-    //    }
-    //}
-
-    //private void _removeRow(int disciplineTypeId)
-    //{
-    //    List<DisciplineVM> disciplines = new List<DisciplineVM>(_disciplines);
-    //    _disciplines.Clear();
-    //    disciplines.ForEach(d => {
-    //        if (d.TypeId != disciplineTypeId)
-    //            _disciplines.Add(d);
-    //    });
-    //    StateHasChanged();
-    //}
-    #endregion
+    } 
 
     public async void PrepairForNew()
     {
         isNew = true;
-        _projectTypes.Clear();
-        //_disciplineTypes.Clear();
-        //_disciplines.Clear();
+        await _getProjectGroups();
+        await _getProjectStages();
         await _getProjectTypes();
-        //await _getDisciplineTypes();
+        _createdGroup = new ProjectGroupVM();
         _project = new ProjectVM();
         _project.Active = true;
-        _project.TypeId = _projectTypes.FirstOrDefault().Id;
+        //_project.GroupId = _projectGroups.FirstOrDefault().Id;
+        //_project.StageId = _projectStages.FirstOrDefault().Id;
+        //_project.TypeId = _projectTypes.FirstOrDefault().Id;
+        _project.GroupId = 0;
+        _project.StageId = 0;
+        _project.TypeId = 0;
+        await _map.Search(null);
         StateHasChanged();
     }
 
     public async void PrepairForEdit(ProjectVM project)
     {
         isNew = false;
-        _projectTypes.Clear();
-        //_disciplineTypes.Clear();
-        //_disciplines.Clear();
+        await _getProjectGroups();
+        await _getProjectStages();
         await _getProjectTypes();
-        //await _getDisciplineTypes();
+        _createdGroup = new ProjectGroupVM();
         _project = project;
-        //await _getMyDisciplines();
+        await _map.SetAddress(project.Address);
         StateHasChanged();
     }
 
     private void _updateProjectType(ChangeEventArgs e)
     {
         var projectTypeId = Convert.ToInt32(e.Value);
-        var projectType = _projectTypes.FirstOrDefault(t => t.Id == projectTypeId);
         _project.TypeId = projectTypeId;
-        _project.Type = null;
+        var typeDto = _projectTypes.FirstOrDefault(g => g.Id == projectTypeId);
+        _project.Type = Mapping.Mapper.Map<ProjectType>(typeDto);
+    }
+
+    private void _updateProjectStage(ChangeEventArgs e)
+    {
+        var projectStageId = Convert.ToInt32(e.Value);
+        _project.StageId = projectStageId;
+        var stageDto = _projectStages.FirstOrDefault(g => g.Id == projectStageId);
+        _project.Stage = Mapping.Mapper.Map<ProjectStage>(stageDto);
+    }
+
+    private void _updateProjectGroup(ChangeEventArgs e)
+    {
+        _createdGroup = new ProjectGroupVM();
+        var projectGroupId = Convert.ToInt32(e.Value);
+        _project.GroupId = projectGroupId;
+        var groupDto = _projectGroups.FirstOrDefault(g => g.Id == projectGroupId);
+        _project.Group = Mapping.Mapper.Map<ProjectGroup>(groupDto);
+
+        _validator.ValidateProperty(_project, nameof(ProjectVM.GroupId), _project.GroupId);
+        StateHasChanged();
+    }
+
+    private void _onGroupNameChange(ChangeEventArgs e)
+    {
+        var value = e.Value.ToString();
+        _validator.ValidateProperty(_project, "GroupName", value);
+        StateHasChanged();
+    }
+
+    private void _onSearchAddressChange()
+    {
+        var address = _map.GetAddress();
+        if (address != null)
+            _project.Address = address;
+    }
+
+    private async Task _createGroup()
+    {
+        try
+        {
+            if (!_validator.ValidateProperty(_project, "GroupName", _createdGroup.Name))
+                return;
+
+            var dto = Mapper.Map<ProjectGroupDto>(_createdGroup);
+            ProjectGroupDto result = await DataProvider.ProjectsGroups.Add(dto);
+            if (result == null)
+                throw new NullReferenceException(nameof(result));
+
+            _createdGroup = new ProjectGroupVM();
+
+            _project.GroupId = result.Id;
+            _project.Group = Mapping.Mapper.Map<ProjectGroup>(result);
+
+            PrepairForEdit(_project);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+
     }
 
     public async Task HandleValidSubmit()
     {
-        // Save Project
-        ProjectDto saveProject;
-        var exists = await DataProvider.Projects.Any(p =>  p.Id == _project.Id);
-        if (exists)
-            saveProject = await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_project));
-        else
-            saveProject = await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(_project));
+        try
+        {
+            _project.Group = null;
+            _project.Stage = null;
+            _project.Type = null;
 
-        //// Save Disciplines
-        //var disciplinesDtos = Mapper.Map<List<DisciplineDto>>(_disciplines);
-        //await DataProvider.Projects.UpdateDisciplines(saveProject.Id, disciplinesDtos);
+            // If Addres Save Address
+            if(_project?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(_project.Address.PlaceId))))
+            {
+                var dto = Mapping.Mapper.Map<AddressDto>(_project.Address);
+                var address = await DataProvider.Address.Add(dto);
+                _project.AddressId = address.Id;
+            }
+            else if (_project?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(_project.Address.PlaceId))))
+            {
+                var dto = Mapping.Mapper.Map<AddressDto>(_project.Address);
+                var address = await DataProvider.Address.Update(dto);
+            }
+
+            // Save Project
+            ProjectDto saveProject;
+            var exists = await DataProvider.Projects.Any(p =>  p.Id == _project.Id);
+            if (exists)
+                saveProject = await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_project));
+            else
+                saveProject = await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(_project));
+
+            if (saveProject == null)
+                throw new NullReferenceException(nameof(saveProject));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
     }
 
     protected virtual void Dispose(bool disposing)

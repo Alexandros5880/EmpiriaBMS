@@ -131,7 +131,7 @@ else
                                 @if (!_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row me-2">
-                                        <h3 class="@((_selectedProject != null ? "col-7" : "col-11"))">Projects</h3>
+                                        <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
                                         @if (isWorkingMode && editProject)
                                         {
                                             @if(_selectedProject != null)
@@ -140,6 +140,9 @@ else
                                                       @onclick="@(async () => await AddEditInvoice())" />
                                                 <span class="payment col-1"
                                                       @onclick="@(async () => await AddEditPayment())" />
+                                                <span class="navigate-outline col-1"
+                                                      style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
+                                                      @onclick="@(async () => await NavigateOnMap(_selectedProject.Address))" />
                                                 <span class="fluent--delete-28-regular col-1"
                                                       @onclick="@(() => DeleteProject())" />
                                                 <span class="material-symbols--edit-outline col-1"
@@ -225,7 +228,7 @@ else
                                                                 {
                                                                     @if (!string.IsNullOrEmpty(project.PmName))
                                                                     {
-                                                                        <button type="button" class="btn btn-outline-info"
+                                                                        <button type="button" class="btn btn-outline-info default-color"
                                                                                 @onclick="@(async (x) => await OnProjectAssignClick(project))">
                                                                             @project.PmName
                                                                         </button>
@@ -263,12 +266,12 @@ else
                                                 <span class="fluent--delete-28-regular col-1"
                                                       @onclick="@(() => DeleteDiscipline())" />
                                                 <span class="material-symbols--edit-outline col-1"
-                                                      @onclick="@(() => EditDiscipline())" />
+                                                      @onclick="@(async () => await EditDiscipline())" />
                                             }
                                             @if (_hasDisciplinesSelections)
                                             {
                                                 <span class="grommet-icons--add col-1"
-                                                      @onclick="@(() => AddDiscipline())" />
+                                                      @onclick="@(async () => await AddDiscipline())" />
                                             }
                                         }
                                     </div>

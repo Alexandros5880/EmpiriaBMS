@@ -247,11 +247,32 @@ public static class ModelRelations
                .HasForeignKey(c => c.DrawingId)
                .OnDelete(DeleteBehavior.Cascade);
 
+        // Projects Group
+        builder.Entity<ProjectGroup>()
+               .HasMany(p => p.Projects)
+               .WithOne(c => c.Group)
+               .HasForeignKey(c => c.GroupId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Projects Address
+        builder.Entity<Address>()
+               .HasMany(p => p.Projects)
+               .WithOne(c => c.Address)
+               .HasForeignKey(c => c.AddressId)
+               .OnDelete(DeleteBehavior.Cascade);
+
         // Projects ProjectType
         builder.Entity<ProjectType>()
                .HasMany(p => p.Projects)
                .WithOne(c => c.Type)
                .HasForeignKey(c => c.TypeId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Projects ProjectStage
+        builder.Entity<ProjectStage>()
+               .HasMany(p => p.Projects)
+               .WithOne(c => c.Stage)
+               .HasForeignKey(c => c.StageId)
                .OnDelete(DeleteBehavior.Cascade);
 
         // Complain Project

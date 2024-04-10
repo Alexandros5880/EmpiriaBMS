@@ -170,3 +170,16 @@ code {
     border-radius: 4px !important;
 }
 
+/* CheckBox */
+
+
+/* Button */
+.default-color.btn-outline-info {
+    color: var(--primary-accent-color) !important;
+    border-color: var(--primary-accent-color) !important;
+}
+.default-color.btn-outline-info:hover {
+    background-color: var(--primary-hover-bg-color) !important;
+}
+/* Button */
+

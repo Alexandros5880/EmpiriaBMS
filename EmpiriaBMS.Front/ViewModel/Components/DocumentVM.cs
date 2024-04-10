@@ -3,7 +3,7 @@ using EmpiriaBMS.Front.ViewModel.Components.Base;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DocumentVM : BaseVM
+public class DocumentVM : BaseValidator
 {
     private string _fileName;
     public string FileName
