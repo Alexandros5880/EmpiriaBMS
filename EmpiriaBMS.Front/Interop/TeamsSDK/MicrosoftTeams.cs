@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.ViewModel.DefaultComponents;
+﻿using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -49,6 +50,12 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("navigateToAdmin", url, objectId);
     }
 
+    public Task RegisterGlobalMouseWheelEvent(DotNetObjectReference<TimeInput> objRef, string Id)
+    {
+        return InvokeVoidAsync("registerGlobalMouseWheelEvent", objRef, Id);
+    }
+
+    #region Cookies
     public async Task SetCookie(string key, string value)
     {
         await InvokeVoidAsync("setCooke", key, value);
@@ -58,7 +65,9 @@ public class MicrosoftTeams : InteropModuleBase
     {
         return await InvokeAsync<string>("getCooke", key);
     }
+    #endregion
 
+    #region Canvas
     public async Task InitializeCanvas(ElementReference canvasRef)
     {
         await InvokeVoidAsync("initializeCanvas", canvasRef);
@@ -73,8 +82,9 @@ public class MicrosoftTeams : InteropModuleBase
     {
         return await InvokeAsync<byte[]>("getCanvasImageData", canvasRef);
     }
+    #endregion
 
-    // Google Maps
+    #region Google Maps
     public async Task DisplayAddress(string mapElementId, string[] address)
     {
         await InvokeVoidAsync("displayAddress", mapElementId, address);
@@ -90,4 +100,5 @@ public class MicrosoftTeams : InteropModuleBase
     {
         await InvokeVoidAsync("initializeAutocomplete", inputElementId);
     }
+    #endregion
 }

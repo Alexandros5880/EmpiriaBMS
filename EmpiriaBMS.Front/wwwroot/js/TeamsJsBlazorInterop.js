@@ -85,6 +85,43 @@ export function navigateToAdmin(url, objectId) {
     });
 }
 
+// Register MNouse Weel Event
+export function registerGlobalMouseWheelEvent(objRef, id) {
+    $('[data-id="' + id + '"]').on('wheel', function (e) {
+        var deltaY = e.originalEvent.deltaY;
+        var focusedElement = $(':focus');
+        if (focusedElement.is('[data-id="' + id + '"]')) {
+            var inputType = focusedElement.data("input-type");
+            var inputId = focusedElement.data("id");
+
+            //var currentValue = parseInt(focusedElement.val());
+            //var max = parseInt(focusedElement.attr("max"));
+            //var min = parseInt(focusedElement.attr("min"));
+
+            //console.log("currentValue: ", currentValue);
+            //console.log("max: ", max);
+            //console.log("min: ", min);
+            //if (currentValue > max) {
+            //    focusedElement.val(max);
+            //    console.log("currentValue > max");
+            //}
+            //else if (currentValue < min) {
+            //    focusedElement.val(min);
+            //    console.log("currentValue < min");
+            //}
+
+            if (id == inputId) {
+                if (inputType === "hours") {
+                    objRef.invokeMethodAsync('OnMouseWheel', deltaY, "hours");
+                    //DotNet.invokeMethodAsync('EmpiriaBMS.Front', 'OnMouseWheel', deltaY, "hours");
+                } else if (inputType === "minutes") {
+                    objRef.invokeMethodAsync('OnMouseWheel', deltaY, "minutes");
+                    //DotNet.invokeMethodAsync('EmpiriaBMS.Front', 'OnMouseWheel', deltaY, "minutes");
+                }
+            }
+        }
+    });
+}
 
 // Cookies
 export function setCookie(key, value) {
