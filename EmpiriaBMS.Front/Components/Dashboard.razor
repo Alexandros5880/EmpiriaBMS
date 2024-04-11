@@ -121,11 +121,11 @@ else
                         }
                     </div>
 
-                    <div class="row mt-4 p-1
+                    <div class="row mt-4
                                 gx-xl-1 gx-lg-1 gx-md-1 gx-sm-1
                                 gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
-                        
-                        <div class="col row">
+
+                        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <!-- Table Projects -->
                             <div class="col-12">
                                 @if (!_isEndWorkDialogOdepened)
@@ -184,7 +184,7 @@ else
                                                             @((_selectedProject == null || 
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "highlight_1"))"
-                                                            style="word-wrap: break-word; max-width: 150px;">
+                                                            style="word-wrap: break-word; max-width: 110px;">
                                                             <labe>@project.Name</labe>
                                                         </td>
                                                     
@@ -252,7 +252,7 @@ else
                             </div>
                         </div>
 
-                        <div class="col row">
+                        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <!-- Table Disciplines -->
                             <div class="col-12">
                                 @if (_selectedProject != null && !_isEndWorkDialogOdepened)
@@ -326,7 +326,7 @@ else
                             </div>
                         </div>
 
-                        <div class="col row">
+                        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             
                             <!-- Table Deliverables -->
                             <div class="col-12">
