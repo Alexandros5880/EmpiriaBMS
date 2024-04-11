@@ -122,6 +122,8 @@ export function registerGlobalMouseWheelEvent(objRef, id) {
         }
     });
 }
+// Register MNouse Weel Event
+
 
 // Cookies
 export function setCookie(key, value) {
