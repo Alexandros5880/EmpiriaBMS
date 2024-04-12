@@ -18,36 +18,6 @@
 
         <div class="p-2 col-12">
 
-            <!-- Project Sub Category -->
-            <div class="row">
-                <div class="col-12 form-group">
-                    <label>Project Sub Category</label>
-                    <select class="form-select" @onchange="((e) => _updateProjectSubCategory(e))">
-                        @if (_project.SubCategoryId == 0)
-                        {
-                            <option value="0" selected>Selecte Group</option>
-                        }
-                        @foreach (var projectGroup in _projectSubCategories)
-                        {
-                            @if (_project.SubCategoryId == projectGroup.Id)
-                            {
-                                <option value="@projectGroup.Id" selected>@projectGroup.Name</option>
-                            }
-                            else
-                            {
-                                <option value="@projectGroup.Id">@projectGroup.Name</option>
-                            }
-                        }
-                    </select>
-                </div>
-                <div class="col-12">
-                    @if (!_validator.GroupIdValid)
-                    {
-                        <label class="error float-start">@_validator.GroupIdErr</label>
-                    }
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <!-- Name -->
@@ -68,6 +38,55 @@
                         {
                             <InputText id="code" @bind-Value="@defaultCodeValue" class="form-control" disabled />
                         }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <!-- Project Category -->
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select class="form-select" @onchange="((e) => _updateProjectCategory(e))">
+                            @if (_project.CategoryId == 0)
+                            {
+                                <option value="0" selected>Selecte Category</option>
+                            }
+                            @foreach (var category in _projectCategories)
+                            {
+                                @if (_project.CategoryId == category.Id)
+                                {
+                                    <option value="@category.Id" selected>@category.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- Project Sub Category -->
+                    <div class="form-group">
+                        <label>Project Sub Category</label>
+                        <select class="form-select" @onchange="((e) => _updateProjectSubCategory(e))">
+                            @if (_project.SubCategoryId == 0)
+                            {
+                                <option value="0" selected>Selecte Sub Category</option>
+                            }
+                            @foreach (var projectGroup in _projectSubCategories)
+                            {
+                                @if (_project.SubCategoryId == projectGroup.Id)
+                                {
+                                    <option value="@projectGroup.Id" selected>@projectGroup.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@projectGroup.Id">@projectGroup.Name</option>
+                                }
+                            }
+                        </select>
                     </div>
                 </div>
             </div>
@@ -97,32 +116,6 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
-                    <!-- Project Category -->
-                    <div class="form-group">
-                        <label>ProjectType</label>
-                        <select class="form-select" @onchange="((e) => _updateProjectCategory(e))">
-                            @if (_project.CategoryId == 0)
-                            {
-                                <option value="0" selected>Selecte Category</option>
-                            }
-                            @foreach (var category in _projectCategories)
-                            {
-                                @if (_project.CategoryId == category.Id)
-                                {
-                                    <option value="@category.Id" selected>@category.Name</option>
-                                }
-                                else
-                                {
-                                    <option value="@category.Id">@category.Name</option>
-                                }
-                            }
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
                     <!-- Fee -->
                     <div class="form-group">
                         <label for="fee">Fee</label>
@@ -132,13 +125,16 @@
                                @bind="@_project.Fee">
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- Active -->
-                    <div class="row mt-4 float-end" style="width: 134px;">
-                        <label class="col-8" for="active">Is Active</label>
-                        <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
-                    </div>
-                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12 form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control"
+                          name="composeContent"
+                          id="description"
+                          row="7"
+                          @bind="@_project.Description" />
             </div>
 
             <div class="row">
@@ -164,14 +160,17 @@
                 </div>
             </div>
 
-            <!-- Description -->
-            <div class="col-12 form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control"
-                          name="composeContent"
-                          id="description"
-                          row="7"
-                          @bind="@_project.Description" />
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <!-- Active -->
+                    <div class="row mt-4 ms-2 float-start" style="width: 134px;">
+                        <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
+                        <label class="col-8" for="active">Is Active</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    
+                </div>
             </div>
 
         </div>

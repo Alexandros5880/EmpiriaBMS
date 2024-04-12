@@ -1349,7 +1349,7 @@ public class AppDbContext : DbContext
         builder.Entity<RolePermission>().HasData(rp_59);
         #endregion
 
-        #region Create ProjectSubCategorys
+        #region Create ProjectSubCategories
         var project_sub_category_1_Id = random.Next(123456789, 999999999) + 33;
         ProjectSubCategory project_sub_category_1 = new ProjectSubCategory()
         {
@@ -1400,7 +1400,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<ProjectSubCategory>().HasData(project_sub_category_5);
 
-        int[] ProjectSubCategorys = {
+        int[] ProjectSubCategories = {
             project_sub_category_1_Id,
             project_sub_category_2_Id,
             project_sub_category_3_Id,
@@ -1409,14 +1409,14 @@ public class AppDbContext : DbContext
         };
         #endregion
 
-        #region Create 4 ProjectCategorys
+        #region Create 4 ProjectCategories
         var project_category_1_Id = random.Next(123456789, 999999999) + 33;
         ProjectCategory project_category_1 = new ProjectCategory()
         {
             Id = project_category_1_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Buildings",
+            Name = "BUILDINGS",
             Description = "Buildings Description",
             CanAssignePM = true
         };
@@ -1428,7 +1428,7 @@ public class AppDbContext : DbContext
             Id = project_category_2_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Infrastructure",
+            Name = "INFRASTRUCTURE",
             Description = "Infrastructure Description",
             CanAssignePM = true
         };
@@ -1440,7 +1440,7 @@ public class AppDbContext : DbContext
             Id = project_category_3_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Energy",
+            Name = "ENERGY",
             Description = "Energy Description",
             CanAssignePM = true
         };
@@ -1452,7 +1452,7 @@ public class AppDbContext : DbContext
             Id = project_category_4_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Consulting",
+            Name = "CONSULTING",
             Description = "Consulting Description",
             CanAssignePM = true
         };
@@ -1464,23 +1464,61 @@ public class AppDbContext : DbContext
             Id = project_category_5_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Production Management",
+            Name = "PRODUCTION MANAGMENT",
             Description = "Production Management Description",
             CanAssignePM = false
         };
         builder.Entity<ProjectCategory>().HasData(project_category_5);
 
-        int[] ProjectCategorys = {
+        var project_category_6_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_6 = new ProjectCategory()
+        {
+            Id = project_category_6_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "TRANSPORT",
+            Description = "Transport Description",
+            CanAssignePM = false
+        };
+        builder.Entity<ProjectCategory>().HasData(project_category_6);
+
+        var project_category_7_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_7 = new ProjectCategory()
+        {
+            Id = project_category_7_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "ENVIRONMENT",
+            Description = "Environment Description",
+            CanAssignePM = false
+        };
+        builder.Entity<ProjectCategory>().HasData(project_category_7);
+
+        var project_category_8_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_8 = new ProjectCategory()
+        {
+            Id = project_category_8_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "ENVIRONMENT CONSULTING",
+            Description = "Environment Consulting Description",
+            CanAssignePM = false
+        };
+        builder.Entity<ProjectCategory>().HasData(project_category_8);
+
+        int[] ProjectCategories = {
             project_category_1_Id,
             project_category_2_Id,
             project_category_3_Id,
             project_category_4_Id,
-            project_category_5_Id
+            project_category_5_Id,
+            project_category_6_Id,
+            project_category_7_Id,
+            project_category_8_Id
         };
         #endregion
 
         #region Create ProjectStages
-
         var project_stage_1_Id = random.Next(123456789, 999999999) + 33;
         ProjectStage project_stage_1 = new ProjectStage()
         {
@@ -1533,7 +1571,7 @@ public class AppDbContext : DbContext
 
 
 
-        int[] projectStages = {
+        int[] ProjectStages = {
             project_stage_1_Id,
             project_stage_2_Id,
             project_stage_3_Id,
@@ -1543,27 +1581,35 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Create InvoiceTypes
-        // InvoiceType Expenses
-        var it_01_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
-        InvoiceType it_01 = new InvoiceType()
+        var it_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        InvoiceType it_1 = new InvoiceType()
         {
-            Id = it_01_id,
+            Id = it_1_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Expenses"
+            Name = "PUBLIC"
         };
-        builder.Entity<InvoiceType>().HasData(it_01);
+        builder.Entity<InvoiceType>().HasData(it_1);
 
-        // InvoiceType Incomes
-        var it_02_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
-        InvoiceType it_02 = new InvoiceType()
+        var it_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        InvoiceType it_2 = new InvoiceType()
         {
-            Id = it_02_id,
+            Id = it_2_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Incomes"
+            Name = "PRIVATE"
         };
-        builder.Entity<InvoiceType>().HasData(it_02);
+        builder.Entity<InvoiceType>().HasData(it_2);
+
+        var it_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        InvoiceType it_3 = new InvoiceType()
+        {
+            Id = it_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "INTERNATIONAL"
+        };
+        builder.Entity<InvoiceType>().HasData(it_3);
         #endregion
 
         #region Create 5 PaymentTypes
@@ -2420,16 +2466,16 @@ public class AppDbContext : DbContext
 
         var projectManagersLength = projectManagers.Count();
         var projectManagersIndex = 0;
-        var categoriesLength = ProjectCategorys.Count();
+        var categoriesLength = ProjectCategories.Count();
         var categoriesIndex = 0;
-        var subCategoriesLength = ProjectCategorys.Count();
+        var subCategoriesLength = ProjectSubCategories.Count();
         var subCategoriesIndex = 0;
-        var stagesLength = ProjectCategorys.Count();
+        var stagesLength = ProjectStages.Count();
         var stagesIndex = 0;
 
         #region Create 5 Projects
         List<Project> projects = new List<Project>();
-        for (var i = 1; i <= ProjectCategorys.Count(); i++)
+        for (var i = 1; i <= ProjectCategories.Count(); i++)
         {
             // Projects 
             var projectId = random.Next(123456789, 999999999) + i * 2;
@@ -2449,9 +2495,9 @@ public class AppDbContext : DbContext
                 EstimatedHours = 1500,
                 DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
-                CategoryId = ProjectCategorys[categoriesIndex],
-                StageId = projectStages[stagesIndex],
-                SubCategoryId = ProjectSubCategorys[subCategoriesIndex],
+                CategoryId = ProjectCategories[categoriesIndex],
+                StageId = ProjectStages[stagesIndex],
+                SubCategoryId = ProjectSubCategories[subCategoriesIndex],
                 Active = i % 2 == 0 ? true : false,
                 ProjectManagerId = projectManagers[projectManagersIndex].Id
             };
@@ -2459,19 +2505,19 @@ public class AppDbContext : DbContext
             projects.Add(project);
 
             projectManagersIndex++;
-            if (projectManagersIndex >= projectManagersLength)
+            if (projectManagersIndex >= projectManagersLength-1)
                 projectManagersIndex = 0;
 
             categoriesIndex++;
-            if (categoriesIndex >= categoriesLength)
+            if (categoriesIndex >= categoriesLength-1)
                 categoriesIndex = 0;
 
             subCategoriesIndex++;
-            if (subCategoriesIndex >= subCategoriesLength)
+            if (subCategoriesIndex >= subCategoriesLength-1)
                 subCategoriesIndex = 0;
 
             stagesIndex++;
-            if (stagesIndex >= stagesLength)
+            if (stagesIndex >= stagesLength-1)
                 stagesIndex = 0;
 
         // Invoices
@@ -2488,7 +2534,7 @@ public class AppDbContext : DbContext
                 Number = random.Next(10000, 90000),
                 Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
                 ProjectId = projectId,
-                TypeId = it_01_id
+                TypeId = it_1_id
             };
             builder.Entity<Invoice>().HasData(invoice);
         }
@@ -2511,8 +2557,8 @@ public class AppDbContext : DbContext
             DeclaredCompleted = 0,
             EstimatedCompleted = 0,
             CategoryId = project_category_5_Id,
-            StageId = projectStages[4],
-            SubCategoryId = ProjectSubCategorys[4],
+            StageId = ProjectStages[4],
+            SubCategoryId = ProjectSubCategories[4],
             Active = true
         };
         builder.Entity<Project>().HasData(projectPM);
@@ -2543,9 +2589,9 @@ public class AppDbContext : DbContext
                 EstimatedHours = 1500,
                 DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
-                CategoryId = ProjectCategorys[categoriesIndex],
-                StageId = projectStages[stagesIndex],
-                SubCategoryId = ProjectSubCategorys[subCategoriesIndex],
+                CategoryId = ProjectCategories[categoriesIndex],
+                StageId = ProjectStages[stagesIndex],
+                SubCategoryId = ProjectSubCategories[subCategoriesIndex],
                 Active = i % 2 == 0 ? true : false,
                 ProjectManagerId = projectManagers[projectManagersIndex].Id
             };
@@ -2566,7 +2612,7 @@ public class AppDbContext : DbContext
                 Number = random.Next(10000, 90000),
                 Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
                 ProjectId = projectId,
-                TypeId = it_01_id
+                TypeId = it_1_id
             };
             builder.Entity<Invoice>().HasData(invoice);
 
