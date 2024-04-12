@@ -125,7 +125,7 @@ else
                                 gx-xl-1 gx-lg-1 gx-md-1 gx-sm-1
                                 gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
 
-                        <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                        <div class="col-xl-auto col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <!-- Table Projects -->
                             <div class="col-12">
                                 @if (!_isEndWorkDialogOdepened)
@@ -252,13 +252,13 @@ else
                             </div>
                         </div>
 
-                        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                        <div class="col-xl-auto col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <!-- Table Disciplines -->
                             <div class="col-12">
                                 @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row me-2">
-                                        <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Disciplines</h3>
+                                        <h3 class="@((isWorkingMode != null ? "col-8" : "col-11"))">Disciplines</h3>
                                         @if (isWorkingMode && editDiscipline)
                                         {
                                             @if (_selectedDiscipline != null)
@@ -326,10 +326,10 @@ else
                             </div>
                         </div>
 
-                        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                        <div class="col-xl-auto col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             
                             <!-- Table Deliverables -->
-                            <div class="col-12">
+                            <div class="col-xl-6 col-12">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row me-2">
@@ -411,7 +411,7 @@ else
                             </div>
 
                             <!-- Table Others -->
-                            <div class="col-12">
+                            <div class="col-xl-6 col-12">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row me-2">

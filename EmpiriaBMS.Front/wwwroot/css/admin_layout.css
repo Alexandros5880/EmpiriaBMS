@@ -1,1 +1,41 @@
-﻿@import "colors.css"
+﻿@import "colors.css";
+
+
+/* DataTables */
+.pagination .page-link {
+    color: var(--primary-hover-bg-color);
+}
+
+.pagination .page-link:hover {
+    color: var(--primary-hover-bg-color);
+}
+
+li.dt-paging-button.page-item:hover,
+li.dt-paging-button.page-item:active,
+li.dt-paging-button.page-item:focus,
+li.dt-paging-button.page-item.active,
+li.dt-paging-button.page-item.active:hover {
+    background-color: var(--primary-hover-bg-color) !important;
+}
+
+.pagination .page-item:hover,
+.pagination .page-item:active,
+.pagination .page-item:focus {
+    background-color: var(--primary-hover-bg-color) !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-hover-bg-color);
+    border: none !important;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-item.active .page-link:focus {
+    background-color: var(--primary-hover-bg-color) !important;
+    border: none !important;
+}
+
+.pagination .page-item.active .page-link:hover {
+    background-color: var(--primary-hover-bg-color) !important;
+    border: none !important;
+}
+/* DataTables */

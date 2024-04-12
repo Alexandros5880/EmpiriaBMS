@@ -1352,14 +1352,14 @@ public class AppDbContext : DbContext
             builder.Entity<RolePermission>().HasData(rp_59);
             #endregion
 
-            #region Create ProjectGroups
+            #region Create ProjectGroups (SubCategory)
             var project_group_1_Id = random.Next(123456789, 999999999) + 33;
             ProjectGroup project_group_1 = new ProjectGroup()
             {
                 Id = project_group_1_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Project Group 1",
+                Name = "RENEWABLES - INTERCONNECTION HV",
             };
             builder.Entity<ProjectGroup>().HasData(project_group_1);
 
@@ -1369,7 +1369,7 @@ public class AppDbContext : DbContext
                 Id = project_group_2_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Project Group 2",
+                Name = "RENEWABLES - INTERCONNECTION",
             };
             builder.Entity<ProjectGroup>().HasData(project_group_2);
 
@@ -1379,7 +1379,7 @@ public class AppDbContext : DbContext
                 Id = project_group_3_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Project Group 3",
+                Name = "RENEWABLES - PV",
             };
             builder.Entity<ProjectGroup>().HasData(project_group_3);
 
@@ -1389,7 +1389,7 @@ public class AppDbContext : DbContext
                 Id = project_group_4_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Project Group 4",
+                Name = "RENEWABLES - PV - TDD",
             };
             builder.Entity<ProjectGroup>().HasData(project_group_4);
 
@@ -1399,90 +1399,596 @@ public class AppDbContext : DbContext
                 Id = project_group_5_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Project Group 5",
+                Name = "RENEWABLES - PV - CONSTRUCTION SUPERVISION",
             };
             builder.Entity<ProjectGroup>().HasData(project_group_5);
+
+            var project_group_6_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_6 = new ProjectGroup()
+            {
+                Id = project_group_6_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "RENEWABLES - WND",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_6);
+
+            var project_group_7_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_7 = new ProjectGroup()
+            {
+                Id = project_group_7_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "RENEWABLES - HYDRO",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_7);
+
+            var project_group_8_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_8 = new ProjectGroup()
+            {
+                Id = project_group_8_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "POWERPLANTS - PIPELINES",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_8);
+
+            var project_group_9_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_9 = new ProjectGroup()
+            {
+                Id = project_group_9_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "DISTRIBUTION NETWORKS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_9);
+
+            var project_group_10_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_10 = new ProjectGroup()
+            {
+                Id = project_group_10_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "NATURAL GAS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_10);
+
+            var project_group_11_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_11 = new ProjectGroup()
+            {
+                Id = project_group_11_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "ENERGY AUDITS & CONSULTING",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_11);
+
+            var project_group_12_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_12 = new ProjectGroup()
+            {
+                Id = project_group_12_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "FIRE SAFETY",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_12);
+
+            var project_group_13_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_13 = new ProjectGroup()
+            {
+                Id = project_group_13_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "OFFICE BUILDINGS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_13);
+
+            var project_group_14_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_14 = new ProjectGroup()
+            {
+                Id = project_group_14_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "BANKS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_14);
+
+            var project_group_15_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_15 = new ProjectGroup()
+            {
+                Id = project_group_15_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "MALLS, SHOPPING CENTRES, BARS etc",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_15);
+
+            var project_group_16_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_16 = new ProjectGroup()
+            {
+                Id = project_group_16_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "INDUSTRIAL",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_16);
+
+            var project_group_17_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_17 = new ProjectGroup()
+            {
+                Id = project_group_17_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "RESIENTAL",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_17);
+
+            var project_group_18_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_18 = new ProjectGroup()
+            {
+                Id = project_group_18_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "HOTELS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_18);
+
+            var project_group_19_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_19 = new ProjectGroup()
+            {
+                Id = project_group_19_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "ENERGY CERTIFICATES",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_19);
+
+            var project_group_20_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_20 = new ProjectGroup()
+            {
+                Id = project_group_20_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "CAR STATIONS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_20);
+
+            var project_group_21_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_21 = new ProjectGroup()
+            {
+                Id = project_group_21_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "SCHOOLS & UNIVERSITIES",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_21);
+
+            var project_group_22_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_22 = new ProjectGroup()
+            {
+                Id = project_group_22_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "SPORT CENTRES",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_22);
+
+            var project_group_23_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_23 = new ProjectGroup()
+            {
+                Id = project_group_23_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "HOSPITALS & WELFARE",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_23);
+
+            var project_group_24_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_24 = new ProjectGroup()
+            {
+                Id = project_group_24_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "PUBLIC BUILDINGS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_24);
+
+            var project_group_25_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_25 = new ProjectGroup()
+            {
+                Id = project_group_25_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "RESTORATIONS - SQUARES",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_25);
+
+            var project_group_26_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_26 = new ProjectGroup()
+            {
+                Id = project_group_26_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "MUSEUMS & CULTURAL BUILDINGS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_26);
+
+            var project_group_27_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_27 = new ProjectGroup()
+            {
+                Id = project_group_27_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "DATA CENTERS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_27);
+
+            var project_group_28_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_28 = new ProjectGroup()
+            {
+                Id = project_group_28_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "BUILDINGS GENERAL",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_28);
+
+            var project_group_29_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_29 = new ProjectGroup()
+            {
+                Id = project_group_29_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "ROAD NETWORKS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_29);
+
+            var project_group_30_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_30 = new ProjectGroup()
+            {
+                Id = project_group_30_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "TOLL STATIONS & BUILDINGS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_30);
+
+            var project_group_31_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_31 = new ProjectGroup()
+            {
+                Id = project_group_31_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "RAIL NETWORKS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_31);
+
+            var project_group_32_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_32 = new ProjectGroup()
+            {
+                Id = project_group_32_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "TRAIN STATIONS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_32);
+
+            var project_group_33_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_33 = new ProjectGroup()
+            {
+                Id = project_group_33_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "TUNNELS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_33);
+
+            var project_group_34_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_34 = new ProjectGroup()
+            {
+                Id = project_group_34_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "BUS STATIONS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_34);
+
+            var project_group_35_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_35 = new ProjectGroup()
+            {
+                Id = project_group_35_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "PORTS, MARINAS & PORT TERMINALS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_35);
+
+            var project_group_36_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_36 = new ProjectGroup()
+            {
+                Id = project_group_36_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "AIRPORTS & TERMINALS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_36);
+
+            var project_group_37_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_37 = new ProjectGroup()
+            {
+                Id = project_group_37_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "SUBWAYS & STATIONS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_37);
+
+            var project_group_38_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_38 = new ProjectGroup()
+            {
+                Id = project_group_38_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "TRASPORT GENERAL",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_38);
+
+            var project_group_39_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_39 = new ProjectGroup()
+            {
+                Id = project_group_39_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "WASTE WATER TREATTMENT",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_39);
+
+            var project_group_40_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_40 = new ProjectGroup()
+            {
+                Id = project_group_40_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "RECYCLING & LANDFILL PLANTS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_40);
+
+            var project_group_41_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_41 = new ProjectGroup()
+            {
+                Id = project_group_41_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "DAMS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_41);
+
+            var project_group_42_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_42 = new ProjectGroup()
+            {
+                Id = project_group_42_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "SEWAGE AND DRAINAGE NETWORKS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_42);
+
+            var project_group_43_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_43 = new ProjectGroup()
+            {
+                Id = project_group_43_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "ENVIRONMENTAL STUDIES",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_43);
+
+            var project_group_44_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_44 = new ProjectGroup()
+            {
+                Id = project_group_44_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "LEGALIZATION PROCEDURES",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_44);
+
+            var project_group_45_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_45 = new ProjectGroup()
+            {
+                Id = project_group_45_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "PROPERTY EVALUATIONS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_45);
+
+            var project_group_46_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_46 = new ProjectGroup()
+            {
+                Id = project_group_46_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "EU PROJECTS",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_46);
+
+            var project_group_47_Id = random.Next(123456789, 999999999) + 33;
+            ProjectGroup project_group_47 = new ProjectGroup()
+            {
+                Id = project_group_47_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "ENGINEERING CONSULTING - GENERAL",
+            };
+            builder.Entity<ProjectGroup>().HasData(project_group_47);
 
             int[] projectGroups = {
                 project_group_1_Id,
                 project_group_2_Id,
                 project_group_3_Id,
                 project_group_4_Id,
-                project_group_5_Id
+                project_group_5_Id,
+                project_group_6_Id,
+                project_group_7_Id,
+                project_group_8_Id,
+                project_group_9_Id,
+                project_group_10_Id,
+                project_group_11_Id,
+                project_group_12_Id,
+                project_group_13_Id,
+                project_group_14_Id,
+                project_group_15_Id,
+                project_group_15_Id,
+                project_group_16_Id,
+                project_group_17_Id,
+                project_group_18_Id,
+                project_group_19_Id,
+                project_group_20_Id,
+                project_group_21_Id,
+                project_group_22_Id,
+                project_group_23_Id,
+                project_group_24_Id,
+                project_group_25_Id,
+                project_group_26_Id,
+                project_group_27_Id,
+                project_group_28_Id,
+                project_group_29_Id,
+                project_group_30_Id,
+                project_group_31_Id,
+                project_group_32_Id,
+                project_group_33_Id,
+                project_group_34_Id,
+                project_group_35_Id,
+                project_group_36_Id,
+                project_group_37_Id,
+                project_group_38_Id,
+                project_group_39_Id,
+                project_group_40_Id,
+                project_group_41_Id,
+                project_group_42_Id,
+                project_group_43_Id,
+                project_group_44_Id,
+                project_group_45_Id,
+                project_group_46_Id,
+                project_group_47_Id
             };
             #endregion
 
-            #region Create 4 ProjectTypes
-            // Project Type Buildings
+            #region Create 4 ProjectTypes (Category)
+            // Project Type BUILDINGS
             var project_type_1_Id = random.Next(123456789, 999999999) + 33;
             ProjectType project_type_1 = new ProjectType()
             {
                 Id = project_type_1_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Buildings",
-                Description = "Buildings Description",
+                Name = "BUILDINGS",
+                Description = "BUILDINGS Description",
                 CanAssignePM = true
             };
             builder.Entity<ProjectType>().HasData(project_type_1);
 
-            // Project Type Infrastructure
+            // Project Type INFRASTRUCTURE
             var project_type_2_Id = random.Next(123456789, 999999999) + 33;
             ProjectType project_type_2 = new ProjectType()
             {
                 Id = project_type_2_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Infrastructure",
-                Description = "Infrastructure Description",
+                Name = "INFRASTRUCTURE",
+                Description = "INFRASTRUCTURE Description",
                 CanAssignePM = true
             };
             builder.Entity<ProjectType>().HasData(project_type_2);
 
-            // Project Type Energy
+            // Project Type ENERGY
             var project_type_3_Id = random.Next(123456789, 999999999) + 33;
             ProjectType project_type_3 = new ProjectType()
             {
                 Id = project_type_3_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Energy",
-                Description = "Energy Description",
+                Name = "ENERGY",
+                Description = "ENERGY Description",
                 CanAssignePM = true
             };
             builder.Entity<ProjectType>().HasData(project_type_3);
 
-            // Project Type Consulting
+            // Project Type CONSULTING
             var project_type_4_Id = random.Next(123456789, 999999999) + 33;
             ProjectType project_type_4 = new ProjectType()
             {
                 Id = project_type_4_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Consulting",
-                Description = "Consulting Description",
+                Name = "CONSULTING",
+                Description = "CONSULTING Description",
                 CanAssignePM = true
             };
             builder.Entity<ProjectType>().HasData(project_type_4);
 
-            // Project Production Management
+            // Project PRODUCTION MANAGMENT
             var project_type_5_Id = random.Next(123456789, 999999999) + 34;
             ProjectType project_type_5 = new ProjectType()
             {
                 Id = project_type_5_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Production Management",
-                Description = "Production Management Description",
+                Name = "PRODUCTION MANAGMENT",
+                Description = "PRODUCTION MANAGMENT Description",
                 CanAssignePM = false
             };
             builder.Entity<ProjectType>().HasData(project_type_5);
+
+            // Project TRANSPORT
+            var project_type_6_Id = random.Next(123456789, 999999999) + 34;
+            ProjectType project_type_6 = new ProjectType()
+            {
+                Id = project_type_6_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "TRANSPORT",
+                Description = "TRANSPORT Description",
+                CanAssignePM = false
+            };
+            builder.Entity<ProjectType>().HasData(project_type_6);
+
+            // Project ENVIRONMENT
+            var project_type_7_Id = random.Next(123456789, 999999999) + 34;
+            ProjectType project_type_7 = new ProjectType()
+            {
+                Id = project_type_7_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "ENVIRONMENT",
+                Description = "ENVIRONMENT Description",
+                CanAssignePM = false
+            };
+            builder.Entity<ProjectType>().HasData(project_type_7);
+
+            // Project ENGINEERING CONSULTING
+            var project_type_8_Id = random.Next(123456789, 999999999) + 34;
+            ProjectType project_type_8 = new ProjectType()
+            {
+                Id = project_type_8_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "ENGINEERING CONSULTING",
+                Description = "ENGINEERING CONSULTING Description",
+                CanAssignePM = false
+            };
+            builder.Entity<ProjectType>().HasData(project_type_8);
 
             int[] projectTypes = {
                 project_type_1_Id,
                 project_type_2_Id,
                 project_type_3_Id,
-                project_type_4_Id
+                project_type_4_Id,
+                project_type_5_Id,
+                project_type_6_Id,
+                project_type_7_Id,
+                project_type_8_Id
             };
             #endregion
 
@@ -1550,27 +2056,38 @@ public class AppDbContext : DbContext
             #endregion
 
             #region Create InvoiceTypes
-            // InvoiceType Expenses
+            // InvoiceType PUBLIC
             var it_01_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
             InvoiceType it_01 = new InvoiceType()
             {
                 Id = it_01_id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Expenses"
+                Name = "PUBLIC"
             };
             builder.Entity<InvoiceType>().HasData(it_01);
 
-            // InvoiceType Incomes
+            // InvoiceType PRIVATE
             var it_02_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
             InvoiceType it_02 = new InvoiceType()
             {
                 Id = it_02_id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "Incomes"
+                Name = "PRIVATE"
             };
             builder.Entity<InvoiceType>().HasData(it_02);
+
+            // InvoiceType INTERNATIONAL
+            var it_03_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+            InvoiceType it_03 = new InvoiceType()
+            {
+                Id = it_03_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "INTERNATIONAL"
+            };
+            builder.Entity<InvoiceType>().HasData(it_03);
             #endregion
 
             #region Create 5 PaymentTypes
