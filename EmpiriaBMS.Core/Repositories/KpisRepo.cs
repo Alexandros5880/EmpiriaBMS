@@ -84,7 +84,8 @@ public class KpisRepo : IDisposable
                 var allProjects = await _context.Set<Project>()
                                                 .Include(r => r.Customer)
                                                 .Include(r => r.Invoices)
-                                                .Include(p => p.Type)
+                                                .Include(p => p.Category)
+                                                .Include(p => p.SubCategory)
                                                 .Include(p => p.ProjectManager)
                                                 .Include(p => p.ProjectsSubConstructors)
                                                 .Where(p => p.DeadLine < DateTime.Now)
@@ -121,7 +122,8 @@ public class KpisRepo : IDisposable
             var projects = await _context.Set<Project>()
                                          .Include(r => r.Customer)
                                          .Include(r => r.Invoices)
-                                         .Include(p => p.Type)
+                                         .Include(p => p.Category)
+                                         .Include(p => p.SubCategory)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id)
@@ -157,15 +159,15 @@ public class KpisRepo : IDisposable
             if (permissions.Any(p => p.Ord == 20))
             {
                 var allProjects = await _context.Set<Project>()
-                                                .Include(p => p.Type)
+                                                .Include(p => p.Category)
                                                 .Where(p => p.DeadLine < DateTime.Now)
                                                 .ToListAsync();
 
                 projectTypesWithDeadLines = allProjects
-                                                .GroupBy(p => p.Type.Name)
+                                                .GroupBy(p => p.Category.Name)
                                                 .ToDictionary(
-                                                    g => g.Key ?? "Uknown Type",
-                                                    g => allProjects.Where(p => p.Type.Name.Equals(g.Key)).Count()
+                                                    g => g.Key ?? "Uknown Category",
+                                                    g => allProjects.Where(p => p.Category.Name.Equals(g.Key)).Count()
                                                 );
 
 
@@ -196,16 +198,16 @@ public class KpisRepo : IDisposable
                                                         .ToArrayAsync();
 
             var projects = await _context.Set<Project>()
-                                         .Include(p => p.Type)
+                                         .Include(p => p.Category)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id)
                                                             || p.ProjectManagerId == userId)
                                          .Where(p => p.DeadLine < DateTime.Now)
                                          .ToListAsync();
 
-            projectTypesWithDeadLines = projects.GroupBy(p => p.Type.Name)
+            projectTypesWithDeadLines = projects.GroupBy(p => p.Category.Name)
                                                 .ToDictionary(
-                                                    g => g.Key ?? "Uknown Type",
-                                                    g => projects.Where(p => p.Type.Name.Equals(g.Key)).Count()
+                                                    g => g.Key ?? "Uknown Category",
+                                                    g => projects.Where(p => p.Category.Name.Equals(g.Key)).Count()
                                                 );
 
 

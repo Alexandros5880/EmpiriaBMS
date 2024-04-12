@@ -19,7 +19,7 @@ public class MappingProfile : Profile
         CreateMap<OtherDto, OtherVM>().ReverseMap();
         CreateMap<DisciplineDto, DisciplineVM>().ReverseMap();
         CreateMap<ProjectDto, ProjectVM>().ReverseMap();
-        CreateMap<ProjectTypeDto, ProjectTypeVM>().ReverseMap();
+        CreateMap<ProjectCategoryDto, ProjectCategoryVM>().ReverseMap();
         CreateMap<OtherTypeDto, OtherTypeVM>().ReverseMap();
         CreateMap<DrawingTypeDto, DrawingTypeVM>().ReverseMap();
         CreateMap<DisciplineTypeDto, DisciplineTypeVM>().ReverseMap();
@@ -30,6 +30,6 @@ public class MappingProfile : Profile
         CreateMap<InvoiceTypeDto, InvoiceTypeVM>().ReverseMap();
         CreateMap<PaymentTypeDto, PaymentTypeVM>().ReverseMap();
         CreateMap<ProjectStageDto, ProjectStageVM>().ReverseMap();
-        CreateMap<ProjectGroupDto, ProjectGroupVM>().ReverseMap();
+        CreateMap<ProjectSubCategoryDto, ProjectSubCategoryVM>().ReverseMap();
     }
 }

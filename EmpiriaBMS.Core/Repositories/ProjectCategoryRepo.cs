@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
+using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class ProjectGroupRepo : Repository<ProjectGroupDto, ProjectGroup>
+public class ProjectCategoryRepo : Repository<ProjectCategoryDto, ProjectCategory>, IDisposable
 {
-    public ProjectGroupRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public ProjectCategoryRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 }

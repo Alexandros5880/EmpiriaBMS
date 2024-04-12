@@ -23,7 +23,7 @@ public class MappingCoreProfile : Profile
         CreateMap<UserDto, User>().ReverseMap();
         CreateMap<DisciplineDto, Discipline>().ReverseMap();
         CreateMap<ProjectDto, Project>().ReverseMap();
-        CreateMap<ProjectTypeDto, ProjectType>().ReverseMap();
+        CreateMap<ProjectCategoryDto, ProjectCategory>().ReverseMap();
         CreateMap<OtherTypeDto, OtherType>().ReverseMap();
         CreateMap<DrawingTypeDto, DrawingType>().ReverseMap();
         CreateMap<DisciplineTypeDto, DisciplineType>().ReverseMap();
@@ -34,7 +34,7 @@ public class MappingCoreProfile : Profile
         CreateMap<InvoiceTypeDto, InvoiceType>().ReverseMap();
         CreateMap<PaymentTypeDto, PaymentType>().ReverseMap();
         CreateMap<ProjectStageDto, ProjectStage>().ReverseMap();
-        CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap();
+        CreateMap<ProjectSubCategoryDto, ProjectSubCategory>().ReverseMap();
         CreateMap<AddressDto, Address>().ReverseMap();
 
         // ViewModels

@@ -8,9 +8,13 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class ProjectGroup : Entity
+public class ProjectCategory : Entity
 {
     public string? Name { get; set; }
 
-    public ICollection<Project> Projects { get; set; }
+    public string? Description { get; set; }
+
+    public bool CanAssignePM { get; set; }
+
+    public List<Project> Projects { get; set; }
 }

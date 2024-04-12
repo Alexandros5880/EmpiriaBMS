@@ -14,7 +14,7 @@ namespace EmpiriaBMS.Core
         public DrawingRepo Drawings { get; set; }
         public OtherRepo Others { get; set; }
         public InvoiceRepo Invoices { get; set; }
-        public ProjectTypeRepo ProjectsTypes { get; set; }
+        public ProjectCategoryRepo ProjectsCategories { get; set; }
         public OtherTypeRepo OthersTypes { get; set; }
         public DrawingTypeRepo DrawingsTypes { get; set; }
         public DisciplineTypeRepo DisciplinesTypes { get; set; }
@@ -24,7 +24,7 @@ namespace EmpiriaBMS.Core
         public InvoiceTypeRepo InvoiceTypes { get; set; }
         public PaymentTypeRepo PaymentTypes { get; set; }
         public ProjectStageRepo ProjectStages { get; set; }
-        public ProjectGroupRepo ProjectsGroups { get; set; }
+        public ProjectSubCategoryRepo ProjectsSubCategories { get; set; }
         public AddressRepo Address { get; set; }
         public KpisRepo KPIS { get; set; }
     }

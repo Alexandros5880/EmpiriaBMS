@@ -14,59 +14,37 @@
 
     <h3 class="mt-1 mb-1 ms-3">Project</h3>
 
-    <EditForm Model="@_project"
-              class="row mt-3 gx-2 p-2">
+    <EditForm Model="@_project" class="row mt-3 gx-2 p-2">
 
         <div class="p-2 col-12">
 
+            <!-- Project Sub Category -->
             <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- New Group -->
-                    <div class="row">
-                        <div class="col-12 form-group">
-                            <label for="cgroup">Create Group</label>
-                            <InputText id="cgroup" 
-                                       @bind-Value="@_createdGroup.Name"
-                                       @oninput="_onGroupNameChange"
-                                       class="form-control" />
-                        </div>
-                        <div class="col-12">
-                            <button type="button" class="btn btn-light mt-1 float-end"
-                                    disabled="@(!_validator.CreateGroupValid)"
-                                    @onclick="@(async () => await _createGroup())">Create</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- Project Group -->
-                    <div class="row">
-                        <div class="col-12 form-group">
-                            <label>Project Group</label>
-                            <select class="form-select" @onchange="((e) => _updateProjectGroup(e))">
-                                @if (_project.GroupId == 0)
-                                {
-                                    <option value="0" selected>Selecte Group</option>
-                                }
-                                @foreach (var projectGroup in _projectGroups)
-                                {
-                                    @if (_project.GroupId == projectGroup.Id)
-                                    {
-                                        <option value="@projectGroup.Id" selected>@projectGroup.Name</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@projectGroup.Id">@projectGroup.Name</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                        <div class="col-12">
-                            @if (!_validator.GroupIdValid)
+                <div class="col-12 form-group">
+                    <label>Project Sub Category</label>
+                    <select class="form-select" @onchange="((e) => _updateProjectSubCategory(e))">
+                        @if (_project.SubCategoryId == 0)
+                        {
+                            <option value="0" selected>Selecte Group</option>
+                        }
+                        @foreach (var projectGroup in _projectSubCategories)
+                        {
+                            @if (_project.SubCategoryId == projectGroup.Id)
                             {
-                                <label class="error float-start">@_validator.GroupIdErr</label>
+                                <option value="@projectGroup.Id" selected>@projectGroup.Name</option>
                             }
-                        </div>
-                    </div>
+                            else
+                            {
+                                <option value="@projectGroup.Id">@projectGroup.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-12">
+                    @if (!_validator.GroupIdValid)
+                    {
+                        <label class="error float-start">@_validator.GroupIdErr</label>
+                    }
                 </div>
             </div>
 
@@ -119,23 +97,23 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
-                    <!-- ProjectType -->
+                    <!-- Project Category -->
                     <div class="form-group">
                         <label>ProjectType</label>
-                        <select class="form-select" @onchange="((e) => _updateProjectType(e))">
-                            @if (_project.TypeId == 0)
+                        <select class="form-select" @onchange="((e) => _updateProjectCategory(e))">
+                            @if (_project.CategoryId == 0)
                             {
-                                <option value="0" selected>Selecte Type</option>
+                                <option value="0" selected>Selecte Category</option>
                             }
-                            @foreach (var projectType in _projectTypes)
+                            @foreach (var category in _projectCategories)
                             {
-                                @if (_project.TypeId == projectType.Id)
+                                @if (_project.CategoryId == category.Id)
                                 {
-                                    <option value="@projectType.Id" selected>@projectType.Name</option>
+                                    <option value="@category.Id" selected>@category.Name</option>
                                 }
                                 else
                                 {
-                                    <option value="@projectType.Id">@projectType.Name</option>
+                                    <option value="@category.Id">@category.Name</option>
                                 }
                             }
                         </select>

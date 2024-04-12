@@ -13,29 +13,30 @@ namespace EmpiriaBMS.Front.ViewModel.Validation;
 
 public class ProjectValidator : BaseValidator<ProjectVM>
 {
-    #region Group
-    private bool _createGroupValid = false;
-    public bool CreateGroupValid
+    #region SubCategory
+    private bool _createSubCategoryValid = false;
+    public bool CreateSubCategoryValid
     {
-        get => _createGroupValid;
+        get => _createSubCategoryValid;
         set
         {
-            if (value == _createGroupValid)
+            if (value == _createSubCategoryValid)
                 return;
-            _createGroupValid = value;
-            NotifyPropertyChanged(nameof(CreateGroupValid));
+            _createSubCategoryValid = value;
+            NotifyPropertyChanged(nameof(CreateSubCategoryValid));
         }
     }
 
-    private string _createGroupErr = null;
-    public string CreateGroupErr {
-        get => _createGroupErr;
+    private string _createSubCategoryErr = null;
+    public string CreateSubCategoryErr
+    {
+        get => _createSubCategoryErr;
         set
         {
-            if (value == _createGroupErr)
+            if (value == _createSubCategoryErr)
                 return;
-            _createGroupErr = value;
-            NotifyPropertyChanged(nameof(CreateGroupErr));
+            _createSubCategoryErr = value;
+            NotifyPropertyChanged(nameof(CreateSubCategoryErr));
         }
     }
     #endregion
@@ -104,17 +105,17 @@ public class ProjectValidator : BaseValidator<ProjectVM>
 
             switch (propertyName)
             {
-                case "GroupName":
-                    CreateGroupValid = !string.IsNullOrEmpty((string)value);
-                    CreateGroupErr = CreateGroupValid ? null : "Group name requared!";
-                    return CreateGroupValid;
-                case nameof(ProjectVM.GroupId):
-                    GroupIdValid = Convert.ToInt32(value) != 0;
-                    GroupIdErr = NameValid ? null : "Group requared!";
-                    return GroupIdValid;
+                case "SubCategoryName":
+                    CreateSubCategoryValid = !string.IsNullOrEmpty((string)value);
+                    CreateSubCategoryErr = CreateSubCategoryValid ? null : "SubCategory name requared!";
+                    return CreateSubCategoryValid;
+                case nameof(ProjectVM.SubCategoryId):
+                    CreateSubCategoryValid = Convert.ToInt32(value) != 0;
+                    CreateSubCategoryErr = CreateSubCategoryValid ? null : "SubCategory requared!";
+                    return CreateSubCategoryValid;
                 case nameof(ProjectVM.Name):
                     NameValid = !string.IsNullOrEmpty((string)value);
-                    NameErr = NameValid ? null : "Group name requared!";
+                    NameErr = NameValid ? null : "Name requared!";
                     return NameValid;
                 default:
                     return true;

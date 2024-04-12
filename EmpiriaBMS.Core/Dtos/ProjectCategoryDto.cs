@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Dtos;
 
-public class ProjectTypeDto : EntityDto
+public class ProjectCategoryDto : EntityDto
 {
     public string? Name { get; set; }
 

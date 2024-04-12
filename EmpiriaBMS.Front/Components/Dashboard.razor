@@ -224,7 +224,7 @@ else
                                                         @if (isWorkingMode && AssignPm)
                                                         {
                                                             <td class="align-middle">
-                                                                @if (project.Type?.CanAssignePM ?? false)
+                                                                @if (project.Category?.CanAssignePM ?? false)
                                                                 {
                                                                     @if (!string.IsNullOrEmpty(project.PmName))
                                                                     {

@@ -50,7 +50,7 @@ public class ProjectTypesController : Controller
     {
         //var logedUserId = _sharedAuthData.LogedUser.Id;
 
-        var dtos = await _dataProvider.ProjectsTypes.GetAll();
+        var dtos = await _dataProvider.ProjectsCategories.GetAll();
 
         if (dtos == null)
             return NotFound("No project types found!");

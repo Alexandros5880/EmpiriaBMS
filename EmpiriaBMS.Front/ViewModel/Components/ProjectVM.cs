@@ -87,55 +87,55 @@ public class ProjectVM : BaseValidator
         }
     }
 
-    private int? _groupId;
-    public int? GroupId
+    private int? _subCategoryId;
+    public int? SubCategoryId
     {
-        get => _groupId;
+        get => _subCategoryId;
         set
         {
-            if (value == _groupId)
+            if (value == _subCategoryId)
                 return;
-            _groupId = value;
-            NotifyPropertyChanged(nameof(GroupId));
+            _subCategoryId = value;
+            NotifyPropertyChanged(nameof(SubCategoryId));
         }
     }
 
-    private ProjectGroup _group;
-    public ProjectGroup Group
+    private ProjectSubCategory _subCategory;
+    public ProjectSubCategory SubCategory
     {
-        get => _group;
+        get => _subCategory;
         set
         {
-            if (value == _group)
+            if (value == _subCategory)
                 return;
-            _group = value;
-            NotifyPropertyChanged(nameof(Group));
+            _subCategory = value;
+            NotifyPropertyChanged(nameof(SubCategory));
         }
     }
 
-    private int? _typeId;
-    public int? TypeId
+    private int? _categoryId;
+    public int? CategoryId
     {
-        get => _typeId;
+        get => _categoryId;
         set
         {
-            if (value == _typeId)
+            if (value == _categoryId)
                 return;
-            _typeId = value;
-            NotifyPropertyChanged(nameof(TypeId));
+            _categoryId = value;
+            NotifyPropertyChanged(nameof(CategoryId));
         }
     }
 
-    private ProjectType _type;
-    public ProjectType Type
+    private ProjectCategory _category;
+    public ProjectCategory Category
     {
-        get => _type;
+        get => _category;
         set
         {
-            if (value == _type)
+            if (value == _category)
                 return;
-            _type = value;
-            NotifyPropertyChanged(nameof(Type));
+            _category = value;
+            NotifyPropertyChanged(nameof(Category));
         }
     }
 
