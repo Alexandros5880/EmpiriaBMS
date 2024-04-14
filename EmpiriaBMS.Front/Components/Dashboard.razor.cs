@@ -40,6 +40,7 @@ public partial class Dashboard : IDisposable
     bool editDeliverable => _sharedAuthData.Permissions.Any(p => p.Ord == 15);
     bool editOther => _sharedAuthData.Permissions.Any(p => p.Ord == 16);
     bool seeKpis => _sharedAuthData.Permissions.Any(p => p.Ord == 17);
+    bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
     #endregion
 
     // General Fields
