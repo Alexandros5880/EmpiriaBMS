@@ -24,11 +24,8 @@ public class Project : Entity
 
     public double? Fee { get; set; }
 
-    public int? SubCategoryId { get; set; }
-    public ProjectSubCategory SubCategory { get; set; }
-
     public int? CategoryId { get; set; }
-    public ProjectCategory Category { get; set; }
+    public ProjectSubCategory Category { get; set; }
 
     public int StageId { get; set; }
     public ProjectStage Stage { get; set; }

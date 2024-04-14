@@ -109,7 +109,7 @@ public class ProjectValidator : BaseValidator<ProjectVM>
                     CreateSubCategoryValid = !string.IsNullOrEmpty((string)value);
                     CreateSubCategoryErr = CreateSubCategoryValid ? null : "SubCategory name requared!";
                     return CreateSubCategoryValid;
-                case nameof(ProjectVM.SubCategoryId):
+                case nameof(ProjectVM.CategoryId):
                     CreateSubCategoryValid = Convert.ToInt32(value) != 0;
                     CreateSubCategoryErr = CreateSubCategoryValid ? null : "SubCategory requared!";
                     return CreateSubCategoryValid;

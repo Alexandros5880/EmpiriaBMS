@@ -1349,67 +1349,9 @@ public class AppDbContext : DbContext
         builder.Entity<RolePermission>().HasData(rp_59);
         #endregion
 
-        #region Create ProjectSubCategories
-        var project_sub_category_1_Id = random.Next(123456789, 999999999) + 33;
-        ProjectSubCategory project_sub_category_1 = new ProjectSubCategory()
-        {
-            Id = project_sub_category_1_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Project Group 1",
-        };
-        builder.Entity<ProjectSubCategory>().HasData(project_sub_category_1);
+        #region Create 4 Project Categories
+        List<ProjectCategory> projectCategories = new List<ProjectCategory>();
 
-        var project_sub_category_2_Id = random.Next(123456789, 999999999) + 33;
-        ProjectSubCategory project_sub_category_2 = new ProjectSubCategory()
-        {
-            Id = project_sub_category_2_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Project Group 2",
-        };
-        builder.Entity<ProjectSubCategory>().HasData(project_sub_category_2);
-
-        var project_sub_category_3_Id = random.Next(123456789, 999999999) + 33;
-        ProjectSubCategory project_sub_category_3 = new ProjectSubCategory()
-        {
-            Id = project_sub_category_3_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Project Group 3",
-        };
-        builder.Entity<ProjectSubCategory>().HasData(project_sub_category_3);
-
-        var project_sub_category_4_Id = random.Next(123456789, 999999999) + 33;
-        ProjectSubCategory project_sub_category_4 = new ProjectSubCategory()
-        {
-            Id = project_sub_category_4_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Project Group 4",
-        };
-        builder.Entity<ProjectSubCategory>().HasData(project_sub_category_4);
-
-        var project_sub_category_5_Id = random.Next(123456789, 999999999) + 33;
-        ProjectSubCategory project_sub_category_5 = new ProjectSubCategory()
-        {
-            Id = project_sub_category_5_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Project Group 5",
-        };
-        builder.Entity<ProjectSubCategory>().HasData(project_sub_category_5);
-
-        int[] ProjectSubCategories = {
-            project_sub_category_1_Id,
-            project_sub_category_2_Id,
-            project_sub_category_3_Id,
-            project_sub_category_4_Id,
-            project_sub_category_5_Id
-        };
-        #endregion
-
-        #region Create 4 ProjectCategories
         var project_category_1_Id = random.Next(123456789, 999999999) + 33;
         ProjectCategory project_category_1 = new ProjectCategory()
         {
@@ -1421,6 +1363,7 @@ public class AppDbContext : DbContext
             CanAssignePM = true
         };
         builder.Entity<ProjectCategory>().HasData(project_category_1);
+        projectCategories.Add(project_category_1);
 
         var project_category_2_Id = random.Next(123456789, 999999999) + 33;
         ProjectCategory project_category_2 = new ProjectCategory()
@@ -1433,6 +1376,7 @@ public class AppDbContext : DbContext
             CanAssignePM = true
         };
         builder.Entity<ProjectCategory>().HasData(project_category_2);
+        projectCategories.Add(project_category_2);
 
         var project_category_3_Id = random.Next(123456789, 999999999) + 33;
         ProjectCategory project_category_3 = new ProjectCategory()
@@ -1445,6 +1389,7 @@ public class AppDbContext : DbContext
             CanAssignePM = true
         };
         builder.Entity<ProjectCategory>().HasData(project_category_3);
+        projectCategories.Add(project_category_3);
 
         var project_category_4_Id = random.Next(123456789, 999999999) + 33;
         ProjectCategory project_category_4 = new ProjectCategory()
@@ -1457,6 +1402,7 @@ public class AppDbContext : DbContext
             CanAssignePM = true
         };
         builder.Entity<ProjectCategory>().HasData(project_category_4);
+        projectCategories.Add(project_category_4);
 
         var project_category_5_Id = random.Next(123456789, 999999999) + 34;
         ProjectCategory project_category_5 = new ProjectCategory()
@@ -1469,6 +1415,7 @@ public class AppDbContext : DbContext
             CanAssignePM = false
         };
         builder.Entity<ProjectCategory>().HasData(project_category_5);
+        projectCategories.Add(project_category_5);
 
         var project_category_6_Id = random.Next(123456789, 999999999) + 34;
         ProjectCategory project_category_6 = new ProjectCategory()
@@ -1481,6 +1428,7 @@ public class AppDbContext : DbContext
             CanAssignePM = false
         };
         builder.Entity<ProjectCategory>().HasData(project_category_6);
+        projectCategories.Add(project_category_6);
 
         var project_category_7_Id = random.Next(123456789, 999999999) + 34;
         ProjectCategory project_category_7 = new ProjectCategory()
@@ -1493,6 +1441,7 @@ public class AppDbContext : DbContext
             CanAssignePM = false
         };
         builder.Entity<ProjectCategory>().HasData(project_category_7);
+        projectCategories.Add(project_category_7);
 
         var project_category_8_Id = random.Next(123456789, 999999999) + 34;
         ProjectCategory project_category_8 = new ProjectCategory()
@@ -1505,17 +1454,89 @@ public class AppDbContext : DbContext
             CanAssignePM = false
         };
         builder.Entity<ProjectCategory>().HasData(project_category_8);
+        projectCategories.Add(project_category_8);
+        #endregion
 
-        int[] ProjectCategories = {
-            project_category_1_Id,
-            project_category_2_Id,
-            project_category_3_Id,
-            project_category_4_Id,
-            project_category_5_Id,
-            project_category_6_Id,
-            project_category_7_Id,
-            project_category_8_Id
-        };
+        #region Create Project Sub Categories
+        /*
+         * projectCategories[0] = BUILDINGS
+         * projectCategories[1] = INFRASTRUCTURE
+         * projectCategories[2] = ENERGY
+         * projectCategories[3] = CONSULTING
+         * projectCategories[4] = PRODUCTION MANAGMENT
+         * projectCategories[5] = TRANSPORT
+         * projectCategories[6] = ENVIRONMENT
+         * projectCategories[7] = ENVIRONMENT CONSULTING
+         */
+        Dictionary<string, ProjectCategory> ProjectSubCatsNameCat = new Dictionary<string, ProjectCategory>();
+        ProjectSubCatsNameCat.Add("RENEWABLES - INTERCONNECTION HV", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - INTERCONNECTION", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - PV", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - PV - TDD", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - PV - CONSTRUCTION SUPERVISION", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - WIND", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - HYDRO", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("POWER PLANTS - PIPELINES", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("DISTRIBUTION NETWORKS", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("NATURAL GAS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("ENERGY AUDITS & CONSULTING", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("FIRE SAFETY", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("OFFICE BUILDINGS", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("BANKS", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("MALLS, SHOPPING CENTRES, BARS etc", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("INDUSTRIAL", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("RESIDENTIAL", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("HOTELS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("ENERGY CERTIFICATES", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("CAR STATIONS", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("SCHOOLS & UNIVERSITIES", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("SPORT CENTRES", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("HOSPITALS & WELFARE", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("PUBLIC BUILDINGS", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("RESTORATIONS - SQUARES", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("MUSEUMS & CULTURAL BUILDINGS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("DATA CENTERS", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("BUILDINGS GENERAL", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("ROAD NETWORKS", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("TOLL STATIONS & BUILDINGS", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("TRAIN STATIONS", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("TUNNELS", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("BUS STATIONS", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("PORTS, MARINAS & PORT TERMINALS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("AIRPORTS & TERMINALS", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("SUBWAYS & STATIONS", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("TRASPORT GENERAL", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("WASTE WATER TREATMENT", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("RECYCLING & LANDFILL PLANTS", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("DAMS", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("SEWAGE AND DRAINAGE NETWORKS", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("ENVIRONMENTAL STUDIES", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("LEGALIZATION PROCEDURES", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("PROPERTY EVALUATIONS", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("EU PROJECTS", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("ENGINEERING CONSULTING - GENERAL", projectCategories[5]);
+
+        List<ProjectSubCategory> projectSubCategories = new List<ProjectSubCategory>();
+
+        foreach (var item in ProjectSubCatsNameCat)
+        {
+            string subCatName = item.Key;
+            int catId = item.Value.Id;
+            var canAssignePM = item.Value.CanAssignePM;
+
+            var project_sub_category_id = random.Next(123456789, 999999999) + 33;
+            ProjectSubCategory project_sub_category = new ProjectSubCategory()
+            {
+                Id = project_sub_category_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = subCatName,
+                CategoryId = catId,
+                CanAssignePM = canAssignePM
+            };
+            builder.Entity<ProjectSubCategory>().HasData(project_sub_category);
+            projectSubCategories.Add(project_sub_category);
+        }
         #endregion
 
         #region Create ProjectStages
@@ -1613,19 +1634,49 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Create 5 PaymentTypes
-        for (int i = 1; i <= 5; i++)
+        // BANK
+        var pmt_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_1 = new PaymentType()
         {
-            // PaymentType 01
-            var pmt_id = random.Next(123456789, 999999999) + random.Next(0, 333) + (10 * i);
-            PaymentType pmt = new PaymentType()
-            {
-                Id = pmt_id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = $"Payment Type {i}"
-            };
-            builder.Entity<PaymentType>().HasData(pmt);
-        }
+            Id = pmt_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"BANK"
+        };
+        builder.Entity<PaymentType>().HasData(pmt_1);
+
+        // TRANSFER
+        var pmt_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_2 = new PaymentType()
+        {
+            Id = pmt_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"TRANSFER"
+        };
+        builder.Entity<PaymentType>().HasData(pmt_2);
+
+        // CASH
+        var pmt_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_3 = new PaymentType()
+        {
+            Id = pmt_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"CASH"
+        };
+        builder.Entity<PaymentType>().HasData(pmt_3);
+
+        // CHECK
+        var pmt_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_4 = new PaymentType()
+        {
+            Id = pmt_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"CHECK"
+        };
+        builder.Entity<PaymentType>().HasData(pmt_4);
         #endregion
 
         #region Create Secretaries
@@ -2466,16 +2517,12 @@ public class AppDbContext : DbContext
 
         var projectManagersLength = projectManagers.Count();
         var projectManagersIndex = 0;
-        var categoriesLength = ProjectCategories.Count();
-        var categoriesIndex = 0;
-        var subCategoriesLength = ProjectSubCategories.Count();
-        var subCategoriesIndex = 0;
         var stagesLength = ProjectStages.Count();
         var stagesIndex = 0;
 
         #region Create 5 Projects
         List<Project> projects = new List<Project>();
-        for (var i = 1; i <= ProjectCategories.Count(); i++)
+        for (var i = 1; i <= projectSubCategories.Count(); i++)
         {
             // Projects 
             var projectId = random.Next(123456789, 999999999) + i * 2;
@@ -2495,9 +2542,8 @@ public class AppDbContext : DbContext
                 EstimatedHours = 1500,
                 DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
-                CategoryId = ProjectCategories[categoriesIndex],
                 StageId = ProjectStages[stagesIndex],
-                SubCategoryId = ProjectSubCategories[subCategoriesIndex],
+                CategoryId = projectSubCategories[i-1].Id,
                 Active = i % 2 == 0 ? true : false,
                 ProjectManagerId = projectManagers[projectManagersIndex].Id
             };
@@ -2507,14 +2553,6 @@ public class AppDbContext : DbContext
             projectManagersIndex++;
             if (projectManagersIndex >= projectManagersLength-1)
                 projectManagersIndex = 0;
-
-            categoriesIndex++;
-            if (categoriesIndex >= categoriesLength-1)
-                categoriesIndex = 0;
-
-            subCategoriesIndex++;
-            if (subCategoriesIndex >= subCategoriesLength-1)
-                subCategoriesIndex = 0;
 
             stagesIndex++;
             if (stagesIndex >= stagesLength-1)
@@ -2556,9 +2594,8 @@ public class AppDbContext : DbContext
             EstimatedHours = 1500,
             DeclaredCompleted = 0,
             EstimatedCompleted = 0,
-            CategoryId = project_category_5_Id,
             StageId = ProjectStages[4],
-            SubCategoryId = ProjectSubCategories[4],
+            CategoryId = projectSubCategories[4].Id,
             Active = true
         };
         builder.Entity<Project>().HasData(projectPM);
@@ -2566,9 +2603,11 @@ public class AppDbContext : DbContext
 
         #region Create 7 Projects Missed DeadLine
         projectManagersIndex = 0;
-        categoriesIndex = 0;
-        subCategoriesIndex = 0;
         stagesIndex = 0;
+
+        var subCategoriesLength = projectSubCategories.Count();
+        var subCategoriesIndex = 0;
+
         for (var i = 1; i <= 7; i++)
         {
             // Projects 
@@ -2589,9 +2628,8 @@ public class AppDbContext : DbContext
                 EstimatedHours = 1500,
                 DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
-                CategoryId = ProjectCategories[categoriesIndex],
                 StageId = ProjectStages[stagesIndex],
-                SubCategoryId = ProjectSubCategories[subCategoriesIndex],
+                CategoryId = projectSubCategories[subCategoriesIndex].Id,
                 Active = i % 2 == 0 ? true : false,
                 ProjectManagerId = projectManagers[projectManagersIndex].Id
             };
@@ -2619,10 +2657,6 @@ public class AppDbContext : DbContext
             projectManagersIndex++;
             if (projectManagersIndex >= projectManagersLength)
                 projectManagersIndex = 0;
-
-            categoriesIndex++;
-            if (categoriesIndex >= categoriesLength)
-                categoriesIndex = 0;
 
             subCategoriesIndex++;
             if (subCategoriesIndex >= subCategoriesLength)

@@ -12,5 +12,10 @@ public class ProjectSubCategory : Entity
 {
     public string? Name { get; set; }
 
+    public bool CanAssignePM { get; set; }
+
+    public int? CategoryId { get; set; }
+    public ProjectCategory Category { get; set; }
+
     public ICollection<Project> Projects { get; set; }
 }

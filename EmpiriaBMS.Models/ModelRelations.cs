@@ -247,11 +247,18 @@ public static class ModelRelations
                .HasForeignKey(c => c.DrawingId)
                .OnDelete(DeleteBehavior.Cascade);
 
+        // SubCategorys Category
+        builder.Entity<ProjectCategory>()
+               .HasMany(p => p.SubCategories)
+               .WithOne(c => c.Category)
+               .HasForeignKey(c => c.CategoryId)
+               .OnDelete(DeleteBehavior.Cascade);
+
         // Projects SubCategory
         builder.Entity<ProjectSubCategory>()
                .HasMany(p => p.Projects)
-               .WithOne(c => c.SubCategory)
-               .HasForeignKey(c => c.SubCategoryId)
+               .WithOne(c => c.Category)
+               .HasForeignKey(c => c.CategoryId)
                .OnDelete(DeleteBehavior.Cascade);
 
         // Projects Address
@@ -259,13 +266,6 @@ public static class ModelRelations
                .HasMany(p => p.Projects)
                .WithOne(c => c.Address)
                .HasForeignKey(c => c.AddressId)
-               .OnDelete(DeleteBehavior.Cascade);
-
-        // Projects Category
-        builder.Entity<ProjectCategory>()
-               .HasMany(p => p.Projects)
-               .WithOne(c => c.Category)
-               .HasForeignKey(c => c.CategoryId)
                .OnDelete(DeleteBehavior.Cascade);
 
         // Projects ProjectStage

@@ -16,5 +16,5 @@ public class ProjectCategory : Entity
 
     public bool CanAssignePM { get; set; }
 
-    public List<Project> Projects { get; set; }
+    public ICollection<ProjectSubCategory> SubCategories { get; set; }
 }

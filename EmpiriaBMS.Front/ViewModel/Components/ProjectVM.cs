@@ -87,32 +87,6 @@ public class ProjectVM : BaseValidator
         }
     }
 
-    private int? _subCategoryId;
-    public int? SubCategoryId
-    {
-        get => _subCategoryId;
-        set
-        {
-            if (value == _subCategoryId)
-                return;
-            _subCategoryId = value;
-            NotifyPropertyChanged(nameof(SubCategoryId));
-        }
-    }
-
-    private ProjectSubCategory _subCategory;
-    public ProjectSubCategory SubCategory
-    {
-        get => _subCategory;
-        set
-        {
-            if (value == _subCategory)
-                return;
-            _subCategory = value;
-            NotifyPropertyChanged(nameof(SubCategory));
-        }
-    }
-
     private int? _categoryId;
     public int? CategoryId
     {
@@ -126,8 +100,8 @@ public class ProjectVM : BaseValidator
         }
     }
 
-    private ProjectCategory _category;
-    public ProjectCategory Category
+    private ProjectSubCategory _category;
+    public ProjectSubCategory Category
     {
         get => _category;
         set
@@ -191,29 +165,42 @@ public class ProjectVM : BaseValidator
         }
     }
 
-    private int? _projectId;
-    public int? ProjectId
+    private bool _active;
+    public bool Active
     {
-        get => _projectId;
+        get => _active;
         set
         {
-            if (value == _projectId)
+            if (value == _active)
                 return;
-            _projectId = value;
-            NotifyPropertyChanged(nameof(ProjectId));
+            _active = value;
+            NotifyPropertyChanged(nameof(Active));
         }
     }
 
-    private Project _project;
-    public Project Project
+    private DateTime? _startDate;
+    public DateTime? StartDate
     {
-        get => _project;
+        get => _startDate;
         set
         {
-            if (value == _project)
+            if (value == _startDate)
                 return;
-            _project = value;
-            NotifyPropertyChanged(nameof(Project));
+            _startDate = value;
+            NotifyPropertyChanged(nameof(StartDate));
+        }
+    }
+
+    private DateTime? _deadLine;
+    public DateTime? DeadLine
+    {
+        get => _deadLine;
+        set
+        {
+            if (value == _deadLine)
+                return;
+            _deadLine = value;
+            NotifyPropertyChanged(nameof(DeadLine));
         }
     }
 
@@ -243,55 +230,29 @@ public class ProjectVM : BaseValidator
         }
     }
 
-    private bool _active;
-    public bool Active
+    private int? _projectManagerId;
+    public int? ProjectManagerId
     {
-        get => _active;
+        get => _projectManagerId;
         set
         {
-            if (value == _active)
+            if (value == _projectManagerId)
                 return;
-            _active = value;
-            NotifyPropertyChanged(nameof(Active));
+            _projectManagerId = value;
+            NotifyPropertyChanged(nameof(ProjectManagerId));
         }
     }
 
-    private DateTime? _deadLine;
-    public DateTime? DeadLine
+    private User? _projectManager;
+    public User? ProjectManager
     {
-        get => _deadLine;
+        get => _projectManager;
         set
         {
-            if (value == _deadLine)
+            if (value == _projectManager)
                 return;
-            _deadLine = value;
-            NotifyPropertyChanged(nameof(DeadLine));
-        }
-    }
-
-    private DateTime? _startDate;
-    public DateTime? StartDate
-    {
-        get => _startDate;
-        set
-        {
-            if (value == _startDate)
-                return;
-            _startDate = value;
-            NotifyPropertyChanged(nameof(StartDate));
-        }
-    }
-
-    private int? _calculationDaly;
-    public int? CalculationDaly
-    {
-        get => _calculationDaly;
-        set
-        {
-            if (value == _calculationDaly)
-                return;
-            _calculationDaly = value;
-            NotifyPropertyChanged(nameof(CalculationDaly));
+            _projectManager = value;
+            NotifyPropertyChanged(nameof(ProjectManager));
         }
     }
 
@@ -321,61 +282,13 @@ public class ProjectVM : BaseValidator
         }
     }
 
-    private int? _invoiceId;
-    public int? InvoiceId
-    {
-        get => _invoiceId;
-        set
-        {
-            if (value == _invoiceId)
-                return;
-            _invoiceId = value;
-            NotifyPropertyChanged(nameof(Invoice));
-        }
-    }
-
-    private int? _projectManagerId;
-    public int? ProjectManagerId
-    {
-        get => _projectManagerId;
-        set
-        {
-            if (value == _projectManagerId)
-                return;
-            _projectManagerId = value;
-            NotifyPropertyChanged(nameof(ProjectManagerId));
-        }
-    }
-
-    private User? _projectManager;
-    public User? ProjectManager
-    {
-        get => _projectManager;
-        set
-        {
-            if (value == _projectManager)
-                return;
-            _projectManager = value;
-            NotifyPropertyChanged(nameof(ProjectManager));
-        }
-    }
-
-    private string? _pmName;
-    public string? PmName
-    {
-        get => _pmName;
-        set
-        {
-            if (value == _pmName)
-                return;
-            _pmName = value;
-            NotifyPropertyChanged(nameof(PmName));
-        }
-    }
-
-    public ICollection<Project> Projects { get; set; } // TODO: ProjectVM -> Projects ???
-
     public ICollection<Invoice> Invoices { get; set; }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<Discipline> Disciplines { get; set; }
+
+    public ICollection<Issue> Complains { get; set; }
 
     public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 
@@ -392,4 +305,19 @@ public class ProjectVM : BaseValidator
         EstimatedCompleted = 0;
         _declaredCompleted = 0;
     }
+
+    // Extra Hellping Properties
+    private string? _pmName;
+    public string? PmName
+    {
+        get => _pmName;
+        set
+        {
+            if (value == _pmName)
+                return;
+            _pmName = value;
+            NotifyPropertyChanged(nameof(PmName));
+        }
+    }
+
 }

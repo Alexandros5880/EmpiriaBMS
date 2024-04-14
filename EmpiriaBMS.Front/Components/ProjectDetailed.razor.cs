@@ -32,10 +32,13 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     private List<ProjectCategoryDto> _projectCategories = new List<ProjectCategoryDto>();
     private ProjectVM _project = new ProjectVM();
 
-    private async Task _getProjectSubCategories()
+    private async Task _getProjectSubCategories(int id = 0)
     {
         _projectSubCategories.Clear();
-        _projectSubCategories = (await DataProvider.ProjectsSubCategories.GetAll()).ToList();
+        if (id == 0)
+            _projectSubCategories = (await DataProvider.ProjectsSubCategories.GetAll()).ToList();
+        else
+            _projectSubCategories = (await DataProvider.ProjectsSubCategories.GetAll(id)).ToList();
     }
 
     private async Task _getProjectStages()
@@ -58,7 +61,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         await _getProjectCategories();
         _project = new ProjectVM();
         _project.Active = true;
-        _project.SubCategoryId = 0;
+        _project.CategoryId = 0;
         _project.StageId = 0;
         _project.CategoryId = 0;
         await _map.Search(null);
@@ -76,12 +79,19 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         StateHasChanged();
     }
 
-    private void _updateProjectCategory(ChangeEventArgs e)
+    private async Task _updateProjectCategory(ChangeEventArgs e)
     {
         var id = Convert.ToInt32(e.Value);
-        _project.CategoryId = id;
-        var dto = _projectCategories.FirstOrDefault(g => g.Id == id);
-        _project.Category = Mapping.Mapper.Map<ProjectCategory>(dto);
+        // Get SubCategories if If Projects Category Parent is Diffrent
+        if (_project.Category?.CategoryId != id)
+        {
+            await _getProjectSubCategories(id);
+            StateHasChanged();
+        } else
+        {
+            _projectSubCategories.Clear();
+            StateHasChanged();
+        }
     }
 
     private void _updateProjectStage(ChangeEventArgs e)
@@ -95,11 +105,10 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     private void _updateProjectSubCategory(ChangeEventArgs e)
     {
         var id = Convert.ToInt32(e.Value);
-        _project.SubCategoryId = id;
+        _project.CategoryId = id;
         var dto = _projectSubCategories.FirstOrDefault(g => g.Id == id);
-        _project.SubCategory = Mapping.Mapper.Map<ProjectSubCategory>(dto);
-
-        _validator.ValidateProperty(_project, nameof(ProjectVM.SubCategoryId), _project.SubCategoryId);
+        _project.Category = Mapping.Mapper.Map<ProjectSubCategory>(dto);
+        _validator.ValidateProperty(_project, nameof(ProjectVM.CategoryId), _project.CategoryId);
         StateHasChanged();
     }
 
@@ -114,7 +123,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     {
         try
         {
-            _project.SubCategory = null;
+            _project.Category = null;
             _project.Stage = null;
             _project.Category = null;
 

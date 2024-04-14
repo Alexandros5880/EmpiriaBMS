@@ -48,13 +48,13 @@
                     <div class="form-group">
                         <label>Category</label>
                         <select class="form-select" @onchange="((e) => _updateProjectCategory(e))">
-                            @if (_project.CategoryId == 0)
+                            @if (_project.Category?.CategoryId == 0)
                             {
                                 <option value="0" selected>Selecte Category</option>
                             }
                             @foreach (var category in _projectCategories)
                             {
-                                @if (_project.CategoryId == category.Id)
+                                @if (_project.Category?.CategoryId == category.Id)
                                 {
                                     <option value="@category.Id" selected>@category.Name</option>
                                 }
@@ -69,15 +69,15 @@
                 <div class="col-lg-6 col-md-12">
                     <!-- Project Sub Category -->
                     <div class="form-group">
-                        <label>Project Sub Category</label>
-                        <select class="form-select" @onchange="((e) => _updateProjectSubCategory(e))">
-                            @if (_project.SubCategoryId == 0)
+                        <label>Sub Category</label>
+                        <select class="form-select" @onchange="((e) => _updateProjectSubCategory(e))" disabled="@(!_projectSubCategories.Any())">
+                            @if (_project.CategoryId == 0)
                             {
                                 <option value="0" selected>Selecte Sub Category</option>
                             }
                             @foreach (var projectGroup in _projectSubCategories)
                             {
-                                @if (_project.SubCategoryId == projectGroup.Id)
+                                @if (_project.CategoryId == projectGroup.Id)
                                 {
                                     <option value="@projectGroup.Id" selected>@projectGroup.Name</option>
                                 }
