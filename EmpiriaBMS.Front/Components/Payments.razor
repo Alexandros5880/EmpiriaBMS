@@ -35,7 +35,7 @@
                     @foreach (var payment in @freePayments)
                     {
                         <option value="@payment.Id">
-                            <span>@payment.Type.Name &ensp; @payment.Bank &ensp; @payment.DayCost &ensp; @payment.EstPaymentDate &ensp; @payment.PaymentDate &ensp; @payment.DelayInPayment &ensp; @payment.PaymentDetails &ensp; @payment.PendingPayments</span>
+                            <span>@payment.Type.Name &ensp; @payment.Bank &ensp; @payment.Fee &ensp; @payment.PaidFee &ensp; @payment.PaymentDate.ToEuropeFormat() &ensp;  @payment.EstimatedDate?.ToEuropeFormat() ?? "--" &ensp; </span>
                         </option>
                     }
                 </select>
@@ -56,13 +56,13 @@
             <tr>
                 <th scope="col" class="sticky-header">Type</th>
                 <th scope="col" class="sticky-header">Bank</th>
-                <th scope="col" class="sticky-header">Day Cost</th>
-                <th scope="col" class="sticky-header">Details</th>
+                <th scope="col" class="sticky-header">Fee</th>
+                <th scope="col" class="sticky-header">Paid Fee</th>
+                <th scope="col" class="sticky-header">Description</th>
                 <th scope="col" class="sticky-header">Estimated Date</th>
                 <th scope="col" class="sticky-header">Payment Date</th>
-                <th scope="col" class="sticky-header">Delay In Payment</th>
                 <th scope="col" class="sticky-header">Days Until Payment</th>
-                <th scope="col" class="sticky-header">Pending Payments</th>
+                <th scope="col" class="sticky-header">Pending Fee</th>
                 <th scope="col" class="sticky-header">Delete</th>
             </tr>
         </thead>
@@ -91,13 +91,19 @@
                     <td style="min-width: 100px;">
                         <input type="number"
                                class="form-control"
-                               @bind="@payment.DayCost">
+                               @bind="@payment.Fee">
+                    </td>
+
+                    <td style="min-width: 150px;">
+                        <input type="number"
+                               class="form-control"
+                               @bind="@payment.PaidFee">
                     </td>
 
                     <td style="min-width: 200px;">
                         <textarea class="form-control"
                                   rows="1"
-                                  @bind="@payment.PaymentDetails"
+                                  @bind="@payment.Description"
                                   style="min-width: 200px;">
                         </textarea>
                     </td>
@@ -105,7 +111,7 @@
                     <td style="min-width: 150px;">
                         <input type="date"
                                class="form-control"
-                               @bind="@payment.EstPaymentDate">
+                               @bind="@payment.EstimatedDate">
                     </td>
 
                     <td style="min-width: 150px;">
@@ -115,21 +121,11 @@
                     </td>
 
                     <td style="min-width: 150px;">
-                        <input type="number"
-                               class="form-control"
-                               @bind="@payment.DelayInPayment">
+                        <span>@((DateTime.Now - @payment.PaymentDate).DisplayHMS())</span>
                     </td>
 
                     <td style="min-width: 150px;">
-                        <input type="number"
-                               class="form-control"
-                               @bind="@payment.DaysUntilPayment">
-                    </td>
-
-                    <td style="min-width: 150px;">
-                        <input type="number"
-                               class="form-control"
-                               @bind="@payment.PendingPayments">
+                        <span>@(@payment.Fee = @payment.PaidFee)</span>
                     </td>
 
                     <td style="min-width: 50px;">

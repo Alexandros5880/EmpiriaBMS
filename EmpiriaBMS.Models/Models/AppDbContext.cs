@@ -479,6 +479,19 @@ public class AppDbContext : DbContext
             IsEditable = false
         };
         builder.Entity<Role>().HasData(role_9);
+
+        // Engineer SUB
+        var role_11_id = random.Next(123456789, 999999999);
+        Role role_11 = new()
+        {
+            Id = role_11_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Engineer SUB",
+            IsEmployee = false,
+            IsEditable = false
+        };
+        builder.Entity<Role>().HasData(role_11);
         #endregion
 
         #region Create Prmissions Roles Connection

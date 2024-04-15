@@ -13,26 +13,22 @@ namespace EmpiriaBMS.Core.Dtos;
 
 public class PaymentDto : EntityDto
 {
-    public DateTime? EstPaymentDate { get; set; }
+    public DateTime? EstimatedDate { get; set; }
 
-    public DateTime? PaymentDate { get; set; }
-
-    public int? DelayInPayment { get; set; }
-
-    public string? PaymentDetails { get; set; }
-
-    public double? DayCost { get; set; }
+    public DateTime PaymentDate { get; set; }
 
     public string? Bank { get; set; }
 
-    public int? DaysUntilPayment { get; set; }
+    public double PaidFee { get; set; }
 
-    public double? PendingPayments { get; set; }
+    public double Fee { get; set; }
+
+    public string? Description { get; set; }
 
     public int TypeId { get; set; }
-    public PaymentTypeDto Type { get; set; }
+    public PaymentType Type { get; set; }
 
     public int InvoiceId { get; set; }
 
-    public InvoiceDto Invoice { get; set; }
+    public Invoice Invoice { get; set; }
 }
