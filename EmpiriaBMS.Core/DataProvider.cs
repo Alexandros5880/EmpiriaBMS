@@ -33,6 +33,7 @@ public class DataProvider : IDataProvider, IDisposable
     public ProjectStageRepo ProjectStages { get; set; }
     public ProjectSubCategoryRepo ProjectsSubCategories { get; set; }
     public AddressRepo Address { get; set; }
+    public ClientRepo Clients { get; set; }
     public KpisRepo KPIS { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
@@ -55,6 +56,7 @@ public class DataProvider : IDataProvider, IDisposable
         ProjectStages = new ProjectStageRepo(dbFactory);
         ProjectsSubCategories = new ProjectSubCategoryRepo(dbFactory);
         Address = new AddressRepo(dbFactory);
+        Clients = new ClientRepo(dbFactory);
         KPIS = new KpisRepo(dbFactory);
     }
 
@@ -83,6 +85,7 @@ public class DataProvider : IDataProvider, IDisposable
                 ProjectStages.Dispose();
                 ProjectsSubCategories.Dispose();
                 Address.Dispose();
+                Clients.Dispose();
                 KPIS.Dispose();
             }
             disposedValue = true;

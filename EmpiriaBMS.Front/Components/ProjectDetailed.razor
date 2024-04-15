@@ -93,52 +93,6 @@
 
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <!-- Project Stage -->
-                    <div class="form-group">
-                        <label>Project Stage</label>
-                        <select class="form-select" @onchange="((e) => _updateProjectStage(e))">
-                            @if (_project.StageId == 0)
-                            {
-                                <option value="0" selected>Selecte Stage</option>
-                            }
-                            @foreach (var projectStage in _projectStages)
-                            {
-                                @if (_project.StageId == projectStage.Id)
-                                {
-                                    <option value="@projectStage.Id" selected>@projectStage.Name</option>
-                                }
-                                else
-                                {
-                                    <option value="@projectStage.Id">@projectStage.Name</option>
-                                }
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- Fee -->
-                    <div class="form-group">
-                        <label for="fee">Fee</label>
-                        <input type="number"
-                               class="form-control"
-                               id="fee"
-                               @bind="@_project.Fee">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Description -->
-            <div class="col-12 form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control"
-                          name="composeContent"
-                          id="description"
-                          row="7"
-                          @bind="@_project.Description" />
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
                     <!-- StartDate -->
                     <div class="form-group">
                         <label for="durationDate">StartDate</label>
@@ -162,15 +116,45 @@
 
             <div class="row">
                 <div class="col-lg-6 col-md-12">
+                    <!-- Project Stage -->
+                    <div class="form-group">
+                        <label>Project Stage</label>
+                        <select class="form-select" @onchange="((e) => _updateProjectStage(e))">
+                            @if (_project.StageId == 0)
+                            {
+                                <option value="0" selected>Selecte Stage</option>
+                            }
+                            @foreach (var projectStage in _projectStages)
+                            {
+                                @if (_project.StageId == projectStage.Id)
+                                {
+                                    <option value="@projectStage.Id" selected>@projectStage.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@projectStage.Id">@projectStage.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
                     <!-- Active -->
                     <div class="row mt-4 ms-2 float-start" style="width: 134px;">
                         <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
                         <label class="col-8" for="active">Is Active</label>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                    
-                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12 form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control"
+                          name="composeContent"
+                          id="description"
+                          row="7"
+                          @bind="@_project.Description" />
             </div>
 
         </div>

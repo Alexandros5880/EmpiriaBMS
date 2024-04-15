@@ -1692,6 +1692,90 @@ public class AppDbContext : DbContext
         builder.Entity<PaymentType>().HasData(pmt_4);
         #endregion
 
+        #region Create OfferTypes
+        var offer_type_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_1 = new OfferType()
+        {
+            Id = offer_type_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PUBLIC"
+        };
+        builder.Entity<OfferType>().HasData(offer_type_1);
+
+        var offer_type_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_2 = new OfferType()
+        {
+            Id = offer_type_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PRIVATE"
+        };
+        builder.Entity<OfferType>().HasData(offer_type_2);
+
+        var offer_type_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_3 = new OfferType()
+        {
+            Id = offer_type_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "INTERNATIONAL"
+        };
+        builder.Entity<OfferType>().HasData(offer_type_3);
+
+        var offer_type_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_4 = new OfferType()
+        {
+            Id = offer_type_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "HEDNO"
+        };
+        builder.Entity<OfferType>().HasData(offer_type_4);
+        #endregion
+
+        #region Create OfferState
+        var offer_state_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferState offer_state_1 = new OfferState()
+        {
+            Id = offer_state_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "SUBMITTED"
+        };
+        builder.Entity<OfferState>().HasData(offer_state_1);
+
+        var offer_state_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferState offer_state_2 = new OfferState()
+        {
+            Id = offer_state_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "UNSUCCESSFUL"
+        };
+        builder.Entity<OfferState>().HasData(offer_state_2);
+
+        var offer_state_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferState offer_state_3 = new OfferState()
+        {
+            Id = offer_state_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "SUCCESSFUL"
+        };
+        builder.Entity<OfferState>().HasData(offer_state_3);
+
+        var offer_state_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferState offer_state_4 = new OfferState()
+        {
+            Id = offer_state_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "WAITING FOR RESULT"
+        };
+        builder.Entity<OfferState>().HasData(offer_state_4);
+        #endregion
+
         #region Create Secretaries
         List<User> secretaries = new List<User>();
 
@@ -2549,7 +2633,6 @@ public class AppDbContext : DbContext
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 StartDate = createdDate,
                 DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                Fee = 10000,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
@@ -2635,7 +2718,6 @@ public class AppDbContext : DbContext
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 StartDate = createdDate.AddMonths(-(i * 2)),
                 DeadLine = createdDate.AddMonths(-i),
-                Fee = 1325,
                 CalculationDaly = i < 5 ? i : i - (i - 1),
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,

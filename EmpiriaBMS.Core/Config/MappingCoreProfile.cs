@@ -36,6 +36,7 @@ public class MappingCoreProfile : Profile
         CreateMap<ProjectStageDto, ProjectStage>().ReverseMap();
         CreateMap<ProjectSubCategoryDto, ProjectSubCategory>().ReverseMap();
         CreateMap<AddressDto, Address>().ReverseMap();
+        CreateMap<ClientDto, Client>().ReverseMap();
 
         // ViewModels
         CreateMap<Address, AddressVM>().ReverseMap();

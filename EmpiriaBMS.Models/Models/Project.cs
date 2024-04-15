@@ -22,8 +22,6 @@ public class Project : Entity
 
     public long EstimatedHours { get; set; }
 
-    public double? Fee { get; set; }
-
     public int? CategoryId { get; set; }
     public ProjectSubCategory Category { get; set; }
 
@@ -52,7 +50,8 @@ public class Project : Entity
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 
-    public User? Customer { get; set; }
+    public int? ClientId { get; set; }
+    public Client? Client { get; set; }
 
     public ICollection<Invoice> Invoices { get; set; }
 

@@ -32,7 +32,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         {
             return await _context
                              .Set<Project>()
-                             .Include(r => r.Customer)
+                             .Include(r => r.Client)
                              .Include(r => r.Invoices)
                              .Include(p => p.Stage)
                              .Include(p => p.Address)
@@ -50,7 +50,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             projects = await _context.Set<Project>()
-                                      .Include(r => r.Customer)
+                                      .Include(r => r.Client)
                                       .Include(r => r.Invoices)
                                       .Include(p => p.Stage)
                                       .Include(p => p.Address)
@@ -73,7 +73,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (pageSize == 0 || pageIndex == 0)
             {
                 projects = await _context.Set<Project>()
-                                         .Include(r => r.Customer)
+                                         .Include(r => r.Client)
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
@@ -89,7 +89,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             projects =  await _context.Set<Project>()
                                       .Skip((pageIndex - 1) * pageSize)
                                       .Take(pageSize)
-                                      .Include(r => r.Customer)
+                                      .Include(r => r.Client)
                                       .Include(r => r.Invoices)
                                       .Include(p => p.Stage)
                                       .Include(p => p.Address)
@@ -116,7 +116,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 projects = await _context.Set<Project>()
                                          .Where(expresion)
-                                         .Include(r => r.Customer)
+                                         .Include(r => r.Client)
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
@@ -133,7 +133,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
-                                     .Include(r => r.Customer)
+                                     .Include(r => r.Client)
                                      .Include(r => r.Invoices)
                                      .Include(p => p.Stage)
                                      .Include(p => p.Address)
@@ -168,7 +168,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (permissions.Any(p => p.Ord == 11))
             {
                 var allProjects = await _context.Set<Project>()
-                                                .Include(r => r.Customer)
+                                                .Include(r => r.Client)
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Stage)
                                                 .Include(p => p.Address)
@@ -206,7 +206,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                         .ToArrayAsync();
 
             var projects = await _context.Set<Project>()
-                                         .Include(r => r.Customer)
+                                         .Include(r => r.Client)
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
@@ -244,7 +244,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Where(expresion)
-                                                .Include(r => r.Customer)
+                                                .Include(r => r.Client)
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Stage)
                                                 .Include(p => p.Address)
@@ -284,7 +284,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var projects = await _context.Set<Project>()
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                          .Where(expresion)
-                                         .Include(r => r.Customer)
+                                         .Include(r => r.Client)
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
@@ -340,7 +340,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
-                                         .Include(p => p.Customer)
+                                         .Include(p => p.Client)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -381,7 +381,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
-                                         .Include(p => p.Customer)
+                                         .Include(p => p.Client)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -399,7 +399,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.Category)
                                      .Include(p => p.ProjectManager)
                                      .Include(p => p.ProjectsSubConstructors)
-                                     .Include(p => p.Customer)
+                                     .Include(p => p.Client)
                                      .OrderBy(e => !e.Active)
                                      .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
@@ -443,7 +443,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                              .Include(p => p.Category)
                                              .Include(p => p.ProjectManager)
                                              .Include(p => p.ProjectsSubConstructors)
-                                             .Include(p => p.Customer)
+                                             .Include(p => p.Client)
                                              .OrderBy(e => !e.Active)
                                              .ThenByDescending(e => e.DeadLine)
                                              .ToListAsync();
@@ -461,7 +461,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
-                                         .Include(p => p.Customer)
+                                         .Include(p => p.Client)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -504,7 +504,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
-                                         .Include(p => p.Customer)
+                                         .Include(p => p.Client)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -523,7 +523,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.Category)
                                      .Include(p => p.ProjectManager)
                                      .Include(p => p.ProjectsSubConstructors)
-                                     .Include(p => p.Customer)
+                                     .Include(p => p.Client)
                                      .OrderBy(e => !e.Active)
                                      .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();

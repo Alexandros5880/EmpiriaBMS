@@ -74,19 +74,6 @@ public class ProjectVM : BaseValidator
         }
     }
 
-    private double? _fee;
-    public double? Fee
-    {
-        get => _fee;
-        set
-        {
-            if (value == _fee)
-                return;
-            _fee = value;
-            NotifyPropertyChanged(nameof(Fee));
-        }
-    }
-
     private int? _categoryId;
     public int? CategoryId
     {
@@ -256,29 +243,29 @@ public class ProjectVM : BaseValidator
         }
     }
 
-    private int? _customerId;
-    public int? CustomerId
+    private int? _clientId;
+    public int? ClientId
     {
-        get => _customerId;
+        get => _clientId;
         set
         {
-            if (value == _customerId)
+            if (value == _clientId)
                 return;
-            _customerId = value;
-            NotifyPropertyChanged(nameof(CustomerId));
+            _clientId = value;
+            NotifyPropertyChanged(nameof(ClientId));
         }
     }
 
-    private User? _customer;
-    public User? Customer
+    private User? _client;
+    public User? Client
     {
-        get => _customer;
+        get => _client;
         set
         {
-            if (value == _customer)
+            if (value == _client)
                 return;
-            _customer = value;
-            NotifyPropertyChanged(nameof(Customer));
+            _client = value;
+            NotifyPropertyChanged(nameof(Client));
         }
     }
 

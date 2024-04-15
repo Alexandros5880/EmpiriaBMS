@@ -31,5 +31,6 @@ public class MappingProfile : Profile
         CreateMap<PaymentTypeDto, PaymentTypeVM>().ReverseMap();
         CreateMap<ProjectStageDto, ProjectStageVM>().ReverseMap();
         CreateMap<ProjectSubCategoryDto, ProjectSubCategoryVM>().ReverseMap();
+        CreateMap<ClientDto, ClientVM>().ReverseMap();
     }
 }

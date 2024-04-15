@@ -82,7 +82,7 @@ public class KpisRepo : IDisposable
             if (permissions.Any(p => p.Ord == 20))
             {
                 var allProjects = await _context.Set<Project>()
-                                                .Include(r => r.Customer)
+                                                .Include(r => r.Client)
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Category)
                                                 .Include(p => p.ProjectManager)
@@ -119,7 +119,7 @@ public class KpisRepo : IDisposable
                                                         .ToArrayAsync();
 
             var projects = await _context.Set<Project>()
-                                         .Include(r => r.Customer)
+                                         .Include(r => r.Client)
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Category)
                                          .Include(p => p.ProjectManager)
