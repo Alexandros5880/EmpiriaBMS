@@ -138,21 +138,16 @@ code {
 }
 
 /* Selected Table Row */
-.highlight_1 {
-    background-color: var(--selected_1-row-bg-color) !important;
+.selected_table_row {
+    background-color: var(--selected-table-row-bg-color) !important;
 }
 
-.highlight_2 {
-    background-color: var(--selected_2-row-bg-color) !important;
+/* Table Header */
+/*thead th {
+    background: var(--dashboard-tables-header-color) !important;
 }
+*/
 
-.highlight_3 {
-    background-color: var(--selected_3-row-bg-color) !important;
-}
-
-.highlight_4 {
-    background-color: var(--selected_4-row-bg-color) !important;
-}
 
 .default-background {
     background-color: var(--main-bg-color) !important;
@@ -161,6 +156,8 @@ code {
 .primary-bg-color {
     background-color: var(--primary-bg-color) !important;
 }
+
+
 
 /* CheckBox */
 .big-checkbox {

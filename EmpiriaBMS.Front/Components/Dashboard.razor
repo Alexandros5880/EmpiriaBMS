@@ -123,7 +123,8 @@ else
 
                     <div class="mt-4 row">
 
-                        <div class="@((seeAdmin ? "col-lg" : "")) col-md col-sm" style="min-width:500px">
+                        <div class="@((seeAdmin ? "col-lg" : "")) col-md col-sm"
+                             style="min-width: @(isWorkingMode ? "660px" : "500px")">
                             <!-- Table Projects -->
                             @if (!_isEndWorkDialogOdepened)
                             {
@@ -180,7 +181,7 @@ else
                                                     <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "highlight_1"))"
+                                                                                    ? "" : "selected_table_row"))"
                                                         style="word-wrap: break-word; max-width: 110px;">
                                                         <labe>@project.Name</labe>
                                                     </td>
@@ -188,21 +189,21 @@ else
                                                     <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "highlight_1"))">
+                                                                                    ? "" : "selected_table_row"))">
                                                         <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
                                                     </td>
 
                                                     <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "highlight_1"))">
+                                                                                    ? "" : "selected_table_row"))">
                                                         <label>@(project.EstimatedCompleted.ToString("##0.0")) %</label>
                                                     </td>
 
                                                     <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "highlight_1"))">
+                                                                                    ? "" : "selected_table_row"))">
                                                         <label>@project.DeadLine?.ToEuropeFormat()</label>
                                                     </td>
 
@@ -211,7 +212,7 @@ else
                                                         <td class="align-middle
                                                                 @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "highlight_1"))">
+                                                                                    ? "" : "selected_table_row"))">
                                                             <span class="majesticons--chat-2-text"
                                                                   @onclick="@OnAddIssueClick">
                                                             </span>
@@ -248,12 +249,13 @@ else
                             }
                         </div>
 
-                        <div class="@((seeAdmin ? "col-lg" : "")) col-md col-sm" style="min-width:320px">
+                        <div class="@((seeAdmin ? "col-xl col-lg" : "")) col-md col-sm"
+                             style="min-width:440px">
                             <!-- Table Disciplines -->
                             @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                             {
                                 <div class="text-center row me-2">
-                                    <h3 class="@((isWorkingMode != null ? "col-8" : "col-11"))">Disciplines</h3>
+                                    <h3 class="@((isWorkingMode ? "col-8" : "col-11"))">Disciplines</h3>
                                     @if (isWorkingMode && editDiscipline)
                                     {
                                         @if (_selectedDiscipline != null)
@@ -274,8 +276,8 @@ else
                                     <table class="table table-hover table-danger text-center">
                                         <thead>
                                             <tr>
-                                                <th scope="col" class="sticky-header">Discipline</th>
-                                                <th scope="col" class="sticky-header">Estimated Discipline Hours</th>
+                                                <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Discipline</th>
+                                                <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Estimated Discipline Hours</th>
                                                 @if (isWorkingMode && AssignEngineer)
                                                 {
                                                     <th scope="col"></th>
@@ -292,14 +294,16 @@ else
                                                     <td class="align-middle
                                                             @(((_selectedDiscipline == null
                                                                 || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                    ? "" : "highlight_2"))">
+                                                                    ? "" : "selected_table_row"))"
+                                                        style="word-wrap: break-word; max-width: 100px;">
                                                         <labe>@discipline.Type.Name</labe>
                                                     </td>
 
                                                     <td class="align-middle text-center
                                                             @(((_selectedDiscipline == null
                                                                 || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                    ? "" : "highlight_2"))">
+                                                                    ? "" : "selected_table_row"))"
+                                                        style="word-wrap: break-word; max-width: 100px;">
                                                         <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
                                                     </td>
 
@@ -320,10 +324,11 @@ else
                             }
                         </div>
 
-                        <div class="@((seeAdmin ? "col-xl col-lg" : "")) col-md col-sm">
+                        <div class="row @((seeAdmin ? "col-xl col-lg mt-3" : "")) col-md col-sm"
+                             style="min-width:460px">
                             
                             <!-- Table Deliverables -->
-                            <div>
+                            <div class="col">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row me-2">
@@ -369,21 +374,21 @@ else
                                                         <td class="align-middle
                                                             @(((_selectedDraw == null ||
                                                                     !_selectedDraw.Id.Equals(draw.Id))
-                                                                        ? "" : "highlight_3"))">
+                                                                        ? "" : "selected_table_row"))">
                                                             <div class="align-middle h-100"><labe>@draw.Type.Name</labe></div>
                                                         </td>
 
                                                         <td class="align-middle
                                                             @(((_selectedDraw == null ||
                                                                     !_selectedDraw.Id.Equals(draw.Id))
-                                                                        ? "" : "highlight_3"))">
+                                                                        ? "" : "selected_table_row"))">
                                                             <label>@GetDrawingMenHours(draw.Id) h</label>
                                                         </td>
 
                                                         <td class="align-middle
                                                             @(((_selectedDraw == null ||
                                                                 !_selectedDraw.Id.Equals(draw.Id))
-                                                                    ? "" : "highlight_3"))">
+                                                                    ? "" : "selected_table_row"))">
                                                             <label>@draw.CompletionEstimation %</label>
                                                         </td>
 
@@ -405,7 +410,7 @@ else
                             </div>
 
                             <!-- Table Others -->
-                            <div>
+                            <div class="col">
                                 @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                 {
                                     <div class="text-center row me-2">
@@ -446,7 +451,7 @@ else
                                                         <td class="align-middle
                                                         @(((_selectedOther == null ||
                                                                 !_selectedOther.Id.Equals(_other.Id))
-                                                                    ? "" : "highlight_4"))"
+                                                                    ? "" : "selected_table_row"))"
                                                             style="min-width: 110px;">
                                                             <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
                                                         </td>
@@ -454,7 +459,7 @@ else
                                                         <td class="align-middle
                                                         @(((_selectedOther == null ||
                                                                 !_selectedOther.Id.Equals(_other.Id))
-                                                                    ? "" : "highlight_4"))"
+                                                                    ? "" : "selected_table_row"))"
                                                             style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                             <label>@GetOtherMenHours(_other.Id) h</label>
                                                         </td>
@@ -558,7 +563,7 @@ else
                     <div class="table-responsive"
                          style="height: 300px;">
                         <table class="table table-hover table-borderless">
-                            <thead class="table-primary">
+                            <thead>
                                 <tr>
                                     <th scope="col" class="sticky-header">Drawing</th>
                                     <th scope="col" class="sticky-header">Time</th>
@@ -609,7 +614,7 @@ else
                     <div class="table-responsive"
                          style="height: 300px;">
                         <table class="table table-hover table-borderless">
-                            <thead class="table-primary">
+                            <thead>
                                 <tr>
                                     <th scope="col" class="sticky-header">Other</th>
                                     <th scope="col" class="sticky-header">Time</th>
