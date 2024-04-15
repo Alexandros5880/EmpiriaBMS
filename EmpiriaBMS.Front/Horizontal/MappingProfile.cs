@@ -32,5 +32,8 @@ public class MappingProfile : Profile
         CreateMap<ProjectStageDto, ProjectStageVM>().ReverseMap();
         CreateMap<ProjectSubCategoryDto, ProjectSubCategoryVM>().ReverseMap();
         CreateMap<ClientDto, ClientVM>().ReverseMap();
+        CreateMap<OfferTypeDto, OfferTypeVM>().ReverseMap();
+        CreateMap<OfferStateDto, OfferStateVM>().ReverseMap();
+        CreateMap<OfferDto, OfferVM>().ReverseMap();
     }
 }

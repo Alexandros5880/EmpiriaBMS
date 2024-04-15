@@ -27,6 +27,9 @@ namespace EmpiriaBMS.Core
         public ProjectSubCategoryRepo ProjectsSubCategories { get; set; }
         public AddressRepo Address { get; set; }
         public ClientRepo Clients { get; set; }
+        public OfferTypeRepo OfferTypes { get; set; }
+        public OfferStateRepo OfferStates { get; set; }
+        public OfferRepo Offers { get; set; }
         public KpisRepo KPIS { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class OtherTypeVM : BaseValidator
+public class OtherTypeVM : BaseVM
 {
     private string? _name;
     public string? Name

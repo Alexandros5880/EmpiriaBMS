@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DrawingVM : BaseValidator
+public class DrawingVM : BaseVM
 {
     // Not Mapped
     private TimeSpan _time = TimeSpan.Zero;

@@ -1,10 +1,9 @@
-﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class PaymentTypeVM : BaseValidator
+public class PaymentTypeVM : BaseVM
 {
     private string _name;
     public string Name

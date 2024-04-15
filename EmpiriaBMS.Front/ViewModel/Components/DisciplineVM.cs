@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DisciplineVM : BaseValidator
+public class DisciplineVM : BaseVM
 {
     private bool? _isSelected = false;
     public bool? IsSelected

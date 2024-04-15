@@ -3,7 +3,7 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DisciplineTypeVM : BaseVM
+public class OfferStateVM : BaseVM
 {
     private string _name;
     public string Name
@@ -18,5 +18,5 @@ public class DisciplineTypeVM : BaseVM
         }
     }
 
-    public ICollection<Discipline> Disciplines { get; set; }
+    public ICollection<Offer> Offers { get; set; }
 }

@@ -4,7 +4,7 @@ using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class ProjectSubCategoryVM : BaseValidator
+public class ProjectSubCategoryVM : BaseVM
 {
     private string? _name;
     public string? Name

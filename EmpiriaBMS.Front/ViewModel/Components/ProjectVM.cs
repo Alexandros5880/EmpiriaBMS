@@ -7,7 +7,7 @@ using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
-public class ProjectVM : BaseValidator
+public class ProjectVM : BaseVM
 {
     private string? _name;
     public string? Name
