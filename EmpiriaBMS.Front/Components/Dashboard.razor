@@ -120,16 +120,19 @@ else
                         }
                     </div>
 
+                    <!-- Offers-->
                     @if (seeOffers)
                     {
-                        <div class="mt-3">
+                        <div class="mt-5">
                             <FluentAccordion>
-                                <FluentAccordionItem Expanded="false">
+                                <FluentAccordionItem Expanded="true">
                                     <HeadingTemplate>
-                                        <h3>Offers</h3>
+                                        <div class="accordion-header">
+                                            <h3>Offers</h3>
+                                        </div>
                                     </HeadingTemplate>
                                     <ChildContent>
-                                        Panel four content
+                                        <Offers />
                                     </ChildContent>
                                 </FluentAccordionItem>
                             </FluentAccordion>
