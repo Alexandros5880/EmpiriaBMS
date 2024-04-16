@@ -37,8 +37,7 @@ else
     <div class="row justify-content-center mt-1 mb-1">
         <div class="col-auto" style="width: 100%; height: 100%;">
             <div class="m-1 row justify-content-center">
-                <div class="col-12 p-2"
-                        style="overflow-x:hidden; margin: 0 auto;">
+                <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
                     
                     <!-- Headder -->
                     <div class="mt-2 shadow p-2">
@@ -120,6 +119,22 @@ else
                             </div>
                         }
                     </div>
+
+                    @if (seeOffers)
+                    {
+                        <div class="mt-3">
+                            <FluentAccordion>
+                                <FluentAccordionItem Expanded="false">
+                                    <HeadingTemplate>
+                                        <h3>Offers</h3>
+                                    </HeadingTemplate>
+                                    <ChildContent>
+                                        Panel four content
+                                    </ChildContent>
+                                </FluentAccordionItem>
+                            </FluentAccordion>
+                        </div>
+                    }
 
                     <div class="mt-4 row">
 
@@ -487,8 +502,16 @@ else
 <!-- KPIS -->
 @if (seeKpis)
 {
-    <div class="mt-3">
-        <KpisLand />
+    <div class="row justify-content-center mt-1 mb-1">
+        <div class="col-auto" style="width: 100%; height: 100%;">
+            <div class="m-1 row justify-content-center">
+                <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                    <KpisLand />
+
+                </div>
+            </div>
+        </div>
     </div>
 }
 
