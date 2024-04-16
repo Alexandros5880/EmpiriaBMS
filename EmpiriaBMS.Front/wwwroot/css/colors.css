@@ -4,7 +4,8 @@
 :root {
     --warning: #ffcc00;
     --main-bg-color: #f5f5f5;
-    --selected-table-row-bg-color: rgba(68,71,145, 0.3);
+    --selected-table-row-bg-color: rgba(75,83,188, 1);
+    --selected-table-row-color: rgba(255,255,255, 1);
     --hover-row-bg-color: rgb(251, 252, 252);
     --primary-accent-color: #5A5C91;
     --primary-bg-color: rgba(68,71,145, 0.3);

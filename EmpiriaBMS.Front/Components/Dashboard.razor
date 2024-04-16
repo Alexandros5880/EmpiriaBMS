@@ -239,7 +239,10 @@ else
 
                                                     @if (isWorkingMode && AssignPm)
                                                     {
-                                                        <td class="align-middle">
+                                                        <td class="align-middle
+                                                                @((_selectedProject == null ||
+                                                                        !_selectedProject.Id.Equals(project.Id)
+                                                                                        ? "" : "selected_table_row"))">
                                                             @if (project.Category?.CanAssignePM ?? false)
                                                             {
                                                                 @if (!string.IsNullOrEmpty(project.PmName))
@@ -327,7 +330,10 @@ else
 
                                                     @if (isWorkingMode && AssignEngineer)
                                                     {
-                                                        <td class="align-middle">
+                                                        <td class="align-middle
+                                                                @((_selectedDiscipline == null ||
+                                                                        !_selectedDiscipline.Id.Equals(discipline.Id)
+                                                                                        ? "" : "selected_table_row"))">
                                                             <span class="clarity--assign-user-line"
                                                                   @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
                                                             </span>
@@ -412,7 +418,10 @@ else
 
                                                         @if (isWorkingMode && AssignDesigner)
                                                         {
-                                                            <td class="align-middle">
+                                                            <td class="align-middle
+                                                                @((_selectedDraw == null ||
+                                                                        !_selectedDraw.Id.Equals(draw?.Id)
+                                                                                        ? "" : "selected_table_row"))">
                                                                 <span class="clarity--assign-user-line"
                                                                         @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
                                                                 </span>
