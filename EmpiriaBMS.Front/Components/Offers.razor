@@ -4,7 +4,7 @@
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
 
-
+@inject IDialogService DialogService
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
 @inject IWebHostEnvironment HostEnvironment
@@ -18,19 +18,19 @@
 
 <div class="mt-3">
     <FluentStack>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="AddOffer">
             Add Offer
         </FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Edit())">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Edit())" OnClick="EditOffer">
             Edit Offer
         </FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Delete())" Appearance="Appearance.Neutral">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Delete())" Appearance="Appearance.Neutral" OnClick="DeleteOffer">
             Delete Offer
         </FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.LockOpen())" Appearance="Appearance.Accent">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.LockOpen())" Appearance="Appearance.Accent" OnClick="OpenOffer">
             Open Offer
         </FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.LockClosed())" Appearance="Appearance.Accent">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.LockClosed())" Appearance="Appearance.Accent" OnClick="CloseOffer">
             Close Offer
         </FluentButton>
     </FluentStack>

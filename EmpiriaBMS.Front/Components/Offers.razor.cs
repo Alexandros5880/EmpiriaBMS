@@ -2,6 +2,9 @@
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
@@ -86,6 +89,44 @@ public partial class Offers
         _selectedOfferState = _offerStates.FirstOrDefault();
         _selectedOfferType = _offerTypes.FirstOrDefault();
         await _getOffers(_selectedOfferState.Id, _selectedOfferType.Id);
-        StateHasChanged();  
+        StateHasChanged();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private async void AddOffer(MouseEventArgs e)
+    {
+        
+    }
+
+    private async void EditOffer(MouseEventArgs e)
+    {
+
+    }
+
+    private async void DeleteOffer(MouseEventArgs e)
+    {
+
+    }
+
+    private async void OpenOffer(MouseEventArgs e)
+    {
+
+    }
+
+    private async void CloseOffer(MouseEventArgs e)
+    {
+
     }
 }
