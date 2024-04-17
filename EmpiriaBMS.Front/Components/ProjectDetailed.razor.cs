@@ -26,17 +26,19 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     bool seeCode => _sharedAuthData.Permissions.Any(p => p.Ord == 13);
     #endregion
 
-    private ProjectGroupVM _createdGroup = new ProjectGroupVM();
     private ProjectValidator _validator = new ProjectValidator();
-    private List<ProjectGroupDto> _projectGroups = new List<ProjectGroupDto>();
+    private List<ProjectSubCategoryDto> _projectSubCategories = new List<ProjectSubCategoryDto>();
     private List<ProjectStageDto> _projectStages = new List<ProjectStageDto>();
-    private List<ProjectTypeDto> _projectTypes = new List<ProjectTypeDto>();
+    private List<ProjectCategoryDto> _projectCategories = new List<ProjectCategoryDto>();
     private ProjectVM _project = new ProjectVM();
 
-    private async Task _getProjectGroups()
+    private async Task _getProjectSubCategories(int id = 0)
     {
-        _projectGroups.Clear();
-        _projectGroups = (await DataProvider.ProjectsGroups.GetAll()).ToList();
+        _projectSubCategories.Clear();
+        if (id == 0)
+            _projectSubCategories = (await DataProvider.ProjectsSubCategories.GetAll()).ToList();
+        else
+            _projectSubCategories = (await DataProvider.ProjectsSubCategories.GetAll(id)).ToList();
     }
 
     private async Task _getProjectStages()
@@ -45,27 +47,23 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         _projectStages = (await DataProvider.ProjectStages.GetAll()).ToList();
     }
 
-    private async Task _getProjectTypes()
+    private async Task _getProjectCategories()
     {
-        _projectTypes.Clear();
-        _projectTypes = (await DataProvider.ProjectsTypes.GetAll()).ToList();
+        _projectCategories.Clear();
+        _projectCategories = (await DataProvider.ProjectsCategories.GetAll()).ToList();
     } 
 
     public async void PrepairForNew()
     {
         isNew = true;
-        await _getProjectGroups();
+        await _getProjectSubCategories();
         await _getProjectStages();
-        await _getProjectTypes();
-        _createdGroup = new ProjectGroupVM();
+        await _getProjectCategories();
         _project = new ProjectVM();
         _project.Active = true;
-        //_project.GroupId = _projectGroups.FirstOrDefault().Id;
-        //_project.StageId = _projectStages.FirstOrDefault().Id;
-        //_project.TypeId = _projectTypes.FirstOrDefault().Id;
-        _project.GroupId = 0;
+        _project.CategoryId = 0;
         _project.StageId = 0;
-        _project.TypeId = 0;
+        _project.CategoryId = 0;
         await _map.Search(null);
         StateHasChanged();
     }
@@ -73,47 +71,44 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     public async void PrepairForEdit(ProjectVM project)
     {
         isNew = false;
-        await _getProjectGroups();
+        await _getProjectSubCategories();
         await _getProjectStages();
-        await _getProjectTypes();
-        _createdGroup = new ProjectGroupVM();
+        await _getProjectCategories();
         _project = project;
         await _map.SetAddress(project.Address);
         StateHasChanged();
     }
 
-    private void _updateProjectType(ChangeEventArgs e)
+    private async Task _updateProjectCategory(ChangeEventArgs e)
     {
-        var projectTypeId = Convert.ToInt32(e.Value);
-        _project.TypeId = projectTypeId;
-        var typeDto = _projectTypes.FirstOrDefault(g => g.Id == projectTypeId);
-        _project.Type = Mapping.Mapper.Map<ProjectType>(typeDto);
+        var id = Convert.ToInt32(e.Value);
+        // Get SubCategories if If Projects Category Parent is Diffrent
+        if (_project.Category?.CategoryId != id)
+        {
+            await _getProjectSubCategories(id);
+            StateHasChanged();
+        } else
+        {
+            _projectSubCategories.Clear();
+            StateHasChanged();
+        }
     }
 
     private void _updateProjectStage(ChangeEventArgs e)
     {
-        var projectStageId = Convert.ToInt32(e.Value);
-        _project.StageId = projectStageId;
-        var stageDto = _projectStages.FirstOrDefault(g => g.Id == projectStageId);
-        _project.Stage = Mapping.Mapper.Map<ProjectStage>(stageDto);
+        var id = Convert.ToInt32(e.Value);
+        _project.StageId = id;
+        var dto = _projectStages.FirstOrDefault(g => g.Id == id);
+        _project.Stage = Mapping.Mapper.Map<ProjectStage>(dto);
     }
 
-    private void _updateProjectGroup(ChangeEventArgs e)
+    private void _updateProjectSubCategory(ChangeEventArgs e)
     {
-        _createdGroup = new ProjectGroupVM();
-        var projectGroupId = Convert.ToInt32(e.Value);
-        _project.GroupId = projectGroupId;
-        var groupDto = _projectGroups.FirstOrDefault(g => g.Id == projectGroupId);
-        _project.Group = Mapping.Mapper.Map<ProjectGroup>(groupDto);
-
-        _validator.ValidateProperty(_project, nameof(ProjectVM.GroupId), _project.GroupId);
-        StateHasChanged();
-    }
-
-    private void _onGroupNameChange(ChangeEventArgs e)
-    {
-        var value = e.Value.ToString();
-        _validator.ValidateProperty(_project, "GroupName", value);
+        var id = Convert.ToInt32(e.Value);
+        _project.CategoryId = id;
+        var dto = _projectSubCategories.FirstOrDefault(g => g.Id == id);
+        _project.Category = Mapping.Mapper.Map<ProjectSubCategory>(dto);
+        _validator.ValidateProperty(_project, nameof(ProjectVM.CategoryId), _project.CategoryId);
         StateHasChanged();
     }
 
@@ -124,40 +119,13 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
             _project.Address = address;
     }
 
-    private async Task _createGroup()
-    {
-        try
-        {
-            if (!_validator.ValidateProperty(_project, "GroupName", _createdGroup.Name))
-                return;
-
-            var dto = Mapper.Map<ProjectGroupDto>(_createdGroup);
-            ProjectGroupDto result = await DataProvider.ProjectsGroups.Add(dto);
-            if (result == null)
-                throw new NullReferenceException(nameof(result));
-
-            _createdGroup = new ProjectGroupVM();
-
-            _project.GroupId = result.Id;
-            _project.Group = Mapping.Mapper.Map<ProjectGroup>(result);
-
-            PrepairForEdit(_project);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-
-    }
-
     public async Task HandleValidSubmit()
     {
         try
         {
-            _project.Group = null;
+            _project.Category = null;
             _project.Stage = null;
-            _project.Type = null;
+            _project.Category = null;
 
             // If Addres Save Address
             if(_project?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(_project.Address.PlaceId))))

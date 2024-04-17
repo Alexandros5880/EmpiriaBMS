@@ -3,7 +3,7 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DisciplineTypeVM : BaseValidator
+public class DisciplineTypeVM : BaseVM
 {
     private string _name;
     public string Name

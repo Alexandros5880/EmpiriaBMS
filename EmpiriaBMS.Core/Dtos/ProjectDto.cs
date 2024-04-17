@@ -23,13 +23,8 @@ public class ProjectDto : EntityDto
 
     public long EstimatedHours { get; set; }
 
-    public double? Fee { get; set; }
-
-    public int GroupId { get; set; }
-    public ProjectGroup Group { get; set; }
-
-    public int TypeId { get; set; }
-    public ProjectType Type { get; set; }
+    public int? CategoryId { get; set; }
+    public ProjectSubCategory Category { get; set; }
 
     public int StageId { get; set; }
     public ProjectStage Stage { get; set; }
@@ -49,13 +44,19 @@ public class ProjectDto : EntityDto
 
     public int? CalculationDaly { get; set; }
 
-    public int? CustomerId { get; set; }
-    public User? Customer { get; set; }
-
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 
+    public int? ClientId { get; set; }
+    public User? Client { get; set; }
+
     public ICollection<Invoice> Invoices { get; set; }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<Discipline> Disciplines { get; set; }
+
+    public ICollection<Issue> Complains { get; set; }
 
     public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 }

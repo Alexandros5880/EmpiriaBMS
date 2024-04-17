@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class ProjectGroupRepo : Repository<ProjectGroupDto, ProjectGroup>
+public class OfferStateRepo : Repository<OfferStateDto, OfferState>
 {
-    public ProjectGroupRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public OfferStateRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 }

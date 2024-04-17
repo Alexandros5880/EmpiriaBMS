@@ -1,16 +1,20 @@
 ﻿using EmpiriaMS.Models.Models;
-using EmpiriaMS.Models.Models.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class ProjectGroup : Entity
+public class Client : User
 {
-    public string? Name { get; set; }
+    [Required]
+    public string CompanyName { get; set; }
+
+    public int? AddressId { get; set; }
+    public Address? Address { get; set; }
 
     public ICollection<Project> Projects { get; set; }
 }

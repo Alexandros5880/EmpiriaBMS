@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
-public class RoleVM : BaseValidator
+public class RoleVM : BaseVM
 {
     private string? _name;
     public string? Name

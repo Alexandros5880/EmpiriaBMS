@@ -4,23 +4,23 @@ using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class PaymentVM : BaseValidator
+public class PaymentVM : BaseVM
 {
-    private DateTime? _estPaymentDate;
-    public DateTime? EstPaymentDate
+    private DateTime? _estimatedDate;
+    public DateTime? EstimatedDate
     {
-        get => _estPaymentDate;
+        get => _estimatedDate;
         set
         {
-            if (value == _estPaymentDate)
+            if (value == _estimatedDate)
                 return;
-            _estPaymentDate = value;
-            NotifyPropertyChanged(nameof(EstPaymentDate));
+            _estimatedDate = value;
+            NotifyPropertyChanged(nameof(EstimatedDate));
         }
     }
 
-    private DateTime? _paymentDate;
-    public DateTime? PaymentDate
+    private DateTime _paymentDate;
+    public DateTime PaymentDate
     {
         get => _paymentDate;
         set
@@ -29,45 +29,6 @@ public class PaymentVM : BaseValidator
                 return;
             _paymentDate = value;
             NotifyPropertyChanged(nameof(PaymentDate));
-        }
-    }
-
-    private int? _delayInPayment;
-    public int? DelayInPayment
-    {
-        get => _delayInPayment;
-        set
-        {
-            if (value == _delayInPayment)
-                return;
-            _delayInPayment = value;
-            NotifyPropertyChanged(nameof(DelayInPayment));
-        }
-    }
-
-    private string _paymentDetails;
-    public string PaymentDetails
-    {
-        get => _paymentDetails;
-        set
-        {
-            if (value == _paymentDetails)
-                return;
-            _paymentDetails = value;
-            NotifyPropertyChanged(nameof(PaymentDetails));
-        }
-    }
-
-    private double? _dayCost;
-    public double? DayCost
-    {
-        get => _dayCost;
-        set
-        {
-            if (value == _dayCost)
-                return;
-            _dayCost = value;
-            NotifyPropertyChanged(nameof(DayCost));
         }
     }
 
@@ -84,29 +45,42 @@ public class PaymentVM : BaseValidator
         }
     }
 
-    private int? _daysUntilPayment;
-    public int? DaysUntilPayment
+    private double _paidFee;
+    public double PaidFee
     {
-        get => _daysUntilPayment;
+        get => _paidFee;
         set
         {
-            if (value == _daysUntilPayment)
+            if (value == _paidFee)
                 return;
-            _daysUntilPayment = value;
-            NotifyPropertyChanged(nameof(DaysUntilPayment));
+            _paidFee = value;
+            NotifyPropertyChanged(nameof(PaidFee));
         }
     }
 
-    private double? _pendingPayments;
-    public double? PendingPayments
+    private double _fee;
+    public double Fee
     {
-        get => _pendingPayments;
+        get => _fee;
         set
         {
-            if (value == _pendingPayments)
+            if (value == _fee)
                 return;
-            _pendingPayments = value;
-            NotifyPropertyChanged(nameof(PendingPayments));
+            _fee = value;
+            NotifyPropertyChanged(nameof(Fee));
+        }
+    }
+
+    private string _description;
+    public string Description
+    {
+        get => _description;
+        set
+        {
+            if (value == _description)
+                return;
+            _description = value;
+            NotifyPropertyChanged(nameof(Description));
         }
     }
 
@@ -162,26 +136,19 @@ public class PaymentVM : BaseValidator
         }
     }
 
-    public PaymentVM()
-    {
-        EstPaymentDate = DateTime.Now;
-        PaymentDate = DateTime.Now;
-    }
+    public PaymentVM() { }
 
     public PaymentVM(PaymentVM payment)
     {
-        EstPaymentDate = payment.EstPaymentDate;
+        EstimatedDate = payment.EstimatedDate;
         PaymentDate = payment.PaymentDate;
-        DelayInPayment = payment.DelayInPayment;
-        PaymentDetails = payment.PaymentDetails;
-        DayCost = payment.DayCost;
+        PaidFee = payment.PaidFee;
+        Fee = payment.Fee;
         Bank = payment.Bank;
-        DaysUntilPayment = payment.DaysUntilPayment;
-        PendingPayments = payment.PendingPayments;
         TypeId = payment.TypeId;
-        Type = null;
+        Type = payment.Type;
         InvoiceId = payment.InvoiceId;
-        Invoice = null;
+        Invoice = payment.Invoice;
     }
 
 }

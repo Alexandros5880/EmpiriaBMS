@@ -8,34 +8,36 @@ using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Kiota.Abstractions;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using static Microsoft.Fast.Components.FluentUI.Icons.Filled.Size16;
 
 namespace EmpiriaBMS.Front.ViewModel.Validation;
 
 public class ProjectValidator : BaseValidator<ProjectVM>
 {
-    #region Group
-    private bool _createGroupValid = false;
-    public bool CreateGroupValid
+    #region SubCategory
+    private bool _createSubCategoryValid = false;
+    public bool CreateSubCategoryValid
     {
-        get => _createGroupValid;
+        get => _createSubCategoryValid;
         set
         {
-            if (value == _createGroupValid)
+            if (value == _createSubCategoryValid)
                 return;
-            _createGroupValid = value;
-            NotifyPropertyChanged(nameof(CreateGroupValid));
+            _createSubCategoryValid = value;
+            NotifyPropertyChanged(nameof(CreateSubCategoryValid));
         }
     }
 
-    private string _createGroupErr = null;
-    public string CreateGroupErr {
-        get => _createGroupErr;
+    private string _createSubCategoryErr = null;
+    public string CreateSubCategoryErr
+    {
+        get => _createSubCategoryErr;
         set
         {
-            if (value == _createGroupErr)
+            if (value == _createSubCategoryErr)
                 return;
-            _createGroupErr = value;
-            NotifyPropertyChanged(nameof(CreateGroupErr));
+            _createSubCategoryErr = value;
+            NotifyPropertyChanged(nameof(CreateSubCategoryErr));
         }
     }
     #endregion
@@ -68,30 +70,30 @@ public class ProjectValidator : BaseValidator<ProjectVM>
     }
     #endregion
 
-    #region GroupId
-    private bool _groupIdValid = false;
-    public bool GroupIdValid
+    #region CategoryId
+    private bool _categoryIdValid = false;
+    public bool CategoryIdValid
     {
-        get => _groupIdValid;
+        get => _categoryIdValid;
         set
         {
-            if (value == _groupIdValid)
+            if (value == _categoryIdValid)
                 return;
-            _groupIdValid = value;
-            NotifyPropertyChanged(nameof(GroupIdValid));
+            _categoryIdValid = value;
+            NotifyPropertyChanged(nameof(CategoryIdValid));
         }
     }
 
-    private string _groudpIdErr = null;
-    public string GroupIdErr
+    private string _categoryIdErr = null;
+    public string CategoryIdErr
     {
-        get => _groudpIdErr;
+        get => _categoryIdErr;
         set
         {
-            if (value == _groudpIdErr)
+            if (value == _categoryIdErr)
                 return;
-            _groudpIdErr = value;
-            NotifyPropertyChanged(nameof(GroupIdErr));
+            _categoryIdErr = value;
+            NotifyPropertyChanged(nameof(CategoryIdErr));
         }
     }
     #endregion
@@ -104,21 +106,40 @@ public class ProjectValidator : BaseValidator<ProjectVM>
 
             switch (propertyName)
             {
-                case "GroupName":
-                    CreateGroupValid = !string.IsNullOrEmpty((string)value);
-                    CreateGroupErr = CreateGroupValid ? null : "Group name requared!";
-                    return CreateGroupValid;
-                case nameof(ProjectVM.GroupId):
-                    GroupIdValid = Convert.ToInt32(value) != 0;
-                    GroupIdErr = NameValid ? null : "Group requared!";
-                    return GroupIdValid;
+                case "SubCategoryName":
+                    CreateSubCategoryValid = !string.IsNullOrEmpty((string)value);
+                    CreateSubCategoryErr = CreateSubCategoryValid ? null : "SubCategory name requared!";
+                    return CreateSubCategoryValid;
                 case nameof(ProjectVM.Name):
                     NameValid = !string.IsNullOrEmpty((string)value);
-                    NameErr = NameValid ? null : "Group name requared!";
+                    NameErr = NameValid ? null : "Name requared!";
+                    return NameValid;
+                case nameof(ProjectVM.CategoryId    ):
+                    NameValid = !string.IsNullOrEmpty((string)value);
+                    NameErr = NameValid ? null : "Category requared!";
                     return NameValid;
                 default:
                     return true;
             }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+
+            return false;
+        }
+    }
+
+    public new bool Validate(ProjectVM obj)
+    {
+        try
+        {
+            ValidateProperty(obj, nameof(ProjectVM.CategoryId), obj.CategoryId);
+            ValidateProperty(obj, nameof(ProjectVM.Name), obj.Name);
+            ValidateProperty(obj, nameof(ProjectVM.CategoryId), obj.CategoryId);
+
+            return CreateSubCategoryValid || NameValid;
         }
         catch (Exception ex)
         {

@@ -1,0 +1,207 @@
+﻿@using Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Front.Components.General
+@using EmpiriaBMS.Front.Components
+@using EmpiriaBMS.Front.Horizontal
+@using EmpiriaBMS.Front.Services
+
+@inject IDialogService DialogService
+@inject TeamsUserCredential teamsUserCredential
+@inject MicrosoftTeams MicrosoftTeams
+@inject IWebHostEnvironment HostEnvironment
+@inject IConfiguration Configuration
+@inject NavigationManager MyNavigationManager
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+@inject TimerService TimerService
+@inject AuthorizeServices authorizeServices
+@inject SharedAuthDataService _sharedAuthData
+
+<div class="mt-3">
+    <FluentStack>
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="AddOffer">
+            Add Offer
+        </FluentButton>
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Edit())" OnClick="EditOffer">
+            Edit Offer
+        </FluentButton>
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Delete())" Appearance="Appearance.Neutral" OnClick="DeleteOffer">
+            Delete Offer
+        </FluentButton>
+    </FluentStack>
+</div>
+
+
+<div class="row m-3 mt-4">
+
+    <div class="col-12">
+
+        <!-- Filters -->
+        <div class="d-flex justify-content-start">
+            <div>
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Items="@_offerStates"
+                                TOption="OfferStateVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == _selectedOfferState.Id)"
+                                @bind-SelectedOption="@SelectedOfferState" />
+            </div>
+            <div class="ms-2">
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Items="@_offerTypes"
+                                TOption="OfferTypeVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == _selectedOfferType.Id)"
+                                @bind-SelectedOption="@SelectedOfferType" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Offers Table -->
+    <div class="col-12 border border-1 rounded mt-1">
+        <div class="table-responsive p-1 table-container">
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="sticky-header">State</th>
+                        <th scope="col" class="sticky-header">Type</th>
+                        <th scope="col" class="sticky-header">Code</th>
+                        <th scope="col" class="sticky-header">Date</th>
+                        <th scope="col" class="sticky-header">Desciption</th>
+                        <th scope="col" class="sticky-header">PudgetPrice</th>
+                        <th scope="col" class="sticky-header">OfferPrice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var offer in _offers)
+                    {
+                        <tr class="align-middle" @onclick="@(() => _selectedOffer = offer)">
+
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
+                                <labe>@offer.State.Name</labe>
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
+                                <labe>@offer.Type.Name</labe>
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
+                                <labe>@offer.Code</labe>
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
+                                <labe>@offer.Date?.ToEuropeFormat()</labe>
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
+                                <p style="word-wrap: break-word; max-width: 100px;">@offer.Date?.ToEuropeFormat()</p>
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
+                                <labe>@offer.PudgetPrice</labe>
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
+                                <labe>@offer.OfferPrice</labe>
+                            </td>
+                            
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Dialog -->
+<FluentDialog @ref="_dialog"
+              Hidden="@(!_isDialogOdepened)"
+              Modal="false"
+              DialogType=@DialogType.Panel
+              style="--dialog-width: 640px !important;
+                     --dialog-height: auto !important;">
+
+    <div class="modal-body row mb-1">
+
+        <div class="col-12 dialog-header">
+            <span class="carbon--close-outline float-end" @onclick="@CloseDialogClick"></span>
+        </div>
+
+        <div class="col-12 justify-content-center">
+            @if (_selectedOffer != null)
+            {
+                <OfferDetailed States="@_offerStates"
+                               Types="@_offerTypes" 
+                               Offer="@_selectedOffer"
+                               OnCansel="@CloseDialogClick"
+                               OnSave="@(async () => await SaveDialogClick())" />
+            }
+        </div>
+
+    </div>
+
+</FluentDialog>
+
+<!-- On Delete Dialog -->
+<FluentDialog @ref="_deleteDialog"
+              Hidden="@(!_isDeleteDialogOdepened)"
+              Modal="true"
+              DialogType=@DialogType.Panel
+              style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+    <div class="modal-body row mb-1">
+
+        <div class="col-12 dialog-header row">
+            <div class="col-10">
+                <h3>Delete Record</h3>
+            </div>
+            <span class="col-2 carbon--close-outline float-end" @onclick="OnDeleteClose"></span>
+        </div>
+
+        <div class="col-12 justify-content-center">
+            @if(_selectedOffer != null)
+            {
+                <p>Are you sure you want delete @_selectedOffer.Code</p>
+            }
+        </div>
+
+    </div>
+
+    <div class="row">
+        <FluentButton class="col-6"
+                      OnClick="@(async () => await OnDeleteAccept())">
+            Ok
+        </FluentButton>
+        <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
+            Cancel
+        </FluentButton>
+    </div>
+
+</FluentDialog>

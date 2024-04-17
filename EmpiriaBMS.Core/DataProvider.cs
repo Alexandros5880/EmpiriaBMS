@@ -21,7 +21,7 @@ public class DataProvider : IDataProvider, IDisposable
     public DrawingRepo Drawings { get; set; }
     public OtherRepo Others { get; set; }
     public InvoiceRepo Invoices { get; set; }
-    public ProjectTypeRepo ProjectsTypes { get; set; }
+    public ProjectCategoryRepo ProjectsCategories { get; set; }
     public OtherTypeRepo OthersTypes { get; set; }
     public DrawingTypeRepo DrawingsTypes { get; set; }
     public DisciplineTypeRepo DisciplinesTypes { get; set; }
@@ -31,8 +31,12 @@ public class DataProvider : IDataProvider, IDisposable
     public InvoiceTypeRepo InvoiceTypes { get; set; }
     public PaymentTypeRepo PaymentTypes { get; set; }
     public ProjectStageRepo ProjectStages { get; set; }
-    public ProjectGroupRepo ProjectsGroups { get; set; }
+    public ProjectSubCategoryRepo ProjectsSubCategories { get; set; }
     public AddressRepo Address { get; set; }
+    public ClientRepo Clients { get; set; }
+    public OfferTypeRepo OfferTypes { get; set; }
+    public OfferStateRepo OfferStates { get; set; }
+    public OfferRepo Offers { get; set; }
     public KpisRepo KPIS { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
@@ -43,7 +47,7 @@ public class DataProvider : IDataProvider, IDisposable
         Drawings = new DrawingRepo(dbFactory);
         Others = new OtherRepo(dbFactory);
         Invoices = new InvoiceRepo(dbFactory);
-        ProjectsTypes = new ProjectTypeRepo(dbFactory);
+        ProjectsCategories = new ProjectCategoryRepo(dbFactory);
         OthersTypes = new OtherTypeRepo(dbFactory);
         DrawingsTypes = new DrawingTypeRepo(dbFactory);
         DisciplinesTypes = new DisciplineTypeRepo(dbFactory);
@@ -53,8 +57,12 @@ public class DataProvider : IDataProvider, IDisposable
         InvoiceTypes = new InvoiceTypeRepo(dbFactory);
         PaymentTypes = new PaymentTypeRepo(dbFactory);
         ProjectStages = new ProjectStageRepo(dbFactory);
-        ProjectsGroups = new ProjectGroupRepo(dbFactory);
+        ProjectsSubCategories = new ProjectSubCategoryRepo(dbFactory);
         Address = new AddressRepo(dbFactory);
+        Clients = new ClientRepo(dbFactory);
+        OfferTypes = new OfferTypeRepo(dbFactory);
+        OfferStates = new OfferStateRepo(dbFactory);
+        Offers = new OfferRepo(dbFactory);
         KPIS = new KpisRepo(dbFactory);
     }
 
@@ -71,7 +79,7 @@ public class DataProvider : IDataProvider, IDisposable
                 Drawings.Dispose();
                 Others.Dispose();
                 Invoices.Dispose();
-                ProjectsTypes.Dispose();
+                ProjectsCategories.Dispose();
                 OthersTypes.Dispose();
                 DrawingsTypes.Dispose();
                 DisciplinesTypes.Dispose();
@@ -81,8 +89,12 @@ public class DataProvider : IDataProvider, IDisposable
                 InvoiceTypes.Dispose();
                 PaymentTypes.Dispose();
                 ProjectStages.Dispose();
-                ProjectsGroups.Dispose();
+                ProjectsSubCategories.Dispose();
                 Address.Dispose();
+                Clients.Dispose();
+                OfferTypes.Dispose();
+                OfferStates.Dispose();
+                Offers.Dispose();
                 KPIS.Dispose();
             }
             disposedValue = true;

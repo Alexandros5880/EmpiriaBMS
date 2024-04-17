@@ -3,7 +3,7 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class OtherVM : BaseValidator
+public class OtherVM : BaseVM
 {
     private int? _typeId;
     public int? TypeId

@@ -7,8 +7,8 @@ namespace EmpiriaBMS.Front.Components.Admin.ProjectsTypes;
 public partial class ProjectsTypes
 {
     private Paginator _paginator;
-    private ObservableCollection<ProjectTypeVM> _source = new ObservableCollection<ProjectTypeVM>();
-    private ProjectTypeVM _selectedItem = new ProjectTypeVM();
+    private ObservableCollection<ProjectCategoryVM> _source = new ObservableCollection<ProjectCategoryVM>();
+    private ProjectCategoryVM _selectedItem = new ProjectCategoryVM();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -16,7 +16,7 @@ public partial class ProjectsTypes
 
         if (firstRender)
         {
-            _paginator.SetRecordsLength(await DataProvider.ProjectsTypes.Count());
+            _paginator.SetRecordsLength(await DataProvider.ProjectsCategories.Count());
             await _getSource();
 
             StateHasChanged();
@@ -25,8 +25,8 @@ public partial class ProjectsTypes
 
     private async Task _getSource()
     {
-        var dtos = await DataProvider.ProjectsTypes.GetAll(_paginator.PageSize, _paginator.PageIndex);
-        var vms = Mapper.Map<List<ProjectTypeVM>>(dtos);
+        var dtos = await DataProvider.ProjectsCategories.GetAll(_paginator.PageSize, _paginator.PageIndex);
+        var vms = Mapper.Map<List<ProjectCategoryVM>>(dtos);
         _source.Clear();
         vms.ForEach(_source.Add);
     }

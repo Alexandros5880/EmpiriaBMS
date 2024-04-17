@@ -1,0 +1,101 @@
+﻿@using Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Front.Services
+
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+
+
+<div class="row m-3 mt-4">
+
+    <div class="col-12 mt-3 row">
+
+        <div class="col-6">
+            <FluentCombobox Id="states"
+                            Class="w-100"
+                            Placeholder="Select State"
+                            Label="States:"
+                            Autocomplete="ComboboxAutocomplete.Both"
+                            AriaLabel="Pre-selected option"
+                            Items="@States"
+                            TOption="OfferStateVM"
+                            OptionValue="@((t) => t.Id.ToString())"
+                            OptionText="@((t) => t.Name)"
+                            OptionSelected="@(i => i.Id == @Offer.StateId)"
+                            @bind-SelectedOption="@SelectedOfferState" />
+        </div>
+
+        <div class="col-6">
+            <FluentCombobox Id="types"
+                            Class="w-100"
+                            Placeholder="Select Type"
+                            Label="Types:"
+                            Autocomplete="ComboboxAutocomplete.Both"
+                            AriaLabel="Pre-selected option"
+                            Items="@Types"
+                            TOption="OfferTypeVM"
+                            OptionValue="@((t) => t.Id.ToString())"
+                            OptionText="@((t) => t.Name)"
+                            OptionSelected="@(i => i.Id == @Offer.TypeId)"
+                            @bind-SelectedOption="@SelectedOfferType" />
+        </div>
+
+    </div>
+
+    <div class="col-12 mt-2 row">
+
+        <div class="col-6">
+            <FluentTextField Label="Code:" Class="w-100" @bind-Value="@Offer.Code" />
+        </div>
+
+        <div class="col-6">
+            <FluentDatePicker Label="Date:" Class="w-100" @bind-Value="@Offer.Date" />
+        </div>
+
+    </div>
+
+    <div class="col-12 mt-2 row">
+
+        <div class="col-6">
+            <FluentNumberField Label="Pudget:" Class="w-100" @bind-Value="@Offer.PudgetPrice" />
+        </div>
+
+        <div class="col-6">
+            <FluentNumberField Label="Offer:" Class="w-100" @bind-Value="@Offer.OfferPrice" />
+        </div>
+
+    </div>
+
+    <div class="col-12 mt-2 row">
+        <FluentTextArea Label="Description:" Class="col-12" @bind-Value="@Offer.Description" />
+    </div>
+
+    <div class="col-12 mt-2 row">
+        <FluentTextArea Label="Team Text:" Class="col-12" @bind-Value="@Offer.TeamText" />
+    </div>
+
+    <div class="col-12 mt-2 row">
+        <FluentTextArea Label="Comments:" Class="col-12" @bind-Value="@Offer.Comments" />
+    </div>
+
+    <div class="col-12 mt-2 row">
+
+        <div class="col-6"> 
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Backpack())"
+                          OnClick="@(async () => await OnCansel.InvokeAsync())"
+                          Style="float: left;">
+                Cancel
+            </FluentButton>
+        </div>
+
+        <div class="col-6">
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Save())"
+                          OnClick="@(async () => await Save())"
+                          Style="float: right;"
+                          Disabled=false>
+                Save
+            </FluentButton>
+        </div>
+        
+    </div>
+
+</div>

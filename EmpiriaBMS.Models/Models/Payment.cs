@@ -12,30 +12,28 @@ namespace EmpiriaBMS.Models.Models;
 
 public class Payment : Entity
 {
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime? EstimatedDate { get; set; }
+
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime PaymentDate { get; set; }
+
+    public string? Bank { get; set; }
+
+    public double PaidFee { get; set; }
+
+    [Required]
+    public double Fee { get; set; }
+
+    public string? Description { get; set; }
+
     [Required]
     public int TypeId { get; set; }
     public PaymentType Type { get; set; }
 
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime? EstPaymentDate { get; set; }
-
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime? PaymentDate { get; set; }
-
-    public int? DelayInPayment { get; set; }
-
-    public string? PaymentDetails { get; set; }
-
-    public double? DayCost { get; set; }
-
-    public string? Bank { get; set; }
-
-    public int? DaysUntilPayment { get; set; }
-
-    public double? PendingPayments { get; set; }
-
+    [Required]
     public int InvoiceId { get; set; }
 
     public Invoice Invoice { get; set; }

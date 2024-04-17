@@ -4,7 +4,7 @@ using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class InvoiceTypeVM : BaseValidator
+public class InvoiceTypeVM : BaseVM
 {
     private string _name;
     public string Name

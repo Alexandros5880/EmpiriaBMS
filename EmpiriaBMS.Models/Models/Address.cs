@@ -21,4 +21,5 @@ public class Address : Entity
     public double Longitude { get; set; }
 
     public List<Project> Projects { get; set; }
+    public List<Client> Clients { get; set; }
 }

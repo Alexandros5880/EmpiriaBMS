@@ -2,7 +2,7 @@
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class ProjectStageVM : BaseValidator
+public class ProjectStageVM : BaseVM
 {
     private string? _name;
     public string? Name

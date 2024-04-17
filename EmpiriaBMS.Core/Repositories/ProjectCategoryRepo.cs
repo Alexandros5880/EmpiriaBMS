@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class ProjectTypeRepo : Repository<ProjectTypeDto, ProjectType>, IDisposable
+public class ProjectCategoryRepo : Repository<ProjectCategoryDto, ProjectCategory>, IDisposable
 {
-    public ProjectTypeRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public ProjectCategoryRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 }

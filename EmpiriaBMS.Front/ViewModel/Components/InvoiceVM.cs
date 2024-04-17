@@ -6,7 +6,7 @@ using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
-public class InvoiceVM : BaseValidator
+public class InvoiceVM : BaseVM
 {
     private double? _total;
     public double? Total
