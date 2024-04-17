@@ -29,6 +29,7 @@ public partial class Offers
             if (_selectedOfferState != value)
             {
                 _selectedOfferState = value;
+                _selectedOffer = null;
                 _getOffers(_selectedOfferState.Id, SelectedOfferType.Id, refresh: true);
             }
         }
@@ -43,6 +44,7 @@ public partial class Offers
             if (_selectedOfferType != value)
             {
                 _selectedOfferType = value;
+                _selectedOffer = null;
                 _getOffers(_selectedOfferState.Id, SelectedOfferType.Id, refresh: true);
             }
         }
@@ -148,16 +150,6 @@ public partial class Offers
             _deleteDialog.Show();
             _isDeleteDialogOdepened = true;
         } 
-    }
-
-    private async void OpenOffer(MouseEventArgs e)
-    {
-
-    }
-
-    private async void CloseOffer(MouseEventArgs e)
-    {
-
     }
     #endregion
 
