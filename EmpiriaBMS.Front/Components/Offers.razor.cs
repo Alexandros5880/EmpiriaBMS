@@ -54,6 +54,10 @@ public partial class Offers
     private FluentDialog _dialog;
     private bool _isDialogOdepened = false;
 
+    // On Delete Dialog
+    private FluentDialog _deleteDialog;
+    private bool _isDeleteDialogOdepened = false;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -137,9 +141,13 @@ public partial class Offers
         _isDialogOdepened = true;
     }
 
-    private async void DeleteOffer(MouseEventArgs e)
+    private void DeleteOffer(MouseEventArgs e)
     {
-
+        if (_selectedOffer != null)
+        {
+            _deleteDialog.Show();
+            _isDeleteDialogOdepened = true;
+        } 
     }
 
     private async void OpenOffer(MouseEventArgs e)
@@ -150,6 +158,31 @@ public partial class Offers
     private async void CloseOffer(MouseEventArgs e)
     {
 
+    }
+    #endregion
+
+    #region Delete Dialog Actions
+    private async Task OnDeleteAccept()
+    {
+        if (_isDeleteDialogOdepened)
+        {
+            if (_selectedOffer != null)
+                await _dataProvider.Offers.Delete(_selectedOffer.Id);
+
+            _deleteDialog.Hide();
+            _isDeleteDialogOdepened = false;
+
+            await _getOffers(SelectedOfferState.Id, SelectedOfferType.Id, true);
+        }
+    }
+
+    private void OnDeleteClose()
+    {
+        if (_isDeleteDialogOdepened)
+        {
+            _deleteDialog.Hide();
+            _isDeleteDialogOdepened = false;
+        }
     }
     #endregion
 }

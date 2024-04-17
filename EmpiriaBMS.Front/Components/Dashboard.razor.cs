@@ -907,6 +907,7 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
+
     #region Add/Edit/Delete Project Actions
     private async Task NavigateOnMap(Address address)
     {

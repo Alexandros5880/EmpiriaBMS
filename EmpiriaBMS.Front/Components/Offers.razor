@@ -173,3 +173,41 @@
     </div>
 
 </FluentDialog>
+
+<!-- On Delete Dialog -->
+<FluentDialog @ref="_deleteDialog"
+              Hidden="@(!_isDeleteDialogOdepened)"
+              Modal="true"
+              DialogType=@DialogType.Panel
+              style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+    <div class="modal-body row mb-1">
+
+        <div class="col-12 dialog-header row">
+            <div class="col-10">
+                <h3>Delete Record</h3>
+            </div>
+            <span class="col-2 carbon--close-outline float-end" @onclick="OnDeleteClose"></span>
+        </div>
+
+        <div class="col-12 justify-content-center">
+            @if(_selectedOffer != null)
+            {
+                <p>Are you sure you want delete @_selectedOffer.Code</p>
+            }
+        </div>
+
+    </div>
+
+    <div class="row">
+        <FluentButton class="col-6"
+                      OnClick="@(async () => await OnDeleteAccept())">
+            Ok
+        </FluentButton>
+        <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
+            Cancel
+        </FluentButton>
+    </div>
+
+</FluentDialog>
