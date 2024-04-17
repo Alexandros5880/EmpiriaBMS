@@ -1,5 +1,7 @@
-﻿using EmpiriaBMS.Front.ViewModel.Validation.Contracts;
+﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.Validation.Contracts;
 using System.Reflection;
+using static Microsoft.Fast.Components.FluentUI.Icons.Filled.Size16;
 
 namespace EmpiriaBMS.Front.ViewModel.Validation.Base;
 
@@ -58,6 +60,11 @@ public class BaseValidator<T> : BNotifyPropertyChanged, IValidator<T>
 
             return false;
         }
+    }
+
+    public bool Validate(T obj)
+    {
+        return true;
     }
 
     protected object _getPropertyValue(object obj, string propertyName)

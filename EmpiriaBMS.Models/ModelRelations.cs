@@ -89,7 +89,7 @@ public static class ModelRelations
         builder.Entity<OfferState>()
                .HasMany(p => p.Offers)
                .WithOne(c => c.State)
-               .HasForeignKey(c => c.TypeId)
+               .HasForeignKey(c => c.StateId)
                .OnDelete(DeleteBehavior.Cascade);
 
         // Roles Parent And Children

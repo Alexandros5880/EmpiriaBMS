@@ -22,7 +22,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var offers = await _context.Set<Offer>()
-                                         .Where(o => stateId == 0 ? true : o.StateId == stateId && typeId == 0 ? true : o.TypeId == typeId)
+                                         .Where(o => o.StateId == stateId && o.TypeId == typeId)
                                          .Include(o => o.State)
                                          .Include(o => o.Type)
                                          .ToListAsync();

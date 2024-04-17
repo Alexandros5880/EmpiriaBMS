@@ -71,7 +71,6 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\ViewModels\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
-    <Folder Include="Components\Dialogs\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties apppackage_4manifest_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

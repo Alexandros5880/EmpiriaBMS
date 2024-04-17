@@ -26,11 +26,11 @@ public class Offer : Entity
     [Column(TypeName = "datetime2")]
     public DateTime? Date { get; set; }
 
-    public string? Description { get; set; }
-
     public double? PudgetPrice { get; set; }
 
     public double? OfferPrice { get; set; }
+
+    public string? Description { get; set; }
 
     public string? Observations { get; set; }
 

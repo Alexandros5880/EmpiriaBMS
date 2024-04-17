@@ -3,4 +3,5 @@
 public interface IValidator<T>
 {
     bool ValidateProperty(T obj, string propertyName, object fieldValue = null);
+    bool Validate(T obj);
 }

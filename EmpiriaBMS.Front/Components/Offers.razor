@@ -72,8 +72,8 @@
             <table class="table table-hover text-center">
                 <thead>
                     <tr>
-                        <th scope="col" class="sticky-header">Type</th>
                         <th scope="col" class="sticky-header">State</th>
+                        <th scope="col" class="sticky-header">Type</th>
                         <th scope="col" class="sticky-header">Code</th>
                         <th scope="col" class="sticky-header">Date</th>
                         <th scope="col" class="sticky-header">Desciption</th>
@@ -84,33 +84,54 @@
                 <tbody>
                     @foreach (var offer in _offers)
                     {
-                        <tr class="align-middle">
+                        <tr class="align-middle" @onclick="@(() => _selectedOffer = offer)">
 
-                            <td >
-                                <labe>@offer.Type.Name</labe>
-                            </td>
-
-                            <td>
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
                                 <labe>@offer.State.Name</labe>
                             </td>
 
-                            <td>
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
+                                <labe>@offer.Type.Name</labe>
+                            </td>
+
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
                                 <labe>@offer.Code</labe>
                             </td>
 
-                            <td>
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
                                 <labe>@offer.Date?.ToEuropeFormat()</labe>
                             </td>
 
-                            <td>
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
                                 <p style="word-wrap: break-word; max-width: 100px;">@offer.Date?.ToEuropeFormat()</p>
                             </td>
 
-                            <td>
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
                                 <labe>@offer.PudgetPrice</labe>
                             </td>
 
-                            <td>
+                            <td class="align-middle
+                                    @((_selectedOffer == null ||
+                                            !_selectedOffer.Id.Equals(offer.Id)
+                                                            ? "" : "selected_table_row"))">
                                 <labe>@offer.OfferPrice</labe>
                             </td>
                             
@@ -122,3 +143,33 @@
     </div>
 
 </div>
+
+
+<!-- Dialog -->
+<FluentDialog @ref="_dialog"
+              Hidden="@(!_isDialogOdepened)"
+              Modal="false"
+              DialogType=@DialogType.Panel
+              style="--dialog-width: 640px !important;
+                     --dialog-height: auto !important;">
+
+    <div class="modal-body row mb-1">
+
+        <div class="col-12 dialog-header">
+            <span class="carbon--close-outline float-end" @onclick="@CloseDialogClick"></span>
+        </div>
+
+        <div class="col-12 justify-content-center">
+            @if (_selectedOffer != null)
+            {
+                <OfferDetailed States="@_offerStates"
+                               Types="@_offerTypes" 
+                               Offer="@_selectedOffer"
+                               OnCansel="@CloseDialogClick"
+                               OnSave="@(async () => await SaveDialogClick())" />
+            }
+        </div>
+
+    </div>
+
+</FluentDialog>

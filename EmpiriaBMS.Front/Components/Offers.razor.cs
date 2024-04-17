@@ -1,10 +1,14 @@
-﻿using EmpiriaBMS.Front.Interop.TeamsSDK;
+﻿using BlazorBootstrap;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.Fast.Components.FluentUI.Utilities;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
@@ -25,7 +29,7 @@ public partial class Offers
             if (_selectedOfferState != value)
             {
                 _selectedOfferState = value;
-                _getOffers(refresh: true);
+                _getOffers(_selectedOfferState.Id, SelectedOfferType.Id, refresh: true);
             }
         }
     }
@@ -39,10 +43,16 @@ public partial class Offers
             if (_selectedOfferType != value)
             {
                 _selectedOfferType = value;
-                _getOffers(refresh: true);
+                _getOffers(_selectedOfferState.Id, SelectedOfferType.Id, refresh: true);
             }
         }
     }
+
+    private OfferVM _selectedOffer;
+
+    // On Add/Edit Offer Dialog
+    private FluentDialog _dialog;
+    private bool _isDialogOdepened = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -92,27 +102,39 @@ public partial class Offers
         StateHasChanged();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private async void AddOffer(MouseEventArgs e)
+    #region Dialogs Functions
+    private void CloseDialogClick()
     {
-        
+        if (_isDialogOdepened)
+        {
+            _dialog.Hide();
+            _isDialogOdepened = false;
+        }
     }
 
-    private async void EditOffer(MouseEventArgs e)
+    private async Task SaveDialogClick()
     {
+        if (_isDialogOdepened)
+        {
+            _dialog.Hide();
+            _isDialogOdepened = false;
 
+            await Refresh();
+        }
+    }
+
+    private void AddOffer(MouseEventArgs e)
+    {
+        _selectedOffer = null;
+        _selectedOffer = new OfferVM();
+        _dialog.Show();
+        _isDialogOdepened = true;
+    }
+
+    private void EditOffer(MouseEventArgs e)
+    {
+        _dialog.Show();
+        _isDialogOdepened = true;
     }
 
     private async void DeleteOffer(MouseEventArgs e)
@@ -129,4 +151,5 @@ public partial class Offers
     {
 
     }
+    #endregion
 }
