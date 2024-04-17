@@ -21,10 +21,15 @@
         <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="AddOffer">
             Add Offer
         </FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Edit())" OnClick="EditOffer">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Edit())"
+                      OnClick="EditOffer"
+                      Disabled="@(_selectedOffer == null || _selectedOffer.Id == 0)">
             Edit Offer
         </FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Delete())" Appearance="Appearance.Neutral" OnClick="DeleteOffer">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Delete())"
+                      Appearance="Appearance.Neutral"
+                      OnClick="DeleteOffer"
+                      Disabled="@(_selectedOffer == null || _selectedOffer.Id == 0)">
             Delete Offer
         </FluentButton>
     </FluentStack>

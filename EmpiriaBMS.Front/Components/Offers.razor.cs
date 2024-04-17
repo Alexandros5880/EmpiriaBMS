@@ -139,13 +139,16 @@ public partial class Offers
 
     private void EditOffer(MouseEventArgs e)
     {
-        _dialog.Show();
-        _isDialogOdepened = true;
+        if (_selectedOffer != null && _selectedOffer.Id != 0)
+        {
+            _dialog.Show();
+            _isDialogOdepened = true;
+        }  
     }
 
     private void DeleteOffer(MouseEventArgs e)
     {
-        if (_selectedOffer != null)
+        if (_selectedOffer != null && _selectedOffer.Id != 0)
         {
             _deleteDialog.Show();
             _isDeleteDialogOdepened = true;
