@@ -23,10 +23,21 @@
         *@
     }
     else {
+
+        <div class="row">
+            <!-- Hours Per RoleBar Chart-->
+            @if (SeeHoursPerRoleKPI)
+            {
+                <div class="col-lg-6 col-md-12" style="min-height: 300px;">
+                    <Chart Config="_hoursPerRoleBarConfig"></Chart>
+                </div>
+            }
+        </div>
+
         <div class="row">
 
             <!-- Hours Per RoleBar Chart-->
-            @if (SeeHoursPerRoleKPI)
+            @if (SeeTenderTableKPI)
             {
                 <div class="col-lg-6 col-md-12" style="min-height: 300px;">
                     <Chart Config="_hoursPerRoleBarConfig"></Chart>

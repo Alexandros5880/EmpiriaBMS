@@ -32,6 +32,7 @@ public partial class KpisLand : ComponentBase, IDisposable
     bool SeeAllProjectsMissedDeadLineKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 20);
     bool SeeEmployeeTurnoverKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 21);
     bool SeeMyProjectsMissedDeadLineKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 22);
+    bool SeeTenderTableKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 25);
     #endregion
 
     private decimal _missedDeadLineProject = 0;
