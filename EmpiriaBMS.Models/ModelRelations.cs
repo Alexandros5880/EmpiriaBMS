@@ -57,6 +57,13 @@ public static class ModelRelations
                .HasForeignKey(i => i.ProjectId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
+        // Offers Project
+        builder.Entity<Offer>()
+               .HasOne(i => i.Project)
+               .WithMany(p => p.Offers)
+               .HasForeignKey(i => i.ProjectId)
+               .OnDelete(DeleteBehavior.ClientCascade);
+
         // InvoiceType Invoices
         builder.Entity<InvoiceType>()
                .HasMany(p => p.Invoices)

@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Dtos;
 
@@ -28,4 +29,8 @@ public class OfferDto : EntityDto
     public string? TeamText { get; set; }
 
     public string? Comments { get; set; }
+
+    public int? ProjectId { get; set; }
+
+    public Project? Project { get; set; }
 }

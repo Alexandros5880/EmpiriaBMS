@@ -1,4 +1,5 @@
-﻿using EmpiriaMS.Models.Models.Base;
+﻿using EmpiriaMS.Models.Models;
+using EmpiriaMS.Models.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -37,4 +38,8 @@ public class Offer : Entity
     public string? TeamText { get; set; }
 
     public string? Comments { get; set; }
+
+    public int? ProjectId { get; set; }
+
+    public Project? Project { get; set; }
 }

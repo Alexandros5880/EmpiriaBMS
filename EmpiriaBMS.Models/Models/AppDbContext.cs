@@ -1766,6 +1766,13 @@ public class AppDbContext : DbContext
             Name = "HEDNO"
         };
         builder.Entity<OfferType>().HasData(offer_type_4);
+
+        int[] offerTypesIds =
+        {
+            offer_type_1_id,
+            offer_type_2_id,
+            offer_type_3_id
+        };
         #endregion
 
         #region Create OfferState
@@ -1808,6 +1815,14 @@ public class AppDbContext : DbContext
             Name = "WAITING FOR RESULT"
         };
         builder.Entity<OfferState>().HasData(offer_state_4);
+
+        int[] offerStatesIds =
+        {
+            offer_state_1_id,
+            offer_state_2_id,
+            offer_state_3_id,
+            offer_state_4_id
+        };
         #endregion
 
         #region Create Secretaries
@@ -2688,8 +2703,8 @@ public class AppDbContext : DbContext
             if (stagesIndex >= stagesLength-1)
                 stagesIndex = 0;
 
-        // Invoices
-        var invoiceId = random.Next(123456789, 999999999) + i * 3;
+            // Invoices
+            var invoiceId = random.Next(123456789, 999999999) + i * 3;
             Invoice invoice = new Invoice()
             {
                 Id = invoiceId,
@@ -2705,6 +2720,23 @@ public class AppDbContext : DbContext
                 TypeId = it_1_id
             };
             builder.Entity<Invoice>().HasData(invoice);
+
+            // Offers
+            var offerId = random.Next(123456789, 999999999) + i * 3;
+            Offer offer = new Offer()
+            {
+                Id = offerId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Code = $"Code CO-{i}",
+                TypeId = offerTypesIds[random.Next(0, 2)],
+                StateId = offerStatesIds[random.Next(0, 3)],
+                PudgetPrice = 1000 * i * 3,
+                OfferPrice = 1000 * i * 2,
+                ProjectId = projectId
+            };
+            builder.Entity<Offer>().HasData(offer);
         }
 
         // // Project Production Management 
@@ -2782,6 +2814,23 @@ public class AppDbContext : DbContext
                 TypeId = it_1_id
             };
             builder.Entity<Invoice>().HasData(invoice);
+
+            // Offers
+            var offerId = random.Next(123456789, 999999999) + i * 3;
+            Offer offer = new Offer()
+            {
+                Id = offerId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Code = $"Code CO-{i}",
+                TypeId = offerTypesIds[random.Next(0, 2)],
+                StateId = offerStatesIds[random.Next(0, 3)],
+                PudgetPrice = 1000 * i * 4,
+                OfferPrice = 1000 * i * 3,
+                ProjectId = projectId
+            };
+            builder.Entity<Offer>().HasData(offer);
 
             projectManagersIndex++;
             if (projectManagersIndex >= projectManagersLength)

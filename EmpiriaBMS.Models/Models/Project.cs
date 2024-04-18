@@ -53,6 +53,8 @@ public class Project : Entity
     public int? ClientId { get; set; }
     public Client? Client { get; set; }
 
+    public ICollection<Offer> Offers { get; set; }
+
     public ICollection<Invoice> Invoices { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }

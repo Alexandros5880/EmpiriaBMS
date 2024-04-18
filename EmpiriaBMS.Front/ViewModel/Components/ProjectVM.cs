@@ -269,6 +269,7 @@ public class ProjectVM : BaseVM
         }
     }
 
+    public ICollection<Offer> Offers { get; set; }
     public ICollection<Invoice> Invoices { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
