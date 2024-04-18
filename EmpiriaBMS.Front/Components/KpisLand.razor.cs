@@ -17,6 +17,7 @@ using Microsoft.Recognizers.Definitions;
 using static Microsoft.Fast.Components.FluentUI.Emojis.FoodDrink.Color.Default;
 using ChartJs.Blazor;
 using EmpiriaBMS.Front.Horizontal;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components;
 
@@ -371,6 +372,16 @@ public partial class KpisLand : ComponentBase, IDisposable
     {
         var userId = _sharedAuthData.LogedUser.Id;
         _delayedProjectsTypesCountByType = await _dataProvider.KPIS.GetActiveDelayedProjectTypesCountByType(userId);
+    }
+    #endregion
+
+    #region Tab Actions
+    string? activeid = "tab-1";
+    FluentTab? changedto;
+
+    private void HandleOnTabChange(FluentTab tab)
+    {
+        changedto = tab;
     }
     #endregion
 
