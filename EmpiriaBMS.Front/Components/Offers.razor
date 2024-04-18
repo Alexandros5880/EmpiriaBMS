@@ -45,21 +45,34 @@
             <div>
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                 AriaLabel="Pre-selected option"
+                                Height="400px"
+                                Items="@_projects"
+                                TOption="ProjectVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == SelectedProject?.Id)"
+                                @bind-SelectedOption="@SelectedProject"/>
+            </div>
+            <div>
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Height="400px"
                                 Items="@_offerStates"
                                 TOption="OfferStateVM"
                                 OptionValue="@((t) => t.Id.ToString())"
                                 OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == _selectedOfferState.Id)"
-                                @bind-SelectedOption="@SelectedOfferState" />
+                                OptionSelected="@(i => i.Id == SelectedOfferState?.Id)"
+                                @bind-SelectedOption="@SelectedOfferState"/>
             </div>
             <div class="ms-2">
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                 AriaLabel="Pre-selected option"
+                                Height="400px"
                                 Items="@_offerTypes"
                                 TOption="OfferTypeVM"
                                 OptionValue="@((t) => t.Id.ToString())"
                                 OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == _selectedOfferType.Id)"
+                                OptionSelected="@(i => i.Id == SelectedOfferType?.Id)"
                                 @bind-SelectedOption="@SelectedOfferType" />
             </div>
         </div>
