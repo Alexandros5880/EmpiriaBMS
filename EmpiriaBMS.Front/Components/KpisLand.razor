@@ -23,85 +23,106 @@
         *@
     }
     else {
-        <div class="row">
 
-            <!-- Hours Per RoleBar Chart-->
-            @if (SeeHoursPerRoleKPI)
+        <FluentTabs Orientation="Orientation.Vertical"
+                    @bind-ActiveTabId="@activeid"
+                    OnTabChange="HandleOnTabChange"
+                    ShowClose="false"
+                    Size="TabSize.Small"
+                    TabsOverflow="true"
+                    Style="min-height: 80vh;">
+
+            @if (SeeTenderTableKPI)
             {
-                <div class="col-lg-6 col-md-12" style="min-height: 300px;">
-                    <Chart Config="_hoursPerRoleBarConfig"></Chart>
-                </div>
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Tender Table" Id="tab-1">
+                    <div style="margin-top: 50px;">
+                        <TenderTable />
+                    </div>
+                </FluentTab>
             }
 
-            <!-- Get active delayed projects Counter By Type Pie Chart -->
-            @if (SeeHoursPerRoleKPI)
+            @if (SeeTenderTableKPI)
             {
-                <div class="col-lg-6 col-md-12" style="min-height: 300px;">
-                    <Chart Config="_hoursPerRolePieConfig"></Chart>
-                </div>
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Hours Per Role Bar" Id="tab-2">
+                    <div style="margin-top: 50px;">
+                        <Chart Config="_hoursPerRoleBarConfig"></Chart>
+                    </div>
+                </FluentTab>
             }
 
-            <!-- Get active delayed projects Bar Chart -->
+            @if (SeeHoursPerRoleKPI)
+            {
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Hours Per Role Pie" Id="tab-3">
+                    <div style="margin-top: 50px;">
+                        <Chart Config="_hoursPerRolePieConfig"></Chart>
+                    </div>
+                </FluentTab>
+            }
+
             @if (SeeActiveDelayedProjectsKPI)
             {
-                <div class="col-lg-12 col-md-12" style="min-height: 300px;">
-                    <Chart Config="_delayedProjectsBarConfig"></Chart>
-                </div>
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Projects Bar" Id="tab-4">
+                    <div style="margin-top: 50px;">
+                        <Chart Config="_delayedProjectsBarConfig"></Chart>
+                    </div>
+                </FluentTab>
             }
 
-            <!-- Get active delayed projects Counter By Type Bar Chart-->
             @if (SeeActiveDelayedProjectsTypesCounterKPI)
             {
-                <div class="col-lg-6 col-md-12" style="min-height: 300px;">
-                    <Chart Config="_delayedProjectsTypesBarConfig"></Chart>
-                </div>
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Project Types Bar" Id="tab-5">
+                    <div style="margin-top: 50px;">
+                        <Chart Config="_delayedProjectsTypesBarConfig"></Chart>
+                    </div>
+                </FluentTab>
             }
 
-            <!-- Projects missed deadline -->
             @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
             {
-                <div class="col row mt-5" style="max-width: 30vw !important;">
-                    <div class="col-11">
-                        <h5>Projects missed deadline: </h5>
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Projectes Missed Deadline" Id="tab-6">
+                    <div class="col row mt-5" style="max-width: 30vw !important; margin-top: 50px;">
+                        <div class="col-11">
+                            <h5>Projects missed deadline: </h5>
+                        </div>
+                        <div class="col-1">
+                            <h6>@_missedDeadLineProject.ToString("N2")%</h6>
+                        </div>
                     </div>
-                    <div class="col-1">
-                        <h6>@_missedDeadLineProject.ToString("N2")%</h6>
-                    </div>
-                </div>
+                </FluentTab>
             }
 
-            <!-- Employee Turnover -->
             @if (SeeEmployeeTurnoverKPI)
             {
-                <div class="col table-responsive">
-                    <table class="table table-hover table-success text-center caption-top">
-                        <caption>Employee turnover kpi:</caption>
-                        <thead>
-                            <tr>
-                                <th>Employee</th>
-                                <th>Turnover</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>--</td>
-                                <td>No Ready Yet</td>
-                            </tr>
-                            @* @foreach (var item in _delayedProjects)
-                            {
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Employees Turnover" Id="tab-7">
+                    <div class="col table-responsive" style="margin-top: 50px;">
+                        <table class="table table-hover table-success text-center caption-top">
+                            <caption>Employee turnover kpi:</caption>
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Turnover</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>--</td>
+                                    <td>No Ready Yet</td>
+                                </tr>
+                                @* @foreach (var item in _delayedProjects)
+                                {
                                 <tr>
                                     <td>@item.Name</td>
                                     <td>@item.Active</td>
                                 </tr>
-                            } *@
-                        </tbody>
-                    </table>
-                </div>
+                                } *@
+                            </tbody>
+                        </table>
+                    </div>
+                </FluentTab>
             }
 
-            
+        </FluentTabs>
 
-        </div>
     }
 
 </div>

@@ -907,7 +907,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-
     #region Add/Edit/Delete Project Actions
     private async Task NavigateOnMap(Address address)
     {
@@ -1124,6 +1123,16 @@ public partial class Dashboard : IDisposable
             _deleteDialog.Hide();
             _isDeleteDialogOdepened = false;
         }
+    }
+    #endregion
+
+    #region Tab Actions
+    string? activeid = "tab-home";
+    FluentTab? changedto;
+
+    private void HandleOnTabChange(FluentTab tab)
+    {
+        changedto = tab;
     }
     #endregion
 

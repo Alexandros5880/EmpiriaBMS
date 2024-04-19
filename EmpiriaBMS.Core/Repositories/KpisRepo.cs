@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Dtos.KPIS;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -212,6 +214,57 @@ public class KpisRepo : IDisposable
             return projectTypesWithDeadLines;
         }
     }
+
+    public async Task<IQueryable<TenderDataDto>> GetTenderTable()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Project> projects = await _context.Set<Project>()
+                                                   .Include(r => r.Client)
+                                                   .Include(r => r.Invoices)
+                                                   .Include(p => p.Category)
+                                                   .Include(p => p.ProjectManager)
+                                                   .Include(p => p.ProjectsSubConstructors)
+                                                   .Where(p => p.DeadLine < DateTime.Now)
+                                                   .OrderBy(e => !e.Active)
+                                                   .ThenBy(e => e.DeadLine)
+                                                   .ToListAsync();
+
+            List<TenderDataDto> tenderData = new List<TenderDataDto>();
+
+            foreach (var project in projects)
+            {
+                ProjectCategory parentCategory = null;
+                var parentCatId = project.Category?.CategoryId;
+
+                if (parentCatId != null)
+                    parentCategory = await _context.Set<ProjectCategory>().FirstOrDefaultAsync(c => c.Id == parentCatId);
+
+                // Get All Offers
+                var offers = await _context.Set<Offer>().Where(o => o.ProjectId == project.Id).ToListAsync();
+
+                var data = new TenderDataDto()
+                {
+                    ProjectName = project.Name ?? "",
+                    ProjectStage = project.Stage?.Name ?? "",
+                    ProjectCategory = parentCategory?.Name ?? "",
+                    ProjectSubCategory = project.Category?.Name ?? "",
+                    ProjectPrice = offers.Sum(o => o.OfferPrice) ?? 0,
+                    ProjectPudgedPrice = offers.Sum(o => o.PudgetPrice) ?? 0,
+                    ClientCompanyName = project.Client?.CompanyName ?? "",
+                    ClientFullName = project.Client != null ? project.Client?.LastName + " " + project.Client?.FirstName : "",
+                    ClientPhone = project.Client?.Phone1 ?? project.Client?.Phone2 ?? project.Client?.Phone3 ?? "",
+                    ClientEmail = project.Client?.Emails?.FirstOrDefault()?.Address ?? ""
+                };
+
+                tenderData.Add(data);
+            }
+
+
+            return tenderData.AsQueryable();
+        }
+    }
+
 
     protected virtual void Dispose(bool disposing)
     {

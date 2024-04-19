@@ -353,6 +353,18 @@ public class AppDbContext : DbContext
             Ord = 24
         };
         builder.Entity<Permission>().HasData(per_24);
+
+        // See Tender Table KPI
+        var per_25_id = random.Next(123456789, 999999999);
+        Permission per_25 = new Permission()
+        {
+            Id = per_25_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Tender Table KPI",
+            Ord = 25
+        };
+        builder.Entity<Permission>().HasData(per_25);
         #endregion
 
         #region Roles
@@ -1044,6 +1056,17 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_81);
 
+        // CTO || See Tender Table KPI
+        RolePermission rp_83 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_25_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_83);
+
 
         // CEO
         // CEO || See Dashboard Layout
@@ -1254,6 +1277,17 @@ public class AppDbContext : DbContext
             PermissionId = per_24_id
         };
         builder.Entity<RolePermission>().HasData(rp_82);
+
+        // CEO || See Tender Table KPI
+        RolePermission rp_84 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_25_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_84);
 
 
         // Guest
