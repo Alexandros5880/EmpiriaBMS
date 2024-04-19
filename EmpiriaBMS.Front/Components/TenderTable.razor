@@ -1,2 +1,66 @@
-﻿<h3>TenderTable</h3>
+﻿@using EmpiriaBMS.Core.Dtos.KPIS;
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using ChartJs.Blazor;
 
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+
+<div style="max-width: 64vw; margin: 0 auto;">
+    <p>
+        <FluentCheckbox @bind-Value="_showClient">Show Client</FluentCheckbox>
+    </p>
+
+    <FluentDataGrid Items="@FilteredItems"
+                    ResizableColumns=true 
+                    Pagination="@pagination" 
+                    TGridItem="TenderDataDto"
+                    OnRowFocus="HandleRowFocus"
+                    GridTemplateColumns="0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr"
+                    style="height: 405px; overflow:auto;">
+
+        <TemplateColumn Title="Project"
+                        Sortable="true"
+                        InitialSortDirection=SortDirection.Descending
+                        IsDefaultSortColumn=true
+                        Style="min-width: 200px;">
+            <ColumnOptions>
+                <div class="search-box">
+                    <FluentSearch type="search"
+                                    Autofocus=true
+                                    @bind-Value="@_nameFilter"
+                                    Placeholder="Project name..."
+                                    @oninput="@HandleFilter" />
+                </div>
+            </ColumnOptions>
+            <ChildContent>
+                @(context.ProjectName)
+            </ChildContent>
+        </TemplateColumn>
+
+        <PropertyColumn Property="@(p => p.ProjectStage)" Sortable="true" Title="Stage" Style="min-width: 150px;" />
+        <PropertyColumn Property="@(p => p.ProjectCategory)" Sortable="true" Title="Category" Style="min-width: 240px;" />
+        <PropertyColumn Property="@(p => p.ProjectSubCategory)" Sortable="true" Title="Sub Category" Style="min-width: 280px;" />
+        <PropertyColumn Property="@(p => p.ProjectPrice)" Sortable="true" Title="Price" Style="min-width: 100px;" />
+        <PropertyColumn Property="@(p => p.ProjectPudgedPrice)" Sortable="true" Title="Pudged Price" Style="min-width: 100px;" />
+        @if (_showClient)
+        {
+            <PropertyColumn Property="@(p => p.ClientCompanyName)" Sortable="true" Title="Company" Style="min-width: 100px;" />
+            <PropertyColumn Property="@(p => p.ClientFullName)" Sortable="true" Title="Client" Style="min-width: 100px;" />
+            <PropertyColumn Property="@(p => p.ClientPhone)" Sortable="true" Title="Phone" Style="min-width: 100px;" />
+            <PropertyColumn Property="@(p => p.ClientEmail)" Sortable="true" Title="Email" Style="min-width: 100px;" />
+        }
+    </FluentDataGrid>
+</div>
+
+<div style="max-width: 64vw; margin: 0 auto;">
+    <FluentPaginator State="@pagination">
+        <SummaryTemplate>
+            There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+        </SummaryTemplate>
+        <PaginationTextTemplate>
+            This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+        </PaginationTextTemplate>
+    </FluentPaginator>
+</div>

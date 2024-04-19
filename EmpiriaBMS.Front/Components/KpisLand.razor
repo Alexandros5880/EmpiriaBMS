@@ -24,12 +24,18 @@
     }
     else {
 
-        <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
+        <FluentTabs Orientation="Orientation.Vertical"
+                    @bind-ActiveTabId="@activeid"
+                    OnTabChange="HandleOnTabChange"
+                    ShowClose="false"
+                    Size="TabSize.Small"
+                    TabsOverflow="true"
+                    Style="min-height: 80vh;">
 
             @if (SeeTenderTableKPI)
             {
-                <FluentTab LabelClass="fs-1 fw-bold" Label="Tender Table" Icon="@(new Icons.Regular.Size24.Table())" Id="tab-1">
-                    <div style="height: 300px;">
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Tender Table" Id="tab-1">
+                    <div style="margin-top: 50px;">
                         <TenderTable />
                     </div>
                 </FluentTab>
@@ -37,44 +43,44 @@
 
             @if (SeeTenderTableKPI)
             {
-                <FluentTab LabelClass="fs-1 fw-bold" Label="Hours Per Role Bar Graph" Id="tab-2">
-                    <div style="height: 300px;">
-                        <Chart Height="300" Config="_hoursPerRoleBarConfig"></Chart>
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Hours Per Role Bar" Id="tab-2">
+                    <div style="margin-top: 50px;">
+                        <Chart Config="_hoursPerRoleBarConfig"></Chart>
                     </div>
                 </FluentTab>
             }
 
             @if (SeeHoursPerRoleKPI)
             {
-                <FluentTab LabelClass="fs-1 fw-bold" Label="Hours Per Role Pie Graph" Id="tab-3">
-                    <div style="height: 300px;">
-                        <Chart Height="300" Config="_hoursPerRolePieConfig"></Chart>
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Hours Per Role Pie" Id="tab-3">
+                    <div style="margin-top: 50px;">
+                        <Chart Config="_hoursPerRolePieConfig"></Chart>
                     </div>
                 </FluentTab>
             }
 
             @if (SeeActiveDelayedProjectsKPI)
             {
-                <FluentTab LabelClass="fs-1 fw-bold" Label="Delayed Projects Bar Graph" Id="tab-4">
-                    <div style="height: 300px;">
-                        <Chart Height="300" Config="_delayedProjectsBarConfig"></Chart>
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Projects Bar" Id="tab-4">
+                    <div style="margin-top: 50px;">
+                        <Chart Config="_delayedProjectsBarConfig"></Chart>
                     </div>
                 </FluentTab>
             }
 
             @if (SeeActiveDelayedProjectsTypesCounterKPI)
             {
-                <FluentTab LabelClass="fs-1 fw-bold" Label="Delayed Project Types Bar Graph" Id="tab-5">
-                    <div style="height: 300px;">
-                        <Chart Height="300" Config="_delayedProjectsTypesBarConfig"></Chart>
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Project Types Bar" Id="tab-5">
+                    <div style="margin-top: 50px;">
+                        <Chart Config="_delayedProjectsTypesBarConfig"></Chart>
                     </div>
                 </FluentTab>
             }
 
             @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
             {
-                <FluentTab LabelClass="fs-1 fw-bold" Label="Projectes Missed Deadline" Id="tab-6">
-                    <div class="col row mt-5" style="max-width: 30vw !important;">
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Projectes Missed Deadline" Id="tab-6">
+                    <div class="col row mt-5" style="max-width: 30vw !important; margin-top: 50px;">
                         <div class="col-11">
                             <h5>Projects missed deadline: </h5>
                         </div>
@@ -87,8 +93,8 @@
 
             @if (SeeEmployeeTurnoverKPI)
             {
-                <FluentTab LabelClass="fs-1 fw-bold" Label="Employees Turnover" Id="tab-7">
-                    <div class="col table-responsive">
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Employees Turnover" Id="tab-7">
+                    <div class="col table-responsive" style="margin-top: 50px;">
                         <table class="table table-hover table-success text-center caption-top">
                             <caption>Employee turnover kpi:</caption>
                             <thead>

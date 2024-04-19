@@ -231,3 +231,34 @@ background: var(--dashboard-tables-header-color) !important;
 /* Button */
 
 
+/* FluentTab */
+.my-fluent-tab {
+    
+}
+.my-fluent-tab-label, .my-fluent-tab-label {
+    font-size: medium !important;
+    font-weight: bolder !important;
+    text-decoration: var(--main-bg-color) wavy underline !important;
+    min-width: 200px;
+    border: 1px solid gray;
+    border-radius: 11px;
+    margin: 4px;
+    padding: 4px;
+    text-align: center !important;
+}
+.my-fluent-tab-label[aria-selected="true"] {
+    font-size: medium !important;
+    font-weight: bolder !important;
+    text-decoration: none !important;
+    min-width: 200px;
+    border: 1px solid var(--primary-bg-color);
+    background-color: var(--primary-bg-color);
+    border-radius: 11px;
+    margin: 4px;
+    padding: 4px;
+    text-align: center !important;
+}
+::deep fluent-tabs::part(activeIndicator) {
+    width: 85%;
+}
+/* FluentTab */
