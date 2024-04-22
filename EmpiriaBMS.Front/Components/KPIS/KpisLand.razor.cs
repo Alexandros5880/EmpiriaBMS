@@ -48,8 +48,6 @@ public partial class KpisLand : ComponentBase, IDisposable
 
         if (firstRender)
         {
-            await _initilizeDelayedProjectsTypesChart();
-
             await _getMissedDeadLineProjects();
             await _getEmployeesTurnover();
 
@@ -70,82 +68,6 @@ public partial class KpisLand : ComponentBase, IDisposable
         // TODO: _getEmployeesTurnover()
         // _employeesTurnover = await _dataProvider.KPIS.GetEmployeesTurnover();
     }
-
-    #region Initialize ProjectTypes Missed DeadLine Chart
-    private Dictionary<string, int> _delayedProjectsTypesCountByType = null;
-    private BarConfig _delayedProjectsTypesBarConfig;
-
-    private async Task _initilizeDelayedProjectsTypesChart()
-    {
-        await _getActiveDelayedProjectsTypesCountByType();
-
-        _delayedProjectsTypesBarConfig = new BarConfig
-        {
-            Options = new BarOptions
-            {
-                Title = new OptionsTitle
-                {
-                    Display = true,
-                    Text = "Count Delayed Projects By Type",
-                    Position = ChartEnums.Position.Right,
-                    FontSize = 24
-                },
-                Scales = new BarScales
-                {
-                    XAxes = new List<CartesianAxis>
-                    {
-                        new BarCategoryAxis
-                        {
-                            BarPercentage = 0.5,
-                            BarThickness = BarThickness.Flex
-                        }
-                    },
-                    YAxes = new List<CartesianAxis>
-                    {
-                        new BarLinearCartesianAxis
-                        {
-                            Ticks = new LinearCartesianTicks
-                            {
-                                BeginAtZero = true,
-                                StepSize = 0.5,
-                                //SuggestedMax = 100
-                            }
-                        }
-                    }
-                },
-                Responsive = true,
-
-            }
-        };
-
-        foreach (string key in _delayedProjectsTypesCountByType.Keys)
-            _delayedProjectsTypesBarConfig.Data.Labels.Add(key);
-
-        // Values Dataset
-        var values = _delayedProjectsTypesCountByType.Values;
-        BarDataset<int> dataset = new BarDataset<int>(values, false)
-        {
-            //Label = "Project Type",
-            //BackgroundColor = ChartJsHelper.GenerateColors(_delayedProjectsTypesCountByType.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_delayedProjectsTypesCountByType.Values.Count, 685, 700, 1),
-            BorderWidth = 0,
-            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
-            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
-            HoverBorderWidth = 1,
-            BorderColor = ChartJsHelper.GetPreviusRgb(1),
-            BarPercentage = 0.5,
-
-        };
-        _delayedProjectsTypesBarConfig.Data.Datasets.Add(dataset);
-
-    }
-
-    private async Task _getActiveDelayedProjectsTypesCountByType()
-    {
-        var userId = _sharedAuthData.LogedUser.Id;
-        _delayedProjectsTypesCountByType = await _dataProvider.KPIS.GetActiveDelayedProjectTypesCountByType(userId);
-    }
-    #endregion
 
     #region Tab Actions
     string? activeid = "tab-1";
