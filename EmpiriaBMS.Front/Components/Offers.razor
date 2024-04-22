@@ -80,86 +80,56 @@
 
     <!-- Offers Table -->
     <div class="col-12 border border-1 rounded mt-1">
-        <div class="table-responsive p-1 table-container" style="max-height: 300px;">
-            <table class="table table-hover text-center">
-                <thead>
-                    <tr>
-                        <th scope="col" class="sticky-header">Project</th>
-                        <th scope="col" class="sticky-header">State</th>
-                        <th scope="col" class="sticky-header">Type</th>
-                        <th scope="col" class="sticky-header">Code</th>
-                        <th scope="col" class="sticky-header">Date</th>
-                        <th scope="col" class="sticky-header">Desciption</th>
-                        <th scope="col" class="sticky-header">PudgetPrice</th>
-                        <th scope="col" class="sticky-header">OfferPrice</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var offer in _offers)
-                    {
-                        <tr class="align-middle" @onclick="@(() => _selectedOffer = offer)">
 
-                            <td class="align-middle
-                                    @((_selectedOffer == null ||
-                                            !_selectedOffer.Id.Equals(offer.Id)
-                                                            ? "" : "selected_table_row"))">
-                                <labe>@offer.Project.Name</labe>
-                            </td>
+        <div style="max-width: 64vw; margin: 0 auto;">
+            <FluentDataGrid Items="@FilteredItems"
+                            ResizableColumns=true
+                            Pagination="@pagination"
+                            TGridItem="OfferVM"
+                            OnRowFocus="HandleRowFocus"
+                            GridTemplateColumns="0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr"
+                            style="height: 405px; overflow:auto;">
 
-                            <td class="align-middle
-                                    @((_selectedOffer == null ||
-                                            !_selectedOffer.Id.Equals(offer.Id)
-                                                            ? "" : "selected_table_row"))">
-                                <labe>@offer.State.Name</labe>
-                            </td>
+                <TemplateColumn Title="Project"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true
+                                Style="min-width: 200px;">
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                          Autofocus=true
+                                          @bind-Value="@_projectNameFilter"
+                                          Placeholder="Project name..."
+                                          @oninput="@HandleFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.Project.Name)
+                    </ChildContent>
+                </TemplateColumn>
 
-                            <td class="align-middle
-                                    @((_selectedOffer == null ||
-                                            !_selectedOffer.Id.Equals(offer.Id)
-                                                            ? "" : "selected_table_row"))">
-                                <labe>@offer.Type.Name</labe>
-                            </td>
-
-                            <td class="align-middle
-                                    @((_selectedOffer == null ||
-                                            !_selectedOffer.Id.Equals(offer.Id)
-                                                            ? "" : "selected_table_row"))">
-                                <labe>@offer.Code</labe>
-                            </td>
-
-                            <td class="align-middle
-                                    @((_selectedOffer == null ||
-                                            !_selectedOffer.Id.Equals(offer.Id)
-                                                            ? "" : "selected_table_row"))">
-                                <labe>@offer.Date?.ToEuropeFormat()</labe>
-                            </td>
-
-                            <td class="align-middle
-                                    @((_selectedOffer == null ||
-                                            !_selectedOffer.Id.Equals(offer.Id)
-                                                            ? "" : "selected_table_row"))">
-                                <p style="word-wrap: break-word; max-width: 100px;">@offer.Date?.ToEuropeFormat()</p>
-                            </td>
-
-                            <td class="align-middle
-                                    @((_selectedOffer == null ||
-                                            !_selectedOffer.Id.Equals(offer.Id)
-                                                            ? "" : "selected_table_row"))">
-                                <labe>@offer.PudgetPrice</labe>
-                            </td>
-
-                            <td class="align-middle
-                                    @((_selectedOffer == null ||
-                                            !_selectedOffer.Id.Equals(offer.Id)
-                                                            ? "" : "selected_table_row"))">
-                                <labe>@offer.OfferPrice</labe>
-                            </td>
-                            
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 150px;" />
+                <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Style="min-width: 150px;" />
+                <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.PudgetPrice)" Sortable="true" Title="Pudget" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.OfferPrice)" Sortable="true" Title="Price" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="min-width: 250px;" />
+            </FluentDataGrid>
         </div>
+
+        <div style="max-width: 64vw; margin: 0 auto;">
+            <FluentPaginator State="@pagination">
+                <SummaryTemplate>
+                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                </SummaryTemplate>
+                <PaginationTextTemplate>
+                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                </PaginationTextTemplate>
+            </FluentPaginator>
+        </div>
+
     </div>
 
 </div>

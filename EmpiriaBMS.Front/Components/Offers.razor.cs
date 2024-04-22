@@ -1,8 +1,10 @@
 ﻿using BlazorBootstrap;
+using EmpiriaBMS.Core.Dtos.KPIS;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
@@ -33,6 +35,29 @@ public partial class Offers
     // On Delete Dialog
     private FluentDialog _deleteDialog;
     private bool _isDeleteDialogOdepened = false;
+
+    #region Data Grid
+    IQueryable<OfferVM>? FilteredItems => _offers?.AsQueryable().Where(x => x.Project.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    private string _projectNameFilter = string.Empty;
+
+    private void HandleFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _projectNameFilter = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_projectNameFilter) || string.IsNullOrEmpty(_projectNameFilter))
+        {
+            _projectNameFilter = string.Empty;
+        }
+    }
+
+    private void HandleRowFocus(FluentDataGridRow<OfferVM> row)
+    {
+        Console.WriteLine($"Row focused: {row.Item?.Project?.Name}");
+    }
+    #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
