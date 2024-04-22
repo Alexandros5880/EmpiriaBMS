@@ -48,8 +48,6 @@ public partial class KpisLand : ComponentBase, IDisposable
 
         if (firstRender)
         {
-            await _initilizeHoursPerRoleChart();
-            _initilizeHoursPerRolePieChart();
             await _initilizeDelayedProjectsChart();
             await _initilizeDelayedProjectsTypesChart();
 
@@ -81,117 +79,6 @@ public partial class KpisLand : ComponentBase, IDisposable
     }
 
     private TimeSpan _displayTimeMissed(DateTime? date) => (TimeSpan)(DateTime.Now - date);
-
-    #region Initialize HoursPerRole Chart
-    private Dictionary<string, long> _hoursPerRole = null;
-    private BarConfig _hoursPerRoleBarConfig;
-
-    private async Task _initilizeHoursPerRoleChart()
-    {
-        await _getHoursPerRole();
-        _hoursPerRoleBarConfig = new BarConfig
-        {
-            Options = new BarOptions
-            {
-                Title = new OptionsTitle
-                {
-                    Display = true,
-                    Text = "Hours Per Role Bar Chart",
-                    Position = ChartEnums.Position.Left,
-                    FontSize = 24
-                },
-                Scales = new BarScales
-                {
-                    XAxes = new List<CartesianAxis>
-                    {
-                        new BarCategoryAxis
-                        {
-                            BarPercentage = 0.5,
-                            BarThickness = BarThickness.Flex
-                        }
-                    },
-                    YAxes = new List<CartesianAxis>
-                    {
-                        new BarLinearCartesianAxis
-                        {
-                            Ticks = new LinearCartesianTicks
-                            {
-                                BeginAtZero = true,
-                                StepSize = 2,
-                                //SuggestedMax = 100
-                            }
-                        }
-                    }
-                },
-                Responsive = true,
-
-            }
-        };
-
-        foreach (string key in _hoursPerRole.Keys)
-            _hoursPerRoleBarConfig.Data.Labels.Add(key);
-
-        BarDataset<long> dataset = new BarDataset<long>(_hoursPerRole.Values)
-        {
-            //Label = "Roles",
-            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 650, 699, 1),
-            BorderWidth = 0,
-            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
-            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
-            HoverBorderWidth = 1,
-            BorderColor = ChartJsHelper.GetPreviusRgb(1),
-            BarPercentage = 0.5,
-
-        };
-
-        _hoursPerRoleBarConfig.Data.Datasets.Add(dataset);
-    }
-
-    private async Task _getHoursPerRole() =>
-        _hoursPerRole = await _dataProvider.KPIS.GetHoursPerRole();
-
-    // Pie Chart
-    private PieConfig _hoursPerRolePieConfig;
-
-    private void _initilizeHoursPerRolePieChart()
-    {
-        //await _getActiveDelayedProjects();
-
-        _hoursPerRolePieConfig = new PieConfig()
-        {
-            Options = new PieOptions()
-            {
-                CutoutPercentage = 50, // 50 = Doughnut  ||  0 = Pie
-                Responsive = true,
-                Title = new OptionsTitle()
-                {
-                    Display = true,
-                    Text = "Hours Per Role Pie Chart",
-                    Position = ChartEnums.Position.Right,
-                    FontSize = 24
-                }
-            }
-        };
-
-        foreach (string key in _hoursPerRole.Keys)
-            _hoursPerRolePieConfig.Data.Labels.Add(key);
-
-
-        PieDataset<long> dataset = new PieDataset<long>(_hoursPerRole.Values)
-        {
-            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 550, 599, 1),
-            BorderWidth = 0,
-            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
-            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
-            HoverBorderWidth = 1,
-            BorderColor = ChartJsHelper.GetPreviusRgb(1),
-        };
-
-        _hoursPerRolePieConfig.Data.Datasets.Add(dataset);
-    }
-    #endregion
 
     #region Initialize DelayedProjects Bar Chart
     private List<ProjectVM> _delayedProjects = null;
@@ -357,8 +244,8 @@ public partial class KpisLand : ComponentBase, IDisposable
         BarDataset<int> dataset = new BarDataset<int>(values, false)
         {
             //Label = "Project Type",
-            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 685, 700, 1),
+            //BackgroundColor = ChartJsHelper.GenerateColors(_delayedProjectsTypesCountByType.Values.Count, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_delayedProjectsTypesCountByType.Values.Count, 685, 700, 1),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),

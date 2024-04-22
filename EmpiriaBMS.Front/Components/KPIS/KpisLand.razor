@@ -29,7 +29,8 @@
                     OnTabChange="HandleOnTabChange"
                     ShowClose="false"
                     Size="TabSize.Small"
-                    TabsOverflow="true">
+                    TabsOverflow="true"
+                    style="min-height: 500px;">
 
             @if (SeeTenderTableKPI)
             {
@@ -40,27 +41,18 @@
                 </FluentTab>
             }
 
-            @if (SeeTenderTableKPI)
-            {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Hours Per Role Bar" Id="tab-2">
-                    <div style="margin-top: 50px;">
-                        <Chart Config="_hoursPerRoleBarConfig"></Chart>
-                    </div>
-                </FluentTab>
-            }
-
             @if (SeeHoursPerRoleKPI)
             {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Hours Per Role Pie" Id="tab-3">
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Hours Per Role" Id="tab-2">
                     <div style="margin-top: 50px;">
-                        <Chart Config="_hoursPerRolePieConfig"></Chart>
+                        <HouresPerRoleKPI />
                     </div>
                 </FluentTab>
             }
 
             @if (SeeActiveDelayedProjectsKPI)
             {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Projects Bar" Id="tab-4">
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Projects Bar" Id="tab-3">
                     <div style="margin-top: 50px;">
                         <Chart Config="_delayedProjectsBarConfig"></Chart>
                     </div>
@@ -69,7 +61,7 @@
 
             @if (SeeActiveDelayedProjectsTypesCounterKPI)
             {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Project Types Bar" Id="tab-5">
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Project Types Bar" Id="tab-4">
                     <div style="margin-top: 50px;">
                         <Chart Config="_delayedProjectsTypesBarConfig"></Chart>
                     </div>
@@ -78,7 +70,7 @@
 
             @if (SeeDelayedPaymentsKPI)
             {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Payments" Id="tab-6">
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Payments" Id="tab-5">
                     <div style="margin-top: 50px;">
                         <DelayedPaymentsKpi />
                     </div>
@@ -87,7 +79,7 @@
 
             @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
             {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Projectes Missed Deadline" Id="tab-7">
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Projectes Missed Deadline" Id="tab-6">
                     <div class="col row mt-5" style="max-width: 30vw !important; margin-top: 50px;">
                         <div class="col-11">
                             <h5>Projects missed deadline: </h5>
@@ -101,7 +93,7 @@
 
             @if (SeeEmployeeTurnoverKPI)
             {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Employees Turnover" Id="tab-8">
+                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Employees Turnover" Id="tab-7">
                     <div class="col table-responsive" style="margin-top: 50px;">
                         <table class="table table-hover table-success text-center caption-top">
                             <caption>Employee turnover kpi:</caption>
