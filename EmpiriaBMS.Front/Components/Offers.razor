@@ -80,7 +80,7 @@
 
     <!-- Offers Table -->
     <div class="col-12 border border-1 rounded mt-1">
-        <div style="max-width: 64vw; margin: 0 auto;">
+        <div>
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
                             Pagination="@pagination"
@@ -114,7 +114,7 @@
                 <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.PudgetPrice)" Sortable="true" Title="Pudget" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.OfferPrice)" Sortable="true" Title="Price" Style="min-width: 100px;" />
-                <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="min-width: 250px;" />
+                <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="min-width: 200px;" />
             </FluentDataGrid>
         </div>
         <div style="max-width: 64vw; margin: 0 auto;">

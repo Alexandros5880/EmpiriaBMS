@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Dtos.KPIS;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Components.Admin.Roles;
 using EmpiriaBMS.Front.Horizontal;
@@ -21,6 +22,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Threading;
+using System.Xml.Linq;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
@@ -59,7 +61,24 @@ public partial class Dashboard : IDisposable
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
-    #region List
+    #region Projects Filter
+    IQueryable<ProjectVM>? _filteredProjects => _projects?.AsQueryable().Where(x => x.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase));
+    private string _projectNameFilter = string.Empty;
+
+    private void HandleProjectFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _projectNameFilter = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_projectNameFilter) || string.IsNullOrEmpty(_projectNameFilter))
+        {
+            _projectNameFilter = string.Empty;
+        }
+    }
+    #endregion
+
+    #region Lists
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DrawingVM> _draws = new ObservableCollection<DrawingVM>();
