@@ -18,8 +18,10 @@ using static Microsoft.Fast.Components.FluentUI.Emojis.FoodDrink.Color.Default;
 using ChartJs.Blazor;
 using EmpiriaBMS.Front.Horizontal;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.Graph.Models;
+using EmpiriaBMS.Core.Dtos;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class KpisLand : ComponentBase, IDisposable
 {
@@ -34,6 +36,7 @@ public partial class KpisLand : ComponentBase, IDisposable
     bool SeeEmployeeTurnoverKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 21);
     bool SeeMyProjectsMissedDeadLineKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 22);
     bool SeeTenderTableKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 25);
+    bool SeeDelayedPaymentsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 26);
     #endregion
 
     private decimal _missedDeadLineProject = 0;

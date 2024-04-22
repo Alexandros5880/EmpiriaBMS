@@ -5,12 +5,9 @@ using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
+
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -265,6 +262,29 @@ public class KpisRepo : IDisposable
         }
     }
 
+    public async Task<Dictionary<string, DelayedPayments>> GetDelayedPayments()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var payments = await _context.Set<Payment>()
+                                       .Include(p => p.Invoice)
+                                       .Include(p => p.Invoice.Project)
+                                       .Where(p => p.Invoice.Date < p.PaymentDate)
+                                       .ToListAsync();
+
+            var result = payments.GroupBy(p => p.Invoice.Project)
+                                 .ToDictionary(
+                                    g => g.Key.Name ?? "Uknown Project",
+                                    g => new DelayedPayments()
+                                    {
+                                        DelayedPaymentsCount = g.Count(),
+                                        Project = Mapping.Mapper.Map<ProjectDto>(g.Key),
+                                        Payments = Mapping.Mapper.Map<List<PaymentDto>>(g.ToList())
+                                    }
+                                 );
+            return result;
+        }
+    }
 
     protected virtual void Dispose(bool disposing)
     {
