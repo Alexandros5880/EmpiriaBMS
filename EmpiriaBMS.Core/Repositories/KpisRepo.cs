@@ -61,6 +61,31 @@ public class KpisRepo : IDisposable
         }
     }
 
+    public async Task<Dictionary<string, long>> GetHoursPerUser()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var userRolesWithDailyTimes = await _context.Set<UserRole>()
+                                            .Include(ur => ur.Role)
+                                            .Include(ur => ur.User)
+                                            .Select(ur => new
+                                            {
+                                                UserName = $"{ur.User.LastName} {ur.User.MidName} {ur.User.LastName}",
+                                                DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.TimeSpan.Hours)
+                                            })
+                                            .ToListAsync();
+
+            var userTimes = userRolesWithDailyTimes
+                                .GroupBy(ur => ur.UserName)
+                                .ToDictionary(
+                                    g => g.Key ?? "Uknown User",
+                                    g => g.Sum(ur => ur.DailyTimeHours)
+                                );
+
+            return userTimes;
+        }
+    }
+
     public async Task<List<ProjectDto>> GetActiveDelayedProjects(int userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
