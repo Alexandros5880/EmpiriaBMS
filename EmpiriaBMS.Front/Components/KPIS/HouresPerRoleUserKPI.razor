@@ -1,0 +1,30 @@
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using ChartJs.Blazor;
+
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+
+<div class="row">
+    <div class="col-12">
+        @if (_hoursPerRoleBarConfig != null)
+        {
+            <Chart Config="_hoursPerRoleBarConfig"></Chart>
+        }
+        else
+        {
+            <span class="text-warning ms-5">No Data!</span>
+        }
+    </div>
+    <div class="col-12 mt-3">
+        @if (_hoursPerUserPieConfig != null)
+        {
+            <Chart Config="_hoursPerUserPieConfig"></Chart>
+        }
+        else
+        {
+            <span class="text-warning ms-5">No Data!</span>
+        }
+    </div>
+</div>

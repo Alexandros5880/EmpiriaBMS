@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class TenderTable
 {
@@ -48,7 +48,7 @@ public partial class TenderTable
 
     private void HandleRowFocus(FluentDataGridRow<TenderDataDto> row)
     {
-        Console.WriteLine($"Row focused: {row.Item?.ProjectName}");
+        Console.WriteLine($"Row focused: {row.Item?.ProjectStage}");
     }
 
 }

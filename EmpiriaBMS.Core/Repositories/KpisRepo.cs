@@ -5,12 +5,9 @@ using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
+
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -61,6 +58,31 @@ public class KpisRepo : IDisposable
                                 );
 
             return roleTimes;
+        }
+    }
+
+    public async Task<Dictionary<string, long>> GetHoursPerUser()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var userRolesWithDailyTimes = await _context.Set<UserRole>()
+                                            .Include(ur => ur.Role)
+                                            .Include(ur => ur.User)
+                                            .Select(ur => new
+                                            {
+                                                UserName = $"{ur.User.LastName} {ur.User.MidName} {ur.User.LastName}",
+                                                DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.TimeSpan.Hours)
+                                            })
+                                            .ToListAsync();
+
+            var userTimes = userRolesWithDailyTimes
+                                .GroupBy(ur => ur.UserName)
+                                .ToDictionary(
+                                    g => g.Key ?? "Uknown User",
+                                    g => g.Sum(ur => ur.DailyTimeHours)
+                                );
+
+            return userTimes;
         }
     }
 
@@ -223,6 +245,7 @@ public class KpisRepo : IDisposable
                                                    .Include(r => r.Client)
                                                    .Include(r => r.Invoices)
                                                    .Include(p => p.Category)
+                                                   .Include(p => p.Stage)
                                                    .Include(p => p.ProjectManager)
                                                    .Include(p => p.ProjectsSubConstructors)
                                                    .Where(p => p.DeadLine < DateTime.Now)
@@ -265,6 +288,54 @@ public class KpisRepo : IDisposable
         }
     }
 
+    public async Task<Dictionary<string, DelayedPayments>> GetDelayedPayments()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var payments = await _context.Set<Payment>()
+                                       .Include(p => p.Invoice)
+                                       .Include(p => p.Invoice.Project)
+                                       .Where(p => p.Invoice.Date < p.PaymentDate)
+                                       .ToListAsync();
+
+            var result = payments.GroupBy(p => p.Invoice.Project)
+                                 .ToDictionary(
+                                    g => g.Key.Name ?? "Uknown Project",
+                                    g => new DelayedPayments()
+                                    {
+                                        DelayedPaymentsCount = g.Count(),
+                                        Project = Mapping.Mapper.Map<ProjectDto>(g.Key),
+                                        Payments = Mapping.Mapper.Map<List<PaymentDto>>(g.ToList())
+                                    }
+                                 );
+            return result;
+        }
+    }
+
+    public async Task<Dictionary<string, PendingPayments>> GetPendingPaymentsPerProject()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var payments = await _context.Set<Payment>()
+                                         .Include(p => p.Invoice)
+                                         .Include(p => p.Invoice.Project)
+                                         .Where(p => p.PaidFee < p.Fee)
+                                         .ToListAsync();
+
+            var result = payments.GroupBy(p => p.Invoice.Project)
+                                 .ToDictionary(
+                                    g => g.Key.Name ?? "Uknown Project",
+                                    g => new PendingPayments()
+                                    {
+                                        DelayedPaymentsCount = g.Count(),
+                                        Project = Mapping.Mapper.Map<ProjectDto>(g.Key),
+                                        Payments = Mapping.Mapper.Map<List<PaymentDto>>(g.ToList()),
+                                        PendingFee = g.Sum(p => p.Fee) - g.Sum(p => p.PaidFee)
+                                    }
+                                 );
+            return result;
+        }
+    }
 
     protected virtual void Dispose(bool disposing)
     {
