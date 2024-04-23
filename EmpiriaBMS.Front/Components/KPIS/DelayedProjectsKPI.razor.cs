@@ -37,7 +37,7 @@ public partial class DelayedProjectsKPI
                 {
                     Display = true,
                     Text = "Delayed Projects Bar Chart",
-                    Position = ChartEnums.Position.Left,
+                    Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
                 Scales = new BarScales

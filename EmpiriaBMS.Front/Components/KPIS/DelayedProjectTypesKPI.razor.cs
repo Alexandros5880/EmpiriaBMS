@@ -35,7 +35,7 @@ public partial class DelayedProjectTypesKPI
                 {
                     Display = true,
                     Text = "Count Delayed Projects By Type",
-                    Position = ChartEnums.Position.Right,
+                    Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
                 Scales = new BarScales
