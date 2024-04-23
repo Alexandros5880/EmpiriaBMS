@@ -22,7 +22,7 @@
                 <FluentNavLink OnClick="@((e) => TabMenuClick(e, 0))"
                                Class="@((tabs[0] ? "active-nav-link" : ""))">Tender Table</FluentNavLink>
                 <FluentNavLink OnClick="@((e) => TabMenuClick(e, 1))"
-                               Class="@((tabs[1] ? "active-nav-link" : ""))">Hours Per Role1</FluentNavLink>
+                               Class="@((tabs[1] ? "active-nav-link" : ""))">Hours Per Role/User</FluentNavLink>
                 <FluentNavLink OnClick="@((e) => TabMenuClick(e, 2))"
                                Class="@((tabs[2] ? "active-nav-link" : ""))">Delayed Projects Bar</FluentNavLink>
                 <FluentNavLink OnClick="@((e) => TabMenuClick(e, 3))"
@@ -52,7 +52,7 @@
                     @if (SeeHoursPerRoleKPI)
                     {
                         <div style="margin-top: 50px;">
-                            <HouresPerRoleKPI />
+                            <HouresPerRoleUserKPI />
                         </div>
                     }
                 }

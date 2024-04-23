@@ -10,9 +10,10 @@ using EmpiriaBMS.Front.Components.General;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class HouresPerRoleKPI
+public partial class HouresPerRoleUserKPI
 {
     private Dictionary<string, long> _hoursPerRole = null;
+    private Dictionary<string, long> _hoursPerUser = null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -21,14 +22,18 @@ public partial class HouresPerRoleKPI
         if (firstRender)
         {
             await _getHoursPerRole();
+            await _getHoursPerUser();
             _initilizeHoursPerRoleChart();
-            _initilizeHoursPerRolePieChart();
+            _initilizeHoursPerUserPieChart();
             StateHasChanged();
         }
     }
 
     private async Task _getHoursPerRole() =>
         _hoursPerRole = await _dataProvider.KPIS.GetHoursPerRole();
+
+    private async Task _getHoursPerUser() =>
+        _hoursPerUser = await _dataProvider.KPIS.GetHoursPerUser();
 
     // Bar Chart
     private BarConfig _hoursPerRoleBarConfig;
@@ -87,20 +92,17 @@ public partial class HouresPerRoleKPI
             HoverBorderWidth = 1,
             BorderColor = ChartJsHelper.GetPreviusRgb(1),
             BarPercentage = 0.5,
-
         };
 
         _hoursPerRoleBarConfig.Data.Datasets.Add(dataset);
     }
 
     // Pie Chart
-    private PieConfig _hoursPerRolePieConfig;
+    private PieConfig _hoursPerUserPieConfig;
 
-    private void _initilizeHoursPerRolePieChart()
+    private void _initilizeHoursPerUserPieChart()
     {
-        //await _getActiveDelayedProjects();
-
-        _hoursPerRolePieConfig = new PieConfig()
+        _hoursPerUserPieConfig = new PieConfig()
         {
             Options = new PieOptions()
             {
@@ -109,21 +111,21 @@ public partial class HouresPerRoleKPI
                 Title = new OptionsTitle()
                 {
                     Display = true,
-                    Text = "Hours Per Role Pie Chart",
+                    Text = "Hours Per User Pie Chart",
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 }
             }
         };
 
-        foreach (string key in _hoursPerRole.Keys)
-            _hoursPerRolePieConfig.Data.Labels.Add(key);
+        foreach (string key in _hoursPerUser.Keys)
+            _hoursPerUserPieConfig.Data.Labels.Add(key);
 
 
-        PieDataset<long> dataset = new PieDataset<long>(_hoursPerRole.Values)
+        PieDataset<long> dataset = new PieDataset<long>(_hoursPerUser.Values)
         {
-            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 550, 599, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerUser.Values.Count, 1),
+            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerUser.Values.Count, 550, 599, 1),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -131,6 +133,6 @@ public partial class HouresPerRoleKPI
             BorderColor = ChartJsHelper.GetPreviusRgb(1),
         };
 
-        _hoursPerRolePieConfig.Data.Datasets.Add(dataset);
+        _hoursPerUserPieConfig.Data.Datasets.Add(dataset);
     }
 }
