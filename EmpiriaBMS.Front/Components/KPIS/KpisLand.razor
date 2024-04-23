@@ -8,9 +8,6 @@
 
 <div class="container-fluid m-2" style="max-width: 74vw !important;">
 
-    <h3>Key Performance Indicators (KPIS)</h3>
-
-
     @if (_loading)
     {
         <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px;">
@@ -24,104 +21,132 @@
     }
     else {
 
-        <FluentTabs Orientation="Orientation.Vertical"
-                    @bind-ActiveTabId="@activeid"
-                    OnTabChange="HandleOnTabChange"
-                    ShowClose="false"
-                    Size="TabSize.Small"
-                    TabsOverflow="true"
-                    style="min-height: 500px;">
 
-            @if (SeeTenderTableKPI)
-            {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Tender Table" Id="tab-1">
-                    <div style="margin-top: 50px;">
-                        <TenderTable />
-                    </div>
-                </FluentTab>
-            }
+        <FluentLayout Style="margin-top: 10px;">
 
-            @if (SeeHoursPerRoleKPI)
-            {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Hours Per Role" Id="tab-2">
-                    <div style="margin-top: 50px;">
-                        <HouresPerRoleKPI />
-                    </div>
-                </FluentTab>
-            }
+            <FluentHeader>
+                <h3>Key Performance Indicators (KPIS)</h3>
+                <FluentSpacer />
+                Aligned to the end
+            </FluentHeader>
 
-            @if (SeeActiveDelayedProjectsKPI)
-            {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Projects Bar" Id="tab-3">
-                    <div style="margin-top: 50px;">
-                        <DelayedProjectsKPI />
-                    </div>
-                </FluentTab>
-            }
+            <FluentStack Orientation="Orientation.Horizontal" Width="100%" HorizontalGap="33">
 
-            @if (SeeActiveDelayedProjectsTypesCounterKPI)
-            {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Project Types Bar" Id="tab-4">
-                    <div style="margin-top: 50px;">
-                        <DelayedProjectTypesKPI/>
-                    </div>
-                </FluentTab>
-            }
+                <FluentNavMenu Width="340">
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 0))"
+                                   Class="@((tabs[0] ? "active-nav-link" : ""))">Tender Table</FluentNavLink>
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 1))"
+                                   Class="@((tabs[1] ? "active-nav-link" : ""))">Hours Per Role1</FluentNavLink>
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 2))"
+                                   Class="@((tabs[2] ? "active-nav-link" : ""))">Delayed Projects Bar</FluentNavLink>
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 3))"
+                                   Class="@((tabs[3] ? "active-nav-link" : ""))">Delayed Project Types Bar</FluentNavLink>
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 4))"
+                                   Class="@((tabs[4] ? "active-nav-link" : ""))">Delayed Payments</FluentNavLink>
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 5))"
+                                   Class="@((tabs[5] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 6))"
+                                   Class="@((tabs[6] ? "active-nav-link" : ""))">Employees Turnover</FluentNavLink>
+                </FluentNavMenu>
 
-            @if (SeeDelayedPaymentsKPI)
-            {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Delayed Payments" Id="tab-5">
-                    <div style="margin-top: 50px;">
-                        <DelayedPaymentsKpi />
-                    </div>
-                </FluentTab>
-            }
+                <FluentBodyContent>
+                    @if(tabs[0])
+                    {
+                        @if (SeeTenderTableKPI)
+                        {
+                            <div style="margin-top: 50px;">
+                                <TenderTable />
+                            </div>
+                        }
+                    }
+                    else if (tabs[1])
+                    {
+                        @if (SeeHoursPerRoleKPI)
+                        {
+                            <div style="margin-top: 50px;">
+                                <HouresPerRoleKPI />
+                            </div>
+                        }
+                    }
+                    else if (tabs[2])
+                    {
+                        @if (SeeActiveDelayedProjectsKPI)
+                        {
+                            <div style="margin-top: 50px;">
+                                <DelayedProjectsKPI />
+                            </div>
+                        }
+                    }
+                    else if (tabs[3])
+                    {
+                        @if (SeeActiveDelayedProjectsTypesCounterKPI)
+                        {
+                            <div style="margin-top: 50px;">
+                                <DelayedProjectTypesKPI />
+                            </div>
+                        }
+                    }
+                    else if (tabs[4])
+                    {
+                        @if (SeeDelayedPaymentsKPI)
+                        {
+                            <div style="margin-top: 50px;">
+                                <DelayedPaymentsKpi />
+                            </div>
+                        }
+                    }
+                    else if (tabs[5])
+                    {
+                        @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
+                        {
+                            <div class="col row mt-5" style="max-width: 30vw !important; margin-top: 50px;">
+                                <div class="col-11">
+                                    <h5>Projects missed deadline: </h5>
+                                </div>
+                                <div class="col-1">
+                                    <h6>@_missedDeadLineProject.ToString("N2")%</h6>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else if (tabs[6])
+                    {
+                        @if (SeeEmployeeTurnoverKPI)
+                        {
+                            <div class="col table-responsive" style="margin-top: 50px;">
+                                <table class="table table-hover table-success text-center caption-top">
+                                    <caption>Employee turnover kpi:</caption>
+                                    <thead>
+                                        <tr>
+                                            <th>Employee</th>
+                                            <th>Turnover</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>--</td>
+                                            <td>No Ready Yet</td>
+                                        </tr>
+                                        @* @foreach (var item in _delayedProjects)
+                                        {
+                                        <tr>
+                                            <td>@item.Name</td>
+                                            <td>@item.Active</td>
+                                        </tr>
+                                        } *@
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </FluentBodyContent>
 
-            @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
-            {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Projectes Missed Deadline" Id="tab-6">
-                    <div class="col row mt-5" style="max-width: 30vw !important; margin-top: 50px;">
-                        <div class="col-11">
-                            <h5>Projects missed deadline: </h5>
-                        </div>
-                        <div class="col-1">
-                            <h6>@_missedDeadLineProject.ToString("N2")%</h6>
-                        </div>
-                    </div>
-                </FluentTab>
-            }
+            </FluentStack>
 
-            @if (SeeEmployeeTurnoverKPI)
-            {
-                <FluentTab Class="my-fluent-tab" LabelClass="my-fluent-tab-label" Label="Employees Turnover" Id="tab-7">
-                    <div class="col table-responsive" style="margin-top: 50px;">
-                        <table class="table table-hover table-success text-center caption-top">
-                            <caption>Employee turnover kpi:</caption>
-                            <thead>
-                                <tr>
-                                    <th>Employee</th>
-                                    <th>Turnover</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>--</td>
-                                    <td>No Ready Yet</td>
-                                </tr>
-                                @* @foreach (var item in _delayedProjects)
-                                {
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td>@item.Active</td>
-                                </tr>
-                                } *@
-                            </tbody>
-                        </table>
-                    </div>
-                </FluentTab>
-            }
-
-        </FluentTabs>
+            <FluentFooter Style="@("height: 40px; color: white; text-align: center;")">
+                Footer Text
+            </FluentFooter>
+        </FluentLayout>
 
     }
 

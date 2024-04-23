@@ -245,6 +245,7 @@ public class KpisRepo : IDisposable
                                                    .Include(r => r.Client)
                                                    .Include(r => r.Invoices)
                                                    .Include(p => p.Category)
+                                                   .Include(p => p.Stage)
                                                    .Include(p => p.ProjectManager)
                                                    .Include(p => p.ProjectsSubConstructors)
                                                    .Where(p => p.DeadLine < DateTime.Now)

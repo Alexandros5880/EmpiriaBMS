@@ -48,7 +48,7 @@ public partial class TenderTable
 
     private void HandleRowFocus(FluentDataGridRow<TenderDataDto> row)
     {
-        Console.WriteLine($"Row focused: {row.Item?.ProjectName}");
+        Console.WriteLine($"Row focused: {row.Item?.ProjectStage}");
     }
 
 }

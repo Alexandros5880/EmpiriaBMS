@@ -20,6 +20,7 @@ using EmpiriaBMS.Front.Horizontal;
 using Microsoft.Fast.Components.FluentUI;
 using Microsoft.Graph.Models;
 using EmpiriaBMS.Core.Dtos;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -39,8 +40,29 @@ public partial class KpisLand : ComponentBase, IDisposable
     bool SeeDelayedPaymentsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 26);
     #endregion
 
-    private decimal _missedDeadLineProject = 0;
-    private Dictionary<string, long> _employeesTurnover = null;
+    
+    
+
+    #region Tab Actions
+    bool[] tabs =
+    {
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+    };
+
+    private void TabMenuClick(MouseEventArgs e, int tabIndex)
+    {
+        for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+        tabs[tabIndex] = true;
+    }
+    #endregion
+
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -56,11 +78,17 @@ public partial class KpisLand : ComponentBase, IDisposable
         }
     }
 
+
+
+    private decimal _missedDeadLineProject = 0;
     private async Task _getMissedDeadLineProjects()
     {
         _missedDeadLineProject = await _dataProvider.KPIS.GetMissedDeadLineProjects();
     }
 
+
+
+    private Dictionary<string, long> _employeesTurnover = null;
     private async Task _getEmployeesTurnover()
     {
         await Task.Delay(1000);
@@ -69,15 +97,7 @@ public partial class KpisLand : ComponentBase, IDisposable
         // _employeesTurnover = await _dataProvider.KPIS.GetEmployeesTurnover();
     }
 
-    #region Tab Actions
-    string? activeid = "tab-1";
-    FluentTab? changedto;
-
-    private void HandleOnTabChange(FluentTab tab)
-    {
-        changedto = tab;
-    }
-    #endregion
+    
 
     protected virtual void Dispose(bool disposing)
     {
