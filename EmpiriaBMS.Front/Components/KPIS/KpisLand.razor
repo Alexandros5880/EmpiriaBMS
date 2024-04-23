@@ -8,146 +8,115 @@
 
 <div class="container-fluid m-2" style="max-width: 74vw !important;">
 
-    @if (_loading)
-    {
-        <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px;">
-            <FluentProgressRing />
-        </div>
-        @*
-            <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-                <FilterProgressRing FilterLoading="@_startLoading" />
-            </div>
-        *@
-    }
-    else {
+    <FluentLayout Style="margin-top: 10px;">
 
+        <FluentHeader>
+            <h3>Key Performance Indicators (KPIS)</h3>
+            <FluentSpacer />
+            Aligned to the end
+        </FluentHeader>
 
-        <FluentLayout Style="margin-top: 10px;">
+        <FluentStack Orientation="Orientation.Horizontal" Width="100%" HorizontalGap="33">
 
-            <FluentHeader>
-                <h3>Key Performance Indicators (KPIS)</h3>
-                <FluentSpacer />
-                Aligned to the end
-            </FluentHeader>
+            <FluentNavMenu Width="340">
+                <FluentNavLink OnClick="@((e) => TabMenuClick(e, 0))"
+                               Class="@((tabs[0] ? "active-nav-link" : ""))">Tender Table</FluentNavLink>
+                <FluentNavLink OnClick="@((e) => TabMenuClick(e, 1))"
+                               Class="@((tabs[1] ? "active-nav-link" : ""))">Hours Per Role1</FluentNavLink>
+                <FluentNavLink OnClick="@((e) => TabMenuClick(e, 2))"
+                               Class="@((tabs[2] ? "active-nav-link" : ""))">Delayed Projects Bar</FluentNavLink>
+                <FluentNavLink OnClick="@((e) => TabMenuClick(e, 3))"
+                               Class="@((tabs[3] ? "active-nav-link" : ""))">Delayed Project Types Bar</FluentNavLink>
+                <FluentNavLink OnClick="@((e) => TabMenuClick(e, 4))"
+                               Class="@((tabs[4] ? "active-nav-link" : ""))">Delayed Payments</FluentNavLink>
+                <FluentNavLink OnClick="@((e) => TabMenuClick(e, 5))"
+                               Class="@((tabs[5] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
+                <FluentNavLink OnClick="@((e) => TabMenuClick(e, 6))"
+                               Class="@((tabs[6] ? "active-nav-link" : ""))">Employees Turnover</FluentNavLink>
+                <FluentNavLink OnClick="@((e) => TabMenuClick(e, 7))"
+                               Class="@((tabs[7] ? "active-nav-link" : ""))">Pending Peyments</FluentNavLink>
+            </FluentNavMenu>
 
-            <FluentStack Orientation="Orientation.Horizontal" Width="100%" HorizontalGap="33">
-
-                <FluentNavMenu Width="340">
-                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 0))"
-                                   Class="@((tabs[0] ? "active-nav-link" : ""))">Tender Table</FluentNavLink>
-                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 1))"
-                                   Class="@((tabs[1] ? "active-nav-link" : ""))">Hours Per Role1</FluentNavLink>
-                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 2))"
-                                   Class="@((tabs[2] ? "active-nav-link" : ""))">Delayed Projects Bar</FluentNavLink>
-                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 3))"
-                                   Class="@((tabs[3] ? "active-nav-link" : ""))">Delayed Project Types Bar</FluentNavLink>
-                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 4))"
-                                   Class="@((tabs[4] ? "active-nav-link" : ""))">Delayed Payments</FluentNavLink>
-                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 5))"
-                                   Class="@((tabs[5] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
-                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 6))"
-                                   Class="@((tabs[6] ? "active-nav-link" : ""))">Employees Turnover</FluentNavLink>
-                </FluentNavMenu>
-
-                <FluentBodyContent>
-                    @if(tabs[0])
+            <FluentBodyContent>
+                @if (tabs[0])
+                {
+                    @if (SeeTenderTableKPI)
                     {
-                        @if (SeeTenderTableKPI)
-                        {
-                            <div style="margin-top: 50px;">
-                                <TenderTable />
-                            </div>
-                        }
+                        <div style="margin-top: 50px;">
+                            <TenderTable />
+                        </div>
                     }
-                    else if (tabs[1])
+                }
+                else if (tabs[1])
+                {
+                    @if (SeeHoursPerRoleKPI)
                     {
-                        @if (SeeHoursPerRoleKPI)
-                        {
-                            <div style="margin-top: 50px;">
-                                <HouresPerRoleKPI />
-                            </div>
-                        }
+                        <div style="margin-top: 50px;">
+                            <HouresPerRoleKPI />
+                        </div>
                     }
-                    else if (tabs[2])
+                }
+                else if (tabs[2])
+                {
+                    @if (SeeActiveDelayedProjectsKPI)
                     {
-                        @if (SeeActiveDelayedProjectsKPI)
-                        {
-                            <div style="margin-top: 50px;">
-                                <DelayedProjectsKPI />
-                            </div>
-                        }
+                        <div style="margin-top: 50px;">
+                            <DelayedProjectsKPI />
+                        </div>
                     }
-                    else if (tabs[3])
+                }
+                else if (tabs[3])
+                {
+                    @if (SeeActiveDelayedProjectsTypesCounterKPI)
                     {
-                        @if (SeeActiveDelayedProjectsTypesCounterKPI)
-                        {
-                            <div style="margin-top: 50px;">
-                                <DelayedProjectTypesKPI />
-                            </div>
-                        }
+                        <div style="margin-top: 50px;">
+                            <DelayedProjectTypesKPI />
+                        </div>
                     }
-                    else if (tabs[4])
+                }
+                else if (tabs[4])
+                {
+                    @if (SeeDelayedPaymentsKPI)
                     {
-                        @if (SeeDelayedPaymentsKPI)
-                        {
-                            <div style="margin-top: 50px;">
-                                <DelayedPaymentsKpi />
-                            </div>
-                        }
+                        <div style="margin-top: 50px;">
+                            <DelayedPaymentsKpi />
+                        </div>
                     }
-                    else if (tabs[5])
+                }
+                else if (tabs[5])
+                {
+                    @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
                     {
-                        @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
-                        {
-                            <div class="col row mt-5" style="max-width: 30vw !important; margin-top: 50px;">
-                                <div class="col-11">
-                                    <h5>Projects missed deadline: </h5>
-                                </div>
-                                <div class="col-1">
-                                    <h6>@_missedDeadLineProject.ToString("N2")%</h6>
-                                </div>
-                            </div>
-                        }
+                        <div style="margin-top: 50px;">
+                            <ProjectsMissedDeadlineKPI />
+                        </div>
                     }
-                    else if (tabs[6])
+                }
+                else if (tabs[6])
+                {
+                    @if (SeeEmployeeTurnoverKPI)
                     {
-                        @if (SeeEmployeeTurnoverKPI)
-                        {
-                            <div class="col table-responsive" style="margin-top: 50px;">
-                                <table class="table table-hover table-success text-center caption-top">
-                                    <caption>Employee turnover kpi:</caption>
-                                    <thead>
-                                        <tr>
-                                            <th>Employee</th>
-                                            <th>Turnover</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>--</td>
-                                            <td>No Ready Yet</td>
-                                        </tr>
-                                        @* @foreach (var item in _delayedProjects)
-                                        {
-                                        <tr>
-                                            <td>@item.Name</td>
-                                            <td>@item.Active</td>
-                                        </tr>
-                                        } *@
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
+                        <div style="margin-top: 50px;">
+                            <EmployeeTurnoverKPI />
+                        </div>
                     }
-                </FluentBodyContent>
+                }
+                else if (tabs[7])
+                {
+                    @if (SeePendingsPaymentsKPI)
+                    {
+                        <div style="margin-top: 50px;">
+                            <PandingPaymentsKPI />
+                        </div>
+                    }
+                }
+            </FluentBodyContent>
 
-            </FluentStack>
+        </FluentStack>
 
-            <FluentFooter Style="@("height: 40px; color: white; text-align: center;")">
-                Footer Text
-            </FluentFooter>
-        </FluentLayout>
-
-    }
+        <FluentFooter Style="@("height: 40px; color: white; text-align: center;")">
+            Footer Text
+        </FluentFooter>
+    </FluentLayout>
 
 </div>

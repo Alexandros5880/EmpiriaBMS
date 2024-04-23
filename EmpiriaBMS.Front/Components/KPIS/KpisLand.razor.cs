@@ -24,10 +24,8 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class KpisLand : ComponentBase, IDisposable
+public partial class KpisLand : ComponentBase
 {
-    private bool disposedValue;
-    bool _loading = true;
 
     #region Authorization Properties
     bool SeeHoursPerRoleKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 18);
@@ -38,22 +36,12 @@ public partial class KpisLand : ComponentBase, IDisposable
     bool SeeMyProjectsMissedDeadLineKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 22);
     bool SeeTenderTableKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 25);
     bool SeeDelayedPaymentsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 26);
+    bool SeePendingsPaymentsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 27);
     #endregion
 
-    
-    
 
     #region Tab Actions
-    bool[] tabs =
-    {
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-    };
+    bool[] tabs = new bool[1000];
 
     private void TabMenuClick(MouseEventArgs e, int tabIndex)
     {
@@ -62,58 +50,15 @@ public partial class KpisLand : ComponentBase, IDisposable
     }
     #endregion
 
-
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
 
         if (firstRender)
         {
-            await _getMissedDeadLineProjects();
-            await _getEmployeesTurnover();
-
-            _loading = false;
+            tabs[0] = true;
             StateHasChanged();
         }
     }
 
-
-
-    private decimal _missedDeadLineProject = 0;
-    private async Task _getMissedDeadLineProjects()
-    {
-        _missedDeadLineProject = await _dataProvider.KPIS.GetMissedDeadLineProjects();
-    }
-
-
-
-    private Dictionary<string, long> _employeesTurnover = null;
-    private async Task _getEmployeesTurnover()
-    {
-        await Task.Delay(1000);
-
-        // TODO: _getEmployeesTurnover()
-        // _employeesTurnover = await _dataProvider.KPIS.GetEmployeesTurnover();
-    }
-
-    
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-
-            }
-            disposedValue = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
 }
