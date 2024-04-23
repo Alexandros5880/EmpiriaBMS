@@ -293,4 +293,7 @@ background: var(--dashboard-tables-header-color) !important;
     z-index: 0 !important;
     text-align: left !important;
 }
+.positioning-region {
+    background-color: var(--main-bg-color) !important;
+}
 /* Fluent Nav Item */

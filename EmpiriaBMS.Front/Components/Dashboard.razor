@@ -8,6 +8,7 @@
 @using EmpiriaBMS.Front.Components.KPIS
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Admin
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -37,6 +38,7 @@ else
 {
     <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
 
+        <!-- Dashboard -->
         <FluentTab Class="my-fluent-tab" 
                    LabelClass="my-fluent-tab-label"
                    Label="Home"
@@ -543,6 +545,29 @@ else
                             </div>
                         </div>
                     </div>
+            </FluentTab>
+        }
+
+        <!-- Admin -->
+        @if (seeAdmin)
+        {
+            <FluentTab Class="my-fluent-tab"
+                       LabelClass="my-fluent-tab-label"
+                       Label="Admin"
+                       Icon="@(new Icons.Regular.Size48.Settings())"
+                       Id="tab-admin">
+
+                <div class="row justify-content-center mt-1 mb-1">
+                    <div class="col-auto" style="width: 100%; height: 100%;">
+                        <div class="m-1 row justify-content-center">
+                            <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                                <AdminLand />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </FluentTab>
         }
 

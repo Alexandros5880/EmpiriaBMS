@@ -1,0 +1,71 @@
+﻿<h2>Collapsible Navigation Example</h2>
+
+<FluentStack Orientation="Orientation.Horizontal" Width="100%">
+    <div style="max-height: 78vh;">
+        <FluentNavMenu Width="250"
+                       Collapsible="false"
+                       Title="Collapsible demo"
+                       Style="height: 78vh; overflow-y: auto; border-radius: 4px;">
+
+            <FluentNavGroup Title="Authorization" Icon="@(new MyIcons.Regular.Size24.Auth())">
+                <FluentNavGroup Title="Users" Icon="@(new MyIcons.Regular.Size24.People())">
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Users</FluentNavLink>
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Roles</FluentNavLink>
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Permissions</FluentNavLink>
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Clients</FluentNavLink>
+                    <FluentNavLink Icon="@(new Icons.Filled.Size24.DataTreemap())">Emails</FluentNavLink>
+                </FluentNavGroup>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Roles</FluentNavLink>
+            </FluentNavGroup>
+
+            <FluentNavGroup Title="Projects" Icon="@(new Icons.Regular.Size24.ProjectionScreen())">
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Projects</FluentNavLink>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.Status())">Stages</FluentNavLink>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.TextBulletList())">Categories</FluentNavLink>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.TextBulletList())">Sub Categories</FluentNavLink>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.CircleImage())">Clients</FluentNavLink>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.CallDismiss())">Issues</FluentNavLink>
+                <FluentNavGroup Title="Offers" Icon="@(new Icons.Regular.Size24.CloudOff())">
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Offers</FluentNavLink>
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Types</FluentNavLink>
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">States</FluentNavLink>
+                </FluentNavGroup>
+
+                <FluentNavGroup Title="Invoices" Icon="@(new Icons.Regular.Size24.TextIndentIncrease())">
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Invoices</FluentNavLink>
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Types</FluentNavLink>
+                </FluentNavGroup>
+
+                <FluentNavGroup Title="Payments" Icon="@(new Icons.Regular.Size24.Payment())">
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Payments</FluentNavLink>
+                    <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Types</FluentNavLink>
+                </FluentNavGroup>
+            </FluentNavGroup>
+
+            <FluentNavLink Icon="@(new Icons.Regular.Size24.CallMissed())">Issues</FluentNavLink>
+
+            <FluentNavGroup Title="Disciplines" Icon="@(new Icons.Regular.Size24.PlugDisconnected())">
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Disciplines</FluentNavLink>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Types</FluentNavLink>
+            </FluentNavGroup>
+
+            <FluentNavGroup Title="Deliverables" Icon="@(new Icons.Regular.Size24.PlugDisconnected())">
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Deliverables</FluentNavLink>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Types</FluentNavLink>
+            </FluentNavGroup>
+
+            <FluentNavGroup Title="Supportive Works" Icon="@(new Icons.Regular.Size24.CloudWords())">
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Supportive Works</FluentNavLink>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.GroupList())">Types</FluentNavLink>
+            </FluentNavGroup>
+
+            <FluentNavLink Icon="@(new Icons.Regular.Size24.Folder())">Documents</FluentNavLink>
+
+        </FluentNavMenu>
+    </div>
+    <div style="width: 100%;">
+
+        <!-- Display Body -->
+
+    </div>
+</FluentStack>
