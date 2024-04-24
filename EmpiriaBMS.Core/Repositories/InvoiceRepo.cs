@@ -44,6 +44,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
             {
                 i = await _context.Set<Invoice>()
                                   .Include(r => r.Project)
+                                  .Include(r => r.Type)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
