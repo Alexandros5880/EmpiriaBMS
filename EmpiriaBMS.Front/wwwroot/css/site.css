@@ -280,7 +280,8 @@ background: var(--dashboard-tables-header-color) !important;
     padding: 4px;
     text-align: left !important;
     z-index: 1 !important;
-    width: 280px !important;
+    min-width: 200px !important;
+    max-width: 280px !important;
 }
 
 .active-nav-link > .positioning-region,

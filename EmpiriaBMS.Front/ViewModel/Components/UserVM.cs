@@ -137,6 +137,8 @@ public class UserVM : BaseVM
         }
     }
 
+    public string FullName => $"{LastName} {MidName} {FirstName}";
+
     public ICollection<Email> Emails { get; set; }
 
     public List<ProjectSubConstructor> ProjectsSubConstructors { get; set; }

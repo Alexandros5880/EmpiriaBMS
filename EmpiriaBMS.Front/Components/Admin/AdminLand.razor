@@ -2,66 +2,302 @@
 
 <FluentStack Orientation="Orientation.Horizontal" Width="100%">
     <div style="max-height: 78vh;">
-        <FluentNavMenu Width="250"
+        <FluentNavMenu Width="280"
                        Collapsible="false"
                        Title="Collapsible demo"
                        Style="height: 78vh; overflow-y: auto; border-radius: 4px;">
 
             <FluentNavGroup Title="Authorization" Icon="@(new MyIcons.Size24.Auth())">
                 <FluentNavGroup Title="Users" Icon="@(new MyIcons.Size24.People())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Users())">Users</FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Emails())">Emails</FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Users())"
+                                   OnClick="@(() => TabMenuClick(0))"
+                                   Class="@((tabs[0] ? "active-nav-link" : ""))">
+                        Users
+                    </FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Emails())"
+                                   OnClick="@(() => TabMenuClick(1))"
+                                   Class="@((tabs[1] ? "active-nav-link" : ""))">
+                        Emails
+                    </FluentNavLink>
                 </FluentNavGroup>
-                <FluentNavLink Icon="@(new MyIcons.Size24.Roles())">Roles</FluentNavLink>
-                <FluentNavLink Icon="@(new MyIcons.Size24.Permissions())">Permissions</FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Roles())"
+                               OnClick="@(() => TabMenuClick(2))"
+                               Class="@((tabs[2] ? "active-nav-link" : ""))">
+                    Roles
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Permissions())"
+                               OnClick="@(() => TabMenuClick(3))"
+                               Class="@((tabs[3] ? "active-nav-link" : ""))">
+                    Permissions
+                </FluentNavLink>
             </FluentNavGroup>
 
             <FluentNavGroup Title="Projects" Icon="@(new MyIcons.Size24.Projects1())">
-                <FluentNavLink Icon="@(new MyIcons.Size24.Projects2())">Projects</FluentNavLink>
-                <FluentNavLink Icon="@(new MyIcons.Size24.Stages())">Stages</FluentNavLink>
-                <FluentNavLink Icon="@(new MyIcons.Size24.Categories())">Categories</FluentNavLink>
-                <FluentNavLink Icon="@(new MyIcons.Size24.SubCategories())">Sub Categories</FluentNavLink>
-                <FluentNavLink Icon="@(new MyIcons.Size24.Clients())">Clients</FluentNavLink>
-                <FluentNavLink Icon="@(new MyIcons.Size24.Issues())">Issues</FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Projects2())"
+                               OnClick="@(() => TabMenuClick(4))"
+                               Class="@((tabs[4] ? "active-nav-link" : ""))">
+                    Projects
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Stages())"
+                               OnClick="@(() => TabMenuClick(5))"
+                               Class="@((tabs[5] ? "active-nav-link" : ""))">
+                    Stages
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Categories())"
+                               OnClick="@(() => TabMenuClick(6))"
+                               Class="@((tabs[6] ? "active-nav-link" : ""))">
+                    Categories
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.SubCategories())"
+                               OnClick="@(() => TabMenuClick(7))"
+                               Class="@((tabs[7] ? "active-nav-link" : ""))">
+                    Sub Categories
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Clients())"
+                               OnClick="@(() => TabMenuClick(8))"
+                               Class="@((tabs[8] ? "active-nav-link" : ""))">
+                    Clients
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Issues())"
+                               OnClick="@(() => TabMenuClick(9))"
+                               Class="@((tabs[9] ? "active-nav-link" : ""))">
+                    Issues
+                </FluentNavLink>
                 <FluentNavGroup Title="Offers" Icon="@(new MyIcons.Size24.Offers1())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())">Offers</FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())">Types</FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.States())">States</FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())"
+                                   OnClick="@(() => TabMenuClick(10))"
+                                   Class="@((tabs[10] ? "active-nav-link" : ""))">
+                        Offers
+                    </FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                                   OnClick="@(() => TabMenuClick(11))"
+                                   Class="@((tabs[11] ? "active-nav-link" : ""))">
+                        Types
+                    </FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.States())"
+                                   OnClick="@(() => TabMenuClick(12))"
+                                   Class="@((tabs[12] ? "active-nav-link" : ""))">
+                        States
+                    </FluentNavLink>
                 </FluentNavGroup>
 
                 <FluentNavGroup Title="Invoices" Icon="@(new MyIcons.Size24.Invoices1())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Invoices2())">Invoices</FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())">Types</FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Invoices2())"
+                                   OnClick="@(() => TabMenuClick(13))"
+                                   Class="@((tabs[13] ? "active-nav-link" : ""))">
+                        Invoices
+                    </FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                                   OnClick="@(() => TabMenuClick(14))"
+                                   Class="@((tabs[14] ? "active-nav-link" : ""))">
+                        Types
+                    </FluentNavLink>
                 </FluentNavGroup>
 
                 <FluentNavGroup Title="Payments" Icon="@(new MyIcons.Size24.Payments1())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Payments2())">Payments</FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())">Types</FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Payments2())"
+                                   OnClick="@(() => TabMenuClick(15))"
+                                   Class="@((tabs[15] ? "active-nav-link" : ""))">
+                        Payments
+                    </FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                                   OnClick="@(() => TabMenuClick(16))"
+                                   Class="@((tabs[16] ? "active-nav-link" : ""))">
+                        Types
+                    </FluentNavLink>
                 </FluentNavGroup>
             </FluentNavGroup>
 
             <FluentNavGroup Title="Disciplines" Icon="@(new MyIcons.Size24.Disciplines1())">
-                <FluentNavLink Icon="@(new MyIcons.Size24.Disciplines2())">Disciplines</FluentNavLink>
-                <FluentNavLink Icon="@(new MyIcons.Size24.Types())">Types</FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Disciplines2())"
+                               OnClick="@(() => TabMenuClick(17))"
+                               Class="@((tabs[17] ? "active-nav-link" : ""))">
+                    Disciplines
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(18))"
+                               Class="@((tabs[18] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
             </FluentNavGroup>
 
             <FluentNavGroup Title="Deliverables" Icon="@(new MyIcons.Size24.Deliverables1())">
-                <FluentNavLink Icon="@(new MyIcons.Size24.Deliverables2())">Deliverables</FluentNavLink>
-                <FluentNavLink Icon="@(new MyIcons.Size24.Types())">Types</FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Deliverables2())"
+                               OnClick="@(() => TabMenuClick(19))"
+                               Class="@((tabs[19] ? "active-nav-link" : ""))">
+                    Deliverables
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(20))"
+                               Class="@((tabs[20] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
             </FluentNavGroup>
 
             <FluentNavGroup Title="Supportive Works" Icon="@(new MyIcons.Size24.SupportiveWorks1())">
-                <FluentNavLink Icon="@(new MyIcons.Size24.SupportiveWorks2())">Supportive Works</FluentNavLink>
-                <FluentNavLink Icon="@(new MyIcons.Size24.Types())">Types</FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.SupportiveWorks2())"
+                               OnClick="@(() => TabMenuClick(21))"
+                               Class="@((tabs[21] ? "active-nav-link" : ""))">
+                    Supportive Works
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(22))"
+                               Class="@((tabs[22] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
             </FluentNavGroup>
 
-            <FluentNavLink Icon="@(new MyIcons.Size24.Documents())">Documents</FluentNavLink>
+            <FluentNavLink Icon="@(new MyIcons.Size24.Documents())"
+                           OnClick="@(() => TabMenuClick(23))"
+                           Class="@((tabs[23] ? "active-nav-link" : ""))">
+                Documents
+            </FluentNavLink>
 
         </FluentNavMenu>
     </div>
     <div style="width: 100%;">
 
         <!-- Display Body -->
+        @if (tabs[0])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Users.Users />
+            </div>
+        }
+        else if (tabs[1])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[2])
+        {
+            <div style="padding: 10px;">
+            </div>
+        }
+        else if (tabs[3])
+        {
+            <div style="padding: 10px;">
+            </div>
+        }
+        else if (tabs[4])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[5])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[6])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[7])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[8])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[9])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[10])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[11])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[12])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[13])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[14])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[15])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[16])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[17])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[18])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[19])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[20])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[21])
+        {
+            <div style="padding: 10px;">
+
+            </div>
+        }
+        else if (tabs[22])
+        {
+            <div style="padding: 10px;">
+            </div>
+        }
+        else if (tabs[23])
+        {
+            <div style="padding: 10px;">
+            </div>
+        }
 
     </div>
 </FluentStack>

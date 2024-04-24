@@ -41,7 +41,7 @@ public partial class KpisLand : ComponentBase
 
 
     #region Tab Actions
-    bool[] tabs = new bool[1000];
+    bool[] tabs = new bool[50];
 
     private void TabMenuClick(MouseEventArgs e, int tabIndex)
     {

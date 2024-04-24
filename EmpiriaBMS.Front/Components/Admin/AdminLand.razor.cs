@@ -1,25 +1,19 @@
-﻿using Microsoft.Fast.Components.FluentUI;
+﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin;
 
 public partial class AdminLand
 {
 
-    /* 
-        FluentNavLink.Icon
+    #region Tab Actions
+    bool[] tabs = new bool[50];
 
-        public Icon(string name, IconVariant variant, IconSize size, string content)
-        {
-            Name = name;
-            Variant = variant;
-            Size = size;
-            Content = content;
-        }
-    */
-
-    public AdminLand()
+    private void TabMenuClick(int tabIndex)
     {
-        new Icons.Regular.Size24.GroupList();
+        for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+        tabs[tabIndex] = true;
     }
+    #endregion
 
 }
