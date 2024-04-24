@@ -17,7 +17,7 @@
                             Pagination="@pagination"
                             TGridItem="ProjectVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="auto auto auto auto auto 100px"
+                            GridTemplateColumns="auto auto auto auto auto auto auto 100px"
                             style="height: 70vh; overflow:auto;">
 
                 <TemplateColumn Title="Name"
@@ -40,8 +40,10 @@
 
                 <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Active)" Sortable="true" Title="Active" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.StartDate)" Sortable="true" Title="StartDate" Format="dd-mm-yy" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.DeadLine)" Sortable="true" Title="DeadLine" Format="dd-mm-yy" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.StartDate)" Sortable="true" Title="StartDate" Format="dd-mm-yyyy" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.DeadLine)" Sortable="true" Title="DeadLine" Format="dd-mm-yyyy" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.PMFullName)" Sortable="true" Title="ProjectManager" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.ClientFullName)" Sortable="true" Title="Client" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
                     <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />

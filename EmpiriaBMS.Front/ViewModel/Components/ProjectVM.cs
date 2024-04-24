@@ -308,4 +308,6 @@ public class ProjectVM : BaseVM
         }
     }
 
+    public string PMFullName => ProjectManager != null ? $"{ProjectManager.LastName} {ProjectManager.MidName} {ProjectManager.FirstName}" : "";
+    public string ClientFullName => Client != null ? $"{Client.LastName} {Client.MidName} {Client.FirstName}" : "";
 }
