@@ -1,16 +1,57 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Front.Components.General;
-using EmpiriaBMS.Front.ViewModel.Components;
-using System.Collections.ObjectModel;
+﻿using EmpiriaBMS.Front.ViewModel.Components;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects;
 
 public partial class Projects
 {
-    private Paginator _paginator;
-    private ObservableCollection<ProjectVM> _source = new ObservableCollection<ProjectVM>();
-    private ProjectVM _selectedItem = new ProjectVM();
+    #region Data Grid
+    private List<ProjectVM> _records = new List<ProjectVM>();
+    private string _filterString = string.Empty;
+    IQueryable<ProjectVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    private ProjectVM _selectedRecord = new ProjectVM();
+
+    private void HandleFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        {
+            _filterString = string.Empty;
+        }
+    }
+
+    private void HandleRowFocus(FluentDataGridRow<ProjectVM> row)
+    {
+        _selectedRecord = row.Item as ProjectVM;
+    }
+
+    private async Task _getRecords()
+    {
+        var dtos = await DataProvider.Projects.GetAll();
+        _records = Mapper.Map<List<ProjectVM>>(dtos);
+    }
+
+    private void _add()
+    {
+
+    }
+
+    private void _edit(ProjectVM record)
+    {
+
+    }
+
+    private void _delete(ProjectVM record)
+    {
+
+    }
+    #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -18,29 +59,9 @@ public partial class Projects
 
         if (firstRender)
         {
-            _paginator.SetRecordsLength(await DataProvider.Projects.Count());
-            await _getSource();
+            await _getRecords();
 
             StateHasChanged();
         }
-    }
-
-    private async Task _getSource()
-    {
-        var dtos = await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex);
-        var vms = Mapper.Map<List<ProjectVM>>(dtos);
-        _source.Clear();
-        vms.ForEach(_source.Add);
-    }
-
-    private void _onSelectItem(int id)
-    {
-        _selectedItem = _source.FirstOrDefault(r => r.Id == id);
-    }
-
-    protected override bool ShouldRender()
-    {
-        // Return false to prevent the entire component from re-rendering
-        return true;
     }
 }
