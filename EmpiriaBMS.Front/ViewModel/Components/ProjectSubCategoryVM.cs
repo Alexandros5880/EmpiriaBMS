@@ -59,4 +59,6 @@ public class ProjectSubCategoryVM : BaseVM
     }
 
     public ICollection<Project> Projects { get; set; }
+
+    public string ParentCategoryName => Category != null ? Category.Name : "";
 }
