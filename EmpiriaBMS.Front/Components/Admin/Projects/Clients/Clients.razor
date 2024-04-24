@@ -1,4 +1,4 @@
-﻿@page "/admin/projects/subcategory"
+﻿@page "/admin/projects/clients"
 
 @using EmpiriaBMS.Front.Services
 @inject IDataProvider DataProvider
@@ -15,9 +15,9 @@
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
                             Pagination="@pagination"
-                            TGridItem="ProjectSubCategoryVM"
+                            TGridItem="ClientVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="auto auto 150px 100px"
+                            GridTemplateColumns="auto 100px 100px"
                             style="height: 70vh; overflow:auto;">
 
                 <TemplateColumn Title="Name"
@@ -34,12 +34,9 @@
                         </div>
                     </ColumnOptions>
                     <ChildContent>
-                        @(context.Name)
+                        @(context.FullName)
                     </ChildContent>
                 </TemplateColumn>
-
-                <PropertyColumn Property="@(p => p.ParentCategoryName)" Sortable="true" Title="Parent Category" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.CanAssignePM)" Sortable="true" Title="Can Assigne PM" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
                     <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />

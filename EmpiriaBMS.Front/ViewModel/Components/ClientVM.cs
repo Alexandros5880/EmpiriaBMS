@@ -46,4 +46,5 @@ public class ClientVM : UserVM
     }
 
     public ICollection<Project> Projects { get; set; }
+
 }
