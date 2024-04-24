@@ -4,7 +4,7 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 
-<div class="row" style="max-width: 76vw; overflow-x: auto; margin: 0 auto;">
+<div class="row" style="width: 76vw; overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow">
         <div>
             <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
@@ -17,7 +17,7 @@
                             Pagination="@pagination"
                             TGridItem="RoleVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="250px 280px 110px 110px 110px 300px 100px"
+                            GridTemplateColumns="auto 100px"
                             style="height: 70vh; overflow:auto;">
 
                 <TemplateColumn Title="Name"
