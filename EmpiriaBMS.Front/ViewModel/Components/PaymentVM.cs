@@ -110,6 +110,8 @@ public class PaymentVM : BaseVM
         }
     }
 
+    public string TypeName => Type != null ? Type.Name : "";
+
     private int _invoiceId { get; set; }
     public int InvoiceId
     {
@@ -135,6 +137,9 @@ public class PaymentVM : BaseVM
             NotifyPropertyChanged(nameof(Invoice));
         }
     }
+
+    public string ProjectName => Invoice?.Project?.Name ?? "";
+    public string InvoiceTypeName => Invoice?.Type?.Name ?? "";
 
     public PaymentVM() { }
 
