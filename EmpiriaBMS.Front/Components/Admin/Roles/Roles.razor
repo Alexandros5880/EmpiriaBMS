@@ -4,92 +4,56 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 
-@if (!_isEditMode)
-{
-<div class="row">
-    <div class="col-12 card shadow p-1 mt-2">
-            <div class="d-flex justify-content-between m-1">
-                <div><h3>Roles</h3></div>
-                <div>
-                    <span class="codicon--add"
-                      @onclick="@(async() => await _add())">
-                    </span>
-                </div>
-            </div>
-            <div class="table-responsive p-1 table-container">
-                <table class="table table-hover text-center">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="sticky-header"><h5>User</h5></th>
-                            <th scope="col" class="sticky-header"><h5>Edit</h5></th>
-                            <th scope="col" class="sticky-header"><h5>Delete</h5></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var role in _roles)
-                        {
-                            <tr class="align-middle"
-                                @onclick="@(() => _onSelectRole(role.Id))">
+<div class="row" style="max-width: 76vw; overflow-x: auto; margin: 0 auto;">
+    <div class="col-12 card shadow">
+        <div>
+            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+            </FluentStack>
+        </div>
+        <div>
+            <FluentDataGrid Items="@FilteredItems"
+                            ResizableColumns=true
+                            Pagination="@pagination"
+                            TGridItem="RoleVM"
+                            OnRowFocus="HandleRowFocus"
+                            GridTemplateColumns="250px 280px 110px 110px 110px 300px 100px"
+                            style="height: 70vh; overflow:auto;">
 
-                                <td class="align-middle
-                                    @((_selectedRole == null ||
-                                            !_selectedRole.Id.Equals(role.Id)
-                                                            ? "" : "highlight_1"))"
-                                    style="word-wrap: break-word;">
-                                    <labe>@role.Name</labe>
-                                </td>
+                <TemplateColumn Title="Name"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                          Autofocus=true
+                                          @bind-Value="@_filterString"
+                                          Placeholder="Name..."
+                                          @oninput="@HandleFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.Name)
+                    </ChildContent>
+                </TemplateColumn>
 
-                                <td class="align-middle
-                                    @((_selectedRole == null ||
-                                            !_selectedRole.Id.Equals(role.Id)
-                                                            ? "" : "highlight_1"))"
-                                    style="width: 150px !important;"
-                                    @onclick="@(async() => await _edit())">
-                                    <span class="material-symbols--edit-outline" />
-                                </td>
+                <TemplateColumn Title="Actions" Align="@Align.End">
+                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                </TemplateColumn>
 
-                                <td class="align-middle
-                                    @((_selectedRole == null ||
-                                            !_selectedRole.Id.Equals(role.Id)
-                                                            ? "" : "highlight_1"))"
-                                    style="width: 150px !important;"
-                                    @onclick="@(async() => await _delete(role.Id))">
-                                    <span class="fluent--delete-28-regular" />
-                                </td>
-
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <!-- Paginator -->
-            <div style="text-align: right;">
-                <Paginator @ref=_paginator Renderer="@_getRoles" />
-            </div>
+            </FluentDataGrid>
+        </div>
+        <div style="min-width: 50%;">
+            <FluentPaginator State="@pagination">
+                <SummaryTemplate>
+                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                </SummaryTemplate>
+                <PaginationTextTemplate>
+                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                </PaginationTextTemplate>
+            </FluentPaginator>
+        </div>
     </div>
-    </div>
-}
-else
-{
-    <EditRole @ref="_editRoleCompoment"
-              Role="@_selectedRole"
-              IsReadMode="@false"
-              OnSave="@(async () => await _save())"
-              OnCancel="@_cancel" />
-}
-
-<!-- Add / Edit Dialog -->
-@* <FluentDialog @ref="_addEditDialog"
-                Hidden="@(!_isAddEditDialogOdepened)"
-                Modal="true"
-                DialogType=@DialogType.Panel
-                style="--dialog-width: 500px !important;
-                       --dialog-height: auto !important;">
-
-    <EditRole @ref="_editRoleCompoment"
-              Role="@_selectedRole"
-              IsReadMode="@false"
-              OnSave="@(async () => await _save())"
-              OnCancel="@_cancel" />
-
-</FluentDialog> *@
+</div>

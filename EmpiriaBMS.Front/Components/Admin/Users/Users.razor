@@ -4,7 +4,7 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 
-<div class="row">
+<div class="row" style="max-width: 76vw; overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow">
         <div>
             <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
@@ -51,7 +51,7 @@
                 
             </FluentDataGrid>
         </div>
-        <div style="max-width: 100%;">
+        <div style="min-width: 50%;">
             <FluentPaginator State="@pagination">
                 <SummaryTemplate>
                     There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
