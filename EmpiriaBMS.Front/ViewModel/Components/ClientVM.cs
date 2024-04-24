@@ -47,4 +47,6 @@ public class ClientVM : UserVM
 
     public ICollection<Project> Projects { get; set; }
 
+    public string AddressFormated => Address != null ? Address.FormattedAddress : "";
+
 }

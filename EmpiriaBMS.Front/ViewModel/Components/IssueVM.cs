@@ -45,6 +45,8 @@ public class IssueVM : BaseVM
         }
     }
 
+    public string ProjectName => Project != null ? Project.Name : "";
+
     private int _displayedRoleId;
     public int DisplayedRoleId
     {
@@ -71,6 +73,8 @@ public class IssueVM : BaseVM
         }
     }
 
+    public string DisplayedRoleName => DisplayedRole != null ? DisplayedRole.Name : "";
+
     private int _creatorId;
     public int CreatorId
     {
@@ -96,6 +100,8 @@ public class IssueVM : BaseVM
             NotifyPropertyChanged(nameof(Creator));
         }
     }
+
+    public string CreatorName => Creator != null ? Creator.FirstName : "";
 
     public ICollection<Document> Documents { get; set; }
 

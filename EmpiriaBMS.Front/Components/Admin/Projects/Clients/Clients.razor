@@ -17,7 +17,7 @@
                             Pagination="@pagination"
                             TGridItem="ClientVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="auto 100px 100px"
+                            GridTemplateColumns="auto auto auto 100px"
                             style="height: 70vh; overflow:auto;">
 
                 <TemplateColumn Title="Name"
@@ -37,6 +37,9 @@
                         @(context.FullName)
                     </ChildContent>
                 </TemplateColumn>
+
+                <PropertyColumn Property="@(p => p.CompanyName)" Sortable="true" Title="Company" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.AddressFormated)" Sortable="true" Title="Address" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
                     <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
