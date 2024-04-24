@@ -34,6 +34,8 @@ public class OfferVM : BaseVM
         }
     }
 
+    public string TypeName => Type != null ? Type.Name : "";
+
     private int  _stateId;
     public int StateId
     {
@@ -59,6 +61,8 @@ public class OfferVM : BaseVM
             NotifyPropertyChanged(nameof(State));
         }
     }
+
+    public string StateName => State != null ? State.Name : "";
 
     private string _code;
     public string Code
@@ -189,4 +193,6 @@ public class OfferVM : BaseVM
             NotifyPropertyChanged(nameof(Project));
         }
     }
+
+    public string ProjectName => Project != null ? Project.Name : "";
 }
