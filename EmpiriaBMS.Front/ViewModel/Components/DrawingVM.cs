@@ -46,6 +46,8 @@ public class DrawingVM : BaseVM
         }
     }
 
+    public string TypeName => Type != null ? Type.Name : "";
+
     private float _completionEstimation;
     public float CompletionEstimation
     {
@@ -97,6 +99,8 @@ public class DrawingVM : BaseVM
             NotifyPropertyChanged(nameof(Discipline));
         }
     }
+
+    public string ProjectName => Discipline != null && Discipline.Project != null ? Discipline.Project.Name : "";
 
     [NotMapped]
     public string CompletionDateDisplay => $"{CompletionDate.Value.Day}/{CompletionDate.Value.Month}/{CompletionDate.Value.Year}";

@@ -30,6 +30,9 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
         {
             var dr = await _context
                              .Set<Drawing>()
+                             .Include(d => d.Type)
+                             .Include(d => d.Discipline)
+                             .ThenInclude(dis => dis.Project)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<DrawingDto>(dr);
@@ -45,16 +48,22 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
             if (pageSize == 0 || pageIndex == 0)
             {
                 drs = await _context.Set<Drawing>()
-                                     .ToListAsync();
+                                    .Include(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(dis => dis.Project)
+                                    .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
             }
 
 
             drs = await _context.Set<Drawing>()
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+                                .Include(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(dis => dis.Project)
+                                .Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
 
             return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
         }
@@ -72,6 +81,9 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
             if (pageSize == 0 || pageIndex == 0)
             {
                 drs = await _context.Set<Drawing>()
+                                    .Include(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(dis => dis.Project)
                                     .Where(expresion)
                                     .ToListAsync();
 
@@ -80,6 +92,9 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
 
 
             drs = await _context.Set<Drawing>()
+                                .Include(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(dis => dis.Project)
                                 .Where(expresion)
                                 .Skip((pageIndex - 1) * pageSize)
                                 .Take(pageSize)
