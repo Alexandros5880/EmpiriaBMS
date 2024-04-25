@@ -1,9 +1,10 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Front.ViewModel.Interfaces;
 using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class OfferTypeVM : BaseVM
+public class OfferTypeVM : BaseVM, ITypeVM
 {
     private string _name;
     public string Name

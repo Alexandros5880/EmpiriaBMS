@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Front.ViewModel.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class InvoiceTypeVM : BaseVM
+public class InvoiceTypeVM : BaseVM, ITypeVM
 {
     private string _name;
     public string Name

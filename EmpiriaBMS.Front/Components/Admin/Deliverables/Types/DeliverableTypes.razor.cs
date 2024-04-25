@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,56 @@ public partial class DeliverableTypes
         _records = Mapper.Map<List<DrawingTypeVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new DrawingTypeVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            DrawingTypeVM vm = result.Data as DrawingTypeVM;
+            var dto = Mapper.Map<DrawingTypeDto>(vm);
+            await DataProvider.DrawingsTypes.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(DrawingTypeVM record)
+    private async Task _edit(DrawingTypeVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            DrawingTypeVM vm = result.Data as DrawingTypeVM;
+            var dto = Mapper.Map<DrawingTypeDto>(vm);
+            await DataProvider.DrawingsTypes.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(DrawingTypeVM record)
