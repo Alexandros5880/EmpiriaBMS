@@ -46,6 +46,7 @@ public class DrawingVM : BaseVM
         }
     }
 
+    [NotMapped]
     public string TypeName => Type != null ? Type.Name : "";
 
     private float _completionEstimation;
@@ -100,6 +101,10 @@ public class DrawingVM : BaseVM
         }
     }
 
+    [NotMapped]
+    public string DisciplineTypeName => Discipline != null && Discipline.Type != null ? Discipline.Type.Name : "";
+
+    [NotMapped]
     public string ProjectName => Discipline != null && Discipline.Project != null ? Discipline.Project.Name : "";
 
     [NotMapped]

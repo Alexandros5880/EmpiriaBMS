@@ -7,6 +7,7 @@
                        Title="Collapsible demo"
                        Style="height: 78vh; overflow-y: auto; border-radius: 4px;">
 
+            <!-- Authorization -->
             <FluentNavGroup Title="Authorization" Icon="@(new MyIcons.Size24.Auth())">
                 <FluentNavLink Icon="@(new MyIcons.Size24.Users())"
                                OnClick="@(() => TabMenuClick(0))"
@@ -25,6 +26,7 @@
                 </FluentNavLink>
             </FluentNavGroup>
 
+            <!-- Projects -->
             <FluentNavGroup Title="Projects" Icon="@(new MyIcons.Size24.Projects1())">
                 <FluentNavLink Icon="@(new MyIcons.Size24.Projects2())"
                                OnClick="@(() => TabMenuClick(3))"
@@ -56,6 +58,8 @@
                                Class="@((tabs[8] ? "active-nav-link" : ""))">
                     Issues
                 </FluentNavLink>
+
+                <!-- Projects Offers -->
                 <FluentNavGroup Title="Offers" Icon="@(new MyIcons.Size24.Offers1())">
                     <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())"
                                    OnClick="@(() => TabMenuClick(9))"
@@ -74,6 +78,7 @@
                     </FluentNavLink>
                 </FluentNavGroup>
 
+                <!-- Projects Invoices -->
                 <FluentNavGroup Title="Invoices" Icon="@(new MyIcons.Size24.Invoices1())">
                     <FluentNavLink Icon="@(new MyIcons.Size24.Invoices2())"
                                    OnClick="@(() => TabMenuClick(12))"
@@ -87,6 +92,7 @@
                     </FluentNavLink>
                 </FluentNavGroup>
 
+                <!-- Projects Payments -->
                 <FluentNavGroup Title="Payments" Icon="@(new MyIcons.Size24.Payments1())">
                     <FluentNavLink Icon="@(new MyIcons.Size24.Payments2())"
                                    OnClick="@(() => TabMenuClick(14))"
@@ -101,6 +107,7 @@
                 </FluentNavGroup>
             </FluentNavGroup>
 
+            <!-- Disciplines -->
             <FluentNavGroup Title="Disciplines" Icon="@(new MyIcons.Size24.Disciplines1())">
                 <FluentNavLink Icon="@(new MyIcons.Size24.Disciplines2())"
                                OnClick="@(() => TabMenuClick(16))"
@@ -114,6 +121,7 @@
                 </FluentNavLink>
             </FluentNavGroup>
 
+            <!-- Deliverables -->
             <FluentNavGroup Title="Deliverables" Icon="@(new MyIcons.Size24.Deliverables1())">
                 <FluentNavLink Icon="@(new MyIcons.Size24.Deliverables2())"
                                OnClick="@(() => TabMenuClick(18))"
@@ -127,6 +135,7 @@
                 </FluentNavLink>
             </FluentNavGroup>
 
+            <!-- Supportive Works -->
             <FluentNavGroup Title="Supportive Works" Icon="@(new MyIcons.Size24.SupportiveWorks1())">
                 <FluentNavLink Icon="@(new MyIcons.Size24.SupportiveWorks2())"
                                OnClick="@(() => TabMenuClick(20))"

@@ -33,6 +33,8 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                              .Include(d => d.Type)
                              .Include(d => d.Discipline)
                              .ThenInclude(dis => dis.Project)
+                             .Include(o => o.Discipline)
+                             .ThenInclude(d => d.Type)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<DrawingDto>(dr);
@@ -51,6 +53,8 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                     .Include(d => d.Type)
                                     .Include(d => d.Discipline)
                                     .ThenInclude(dis => dis.Project)
+                                    .Include(o => o.Discipline)
+                                    .ThenInclude(d => d.Type)
                                     .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
@@ -61,6 +65,8 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                 .Include(d => d.Type)
                                 .Include(d => d.Discipline)
                                 .ThenInclude(dis => dis.Project)
+                                .Include(o => o.Discipline)
+                                .ThenInclude(d => d.Type)
                                 .Skip((pageIndex - 1) * pageSize)
                                 .Take(pageSize)
                                 .ToListAsync();
@@ -84,6 +90,8 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                     .Include(d => d.Type)
                                     .Include(d => d.Discipline)
                                     .ThenInclude(dis => dis.Project)
+                                    .Include(o => o.Discipline)
+                                    .ThenInclude(d => d.Type)
                                     .Where(expresion)
                                     .ToListAsync();
 
@@ -95,6 +103,8 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                 .Include(d => d.Type)
                                 .Include(d => d.Discipline)
                                 .ThenInclude(dis => dis.Project)
+                                .Include(o => o.Discipline)
+                                .ThenInclude(d => d.Type)
                                 .Where(expresion)
                                 .Skip((pageIndex - 1) * pageSize)
                                 .Take(pageSize)

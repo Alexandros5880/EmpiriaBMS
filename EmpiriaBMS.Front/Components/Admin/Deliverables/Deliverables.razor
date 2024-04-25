@@ -17,7 +17,7 @@
                             Pagination="@pagination"
                             TGridItem="DrawingVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="auto 180px 180px 100px"
+                            GridTemplateColumns="auto 180px 180px 180px 180px 100px"
                             style="height: 70vh; overflow:auto;">
 
                 <TemplateColumn Title="Project"
@@ -38,6 +38,8 @@
                     </ChildContent>
                 </TemplateColumn>
 
+                <PropertyColumn Property="@(p => p.DisciplineTypeName)" Sortable="true" Title="Discipline Type" Align="@Align.Start" Style="text-wrap: wrap;" />
+                <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" Style="text-wrap: wrap;" />
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" Style="text-wrap: wrap;" />
                 <PropertyColumn Property="@(p => p.CompletionDate)" Format="dd-mm-yyyy" Sortable="true" Title="Completion Date" Align="@Align.Start"/>
 

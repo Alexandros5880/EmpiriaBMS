@@ -28,6 +28,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         {
             var dr = await _context
                              .Set<Other>()
+                             .Include(o => o.Type)
+                             .Include(o => o.Discipline)
+                             .ThenInclude(d => d.Project)
+                             .Include(o => o.Discipline)
+                             .ThenInclude(d => d.Type)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<OtherDto>(dr);
@@ -43,16 +48,26 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 drs = await _context.Set<Other>()
-                                     .ToListAsync();
+                                    .Include(o => o.Type)
+                                    .Include(o => o.Discipline)
+                                    .ThenInclude(d => d.Project)
+                                    .Include(o => o.Discipline)
+                                    .ThenInclude(d => d.Type)
+                                    .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
             }
 
 
             drs = await _context.Set<Other>()
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+                                .Include(o => o.Type)
+                                .Include(o => o.Discipline)
+                                .ThenInclude(d => d.Project)
+                                .Include(o => o.Discipline)
+                                .ThenInclude(d => d.Type)
+                                .Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
 
             return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
         }
@@ -70,6 +85,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 drs = await _context.Set<Other>()
+                                    .Include(o => o.Type)
+                                    .Include(o => o.Discipline)
+                                    .ThenInclude(d => d.Project)
+                                    .Include(o => o.Discipline)
+                                    .ThenInclude(d => d.Type)
                                     .Where(expresion)
                                     .ToListAsync();
 
@@ -78,6 +98,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
 
             drs = await _context.Set<Other>()
+                                .Include(o => o.Type)
+                                .Include(o => o.Discipline)
+                                .ThenInclude(d => d.Project)
+                                .Include(o => o.Discipline)
+                                .ThenInclude(d => d.Type)
                                 .Where(expresion)
                                 .Skip((pageIndex - 1) * pageSize)
                                 .Take(pageSize)
