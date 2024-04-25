@@ -280,4 +280,66 @@ public class RolesRepo : Repository<RoleDto, Role>
             return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
         }
     }
+
+    public async Task<ICollection<PermissionDto>> GetMyPermissions(int roleId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var permissions = await _context.Set<RolePermission>()
+                                            .Where(rp => rp.RoleId == roleId)
+                                            .Include(rp => rp.Permission)
+                                            .Select(rp => rp.Permission)
+                                            .Distinct()
+                                            .ToListAsync();
+
+            return Mapping.Mapper.Map<List<PermissionDto>>(permissions);
+        }
+    }
+
+    public async Task<ICollection<PermissionDto>> GetOtherPermissions(int roleId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var permissions = await _context.Set<RolePermission>()
+                                            .Where(rp => rp.RoleId != roleId)
+                                            .Include(rp => rp.Permission)
+                                            .Select(rp => rp.Permission)
+                                            .Distinct()
+                                            .ToListAsync();
+
+            return Mapping.Mapper.Map<List<PermissionDto>>(permissions);
+        }
+    }
+
+    public async Task UpdatePermissions(int roleId, IEnumerable<int> permissionsIds)
+    {
+        if (roleId == 0)
+            throw new ArgumentNullException(nameof(roleId));
+
+        if (permissionsIds == null)
+            throw new ArgumentNullException(nameof(permissionsIds));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var permissions = await _context.Set<RolePermission>()
+                                            .Where(rp => rp.RoleId == roleId)
+                                            .ToArrayAsync();
+
+            if (permissions != null)
+                _context.Set<RolePermission>().RemoveRange(permissions);
+
+            List<RolePermission> rps = new List<RolePermission>();
+            foreach(var id in permissionsIds)
+            {
+                rps.Add(new RolePermission()
+                {
+                    RoleId = roleId,
+                    PermissionId = id
+                });
+            }
+
+            await _context.Set<RolePermission>().AddRangeAsync(rps);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

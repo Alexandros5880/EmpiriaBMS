@@ -1,12 +1,13 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class PermissionVM : BaseVM
 {
-    private bool? _isSelected;
-    public bool? IsSelected
+    private bool _isSelected = false;
+    public bool IsSelected
     {
         get => _isSelected;
         set

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
@@ -42,14 +44,56 @@ public partial class Roles
         _records = Mapper.Map<List<RoleVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New record...",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<RolesDetailedDialog>(new RoleVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            RoleVM vm = result.Data as RoleVM;
+            var dto = Mapper.Map<RoleDto>(vm);
+            await DataProvider.Roles.Add(dto); // TODO: Update Permissions
+            await _getRecords();
+        }
     }
 
-    private void _edit(RoleVM record)
+    private async Task _edit(RoleVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<RolesDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            RoleVM vm = result.Data as RoleVM;
+            var dto = Mapper.Map<RoleDto>(vm);
+            await DataProvider.Roles.Update(dto); // TODO: Update Permissions
+            await _getRecords();
+        }
     }
 
     private async Task _delete(RoleVM record)

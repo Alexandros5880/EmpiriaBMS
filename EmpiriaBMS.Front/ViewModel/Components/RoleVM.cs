@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class RoleVM : BaseVM
@@ -17,5 +18,6 @@ public class RoleVM : BaseVM
         }
     }
     public bool IsEmployee { get; set; }
+    
     public ICollection<RolePermission> RolesPermissions { get; set; }
 }

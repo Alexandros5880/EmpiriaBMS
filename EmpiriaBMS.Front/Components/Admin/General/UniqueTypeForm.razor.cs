@@ -6,7 +6,6 @@ namespace EmpiriaBMS.Front.Components.Admin.General;
 
 public partial class UniqueTypeForm : IDialogContentComponent<ITypeVM>
 {
-
     [Parameter]
     public ITypeVM Content { get; set; } = default!;
 

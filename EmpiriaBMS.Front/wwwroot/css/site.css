@@ -298,3 +298,17 @@ background: var(--dashboard-tables-header-color) !important;
     background-color: var(--main-bg-color) !important;
 }
 /* Fluent Nav Item */
+
+
+
+/* Lists */
+
+.drag-drop-list {
+    border: 1px solid gray;
+    border-radius: 4px;
+    margin: 4px;
+    height: 200px;
+    overflow-y: auto;
+}
+
+/* Lists */
