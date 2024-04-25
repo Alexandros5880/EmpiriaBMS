@@ -47,9 +47,18 @@ public partial class Permissions
 
     }
 
-    private void _delete(PermissionVM record)
+    private async Task _delete(PermissionVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the permission {record.Name}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Permissions.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
     }
     #endregion
 

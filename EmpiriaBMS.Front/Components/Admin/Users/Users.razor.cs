@@ -4,6 +4,7 @@ using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
@@ -52,9 +53,18 @@ public partial class Users
 
     }
 
-    private void _delete(UserVM record)
-    {
+    private async Task _delete(UserVM record)
+    {        
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the user {record.FullName}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+ 
+        if (!result.Cancelled)
+        {
+            await DataProvider.Users.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
     }
     #endregion
 

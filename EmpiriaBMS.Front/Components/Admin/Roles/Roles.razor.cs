@@ -52,9 +52,18 @@ public partial class Roles
 
     }
 
-    private void _delete(RoleVM record)
+    private async Task _delete(RoleVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the role {record.Name}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Roles.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
     }
     #endregion
 
