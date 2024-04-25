@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,56 @@ public partial class OfferStates
         _records = Mapper.Map<List<OfferStateVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new OfferStateVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            OfferStateVM vm = result.Data as OfferStateVM;
+            var dto = Mapper.Map<OfferStateDto>(vm);
+            await DataProvider.OfferStates.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(OfferStateVM record)
+    private async Task _edit(OfferStateVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            OfferStateVM vm = result.Data as OfferStateVM;
+            var dto = Mapper.Map<OfferStateDto>(vm);
+            await DataProvider.OfferStates.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(OfferStateVM record)

@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,56 @@ public partial class OfferTypes
         _records = Mapper.Map<List<OfferTypeVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new OfferTypeVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            OfferTypeVM vm = result.Data as OfferTypeVM;
+            var dto = Mapper.Map<OfferTypeDto>(vm);
+            await DataProvider.OfferTypes.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(OfferTypeVM record)
+    private async Task _edit(OfferTypeVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            OfferTypeVM vm = result.Data as OfferTypeVM;
+            var dto = Mapper.Map<OfferTypeDto>(vm);
+            await DataProvider.OfferTypes.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(OfferTypeVM record)
