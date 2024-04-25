@@ -1,5 +1,67 @@
-﻿namespace EmpiriaBMS.Front.Components.Admin.Disciplines;
+﻿using EmpiriaBMS.Front.ViewModel.Components;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
+
+namespace EmpiriaBMS.Front.Components.Admin.Disciplines;
 
 public partial class Disciplines
 {
+    #region Data Grid
+    private List<DisciplineVM> _records = new List<DisciplineVM>();
+    private string _filterString = string.Empty;
+    IQueryable<DisciplineVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    private DisciplineVM _selectedRecord = new DisciplineVM();
+
+    private void HandleFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        {
+            _filterString = string.Empty;
+        }
+    }
+
+    private void HandleRowFocus(FluentDataGridRow<DisciplineVM> row)
+    {
+        _selectedRecord = row.Item as DisciplineVM;
+    }
+
+    private async Task _getRecords()
+    {
+        var dtos = await DataProvider.Disciplines.GetAll();
+        _records = Mapper.Map<List<DisciplineVM>>(dtos);
+    }
+
+    private void _add()
+    {
+
+    }
+
+    private void _edit(DisciplineVM record)
+    {
+
+    }
+
+    private void _delete(DisciplineVM record)
+    {
+
+    }
+    #endregion
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await _getRecords();
+
+            StateHasChanged();
+        }
+    }
 }

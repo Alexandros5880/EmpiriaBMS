@@ -26,6 +26,8 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         {
             var disclipline = await _context
                              .Set<Discipline>()
+                             .Include(d => d.Type)
+                             .Include(d => d.Project)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<DisciplineDto>(disclipline);
@@ -41,6 +43,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             {
                 ds = await _context.Set<Discipline>()
                                    .Include(d => d.Type)
+                                   .Include(d => d.Project)
                                    .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -48,6 +51,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 
             ds = await _context.Set<Discipline>()
                                .Include(d => d.Type)
+                               .Include(d => d.Project)
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)
                                .ToListAsync();
@@ -68,6 +72,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             {
                 ds = await _context.Set<Discipline>()
                                    .Include(d => d.Type)
+                                   .Include(d => d.Project)
                                    .Where(expresion)
                                    .ToListAsync();
 
@@ -76,6 +81,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 
             ds = await _context.Set<Discipline>()
                                .Include(d => d.Type)
+                               .Include(d => d.Project)
                                .Where(expresion)
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)
