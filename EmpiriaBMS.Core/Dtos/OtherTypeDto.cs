@@ -11,5 +11,7 @@ namespace EmpiriaBMS.Core.Dtos;
 public class OtherTypeDto : EntityDto
 {
     public string Name { get; set; }
+
+    public string? Description { get; set; }
     public ICollection<Other> Others { get; set; }
 }

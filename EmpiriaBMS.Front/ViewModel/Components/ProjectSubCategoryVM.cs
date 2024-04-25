@@ -31,6 +31,19 @@ public class ProjectSubCategoryVM : BaseVM
         }
     }
 
+    private string? _description;
+    public string? Description
+    {
+        get => _description;
+        set
+        {
+            if (value == _description)
+                return;
+            _description = value;
+            NotifyPropertyChanged(nameof(Description));
+        }
+    }
+
     private int? _categoryId;
     public int? CategoryId
     {

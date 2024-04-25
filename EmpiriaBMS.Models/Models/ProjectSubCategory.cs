@@ -7,6 +7,8 @@ public class ProjectSubCategory : Entity
 
     public bool CanAssignePM { get; set; }
 
+    public string? Description { get; set; }
+
     public int? CategoryId { get; set; }
     public ProjectCategory Category { get; set; }
 
