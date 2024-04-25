@@ -1,12 +1,4 @@
-﻿using EmpiriaBMS.Models;
-using EmpiriaMS.Models.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Diagnostics;
-using System.Reflection.Emit;
-using System.Xml.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext

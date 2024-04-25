@@ -1,16 +1,8 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos.Base;
-using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using EmpiriaMS.Models.Models.Base;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Xml.Linq;
 
 
 namespace EmpiriaBMS.Core.Repositories.Base;

@@ -1,22 +1,9 @@
-﻿using EmpiriaBMS.Core.Hellpers;
-using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using EmpiriaMS.Models.Models.Base;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
-using AutoMapper;
-using EmpiriaBMS.Core.ReturnModels;
-using System.Collections;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class ProjectsRepo : Repository<ProjectDto, Project>

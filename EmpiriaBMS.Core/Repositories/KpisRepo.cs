@@ -3,9 +3,7 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Dtos.KPIS;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 
 

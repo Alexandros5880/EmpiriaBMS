@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -16,4 +17,6 @@ public class ProjectStageVM : BaseVM
             NotifyPropertyChanged(nameof(Name));
         }
     }
+
+    public ICollection<Project> Projects { get; set; }
 }

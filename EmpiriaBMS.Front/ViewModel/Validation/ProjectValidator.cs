@@ -1,14 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Front.ViewModel.Validation.Base;
-using EmpiriaBMS.Front.ViewModel.Validation.Contracts;
-using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
-using Microsoft.Kiota.Abstractions;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using static Microsoft.Fast.Components.FluentUI.Icons.Filled.Size16;
 
 namespace EmpiriaBMS.Front.ViewModel.Validation;
 

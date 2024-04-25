@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 

@@ -1,7 +1,4 @@
 ﻿using EmpiriaBMS.Core.Repositories;
-using EmpiriaBMS.Core.Repositories.Base;
-using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Core
 {

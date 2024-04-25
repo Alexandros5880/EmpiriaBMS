@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos.Base;
-using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Dtos;
 

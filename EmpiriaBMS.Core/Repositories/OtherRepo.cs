@@ -1,16 +1,9 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
-using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
-using System.ComponentModel.DataAnnotations;
 using EmpiriaBMS.Core.Hellpers;
 
 namespace EmpiriaBMS.Core.Repositories;

@@ -1,6 +1,4 @@
-﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
-using EmpiriaMS.Models.Models;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 

@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class UserVM : BaseVM

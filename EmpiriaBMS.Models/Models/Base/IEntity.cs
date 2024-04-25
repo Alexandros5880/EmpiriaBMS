@@ -1,5 +1,5 @@
 ﻿
-namespace EmpiriaMS.Models.Models.Base
+namespace EmpiriaBMS.Models.Models
 {
     public interface IEntity
     {

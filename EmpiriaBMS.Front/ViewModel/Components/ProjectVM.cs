@@ -1,9 +1,4 @@
-﻿using EmpiriaMS.Models.Models;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.ObjectModel;
-using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
