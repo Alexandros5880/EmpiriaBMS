@@ -47,9 +47,19 @@ public partial class Clients
 
     }
 
-    private void _delete(ClientVM record)
+    private async Task _delete(ClientVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the client {record.FullName}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Clients.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

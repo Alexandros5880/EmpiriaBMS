@@ -47,9 +47,19 @@ public partial class DeliverableTypes
 
     }
 
-    private void _delete(DrawingTypeVM record)
+    private async Task _delete(DrawingTypeVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the deliverable type  {record.Name}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.DrawingsTypes.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

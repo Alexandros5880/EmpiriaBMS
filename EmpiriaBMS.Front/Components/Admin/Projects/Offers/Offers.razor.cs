@@ -47,9 +47,19 @@ public partial class Offers
 
     }
 
-    private void _delete(OfferVM record)
+    private async Task _delete(OfferVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the offer of type {record.TypeName} of project {record.ProjectName}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Offers.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

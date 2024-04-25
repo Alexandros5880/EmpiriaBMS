@@ -47,9 +47,19 @@ public partial class Disciplines
 
     }
 
-    private void _delete(DisciplineVM record)
+    private async Task _delete(DisciplineVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the discipline of type {record.TypeName} of project {record.ProjectName}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Disciplines.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

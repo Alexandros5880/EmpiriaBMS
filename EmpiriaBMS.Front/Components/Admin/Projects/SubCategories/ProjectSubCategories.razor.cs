@@ -47,9 +47,19 @@ public partial class ProjectSubCategories
 
     }
 
-    private void _delete(ProjectSubCategoryVM record)
+    private async Task _delete(ProjectSubCategoryVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the project sub categories {record.Name}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.ProjectsSubCategories.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

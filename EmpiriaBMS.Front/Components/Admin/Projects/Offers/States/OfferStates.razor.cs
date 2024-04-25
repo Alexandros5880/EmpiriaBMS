@@ -47,9 +47,19 @@ public partial class OfferStates
 
     }
 
-    private void _delete(OfferStateVM record)
+    private async Task _delete(OfferStateVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the offer state {record.Name}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.OfferStates.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

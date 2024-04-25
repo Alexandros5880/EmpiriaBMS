@@ -47,9 +47,19 @@ public partial class InvoiceTypes
 
     }
 
-    private void _delete(InvoiceTypeVM record)
+    private async Task _delete(InvoiceTypeVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete invoice type {record.Name}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.InvoiceTypes.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

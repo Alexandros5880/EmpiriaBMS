@@ -65,6 +65,7 @@ public partial class Users
         }
 
         await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

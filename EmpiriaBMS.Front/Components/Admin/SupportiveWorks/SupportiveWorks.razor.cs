@@ -47,9 +47,19 @@ public partial class SupportiveWorks
 
     }
 
-    private void _delete(OtherVM record)
+    private async Task _delete(OtherVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the supportive work of type {record.TypeName} of discipline {record.DisciplineTypeName} of project {record.ProjectName}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Others.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

@@ -47,9 +47,19 @@ public partial class PaymentTypes
 
     }
 
-    private void _delete(PaymentTypeVM record)
+    private async Task _delete(PaymentTypeVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the payment type {record.Name}?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.PaymentTypes.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

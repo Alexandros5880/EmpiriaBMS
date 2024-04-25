@@ -64,6 +64,7 @@ public partial class Roles
         }
 
         await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

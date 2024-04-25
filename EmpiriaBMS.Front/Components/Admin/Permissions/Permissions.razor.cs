@@ -59,6 +59,7 @@ public partial class Permissions
         }
 
         await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

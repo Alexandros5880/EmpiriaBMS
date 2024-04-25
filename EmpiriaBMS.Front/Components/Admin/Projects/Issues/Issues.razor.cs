@@ -47,9 +47,19 @@ public partial class Issues
 
     }
 
-    private void _delete(IssueVM record)
+    private async Task _delete(IssueVM record)
     {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the issue <{record.Description}>?", "Yes", "No", "Deleting record...");
 
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Issues.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 
