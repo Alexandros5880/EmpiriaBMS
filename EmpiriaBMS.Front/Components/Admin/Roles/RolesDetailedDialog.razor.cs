@@ -35,40 +35,42 @@ public partial class RolesDetailedDialog : IDialogContentComponent<RoleVM>
 
     private async Task _getRecords()
     {
-        var myPerDtos = await _dataProvider.Roles.GetMyPermissions(Content.Id);
-        var otherPerDtos = await _dataProvider.Roles.GetOtherPermissions(Content.Id);
+        var allPermissions = await _dataProvider.Permissions.GetAll();
+        var allPermissionsVms = Mapper.Map<List<PermissionVM>>(allPermissions);
 
-        var myPerVms = Mapper.Map<List<PermissionVM>>(myPerDtos);
-        var otherPerVms = Mapper.Map<List<PermissionVM>>(otherPerDtos);
+        var myPerIds = (await _dataProvider.Roles.GetMyPermissions(Content.Id)).Select(p => p.Id);
 
-        _records.Clear();
-        myPerVms.ForEach(p => {
-            p.IsSelected = true;
-            _records.Add(p);
+        var permissions = new HashSet<PermissionVM>();
+        allPermissionsVms.ForEach(p => {
+            p.IsSelected = myPerIds.Contains(p.Id);
+            permissions.Add(p);
         });
-        otherPerVms.ForEach(p => {
-            p.IsSelected = false;
-            _records.Add(p);
-        });
+
+        _records = permissions.ToList();
+    }
+
+    private void _onSelectionChange(int permissionId, bool val)
+    {
+        var permission = _records.FirstOrDefault(r => r.Id == permissionId);
+        var index = _records.IndexOf(permission);
+        _records[index].IsSelected = val;
     }
     #endregion
 
     private async Task SaveAsync()
     {
-        if (!IsNew)
+        var permissionsIds = _records.Where(r => r.IsSelected).Select(r => r.Id).ToList();
+        List<RolePermission> rp = new List<RolePermission>();
+        foreach (var id in permissionsIds)
         {
-            var permissionsIds = _records.Where(r => r.IsSelected).Select(r => r.Id).ToList();
-            List<RolePermission> rp = new List<RolePermission>();
-            foreach (var id in permissionsIds)
+            rp.Add(new RolePermission()
             {
-                rp.Add(new RolePermission()
-                {
-                    RoleId = Content.Id,
-                    PermissionId = id
-                });
-            }
-            Content.RolesPermissions = rp;
+                RoleId = Content.Id,
+                PermissionId = id
+            });
         }
+        Content.RolesPermissions = rp;
+
         await Dialog.CloseAsync(Content);
     }
 

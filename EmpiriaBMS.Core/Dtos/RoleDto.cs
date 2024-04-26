@@ -16,5 +16,7 @@ public class RoleDto : EntityDto
 
     public bool IsEmployee { get; set; }
 
+    public bool IsEditable { get; set; }
+
     public ICollection<RolePermission> RolesPermissions { get; set; }
 }

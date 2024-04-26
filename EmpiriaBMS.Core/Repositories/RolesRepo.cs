@@ -11,6 +11,67 @@ public class RolesRepo : Repository<RoleDto, Role>
 {
     public RolesRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public new async Task<RoleDto?> Add(RoleDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var exists = await _context.Set<Role>().AnyAsync(r => r.Name.Equals(entity.Name));
+                if (exists)
+                    return null;
+
+                var result = await _context.Set<Role>().AddAsync(Mapping.Mapper.Map<Role>(entity));
+                await _context.SaveChangesAsync();
+
+                return Mapping.Mapper.Map<RoleDto>(result.Entity);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On RolesRepo.Add({Mapping.Mapper.Map<Role>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
+        }
+    }
+
+    public new async Task<RoleDto?> Update(RoleDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var exists = await _context.Set<Role>().AnyAsync(r => r.Name.Equals(entity.Name) && !(r.Id == entity.Id));
+                if (exists)
+                    return null;
+
+                var entry = await _context.Set<Role>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Role>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                return Mapping.Mapper.Map<RoleDto>(entry);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On RolesRepo.Update({Mapping.Mapper.Map<Role>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
+        }
+    }
+
     public async Task<RoleDto?> Get(string name)
     {
         if (name == null)
@@ -30,17 +91,11 @@ public class RolesRepo : Repository<RoleDto, Role>
         {
             List<Role> roles;
 
-            var rolesIds = await _context.Set<UserRole>()
-                                 .Include(ur => ur.Role)
-                                 .Select(ur => ur.RoleId)
-                                 .ToListAsync();
-
             if (pageSize == 0 || pageIndex == 0)
             {
 
 
                 roles = await _context.Set<Role>()
-                                      .Where(r => rolesIds.Contains(r.Id))
                                       .Include(r => r.RolesPermissions)
                                       .Include(r => r.UserRoles)
                                       .ToListAsync();
@@ -49,7 +104,6 @@ public class RolesRepo : Repository<RoleDto, Role>
             }
 
             roles = await _context.Set<Role>()
-                                  .Where(r => rolesIds.Contains(r.Id))
                                   .Include(r => r.RolesPermissions)
                                   .Include(r => r.UserRoles)
                                   .Skip((pageIndex - 1) * pageSize)
@@ -69,17 +123,11 @@ public class RolesRepo : Repository<RoleDto, Role>
         {
             List<Role> roles;
 
-            var rolesIds = await _context.Set<UserRole>()
-                                 .Include(ur => ur.Role)
-                                 .Select(ur => ur.RoleId)
-                                 .ToListAsync();
-
             if (pageSize == 0 || pageIndex == 0)
             {
                 
 
                 roles = await _context.Set<Role>()
-                                      .Where(r => rolesIds.Contains(r.Id))
                                       .Where(expresion)
                                       .Include(r => r.RolesPermissions)
                                       .Include(r => r.UserRoles)
@@ -89,7 +137,6 @@ public class RolesRepo : Repository<RoleDto, Role>
             }
 
             roles = await _context.Set<Role>()
-                                  .Where(r => rolesIds.Contains(r.Id))
                                   .Where(expresion)
                                   .Include(r => r.RolesPermissions)
                                   .Include(r => r.UserRoles)
@@ -292,7 +339,9 @@ public class RolesRepo : Repository<RoleDto, Role>
                                             .Distinct()
                                             .ToListAsync();
 
-            return Mapping.Mapper.Map<List<PermissionDto>>(permissions);
+            var hasSet = new HashSet<Permission>(permissions);
+
+            return Mapping.Mapper.Map<List<PermissionDto>>(hasSet.ToList());
         }
     }
 
@@ -307,7 +356,9 @@ public class RolesRepo : Repository<RoleDto, Role>
                                             .Distinct()
                                             .ToListAsync();
 
-            return Mapping.Mapper.Map<List<PermissionDto>>(permissions);
+            var hasSet = new HashSet<Permission>(permissions);
+
+            return Mapping.Mapper.Map<List<PermissionDto>>(hasSet.ToList());
         }
     }
 
