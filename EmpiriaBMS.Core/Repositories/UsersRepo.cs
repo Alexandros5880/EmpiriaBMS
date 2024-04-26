@@ -160,6 +160,17 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
+    public async Task<ICollection<Email>> GetEmails(int userId)
+    {
+        if (userId == 0)
+            return new List<Email>();
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            return await _context.Set<Email>()
+                                 .Where(r => r.UserId == userId)
+                                 .ToListAsync();
+    }
+
     public async Task<ICollection<UserDto>> GetEmployees()
     {
         using (var _context = _dbContextFactory.CreateDbContext())

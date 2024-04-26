@@ -1,8 +1,12 @@
-﻿using EmpiriaBMS.Front.Components.General;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Fast.Components.FluentUI;
@@ -43,14 +47,69 @@ public partial class Users
         _records = Mapper.Map<List<UserVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UsersDetailedDialog>(new UserVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            UserVM vm = result.Data as UserVM;
+            var emails = Mapping.Mapper.Map<List<EmailDto>>(vm.Emails);
+            emails.ForEach(e => e.User = null);
+            vm.Emails = null;
+            var dto = Mapper.Map<UserDto>(vm);
+            var added = await DataProvider.Users.Add(dto);
+            if (added != null)
+            {
+                emails.ForEach(e => e.UserId = added.Id);
+                await DataProvider.Emails.AddRange(emails);
+                await _getRecords();
+            }
+        }
     }
 
-    private void _edit(UserVM record)
+    private async Task _edit(UserVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.FullName}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UsersDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            UserVM vm = result.Data as UserVM;
+            var emails = Mapping.Mapper.Map<List<EmailDto>>(vm.Emails);
+            emails.ForEach(e => e.User = null);
+            vm.Emails = null;
+            var dto = Mapper.Map<UserDto>(vm);
+            await DataProvider.Users.Update(dto);
+            await DataProvider.Emails.RemoveAll(dto.Id);
+            await DataProvider.Emails.AddRange(emails);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(UserVM record)

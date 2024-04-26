@@ -1,0 +1,134 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
+@using EmpiriaBMS.Models.Models
+
+@implements IDialogContentComponent<UserVM>
+
+        @using EmpiriaBMS.Front.Services
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
+@inject IDialogService _dialogService
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+</FluentDialogFooter>
+
+@* Body *@
+<FluentDialogBody>
+    <div class="row">
+        <div class="col-xl-4 col-lg-4">
+            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.FirstName">FirstName<span class="text-danger">*</span></FluentTextField>
+        </div>
+        <div class="col-xl-4 col-lg-4">
+            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.MidName">MidName</FluentTextField>
+        </div>
+        <div class="col-xl-4 col-lg-4">
+            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.LastName">LastName<span class="text-danger">*</span></FluentTextField>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.ProxyAddress">ProxyAddress<span class="text-danger">*</span></FluentTextField>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-4 col-lg-4">
+            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Phone1">Phone1<span class="text-danger">*</span></FluentTextField>
+        </div>
+        <div class="col-xl-4 col-lg-4">
+            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Phone2">Phone2</FluentTextField>
+        </div>
+        <div class="col-xl-4 col-lg-4">
+            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Phone3">Phone3</FluentTextField>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <FluentTextArea Style="width:100%; margin:4px;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+        </div>
+    </div>
+    <!-- Emails -->
+    <div class="col-12" Style="margin-top: 4px;">
+        <div class="row">
+            <div class="col-12">
+                <h4>Emails</h4>
+                @if (_emails.Count == 0)
+                {
+                    <span class="text-warning">At least one email required!</span>
+                }
+            </div>
+            <div class="col-12 row">
+                <div class="col-6">
+                    <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-left: 10px;">
+                        <FluentSearch type="search"
+                                      Autofocus=true
+                                      @bind-Value="@_filterString"
+                                      Placeholder="Search..."
+                                      @oninput="@HandleFilter" />
+                    </FluentStack>
+                </div>
+                <div class="col-6">
+                    <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                        <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _addEmail())">Add</FluentButton>
+                    </FluentStack>
+                </div>
+            </div>
+        </div>
+        <div>
+            <FluentDataGrid @ref="@myGrid"
+                            Items="@FilteredEmails"
+                            ResizableColumns=true
+                            Pagination="@pagination"
+                            TGridItem="Email"
+                            GridTemplateColumns="auto 100px">
+
+                <TemplateColumn Title="Address" Sortable="true" Style="text-wrap: wrap;">
+                    <FluentTextField Value="@context.Address"
+                                     TextFieldType="TextFieldType.Email"
+                                     @onchange="@((e) => _onEmailAddressChange(context.Address, e))"/>
+                </TemplateColumn>
+
+                <TemplateColumn Title="Actions" Align="@Align.End">
+                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _deleteEmail(context))" />
+                </TemplateColumn>
+
+            </FluentDataGrid>
+        </div>
+        <div style="min-width: 50%;">
+            <FluentPaginator State="@pagination">
+                <SummaryTemplate>
+                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                </SummaryTemplate>
+                <PaginationTextTemplate>
+                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                </PaginationTextTemplate>
+            </FluentPaginator>
+        </div>
+    </div>
+</FluentDialogBody>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

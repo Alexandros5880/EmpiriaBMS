@@ -30,6 +30,7 @@ public class DataProvider : IDataProvider, IDisposable
     public OfferTypeRepo OfferTypes { get; set; }
     public OfferStateRepo OfferStates { get; set; }
     public OfferRepo Offers { get; set; }
+    public EmailRepo Emails { get; set; }
     public KpisRepo KPIS { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
@@ -56,6 +57,7 @@ public class DataProvider : IDataProvider, IDisposable
         OfferTypes = new OfferTypeRepo(dbFactory);
         OfferStates = new OfferStateRepo(dbFactory);
         Offers = new OfferRepo(dbFactory);
+        Emails = new EmailRepo(dbFactory);
         KPIS = new KpisRepo(dbFactory);
     }
 
@@ -88,6 +90,7 @@ public class DataProvider : IDataProvider, IDisposable
                 OfferTypes.Dispose();
                 OfferStates.Dispose();
                 Offers.Dispose();
+                Emails.Dispose();
                 KPIS.Dispose();
             }
             disposedValue = true;
