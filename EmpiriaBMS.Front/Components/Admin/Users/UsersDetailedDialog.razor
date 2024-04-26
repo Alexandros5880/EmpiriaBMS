@@ -26,44 +26,145 @@
 
 @* Body *@
 <FluentDialogBody>
+
+    <!-- Names -->
     <div class="row">
         <div class="col-xl-4 col-lg-4">
-            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.FirstName">FirstName<span class="text-danger">*</span></FluentTextField>
+            <div class="12">
+                <FluentTextField Style="width:100%; margin:4px;" 
+                                 @bind-Value="@Content.FirstName">FirstName<span class="text-danger">*</span></FluentTextField>
+            </div>
+            @if (!validFirstName)
+            {
+                @if (string.IsNullOrEmpty(@Content.FirstName))
+                {
+                    <div class="12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            }
         </div>
         <div class="col-xl-4 col-lg-4">
             <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.MidName">MidName</FluentTextField>
         </div>
         <div class="col-xl-4 col-lg-4">
-            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.LastName">LastName<span class="text-danger">*</span></FluentTextField>
+            <div class="12">
+                <FluentTextField Style="width:100%; margin:4px;"
+                                 @bind-Value="@Content.LastName">
+                    LastName<span class="text-danger">*</span>
+                </FluentTextField>
+            </div>
+            @if (!validLastName)
+            {
+                @if (string.IsNullOrEmpty(@Content.LastName))
+                {
+                    <div class="12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            }
         </div>
     </div>
+
+    <!-- Phones-->
+    <div class="row">
+        <div class="col-xl-4 col-lg-4">
+            <div class="12">
+                <FluentTextField Style="width:100%; margin:4px;"
+                                 @bind-Value="@Content.Phone1">
+                    Phone1<span class="text-danger">*</span>
+                </FluentTextField>
+            </div>
+            @if (!validPhone1)
+            {
+                @if (string.IsNullOrEmpty(@Content.Phone1))
+                {
+                    <div class="12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+                else if (!_isValidPhoneNumber(@Content.Phone1))
+                {
+                    <div class="12">
+                        <span class="text-warning">Invalid Phone!</span>
+                    </div>
+                }
+            }
+        </div>
+        <div class="col-xl-4 col-lg-4">
+            <div class="12">
+                <FluentTextField Style="width:100%; margin:4px;"
+                                 @bind-Value="@Content.Phone2">
+                    Phone2<span class="text-danger">*</span>
+                </FluentTextField>
+            </div>
+            @if (!validPhone2)
+            {
+                @if (!_isValidPhoneNumber(@Content.Phone2) && !string.IsNullOrEmpty(@Content.Phone2))
+                {
+                    <div class="12">
+                        <span class="text-warning">Invalid Phone!</span>
+                    </div>
+                }
+            }
+        </div>
+        <div class="col-xl-4 col-lg-4">
+            <div class="12">
+                <FluentTextField Style="width:100%; margin:4px;"
+                                 @bind-Value="@Content.Phone3">
+                    Phone3<span class="text-danger">*</span>
+                </FluentTextField>
+            </div>
+            @if (!validPhone3)
+            {
+                @if (!_isValidPhoneNumber(@Content.Phone3) && !string.IsNullOrEmpty(@Content.Phone3))
+                {
+                    <div class="12">
+                        <span class="text-warning">Invalid Phone!</span>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    
+    <!-- Proxy Address -->
     <div class="row">
         <div class="col-12">
-            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.ProxyAddress">ProxyAddress<span class="text-danger">*</span></FluentTextField>
+            <FluentTextField Style="width:100%; margin:4px;"
+                             @oninput="@((e) => _onProxyAddressChange(e))">
+                ProxyAddress<span class="text-danger">*</span>
+            </FluentTextField>
         </div>
+        @if (!validProxyAddress)
+        {
+            @if (string.IsNullOrEmpty(@Content.ProxyAddress))
+            {
+                <div class="12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+            else if (!_isValidEmail(@Content.ProxyAddress))
+            {
+                <div class="12">
+                    <span class="text-warning">No valid proxy address!</span>
+                </div>
+            }
+        }
     </div>
-    <div class="row">
-        <div class="col-xl-4 col-lg-4">
-            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Phone1">Phone1<span class="text-danger">*</span></FluentTextField>
-        </div>
-        <div class="col-xl-4 col-lg-4">
-            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Phone2">Phone2</FluentTextField>
-        </div>
-        <div class="col-xl-4 col-lg-4">
-            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Phone3">Phone3</FluentTextField>
-        </div>
-    </div>
+
+    <!-- Description -->
     <div class="row">
         <div class="col-12">
             <FluentTextArea Style="width:100%; margin:4px;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
         </div>
     </div>
+
     <!-- Emails -->
     <div class="col-12" Style="margin-top: 4px;">
         <div class="row">
             <div class="col-12">
                 <h4>Emails</h4>
-                @if (_emails.Count == 0)
+                @if (!validEmails)
                 {
                     <span class="text-warning">At least one email required!</span>
                 }
@@ -94,9 +195,19 @@
                             GridTemplateColumns="auto 100px">
 
                 <TemplateColumn Title="Address" Sortable="true" Style="text-wrap: wrap;">
-                    <FluentTextField Value="@context.Address"
-                                     TextFieldType="TextFieldType.Email"
-                                     @onchange="@((e) => _onEmailAddressChange(context.Address, e))"/>
+                    <div class="row">
+                        <div class="col-12">
+                            <FluentTextField Value="@context.Address"
+                                             TextFieldType="TextFieldType.Email"
+                                             @oninput="@((e) => _onEmailAddressChange(context.Address, e))" />
+                        </div>
+                        <div class="col-12">
+                            @if (!_isValidEmail(@context.Address))
+                            {
+                                <span class="text-warning">No valid email!</span>
+                            }
+                        </div>
+                    </div>
                 </TemplateColumn>
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
@@ -117,18 +228,3 @@
         </div>
     </div>
 </FluentDialogBody>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
