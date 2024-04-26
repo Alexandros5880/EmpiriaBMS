@@ -46,7 +46,7 @@ public partial class RolesDetailedDialog : IDialogContentComponent<RoleVM>
             permissions.Add(p);
         });
 
-        _records = permissions.ToList();
+        _records = permissions.OrderByDescending(p => p.IsSelected).ToList();
     }
 
     private void _onSelectionChange(int permissionId, bool val)
