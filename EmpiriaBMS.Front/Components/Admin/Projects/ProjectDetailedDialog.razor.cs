@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.Interfaces;
@@ -19,6 +20,8 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     ObservableCollection<ProjectCategoryVM> _categories = new ObservableCollection<ProjectCategoryVM>();
     ObservableCollection<ProjectSubCategoryVM> _subCategories = new ObservableCollection<ProjectSubCategoryVM>();
     ObservableCollection<ProjectStageVM> _stages = new ObservableCollection<ProjectStageVM>();
+    ObservableCollection<UserVM> _pms = new ObservableCollection<UserVM>();
+    ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
 
     public ProjectCategoryVM _category;
     public ProjectCategoryVM Category
@@ -59,6 +62,30 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         }
     }
 
+    private UserVM _pm;
+    public UserVM Pm
+    {
+        get => _pm;
+        set
+        {
+            if (_pm == value) return;
+            _pm = value;
+            Content.ProjectManagerId = _pm.Id;
+        }
+    }
+
+    private ClientVM _client;
+    public ClientVM Client
+    {
+        get => _client;
+        set
+        {
+            if (_client == value) return;
+            _client = value;
+            Content.ClientId = _client.Id;
+        }
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -93,6 +120,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     private bool validCategory = true;
     private bool validSubCategory = true;
     private bool validStage = true;
+    private bool validPm = true;
 
     private bool Validate(string fieldname = null)
     {
@@ -103,8 +131,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
             validCategory = _category != null;
             validSubCategory = Content.CategoryId != 0;
             validStage = Content.StageId != 0;
+            validPm = Content.ProjectManagerId != 0;
 
-            return validName && validCode && validCategory && validSubCategory && validStage;
+            return validName && validCode && validCategory && validSubCategory && validStage && validPm;
         }
         else
         {
@@ -112,6 +141,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
             validCode = true;
             validCategory = true;
             validStage = true;
+            validPm = true;
 
             switch (fieldname)
             {
@@ -130,6 +160,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
                 case "Stage":
                     validStage = Content.StageId != 0;
                     return validStage;
+                case "PM":
+                    validPm = Content.ProjectManagerId != 0;
+                    return validPm;
                 default:
                     return true;
             }
@@ -143,6 +176,8 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     {
         await _getCategories();
         await _getStages();
+        await _getProjectManagers();
+        await _getClients();
     }
 
     private async Task _getCategories()
@@ -178,6 +213,26 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         vms.ForEach(_stages.Add);
 
         Stage = _stages.FirstOrDefault(c => c.Id == Content.StageId) ?? null;
+    }
+
+    private async Task _getProjectManagers()
+    {
+        var dtos = await DataProvider.Users.GetProjectManagers();
+        var vms = Mapper.Map<List<UserVM>>(dtos);
+        _pms.Clear();
+        vms.ForEach(_pms.Add);
+
+        Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId) ?? null;
+    }
+
+    private async Task _getClients()
+    {
+        var dtos = await DataProvider.Clients.GetAll();
+        var vms = Mapper.Map<List<ClientVM>>(dtos);
+        _clients.Clear();
+        vms.ForEach(_clients.Add);
+
+        Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId) ?? null;
     }
     #endregion
 

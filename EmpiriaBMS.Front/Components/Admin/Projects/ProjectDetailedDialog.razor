@@ -25,13 +25,13 @@
 
 @* Body *@
 <FluentDialogBody>
-    <div class="row gx-2">
+    <div class="row gx-2" style="max-height: 77vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;">
 
         <div class="col-12 row gx-2">
             <!-- Name -->
             <div class="col-lg-6 col-md-12">
                 <div class="col-12">
-                    <FluentTextField Style="width: 300px; margin:4px;" @bind-Value="@Content.Name">
+                    <FluentTextField Style="width: 100%;" @bind-Value="@Content.Name">
                         Name<span class="text-danger">*</span>
                     </FluentTextField>
                 </div>
@@ -48,7 +48,7 @@
             <!-- Code-->
             <div class="col-lg-6 col-md-12">
                 <div class="col-12">
-                    <FluentTextField Style="width: 300px; margin:4px;" @bind-Value="@Content.Code">
+                    <FluentTextField Style="width: 100%;" @bind-Value="@Content.Code">
                         Code<span class="text-danger">*</span>
                     </FluentTextField>
                 </div>
@@ -74,7 +74,7 @@
                     <FluentCombobox Placeholder="Select Category..."
                                     Items="@_categories"
                                     Height="200px"
-                                    Width="300px"
+                                    Width="100%"
                                     TOption="ProjectCategoryVM"
                                     OptionText="@(c => c.Name)"
                                     OptionValue="@(c => c.Id.ToString())"
@@ -99,7 +99,7 @@
                     <FluentCombobox Placeholder="Select SubCategory..."
                                     Items="@_subCategories"
                                     Height="200px"
-                                    Width="300px"
+                                    Width="100%"
                                     TOption="ProjectSubCategoryVM"
                                     OptionText="@(c => c.Name)"
                                     OptionValue="@(c => c.Id.ToString())"
@@ -120,11 +120,11 @@
         <div class="col-12 row gx-2">
             <!-- StartDate -->
             <div class="col-lg-6 col-md-12">
-                <FluentDatePicker Style="width:300px;" @bind-Value="@Content.StartDate" Label="Start Date" />
+                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.StartDate" Label="Start Date" />
             </div>
             <!-- DeadLine-->
             <div class="col-lg-6 col-md-12">
-                <FluentDatePicker Style="width:300px;" @bind-Value="@Content.DeadLine" Label="DeadLine" />
+                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.DeadLine" Label="DeadLine" />
             </div>
         </div>
 
@@ -138,7 +138,7 @@
                     <FluentCombobox Placeholder="Select Stage..."
                                     Items="@_stages"
                                     Height="200px"
-                                    Width="300px"
+                                    Width="100%"
                                     TOption="ProjectStageVM"
                                     OptionText="@(c => c.Name)"
                                     OptionValue="@(c => c.Id.ToString())"
@@ -156,15 +156,59 @@
             </div>
             <!-- EstimatedHours -->
             <div class="col-lg-6 col-md-12">
-                <FluentNumberField Style="width:300px;" @bind-Value="@Content.EstimatedHours" Min="0">
+                <FluentNumberField Style="width: 100%;" @bind-Value="@Content.EstimatedHours" Min="0">
                     EstimatedHours<span class="text-danger">*</span>
                 </FluentNumberField>
             </div>
         </div>
 
+        <div class="col-12 row gx-2">
+            <!-- Project Manager -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Project Manager<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Placeholder="Select PM..."
+                                    Items="@_pms"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="UserVM"
+                                    OptionText="@(c => c.FullName)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Pm"/>
+                </div>
+                @if (!validPm)
+                {
+                    @if (Content.ProjectManagerId == 0)
+                    {
+                        <div class="col-12">
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                }
+            </div>
+            <!-- Client -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Client
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Placeholder="Select PM..."
+                                    Items="@_clients"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="ClientVM"
+                                    OptionText="@(c => c.FullName)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Client" />
+                </div>
+            </div>
+        </div>
+
         <!-- Description -->
         <div class="col-12">
-            <FluentTextArea Style="width:98%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
         </div>
 
         <!-- Address (Map) -->
