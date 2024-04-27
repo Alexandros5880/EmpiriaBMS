@@ -131,7 +131,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
             validCategory = _category != null;
             validSubCategory = Content.CategoryId != 0;
             validStage = Content.StageId != 0;
-            validPm = Content.ProjectManagerId != 0;
+            validPm = Content.ProjectManagerId != 0 && Content.ProjectManagerId != null;
 
             return validName && validCode && validCategory && validSubCategory && validStage && validPm;
         }
@@ -187,7 +187,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         _categories.Clear();
         vms.ForEach(_categories.Add);
 
-        Category = _categories.FirstOrDefault(c => c.Id == Content.Category.CategoryId) ?? null;
+        Category = _categories.FirstOrDefault(c => c.Id == Content.Category?.CategoryId) ?? null;
         SubCategory = null;
     }
 

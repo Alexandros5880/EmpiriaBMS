@@ -180,7 +180,7 @@
                 </div>
                 @if (!validPm)
                 {
-                    @if (Content.ProjectManagerId == 0)
+                    @if (Content.ProjectManagerId == 0 || Content.ProjectManagerId == null)
                     {
                         <div class="col-12">
                             <span class="text-warning">Field is required!</span>

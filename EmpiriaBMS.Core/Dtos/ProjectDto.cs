@@ -34,8 +34,6 @@ public class ProjectDto : EntityDto
 
     public float DeclaredCompleted { get; set; }
 
-    public int? CalculationDaly { get; set; }
-
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 
