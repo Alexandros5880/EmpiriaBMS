@@ -11,5 +11,5 @@ public class ProjectCategoryDto : EntityDto
 
     public bool CanAssignePM { get; set; }
 
-    public List<Project> Projects { get; set; }
+    public List<ProjectSubCategory> SubCategories { get; set; }
 }

@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -72,5 +73,6 @@ public class ProjectSubCategoryVM : BaseVM
 
     public ICollection<Project> Projects { get; set; }
 
+    [NotMapped]
     public string ParentCategoryName => Category != null ? Category.Name : "";
 }
