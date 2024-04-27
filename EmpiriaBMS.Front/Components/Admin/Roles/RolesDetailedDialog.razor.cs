@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
@@ -59,6 +60,9 @@ public partial class RolesDetailedDialog : IDialogContentComponent<RoleVM>
 
     private async Task SaveAsync()
     {
+        var valid = Validate();
+        if (!valid) return;
+
         var permissionsIds = _records.Where(r => r.IsSelected).Select(r => r.Id).ToList();
         List<RolePermission> rp = new List<RolePermission>();
         foreach (var id in permissionsIds)
@@ -90,4 +94,32 @@ public partial class RolesDetailedDialog : IDialogContentComponent<RoleVM>
             StateHasChanged();
         }
     }
+
+    #region Validation
+    private bool validName = true;
+
+    private bool Validate(string fieldname = null)
+    {
+        if (fieldname == null)
+        {
+            validName = !string.IsNullOrEmpty(Content.Name);
+
+            return validName;
+        }
+        else
+        {
+            validName = true;
+
+            switch (fieldname)
+            {
+                case "Name":
+                    validName = !string.IsNullOrEmpty(Content.Name);
+                    return validName;
+                default:
+                    return true;
+            }
+
+        }
+    }
+    #endregion
 }

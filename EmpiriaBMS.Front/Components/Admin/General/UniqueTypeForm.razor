@@ -23,6 +23,15 @@
     <div class="row">
         <div class="col-12">
             <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Name">Name:</FluentTextField>
+            @if (!validName)
+            {
+                @if (string.IsNullOrEmpty(@Content.Name))
+                {
+                    <div class="12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            }
         </div>
         <div class="col-12">
             <FluentTextArea Style="width:100%; margin:4px;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
