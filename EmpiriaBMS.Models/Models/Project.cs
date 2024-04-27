@@ -39,7 +39,7 @@ public class Project : Entity
 
     public float DeclaredCompleted { get; set; }
 
-    public int? CalculationDaly { get; set; }
+    public int? CalculationDaly { get; set; } // TODO: Project Mode Check if Used
 
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }

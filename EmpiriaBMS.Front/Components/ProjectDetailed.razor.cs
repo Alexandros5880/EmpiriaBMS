@@ -62,7 +62,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         _project.CategoryId = 0;
         _project.StageId = 0;
         _project.CategoryId = 0;
-        await _map.Search(null);
+        await _map.Search();
         StateHasChanged();
     }
 

@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.Admin.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
@@ -51,7 +52,7 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "auto"
+            Width = "50vw"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(new ProjectVM(), parameters);
@@ -61,6 +62,21 @@ public partial class Projects
         {
             ProjectVM vm = result.Data as ProjectVM;
             var dto = Mapper.Map<ProjectDto>(vm);
+
+            // If Addres Save Address
+            if (dto?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await DataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await DataProvider.Address.Update(addressDto);
+            }
+
+            // Save Project
             await DataProvider.Projects.Add(dto);
             await _getRecords();
         }
@@ -78,7 +94,7 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "auto"
+            Width = "50vw"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(record, parameters);
@@ -88,6 +104,21 @@ public partial class Projects
         {
             ProjectVM vm = result.Data as ProjectVM;
             var dto = Mapper.Map<ProjectDto>(vm);
+
+            // If Addres Save Address
+            if (dto?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await DataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await DataProvider.Address.Update(addressDto);
+            }
+
+            // Save Project
             await DataProvider.Projects.Update(dto);
             await _getRecords();
         }

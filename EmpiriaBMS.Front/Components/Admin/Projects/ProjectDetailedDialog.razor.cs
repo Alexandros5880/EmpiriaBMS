@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -65,6 +66,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         if (firstRender)
         {
             await _getRecords();
+
+            if (Content.Id != 0)
+                await _map.SetAddress(Content.Address);
 
             StateHasChanged();
         }
@@ -152,7 +156,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         SubCategory = null;
     }
 
-    private async Task _getSubCategories()
+    private async Task _getSubCategories(bool refresh = false)
     {
         if (_category == null) return;
         var dtos = await DataProvider.ProjectsSubCategories.GetAll(_category.Id);
@@ -161,6 +165,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         vms.ForEach(_subCategories.Add);
 
         SubCategory = _subCategories.FirstOrDefault(c => c.Id == Content.CategoryId) ?? null;
+
+        if (refresh)
+            StateHasChanged();
     }
 
     private async Task _getStages()
@@ -171,6 +178,17 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         vms.ForEach(_stages.Add);
 
         Stage = _stages.FirstOrDefault(c => c.Id == Content.StageId) ?? null;
+    }
+    #endregion
+
+    #region Map Address
+    private Map _map;
+
+    private void _onSearchAddressChange()
+    {
+        var address = _map.GetAddress();
+        if (address != null)
+            Content.Address = address;
     }
     #endregion
 }
