@@ -52,7 +52,7 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "50vw"
+            Width = "min(80%, 700px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(new ProjectVM(), parameters);
@@ -94,7 +94,7 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "50vw"
+            Width = "min(80%, 700px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(record, parameters);
