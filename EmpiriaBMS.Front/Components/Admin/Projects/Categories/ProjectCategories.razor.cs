@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,56 @@ public partial class ProjectCategories
         _records = Mapper.Map<List<ProjectCategoryVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectCategoryDetailedDialog>(new ProjectCategoryVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            ProjectCategoryVM vm = result.Data as ProjectCategoryVM;
+            var dto = Mapper.Map<ProjectCategoryDto>(vm);
+            await DataProvider.ProjectsCategories.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(ProjectCategoryVM record)
+    private async Task _edit(ProjectCategoryVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectCategoryDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            ProjectCategoryVM vm = result.Data as ProjectCategoryVM;
+            var dto = Mapper.Map<ProjectCategoryDto>(vm);
+            await DataProvider.ProjectsCategories.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(ProjectCategoryVM record)
