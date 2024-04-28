@@ -3,7 +3,7 @@
 
 @implements IDialogContentComponent<UserVM>
 
-        @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Services
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
 @inject IDialogService _dialogService
@@ -95,7 +95,7 @@
             <div class="col-12">
                 <FluentTextField Style="width:100%; margin:4px;"
                                  @bind-Value="@Content.Phone2">
-                    Phone2<span class="text-danger">*</span>
+                    Phone2
                 </FluentTextField>
             </div>
             @if (!validPhone2)
@@ -112,7 +112,7 @@
             <div class="col-12">
                 <FluentTextField Style="width:100%; margin:4px;"
                                  @bind-Value="@Content.Phone3">
-                    Phone3<span class="text-danger">*</span>
+                    Phone3
                 </FluentTextField>
             </div>
             @if (!validPhone3)
@@ -227,4 +227,5 @@
             </FluentPaginator>
         </div>
     </div>
+
 </FluentDialogBody>

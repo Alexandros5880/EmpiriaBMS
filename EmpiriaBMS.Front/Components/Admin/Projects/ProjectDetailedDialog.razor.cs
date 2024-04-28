@@ -5,6 +5,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.Kiota.Abstractions;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects;
@@ -23,13 +24,13 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     ObservableCollection<UserVM> _pms = new ObservableCollection<UserVM>();
     ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
 
-    public ProjectCategoryVM _category;
+    public ProjectCategoryVM _category = new ProjectCategoryVM();
     public ProjectCategoryVM Category
     {
         get => _category;
         set
         {
-            if (_category == value) return;
+            if (_category == value || value == null) return;
             _category = value;
             Content.Category.CategoryId = _category.Id;
             _getSubCategories();
@@ -38,49 +39,49 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         }
     }
     
-    private ProjectSubCategoryVM _subCategory;
+    private ProjectSubCategoryVM _subCategory = new ProjectSubCategoryVM();
     public ProjectSubCategoryVM SubCategory
     {
         get => _subCategory;
         set
         {
-            if (_subCategory == value) return;
+            if (_subCategory == value || value == null) return;
             _subCategory = value;
             Content.CategoryId = _subCategory?.Id ?? 0;
         }
     }
 
-    private ProjectStageVM _stage;
+    private ProjectStageVM _stage = new ProjectStageVM();
     public ProjectStageVM Stage
     {
         get => _stage;
         set
         {
-            if (_stage == value) return;
+            if (_stage == value || value == null) return;
             _stage = value;
             Content.StageId = _stage.Id;
         }
     }
 
-    private UserVM _pm;
+    private UserVM _pm = new UserVM();
     public UserVM Pm
     {
         get => _pm;
         set
         {
-            if (_pm == value) return;
+            if (_pm == value || value == null) return;
             _pm = value;
             Content.ProjectManagerId = _pm.Id;
         }
     }
 
-    private ClientVM _client;
+    private ClientVM _client = new ClientVM();
     public ClientVM Client
     {
         get => _client;
         set
         {
-            if (_client == value) return;
+            if (_client == value || value == null) return;
             _client = value;
             Content.ClientId = _client.Id;
         }
@@ -113,6 +114,30 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     {
         await Dialog.CancelAsync();
     }
+
+    #region Client && Autocomplete
+    FluentAutocomplete<ClientVM> ClientsList = default!;
+    private bool _diplayedClientForm = false;
+    private void OnClientSearch(OptionsSearchEventArgs<ClientVM> e)
+    {
+        e.Items = _clients.Where(i => i.FullName.Contains(e.Text, StringComparison.OrdinalIgnoreCase))
+                          .OrderBy(i => i.LastName);
+    }
+
+    private void _addClient()
+    {
+        _diplayedClientForm = true;
+        StateHasChanged();
+    }
+
+    private void _closeClientForm(ClientVM client = null)
+    {
+        if (client != null) Client = client;
+        else  Client = null;
+        _diplayedClientForm = false;
+        StateHasChanged();
+    }
+    #endregion
 
     #region Validation
     private bool validName = true;
