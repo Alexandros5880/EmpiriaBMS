@@ -253,7 +253,7 @@
         <!-- Client Form (For Add) -->
         @if(_diplayedClientForm)
         {
-            <div class="col-12 border rounded mb-3 mt-3 bg-secondary-subtle p-2">
+            <div class="col-12 border rounded mb-3 mt-3 bg-secondary-subtle p-2" style="margin: 0 auto;">
                 <ClientDetailed Content="@Client"
                                 OnCancel="@(() => _closeClientForm())"
                                 OnSave="@((client) => _closeClientForm(client))" />
