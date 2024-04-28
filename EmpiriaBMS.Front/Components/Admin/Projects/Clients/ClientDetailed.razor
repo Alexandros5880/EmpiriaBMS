@@ -8,21 +8,22 @@
 
 <div class="row" style="margin: 0 auto;">
     
-    @* Header *@
-    <div class="col-12">
-
-        <FluentLabel Typo="Typography.PaneHeader">
-            @if (Content.Id == 0)
-            {
-                <h3>Add Client</h3>
-            }
-            else
-            {
-                <h3>Edit Client</h3>
-            }
-        </FluentLabel>
-
-    </div>
+    @if (Autonomuse)
+    {
+        @* Header *@
+        <div class="col-12">
+            <FluentLabel Typo="Typography.PaneHeader">
+                @if (Content.Id == 0)
+                {
+                    <h3>Add Client</h3>
+                }
+                else
+                {
+                    <h3>Edit Client</h3>
+                }
+            </FluentLabel>
+        </div>
+    }
 
     @* Body *@
     <div class="col-12 row" style="margin: 0 auto;">
@@ -147,6 +148,7 @@
             <div class="col-xl-6 col-lg-6">
                 <div class="col-12">
                     <FluentTextField Style="width:100%; margin:4px;"
+                                     Value="@Content.ProxyAddress"
                                      @oninput="@((e) => _onProxyAddressChange(e))">
                         ProxyAddress<span class="text-danger">*</span>
                     </FluentTextField>
@@ -234,6 +236,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <FluentTextField Value="@context.Address"
+                                                     Style="width: 300px;"
                                                      TextFieldType="TextFieldType.Email"
                                                      @oninput="@((e) => _onEmailAddressChange(context.Address, e))" />
                                 </div>
@@ -267,16 +270,45 @@
             </div>
         </div>
 
+        <!-- Address -->
+        <div class="col-12 row border rounded m-2">
+            <div class="col-12">
+                <h4>Clients Address</h4>
+            </div>
+            <div class="col-12">
+                <FluentSwitch @bind-Value="@DisplayAddress">
+                    Add/Edit Address
+                </FluentSwitch>
+            </div>
+            @if (DisplayAddress)
+            {
+                <!-- Search Address / (Map) -->
+                <div class="col-12 row">
+                    <div class="row mt-3 mb-3">
+                        <div class="col-12">
+                            <Map @ref="@_map"
+                                 Id="adminClientMap"
+                                 AutoCompeteId="autocompeteAdminClientMap"
+                                 OnFindAddress="@(() => _onSearchAddressChange())" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
     </div>
 
-    @* Footer *@
-    <div class="col-12 row" style="margin: 0 auto;">
+    @if (Autonomuse)
+    {
+        @* Footer *@
         <div class="col-12 row" style="margin: 0 auto;">
-            <FluentFooter>
-                <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
-                <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
-            </FluentFooter>
+            <div class="col-12 row" style="margin: 0 auto;">
+                <FluentFooter>
+                    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+                    <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+                </FluentFooter>
+            </div>
         </div>
-    </div>
+    }
 
 </div>

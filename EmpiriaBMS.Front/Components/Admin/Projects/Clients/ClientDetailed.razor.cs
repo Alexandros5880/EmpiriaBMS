@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
@@ -20,6 +23,12 @@ public partial class ClientDetailed
     [Parameter]
     public EventCallback OnCancel { get; set; }
 
+    [Parameter]
+    public bool Autonomuse { get; set; } = true;
+
+    [Parameter]
+    public bool DisplayAddress { get; set; } = false;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -30,27 +39,61 @@ public partial class ClientDetailed
 
             Validate("Emails");
 
+            if (Content.Id != 0 && Content.Address != null)
+                await _map.SetAddress(Content.Address);
+
             StateHasChanged();
         }
     }
 
-    private async Task SaveAsync()
+    public async Task SaveAsync()
     {
         var valid = Validate();
         if (!valid) return;
 
         Content.Emails = _emails;
         ClientDto dto = _mapper.Map<ClientDto>(Content);
-        
-        if (Content.Id == 0)
-            await _dataProvider.Clients.Add(dto);
-        else
-            await _dataProvider.Clients.Update(dto);
 
+        // Get Emails
+        var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
+        emails.ForEach(e => e.User = null);
+        dto.Emails = null;
+
+        // If Addres Then Save Address
+        if (dto?.Address != null && !(await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+        {
+            var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+            var address = await _dataProvider.Address.Add(addressDto);
+            dto.AddressId = address.Id;
+        }
+        else if (dto?.Address != null && (await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+        {
+            var address = await _dataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+            dto.AddressId = address.Id;
+        }
+
+        if (Content.Id == 0)
+        {
+            var added = await _dataProvider.Clients.Add(dto);
+            if (added != null)
+            {
+                emails.ForEach(e => e.UserId = added.Id);
+                await _dataProvider.Emails.AddRange(emails);
+                await _getRecords();
+            }
+        }
+        else
+        {
+            await _dataProvider.Clients.Update(dto);
+            await _dataProvider.Emails.RemoveAll(dto.Id);
+            await _dataProvider.Emails.AddRange(emails);
+        }
+
+        Content.Emails = _emails;
         await OnSave.InvokeAsync(Content);
     }
 
-    private async Task CancelAsync() => await OnCancel.InvokeAsync();
+    public async Task CancelAsync() => await OnCancel.InvokeAsync();
 
     #region Data Grid
     FluentDataGrid<Email> myGrid;
@@ -73,17 +116,37 @@ public partial class ClientDetailed
 
     private async Task _getRecords()
     {
-        var emails = await _dataProvider.Users.GetEmails(Content.Id);
+        var emails = await _dataProvider.Clients.GetEmails(Content.Id);
         _emails = emails.ToList();
+        Content.Emails = emails;
     }
 
     private void _onEmailAddressChange(string preEmailAddress, ChangeEventArgs e)
     {
         var newEmailAddress = e.Value?.ToString();
+        var validRegex = _isValidEmail(newEmailAddress);
+        if (!validRegex)
+            return;
+                
         var email = _emails.FirstOrDefault(r => r.Address.Equals(preEmailAddress));
-        var index = _emails.IndexOf(email);
-        _emails[index].Address = newEmailAddress;
-        Validate("Emails");
+        if (email != null)
+        {
+            var index = _emails.IndexOf(email);
+            _emails[index].Address = newEmailAddress;
+        }
+        
+        else
+        {
+            _emails.Add(new Email()
+            {
+                Address = newEmailAddress,
+                UserId = Content.Id,
+            });
+        }
+
+        var valid = Validate("Emails");
+        if (valid)
+            Content.Emails = _emails;
     }
 
     private async Task _addEmail()
@@ -130,7 +193,7 @@ public partial class ClientDetailed
         }
         else
         {
-            //validEmails = true;
+            validEmails = true;
             validFirstName = true;
             validLastName = true;
             validPhone1 = true;
@@ -142,7 +205,7 @@ public partial class ClientDetailed
             switch (fieldname)
             {
                 case "Emails":
-                    validEmails = Content.Emails?.Any() ?? false;
+                    validEmails = _emails?.Any() ?? false;
                     return validEmails;
                 case "FirstName":
                     validFirstName = !string.IsNullOrEmpty(Content.FirstName);
@@ -180,5 +243,16 @@ public partial class ClientDetailed
 
     private bool _isValidEmail(string email) => GeneralValidator.IsValidEmail(email);
     private bool _isValidPhoneNumber(string phone) => GeneralValidator.IsValidPhoneNumber(phone);
+    #endregion
+
+    #region Map Address
+    private Map _map;
+
+    private void _onSearchAddressChange()
+    {
+        var address = _map.GetAddress();
+        if (address != null)
+            Content.Address = address;
+    }
     #endregion
 }

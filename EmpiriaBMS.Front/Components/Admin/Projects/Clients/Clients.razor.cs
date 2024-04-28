@@ -1,4 +1,7 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +40,110 @@ public partial class Clients
         _records = Mapper.Map<List<ClientVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 700px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(new ClientVM()
+        {
+            FirstName = "Alexandros",
+            LastName = "Platanios",
+            Phone1 = "6949277783",
+            ProxyAddress = "alexandrosplatanios15@gmail.com",
+            CompanyName = "Alexandros.Platanios A.E."
+        }, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            ClientVM vm = result.Data as ClientVM;
+            var dto = Mapper.Map<ClientDto>(vm);
+
+            // Get Emails
+            var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
+            emails.ForEach(e => e.User = null);
+            dto.Emails = null;
+
+            // If Addrees Then Save Address
+            if (dto?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await DataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await DataProvider.Address.Update(addressDto);
+            }
+
+            var added = await DataProvider.Clients.Add(dto);
+            if (added != null)
+            {
+                emails.ForEach(e => e.UserId = added.Id);
+                await DataProvider.Emails.AddRange(emails);
+                await _getRecords();
+            }
+        }
     }
 
-    private void _edit(ClientVM record)
+    private async Task _edit(ClientVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.FullName}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 700px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            ClientVM vm = result.Data as ClientVM;
+            var dto = Mapper.Map<ClientDto>(vm);
+
+            // Get Emails
+            var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
+            emails.ForEach(e => e.User = null);
+            dto.Emails = null;
+
+            // If Addrees Then Save Address
+            if (dto?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await DataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var address = await DataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                dto.AddressId = address.Id;
+            }
+
+            await DataProvider.Clients.Update(dto);
+            await DataProvider.Emails.RemoveAll(dto.Id);
+            await DataProvider.Emails.AddRange(emails);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(ClientVM record)

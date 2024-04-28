@@ -72,8 +72,8 @@ public partial class Projects
             }
             else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
             {
-                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
-                var address = await DataProvider.Address.Update(addressDto);
+                var address = await DataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                dto.AddressId = address.Id;
             }
 
             // Save Project

@@ -131,6 +131,7 @@
     <div class="row">
         <div class="col-12">
             <FluentTextField Style="width:100%; margin:4px;"
+                             Value="@Content.ProxyAddress"
                              @oninput="@((e) => _onProxyAddressChange(e))">
                 ProxyAddress<span class="text-danger">*</span>
             </FluentTextField>

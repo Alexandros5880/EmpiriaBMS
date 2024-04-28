@@ -6,6 +6,7 @@ using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using Microsoft.Graph.Models;
+using System;
 using System.Text.RegularExpressions;
 using static Microsoft.Fast.Components.FluentUI.Emojis.Objects.Color.Default;
 
@@ -70,15 +71,35 @@ public partial class UsersDetailedDialog : IDialogContentComponent<UserVM>
     {
         var emails = await _dataProvider.Users.GetEmails(Content.Id);
         _emails = emails.ToList();
+        Content.Emails = emails;
     }
 
     private void _onEmailAddressChange(string preEmailAddress, ChangeEventArgs e)
     {
         var newEmailAddress = e.Value?.ToString();
+        var validRegex = _isValidEmail(newEmailAddress);
+        if (!validRegex)
+            return;
+
         var email = _emails.FirstOrDefault(r => r.Address.Equals(preEmailAddress));
-        var index = _emails.IndexOf(email);
-        _emails[index].Address = newEmailAddress;
-        Validate("Emails");
+        if (email != null)
+        {
+            var index = _emails.IndexOf(email);
+            _emails[index].Address = newEmailAddress;
+        }
+
+        else
+        {
+            _emails.Add(new Email()
+            {
+                Address = newEmailAddress,
+                UserId = Content.Id,
+            });
+        }
+
+        var valid = Validate("Emails");
+        if (valid)
+            Content.Emails = _emails;
     }
 
     private async Task _addEmail()
@@ -134,7 +155,7 @@ public partial class UsersDetailedDialog : IDialogContentComponent<UserVM>
             switch (fieldname)
             {
                 case "Emails":
-                    validEmails = Content.Emails?.Any() ?? false;
+                    validEmails = _emails?.Any() ?? false;
                     return validEmails;
                 case "FirstName":
                     validFirstName = !string.IsNullOrEmpty(Content.FirstName);

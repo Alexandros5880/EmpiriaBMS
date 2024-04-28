@@ -95,7 +95,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         {
             await _getRecords();
 
-            if (Content.Id != 0)
+            if (Content.Id != 0 && Content.Address != null)
                 await _map.SetAddress(Content.Address);
 
             StateHasChanged();
@@ -132,8 +132,10 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 
     private void _closeClientForm(ClientVM client = null)
     {
-        if (client != null) Client = client;
-        else  Client = null;
+        if (client != null)
+            Client = client;
+        else 
+            Client = null;
         _diplayedClientForm = false;
         StateHasChanged();
     }
