@@ -135,9 +135,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 
     private void _addClient()
     {
-        _diplayedClientForm = true;
         _backupClient = Client.Clone() as ClientVM;
-        Client = null;
+        Client = new ClientVM();
+        _diplayedClientForm = true;
         StateHasChanged();
     }
 
