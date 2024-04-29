@@ -117,8 +117,6 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 
     private async Task SaveAsync()
     {
-        Client = SelectedClients.LastOrDefault();
-
         var valid = Validate();
         if (!valid)
             return;
@@ -132,15 +130,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     }
 
     #region Client && Autocomplete
-    FluentAutocomplete<ClientVM> ClientsList = default!;
-    IEnumerable<ClientVM> SelectedClients = Array.Empty<ClientVM>();
     private bool _diplayedClientForm = false;
-
-    private void OnClientSearch(OptionsSearchEventArgs<ClientVM> e)
-    {
-        e.Items = _clients.Where(i => i.FullName.Contains(e.Text, StringComparison.OrdinalIgnoreCase))
-                          .OrderBy(i => i.LastName);
-    }
 
     private void _addClient()
     {
@@ -157,9 +147,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
             var c = _clients.FirstOrDefault(c => c.Id == client.Id);
             Client = c;
         }
-        
         StateHasChanged();
     }
+
     #endregion
 
     #region Validation
