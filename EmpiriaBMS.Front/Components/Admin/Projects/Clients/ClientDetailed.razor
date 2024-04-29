@@ -196,8 +196,10 @@
             </div>
         </div>
 
+        <FluentDivider Style="width: 100%;" Orientation="Orientation.Horizontal" Role="DividerRole.Separator"></FluentDivider>
+
         <!-- Emails -->
-        <div class="col-12 row" Style="margin-top: 4px; margin: 0 auto;">
+        <div class="col-12 row border rounded m-2" Style="margin: 0 auto;">
             <div class="row">
                 <div class="col-12">
                     <h4>Emails</h4>
@@ -270,30 +272,30 @@
             </div>
         </div>
 
+        <FluentDivider Style="width: 100%;" Orientation="Orientation.Horizontal" Role="DividerRole.Separator"></FluentDivider>
+
         <!-- Address -->
-        <div class="col-12 row border rounded m-2">
+        <div class="col-12 row border rounded m-3">
             <div class="col-12">
                 <h4>Clients Address</h4>
             </div>
             <div class="col-12">
-                <FluentSwitch @bind-Value="@DisplayAddress">
-                    Add/Edit Address
+                <FluentSwitch @bind-Value="@IsMapVisible">
+                    Display Map
                 </FluentSwitch>
             </div>
-            @if (DisplayAddress)
-            {
-                <!-- Search Address / (Map) -->
-                <div class="col-12 row">
-                    <div class="row mt-3 mb-3">
-                        <div class="col-12">
-                            <Map @ref="@_map"
-                                 Id="adminClientMap"
-                                 AutoCompeteId="autocompeteAdminClientMap"
-                                 OnFindAddress="@(() => _onSearchAddressChange())" />
-                        </div>
+            <!-- Search Address / (Map) -->
+            <div class="col-12 row">
+                <div class="row mt-3 mb-3">
+                    <div class="col-12">
+                        <Map @ref="@_map"
+                             Id="adminClientMap"
+                             AutoCompeteId="autocompeteAdminClientMap"
+                             OnFindAddress="@(() => _onSearchAddressChange())"
+                             IsMapVisible="@IsMapVisible" />
                     </div>
                 </div>
-            }
+            </div>
         </div>
 
     </div>

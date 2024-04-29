@@ -130,13 +130,14 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         StateHasChanged();
     }
 
-    private void _closeClientForm(ClientVM client = null)
+    private async void _closeClientForm(ClientVM client = null)
     {
         if (client != null)
             Client = client;
         else 
             Client = null;
         _diplayedClientForm = false;
+        await _getClients();
         StateHasChanged();
     }
     #endregion

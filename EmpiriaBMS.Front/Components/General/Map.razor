@@ -27,7 +27,7 @@
         @if (Id != null)
         {
             <!-- Map -->
-            <div id="@Id" style="@((displayMap ? "height: 400px !important; display:block;" : "display:none;"))"></div>
+            <div id="@Id" class="@((hasAddress && IsMapVisible ? "visible" : "unvisible"))"></div>
         }
     </div>
 </div>
@@ -43,10 +43,13 @@
     [Parameter]
     public EventCallback<Address> OnFindAddress { get; set; }
 
+    [Parameter]
+    public bool IsMapVisible { get; set; } = true;
+
     public AddressVM Address { get; set; }
     private string _searchAddress = string.Empty;
 
-    private bool displayMap = false;
+    private bool hasAddress = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -76,7 +79,7 @@
             var add = await GooglePlacesService.GetPlaceDetailsByAddressAsync(_searchAddress);
             if (add != null)
             {
-                displayMap = true;
+                hasAddress = true;
                 Address = Mapping.Mapper.Map<AddressVM>(add);
                 Address.FormattedAddress = _searchAddress;
                 await MicrosoftTeams.DisplayAddress(Id, new string[] { _searchAddress });
@@ -84,14 +87,14 @@
             }
             else
             {
-                displayMap = false;
+                hasAddress = false;
                 Address = null;
             }
 
         }
         else
         {
-            displayMap = false;
+            hasAddress = false;
             Address = null;
         }
     }

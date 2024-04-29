@@ -27,7 +27,7 @@ public partial class ClientDetailed
     public bool Autonomuse { get; set; } = true;
 
     [Parameter]
-    public bool DisplayAddress { get; set; } = false;
+    public bool IsMapVisible { get; set; } = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -39,8 +39,7 @@ public partial class ClientDetailed
 
             Validate("Emails");
 
-            if (Content.Id != 0 && Content.Address != null)
-                await _map.SetAddress(Content.Address);
+            await RefreshMap();
 
             StateHasChanged();
         }
@@ -247,6 +246,14 @@ public partial class ClientDetailed
 
     #region Map Address
     private Map _map;
+
+    public async Task RefreshMap()
+    {
+        if (Content.Id != 0 && Content.Address != null)
+        {
+            await _map.SetAddress(Content.Address);
+        }
+    }
 
     private void _onSearchAddressChange()
     {

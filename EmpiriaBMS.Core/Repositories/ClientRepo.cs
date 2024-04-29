@@ -23,11 +23,13 @@ public class ClientRepo : Repository<ClientDto, Client>
             if (pageSize == 0 || pageIndex == 0)
             {
                 items = await _context.Set<Client>()
+                                      .Include(c => c.Address)
                                       .ToListAsync();
                 return Mapping.Mapper.Map<List<ClientDto>>(items);
             }
 
             items = await _context.Set<Client>()
+                                  .Include(c => c.Address)
                                   .Skip((pageIndex - 1) * pageSize)
                                   .Take(pageSize)
                                   .ToListAsync();
