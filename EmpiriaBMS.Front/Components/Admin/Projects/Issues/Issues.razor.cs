@@ -1,4 +1,7 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +40,63 @@ public partial class Issues
         _records = Mapper.Map<List<IssueVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 700px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<IssuesDetailedDialog>(new IssueVM()
+        {
+            Project = new Project(),
+            DisplayedRole = new Role(),
+            Creator = new User()
+        }, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            IssueVM vm = result.Data as IssueVM;
+            var dto = Mapper.Map<IssueDto>(vm);
+            await DataProvider.Issues.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(IssueVM record)
+    private async Task _edit(IssueVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Project.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 700px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<IssuesDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            IssueVM vm = result.Data as IssueVM;
+            var dto = Mapper.Map<IssueDto>(vm);
+            await DataProvider.Issues.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(IssueVM record)

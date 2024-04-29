@@ -5,8 +5,8 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class IssueVM : BaseVM
 {
-    private DateTime _complaintDate;
-    public DateTime ComplaintDate
+    private DateTime? _complaintDate;
+    public DateTime? ComplaintDate
     {
         get => _complaintDate;
         set

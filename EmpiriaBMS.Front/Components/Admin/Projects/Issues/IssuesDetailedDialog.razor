@@ -1,0 +1,157 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
+@using EmpiriaBMS.Front.Services
+@using Color = Microsoft.Fast.Components.FluentUI.Color
+@using EmpiriaBMS.Front.Components.Admin.Projects.Clients
+
+@implements IDialogContentComponent<IssueVM>
+
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
+@inject IDialogService DialogService
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+</FluentDialogFooter>
+
+@* Body *@
+<FluentDialogBody>
+    <div class="row gx-2" style="height: 77vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;">
+
+        <div class="col-12 row" style="margin: 0 auto;">
+            <!-- Project -->
+            <div class="col-lg-6 col-md-12 row">
+                <div class="col-12">
+                    Project<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Project..."
+                                    Items="@_projects"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="ProjectVM"
+                                    OptionText="@(c => c.Name)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Project" />
+                </div>
+                @if (!validProject)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+            <!-- Visible To Role -->
+            <div class="col-lg-6 col-md-12 row">
+                <div class="col-12">
+                    Visible To Role
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Role..."
+                                    Items="_roles"
+                                    Height="200px"
+                                    Width="100%"
+                                    Class="float-end"
+                                    TOption="RoleVM"
+                                    OptionText="@(c => c.Name)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Role" />
+                </div>
+                @if (!validRole)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-12 row" style="margin: 0 auto;">
+            <!-- Creator -->
+            <div class="col-lg-6 col-md-12 row">
+                <div class="col-12">
+                    Creator<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Creator..."
+                                    Items="@_users"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="UserVM"
+                                    OptionText="@(c => c.FullName)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Creator" />
+                </div>
+                @if (!validCreator)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+            <!-- ComplaintDate-->
+            <div class="col-lg-6 col-md-12 row">
+                <FluentDatePicker Class="float-end" Style="width: 100%;" @bind-Value="@Content.ComplaintDate" Label="Complaint Date" />
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="col-12">
+            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+        </div>
+
+        <!-- Solution -->
+        <div class="col-12">
+            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Solution" Rows="3" Resize="TextAreaResize.Vertical">Solution:</FluentTextArea>
+        </div>
+
+        <!-- Evaluation -->
+        <div class="col-12">
+            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Evaluation" Rows="3" Resize="TextAreaResize.Vertical">Evaluation:</FluentTextArea>
+        </div>
+
+        <!-- Verification -->
+        <div class="col-12">
+            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Verification" Rows="3" Resize="TextAreaResize.Vertical">Verification:</FluentTextArea>
+        </div>
+
+        <div class="col-12 row gx-2" style="margin: 0 auto;">
+            <!-- SolutionDate -->
+            <div class="col-lg-6 col-md-12">
+                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.SolutionDate" Label="Solution Date" />
+            </div>
+            <!-- VerificationDate-->
+            <div class="col-lg-6 col-md-12">
+                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.VerificationDate" Label="Verification Date" />
+            </div>
+        </div>
+
+        <div class="col-12 row gx-2" style="margin: 0 auto;">
+            <!-- IsClose -->
+            <div class="col-lg-6 col-md-12">
+                <FluentSwitch @bind-Value="@Content.IsClose">
+                    IsClose
+                </FluentSwitch>
+            </div>
+            <!-- None -->
+            <div class="col-lg-6 col-md-12">
+                
+            </div>
+        </div>
+
+    </div>
+</FluentDialogBody>
