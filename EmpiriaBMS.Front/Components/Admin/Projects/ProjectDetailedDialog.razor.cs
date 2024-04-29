@@ -131,10 +131,13 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 
     #region Client && Autocomplete
     private bool _diplayedClientForm = false;
+    private ClientVM _backupClient;
 
     private void _addClient()
     {
         _diplayedClientForm = true;
+        _backupClient = Client.Clone() as ClientVM;
+        Client = null;
         StateHasChanged();
     }
 
@@ -146,6 +149,10 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
             await _getClients();
             var c = _clients.FirstOrDefault(c => c.Id == client.Id);
             Client = c;
+        } else
+        {
+            Client = _backupClient.Clone() as ClientVM;
+            _backupClient = null;
         }
         StateHasChanged();
     }
