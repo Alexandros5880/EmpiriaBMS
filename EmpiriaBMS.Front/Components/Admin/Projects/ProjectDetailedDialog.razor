@@ -205,7 +205,8 @@
                                             MaximumSelectedOptions="1"
                                             OptionText="@(c => c.FullName)"
                                             OptionValue="@(c => c.Id.ToString())"
-                                            @bind-SelectedOptions="@SelectedClients">
+                                            @bind-SelectedOptions="@SelectedClients"
+                                            @bind-SelectedOption="@Client">
 
                             @* Label *@
                             <LabelTemplate>
@@ -239,6 +240,11 @@
                                 {
                                     <FluentLabel Style="font-size: 11px; text-align: center; width: 200px;">
                                         No results found
+                                    </FluentLabel>
+                                }
+                                else {
+                                    <FluentLabel Style="font-size: 11px; text-align: center; width: 200px;">
+                                        @Client.FullName
                                     </FluentLabel>
                                 }
                             </FooterContent>

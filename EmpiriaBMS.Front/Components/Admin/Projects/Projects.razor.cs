@@ -105,7 +105,7 @@ public partial class Projects
             ProjectVM vm = result.Data as ProjectVM;
             var dto = Mapper.Map<ProjectDto>(vm);
 
-            // If Addres Save Address
+            // If Address Save Address
             if (dto?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
             {
                 var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
@@ -114,8 +114,16 @@ public partial class Projects
             }
             else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
             {
-                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
-                var address = await DataProvider.Address.Update(addressDto);
+                var address = await DataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                dto.AddressId = address.Id;
+            }
+
+            // If Client Save Client
+            if (dto?.ClientId != null && dto?.ClientId != 0 && !(await DataProvider.Clients.Any(a => a.Id == dto.ClientId)))
+            {
+                var clientDto = Mapping.Mapper.Map<ClientDto>(dto.Client);
+                var client = await DataProvider.Clients.Add(clientDto);
+                dto.ClientId = client.Id;
             }
 
             // Save Project

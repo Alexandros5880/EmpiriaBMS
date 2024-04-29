@@ -251,8 +251,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private User? _client;
-    public User? Client
+    private Client? _client;
+    public Client? Client
     {
         get => _client;
         set

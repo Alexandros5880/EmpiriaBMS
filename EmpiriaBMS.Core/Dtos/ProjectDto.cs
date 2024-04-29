@@ -38,7 +38,7 @@ public class ProjectDto : EntityDto
     public User? ProjectManager { get; set; }
 
     public int? ClientId { get; set; }
-    public User? Client { get; set; }
+    public Client? Client { get; set; }
 
     public ICollection<Offer> Offers { get; set; }
 

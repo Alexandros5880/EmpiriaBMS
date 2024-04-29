@@ -3,6 +3,7 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.Interfaces;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using Microsoft.Kiota.Abstractions;
@@ -81,16 +82,12 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         get => _client;
         set
         {
-            if (_client == value)
-                return;
-            if (value == null)
+            if (_client == value || value == null)
                 return;
             _client = value;
             Content.ClientId = _client.Id;
-            if (SelectedClients.Any(c => c.Id == _client.Id))
-            {
-                SelectedClients = new ClientVM[] { _client };
-            }
+            var dto = Mapper.Map<ClientDto>(_client);
+            Content.Client = Mapping.Mapper.Map<Client>(dto);
         }
     }
 
@@ -102,9 +99,17 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         {
             await _getRecords();
 
+            if (Content.Id == 0)
+                Client = new ClientVM();
+
             if (Content.Id != 0 && Content.Address != null)
                 await _map.SetAddress(Content.Address);
 
+            if (Content.Id != 0 && Content.ClientId != 0 && Content.ClientId != null)
+            {
+                var c = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
+                Client = c;
+            }
 
             StateHasChanged();
         }
@@ -115,7 +120,8 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         Client = SelectedClients.LastOrDefault();
 
         var valid = Validate();
-        if (!valid) return;
+        if (!valid)
+            return;
 
         await Dialog.CloseAsync(Content);
     }

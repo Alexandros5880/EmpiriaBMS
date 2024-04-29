@@ -80,16 +80,19 @@ public partial class ClientDetailed
                 await _dataProvider.Emails.AddRange(emails);
                 await _getRecords();
             }
+            added.Emails = _emails;
+            await OnSave.InvokeAsync(_mapper.Map<ClientVM>(added));
         }
         else
         {
-            await _dataProvider.Clients.Update(dto);
+            var updated = await _dataProvider.Clients.Update(dto);
             await _dataProvider.Emails.RemoveAll(dto.Id);
             await _dataProvider.Emails.AddRange(emails);
+            updated.Emails = _emails;
+            await OnSave.InvokeAsync(_mapper.Map<ClientVM>(updated));
         }
 
         Content.Emails = _emails;
-        await OnSave.InvokeAsync(Content);
     }
 
     public async Task CancelAsync() => await OnCancel.InvokeAsync();
