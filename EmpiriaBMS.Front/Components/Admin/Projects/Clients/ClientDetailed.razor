@@ -199,7 +199,7 @@
         <FluentDivider Style="width: 100%;" Orientation="Orientation.Horizontal" Role="DividerRole.Separator"></FluentDivider>
 
         <!-- Emails -->
-        <div class="col-12 row border rounded m-2" Style="margin: 0 auto;">
+        <div class="col-12 row border rounded mt-2 mb-2" style="margin: 0 auto !important;">
             <div class="row">
                 <div class="col-12">
                     <h4>Emails</h4>
@@ -272,7 +272,7 @@
         <FluentDivider Style="width: 100%;" Orientation="Orientation.Horizontal" Role="DividerRole.Separator"></FluentDivider>
 
         <!-- Address -->
-        <div class="col-12 row border rounded m-3">
+        <div class="col-12 row border rounded mt-2 mb-2" style="margin: 0 auto !important;">
             <div class="col-12">
                 <h4>Clients Address</h4>
             </div>
@@ -303,8 +303,10 @@
         <div class="col-12 row" style="margin: 0 auto;">
             <div class="col-12 row" style="margin: 0 auto;">
                 <FluentFooter>
-                    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
-                    <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+                    <div class="w-100 d-flex justify-content-between">
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel Client</FluentButton>
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save Client</FluentButton>
+                    </div>
                 </FluentFooter>
             </div>
         </div>
