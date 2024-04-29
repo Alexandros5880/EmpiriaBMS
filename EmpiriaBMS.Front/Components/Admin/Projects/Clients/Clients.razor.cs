@@ -55,14 +55,7 @@ public partial class Clients
             Width = "min(80%, 700px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(new ClientVM()
-        {
-            FirstName = "Alexandros",
-            LastName = "Platanios",
-            Phone1 = "6949277783",
-            ProxyAddress = "alexandrosplatanios15@gmail.com",
-            CompanyName = "Alexandros.Platanios A.E."
-        }, parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(new ClientVM(), parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)

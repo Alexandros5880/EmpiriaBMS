@@ -132,7 +132,7 @@ public static class ModelRelations
                .HasOne(r => r.ParentRole)
                .WithMany(r => r.ChildRoles)
                .HasForeignKey(r => r.ParentRoleId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.ClientSetNull);
 
         // Role Issues
         builder.Entity<Role>()
@@ -174,21 +174,21 @@ public static class ModelRelations
                .HasMany(p => p.PMProjects)
                .WithOne(c => c.ProjectManager)
                .HasForeignKey(c => c.ProjectManagerId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.ClientSetNull);
 
         // Client Project
         builder.Entity<Client>()
                .HasMany(p => p.Projects)
                .WithOne(c => c.Client)
                .HasForeignKey(c => c.ClientId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.SetNull);
 
         // Client Address
         builder.Entity<Address>()
                .HasMany(p => p.Clients)
                .WithOne(c => c.Address)
                .HasForeignKey(c => c.AddressId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.SetNull);
 
         // Discipline Draws
         builder.Entity<Discipline>()
