@@ -52,7 +52,7 @@ public partial class Issues
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(80%, 700px);"
+            Width = "min(85%, 800px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<IssuesDetailedDialog>(new IssueVM()
@@ -84,7 +84,7 @@ public partial class Issues
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(80%, 700px);"
+            Width = "min(85%, 800px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<IssuesDetailedDialog>(record, parameters);

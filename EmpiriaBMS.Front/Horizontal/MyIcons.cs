@@ -318,6 +318,17 @@ public static class MyIcons
             {
             }
         }
+        public class Download : Icon
+        {
+            public Download()
+                : base("Download",
+                        IconVariant.Regular,
+                        IconSize.Size10,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\" viewBox=\"0 0 24 24\" {...$$props}>\r\n\t<path fill=\"#444791\" d=\"m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z\" />\r\n</svg>"
+                      )
+            {
+            }
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -627,6 +638,17 @@ public static class MyIcons
                         IconVariant.Regular,
                         IconSize.Size12,
                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 48 48\" {...$$props}>\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M40.358 12.581L26.363 6.04a5.74 5.74 0 0 0-4.857-.001l-13.863 6.47a2.295 2.295 0 0 0-.001 4.159l13.995 6.541a5.74 5.74 0 0 0 4.857.002l13.863-6.471a2.295 2.295 0 0 0 .001-4.159\" />\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m13.227 19.278l-5.584 2.606a2.295 2.295 0 0 0-.001 4.16l13.995 6.54a5.74 5.74 0 0 0 4.857.002l13.863-6.47a2.295 2.295 0 0 0 .001-4.159l-5.585-2.61\" />\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13.227 28.654L7.643 31.26a2.295 2.295 0 0 0-.001 4.16l13.995 6.54a5.74 5.74 0 0 0 4.857.001l13.863-6.47a2.295 2.295 0 0 0 .001-4.159l-5.585-2.61\" />\r\n</svg>"
+                      )
+            {
+            }
+        }
+        public class Download : Icon
+        {
+            public Download()
+                : base("Download",
+                        IconVariant.Regular,
+                        IconSize.Size12,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" {...$$props}>\r\n\t<path fill=\"#444791\" d=\"m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z\" />\r\n</svg>"
                       )
             {
             }
@@ -944,6 +966,17 @@ public static class MyIcons
             {
             }
         }
+        public class Download : Icon
+        {
+            public Download()
+                : base("Download",
+                        IconVariant.Regular,
+                        IconSize.Size16,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" {...$$props}>\r\n\t<path fill=\"#444791\" d=\"m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z\" />\r\n</svg>"
+                      )
+            {
+            }
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -1242,6 +1275,17 @@ public static class MyIcons
                         IconVariant.Regular,
                         IconSize.Size20,
                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 48 48\" {...$$props}>\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M40.358 12.581L26.363 6.04a5.74 5.74 0 0 0-4.857-.001l-13.863 6.47a2.295 2.295 0 0 0-.001 4.159l13.995 6.541a5.74 5.74 0 0 0 4.857.002l13.863-6.471a2.295 2.295 0 0 0 .001-4.159\" />\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m13.227 19.278l-5.584 2.606a2.295 2.295 0 0 0-.001 4.16l13.995 6.54a5.74 5.74 0 0 0 4.857.002l13.863-6.47a2.295 2.295 0 0 0 .001-4.159l-5.585-2.61\" />\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13.227 28.654L7.643 31.26a2.295 2.295 0 0 0-.001 4.16l13.995 6.54a5.74 5.74 0 0 0 4.857.001l13.863-6.47a2.295 2.295 0 0 0 .001-4.159l-5.585-2.61\" />\r\n</svg>"
+                      )
+            {
+            }
+        }
+        public class Download : Icon
+        {
+            public Download()
+                : base("Download",
+                        IconVariant.Regular,
+                        IconSize.Size20,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" {...$$props}>\r\n\t<path fill=\"#444791\" d=\"m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z\" />\r\n</svg>"
                       )
             {
             }
@@ -1559,6 +1603,17 @@ public static class MyIcons
             {
             }
         }
+        public class Download : Icon
+        {
+            public Download()
+                : base("Download",
+                        IconVariant.Regular,
+                        IconSize.Size24,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" {...$$props}>\r\n\t<path fill=\"#444791\" d=\"m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z\" />\r\n</svg>"
+                      )
+            {
+            }
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -1868,6 +1923,17 @@ public static class MyIcons
                         IconVariant.Regular,
                         IconSize.Size28,
                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 48 48\" {...$$props}>\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M40.358 12.581L26.363 6.04a5.74 5.74 0 0 0-4.857-.001l-13.863 6.47a2.295 2.295 0 0 0-.001 4.159l13.995 6.541a5.74 5.74 0 0 0 4.857.002l13.863-6.471a2.295 2.295 0 0 0 .001-4.159\" />\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m13.227 19.278l-5.584 2.606a2.295 2.295 0 0 0-.001 4.16l13.995 6.54a5.74 5.74 0 0 0 4.857.002l13.863-6.47a2.295 2.295 0 0 0 .001-4.159l-5.585-2.61\" />\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13.227 28.654L7.643 31.26a2.295 2.295 0 0 0-.001 4.16l13.995 6.54a5.74 5.74 0 0 0 4.857.001l13.863-6.47a2.295 2.295 0 0 0 .001-4.159l-5.585-2.61\" />\r\n</svg>"
+                      )
+            {
+            }
+        }
+        public class Download : Icon
+        {
+            public Download()
+                : base("Download",
+                        IconVariant.Regular,
+                        IconSize.Size28,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" {...$$props}>\r\n\t<path fill=\"#444791\" d=\"m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z\" />\r\n</svg>"
                       )
             {
             }
@@ -2185,6 +2251,17 @@ public static class MyIcons
             {
             }
         }
+        public class Download : Icon
+        {
+            public Download()
+                : base("Download",
+                        IconVariant.Regular,
+                        IconSize.Size32,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" {...$$props}>\r\n\t<path fill=\"#444791\" d=\"m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z\" />\r\n</svg>"
+                      )
+            {
+            }
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -2494,6 +2571,17 @@ public static class MyIcons
                         IconVariant.Regular,
                         IconSize.Size48,
                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" {...$$props}>\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M40.358 12.581L26.363 6.04a5.74 5.74 0 0 0-4.857-.001l-13.863 6.47a2.295 2.295 0 0 0-.001 4.159l13.995 6.541a5.74 5.74 0 0 0 4.857.002l13.863-6.471a2.295 2.295 0 0 0 .001-4.159\" />\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m13.227 19.278l-5.584 2.606a2.295 2.295 0 0 0-.001 4.16l13.995 6.54a5.74 5.74 0 0 0 4.857.002l13.863-6.47a2.295 2.295 0 0 0 .001-4.159l-5.585-2.61\" />\r\n\t<path fill=\"none\" stroke=\"#444791\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13.227 28.654L7.643 31.26a2.295 2.295 0 0 0-.001 4.16l13.995 6.54a5.74 5.74 0 0 0 4.857.001l13.863-6.47a2.295 2.295 0 0 0 .001-4.159l-5.585-2.61\" />\r\n</svg>"
+                      )
+            {
+            }
+        }
+        public class Download : Icon
+        {
+            public Download()
+                : base("Download",
+                        IconVariant.Regular,
+                        IconSize.Size48,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 24 24\" {...$$props}>\r\n\t<path fill=\"#444791\" d=\"m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z\" />\r\n</svg>"
                       )
             {
             }
