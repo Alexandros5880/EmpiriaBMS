@@ -51,7 +51,7 @@ public partial class Offers
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(85%, 800px);"
+            Width = "min(70%, 500px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferDetailedDialog>(new OfferVM(), parameters);
@@ -78,7 +78,7 @@ public partial class Offers
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(85%, 800px);"
+            Width = "min(70%, 500px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferDetailedDialog>(record, parameters);

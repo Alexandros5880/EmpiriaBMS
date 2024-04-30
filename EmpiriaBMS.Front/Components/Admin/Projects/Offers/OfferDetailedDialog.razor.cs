@@ -72,12 +72,12 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     {
         if (fieldname == null)
         {
-            validProject = Content.ProjectId != 0;
+            validProject = Content.ProjectId != 0 && Content.ProjectId != null;
             validCode = !string.IsNullOrEmpty(Content.Code);
             validType = Content.TypeId != 0;
             validState = Content.StateId != 0;
-            validPudgetPrice = Content.PudgetPrice != 0;
-            validOfferPrice = Content.OfferPrice != 0;
+            validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
+            validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
 
             return validCode && validType && validState && validProject && validPudgetPrice && validOfferPrice;
         }
@@ -93,7 +93,7 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
             switch (fieldname)
             {
                 case "Project":
-                    validProject = Content.ProjectId != 0;
+                    validProject = Content.ProjectId != 0 && Content.ProjectId != null;
                     return validProject;
                 case "Code":
                     validCode = !string.IsNullOrEmpty(Content.Code);
@@ -105,10 +105,10 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
                     validState = Content.StateId != 0;
                     return validState;
                 case "PudgetPrice":
-                    validPudgetPrice = Content.PudgetPrice != 0;
+                    validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
                     return validPudgetPrice;
                 case "OfferPrice":
-                    validOfferPrice = Content.OfferPrice != 0;
+                    validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
                     return validOfferPrice;
                 default:
                     return true;
