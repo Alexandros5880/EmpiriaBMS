@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,58 @@ public partial class SupportiveWorks
         _records = Mapper.Map<List<OtherVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<SupportiveWorkDetailedDialog>(new OtherVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            OtherVM vm = result.Data as OtherVM;
+            var dto = Mapper.Map<OtherDto>(vm);
+            await DataProvider.Others.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(OtherVM record)
+    private async Task _edit(OtherVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit DT-[{record.DisciplineTypeName}] T-[{record.TypeName}]",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<SupportiveWorkDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            OtherVM vm = result.Data as OtherVM;
+            var dto = Mapper.Map<OtherDto>(vm);
+            await DataProvider.Others.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(OtherVM record)
