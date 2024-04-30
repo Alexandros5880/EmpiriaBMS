@@ -156,33 +156,35 @@ else
                                     <!-- Table Projects -->
                                     @if (!_isEndWorkDialogOdepened)
                                     {
-                                        <div class="text-center row me-2">
-                                            <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
-                                            @if (isWorkingMode && editProject)
-                                            {
-                                                @if (_selectedProject != null)
+                                        <div style="height: 74px;">
+                                            <div class="text-center row me-2">
+                                                <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
+                                                @if (isWorkingMode && editProject)
                                                 {
-                                                    <span class="invoice col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoices"
-                                                          @onclick="@(async () => await AddEditInvoice())" />
-                                                    <span class="payment col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Payments"
-                                                          @onclick="@(async () => await AddEditPayment())" />
-                                                    <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
-                                                          style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
-                                                          @onclick="@(async () => await NavigateOnMap(_selectedProject.Address))" />
-                                                    <span class="fluent--delete-28-regular col-1"
-                                                          @onclick="@(() => DeleteProject())" />
-                                                    <span class="material-symbols--edit-outline col-1"
-                                                          @onclick="@(() => EditProject())" />
+                                                    @if (_selectedProject != null)
+                                                    {
+                                                        <span class="invoice col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoices"
+                                                              @onclick="@(async () => await AddEditInvoice())" />
+                                                        <span class="payment col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Payments"
+                                                              @onclick="@(async () => await AddEditPayment())" />
+                                                        <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
+                                                              style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
+                                                              @onclick="@(async () => await NavigateOnMap(_selectedProject.Address))" />
+                                                        <span class="fluent--delete-28-regular col-1"
+                                                              @onclick="@(() => DeleteProject())" />
+                                                        <span class="material-symbols--edit-outline col-1"
+                                                              @onclick="@(() => EditProject())" />
+                                                    }
+                                                    <span class="grommet-icons--add col-1"
+                                                          @onclick="@(() => AddProject())" />
                                                 }
-                                                <span class="grommet-icons--add col-1"
-                                                      @onclick="@(() => AddProject())" />
-                                            }
-                                        </div>
-                                        <div class="text-center row me-2">
-                                            <FluentSearch @bind-Value="@_projectNameFilter"
-                                                          @oninput="@HandleProjectFilter"
-                                                          Placeholder="Search Project" 
-                                                          Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;"/>
+                                            </div>
+                                            <div class="text-center row me-2">
+                                                <FluentSearch @bind-Value="@_projectNameFilter"
+                                                              @oninput="@HandleProjectFilter"
+                                                              Placeholder="Search Project" 
+                                                              Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;"/>
+                                            </div>
                                         </div>
                                         <div class="table-responsive p-1 table-container"
                                              style="overflow-x: auto !important;">
@@ -291,23 +293,25 @@ else
                                     <!-- Table Disciplines -->
                                     @if (_selectedProject != null && !_isEndWorkDialogOdepened)
                                     {
-                                        <div class="text-center row me-2">
-                                            <h3 class="@((isWorkingMode ? "col-8" : "col-11"))">Disciplines</h3>
-                                            @if (isWorkingMode && editDiscipline)
-                                            {
-                                                @if (_selectedDiscipline != null)
+                                        <div style="height: 74px;">
+                                            <div class="text-center row me-2">
+                                                <h3 class="@((isWorkingMode ? "col-8" : "col-11"))">Disciplines</h3>
+                                                @if (isWorkingMode && editDiscipline)
                                                 {
-                                                    <span class="fluent--delete-28-regular col-1"
-                                                          @onclick="@(() => DeleteDiscipline())" />
-                                                    <span class="material-symbols--edit-outline col-1"
-                                                          @onclick="@(async () => await EditDiscipline())" />
+                                                    @if (_selectedDiscipline != null)
+                                                    {
+                                                        <span class="fluent--delete-28-regular col-1"
+                                                              @onclick="@(() => DeleteDiscipline())" />
+                                                        <span class="material-symbols--edit-outline col-1"
+                                                              @onclick="@(async () => await EditDiscipline())" />
+                                                    }
+                                                    @if (_hasDisciplinesSelections)
+                                                    {
+                                                        <span class="grommet-icons--add col-1"
+                                                              @onclick="@(async () => await AddDiscipline())" />
+                                                    }
                                                 }
-                                                @if (_hasDisciplinesSelections)
-                                                {
-                                                    <span class="grommet-icons--add col-1"
-                                                          @onclick="@(async () => await AddDiscipline())" />
-                                                }
-                                            }
+                                            </div>
                                         </div>
                                         <div class="table-responsive p-1 table-container">
                                             <table class="table table-hover table-danger text-center">
@@ -371,26 +375,28 @@ else
                                     <div class="col">
                                         @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                         {
-                                            <div class="text-center row me-2">
-                                                <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Deliverables</h3>
-                                                @if (isWorkingMode && editDeliverable)
-                                                {
-                                                    @if (_selectedDraw != null)
+                                            <div style="height: 74px;">
+                                                <div class="text-center row me-2">
+                                                    <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Deliverables</h3>
+                                                    @if (isWorkingMode && editDeliverable)
                                                     {
-                                                        <span class="fluent--delete-28-regular col-1"
-                                                              @onclick="@(() => DeleteDeliverable())" />
+                                                        @if (_selectedDraw != null)
+                                                        {
+                                                            <span class="fluent--delete-28-regular col-1"
+                                                                  @onclick="@(() => DeleteDeliverable())" />
+                                                            @if (_hasDrawingsSelections)
+                                                            {
+                                                                <span class="material-symbols--edit-outline col-1"
+                                                                      @onclick="@(() => EditDeliverable())" />
+                                                            }
+                                                        }
                                                         @if (_hasDrawingsSelections)
                                                         {
-                                                            <span class="material-symbols--edit-outline col-1"
-                                                                  @onclick="@(() => EditDeliverable())" />
+                                                            <span class="grommet-icons--add col-1"
+                                                                  @onclick="@(() => AddDeliverable())" />
                                                         }
                                                     }
-                                                    @if (_hasDrawingsSelections)
-                                                    {
-                                                        <span class="grommet-icons--add col-1"
-                                                              @onclick="@(() => AddDeliverable())" />
-                                                    }
-                                                }
+                                                </div>
                                             </div>
                                             <div class="table-responsive p-1 table-container">
                                                 <table class="table table-hover table-primary text-center">
@@ -456,28 +462,29 @@ else
                                     <div class="col">
                                         @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
                                         {
-                                            <div class="text-center row me-2">
-                                                <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Supportive Works</h3>
-                                                @if (isWorkingMode && editOther)
-                                                {
-                                                    @if (_selectedOther != null)
+                                            <div style="height: 74px;">
+                                                <div class="text-center row me-2">
+                                                    <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Supportive Works</h3>
+                                                    @if (isWorkingMode && editOther)
                                                     {
-                                                        <span class="fluent--delete-28-regular col-1"
-                                                              @onclick="@(() => DeleteOther())" />
+                                                        @if (_selectedOther != null)
+                                                        {
+                                                            <span class="fluent--delete-28-regular col-1"
+                                                                  @onclick="@(() => DeleteOther())" />
+                                                            @if (_hasOthersSelections)
+                                                            {
+                                                                <span class="material-symbols--edit-outline col-1"
+                                                                      @onclick="@(() => EditOther())" />
+                                                            }
+                                                        }
                                                         @if (_hasOthersSelections)
                                                         {
-                                                            <span class="material-symbols--edit-outline col-1"
-                                                                  @onclick="@(() => EditOther())" />
+                                                            <span class="grommet-icons--add col-1"
+                                                                  @onclick="@(() => AddOther())" />
                                                         }
                                                     }
-                                                    @if (_hasOthersSelections)
-                                                    {
-                                                        <span class="grommet-icons--add col-1"
-                                                              @onclick="@(() => AddOther())" />
-                                                    }
-                                                }
+                                                </div>
                                             </div>
-
                                             <div class="table-responsive p-1 table-container">
                                                 <table class="table table-hover table-warning text-center">
                                                     <thead>
