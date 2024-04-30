@@ -18,8 +18,8 @@ public class PaymentVM : BaseVM
         }
     }
 
-    private DateTime _paymentDate;
-    public DateTime PaymentDate
+    private DateTime? _paymentDate;
+    public DateTime? PaymentDate
     {
         get => _paymentDate;
         set

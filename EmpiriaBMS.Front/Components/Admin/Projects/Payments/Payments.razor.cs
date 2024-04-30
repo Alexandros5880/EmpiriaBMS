@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,56 @@ public partial class Payments
         _records = Mapper.Map<List<PaymentVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(new PaymentVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            PaymentVM vm = result.Data as PaymentVM;
+            var dto = Mapper.Map<PaymentDto>(vm);
+            await DataProvider.Payments.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(PaymentVM record)
+    private async Task _edit(PaymentVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit paymeny of project {record.ProjectName} with bank {record.Bank}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            PaymentVM vm = result.Data as PaymentVM;
+            var dto = Mapper.Map<PaymentDto>(vm);
+            await DataProvider.Payments.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(PaymentVM record)
