@@ -50,7 +50,8 @@ public partial class Payments
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(new PaymentVM(), parameters);
@@ -76,7 +77,8 @@ public partial class Payments
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(record, parameters);
