@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,56 @@ public partial class Disciplines
         _records = Mapper.Map<List<DisciplineVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<DisciplineDetailedDialog>(new DisciplineVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            DisciplineVM vm = result.Data as DisciplineVM;
+            var dto = Mapper.Map<DisciplineDto>(vm);
+            await DataProvider.Disciplines.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(DisciplineVM record)
+    private async Task _edit(DisciplineVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Type.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<DisciplineDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            DisciplineVM vm = result.Data as DisciplineVM;
+            var dto = Mapper.Map<DisciplineDto>(vm);
+            await DataProvider.Disciplines.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(DisciplineVM record)
