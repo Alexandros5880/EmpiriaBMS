@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.Projects.Offers;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,58 @@ public partial class Invoices
         _records = Mapper.Map<List<InvoiceVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(new InvoiceVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            InvoiceVM vm = result.Data as InvoiceVM;
+            var dto = Mapper.Map<InvoiceDto>(vm);
+            await DataProvider.Invoices.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(InvoiceVM record)
+    private async Task _edit(InvoiceVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Project?.Name: 'Record'}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            InvoiceVM vm = result.Data as InvoiceVM;
+            var dto = Mapper.Map<InvoiceDto>(vm);
+            await DataProvider.Invoices.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(InvoiceVM record)

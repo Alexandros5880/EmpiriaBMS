@@ -20,6 +20,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
             var i = await _context
                              .Set<Invoice>()
                              .Include(r => r.Project)
+                             .Include(r => r.Type)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<InvoiceDto>(i);
@@ -46,6 +47,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(r => r.Project)
+                                 .Include(r => r.Type)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -66,6 +68,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
                 i = await _context.Set<Invoice>()
                                   .Where(expresion)
                                   .Include(r => r.Project)
+                                  .Include(r => r.Type)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -76,6 +79,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
                               .Skip((pageIndex - 1) * pageSize)
                               .Take(pageSize)
                               .Include(r => r.Project)
+                              .Include(r => r.Type)
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);

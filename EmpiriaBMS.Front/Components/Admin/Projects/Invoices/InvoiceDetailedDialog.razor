@@ -4,7 +4,7 @@
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
 
-@implements IDialogContentComponent<OfferVM>
+@implements IDialogContentComponent<InvoiceVM>
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
@@ -65,7 +65,7 @@
                                 Items="@_types"
                                 Height="200px"
                                 Width="100%"
-                                TOption="OfferTypeVM"
+                                TOption="InvoiceTypeVM"
                                 OptionText="@(c => c.Name)"
                                 OptionValue="@(c => c.Id.ToString())"
                                 @bind-SelectedOption="@Type" />
@@ -77,105 +77,59 @@
                 </div>
             }
         </div>
-        <!-- State -->
+        <!-- Mark -->
         <div class="col-xl-4 col-lg-4 col-md-12">
-            <div>
-                Visible To Role<span class="text-danger">*</span>
-            </div>
-            <div>
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                Placeholder="Select State..."
-                                Items="_states"
-                                Height="200px"
-                                Width="100%"
-                                Class="float-end"
-                                TOption="OfferStateVM"
-                                OptionText="@(c => c.Name)"
-                                OptionValue="@(c => c.Id.ToString())"
-                                @bind-SelectedOption="@State" />
-            </div>
-            @if (!validState)
-            {
-                <div>
-                    <span class="text-warning">Field is required!</span>
-                </div>
-            }
-        </div>
-    </div>
-
-    <div class="col-12 row gx-3 mt-2">
-        <!-- Code -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Code">
-                Code<span class="text-danger">*</span>
+            <FluentTextField Style="width:100%;" @bind-Value="@Content.Mark">
+                Mark<span class="text-danger">*</span>
             </FluentTextField>
-            @if (!validCode)
+            @if (!validMark)
             {
                 <div class="col-12">
                     <span class="text-warning">Field is required!</span>
                 </div>
             }
         </div>
-        <!-- Date-->
+    </div>
+
+    <div class="col-12 row gx-2 mt-2">
+        <!-- Vat -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Vat" Min="0">
+                Vat
+            </FluentNumberField>
+        </div>
+        <!-- Fee -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Fee" Min="0">
+                Fee
+            </FluentNumberField>
+        </div>
+    </div>
+
+    <div class="col-12 row gx-2 mt-2">
+        <!-- Number -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Number" Min="0">
+                Number
+            </FluentNumberField>
+        </div>
+        <!-- Total -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Total" Min="0">
+                Total
+            </FluentNumberField>
+        </div>
+    </div>
+
+    <div class="col-12 row gx-3 mt-2">
+        <!-- Date -->
         <div class="col-xl-6 col-lg-6 col-md-12">
             <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.Date" Label="Date" />
         </div>
-    </div>
-
-    <div class="col-12 row gx-3 mt-2">
-        <!-- PudgetPrice -->
-        <div class=" col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.PudgetPrice" Min="0">
-                Pudget Price<span class="text-danger">*</span>
-            </FluentNumberField>
-            @if (!validPudgetPrice)
-            {
-                <div class="col-12">
-                    <span class="text-warning">Field is required!</span>
-                </div>
-            }
-        </div>
-        <!-- OfferPrice-->
+        <!-- None -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.OfferPrice" Min="0">
-                Offer Price<span class="text-danger">*</span>
-            </FluentNumberField>
-            @if (!validOfferPrice)
-            {
-                <div class="col-12">
-                    <span class="text-warning">Field is required!</span>
-                </div>
-            }
+
         </div>
     </div>
-
-    <div class="col-12 row gx-3 mt-2">
-        <!-- Description -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
-        </div>
-    </div>
-
-    <div class="col-12 row gx-3 mt-2">
-        <!-- Observations -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Observations" Rows="3" Resize="TextAreaResize.Vertical">Observations:</FluentTextArea>
-        </div>
-    </div>
-
-    <div class="col-12 row gx-3 mt-2">
-        <!-- TeamText -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.TeamText" Rows="3" Resize="TextAreaResize.Vertical">Team Text:</FluentTextArea>
-        </div>
-    </div>
-
-    <div class="col-12 row gx-3 mt-2">
-        <!-- Comments -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Comments" Rows="3" Resize="TextAreaResize.Vertical">Comments:</FluentTextArea>
-        </div>
-    </div>
-
 
 </FluentDialogBody>

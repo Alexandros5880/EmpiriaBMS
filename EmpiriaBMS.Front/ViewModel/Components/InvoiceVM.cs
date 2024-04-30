@@ -68,8 +68,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private DateTime _date;
-    public DateTime Date
+    private DateTime? _date;
+    public DateTime? Date
     {
         get => _date;
         set
