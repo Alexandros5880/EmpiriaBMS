@@ -2,12 +2,14 @@
 @using EmpiriaBMS.Front.Services
 @using Color = Microsoft.Fast.Components.FluentUI.Color
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
+@using EmpiriaBMS.Core.Hellpers
 
 @implements IDialogContentComponent<IssueVM>
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
 @inject IDialogService DialogService
+@inject MicrosoftTeams MicrosoftTeams
 
 @* Header *@
 <FluentDialogHeader ShowDismiss="true">
@@ -29,13 +31,13 @@
 <FluentDialogBody>
     <div class="row gx-2" style="height: 77vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;">
 
-        <div class="col-12 row" style="margin: 0 auto;">
+        <div class="col-12 row gx-3 mt-2">
             <!-- Project -->
-            <div class="col-lg-6 col-md-12 row">
-                <div class="col-12">
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                <div>
                     Project<span class="text-danger">*</span>
                 </div>
-                <div class="col-12">
+                <div>
                     <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Project..."
                                     Items="@_projects"
@@ -48,17 +50,17 @@
                 </div>
                 @if (!validProject)
                 {
-                    <div class="col-12">
+                    <div>
                         <span class="text-warning">Field is required!</span>
                     </div>
                 }
             </div>
             <!-- Visible To Role -->
-            <div class="col-lg-6 col-md-12 row">
-                <div class="col-12">
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                <div>
                     Visible To Role
                 </div>
-                <div class="col-12">
+                <div>
                     <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Role..."
                                     Items="_roles"
@@ -72,20 +74,20 @@
                 </div>
                 @if (!validRole)
                 {
-                    <div class="col-12">
+                    <div>
                         <span class="text-warning">Field is required!</span>
                     </div>
                 }
             </div>
         </div>
 
-        <div class="col-12 row" style="margin: 0 auto;">
+        <div class="col-12 row gx-3 mt-2">
             <!-- Creator -->
-            <div class="col-lg-6 col-md-12 row">
-                <div class="col-12">
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                <div>
                     Creator<span class="text-danger">*</span>
                 </div>
-                <div class="col-12">
+                <div>
                     <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Creator..."
                                     Items="@_users"
@@ -98,38 +100,46 @@
                 </div>
                 @if (!validCreator)
                 {
-                    <div class="col-12">
+                    <div>
                         <span class="text-warning">Field is required!</span>
                     </div>
                 }
             </div>
             <!-- ComplaintDate-->
-            <div class="col-lg-6 col-md-12 row">
+            <div class="col-xl-6 col-lg-6 col-md-12">
                 <FluentDatePicker Class="float-end" Style="width: 100%;" @bind-Value="@Content.ComplaintDate" Label="Complaint Date" />
             </div>
         </div>
 
-        <!-- Description -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+        <div class="col-12 row gx-3 mt-2">
+            <!-- Description -->
+            <div class="col-12">
+                <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+            </div>
         </div>
 
-        <!-- Solution -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Solution" Rows="3" Resize="TextAreaResize.Vertical">Solution:</FluentTextArea>
+        <div class="col-12 row gx-3 mt-2">
+            <!-- Solution -->
+            <div class="col-12">
+                <FluentTextArea Style="width:100%;" @bind-Value="@Content.Solution" Rows="3" Resize="TextAreaResize.Vertical">Solution:</FluentTextArea>
+            </div>
         </div>
 
-        <!-- Evaluation -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Evaluation" Rows="3" Resize="TextAreaResize.Vertical">Evaluation:</FluentTextArea>
+        <div class="col-12 row gx-3 mt-2">
+            <!-- Evaluation -->
+            <div class="col-12">
+                <FluentTextArea Style="width:100%;" @bind-Value="@Content.Evaluation" Rows="3" Resize="TextAreaResize.Vertical">Evaluation:</FluentTextArea>
+            </div>
         </div>
 
-        <!-- Verification -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Verification" Rows="3" Resize="TextAreaResize.Vertical">Verification:</FluentTextArea>
+        <div class="col-12 row gx-3 mt-2">
+            <!-- Verification -->
+            <div class="col-12">
+                <FluentTextArea Style="width:100%;" @bind-Value="@Content.Verification" Rows="3" Resize="TextAreaResize.Vertical">Verification:</FluentTextArea>
+            </div>
         </div>
 
-        <div class="col-12 row gx-2" style="margin: 0 auto;">
+        <div class="col-12 row gx-3 mt-2">
             <!-- SolutionDate -->
             <div class="col-lg-6 col-md-12">
                 <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.SolutionDate" Label="Solution Date" />
@@ -140,7 +150,7 @@
             </div>
         </div>
 
-        <div class="col-12 row gx-2" style="margin: 0 auto;">
+        <div class="col-12 row gx-3 mt-2">
             <!-- IsClose -->
             <div class="col-lg-6 col-md-12">
                 <FluentSwitch @bind-Value="@Content.IsClose">
@@ -150,6 +160,61 @@
             <!-- None -->
             <div class="col-lg-6 col-md-12">
                 
+            </div>
+        </div>
+
+        <div class="col-12 row gx-3 mt-2">
+            <!-- PMSignature -->
+            <div class="col-lg-6 col-md-12">
+                @{
+                    var pmSignatureSrc = @ImageHelper.GetImageUrl(@Content.PMSignature);
+                }
+                @if (pmSignatureSrc != null)
+                {
+                    <div>
+                        Project Manager Signature
+                    </div>
+                    <div>
+                        <img src="@pmSignatureSrc" alt="Project Manager Signature">
+                    </div>
+                }
+            </div>
+            <!-- VerificatorSignature -->
+            <div class="col-lg-6 col-md-12">
+                @{
+                    var verificatorSignatureSrc = @ImageHelper.GetImageUrl(Content.VerificatorSignature);
+                }
+                @if (verificatorSignatureSrc != null)
+                {
+                    <div>
+                        Project Manager Signature
+                    </div>
+                    <div>
+                        <img src="@verificatorSignatureSrc" alt="Verificator Signature">
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-12 row gx-3 mt-2">
+            <!-- Documents -->
+            <div class="col-12">
+                <div>
+                    <h3>Documents</h3>
+                </div>
+                <div>
+                    <ul>
+                        @foreach (var document in _documents)
+                        {
+                            <li>
+                                <FluentButton OnClick="@(() => DownloadFile(document))">
+                                    <FluentIcon Value="@(new Icons.Regular.Size32.ArrowDown())" Color="Color.Error" Slot="start" />
+                                    @document.FileName
+                                </FluentButton>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
 

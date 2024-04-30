@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.Interfaces;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.JSInterop;
 using NuGet.Packaging;
 using System.Collections.ObjectModel;
 
@@ -26,6 +29,24 @@ public partial class IssuesDetailedDialog : IDialogContentComponent<IssueVM>
         {
             await _getRecords();
 
+            if (Content.Project != null)
+            {
+                var projectDto = Mapping.Mapper.Map<ProjectDto>(Content.Project);
+                Project = _mapper.Map<ProjectVM>(projectDto);
+            }
+
+            if (Content.DisplayedRole != null)
+            {
+                var roleDto = Mapping.Mapper.Map<RoleDto>(Content.DisplayedRole);
+                Role = _mapper.Map<RoleVM>(roleDto);
+            }
+
+            if (Content.Creator != null)
+            {
+                var creatorDto = Mapping.Mapper.Map<UserDto>(Content.Creator);
+                Creator = _mapper.Map<UserVM>(creatorDto);
+            }
+
             StateHasChanged();
         }
     }
@@ -41,6 +62,12 @@ public partial class IssuesDetailedDialog : IDialogContentComponent<IssueVM>
     private async Task CancelAsync()
     {
         await Dialog.CancelAsync();
+    }
+
+    private async Task DownloadFile(DocumentVM document)
+    {
+        var dto = _mapper.Map<DocumentDto>(document);
+        await MicrosoftTeams.DownloadFile(dto);
     }
 
     #region Validation
@@ -87,6 +114,7 @@ public partial class IssuesDetailedDialog : IDialogContentComponent<IssueVM>
     ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     ObservableCollection<RoleVM> _roles = new ObservableCollection<RoleVM>();
     ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
+    ObservableCollection<DocumentVM> _documents = new ObservableCollection<DocumentVM>();
 
     private ProjectVM _project = new ProjectVM();
     public ProjectVM Project
@@ -129,6 +157,7 @@ public partial class IssuesDetailedDialog : IDialogContentComponent<IssueVM>
         await _getProjects();
         await _getRoles();
         await _getUsers();
+        await _getMyDocuments();
     }
 
     private async Task _getProjects()
@@ -153,6 +182,16 @@ public partial class IssuesDetailedDialog : IDialogContentComponent<IssueVM>
         var vms = _mapper.Map<List<UserVM>>(dtos);
         _users.Clear();
         vms.ForEach(_users.Add);
+    }
+
+    private async Task _getMyDocuments()
+    {
+        if (Content == null || Content.Id == 0)
+            return;
+        var dtos = await _dataProvider.Issues.GetMyDocuments(Content.Id);
+        var vms = _mapper.Map<List<DocumentVM>>(dtos);
+        _documents.Clear();
+        vms.ForEach(_documents.Add);
     }
     #endregion
 }

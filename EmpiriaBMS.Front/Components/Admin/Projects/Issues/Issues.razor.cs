@@ -76,7 +76,7 @@ public partial class Issues
     {
         DialogParameters parameters = new()
         {
-            Title = $"Edit {record.Project.Name}",
+            Title = $"Edit {record.Project?.Name ?? "Issue"}",
             PrimaryActionEnabled = true,
             SecondaryActionEnabled = true,
             PrimaryAction = "Save",
