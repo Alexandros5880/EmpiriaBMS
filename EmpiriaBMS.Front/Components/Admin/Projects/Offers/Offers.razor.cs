@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,58 @@ public partial class Offers
         _records = Mapper.Map<List<OfferVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(85%, 800px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<OfferDetailedDialog>(new OfferVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            OfferVM vm = result.Data as OfferVM;
+            var dto = Mapper.Map<OfferDto>(vm);
+            await DataProvider.Offers.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(OfferVM record)
+    private async Task _edit(OfferVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Project?.Name : 'Record'}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(85%, 800px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<OfferDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            OfferVM vm = result.Data as OfferVM;
+            var dto = Mapper.Map<OfferDto>(vm);
+            await DataProvider.Offers.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(OfferVM record)
