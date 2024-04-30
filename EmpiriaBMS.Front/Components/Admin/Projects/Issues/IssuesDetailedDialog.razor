@@ -207,15 +207,47 @@
                         @foreach (var document in _documents)
                         {
                             <li>
-                                <FluentButton OnClick="@(() => DownloadFile(document))">
-                                    <FluentIcon Value="@(new MyIcons.Size32.Download())" Color="Color.Error" Slot="start" />
+                                <FluentStack Width="100%">
                                     @document.FileName
-                                </FluentButton>
+
+                                    <FluentButton IconEnd="@(new MyIcons.Size32.Download())"
+                                                  Title="Globe"
+                                                  OnClick="@(() => DownloadFile(document))" />
+
+                                    <FluentButton IconEnd="@(new Icons.Regular.Size32.Delete())"
+                                                  Title="Globe"
+                                                  OnClick="@(() => DeleteFile(document))" />
+
+                                </FluentStack>
                             </li>
                         }
                     </ul>
                 </div>
             </div>
+            <!-- Deleted Documents -->
+            @if (_deletedDocuments.Count > 0)
+            {
+                <div class="col-12">
+                    <div>
+                        <h3>Deleted Documents</h3>
+                    </div>
+                    <div>
+                        <ul>
+                            @foreach (var document in _deletedDocuments)
+                            {
+                                <li>
+                                    <FluentButton OnClick="@(async () => await AddFile(document))">
+                                        <FluentIcon Value="@(new Icons.Regular.Size32.Add())"
+                                                    Color="Color.Accent"
+                                                    Slot="end"/>
+                                        Add @document.FileName
+                                    </FluentButton>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
         </div>
 
     </div>

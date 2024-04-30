@@ -132,4 +132,37 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
     }
 
+    public async Task DeleteDocuments(List<DocumentDto> documents)
+    {
+        if (documents == null || documents.Count == 0)
+            return;
+
+        var docs = Mapping.Mapper.Map<List<Document>>(documents);
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            _context.Set<Document>().RemoveRange(docs);
+    }
+
+    public void DeleteDocument(DocumentDto document)
+    {
+        if (document == null || document.Id == 0)
+            return;
+
+        var doc = Mapping.Mapper.Map<Document>(document);
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            _context.Set<Document>().Remove(doc);
+    }
+
+    public async Task AddDocument(DocumentDto document)
+    {
+        if (document == null || document.Id == 0)
+            return;
+
+        var doc = Mapping.Mapper.Map<Document>(document);
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            await _context.Set<Document>().AddAsync(doc);
+    }
+
 }

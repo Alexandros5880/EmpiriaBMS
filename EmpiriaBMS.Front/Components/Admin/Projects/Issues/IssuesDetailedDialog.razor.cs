@@ -64,11 +64,29 @@ public partial class IssuesDetailedDialog : IDialogContentComponent<IssueVM>
         await Dialog.CancelAsync();
     }
 
+    #region Documents
     private async Task DownloadFile(DocumentVM document)
     {
         var dto = _mapper.Map<DocumentDto>(document);
         await MicrosoftTeams.DownloadFile(dto);
     }
+
+    private void DeleteFile(DocumentVM document)
+    {
+        var dto = _mapper.Map<DocumentDto>(document);
+        _dataProvider.Issues.DeleteDocument(dto);
+        _documents.Remove(document);
+        _deletedDocuments.Add(document);
+    }
+
+    private async Task AddFile(DocumentVM document)
+    {
+        var dto = _mapper.Map<DocumentDto>(document);
+        await _dataProvider.Issues.AddDocument(dto);
+        _documents.Add(document);
+        _deletedDocuments.Remove(document);
+    }
+    #endregion
 
     #region Validation
     private bool validProject = true;
@@ -115,6 +133,7 @@ public partial class IssuesDetailedDialog : IDialogContentComponent<IssueVM>
     ObservableCollection<RoleVM> _roles = new ObservableCollection<RoleVM>();
     ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
     ObservableCollection<DocumentVM> _documents = new ObservableCollection<DocumentVM>();
+    ObservableCollection<DocumentVM> _deletedDocuments = new ObservableCollection<DocumentVM>();
 
     private ProjectVM _project = new ProjectVM();
     public ProjectVM Project
