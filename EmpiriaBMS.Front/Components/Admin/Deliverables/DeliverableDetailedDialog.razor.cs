@@ -61,8 +61,8 @@ public partial class DeliverableDetailedDialog : IDialogContentComponent<Drawing
     {
         if (fieldname == null)
         {
-            validType = Content.TypeId != 0;
-            validDiscipline = Content.DisciplineId != 0;
+            validType = Content.TypeId != 0 && Content.TypeId != null;
+            validDiscipline = Content.DisciplineId != 0 && Content.DisciplineId != null;
 
             return validType && validDiscipline;
         }
@@ -76,7 +76,7 @@ public partial class DeliverableDetailedDialog : IDialogContentComponent<Drawing
                 case "Type":
                     validType = Content.TypeId != 0;
                     return validType;
-                case "Project":
+                case "Discipline":
                     validDiscipline = Content.DisciplineId != 0;
                     return validDiscipline;
                 default:

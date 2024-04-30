@@ -21,9 +21,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         {
             var dr = await _context
                              .Set<Other>()
-                             .Include(o => o.Type)
-                             .Include(o => o.Discipline)
-                             .ThenInclude(d => d.Project)
+                             .Include(d => d.Type)
+                             .Include(d => d.Discipline)
+                             .ThenInclude(d => d.Type)
+                             .Include(d => d.Discipline)
+                             .ThenInclude(dis => dis.Project)
                              .Include(o => o.Discipline)
                              .ThenInclude(d => d.Type)
                              .FirstOrDefaultAsync(r => r.Id == id);
@@ -41,9 +43,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 drs = await _context.Set<Other>()
-                                    .Include(o => o.Type)
-                                    .Include(o => o.Discipline)
-                                    .ThenInclude(d => d.Project)
+                                    .Include(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(dis => dis.Project)
                                     .Include(o => o.Discipline)
                                     .ThenInclude(d => d.Type)
                                     .ToListAsync();
@@ -53,9 +57,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
 
             drs = await _context.Set<Other>()
-                                .Include(o => o.Type)
-                                .Include(o => o.Discipline)
-                                .ThenInclude(d => d.Project)
+                                .Include(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(dis => dis.Project)
                                 .Include(o => o.Discipline)
                                 .ThenInclude(d => d.Type)
                                 .Skip((pageIndex - 1) * pageSize)
@@ -78,9 +84,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 drs = await _context.Set<Other>()
-                                    .Include(o => o.Type)
-                                    .Include(o => o.Discipline)
-                                    .ThenInclude(d => d.Project)
+                                    .Include(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(dis => dis.Project)
                                     .Include(o => o.Discipline)
                                     .ThenInclude(d => d.Type)
                                     .Where(expresion)
@@ -91,9 +99,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
 
             drs = await _context.Set<Other>()
-                                .Include(o => o.Type)
-                                .Include(o => o.Discipline)
-                                .ThenInclude(d => d.Project)
+                                .Include(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(dis => dis.Project)
                                 .Include(o => o.Discipline)
                                 .ThenInclude(d => d.Type)
                                 .Where(expresion)

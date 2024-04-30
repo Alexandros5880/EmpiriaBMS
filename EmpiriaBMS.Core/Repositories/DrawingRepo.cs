@@ -24,6 +24,8 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                              .Set<Drawing>()
                              .Include(d => d.Type)
                              .Include(d => d.Discipline)
+                             .ThenInclude(d => d.Type)
+                             .Include(d => d.Discipline)
                              .ThenInclude(dis => dis.Project)
                              .Include(o => o.Discipline)
                              .ThenInclude(d => d.Type)
@@ -47,7 +49,6 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                     .ThenInclude(d => d.Type)
                                     .Include(d => d.Discipline)
                                     .ThenInclude(dis => dis.Project)
-                                    .ThenInclude(p => p.Name)
                                     .Include(o => o.Discipline)
                                     .ThenInclude(d => d.Type)
                                     .ToListAsync();
@@ -62,7 +63,6 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                 .ThenInclude(d => d.Type)
                                 .Include(d => d.Discipline)
                                 .ThenInclude(dis => dis.Project)
-                                .ThenInclude(p => p.Name)
                                 .Skip((pageIndex - 1) * pageSize)
                                 .Take(pageSize)
                                 .ToListAsync();
@@ -88,7 +88,6 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                     .ThenInclude(d => d.Type)
                                     .Include(d => d.Discipline)
                                     .ThenInclude(dis => dis.Project)
-                                    .ThenInclude(p => p.Name)
                                     .Where(expresion)
                                     .ToListAsync();
 
@@ -102,7 +101,6 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                 .ThenInclude(d => d.Type)
                                 .Include(d => d.Discipline)
                                 .ThenInclude(dis => dis.Project)
-                                .ThenInclude(p => p.Name)
                                 .Where(expresion)
                                 .Skip((pageIndex - 1) * pageSize)
                                 .Take(pageSize)
