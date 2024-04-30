@@ -1,6 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -32,6 +32,19 @@ public class ProjectSubCategoryVM : BaseVM
         }
     }
 
+    private string? _description;
+    public string? Description
+    {
+        get => _description;
+        set
+        {
+            if (value == _description)
+                return;
+            _description = value;
+            NotifyPropertyChanged(nameof(Description));
+        }
+    }
+
     private int? _categoryId;
     public int? CategoryId
     {
@@ -59,4 +72,7 @@ public class ProjectSubCategoryVM : BaseVM
     }
 
     public ICollection<Project> Projects { get; set; }
+
+    [NotMapped]
+    public string ParentCategoryName => Category != null ? Category.Name : "";
 }

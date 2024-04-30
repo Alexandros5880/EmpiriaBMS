@@ -2,14 +2,8 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -27,6 +21,9 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
             var i = await _context
                              .Set<Payment>()
                              .Include(r => r.Invoice)
+                             .ThenInclude(i => i.Type)
+                             .Include(r => r.Invoice)
+                             .ThenInclude(i => i.Project)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<PaymentDto>(i);
@@ -43,6 +40,9 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
             {
                 i = await _context.Set<Payment>()
                                   .Include(r => r.Invoice)
+                                  .ThenInclude(i => i.Type)
+                                  .Include(r => r.Invoice)
+                                  .ThenInclude(i => i.Project)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
@@ -52,6 +52,9 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(r => r.Invoice)
+                                 .ThenInclude(i => i.Type)
+                                 .Include(r => r.Invoice)
+                                 .ThenInclude(i => i.Project)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
@@ -72,6 +75,9 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
                 i = await _context.Set<Payment>()
                                   .Where(expresion)
                                   .Include(r => r.Invoice)
+                                  .ThenInclude(i => i.Type)
+                                  .Include(r => r.Invoice)
+                                  .ThenInclude(i => i.Project)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
@@ -82,6 +88,9 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
                               .Skip((pageIndex - 1) * pageSize)
                               .Take(pageSize)
                               .Include(r => r.Invoice)
+                              .ThenInclude(i => i.Type)
+                              .Include(r => r.Invoice)
+                              .ThenInclude(i => i.Project)
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);

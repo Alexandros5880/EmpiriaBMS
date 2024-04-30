@@ -31,123 +31,8 @@ else
 {
     <div class="container-fluid">
         <div class="row flex-nowrap">
-            @if (SeeAdmin)
-            {
-                <!-- NavBar -->
-                <div class="col-auto col-md-3 col-xl-2 px-0
-                            bg-dark bg-gradient">
-                    <div class="d-flex flex-column
-                                align-items-start align-items-md-start align-items-sm-center align-items-xs-center
-                                px-3 pt-2 text-white min-vh-100">
-                        <a href="#" class="d-none d-md-inline d-flex
-                                           align-items-center
-                                           pb-3 mb-md-0 me-md-auto
-                                           text-white text-decoration-none">
-                            <span class="fs-5 d-none d-md-inline">Menu</span>
-                        </a>
-                        <ul class="nav nav-pills flex-column 
-                                   mb-auto
-                                   align-items-start
-                                   align-items-md-start
-                                   align-items-sm-center
-                                   align-items-xs-center"
-                            id="menu">
-                            @if (SeeDashboard)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link d-flex justify-content-start"
-                                       herf="/dashboard"
-                                       @onclick="@(() => selectUrl("/dashboard"))">
-                                        <span class="arcticons--nextcloud-tables"></span>
-                                        <b class="ms-1 d-none d-md-inline nav-link-text">Dashboard</b>
-                                    </a>
-                                </li>
-                            }
-                            <li class="nav-item">
-                                <a class="nav-link d-flex justify-content-start"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/Projects/Table"))">
-                                    <span class="file-icons--microsoft-project"></span>
-                                    <b class="ms-1 d-none d-md-inline nav-link-text">Projects</b>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex justify-content-start"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/Users/Table"))">
-                                    <span class="ph--users-four-light"></span>
-                                    <b class="ms-1 d-none d-md-inline nav-link-text">Users</b>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex justify-content-start"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/Roles/Table"))">
-                                    <span class="oui--app-users-roles"></span>
-                                    <b class="ms-1 d-none d-md-inline nav-link-text">Roles</b>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex justify-content-start"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/ProjectTypes/Table"))">
-                                    <span class="arcticons--ptv"></span>
-                                    <b class="ms-1 d-none d-md-inline nav-link-text">Project Types</b>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex justify-content-start"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/DisciplineTypes/Table"))">
-                                    <span class="gala--layer"></span>
-                                    <b class="ms-1 d-none d-md-inline nav-link-text">Disciplines Types</b>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex justify-content-start"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/DrawingTypes/Table"))">
-                                    <span class="streamline--hand-held-tablet-drawing"></span>
-                                    <b class="ms-1 d-none d-md-inline nav-link-text">Deliverable Types</b>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex justify-content-start"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/OtherTypes/Table"))">
-                                    <span class="material-symbols--other-admission-outline-sharp"></span>
-                                    <b class="ms-1 d-none d-md-inline nav-link-text">Supportive Work Types</b>
-                                </a>
-                            </li>
-                        </ul>
-                        <hr>
-                        <!-- Side NavBar Down Profile Button -->
-                        @* <div class="dropdown pb-4">
-                            <a href="#"
-                               class="d-flex text-white text-decoration-none dropdown-toggle
-                                      align-items-center"
-                               id="dropdownUser1"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                                <span class="d-none d-lg-inline mx-1">@_userName</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                                <li><a class="dropdown-item" href="#">New project...</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Sign out</a></li>
-                            </ul>
-                        </div> *@
-                    </div>
-                </div>
-            }
-            <div class="col py-3">
-                @if (SeeAdmin && !_selectedUrl.Equals("/dashboard"))
-                {
-                    <iframe src="@_selectedUrl" style="width: 100%; height: 100%; border: none;"></iframe>
-                }
-                else
-                {
-                    @Body
-                }
-            </div>
+            @Body
+            <FluentDialogProvider />
         </div>
     </div>
 
@@ -185,7 +70,6 @@ else
 @code {
     bool _runInTeams = false;
     bool isLoading = true;
-    private string _selectedUrl = "";
 
     #region Authorization Properties
     public bool SeeAdmin
@@ -224,13 +108,7 @@ else
     private void _afterAuthCallBack()
     {
         isLoading = false;
-        selectUrl("/mvc/Admin/Projects/Table");
         StateHasChanged();
-    }
-
-    private void selectUrl(string url)
-    {
-        _selectedUrl = url;
     }
 
     private string GetEnvironmentName()

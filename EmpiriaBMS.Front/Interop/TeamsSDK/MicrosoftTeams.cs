@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.Components.General;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
@@ -99,6 +100,13 @@ public class MicrosoftTeams : InteropModuleBase
     public async Task InitializeAutocomplete(string inputElementId)
     {
         await InvokeVoidAsync("initializeAutocomplete", inputElementId);
+    }
+    #endregion
+
+    #region Download Document
+    public async Task DownloadFile(DocumentDto doc)
+    {
+        await InvokeVoidAsync("downloadFile", doc.FileName, doc.ContentType, Convert.ToBase64String(doc.Content));
     }
     #endregion
 }

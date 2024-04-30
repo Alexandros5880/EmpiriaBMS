@@ -1,12 +1,4 @@
-﻿using EmpiriaBMS.Models;
-using EmpiriaMS.Models.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Diagnostics;
-using System.Reflection.Emit;
-using System.Xml.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
@@ -2784,7 +2776,6 @@ public class AppDbContext : DbContext
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 StartDate = createdDate,
                 DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                CalculationDaly = i < 5 ? i : i - (i - 1),
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
                 DeclaredCompleted = 0,
@@ -2853,7 +2844,6 @@ public class AppDbContext : DbContext
             Description = "Test Description Project_PM",
             StartDate = createdDate,
             DeadLine = createdDate.AddMonths(3),
-            CalculationDaly = 345,
             EstimatedMandays = 100 / 8,
             EstimatedHours = 1500,
             DeclaredCompleted = 0,
@@ -2886,7 +2876,6 @@ public class AppDbContext : DbContext
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 StartDate = createdDate.AddMonths(-(i * 2)),
                 DeadLine = createdDate.AddMonths(-i),
-                CalculationDaly = i < 5 ? i : i - (i - 1),
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
                 DeclaredCompleted = 0,

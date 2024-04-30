@@ -17,6 +17,53 @@ public class IssueRepo : Repository<IssueDto, Issue>
 {
     public IssueRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<IssueDto?> Get(int id)
+    {
+        if (id == 0)
+            return null;
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var i = await _context.Set<Issue>()
+                                  .Include(i => i.Project)
+                                  .Include(i => i.DisplayedRole)
+                                  .Include(i => i.Creator)
+                                  .Include(i => i.Documents)
+                                  .FirstOrDefaultAsync(r => r.Id == id);
+
+            return Mapping.Mapper.Map<IssueDto>(i);
+        }
+    }
+
+    public async Task<ICollection<IssueDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Issue> items;
+            if (pageSize == 0 || pageIndex == 0)
+            {
+                items = await _context.Set<Issue>()
+                                      .Include(i => i.Project)
+                                      .Include(i => i.DisplayedRole)
+                                      .Include(i => i.Creator)
+                                      .Include(i => i.Documents)
+                                      .ToListAsync();
+                return Mapping.Mapper.Map<List<IssueDto>>(items);
+            }
+
+            items = await _context.Set<Issue>()
+                                  .Include(i => i.Project)
+                                  .Include(i => i.DisplayedRole)
+                                  .Include(i => i.Creator)
+                                  .Include(i => i.Documents)
+                                 .Skip((pageIndex - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .ToListAsync();
+
+            return Mapping.Mapper.Map<List<IssueDto>>(items);
+        }
+    }
+
     public async new Task<IssueDto> Add(IssueDto entity, List<DocumentDto> documents)
     {
         if (entity == null)
@@ -68,6 +115,54 @@ public class IssueRepo : Repository<IssueDto, Issue>
                 }
             }
         }
+    }
+
+    public async Task<ICollection<DocumentDto>> GetMyDocuments(int issuesId)
+    {
+        if (issuesId == 0)
+            return new List<DocumentDto>();
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var documents = await _context.Set<Document>()
+                                          .Where(d => d.IssueId == issuesId)
+                                          .ToListAsync();
+
+            return Mapping.Mapper.Map<List<DocumentDto>>(documents);
+        }
+    }
+
+    public async Task DeleteDocuments(List<DocumentDto> documents)
+    {
+        if (documents == null || documents.Count == 0)
+            return;
+
+        var docs = Mapping.Mapper.Map<List<Document>>(documents);
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            _context.Set<Document>().RemoveRange(docs);
+    }
+
+    public void DeleteDocument(DocumentDto document)
+    {
+        if (document == null || document.Id == 0)
+            return;
+
+        var doc = Mapping.Mapper.Map<Document>(document);
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            _context.Set<Document>().Remove(doc);
+    }
+
+    public async Task AddDocument(DocumentDto document)
+    {
+        if (document == null || document.Id == 0)
+            return;
+
+        var doc = Mapping.Mapper.Map<Document>(document);
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            await _context.Set<Document>().AddAsync(doc);
     }
 
 }

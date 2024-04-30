@@ -1,10 +1,9 @@
-﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
-using EmpiriaMS.Models.Models;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Front.ViewModel.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class InvoiceTypeVM : BaseVM
+public class InvoiceTypeVM : BaseVM, ITypeVM
 {
     private string _name;
     public string Name
@@ -16,6 +15,19 @@ public class InvoiceTypeVM : BaseVM
                 return;
             _name = value;
             NotifyPropertyChanged(nameof(Name));
+        }
+    }
+
+    private string? _description;
+    public string? Description
+    {
+        get => _description;
+        set
+        {
+            if (value == _description)
+                return;
+            _description = value;
+            NotifyPropertyChanged(nameof(Description));
         }
     }
 

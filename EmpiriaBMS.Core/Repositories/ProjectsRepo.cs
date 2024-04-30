@@ -1,22 +1,9 @@
-﻿using EmpiriaBMS.Core.Hellpers;
-using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using EmpiriaMS.Models.Models.Base;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
-using AutoMapper;
-using EmpiriaBMS.Core.ReturnModels;
-using System.Collections;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class ProjectsRepo : Repository<ProjectDto, Project>
@@ -37,6 +24,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                              .Include(p => p.Stage)
                              .Include(p => p.Address)
                              .Include(p => p.Category)
+                             .ThenInclude(c => c.Category)
                              .Include(p => p.ProjectManager)
                              .Include(p => p.ProjectsSubConstructors)
                              .Select(r => Mapping.Mapper.Map<ProjectDto>(r))
@@ -55,6 +43,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Include(p => p.Stage)
                                       .Include(p => p.Address)
                                       .Include(p => p.Category)
+                                      .ThenInclude(c => c.Category)
                                       .Include(p => p.ProjectManager)
                                       .Include(p => p.ProjectsSubConstructors)
                                       .OrderBy(e => !e.Active)
@@ -78,6 +67,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
                                          .Include(p => p.Category)
+                                         .ThenInclude(c => c.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .OrderBy(e => !e.Active)
@@ -94,6 +84,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                       .Include(p => p.Stage)
                                       .Include(p => p.Address)
                                       .Include(p => p.Category)
+                                      .ThenInclude(c => c.Category)
                                       .Include(p => p.ProjectManager)
                                       .Include(p => p.ProjectsSubConstructors)
                                       .OrderBy(e => !e.Active)
@@ -121,6 +112,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
                                          .Include(p => p.Category)
+                                         .ThenInclude(c => c.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .OrderBy(e => !e.Active)
@@ -138,6 +130,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.Stage)
                                      .Include(p => p.Address)
                                      .Include(p => p.Category)
+                                     .ThenInclude(c => c.Category)
                                      .Include(p => p.ProjectManager)
                                      .Include(p => p.ProjectsSubConstructors)
                                      .OrderBy(e => !e.Active)
@@ -173,6 +166,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                 .Include(p => p.Stage)
                                                 .Include(p => p.Address)
                                                 .Include(p => p.Category)
+                                                .ThenInclude(c => c.Category)
                                                 .Include(p => p.ProjectManager)
                                                 .Include(p => p.ProjectsSubConstructors)
                                                 .OrderBy(e => !e.Active)
@@ -211,6 +205,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
                                          .Include(p => p.Category)
+                                         .ThenInclude(c => c.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
@@ -249,6 +244,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                 .Include(p => p.Stage)
                                                 .Include(p => p.Address)
                                                 .Include(p => p.Category)
+                                                .ThenInclude(c => c.Category)
                                                 .Include(p => p.ProjectManager)
                                                 .Include(p => p.ProjectsSubConstructors)
                                                 .OrderBy(e => !e.Active)
@@ -289,6 +285,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
                                          .Include(p => p.Category)
+                                         .ThenInclude(c => c.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .OrderBy(e => !e.Active)
@@ -338,6 +335,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
                                          .Include(p => p.Category)
+                                         .ThenInclude(c => c.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Client)
@@ -379,6 +377,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
                                          .Include(p => p.Category)
+                                         .ThenInclude(c => c.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Client)
@@ -397,6 +396,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.Stage)
                                      .Include(p => p.Address)
                                      .Include(p => p.Category)
+                                     .ThenInclude(c => c.Category)
                                      .Include(p => p.ProjectManager)
                                      .Include(p => p.ProjectsSubConstructors)
                                      .Include(p => p.Client)
@@ -441,6 +441,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                              .Include(p => p.Stage)
                                              .Include(p => p.Address)
                                              .Include(p => p.Category)
+                                             .ThenInclude(c => c.Category)
                                              .Include(p => p.ProjectManager)
                                              .Include(p => p.ProjectsSubConstructors)
                                              .Include(p => p.Client)
@@ -459,6 +460,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
                                          .Include(p => p.Category)
+                                         .ThenInclude(c => c.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Client)
@@ -502,6 +504,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Include(p => p.Stage)
                                          .Include(p => p.Address)
                                          .Include(p => p.Category)
+                                         .ThenInclude(c => c.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Include(p => p.Client)
@@ -521,6 +524,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Include(p => p.Stage)
                                      .Include(p => p.Address)
                                      .Include(p => p.Category)
+                                     .ThenInclude(c => c.Category)
                                      .Include(p => p.ProjectManager)
                                      .Include(p => p.ProjectsSubConstructors)
                                      .Include(p => p.Client)

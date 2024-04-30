@@ -1,13 +1,12 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class IssueVM : BaseVM
 {
-    private DateTime _complaintDate;
-    public DateTime ComplaintDate
+    private DateTime? _complaintDate;
+    public DateTime? ComplaintDate
     {
         get => _complaintDate;
         set
@@ -45,6 +44,8 @@ public class IssueVM : BaseVM
         }
     }
 
+    public string ProjectName => Project != null ? Project.Name : "";
+
     private int _displayedRoleId;
     public int DisplayedRoleId
     {
@@ -71,6 +72,8 @@ public class IssueVM : BaseVM
         }
     }
 
+    public string DisplayedRoleName => DisplayedRole != null ? DisplayedRole.Name : "";
+
     private int _creatorId;
     public int CreatorId
     {
@@ -96,6 +99,8 @@ public class IssueVM : BaseVM
             NotifyPropertyChanged(nameof(Creator));
         }
     }
+
+    public string CreatorName => Creator != null ? Creator.FirstName : "";
 
     public ICollection<Document> Documents { get; set; }
 

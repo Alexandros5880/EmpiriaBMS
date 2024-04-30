@@ -1,0 +1,99 @@
+﻿@implements IDialogContentComponent<RoleVM>
+
+@using EmpiriaBMS.Front.Services
+
+
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+</FluentDialogFooter>
+
+@* Body *@
+<FluentDialogBody>
+    <div class="row ms-2">
+        <div class="col-12">
+            <FluentTextField Style="width:100%; margin-top:4px;" @bind-Value="@Content.Name" Disabled="@(!Content.IsEditable && !IsNew)">Name:</FluentTextField>
+            @if (!validName)
+            {
+                @if (string.IsNullOrEmpty(@Content.Name))
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            }
+        </div>
+        <div class="col-12">
+            <div class="col-6">
+                <FluentCheckbox @bind-Value="@Content.IsEmployee" Style="margin-top: 4px;" Disabled="@(!Content.IsEditable && !IsNew)">Is Employee</FluentCheckbox>
+            </div>
+            <div class="col-6">
+                <FluentCheckbox @bind-Value="@Content.IsEditable" Style="margin-top: 4px;" Disabled="@(!Content.IsEditable && !IsNew)">Is Editable</FluentCheckbox>
+            </div>
+            
+        </div>
+        <div class="col-12" Style="margin-top: 4px;">
+            <div>
+                <h4>Select Permissions:</h4>
+            </div>
+            <div>
+                <FluentDataGrid Items="@FilteredItems"
+                                ResizableColumns=true
+                                Pagination="@pagination"
+                                TGridItem="PermissionVM"
+                                GridTemplateColumns="100px auto">
+
+                    <TemplateColumn Title="Selected">
+                        <FluentCheckbox TValue="bool"
+                                        ValueChanged="@((val) => _onSelectionChange(context.Id, val))"
+                                        Value="@context.IsSelected"
+                                        Disabled="@(!Content.IsEditable && !IsNew)" />
+                    </TemplateColumn>
+
+                    <TemplateColumn Title="Name"
+                                    Sortable="true"
+                                    InitialSortDirection=SortDirection.Descending
+                                    IsDefaultSortColumn=true>
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterString"
+                                              Placeholder="Name..."
+                                              @oninput="@HandleFilter" />
+                            </div>
+                        </ColumnOptions>
+                        <ChildContent>
+                            @(context.Name)
+                        </ChildContent>
+                    </TemplateColumn>
+
+                </FluentDataGrid>
+            </div>
+            <div style="min-width: 50%;">
+                <FluentPaginator State="@pagination">
+                    <SummaryTemplate>
+                        There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                    </PaginationTextTemplate>
+                </FluentPaginator>
+            </div>
+        </div>
+    </div>
+</FluentDialogBody>

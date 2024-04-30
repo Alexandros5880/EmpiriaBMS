@@ -1,6 +1,4 @@
 ﻿using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using Microsoft.Kiota.Abstractions;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -46,4 +44,7 @@ public class ClientVM : UserVM
     }
 
     public ICollection<Project> Projects { get; set; }
+
+    public string AddressFormated => Address != null ? Address.FormattedAddress : "";
+
 }

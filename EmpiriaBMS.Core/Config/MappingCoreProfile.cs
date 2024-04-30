@@ -2,12 +2,6 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Services.GooglePlaces.ViewModels;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Config;
 
@@ -40,6 +34,7 @@ public class MappingCoreProfile : Profile
         CreateMap<OfferTypeDto, OfferType>().ReverseMap();
         CreateMap<OfferStateDto, OfferState>().ReverseMap();
         CreateMap<OfferDto, Offer>().ReverseMap();
+        CreateMap<EmailDto, Email>().ReverseMap();
 
         // ViewModels
         CreateMap<Address, AddressVM>().ReverseMap();

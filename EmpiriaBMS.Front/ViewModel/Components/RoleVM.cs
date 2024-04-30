@@ -1,8 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class RoleVM : BaseVM
@@ -19,6 +17,32 @@ public class RoleVM : BaseVM
             NotifyPropertyChanged(nameof(Name));
         }
     }
-    public bool IsEmployee { get; set; }
+
+    private bool _isEmployee;
+    public bool IsEmployee
+    {
+        get => _isEmployee;
+        set
+        {
+            if (value == _isEmployee)
+                return;
+            _isEmployee = value;
+            NotifyPropertyChanged(nameof(IsEmployee));
+        }
+    }
+
+    private bool _isEditable;
+    public bool IsEditable
+    {
+        get => _isEditable;
+        set
+        {
+            if (value == _isEditable)
+                return;
+            _isEditable = value;
+            NotifyPropertyChanged(nameof(IsEditable));
+        }
+    }
+
     public ICollection<RolePermission> RolesPermissions { get; set; }
 }

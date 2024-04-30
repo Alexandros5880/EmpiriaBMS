@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -30,6 +31,9 @@ public class OtherVM : BaseVM
             NotifyPropertyChanged(nameof(Type));
         }
     }
+
+    [NotMapped]
+    public string TypeName => Type != null ? Type.Name : "";
 
     private TimeSpan _time = TimeSpan.Zero;
     public TimeSpan Time
@@ -82,5 +86,11 @@ public class OtherVM : BaseVM
             NotifyPropertyChanged(nameof(Discipline));
         }
     }
+
+    [NotMapped]
+    public string DisciplineTypeName => Discipline != null && Discipline.Type != null ? Discipline.Type.Name : "";
+
+    [NotMapped]
+    public string ProjectName => Discipline != null && Discipline.Project != null ? Discipline.Project.Name : "";
 }
 

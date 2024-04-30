@@ -1,14 +1,8 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Interop.TeamsSDK;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
-using Microsoft.Kiota.Abstractions;
-using SQLitePCL;
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 
 namespace EmpiriaBMS.Front.Components;
 

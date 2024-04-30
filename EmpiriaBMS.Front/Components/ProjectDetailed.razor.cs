@@ -5,9 +5,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Front.Components.Admin.DisciplinesTypes;
 using System.Linq.Expressions;
-using EmpiriaBMS.Front.Components.Admin.ProjectsTypes;
 using System.Security.Cryptography;
 using EmpiriaBMS.Front.ViewModel.Validation;
 using Microsoft.IdentityModel.Tokens;
@@ -64,7 +62,7 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         _project.CategoryId = 0;
         _project.StageId = 0;
         _project.CategoryId = 0;
-        await _map.Search(null);
+        await _map.Search();
         StateHasChanged();
     }
 

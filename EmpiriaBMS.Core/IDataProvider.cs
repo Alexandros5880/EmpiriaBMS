@@ -1,7 +1,4 @@
 ﻿using EmpiriaBMS.Core.Repositories;
-using EmpiriaBMS.Core.Repositories.Base;
-using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Core
 {
@@ -30,6 +27,7 @@ namespace EmpiriaBMS.Core
         public OfferTypeRepo OfferTypes { get; set; }
         public OfferStateRepo OfferStates { get; set; }
         public OfferRepo Offers { get; set; }
+        public EmailRepo Emails { get; set; }
         public KpisRepo KPIS { get; set; }
     }
 }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EmpiriaMS.Models.Models.Base;
-using EmpiriaBMS.Models.Models;
 
-namespace EmpiriaMS.Models.Models;
+namespace EmpiriaBMS.Models.Models;
 public class Project : Entity
 {
     [Required]
@@ -44,8 +38,6 @@ public class Project : Entity
     public float EstimatedCompleted { get; set; }
 
     public float DeclaredCompleted { get; set; }
-
-    public int? CalculationDaly { get; set; }
 
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }

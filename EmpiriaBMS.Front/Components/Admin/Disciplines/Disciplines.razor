@@ -1,0 +1,66 @@
+﻿@page "/admin/projects/disciplines"
+
+@using EmpiriaBMS.Front.Services
+@inject IDataProvider DataProvider
+@inject IMapper Mapper
+@inject IDialogService DialogService
+
+<div class="row" style="width: 76vw; overflow-x: auto; margin: 0 auto;">
+    <div class="col-12 card shadow">
+        <div>
+            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+            </FluentStack>
+        </div>
+        <div>
+            <FluentDataGrid Items="@FilteredItems"
+                            ResizableColumns=true
+                            Pagination="@pagination"
+                            TGridItem="DisciplineVM"
+                            OnRowFocus="HandleRowFocus"
+                            GridTemplateColumns="auto 140px 180px 160px 180px 180px 100px"
+                            style="height: 70vh; overflow:auto;">
+
+                <TemplateColumn Title="Project"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                          Autofocus=true
+                                          @bind-Value="@_filterString"
+                                          Placeholder="Project..."
+                                          @oninput="@HandleFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.ProjectName)
+                    </ChildContent>
+                </TemplateColumn>
+
+                <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" Style="text-wrap: wrap;" />
+                <PropertyColumn Property="@(p => p.EstimatedMandays)" Sortable="true" Title="Estimated Mandays" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.EstimatedHours)" Sortable="true" Title="Estimated Hours" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.EstimatedCompleted)" Sortable="true" Title="Estimated Completed" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.DeclaredCompleted)" Sortable="true" Title="Declared Completed" Align="@Align.Start" />
+
+                <TemplateColumn Title="Actions" Align="@Align.End">
+                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                </TemplateColumn>
+
+            </FluentDataGrid>
+        </div>
+        <div style="min-width: 50%;">
+            <FluentPaginator State="@pagination">
+                <SummaryTemplate>
+                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                </SummaryTemplate>
+                <PaginationTextTemplate>
+                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                </PaginationTextTemplate>
+            </FluentPaginator>
+        </div>
+    </div>
+</div>

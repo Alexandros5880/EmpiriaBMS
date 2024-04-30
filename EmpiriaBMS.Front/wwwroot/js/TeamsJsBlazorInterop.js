@@ -279,7 +279,7 @@ export function getCanvasImageData(canvas) {
 export function displayAddress(mapElementId, address) {
     var map = new google.maps.Map(document.getElementById(mapElementId), {
         center: { lat: -34.397, lng: 150.644 },
-        zoom: 8
+        zoom: 12
     });
     var geocoder = new google.maps.Geocoder();
 
@@ -317,3 +317,22 @@ export function initializeAutocomplete(inputElementId) {
     });
 };
 // Google Maps Api
+
+
+
+// Download Document
+export function downloadFile(fileName, contentType, base64Content) {
+    const byteArray = Uint8Array.from(atob(base64Content), c => c.charCodeAt(0));
+    const blob = new Blob([byteArray], { type: contentType });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
+// Download Document

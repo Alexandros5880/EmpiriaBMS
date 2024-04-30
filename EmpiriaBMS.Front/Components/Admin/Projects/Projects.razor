@@ -3,63 +3,65 @@
 @using EmpiriaBMS.Front.Services
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
+@inject IDialogService DialogService
 
-<div class="row">
-    <div class="col-12 card shadow p-1 mt-2">
-        <div class="d-flex justify-content-between m-1">
-            <div><h3>Projects</h3></div>
-            <div>
-                <span class="codicon--add">
-                </span>
-            </div>
+<div class="row" style="width: 76vw; overflow-x: auto; margin: 0 auto;">
+    <div class="col-12 card shadow">
+        <div>
+            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+            </FluentStack>
         </div>
-        <div class="table-responsive p-1 table-container">
-            <table class="table table-hover text-center">
-                <thead>
-                    <tr>
-                        <th scope="col" class="sticky-header"><h5>Name</h5></th>
-                        <th scope="col" class="sticky-header"><h5>Edit</h5></th>
-                        <th scope="col" class="sticky-header"><h5>Delete</h5></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in _source)
-                    {
-                        <tr class="align-middle"
-                            @onclick="@(() => _onSelectItem(item.Id))">
+        <div>
+            <FluentDataGrid Items="@FilteredItems"
+                            ResizableColumns=true
+                            Pagination="@pagination"
+                            TGridItem="ProjectVM"
+                            OnRowFocus="HandleRowFocus"
+                            GridTemplateColumns="auto 120px 120px 120px 120px 200px 200px 100px"
+                            style="height: 70vh; overflow:auto;">
 
-                            <td class="align-middle
-                                    @((_selectedItem == null ||
-                                            !_selectedItem.Id.Equals(item.Id)
-                                                            ? "" : "highlight_1"))"
-                                style="word-wrap: break-word;">
-                                <labe>@item.Name</labe>
-                            </td>
+                <TemplateColumn Title="Name"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                          Autofocus=true
+                                          @bind-Value="@_filterString"
+                                          Placeholder="Name..."
+                                          @oninput="@HandleFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.Name)
+                    </ChildContent>
+                </TemplateColumn>
 
-                            <td class="align-middle
-                                    @((_selectedItem == null ||
-                                            !_selectedItem.Id.Equals(item.Id)
-                                                            ? "" : "highlight_1"))"
-                                style="width: 150px !important;">
-                                <span class="material-symbols--edit-outline" />
-                            </td>
+                <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.Active)" Sortable="true" Title="Active" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.StartDate)" Sortable="true" Title="StartDate" Format="dd-mm-yyyy" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.DeadLine)" Sortable="true" Title="DeadLine" Format="dd-mm-yyyy" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.PMFullName)" Sortable="true" Title="ProjectManager" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.ClientFullName)" Sortable="true" Title="Client" Align="@Align.Start" />
 
-                            <td class="align-middle
-                                    @((_selectedItem == null ||
-                                            !_selectedItem.Id.Equals(item.Id)
-                                                            ? "" : "highlight_1"))"
-                                style="width: 150px !important;">
-                                <span class="fluent--delete-28-regular" />
-                            </td>
+                <TemplateColumn Title="Actions" Align="@Align.End">
+                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                </TemplateColumn>
 
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            </FluentDataGrid>
         </div>
-        <!-- Paginator -->
-        <div style="text-align: right;">
-            <Paginator @ref=_paginator Renderer="@_getSource" />
+        <div style="min-width: 50%;">
+            <FluentPaginator State="@pagination">
+                <SummaryTemplate>
+                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                </SummaryTemplate>
+                <PaginationTextTemplate>
+                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                </PaginationTextTemplate>
+            </FluentPaginator>
         </div>
     </div>
 </div>

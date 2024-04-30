@@ -1,12 +1,6 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
-using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
@@ -26,6 +20,8 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         {
             var disclipline = await _context
                              .Set<Discipline>()
+                             .Include(d => d.Type)
+                             .Include(d => d.Project)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<DisciplineDto>(disclipline);
@@ -41,6 +37,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             {
                 ds = await _context.Set<Discipline>()
                                    .Include(d => d.Type)
+                                   .Include(d => d.Project)
                                    .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
@@ -48,6 +45,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 
             ds = await _context.Set<Discipline>()
                                .Include(d => d.Type)
+                               .Include(d => d.Project)
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)
                                .ToListAsync();
@@ -68,6 +66,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             {
                 ds = await _context.Set<Discipline>()
                                    .Include(d => d.Type)
+                                   .Include(d => d.Project)
                                    .Where(expresion)
                                    .ToListAsync();
 
@@ -76,6 +75,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 
             ds = await _context.Set<Discipline>()
                                .Include(d => d.Type)
+                               .Include(d => d.Project)
                                .Where(expresion)
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)

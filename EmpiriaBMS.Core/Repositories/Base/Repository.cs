@@ -1,16 +1,8 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos.Base;
-using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using EmpiriaMS.Models.Models.Base;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Xml.Linq;
 
 
 namespace EmpiriaBMS.Core.Repositories.Base;
@@ -26,18 +18,26 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
 
     public async Task<T> Add(T entity, bool update = false)
     {
-        if (entity == null)
-            throw new ArgumentNullException(nameof(entity));
-
-        entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
-        entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
-
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            var result = await _context.Set<U>().AddAsync(Mapping.Mapper.Map<U>(entity));
-            await _context.SaveChangesAsync();
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
 
-            return Mapping.Mapper.Map<T>(result.Entity);
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var result = await _context.Set<U>().AddAsync(Mapping.Mapper.Map<U>(entity));
+                await _context.SaveChangesAsync();
+
+                return Mapping.Mapper.Map<T>(result.Entity);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On Repository.Add({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
         }
     }
 

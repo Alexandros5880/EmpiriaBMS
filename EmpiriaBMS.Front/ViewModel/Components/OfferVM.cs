@@ -1,8 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using EmpiriaMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -34,6 +31,8 @@ public class OfferVM : BaseVM
         }
     }
 
+    public string TypeName => Type != null ? Type.Name : "";
+
     private int  _stateId;
     public int StateId
     {
@@ -59,6 +58,8 @@ public class OfferVM : BaseVM
             NotifyPropertyChanged(nameof(State));
         }
     }
+
+    public string StateName => State != null ? State.Name : "";
 
     private string _code;
     public string Code
@@ -189,4 +190,6 @@ public class OfferVM : BaseVM
             NotifyPropertyChanged(nameof(Project));
         }
     }
+
+    public string ProjectName => Project != null ? Project.Name : "";
 }

@@ -1,0 +1,8 @@
+﻿.visible {
+    height: 400px !important;
+    visibility: visible !important;
+}
+.unvisible {
+    height: 0px !important;
+    visibility: hidden !important;
+}

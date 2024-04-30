@@ -1,7 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -72,6 +70,8 @@ public class DisciplineVM : BaseVM
         }
     }
 
+    public string TypeName => Type != null ? Type.Name : "";
+
     private int _projectId;
     public int ProjectId
     {
@@ -97,6 +97,8 @@ public class DisciplineVM : BaseVM
             NotifyPropertyChanged(nameof(Project));
         }
     }
+
+    public string ProjectName => Project != null ? Project.Name : "";
 
     private float _estimatedCompleted;
     public float EstimatedCompleted

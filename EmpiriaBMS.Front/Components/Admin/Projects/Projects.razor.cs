@@ -1,16 +1,152 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Front.Components.General;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
 using EmpiriaBMS.Front.ViewModel.Components;
-using System.Collections.ObjectModel;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects;
 
 public partial class Projects
 {
-    private Paginator _paginator;
-    private ObservableCollection<ProjectVM> _source = new ObservableCollection<ProjectVM>();
-    private ProjectVM _selectedItem = new ProjectVM();
+    #region Data Grid
+    private List<ProjectVM> _records = new List<ProjectVM>();
+    private string _filterString = string.Empty;
+    IQueryable<ProjectVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    private ProjectVM _selectedRecord = new ProjectVM();
+
+    private void HandleFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        {
+            _filterString = string.Empty;
+        }
+    }
+
+    private void HandleRowFocus(FluentDataGridRow<ProjectVM> row)
+    {
+        _selectedRecord = row.Item as ProjectVM;
+    }
+
+    private async Task _getRecords()
+    {
+        var dtos = await DataProvider.Projects.GetAll();
+        _records = Mapper.Map<List<ProjectVM>>(dtos);
+    }
+
+    private async Task _add()
+    {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 700px);"
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(new ProjectVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            ProjectVM vm = result.Data as ProjectVM;
+            var dto = Mapper.Map<ProjectDto>(vm);
+
+            // If Addres Save Address
+            if (dto?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await DataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var address = await DataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                dto.AddressId = address.Id;
+            }
+
+            // Save Project
+            await DataProvider.Projects.Add(dto);
+            await _getRecords();
+        }
+    }
+
+    private async Task _edit(ProjectVM record)
+    {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 700px);"
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            ProjectVM vm = result.Data as ProjectVM;
+            var dto = Mapper.Map<ProjectDto>(vm);
+
+            // If Address Save Address
+            if (dto?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await DataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var address = await DataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                dto.AddressId = address.Id;
+            }
+
+            // If Client Save Client
+            if (dto?.ClientId != null && dto?.ClientId != 0 && !(await DataProvider.Clients.Any(a => a.Id == dto.ClientId)))
+            {
+                var clientDto = Mapping.Mapper.Map<ClientDto>(dto.Client);
+                var client = await DataProvider.Clients.Add(clientDto);
+                dto.ClientId = client.Id;
+            }
+
+            // Save Project
+            await DataProvider.Projects.Update(dto);
+            await _getRecords();
+        }
+    }
+
+    private async Task _delete(ProjectVM record)
+    {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the project {record.Name}?", "Yes", "No", "Deleting record...");
+
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Projects.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
+    }
+    #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -18,29 +154,9 @@ public partial class Projects
 
         if (firstRender)
         {
-            _paginator.SetRecordsLength(await DataProvider.Projects.Count());
-            await _getSource();
+            await _getRecords();
 
             StateHasChanged();
         }
-    }
-
-    private async Task _getSource()
-    {
-        var dtos = await DataProvider.Projects.GetAll(_paginator.PageSize, _paginator.PageIndex);
-        var vms = Mapper.Map<List<ProjectVM>>(dtos);
-        _source.Clear();
-        vms.ForEach(_source.Add);
-    }
-
-    private void _onSelectItem(int id)
-    {
-        _selectedItem = _source.FirstOrDefault(r => r.Id == id);
-    }
-
-    protected override bool ShouldRender()
-    {
-        // Return false to prevent the entire component from re-rendering
-        return true;
     }
 }

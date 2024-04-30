@@ -12,5 +12,7 @@ public class PaymentTypeDto : EntityDto
 {
     public string Name { get; set; }
 
+    public string? Description { get; set; }
+
     public ICollection<PaymentDto> Payments { get; set; }
 }

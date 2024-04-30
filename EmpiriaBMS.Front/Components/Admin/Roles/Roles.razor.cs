@@ -1,30 +1,148 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Components.Admin.General;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Bot.Builder;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EmpiriaBMS.Front.Components.Admin.Roles;
 
 public partial class Roles
 {
-    private Paginator _paginator;
-    private ObservableCollection<RoleVM> _roles = new ObservableCollection<RoleVM>();
-    private RoleVM _selectedRole = new RoleVM();
+    #region Data Grid
+    private List<RoleVM> _records = new List<RoleVM>();
+    private string _filterString = string.Empty;
+    IQueryable<RoleVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private EditRole _editRoleCompoment;
+    private RoleVM _selectedRecord = new RoleVM();
 
-    // Add / Edit Dialog
-    private bool _isEditMode = false;
-    //private FluentDialog? _addEditDialog;
-    //private bool _isAddEditDialogOdepened = false;
-
-    protected override void OnInitialized()
+    private void HandleFilter(ChangeEventArgs args)
     {
-        base.OnInitialized();
+        if (args.Value is string value)
+        {
+            _filterString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        {
+            _filterString = string.Empty;
+        }
     }
+
+    private void HandleRowFocus(FluentDataGridRow<RoleVM> row)
+    {
+        _selectedRecord = row.Item as RoleVM;
+    }
+
+    private async Task _getRecords()
+    {
+        var dtos = await DataProvider.Roles.GetAll();
+        _records = Mapper.Map<List<RoleVM>>(dtos);
+    }
+
+    private async Task _add()
+    {
+        DialogParameters parameters = new()
+        {
+            Title = $"New record...",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<RolesDetailedDialog>(new RoleVM() { IsEditable = true }, parameters);
+        DialogResult result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            RoleVM vm = result.Data as RoleVM;
+            var dto = Mapper.Map<RoleDto>(vm);
+            var role = await DataProvider.Roles.Add(dto);
+
+            if (role == null)
+                return; // Role Exists
+
+            await DataProvider.Roles.UpdatePermissions(role.Id, vm.RolesPermissions.Select(rp => rp.PermissionId));
+
+            var r = role;
+            Console.WriteLine($"Added new Role: {role.Name}.");
+
+            await _getRecords();
+        }
+    }
+
+    private async Task _edit(RoleVM record)
+    {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit {record.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
+
+        var prevObj = record.Clone() as RoleVM;
+        var prevPermissionsIds = new List<int>(record.RolesPermissions.Select(rp => rp.PermissionId));
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<RolesDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            RoleVM vm = result.Data as RoleVM;
+            
+            var permissionsIds = vm.RolesPermissions.Select(rp => rp.PermissionId).ToList();
+            vm.RolesPermissions = null;
+
+            var changed = ModelsHellper.IsChanged<RoleVM>(prevObj, vm);
+
+            if (changed)
+            {
+                var dto = Mapper.Map<RoleDto>(vm);
+                var updated = await DataProvider.Roles.Update(dto);
+                if (updated == null)
+                    return; // Role Exists
+            }
+
+            var permissionsChanged = ModelsHellper.ListsChanged<int>(prevPermissionsIds, permissionsIds);
+            if (permissionsChanged)
+                await DataProvider.Roles.UpdatePermissions(vm.Id, permissionsIds);
+
+            if (changed || permissionsChanged)
+                await _getRecords();
+        }
+    }
+
+    private async Task _delete(RoleVM record)
+    {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the role {record.Name}?", "Yes", "No", "Deleting record...");
+
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Roles.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords();
+    }
+    #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -32,63 +150,9 @@ public partial class Roles
 
         if (firstRender)
         {
-            _paginator.SetRecordsLength(await DataProvider.Roles.Count());
-            await _getRoles();
+            await _getRecords();
 
             StateHasChanged();
         }
-    }
-
-    private async Task _getRoles()
-    {
-        var dtos = await DataProvider.Roles.GetAll(_paginator.PageSize, _paginator.PageIndex);
-        var vms = Mapper.Map<List<RoleVM>>(dtos);
-        _roles.Clear();
-        vms.ForEach(_roles.Add);
-    }
-
-    private void _onSelectRole(int id)
-    {
-        _selectedRole = _roles.FirstOrDefault(r => r.Id == id);
-    }
-
-    protected override bool ShouldRender()
-    {
-        return true;
-    }
-
-    private async Task _add()
-    {
-        _selectedRole = null;
-        _isEditMode = true;
-        //_addEditDialog.Show();
-        //_isAddEditDialogOdepened = true;
-    }
-
-    private async Task _edit()
-    {
-        _isEditMode = true;
-        //_addEditDialog.Show();
-        //_isAddEditDialogOdepened = true;
-    }
-
-    private async Task _delete(int id)
-    {
-        await Task.Delay(1333);
-    }
-
-    private async Task _save()
-    {
-        await Task.Delay(1333);
-        _isEditMode = false;
-        //_addEditDialog.Hide();
-        //_isAddEditDialogOdepened = false;
-    }
-
-    private void _cancel()
-    {
-        _isEditMode = false;
-        //_addEditDialog.Hide();
-        //_isAddEditDialogOdepened = false;
     }
 }

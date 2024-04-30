@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -42,4 +43,6 @@ public class ProjectCategoryVM : BaseVM
             NotifyPropertyChanged(nameof(CanAssignePM));
         }
     }
+
+    public ICollection<ProjectSubCategory> SubCategories { get; set; }
 }

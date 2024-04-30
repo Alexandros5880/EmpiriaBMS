@@ -1,9 +1,4 @@
-﻿using EmpiriaMS.Models.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
-using EmpiriaBMS.Models.Models;
-using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
@@ -73,8 +68,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private DateTime _date;
-    public DateTime Date
+    private DateTime? _date;
+    public DateTime? Date
     {
         get => _date;
         set
@@ -112,6 +107,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
+    public string TypeName => Type != null ? Type.Name : "";
+
     private int _projectId { get; set; }
     public int ProjectId
     {
@@ -137,6 +134,8 @@ public class InvoiceVM : BaseVM
             NotifyPropertyChanged(nameof(Project));
         }
     }
+
+    public string ProjectName => Project != null ? Project.Name : "";
 
     public ICollection<PaymentVM> Payments { get; set; }
 

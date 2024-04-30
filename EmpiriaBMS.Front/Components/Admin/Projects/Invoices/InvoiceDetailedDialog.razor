@@ -1,0 +1,135 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
+@using EmpiriaBMS.Front.Services
+@using Color = Microsoft.Fast.Components.FluentUI.Color
+@using EmpiriaBMS.Front.Components.Admin.Projects.Clients
+@using EmpiriaBMS.Core.Hellpers
+
+@implements IDialogContentComponent<InvoiceVM>
+
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
+@inject IDialogService DialogService
+@inject MicrosoftTeams MicrosoftTeams
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+</FluentDialogFooter>
+
+@* Body *@
+<FluentDialogBody>
+
+    <div class="col-12 row gx-2 mt-2">
+        <!-- Project -->
+        <div class="col-xl-4 col-lg-4 col-md-12">
+            <div>
+                Project<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                Placeholder="Select Project..."
+                                Items="@_projects"
+                                Height="200px"
+                                Width="100%"
+                                TOption="ProjectVM"
+                                OptionText="@(c => c.Name)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                @bind-SelectedOption="@Project" />
+            </div>
+            @if (!validProject)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+        <!-- Type -->
+        <div class="col-xl-4 col-lg-4 col-md-12">
+            <div>
+                Type<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                Placeholder="Select Type..."
+                                Items="@_types"
+                                Height="200px"
+                                Width="100%"
+                                TOption="InvoiceTypeVM"
+                                OptionText="@(c => c.Name)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                @bind-SelectedOption="@Type" />
+            </div>
+            @if (!validType)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+        <!-- Mark -->
+        <div class="col-xl-4 col-lg-4 col-md-12">
+            <FluentTextField Style="width:100%;" @bind-Value="@Content.Mark">
+                Mark<span class="text-danger">*</span>
+            </FluentTextField>
+            @if (!validMark)
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-12 row gx-2 mt-2">
+        <!-- Vat -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Vat" Min="0">
+                Vat
+            </FluentNumberField>
+        </div>
+        <!-- Fee -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Fee" Min="0">
+                Fee
+            </FluentNumberField>
+        </div>
+    </div>
+
+    <div class="col-12 row gx-2 mt-2">
+        <!-- Number -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Number" Min="0">
+                Number
+            </FluentNumberField>
+        </div>
+        <!-- Total -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Total" Min="0">
+                Total
+            </FluentNumberField>
+        </div>
+    </div>
+
+    <div class="col-12 row gx-3 mt-2">
+        <!-- Date -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.Date" Label="Date" />
+        </div>
+        <!-- None -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+
+        </div>
+    </div>
+
+</FluentDialogBody>

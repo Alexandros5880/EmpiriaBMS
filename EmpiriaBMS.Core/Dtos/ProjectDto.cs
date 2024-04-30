@@ -1,12 +1,4 @@
 ﻿using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EmpiriaBMS.Core.Dtos.Base;
 
 namespace EmpiriaBMS.Core.Dtos;
@@ -42,13 +34,11 @@ public class ProjectDto : EntityDto
 
     public float DeclaredCompleted { get; set; }
 
-    public int? CalculationDaly { get; set; }
-
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 
     public int? ClientId { get; set; }
-    public User? Client { get; set; }
+    public Client? Client { get; set; }
 
     public ICollection<Offer> Offers { get; set; }
 

@@ -1,28 +1,13 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Dtos.KPIS;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
-using EmpiriaBMS.Front.Components.Admin.Roles;
-using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
-using Microsoft.Graph.Models;
-using Microsoft.JSInterop;
-using Microsoft.Kiota.Abstractions;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Xml.Linq;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
@@ -249,7 +234,7 @@ public partial class Dashboard : IDisposable
             //                                                           .ToList<ProjectDto>();
 
             // Get Projects of last month.
-            Expression<Func<EmpiriaMS.Models.Models.Project, bool>> expression = p => p.CreatedDate >= DateTime.Now.AddMonths(-1);
+            Expression<Func<EmpiriaBMS.Models.Models.Project, bool>> expression = p => p.CreatedDate >= DateTime.Now.AddMonths(-1);
             List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetAll(expression, _sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
 
 

@@ -1,14 +1,6 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
-using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Models.Models;
@@ -28,6 +20,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
             var i = await _context
                              .Set<Invoice>()
                              .Include(r => r.Project)
+                             .Include(r => r.Type)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<InvoiceDto>(i);
@@ -44,6 +37,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
             {
                 i = await _context.Set<Invoice>()
                                   .Include(r => r.Project)
+                                  .Include(r => r.Type)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -53,6 +47,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
                                  .Skip((pageIndex - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(r => r.Project)
+                                 .Include(r => r.Type)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -73,6 +68,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
                 i = await _context.Set<Invoice>()
                                   .Where(expresion)
                                   .Include(r => r.Project)
+                                  .Include(r => r.Type)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -83,6 +79,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
                               .Skip((pageIndex - 1) * pageSize)
                               .Take(pageSize)
                               .Include(r => r.Project)
+                              .Include(r => r.Type)
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);

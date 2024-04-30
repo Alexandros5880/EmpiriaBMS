@@ -1,9 +1,4 @@
-﻿using EmpiriaMS.Models.Models;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.ObjectModel;
-using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
@@ -256,8 +251,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private User? _client;
-    public User? Client
+    private Client? _client;
+    public Client? Client
     {
         get => _client;
         set
@@ -308,4 +303,6 @@ public class ProjectVM : BaseVM
         }
     }
 
+    public string PMFullName => ProjectManager != null ? $"{ProjectManager.LastName} {ProjectManager.MidName} {ProjectManager.FirstName}" : "";
+    public string ClientFullName => Client != null ? $"{Client.LastName} {Client.MidName} {Client.FirstName}" : "";
 }

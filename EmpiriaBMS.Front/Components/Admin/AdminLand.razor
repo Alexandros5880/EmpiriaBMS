@@ -1,0 +1,291 @@
+﻿<h3>Administration</h3>
+
+<FluentStack Orientation="Orientation.Horizontal" Width="100%">
+    <div style="max-height: 78vh;">
+        <FluentNavMenu Width="280"
+                       Collapsible="false"
+                       Title="Collapsible demo"
+                       Style="height: 78vh; overflow-y: auto; border-radius: 4px;">
+
+            <!-- Authorization -->
+            <FluentNavGroup Title="Authorization" Icon="@(new MyIcons.Size24.Auth())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Users())"
+                               OnClick="@(() => TabMenuClick(0))"
+                               Class="@((tabs[0] ? "active-nav-link" : ""))">
+                    Users
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Roles())"
+                               OnClick="@(() => TabMenuClick(1))"
+                               Class="@((tabs[1] ? "active-nav-link" : ""))">
+                    Roles
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Permissions())"
+                               OnClick="@(() => TabMenuClick(2))"
+                               Class="@((tabs[2] ? "active-nav-link" : ""))">
+                    Permissions
+                </FluentNavLink>
+            </FluentNavGroup>
+
+            <!-- Projects -->
+            <FluentNavGroup Title="Projects" Icon="@(new MyIcons.Size24.Projects1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Projects2())"
+                               OnClick="@(() => TabMenuClick(3))"
+                               Class="@((tabs[3] ? "active-nav-link" : ""))">
+                    Projects
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Stages())"
+                               OnClick="@(() => TabMenuClick(4))"
+                               Class="@((tabs[4] ? "active-nav-link" : ""))">
+                    Stages
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Categories())"
+                               OnClick="@(() => TabMenuClick(5))"
+                               Class="@((tabs[5] ? "active-nav-link" : ""))">
+                    Categories
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.SubCategories())"
+                               OnClick="@(() => TabMenuClick(6))"
+                               Class="@((tabs[6] ? "active-nav-link" : ""))">
+                    Sub Categories
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Clients())"
+                               OnClick="@(() => TabMenuClick(7))"
+                               Class="@((tabs[7] ? "active-nav-link" : ""))">
+                    Clients
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Issues())"
+                               OnClick="@(() => TabMenuClick(8))"
+                               Class="@((tabs[8] ? "active-nav-link" : ""))">
+                    Issues
+                </FluentNavLink>
+
+                <!-- Projects Offers -->
+                <FluentNavGroup Title="Offers" Icon="@(new MyIcons.Size24.Offers1())">
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())"
+                                   OnClick="@(() => TabMenuClick(9))"
+                                   Class="@((tabs[9] ? "active-nav-link" : ""))">
+                        Offers
+                    </FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                                   OnClick="@(() => TabMenuClick(10))"
+                                   Class="@((tabs[10] ? "active-nav-link" : ""))">
+                        Types
+                    </FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.States())"
+                                   OnClick="@(() => TabMenuClick(11))"
+                                   Class="@((tabs[11] ? "active-nav-link" : ""))">
+                        States
+                    </FluentNavLink>
+                </FluentNavGroup>
+
+                <!-- Projects Invoices -->
+                <FluentNavGroup Title="Invoices" Icon="@(new MyIcons.Size24.Invoices1())">
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Invoices2())"
+                                   OnClick="@(() => TabMenuClick(12))"
+                                   Class="@((tabs[12] ? "active-nav-link" : ""))">
+                        Invoices
+                    </FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                                   OnClick="@(() => TabMenuClick(13))"
+                                   Class="@((tabs[13] ? "active-nav-link" : ""))">
+                        Types
+                    </FluentNavLink>
+                </FluentNavGroup>
+
+                <!-- Projects Payments -->
+                <FluentNavGroup Title="Payments" Icon="@(new MyIcons.Size24.Payments1())">
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Payments2())"
+                                   OnClick="@(() => TabMenuClick(14))"
+                                   Class="@((tabs[14] ? "active-nav-link" : ""))">
+                        Payments
+                    </FluentNavLink>
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                                   OnClick="@(() => TabMenuClick(15))"
+                                   Class="@((tabs[15] ? "active-nav-link" : ""))">
+                        Types
+                    </FluentNavLink>
+                </FluentNavGroup>
+            </FluentNavGroup>
+
+            <!-- Disciplines -->
+            <FluentNavGroup Title="Disciplines" Icon="@(new MyIcons.Size24.Disciplines1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Disciplines2())"
+                               OnClick="@(() => TabMenuClick(16))"
+                               Class="@((tabs[16] ? "active-nav-link" : ""))">
+                    Disciplines
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(17))"
+                               Class="@((tabs[17] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
+            </FluentNavGroup>
+
+            <!-- Deliverables -->
+            <FluentNavGroup Title="Deliverables" Icon="@(new MyIcons.Size24.Deliverables1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Deliverables2())"
+                               OnClick="@(() => TabMenuClick(18))"
+                               Class="@((tabs[18] ? "active-nav-link" : ""))">
+                    Deliverables
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(19))"
+                               Class="@((tabs[19] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
+            </FluentNavGroup>
+
+            <!-- Supportive Works -->
+            <FluentNavGroup Title="Supportive Works" Icon="@(new MyIcons.Size24.SupportiveWorks1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.SupportiveWorks2())"
+                               OnClick="@(() => TabMenuClick(20))"
+                               Class="@((tabs[20] ? "active-nav-link" : ""))">
+                    Supportive Works
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(21))"
+                               Class="@((tabs[21] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
+            </FluentNavGroup>
+
+        </FluentNavMenu>
+    </div>
+    <div>
+
+        <!-- Display Body -->
+        @if (tabs[0])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Users.Users />
+            </div>
+        }
+        else if (tabs[1])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Roles.Roles />
+            </div>
+        }
+        else if (tabs[2])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Permissions.Permissions />
+            </div>
+        }
+        else if (tabs[3])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Projects />
+            </div>
+        }
+        else if (tabs[4])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Stages.Stages />
+            </div>
+        }
+        else if (tabs[5])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Categories.ProjectCategories />
+            </div>
+        }
+        else if (tabs[6])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.SubCategories.ProjectSubCategories />
+            </div>
+        }
+        else if (tabs[7])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Clients.Clients />
+            </div>
+        }
+        else if (tabs[8])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Issues.Issues />
+            </div>
+        }
+        else if (tabs[9])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Offers.Offers />
+            </div>
+        }
+        else if (tabs[10])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Offers.Types.OfferTypes />
+            </div>
+        }
+        else if (tabs[11])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Offers.States.OfferStates />
+            </div>
+        }
+        else if (tabs[12])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Invoices.Invoices />
+            </div>
+        }
+        else if (tabs[13])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Invoices.Types.InvoiceTypes />
+            </div>
+        }
+        else if (tabs[14])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Payments.Payments />
+            </div>
+        }
+        else if (tabs[15])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.Payments.Types.PaymentTypes />
+            </div>
+        }
+        else if (tabs[16])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Disciplines.Disciplines />
+            </div>
+        }
+        else if (tabs[17])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Disciplines.Types.DisciplineTypes />
+            </div>
+        }
+        else if (tabs[18])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Deliverables.Deliverables />
+            </div>
+        }
+        else if (tabs[19])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Deliverables.Types.DeliverableTypes />
+            </div>
+        }
+        else if (tabs[20])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.SupportiveWorks.SupportiveWorks />
+            </div>
+        }
+        else if (tabs[21])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.SupportiveWorks.Types.SupportiveWorkTypes />
+            </div>
+        }
+
+    </div>
+</FluentStack>
