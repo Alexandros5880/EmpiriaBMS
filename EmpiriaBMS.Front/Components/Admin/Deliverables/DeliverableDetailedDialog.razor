@@ -4,7 +4,7 @@
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
 
-@implements IDialogContentComponent<DisciplineVM>
+@implements IDialogContentComponent<DrawingVM>
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
@@ -31,23 +31,23 @@
 <FluentDialogBody>
 
     <div class="col-12 row gx-2 mt-2">
-        <!-- Project -->
+        <!-- Discipline -->
         <div class="col-xl-6 col-lg-6 col-md-12">
             <div>
-                Project<span class="text-danger">*</span>
+                Discipline<span class="text-danger">*</span>
             </div>
             <div>
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                Placeholder="Select Project..."
-                                Items="@_projects"
+                                Placeholder="Select Discipline..."
+                                Items="@_disciplines"
                                 Height="200px"
                                 Width="100%"
-                                TOption="ProjectVM"
-                                OptionText="@(p => p.Name)"
+                                TOption="DisciplineVM"
+                                OptionText="@(d => $"P-[{d.Project?.Name : ''}] T-[{d.Type?.Name : ''}]")"
                                 OptionValue="@(c => c.Id.ToString())"
-                                @bind-SelectedOption="@Project" />
+                                @bind-SelectedOption="@Discipline" />
             </div>
-            @if (!validProject)
+            @if (!validDiscipline)
             {
                 <div>
                     <span class="text-warning">Field is required!</span>
@@ -65,7 +65,7 @@
                                 Items="@_types"
                                 Height="200px"
                                 Width="100%"
-                                TOption="DisciplineTypeVM"
+                                TOption="DrawingTypeVM"
                                 OptionText="@(p => p.Name)"
                                 OptionValue="@(c => c.Id.ToString())"
                                 @bind-SelectedOption="@Type" />
@@ -80,32 +80,15 @@
     </div>
 
     <div class="col-12 row gx-2 mt-2">
-        <!-- EstimatedMandays -->
+        <!-- CompletionEstimation -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.EstimatedMandays" Min="0" Disabled>
-                Estimated Mandays
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.CompletionEstimation" Min="0" Disabled>
+                Completion Estimation
             </FluentNumberField>
         </div>
-        <!-- EstimatedHours -->
+        <!-- CompletionDate -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.EstimatedHours" Min="0" Disabled>
-                Estimated Hours
-            </FluentNumberField>
-        </div>
-    </div>
-
-    <div class="col-12 row gx-2 mt-2">
-        <!-- EstimatedCompleted -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.EstimatedCompleted" Min="0" Disabled>
-                Estimated Completed
-            </FluentNumberField>
-        </div>
-        <!-- DeclaredCompleted -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.DeclaredCompleted" Min="0" Disabled>
-                Declared Completed
-            </FluentNumberField>
+            <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.CompletionDate" Label="CompletionDate" Disabled/>
         </div>
     </div>
 

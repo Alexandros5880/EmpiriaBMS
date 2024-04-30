@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -37,14 +39,58 @@ public partial class Deliverables
         _records = Mapper.Map<List<DrawingVM>>(dtos);
     }
 
-    private void _add()
+    private async Task _add()
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<DeliverableDetailedDialog>(new DrawingVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            DrawingVM vm = result.Data as DrawingVM;
+            var dto = Mapper.Map<DrawingDto>(vm);
+            await DataProvider.Drawings.Add(dto);
+            await _getRecords();
+        }
     }
 
-    private void _edit(DrawingVM record)
+    private async Task _edit(DrawingVM record)
     {
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit DT-[{record.DisciplineTypeName}] T-[{record.TypeName}]",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
 
+        IDialogReference dialog = await DialogService.ShowDialogAsync<DeliverableDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            DrawingVM vm = result.Data as DrawingVM;
+            var dto = Mapper.Map<DrawingDto>(vm);
+            await DataProvider.Drawings.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(DrawingVM record)
