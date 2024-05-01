@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Config;
+﻿using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.Admin.General;
 using EmpiriaBMS.Front.Components.General;
@@ -58,7 +59,9 @@ public partial class Users
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true
+            PreventScroll = true,
+            Width = "min(70vw, 800px)",
+            Height = "min(95vh, 1400px)"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UsersDetailedDialog>(new UserVM(), parameters);
@@ -70,10 +73,12 @@ public partial class Users
             var emails = Mapping.Mapper.Map<List<EmailDto>>(vm.Emails);
             emails.ForEach(e => e.User = null);
             vm.Emails = null;
+            var myRolesIds = vm.MyRolesIds;
             var dto = Mapper.Map<UserDto>(vm);
             var added = await DataProvider.Users.Add(dto);
             if (added != null)
             {
+                await DataProvider.Users.UpdateRoles(added.Id, myRolesIds);
                 emails.ForEach(e => e.UserId = added.Id);
                 await DataProvider.Emails.AddRange(emails);
                 await _getRecords();
@@ -92,7 +97,9 @@ public partial class Users
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true
+            PreventScroll = true,
+            Width = "min(70vw, 800px)",
+            Height = "min(95vh, 1400px)"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UsersDetailedDialog>(record, parameters);
@@ -104,8 +111,10 @@ public partial class Users
             var emails = Mapping.Mapper.Map<List<EmailDto>>(vm.Emails);
             emails.ForEach(e => e.User = null);
             vm.Emails = null;
+            var myRolesIds = vm.MyRolesIds;
             var dto = Mapper.Map<UserDto>(vm);
             await DataProvider.Users.Update(dto);
+            await DataProvider.Users.UpdateRoles(dto.Id, myRolesIds);
             await DataProvider.Emails.RemoveAll(dto.Id);
             await DataProvider.Emails.AddRange(emails);
             await _getRecords();

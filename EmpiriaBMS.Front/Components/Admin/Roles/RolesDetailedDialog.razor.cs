@@ -16,7 +16,7 @@ public partial class RolesDetailedDialog : IDialogContentComponent<RoleVM>
 
     public bool IsNew => Content.Id == 0;
 
-    #region Data Grid
+    #region Data Grid Permissions
     private List<PermissionVM> _records = new List<PermissionVM>();
     private string _filterString = string.Empty;
     IQueryable<PermissionVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.Interfaces;
@@ -34,12 +35,19 @@ public partial class UsersDetailedDialog : IDialogContentComponent<UserVM>
         }
     }
 
+    private async Task _getRecords()
+    {
+        await _getEmails();
+        await _getRoles();
+    }
+
     private async Task SaveAsync()
     {
         var valid = Validate();
         if (!valid) return;
 
         Content.Emails = _emails;
+        Content.MyRolesIds = _roles.Where(r => r.IsSelected).Select(r => r.Id).ToList();
         await Dialog.CloseAsync(Content);
     }
 
@@ -48,26 +56,70 @@ public partial class UsersDetailedDialog : IDialogContentComponent<UserVM>
         await Dialog.CancelAsync();
     }
 
-    #region Data Grid
-    FluentDataGrid<Email> myGrid;
-    private List<Email> _emails = new List<Email>();
-    private string _filterString = string.Empty;
-    IQueryable<Email> FilteredEmails => _emails?.AsQueryable().Where(x => x.Address.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
-    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
+    #region Data Grid Roles
+    private List<RoleVM> _roles = new List<RoleVM>();
+    private string _filterRoleString = string.Empty;
+    IQueryable<RoleVM> FilteredRoles => _roles?.AsQueryable().Where(x => x.Name.Contains(_filterRoleString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState paginationRoles = new PaginationState { ItemsPerPage = 5 };
 
-    private void HandleFilter(ChangeEventArgs args)
+    private void HandleRoleFilter(ChangeEventArgs args)
     {
         if (args.Value is string value)
         {
-            _filterString = value;
+            _filterRoleString = value;
         }
-        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        else if (string.IsNullOrWhiteSpace(_filterRoleString) || string.IsNullOrEmpty(_filterRoleString))
         {
-            _filterString = string.Empty;
+            _filterRoleString = string.Empty;
         }
     }
 
-    private async Task _getRecords()
+    private async Task _getRoles()
+    {
+        var allRoles = await _dataProvider.Roles.GetAll();
+        
+        var allRolesVms = _mapper.Map<List<RoleVM>>(allRoles);
+
+        var myRoleIds = (await _dataProvider.Users.GetRoles(Content.Id)).Select(p => p.Id);
+
+        var roles = new HashSet<RoleVM>();
+        allRolesVms.ForEach(p =>
+        {
+            p.IsSelected = myRoleIds.Contains(p.Id);
+            roles.Add(p);
+        });
+
+        _roles = roles.OrderByDescending(p => p.IsSelected).ToList();
+    }
+
+    private void _onRoleSelectionChange(int roleId, bool val)
+    {
+        var role = _roles.FirstOrDefault(r => r.Id == roleId);
+        var index = _roles.IndexOf(role);
+        _roles[index].IsSelected = val;
+    }
+    #endregion
+
+    #region Data Grid Emails
+    FluentDataGrid<Email> myEmailsGrid;
+    private List<Email> _emails = new List<Email>();
+    private string _filterEmailString = string.Empty;
+    IQueryable<Email> FilteredEmails => _emails?.AsQueryable().Where(x => x.Address.Contains(_filterEmailString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState paginationEmails = new PaginationState { ItemsPerPage = 5 };
+
+    private void HandleEmailsFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterEmailString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterEmailString) || string.IsNullOrEmpty(_filterEmailString))
+        {
+            _filterEmailString = string.Empty;
+        }
+    }
+
+    private async Task _getEmails()
     {
         var emails = await _dataProvider.Users.GetEmails(Content.Id);
         _emails = emails.ToList();
@@ -109,13 +161,13 @@ public partial class UsersDetailedDialog : IDialogContentComponent<UserVM>
             Address = string.Empty,
             UserId = Content.Id
         });
-        await myGrid.RefreshDataAsync();
+        await myEmailsGrid.RefreshDataAsync();
     }
 
     private async Task _deleteEmail(Email email)
     {
         _emails.Remove(email);
-        await myGrid.RefreshDataAsync();
+        await myEmailsGrid.RefreshDataAsync();
     }
     #endregion
 

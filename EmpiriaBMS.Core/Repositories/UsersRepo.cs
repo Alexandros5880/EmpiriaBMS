@@ -6,6 +6,7 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Core.Hellpers;
+using System;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>
@@ -95,7 +96,8 @@ public class UsersRepo : Repository<UserDto, User>
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                us = await _context.Set<User>().ToListAsync();
+                us = await _context.Set<User>()
+                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<User>, List<UserDto>>(us);
             }
@@ -154,9 +156,41 @@ public class UsersRepo : Repository<UserDto, User>
                                         .ToListAsync();
 
             var roles = await _context.Roles.Where(r => roleIds.Contains(r.Id))
-                                       .ToListAsync();
+                                      .ToListAsync();
 
             return Mapping.Mapper.Map<List<Role>, List<RoleDto>>(roles);
+        }
+    }
+
+    public async Task UpdateRoles(int userId, ICollection<int> rolesids)
+    {
+        if (userId == 0)
+            throw new NullReferenceException($"No User Id Specified!");
+
+        if (rolesids == null)
+            throw new NullReferenceException($"No Roles Ids Specified!");
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var userRolesToDelete = await _context.Set<UserRole>()
+                                                  .Where(r => r.UserId == userId)
+                                                  .ToListAsync();
+
+            _context.Set<UserRole>().RemoveRange(userRolesToDelete);
+
+            Random random = new Random();
+
+            List<UserRole> userRolesToAdd = rolesids.Select(roleId => new UserRole()
+            {
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                UserId = userId,
+                RoleId = roleId
+            }).ToList();
+
+            await _context.Set<UserRole>().AddRangeAsync(userRolesToAdd);
+
+            await _context.SaveChangesAsync();
         }
     }
 
