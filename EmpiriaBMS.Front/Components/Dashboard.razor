@@ -9,6 +9,7 @@
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
 @using EmpiriaBMS.Front.Components.Admin
+@using Color = Microsoft.Fast.Components.FluentUI.Color;
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -21,6 +22,14 @@
 @inject TimerService TimerService
 @inject AuthorizeServices authorizeServices
 @inject SharedAuthDataService _sharedAuthData
+@inject IDialogService DialogService
+
+<!-- Loading -->
+<FluentOverlay @bind-Visible="@_startLoading"
+               Opacity="0.1"
+               BackgroundColor="#444791">
+    <FluentProgressRing />
+</FluentOverlay>
 
 @if (_startLoading)
 {
@@ -30,9 +39,9 @@
     </div>
     *@
 
-    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+    @* <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
         <FilterProgressRing FilterLoading="@_startLoading" />
-    </div>
+    </div> *@
 }
 else
 {
@@ -103,16 +112,21 @@ else
                                         <div class="col-lg-3 col-md-5 col-sm-5">
                                             <div class="d-flex justify-content-between"
                                                  style="height: auto !important;">
-
-                                                <div style="width: 50px;">
-                                                    @if (isWorkingMode && _issues.Count > 0)
-                                                    {
-                                                        <span class="issue mt-2"
-                                                              @onclick="@(() => OpenIssuesClick())">
-                                                        </span>
-                                                    }
+                                                 <!-- Issues Badge -->
+                                                <div style="width: 50px; margin-top: 4px;">
+                                                    <FluentCounterBadge Count="@_issues.Count"
+                                                                        ShowZero="false"
+                                                                        Appearance="Appearance.Neutral"
+                                                                        HorizontalPosition="-25"
+                                                                        BottomPosition="-25">
+                                                        <FluentButton OnClick="@OpenIssuesClick"
+                                                                      Appearance="Appearance.Accent">
+                                                            <FluentIcon Value="@(new Icons.Regular.Size24.Alert())"
+                                                                        Color="@Color.Fill" />
+                                                        </FluentButton>
+                                                    </FluentCounterBadge>
                                                 </div>
-
+                                                <!-- Display Hours Passed -->
                                                 @if (SeeMyHours)
                                                 {
                                                     <div class="primary-bg-color rounded float-end">
@@ -122,7 +136,6 @@ else
                                                         </div>
                                                     </div>
                                                 }
-
                                             </div>
                                         </div>
 

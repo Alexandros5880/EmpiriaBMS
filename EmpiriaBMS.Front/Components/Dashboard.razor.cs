@@ -4,6 +4,7 @@ using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
@@ -858,10 +859,17 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Display Issues
-    private void OpenIssuesClick()
+    private async Task OpenIssuesClick(MouseEventArgs e)
     {
-        _displayIssuesDialog.Show();
-        _isDisplayIssuesDialogOdepened = true;
+        if (!isWorkingMode)
+        {
+            await ShowInformationAsync("You need to have started your work to see the issues!");
+        }
+        else
+        {
+            _displayIssuesDialog.Show();
+            _isDisplayIssuesDialogOdepened = true;
+        }
     }
 
     private async Task CloseIssuesClick()
@@ -1139,6 +1147,12 @@ public partial class Dashboard : IDisposable
         changedto = tab;
     }
     #endregion
+
+    private async Task ShowInformationAsync(string msg)
+    {
+        var dialog = await DialogService.ShowInfoAsync(msg);
+        var result = await dialog.Result;
+    }
 
     protected virtual void Dispose(bool disposing)
     {
