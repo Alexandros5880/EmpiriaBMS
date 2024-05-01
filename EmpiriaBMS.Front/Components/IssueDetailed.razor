@@ -4,6 +4,7 @@
 @using EmpiriaBMS.Core.Dtos;
 @using System.Text.Json;
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.General
 
 @inject IMapper Mapper
 @inject IDataProvider DataProvider
@@ -17,7 +18,7 @@
         <div class="row">
             <div class="col form-group">
                 <label for="customerId">Customer:</label> <br/>
-                <strong id="customerId">@_customer?.LastName &nbsp; @_customer?.LastName</strong>
+                <strong id="customerId">@_customer?.LastName &nbsp; @_customer?.FirstName</strong>
             </div>
             <div class="col form-group">
                 <label for="projectId">Project:</label> <br />
@@ -26,222 +27,80 @@
         </div>
 
         <div class="row mt-2">
-            <div class="col form-group">
-                <label for="ComplaintDate">Issue Date:</label>
-                <InputDate id="ComplaintDate" @bind-Value="_issue.ComplaintDate" class="form-control" />
+            <div class="col-6">
+                <FluentDatePicker Style="width: 100%;" @bind-Value="@_issue.ComplaintDate" Label="Issue Date" />
             </div>
-
-            <div class="col form-group">
+            <div class="col-6 form-group">
                 <label for="documents">Relative Documents:</label>
                 <InputFile id="documents" OnChange="@HandleFileUploadDoc" multiple />
             </div>
         </div>
 
         <div class="row mt-2">
-            <div class="col-12 form-group">
-                <label for="description">Description:</label>
-                <textarea class="form-control"
-                          id="description"
-                          rows="3"
-                          @bind="_issue.Description">
-                </textarea>
+            <div class="col-12">
+                <FluentTextArea Style="width:100%;" @bind-Value="@_issue.Description" Label="Description:" Rows="3" Resize="TextAreaResize.Vertical" />
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12">
+                <FluentSwitch @bind-Value="@_issue.IsClose">
+                    IsClose
+                </FluentSwitch>
             </div>
         </div>
 
         <!-- Parrent Accordion -->
-        <div class="accordion mt-3" id="parrentAccordion">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingParrentOne">
-                    <button class="accordion-button"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseParrentOne"
-                            aria-expanded="true"
-                            aria-controls="collapseParrentOne">
-                        Iso2001
-                    </button>
-                </h2>
-                <div id="collapseParrentOne"
-                     class="accordion-collapse collapse"
-                     aria-labelledby="headingOne"
-                     data-bs-parent="#parrentAccordion">
-                    <div class="accordion-body">
+        <FluentAccordion Class="mt-4">
 
-                        <!-- Inner Accordion -->
-                        <div class="accordion" id="issueAccordion">
+            <FluentAccordionItem Expanded="true" Heading="Iso2001">
 
-                            <!-- Solution -->
-                            <div class="accordion-item mt-3">
-                                <h4 class="accordion-header">
-                                    <button class="accordion-button"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOne"
-                                            aria-expanded="true"
-                                            aria-controls="collapseOne">
-                                        Solution:
-                                    </button>
-                                </h4>
-                                <div id="collapseOne"
-                                     class="accordion-collapse collapse"
-                                     aria-labelledby="headingOne"
-                                     data-bs-parent="#issueAccordion">
-                                    <div class="accordion-body">
-
-                                        <div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 form-group">
-                                                    <label for="solution">Solution:</label>
-                                                    <textarea class="form-control"
-                                                              id="solution"
-                                                              rows="3"
-                                                              @bind="_issue.Solution">
-                                                    </textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mt-2">
-                                                <div class="col form-group">
-                                                    <label for="solutionDate">SolutionDate:</label>
-                                                    <InputDate id="solutionDate" @bind-Value="_issue.SolutionDate" class="form-control" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Evaluation -->
-                            <div class="accordion-item mt-4">
-                                <h4 class="accordion-header">
-                                    <button class="accordion-button"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#collapseTow"
-                                            aria-expanded="true"
-                                            aria-controls="collapseTow">
-                                        Evaluation:
-                                    </button>
-                                </h4>
-                                <div id="collapseTow"
-                                     class="accordion-collapse collapse"
-                                     aria-labelledby="headingTow"
-                                     data-bs-parent="#issueAccordion">
-                                    <div class="accordion-body">
-
-                                        <div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 form-group">
-                                                    <label for="evaluation">Evaluation:</label>
-                                                    <textarea class="form-control"
-                                                              id="evaluation"
-                                                              rows="3"
-                                                              @bind="_issue.Evaluation">
-                                        </textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Verification -->
-                            <div class="accordion-item mt-4">
-                                <h4 class="accordion-header">
-                                    <button class="accordion-button"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#collapseThree"
-                                            aria-expanded="true"
-                                            aria-controls="collapseThree">
-                                        Verification:
-                                    </button>
-                                </h4>
-                                <div id="collapseThree"
-                                     class="accordion-collapse collapse"
-                                     aria-labelledby="headingThree"
-                                     data-bs-parent="#issueAccordion">
-                                    <div class="accordion-body">
-
-                                        <div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 form-group">
-                                                    <label for="verification">Verification:</label>
-                                                    <textarea class="form-control"
-                                                              id="verification"
-                                                              rows="3"
-                                                              @bind="_issue.Verification">
-                                            </textarea>
-                                                </div>
-                                                <div class="row mt-2">
-                                                    <div class="col form-group">
-                                                        <label for="verificationDate">VerificationDate:</label>
-                                                        <InputDate id="verificationDate" @bind-Value="_issue.VerificationDate" class="form-control" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-md-12 form-group">
-                                                    <label for="verificatorSignature">Verificator Signature:</label>
-                                                    <div>
-                                                        <SignaturePad @ref="verificatorSignature" Id="verificatorSignature" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Submit -->
-                            <div class="accordion-item mt-4">
-                                <h4 class="accordion-header">
-                                    <button class="accordion-button"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#collapseFour"
-                                            aria-expanded="true"
-                                            aria-controls="collapseFour">
-                                        Submit:
-                                    </button>
-                                </h4>
-                                <div id="collapseFour"
-                                     class="accordion-collapse collapse"
-                                     aria-labelledby="headingFour"
-                                     data-bs-parent="#issueAccordion">
-                                    <div class="accordion-body">
-
-                                        <div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 form-group">
-                                                    <label for="pMSignature">Project Manager Signature:</label>
-                                                    <div>
-                                                        <SignaturePad @ref="pMSignature" Id="pMSignature" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 form-group mt-2">
-                                                <div class="row" style="width: 134px;">
-                                                    <label class="col-8" for="isClosed">Is Closed</label>
-                                                    <input class="col-4 big-checkbox" id="isClosed" type="checkbox" @bind="_issue.IsClose" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
+                <!-- Solution -->
+                <div class="row mt-1">
+                    <div class="col-12 mt-2">
+                        <FluentTextArea Style="width:100%;" @bind-Value="@_issue.Solution" Label="Solution:" Rows="3" Resize="TextAreaResize.Vertical" />
+                    </div>
+                    <div class="col-12 mt-2">
+                        <FluentDatePicker Style="width: 100%;" @bind-Value="@_issue.SolutionDate" Label="Solution Date" />
                     </div>
                 </div>
+
+                <!-- Evaluation -->
+                <div class="row mt-1">
+                    <div class="col-12 mt-2">
+                        <FluentTextArea Style="width:100%;" @bind-Value="@_issue.Evaluation" Label="Evaluation:" Rows="3" Resize="TextAreaResize.Vertical" />
+                    </div>
+                </div>
+
+                <!-- Verification -->
+                <div class="row mt-1">
+                    <div class="col-12 mt-2">
+                        <FluentTextArea Style="width:100%;" @bind-Value="@_issue.Verification" Label="Verification:" Rows="3" Resize="TextAreaResize.Vertical" />
+                    </div>
+                    <div class="col-12 mt-2">
+                        <FluentDatePicker Style="width: 100%;" @bind-Value="@_issue.VerificationDate" Label="Verification Date" />
+                    </div>
+                    <div class="col-12 form-group mt-2">
+                        <label for="verificatorSignature">Verificator Signature:</label>
+                        <div>
+                            <SignaturePad @ref="verificatorSignature" Id="verificatorSignature" />
+                        </div>
+                    </div>
+                </div>
+
+            </FluentAccordionItem>
+
+        </FluentAccordion>
+
+        <!-- Submit -->
+        <div class="row mt-4">
+            <div class="col-12 form-group mt-2">
+                <label for="pMSignature">Project Manager Signature:</label>
+                <div>
+                    <SignaturePad @ref="pMSignature" Id="pMSignature" />
+                </div>
             </div>
-
         </div>
-
-        
 
     </EditForm>
 </div>
