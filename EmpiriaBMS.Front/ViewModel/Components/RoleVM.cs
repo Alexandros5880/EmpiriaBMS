@@ -5,6 +5,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class RoleVM : BaseVM
 {
+    private bool _isSelected = false;
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (value == _isSelected)
+                return;
+            _isSelected = value;
+            NotifyPropertyChanged(nameof(IsSelected));
+        }
+    }
+
     private string? _name;
     public string? Name
     {

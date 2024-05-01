@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class UserVM : BaseVM
@@ -139,4 +140,7 @@ public class UserVM : BaseVM
     public ICollection<Email> Emails { get; set; }
 
     public List<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+
+    [NotMapped]
+    public ICollection<int>? MyRolesIds { get; set; }
 }
