@@ -146,7 +146,7 @@ public class UsersRepo : Repository<UserDto, User>
     public async Task<ICollection<RoleDto>> GetRoles(int userId)
     {
         if (userId == 0)
-            throw new NullReferenceException($"No User Id Specified!");
+            return new List<RoleDto>();
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
