@@ -12,54 +12,52 @@
 
     <div class="col-12 row g-3">
 
-        <div class="col row card shadow" style="height: 400px; overflow-x: auto;">
+        <div class="col card shadow" style="height: 400px; overflow-x: auto;">
 
-            <div class="col-12">
-                <div>
-                    <FluentDataGrid Items="@FilteredItems"
-                                    ResizableColumns=true
-                                    Pagination="@pagination"
-                                    TGridItem="IssueVM"
-                                    OnRowFocus="OnRowFocused"
-                                    Style="height: 100%;"
-                                    GridTemplateColumns="auto 160 120px 120px 120px 120px 120px">
+            <div>
+                <FluentDataGrid Items="@FilteredItems"
+                                ResizableColumns=true
+                                Pagination="@pagination"
+                                TGridItem="IssueVM"
+                                OnRowFocus="OnRowFocused"
+                                Style="height: 100%;"
+                                GridTemplateColumns="auto 160 120px 120px 120px 120px 120px">
 
-                        <TemplateColumn Title="Name"
-                                        Sortable="true"
-                                        InitialSortDirection=SortDirection.Descending
-                                        IsDefaultSortColumn=true>
-                            <ColumnOptions>
-                                <div class="search-box">
-                                    <FluentSearch type="search"
-                                                  Autofocus=true
-                                                  @bind-Value="@_filterString"
-                                                  Placeholder="Project..."
-                                                  @oninput="@HandleFilter" />
-                                </div>
-                            </ColumnOptions>
-                            <ChildContent>
-                                @(context.ProjectName)
-                            </ChildContent>
-                        </TemplateColumn>
+                    <TemplateColumn Title="Name"
+                                    Sortable="true"
+                                    InitialSortDirection=SortDirection.Descending
+                                    IsDefaultSortColumn=true>
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterString"
+                                              Placeholder="Project..."
+                                              @oninput="@HandleFilter" />
+                            </div>
+                        </ColumnOptions>
+                        <ChildContent>
+                            @(context.ProjectName)
+                        </ChildContent>
+                    </TemplateColumn>
 
-                        <PropertyColumn Property="@(p => p.DisplayedRoleName)" Sortable="true" Title="Displayed Role" Align="@Align.Start" />
-                        <PropertyColumn Property="@(p => p.CreatorName)" Sortable="true" Title="Creator" Align="@Align.Start" />
-                        <PropertyColumn Property="@(p => p.SolutionDate)" Format="dd-mm-yyy" Sortable="true" Title="Solution Date" Align="@Align.Start" />
-                        <PropertyColumn Property="@(p => p.VerificationDate)" Format="dd-mm-yyy" Sortable="true" Title="Verification Date" Align="@Align.Start" />
-                        <PropertyColumn Property="@(p => p.IsClose)" Sortable="true" Title="IsClose" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.DisplayedRoleName)" Sortable="true" Title="Displayed Role" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.CreatorName)" Sortable="true" Title="Creator" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.SolutionDate)" Format="dd-mm-yyy" Sortable="true" Title="Solution Date" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.VerificationDate)" Format="dd-mm-yyy" Sortable="true" Title="Verification Date" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.IsClose)" Sortable="true" Title="IsClose" Align="@Align.Start" />
 
-                    </FluentDataGrid>
-                </div>
-                <div style="min-width: 50%;">
-                    <FluentPaginator State="@pagination">
-                        <SummaryTemplate>
-                            There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
-                        </SummaryTemplate>
-                        <PaginationTextTemplate>
-                            This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
-                        </PaginationTextTemplate>
-                    </FluentPaginator>
-                </div>
+                </FluentDataGrid>
+            </div>
+            <div style="min-width: 50%;">
+                <FluentPaginator State="@pagination">
+                    <SummaryTemplate>
+                        There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                    </PaginationTextTemplate>
+                </FluentPaginator>
             </div>
 
         </div>
