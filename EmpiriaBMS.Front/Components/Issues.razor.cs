@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.Disciplines;
 using EmpiriaBMS.Front.Components.Admin.Projects.Issues;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
@@ -13,8 +14,6 @@ namespace EmpiriaBMS.Front.Components;
 
 public partial class Issues : ComponentBase
 {
-    private bool disposedValue;
-
     [Parameter]
     public List<IssueVM> Source { get; set; }
 
@@ -41,7 +40,7 @@ public partial class Issues : ComponentBase
     IQueryable<IssueVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
-    private IssueVM _selectedRecord = new IssueVM();
+    private IssueVM _selectedRecord = null;
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -55,9 +54,23 @@ public partial class Issues : ComponentBase
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<IssueVM> row)
+    private void OnRowFocused(FluentDataGridRow<IssueVM> row)
     {
-        _selectedRecord = row.Item as IssueVM;
-        StateHasChanged();
+        var r = row;
+        Console.WriteLine($"Row focused: {r.RowIndex}");
+        var record = r.Item as IssueVM;
+        Console.WriteLine($"Project Name: {record?.ProjectName}");
+        _selectedRecord = record;
     }
+
+    private void _editOnCancel()
+    {
+        _selectedRecord = null;
+    }
+
+    private async Task SaveDetailed()
+    {
+        await OnSave.InvokeAsync(this);
+    }
+
 }

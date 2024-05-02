@@ -11,281 +11,285 @@
 @inject IDialogService DialogService
 @inject MicrosoftTeams MicrosoftTeams
 
-@* Header *@
-@if (Title != null)
-{
+<div class="m-2">
+
+    @* Header *@
+    @if (Title != null)
+    {
+        <div class="mt-2">
+            <FluentStack VerticalAlignment="VerticalAlignment.Center">
+                <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+                <FluentLabel Typo="Typography.PaneHeader">
+                    @Title
+                </FluentLabel>
+            </FluentStack>
+        </div>
+    }
+
+    @* Body *@
     <div class="mt-2">
-        <FluentStack VerticalAlignment="VerticalAlignment.Center">
-            <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
-            <FluentLabel Typo="Typography.PaneHeader">
-                @Title
-            </FluentLabel>
-        </FluentStack>
-    </div>
-}
+        <div class="row gx-2" style="max-height: 380px; overflow-y: auto; overflow-x: hidden;">
 
-@* Body *@
-<div class="mt-2">
-    <div class="row gx-2" style="height: 77vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;">
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- Project -->
-            <div class="col-xl-6 col-lg-6 col-md-12">
-                <div>
-                    Project<span class="text-danger">*</span>
-                </div>
-                <div>
-                    @if (CalledFromDash)
-                    {
-                        <FluentLabel>@Project.Name</FluentLabel>
-                    }
-                    else
-                    {
-                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                        Placeholder="Select Project..."
-                                        Items="@_projects"
-                                        Height="200px"
-                                        Width="100%"
-                                        TOption="ProjectVM"
-                                        OptionText="@(c => c.Name)"
-                                        OptionValue="@(c => c.Id.ToString())"
-                                        @bind-SelectedOption="@Project" />
-                    }
-                </div>
-                @if (!validProject)
-                {
+            <div class="col-12 row gx-3 mt-2">
+                <!-- Project -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
                     <div>
-                        <span class="text-warning">Field is required!</span>
-                    </div>
-                }
-            </div>
-            <!-- Visible To Role -->
-            <div class="col-xl-6 col-lg-6 col-md-12">
-                <div>
-                    Visible To Role
-                </div>
-                <div>
-                    @if (CalledFromDash)
-                    {
-                        <FluentLabel>@Role.Name</FluentLabel>
-                    }
-                    else
-                    {
-                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                        Placeholder="Select Role..."
-                                        Items="_roles"
-                                        Height="200px"
-                                        Width="100%"
-                                        Class="float-end"
-                                        TOption="RoleVM"
-                                        OptionText="@(c => c.Name)"
-                                        OptionValue="@(c => c.Id.ToString())"
-                                        @bind-SelectedOption="@Role"/>
-                    }
-                </div>
-                @if (!validRole)
-                {
-                    <div>
-                        <span class="text-warning">Field is required!</span>
-                    </div>
-                }
-            </div>
-        </div>
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- Creator -->
-            <div class="col-xl-6 col-lg-6 col-md-12">
-                <div>
-                    Creator<span class="text-danger">*</span>
-                </div>
-                <div>
-                    @if (CalledFromDash)
-                    {
-                        <FluentLabel>@Creator.FullName</FluentLabel>
-                    }
-                    else
-                    {
-                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                        Placeholder="Select Creator..."
-                                        Items="@_users"
-                                        Height="200px"
-                                        Width="100%"
-                                        TOption="UserVM"
-                                        OptionText="@(c => c.FullName)"
-                                        OptionValue="@(c => c.Id.ToString())"
-                                        @bind-SelectedOption="@Creator"/>
-                    }
-                </div>
-                @if (!validCreator)
-                {
-                    <div>
-                        <span class="text-warning">Field is required!</span>
-                    </div>
-                }
-            </div>
-            <!-- ComplaintDate-->
-            <div class="col-xl-6 col-lg-6 col-md-12">
-                <FluentDatePicker Class="float-end"
-                                  Style="width: 100%;" 
-                                  @bind-Value="@Content.ComplaintDate" 
-                                  Label="Complaint Date" 
-                                  Disabled="@CalledFromDash" />
-            </div>
-        </div>
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- Description -->
-            <div class="col-12">
-                <FluentTextArea Style="width:100%;"
-                                @bind-Value="@Content.Description"
-                                Rows="3"
-                                Resize="TextAreaResize.Vertical"
-                                Disabled="@CalledFromDash">Description:</FluentTextArea>
-            </div>
-        </div>
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- Solution -->
-            <div class="col-12">
-                <FluentTextArea Style="width:100%;" @bind-Value="@Content.Solution" Rows="3" Resize="TextAreaResize.Vertical">Solution:</FluentTextArea>
-            </div>
-        </div>
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- Evaluation -->
-            <div class="col-12">
-                <FluentTextArea Style="width:100%;" @bind-Value="@Content.Evaluation" Rows="3" Resize="TextAreaResize.Vertical">Evaluation:</FluentTextArea>
-            </div>
-        </div>
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- Verification -->
-            <div class="col-12">
-                <FluentTextArea Style="width:100%;" @bind-Value="@Content.Verification" Rows="3" Resize="TextAreaResize.Vertical">Verification:</FluentTextArea>
-            </div>
-        </div>
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- SolutionDate -->
-            <div class="col-lg-6 col-md-12">
-                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.SolutionDate" Label="Solution Date" />
-            </div>
-            <!-- VerificationDate-->
-            <div class="col-lg-6 col-md-12">
-                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.VerificationDate" Label="Verification Date" />
-            </div>
-        </div>
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- IsClose -->
-            <div class="col-lg-6 col-md-12">
-                <FluentSwitch @bind-Value="@Content.IsClose">
-                    IsClose
-                </FluentSwitch>
-            </div>
-            <!-- None -->
-            <div class="col-lg-6 col-md-12">
-            </div>
-        </div>
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- PMSignature -->
-            <div class="col-lg-6 col-md-12">
-                @{
-                    var pmSignatureSrc = @ImageHelper.GetImageUrl(@Content.PMSignature);
-                }
-                @if (pmSignatureSrc != null)
-                {
-                    <div>
-                        Project Manager Signature
+                        Project<span class="text-danger">*</span>
                     </div>
                     <div>
-                        <img src="@pmSignatureSrc" alt="Project Manager Signature">
-                    </div>
-                }
-            </div>
-            <!-- VerificatorSignature -->
-            <div class="col-lg-6 col-md-12">
-                @{
-                    var verificatorSignatureSrc = @ImageHelper.GetImageUrl(Content.VerificatorSignature);
-                }
-                @if (verificatorSignatureSrc != null)
-                {
-                    <div>
-                        Project Manager Signature
-                    </div>
-                    <div>
-                        <img src="@verificatorSignatureSrc" alt="Verificator Signature">
-                    </div>
-                }
-            </div>
-        </div>
-
-        <div class="col-12 row gx-3 mt-2">
-            <!-- Documents -->
-            <div class="col-12">
-                <div>
-                    <h3>Documents</h3>
-                </div>
-                <div>
-                    <ul>
-                        @foreach (var document in _documents)
+                        @if (CalledFromDash)
                         {
-                            <li>
-                                <FluentStack Width="100%">
-                                    @document.FileName
-
-                                    <FluentButton IconEnd="@(new MyIcons.Size32.Download())"
-                                                  Title="Globe"
-                                                  OnClick="@(() => DownloadFile(document))" />
-
-                                    <FluentButton IconEnd="@(new Icons.Regular.Size32.Delete())"
-                                                  Title="Globe"
-                                                  OnClick="@(() => DeleteFile(document))"
-                                                  Disabled="@CalledFromDash" />
-
-                                </FluentStack>
-                            </li>
+                            <FluentLabel>@Content.ProjectName</FluentLabel>
                         }
-                    </ul>
+                        else
+                        {
+                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                            Placeholder="Select Project..."
+                                            Items="@_projects"
+                                            Height="200px"
+                                            Width="100%"
+                                            TOption="ProjectVM"
+                                            OptionText="@(c => c.Name)"
+                                            OptionValue="@(c => c.Id.ToString())"
+                                            @bind-SelectedOption="@Project" />
+                        }
+                    </div>
+                    @if (!validProject)
+                    {
+                        <div>
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                </div>
+                <!-- Visible To Role -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Visible To Role
+                    </div>
+                    <div>
+                        @if (CalledFromDash)
+                        {
+                            <FluentLabel>@Content.DisplayedRoleName</FluentLabel>
+                        }
+                        else
+                        {
+                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                            Placeholder="Select Role..."
+                                            Items="_roles"
+                                            Height="200px"
+                                            Width="100%"
+                                            Class="float-end"
+                                            TOption="RoleVM"
+                                            OptionText="@(c => c.Name)"
+                                            OptionValue="@(c => c.Id.ToString())"
+                                            @bind-SelectedOption="@Role"/>
+                        }
+                    </div>
+                    @if (!validRole)
+                    {
+                        <div>
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
                 </div>
             </div>
-            <!-- Deleted Documents -->
-            @if (_deletedDocuments.Count > 0)
-            {
+
+            <div class="col-12 row gx-3 mt-2">
+                <!-- Creator -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Creator<span class="text-danger">*</span>
+                    </div>
+                    <div>
+                        @if (CalledFromDash)
+                        {
+                            <FluentLabel>@Content.CreatorName</FluentLabel>
+                        }
+                        else
+                        {
+                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                            Placeholder="Select Creator..."
+                                            Items="@_users"
+                                            Height="200px"
+                                            Width="100%"
+                                            TOption="UserVM"
+                                            OptionText="@(c => c.FullName)"
+                                            OptionValue="@(c => c.Id.ToString())"
+                                            @bind-SelectedOption="@Creator"/>
+                        }
+                    </div>
+                    @if (!validCreator)
+                    {
+                        <div>
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                </div>
+                <!-- ComplaintDate-->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <FluentDatePicker Class="float-end"
+                                      Style="width: 100%;" 
+                                      @bind-Value="@Content.ComplaintDate" 
+                                      Label="Complaint Date" 
+                                      Disabled="@CalledFromDash" />
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-2">
+                <!-- Description -->
+                <div class="col-12">
+                    <FluentTextArea Style="width:100%;"
+                                    @bind-Value="@Content.Description"
+                                    Rows="3"
+                                    Resize="TextAreaResize.Vertical"
+                                    Disabled="@CalledFromDash">Description:</FluentTextArea>
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-2">
+                <!-- Solution -->
+                <div class="col-12">
+                    <FluentTextArea Style="width:100%;" @bind-Value="@Content.Solution" Rows="3" Resize="TextAreaResize.Vertical">Solution:</FluentTextArea>
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-2">
+                <!-- Evaluation -->
+                <div class="col-12">
+                    <FluentTextArea Style="width:100%;" @bind-Value="@Content.Evaluation" Rows="3" Resize="TextAreaResize.Vertical">Evaluation:</FluentTextArea>
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-2">
+                <!-- Verification -->
+                <div class="col-12">
+                    <FluentTextArea Style="width:100%;" @bind-Value="@Content.Verification" Rows="3" Resize="TextAreaResize.Vertical">Verification:</FluentTextArea>
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-2">
+                <!-- SolutionDate -->
+                <div class="col-lg-6 col-md-12">
+                    <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.SolutionDate" Label="Solution Date" />
+                </div>
+                <!-- VerificationDate-->
+                <div class="col-lg-6 col-md-12">
+                    <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.VerificationDate" Label="Verification Date" />
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-2">
+                <!-- IsClose -->
+                <div class="col-lg-6 col-md-12">
+                    <FluentSwitch @bind-Value="@Content.IsClose">
+                        IsClose
+                    </FluentSwitch>
+                </div>
+                <!-- None -->
+                <div class="col-lg-6 col-md-12">
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-2">
+                <!-- PMSignature -->
+                <div class="col-lg-6 col-md-12">
+                    @{
+                        var pmSignatureSrc = @ImageHelper.GetImageUrl(@Content.PMSignature);
+                    }
+                    @if (pmSignatureSrc != null)
+                    {
+                        <div>
+                            Project Manager Signature
+                        </div>
+                        <div>
+                            <img src="@pmSignatureSrc" alt="Project Manager Signature">
+                        </div>
+                    }
+                </div>
+                <!-- VerificatorSignature -->
+                <div class="col-lg-6 col-md-12">
+                    @{
+                        var verificatorSignatureSrc = @ImageHelper.GetImageUrl(Content.VerificatorSignature);
+                    }
+                    @if (verificatorSignatureSrc != null)
+                    {
+                        <div>
+                            Project Manager Signature
+                        </div>
+                        <div>
+                            <img src="@verificatorSignatureSrc" alt="Verificator Signature">
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-2">
+                <!-- Documents -->
                 <div class="col-12">
                     <div>
-                        <h3>Deleted Documents</h3>
+                        <h3>Documents</h3>
                     </div>
                     <div>
                         <ul>
-                            @foreach (var document in _deletedDocuments)
+                            @foreach (var document in _documents)
                             {
                                 <li>
-                                    <FluentButton OnClick="@(async () => await AddFile(document))">
-                                        <FluentIcon Value="@(new Icons.Regular.Size32.Add())"
-                                                    Color="Color.Accent"
-                                                    Slot="end" />
-                                        Add @document.FileName
-                                    </FluentButton>
+                                    <FluentStack Width="100%">
+                                        @document.FileName
+
+                                        <FluentButton IconEnd="@(new MyIcons.Size32.Download())"
+                                                      Title="Globe"
+                                                      OnClick="@(() => DownloadFile(document))" />
+
+                                        <FluentButton IconEnd="@(new Icons.Regular.Size32.Delete())"
+                                                      Title="Globe"
+                                                      OnClick="@(() => DeleteFile(document))"
+                                                      Disabled="@CalledFromDash" />
+
+                                    </FluentStack>
                                 </li>
                             }
                         </ul>
                     </div>
                 </div>
-            }
+                <!-- Deleted Documents -->
+                @if (_deletedDocuments.Count > 0)
+                {
+                    <div class="col-12">
+                        <div>
+                            <h3>Deleted Documents</h3>
+                        </div>
+                        <div>
+                            <ul>
+                                @foreach (var document in _deletedDocuments)
+                                {
+                                    <li>
+                                        <FluentButton OnClick="@(async () => await AddFile(document))">
+                                            <FluentIcon Value="@(new Icons.Regular.Size32.Add())"
+                                                        Color="Color.Accent"
+                                                        Slot="end" />
+                                            Add @document.FileName
+                                        </FluentButton>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+
         </div>
-
     </div>
+
+    @* Footer *@
+    @if (DisplayActions)
+    {
+        <div class="mt-2 mb-2">
+            <FluentStack VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.End">
+                <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+                <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+            </FluentStack>
+        </div>
+    }
+
 </div>
-
-@* Footer *@
-@if (DisplayActions)
-{
-    <div class="mt-2 mb-2">
-        <FluentStack VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.End">
-            <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
-            <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
-        </FluentStack>
-    </div>
-}

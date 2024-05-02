@@ -4,76 +4,79 @@
 @inject IMapper Mapper
 @inject IDialogService DialogService
 
-<div class="row" style="width: 76vw; overflow-x: auto; margin: 0 auto;">
-    
+<div class="row" style="background-color: green; height: min(72vh, 980px);">
+
     <div class="col-12">
         <h3>Issues</h3>
     </div>
-    
-    <div class="col-12 card shadow">
-        <div>
-            <FluentDataGrid Items="@FilteredItems"
-                            ResizableColumns=true
-                            Pagination="@pagination"
-                            TGridItem="IssueVM"
-                            OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="auto 200px 120px 200px 200px 120px"
-                            style="height: 70vh; overflow:auto;">
 
-                <TemplateColumn Title="Name"
-                                Sortable="true"
-                                InitialSortDirection=SortDirection.Descending
-                                IsDefaultSortColumn=true>
-                    <ColumnOptions>
-                        <div class="search-box">
-                            <FluentSearch type="search"
-                                          Autofocus=true
-                                          @bind-Value="@_filterString"
-                                          Placeholder="Project..."
-                                          @oninput="@HandleFilter" />
-                        </div>
-                    </ColumnOptions>
-                    <ChildContent>
-                        @(context.ProjectName)
-                    </ChildContent>
-                </TemplateColumn>
+    <div class="col-12 row g-3">
 
-                <PropertyColumn Property="@(p => p.DisplayedRoleName)" Sortable="true" Title="Displayed Role" Align="@Align.Start" />
-                
-                <PropertyColumn Property="@(p => p.CreatorName)" Sortable="true" Title="Creator" Align="@Align.Start" />
-                
-                <TemplateColumn Title="Solution Date" Sortable="true" Style="text-wrap: wrap;" Align="@Align.Start">
-                    <FluentDatePicker Style="width: 100%;" @bind-Value="@context.SolutionDate"/>
-                </TemplateColumn>
+        <div class="col row card shadow" style="height: 400px; overflow-x: auto;">
 
-                <TemplateColumn Title="Verification Date" Sortable="true" Style="text-wrap: wrap;" Align="@Align.Start">
-                    <FluentDatePicker Style="width: 100%;" @bind-Value="@context.VerificationDate" />
-                </TemplateColumn>
+            <div class="col-12">
+                <div>
+                    <FluentDataGrid Items="@FilteredItems"
+                                    ResizableColumns=true
+                                    Pagination="@pagination"
+                                    TGridItem="IssueVM"
+                                    OnRowFocus="OnRowFocused"
+                                    Style="height: 100%;"
+                                    GridTemplateColumns="auto 160 120px 120px 120px 120px 120px">
 
-                <TemplateColumn Title="Closed">
-                    <FluentCheckbox @bind-Value="@context.IsClose"/>
-                </TemplateColumn>
+                        <TemplateColumn Title="Name"
+                                        Sortable="true"
+                                        InitialSortDirection=SortDirection.Descending
+                                        IsDefaultSortColumn=true>
+                            <ColumnOptions>
+                                <div class="search-box">
+                                    <FluentSearch type="search"
+                                                  Autofocus=true
+                                                  @bind-Value="@_filterString"
+                                                  Placeholder="Project..."
+                                                  @oninput="@HandleFilter" />
+                                </div>
+                            </ColumnOptions>
+                            <ChildContent>
+                                @(context.ProjectName)
+                            </ChildContent>
+                        </TemplateColumn>
 
-            </FluentDataGrid>
+                        <PropertyColumn Property="@(p => p.DisplayedRoleName)" Sortable="true" Title="Displayed Role" Align="@Align.Start" />
+                        <PropertyColumn Property="@(p => p.CreatorName)" Sortable="true" Title="Creator" Align="@Align.Start" />
+                        <PropertyColumn Property="@(p => p.SolutionDate)" Format="dd-mm-yyy" Sortable="true" Title="Solution Date" Align="@Align.Start" />
+                        <PropertyColumn Property="@(p => p.VerificationDate)" Format="dd-mm-yyy" Sortable="true" Title="Verification Date" Align="@Align.Start" />
+                        <PropertyColumn Property="@(p => p.IsClose)" Sortable="true" Title="IsClose" Align="@Align.Start" />
+
+                    </FluentDataGrid>
+                </div>
+                <div style="min-width: 50%;">
+                    <FluentPaginator State="@pagination">
+                        <SummaryTemplate>
+                            There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                        </SummaryTemplate>
+                        <PaginationTextTemplate>
+                            This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                        </PaginationTextTemplate>
+                    </FluentPaginator>
+                </div>
+            </div>
+
         </div>
-        <div style="min-width: 50%;">
-            <FluentPaginator State="@pagination">
-                <SummaryTemplate>
-                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
-                </SummaryTemplate>
-                <PaginationTextTemplate>
-                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
-                </PaginationTextTemplate>
-            </FluentPaginator>
-        </div>
-    </div>
 
-    <div class="col-12 card shadow mt-2">
-        @if (_selectedRecord != null)
-        {
-            <!-- Detailed Selected Issues -->
-            <IssuesDetailed Title="Update Issue" Content="@_selectedRecord" DisplayActions="true" CalledFromDash="true"/>
-        }
+        <div class="col card shadow" style="height: 400px;">
+            @if (_selectedRecord != null)
+            {
+                <!-- Detailed Selected Issues -->
+                <IssuesDetailed Title="Update Issue"
+                                Content="@_selectedRecord"
+                                DisplayActions="true"
+                                CalledFromDash="true"
+                                OnCancel="_editOnCancel"
+                                OnSave="SaveDetailed" />
+            }
+        </div>
+
     </div>
 
 </div>
