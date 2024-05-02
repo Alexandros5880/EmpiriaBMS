@@ -2,44 +2,24 @@
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.Projects.Issues;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components;
 
-public partial class Issues : ComponentBase, IDisposable
+public partial class Issues : ComponentBase
 {
     private bool disposedValue;
 
     [Parameter]
-    public ObservableCollection<IssueVM> Source { get; set; }
+    public List<IssueVM> Source { get; set; }
 
     [Parameter]
     public EventCallback OnSave { get; set; }
-
-    protected override void OnInitialized()
-    {
-        foreach (var item in Source)
-        {
-            item.PropertyChanged += Item_PropertyChanged;
-        }
-    }
-
-    private void Item_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        var item = sender as IssueVM;
-        var propertyName = e.PropertyName;
-        switch (propertyName)
-        {
-            case nameof(IssueVM.IsClose):
-                break;
-            case nameof(IssueVM.Solution):
-                item.SolutionDate = DateTime.Now;
-                break;
-        }
-    }
 
     public async Task HandleValidSubmit()
     {
@@ -56,25 +36,28 @@ public partial class Issues : ComponentBase, IDisposable
             Console.Write(ex.InnerException.Message);
         }
     }
+    
+    private string _filterString = string.Empty;
+    IQueryable<IssueVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
-    protected virtual void Dispose(bool disposing)
+    private IssueVM _selectedRecord = new IssueVM();
+
+    private void HandleFilter(ChangeEventArgs args)
     {
-        if (!disposedValue)
+        if (args.Value is string value)
         {
-            if (disposing)
-            {
-                foreach (var item in Source)
-                {
-                    item.PropertyChanged -= Item_PropertyChanged;
-                }
-            }
-            disposedValue = true;
+            _filterString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        {
+            _filterString = string.Empty;
         }
     }
 
-    public void Dispose()
+    private void HandleRowFocus(FluentDataGridRow<IssueVM> row)
     {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+        _selectedRecord = row.Item as IssueVM;
+        StateHasChanged();
     }
 }

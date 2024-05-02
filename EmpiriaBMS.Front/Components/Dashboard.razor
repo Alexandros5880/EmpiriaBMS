@@ -978,7 +978,7 @@ else
             </div>
 
             <div class="col-12 justify-content-center">
-                <Issues Source="@_issues" OnSave="@(async() => await CloseIssuesClick())" />
+                <Issues Source="@_issues.ToList()" OnSave="@(async() => await CloseIssuesClick())" />
             </div>
 
         </div>

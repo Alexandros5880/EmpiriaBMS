@@ -787,6 +787,7 @@ public class UsersRepo : Repository<UserDto, User>
                                 .Include(i => i.Project)
                                 .Include(i => i.DisplayedRole)
                                 .Include(i => i.Documents)
+                                .Include(i => i.Creator)
                                 .ToListAsync();
 
             return Mapping.Mapper.Map<List<Issue>, List<IssueDto>>(issues);
