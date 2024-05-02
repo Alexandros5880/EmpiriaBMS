@@ -35,16 +35,22 @@
                     Project<span class="text-danger">*</span>
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                    Placeholder="Select Project..."
-                                    Items="@_projects"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="ProjectVM"
-                                    OptionText="@(c => c.Name)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Project"
-                                    Disabled="@CalledFromDash" />
+                    @if (CalledFromDash)
+                    {
+                        <FluentLabel>@Project.Name</FluentLabel>
+                    }
+                    else
+                    {
+                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Project..."
+                                        Items="@_projects"
+                                        Height="200px"
+                                        Width="100%"
+                                        TOption="ProjectVM"
+                                        OptionText="@(c => c.Name)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Project" />
+                    }
                 </div>
                 @if (!validProject)
                 {
@@ -59,17 +65,23 @@
                     Visible To Role
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                    Placeholder="Select Role..."
-                                    Items="_roles"
-                                    Height="200px"
-                                    Width="100%"
-                                    Class="float-end"
-                                    TOption="RoleVM"
-                                    OptionText="@(c => c.Name)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Role"
-                                    Disabled="@CalledFromDash" />
+                    @if (CalledFromDash)
+                    {
+                        <FluentLabel>@Role.Name</FluentLabel>
+                    }
+                    else
+                    {
+                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Role..."
+                                        Items="_roles"
+                                        Height="200px"
+                                        Width="100%"
+                                        Class="float-end"
+                                        TOption="RoleVM"
+                                        OptionText="@(c => c.Name)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Role"/>
+                    }
                 </div>
                 @if (!validRole)
                 {
@@ -87,16 +99,22 @@
                     Creator<span class="text-danger">*</span>
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                    Placeholder="Select Creator..."
-                                    Items="@_users"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="UserVM"
-                                    OptionText="@(c => c.FullName)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Creator"
-                                    Disabled="@CalledFromDash" />
+                    @if (CalledFromDash)
+                    {
+                        <FluentLabel>@Creator.FullName</FluentLabel>
+                    }
+                    else
+                    {
+                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Creator..."
+                                        Items="@_users"
+                                        Height="200px"
+                                        Width="100%"
+                                        TOption="UserVM"
+                                        OptionText="@(c => c.FullName)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Creator"/>
+                    }
                 </div>
                 @if (!validCreator)
                 {
