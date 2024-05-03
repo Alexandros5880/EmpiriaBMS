@@ -554,12 +554,11 @@
 }
 .icon-missed-deadline:hover::after {
     content: "Deadline Passed!";
-    background-color: rgba(0, 0, 0, 1);
-    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 1);
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
-    transform: translate(-50%, -50%);
     width: auto;
     white-space: nowrap;
 }
@@ -575,12 +574,11 @@
 }
 .icon-worked-hours-passed:hover::after {
     content: "Estimated Worked Hours Passed!";
-    background-color: rgba(0, 0, 0, 1);
-    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 1);
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
-    transform: translate(-50%, -50%);
     width: auto;
     white-space: nowrap;
 }
@@ -596,12 +594,11 @@
 }
 .icon-estimation-completion-passed:hover::after {
     content: "Estimate Completed Passed!";
-    background-color: rgba(0, 0, 0, 1);
-    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 1);
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
-    transform: translate(-50%, -50%);
     width: auto;
     white-space: nowrap;
 }
@@ -617,12 +614,11 @@
 }
 .icon-all-ok:hover::after {
     content: "Active!";
-    background-color: rgba(0, 0, 0, 1);
-    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 1);
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
-    transform: translate(-50%, -50%);
     width: auto;
     white-space: nowrap;
 }
