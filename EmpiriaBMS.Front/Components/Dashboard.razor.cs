@@ -155,6 +155,13 @@ public partial class Dashboard : IDisposable
     protected override void OnInitialized()
     {
         base.OnInitialized();
+
+        if (_sharedAuthData.LogedUser == null)
+        {
+            MyNavigationManager.NavigateTo("/login");
+            return;
+        }
+
         // timer = used only to run UpdateElapsedTime() every one second
         timer = new Timer(_ => UpdateElapsedTime(), null, 0, 1000);
         isWorkingMode = TimerService.IsRunning(_sharedAuthData.LogedUser.Id.ToString());
@@ -1160,7 +1167,7 @@ public partial class Dashboard : IDisposable
         {
             if (disposing)
             {
-                timer.Dispose();
+                timer?.Dispose();
             }
             disposedValue = true;
         }

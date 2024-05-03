@@ -20,16 +20,20 @@
 @inject AuthorizeServices authorizeServices
 @inject SharedAuthDataService _sharedAuthData
 @inject HttpClient HttpClient
+@inject IDialogService DialogService
 
 
 @if (!isLoading)
 {
-    <div class="container-fluid">
-        <div class="row flex-nowrap">
-            @Body
-            <FluentDialogProvider />
+    @if (refreshed)
+    {
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                @Body
+                <FluentDialogProvider />
+            </div>
         </div>
-    </div>
+    }
 
     <!-- Remove This -->
     <select class="form-select" @onchange="UsersSelectionChanged"
@@ -61,10 +65,15 @@
         }
     </select>
 }
+else
+{
+    <Income />
+}
 
 @code {
     bool _runInTeams = false;
     bool isLoading = true;
+    bool refreshed = true;
 
     #region Authorization Properties
     public bool SeeAdmin
@@ -100,9 +109,10 @@
         }
     }
 
-    private void _afterAuthCallBack()
+    private async Task _afterAuthCallBack()
     {
         isLoading = false;
+        await Task.Delay(1);
         StateHasChanged();
     }
 
@@ -116,10 +126,10 @@
 
     private async Task UsersSelectionChanged(ChangeEventArgs e)
     {
-        isLoading = true;
+        refreshed = false;
         var selectUserId = Convert.ToInt32(e.Value);
         await authorizeServices.Authorize(selectUserId, _runInTeams);
-        isLoading = false;
+        refreshed = true;
         StateHasChanged();
     }
 
