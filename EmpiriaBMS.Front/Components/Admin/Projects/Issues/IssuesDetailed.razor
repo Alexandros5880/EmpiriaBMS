@@ -18,7 +18,7 @@
     {
         <div class="col-12">
             <FluentStack VerticalAlignment="VerticalAlignment.Center">
-                <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+                @* <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" /> *@
                 <FluentLabel Typo="Typography.PaneHeader">
                     @Title
                 </FluentLabel>
@@ -30,17 +30,17 @@
     <div class="col-12 row" style="height: 400px; overflow-y: auto; overflow-x: hidden;">
 
         <!-- Project -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <div>
-                Project<span class="text-danger">*</span>
-            </div>
-            <div>
-                @if (CalledFromDash)
-                {
-                    <FluentLabel>@Content.ProjectName</FluentLabel>
-                }
-                else
-                {
+        <div class="col-xl-6 col-lg-6 col-12">
+            @if (CalledFromDash)
+            {
+                <FluentLabel>Project: <span class="fs-6">@Content.ProjectName</span></FluentLabel>
+            }
+            else
+            {
+                <div>
+                    Project<span class="text-danger">*</span>
+                </div>
+                <div>
                     <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Project..."
                                     Items="@_projects"
@@ -50,28 +50,29 @@
                                     OptionText="@(c => c.Name)"
                                     OptionValue="@(c => c.Id.ToString())"
                                     @bind-SelectedOption="@Project" />
-                }
-            </div>
-            @if (!validProject)
-            {
-                <div>
-                    <span class="text-warning">Field is required!</span>
                 </div>
+                @if (!validProject)
+                {
+                    <div>
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
             }
         </div>
         
         <!-- Visible To Role -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <div>
-                Visible To Role
-            </div>
-            <div>
-                @if (CalledFromDash)
-                {
-                    <FluentLabel>@Content.DisplayedRoleName</FluentLabel>
-                }
-                else
-                {
+        <div class="col-xl-6 col-lg-6 col-12">
+            @if (CalledFromDash)
+            {
+                <FluentLabel>Visible To Role: <span class="fs-6">@Content.DisplayedRoleName</span></FluentLabel>
+            }
+            else
+            {
+                <div>
+                    Visible To Role
+                </div>
+                <div>
+                
                     <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Role..."
                                     Items="_roles"
@@ -82,28 +83,29 @@
                                     OptionText="@(c => c.Name)"
                                     OptionValue="@(c => c.Id.ToString())"
                                     @bind-SelectedOption="@Role" />
-                }
-            </div>
-            @if (!validRole)
-            {
-                <div>
-                    <span class="text-warning">Field is required!</span>
+                
                 </div>
+                @if (!validRole)
+                {
+                    <div>
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
             }
         </div>
 
         <!-- Creator -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <div>
-                Creator<span class="text-danger">*</span>
-            </div>
-            <div>
-                @if (CalledFromDash)
+        <div class="col-xl-6 col-lg-6 col-12">
+            @if (CalledFromDash)
+            {
+                <FluentLabel>Creator: <span class="fs-6">@Content.CreatorName</span></FluentLabel>
+            }
+            else
                 {
-                    <FluentLabel>@Content.CreatorName</FluentLabel>
-                }
-                else
-                {
+                <div>
+                    Creator<span class="text-danger">*</span>
+                </div>
+                <div>
                     <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Creator..."
                                     Items="@_users"
@@ -113,18 +115,18 @@
                                     OptionText="@(c => c.FullName)"
                                     OptionValue="@(c => c.Id.ToString())"
                                     @bind-SelectedOption="@Creator" />
-                }
-            </div>
-            @if (!validCreator)
-            {
-                <div>
-                    <span class="text-warning">Field is required!</span>
                 </div>
+                @if (!validCreator)
+                {
+                    <div>
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
             }
         </div>
         
         <!-- ComplaintDate-->
-        <div class="col-xl-6 col-lg-6 col-md-12">
+        <div class="col-xl-6 col-lg-6 col-12">
             <FluentDatePicker Class="float-end"
                               Style="width: 100%;"
                               @bind-Value="@Content.ComplaintDate"
@@ -222,10 +224,12 @@
                                               Title="Globe"
                                               OnClick="@(() => DownloadFile(document))" />
 
-                                <FluentButton IconEnd="@(new Icons.Regular.Size32.Delete())"
-                                              Title="Globe"
-                                              OnClick="@(() => DeleteFile(document))"
-                                              Disabled="@CalledFromDash" />
+                                @if (!CalledFromDash)
+                                {
+                                    <FluentButton IconEnd="@(new Icons.Regular.Size32.Delete())"
+                                                  Title="Globe"
+                                                  OnClick="@(() => DeleteFile(document))" />
+                                }
 
                             </FluentStack>
                         </li>
