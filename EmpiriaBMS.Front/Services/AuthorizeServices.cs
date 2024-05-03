@@ -16,7 +16,7 @@ public class AuthorizeServices
     private readonly IMapper _mapper;
     private readonly SharedAuthDataService _sharedAuthData;
 
-    public Action CallBackOnAuthorize { get; set; }
+    public Func<Task> CallBackOnAuthorize { get; set; }
 
     public AuthorizeServices(
         IDataProvider dataProvider,
@@ -92,7 +92,7 @@ public class AuthorizeServices
         }
 
         if (CallBackOnAuthorize != null)
-            CallBackOnAuthorize.Invoke();
+            await CallBackOnAuthorize.Invoke();
 
         return result;
     }
