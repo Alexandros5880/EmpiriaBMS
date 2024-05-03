@@ -32,7 +32,7 @@
             @if (freePayments.Count() > 0)
             {
                 <select class="form-select" @onchange="@_onPaymentSelected">
-                    @foreach (var payment in @freePayments)
+                    @foreach (var payment in freePayments)
                     {
                         <option value="@payment.Id">
                             <span>@payment.Type.Name &ensp; @payment.Bank &ensp; @payment.Fee &ensp; @payment.PaidFee &ensp; @payment.PaymentDate?.ToEuropeFormat() &ensp;  @payment.EstimatedDate?.ToEuropeFormat() ?? "--" &ensp; </span>

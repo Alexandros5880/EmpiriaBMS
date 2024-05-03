@@ -52,11 +52,6 @@ public partial class Offers
             _projectNameFilter = string.Empty;
         }
     }
-
-    private void HandleRowFocus(FluentDataGridRow<OfferVM> row)
-    {
-        Console.WriteLine($"Row focused: {row.Item?.Project?.Name}");
-    }
     #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -172,8 +167,9 @@ public partial class Offers
         _isDialogOdepened = true;
     }
 
-    private void EditOffer(MouseEventArgs e)
+    private void _edit(OfferVM offer)
     {
+        _selectedOffer = offer;
         if (_selectedOffer != null && _selectedOffer.Id != 0)
         {
             _dialog.Show();
@@ -181,8 +177,9 @@ public partial class Offers
         }  
     }
 
-    private void DeleteOffer(MouseEventArgs e)
+    private void _delete(OfferVM offer)
     {
+        _selectedOffer = offer;
         if (_selectedOffer != null && _selectedOffer.Id != 0)
         {
             _deleteDialog.Show();

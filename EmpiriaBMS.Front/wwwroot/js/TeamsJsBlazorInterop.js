@@ -155,7 +155,6 @@ export function initializeCanvas(canvas) {
         const touches = evt.changedTouches;
         offsetX = canvas.getBoundingClientRect().left;
         offsetY = canvas.getBoundingClientRect().top;
-        console.log(offsetX, offsetY)
         for (let i = 0; i < touches.length; i++) {
             ongoingTouches.push(copyTouch(touches[i]));
         }

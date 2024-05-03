@@ -1,82 +1,86 @@
-﻿@using EmpiriaBMS.Front.Services
-
-@inject IMapper Mapper
+﻿@using EmpiriaBMS.Front.Components.Admin.Projects.Issues
+@using EmpiriaBMS.Front.Services
 @inject IDataProvider DataProvider
+@inject IMapper Mapper
+@inject IDialogService DialogService
 
-<h3>My Issues</h3>
+<div class="row gx-5 pb-1" style="height: min(78vh, 1200px); overflow-y: auto;">
 
-<div>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th scope="col">Project</th>
-                <th scope="col">Closed</th>
-                @* <th scope="col">About</th> *@
-                <th scope="col">Description</th>
-                <th scope="col">Evaluation</th>
-                <th scope="col">Verification</th>
-                <th scope="col">VerificationDate</th>
-                <th scope="col">Solution Date</th>
-                <th scope="col">Solution</th>
-            </tr>
-        </thead>
-        <tbody class="table-group-divider">
-            @foreach (var issue in Source)
+    <div class="col-12" ;>
+        <h3>Issues</h3>
+    </div>
+
+    <div class="col-xl-7 col-lg-7 col-12">
+        <div class="ps-1 border rounded shadow-sm" style="height: 500px; overflow-x: auto;">
+            <div>
+                <FluentDataGrid Items="@FilteredItems"
+                                ResizableColumns=true
+                                Pagination="@pagination"
+                                TGridItem="IssueVM"
+                                OnRowFocus="OnRowFocused"
+                                Style="height: 100%;"
+                                GridTemplateColumns="auto 160 120px 120px 120px 120px 120px">
+
+                    <TemplateColumn Title="Name"
+                                    Sortable="true"
+                                    InitialSortDirection=SortDirection.Descending
+                                    IsDefaultSortColumn=true>
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterString"
+                                              Placeholder="Project..."
+                                              @oninput="@HandleFilter" />
+                            </div>
+                        </ColumnOptions>
+                        <ChildContent>
+                            @(context.ProjectName)
+                        </ChildContent>
+                    </TemplateColumn>
+
+                    <PropertyColumn Property="@(p => p.DisplayedRoleName)" Sortable="true" Title="Displayed Role" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.CreatorName)" Sortable="true" Title="Creator" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.SolutionDate)" Format="dd-mm-yyy" Sortable="true" Title="Solution Date" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.VerificationDate)" Format="dd-mm-yyy" Sortable="true" Title="Verification Date" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.IsClose)" Sortable="true" Title="IsClose" Align="@Align.Start" />
+
+                </FluentDataGrid>
+            </div>
+            <div style="min-width: 50%;">
+                <FluentPaginator State="@pagination">
+                    <SummaryTemplate>
+                        There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                    </PaginationTextTemplate>
+                </FluentPaginator>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-5 col-lg-5 col-12
+                mt-xl-0 mt-lg-0 mt-md-2 mt-sm-2 mt-xs-2
+                mb-xl-0 mb-lg-0 mb-md-2 mb-sm-2 mb-xs-2">
+        <div class="border rounded shadow-sm" style="height: 500px;">
+            <div>
+                <FluentStack VerticalAlignment="VerticalAlignment.Center">
+                    <FluentLabel Typo="Typography.PaneHeader" Class="ms-3 mb-2">
+                        Detaileis
+                    </FluentLabel>
+                </FluentStack>
+            </div>
+            @if (_selectedRecord != null)
             {
-                <tr>
-                    <td>
-                        @(Source.IndexOf(issue) + 1)
-                    </td>
-
-                    <td>
-                        <input class="form-check-input big-checkbox" type="checkbox" @bind="issue.IsClose" />
-                    </td>
-
-                    <td>
-                        <label>@(issue.Project?.Name ?? "--")</label>
-                    </td>
-
-                    @* <td>
-                        <label>@issue.About</label>
-                    </td> *@
-
-                    <td>
-                        <label>@issue.Description</label>
-                    </td>
-
-                    <td>
-                        <label>@issue.Evaluation</label>
-                    </td>
-
-                    <td>
-                        <label>@issue.Verification</label>
-                    </td>
-
-                    <td>
-                        <label>@issue.VerificationDate?.ToString("yyyy-MM-dd HH:mm:ss")</label>
-                    </td>
-
-                    <td>
-                        <label>@issue.SolutionDate?.ToString("yyyy-MM-dd HH:mm:ss")</label>
-                    </td>
-
-                    <td>
-                        <textarea class="form-control"
-                                  rows="1"
-                                  @bind="@issue.Solution"
-                                  style="min-width: 200px;">
-                        </textarea>
-                    </td>
-                </tr>
+                <!-- Detailed Selected Issues -->
+                <IssuesDetailed Content="@_selectedRecord"
+                                DisplayActions="true"
+                                CalledFromDash="true"
+                                OnCancel="_editOnCancel"
+                                OnSave="SaveDetailed" />
             }
-        </tbody>
-    </table>
-
-    <div class="d-flex flex-row-reverse bd-highlight">
-        <button type="button" class="btn btn-light" @onclick=@(async () => await HandleValidSubmit())>
-            Save
-        </button>
+        </div>
     </div>
 
 </div>
