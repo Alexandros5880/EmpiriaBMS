@@ -1,25 +1,24 @@
 ﻿@page "/login"
-
-@inject MicrosoftTeams MicrosoftTeams
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager MyNavigationManager
 
 <h3>Login</h3>
 
-<div class="mt-3">
-    <h5>Run In Teams:  </h5> @_runInTeams
-</div>
+<h6>Test</h6>
 
-
-@code {
-
-    public bool _runInTeams { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            _runInTeams = await MicrosoftTeams.IsInTeams();
-        }
-    }
+@if (errorMessage != null)
+{
+    <p class="text-danger">@errorMessage</p>
 }
+
+<form @onsubmit="HandleSubmit">
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" id="username" @bind="username" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" @bind="password" />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
