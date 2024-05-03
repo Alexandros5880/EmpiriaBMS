@@ -48,7 +48,7 @@ else
     <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
 
         <!-- Dashboard -->
-        <FluentTab Class="my-fluent-tab" 
+        <FluentTab Class="my-fluent-tab mb-3" 
                    LabelClass="my-fluent-tab-label"
                    Label="Home"
                    Icon="@(new Icons.Regular.Size48.ScanDash())"
@@ -227,14 +227,14 @@ else
                                                     *@
                                                     @foreach (var project in _filteredProjects)
                                                     {
-                                                        <tr class="align-middle"
-                                                            @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                        <tr class="align-middle">
 
                                                             <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "selected_table_projects_row"))"
-                                                                style="word-wrap: break-word; max-width: 110px;">
+                                                                style="word-wrap: break-word; max-width: 110px;"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
 
                                                                 @if (@GetProjectMenHours(project.Id) > project.EstimatedHours)
                                                                 {
@@ -259,28 +259,32 @@ else
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "selected_table_projects_row"))"
-                                                                style="word-wrap: break-word; max-width: 110px;">
+                                                                style="word-wrap: break-word; max-width: 110px;"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
                                                                 <labe>@project.Name</labe>
                                                             </td>
 
                                                             <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_projects_row"))">
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
                                                                 <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
                                                             </td>
 
                                                             <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_projects_row"))">
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
                                                                 <label>@(project.EstimatedCompleted.ToString("##0.0")) %</label>
                                                             </td>
 
                                                             <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_projects_row"))">
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
                                                                 <label>@project.DeadLine?.ToEuropeFormat()</label>
                                                             </td>
 
