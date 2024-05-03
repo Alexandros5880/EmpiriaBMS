@@ -204,6 +204,7 @@ else
                                             <table class="table table-hover table-success text-center">
                                                 <thead>
                                                     <tr>
+                                                        <th scope="col" class="sticky-header">Status</th>
                                                         <th scope="col" class="sticky-header">Project</th>
                                                         <th scope="col" class="sticky-header">Work Package Declared Completed</th>
                                                         <th scope="col" class="sticky-header">Estimated Hours Completed</th>
@@ -219,18 +220,45 @@ else
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @*
+                                                        @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-warning" : ""))
+                                                        @(( project.DeadLine < DateTime.Now ? "table-danger" : ""))
+                                                        @(( project.EstimatedCompleted >= 100 || !project.Active ? "table-secondary" : ""))
+                                                    *@
                                                     @foreach (var project in _filteredProjects)
                                                     {
-                                                        <tr class="align-middle
-                                                                @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-warning" : ""))
-                                                                @(( project.DeadLine < DateTime.Now ? "table-danger" : ""))
-                                                                @(( project.EstimatedCompleted >= 100 || !project.Active ? "table-secondary" : ""))"
+                                                        <tr class="align-middle"
                                                             @onclick="@(async () => await OnSelectProject(project.Id))">
 
                                                             <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_row"))"
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                                style="word-wrap: break-word; max-width: 110px;">
+
+                                                                @if (@GetProjectMenHours(project.Id) > project.EstimatedHours)
+                                                                {
+                                                                    <span class="icon-worked-hours-passed"></span>
+                                                                }
+                                                                else if (project.DeadLine < DateTime.Now)
+                                                                {
+                                                                    <span class="icon-missed-deadline"></span>
+                                                                }
+                                                                else if (project.EstimatedCompleted >= 100 || !project.Active)
+                                                                {
+                                                                    <span class="icon-estimation-completion-passed"></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="icon-all-ok"></span>
+                                                                }
+
+                                                            </td>
+
+                                                            <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
                                                                 style="word-wrap: break-word; max-width: 110px;">
                                                                 <labe>@project.Name</labe>
                                                             </td>
@@ -238,21 +266,21 @@ else
                                                             <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_row"))">
+                                                                                    ? "" : "selected_table_projects_row"))">
                                                                 <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
                                                             </td>
 
                                                             <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_row"))">
+                                                                                    ? "" : "selected_table_projects_row"))">
                                                                 <label>@(project.EstimatedCompleted.ToString("##0.0")) %</label>
                                                             </td>
 
                                                             <td class="align-middle
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_row"))">
+                                                                                    ? "" : "selected_table_projects_row"))">
                                                                 <label>@project.DeadLine?.ToEuropeFormat()</label>
                                                             </td>
 
@@ -261,7 +289,7 @@ else
                                                                 <td class="align-middle
                                                                 @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_row"))">
+                                                                                    ? "" : "selected_table_projects_row"))">
                                                                     <span class="majesticons--chat-2-text"
                                                                           @onclick="@OnAddIssueClick">
                                                                     </span>
@@ -273,7 +301,7 @@ else
                                                                 <td class="align-middle
                                                                 @((_selectedProject == null ||
                                                                         !_selectedProject.Id.Equals(project.Id)
-                                                                                        ? "" : "selected_table_row"))">
+                                                                                        ? "" : "selected_table_projects_row"))">
                                                                     @if (project.Category?.CanAssignePM ?? false)
                                                                     {
                                                                         @if (!string.IsNullOrEmpty(project.PmName))
@@ -348,7 +376,7 @@ else
                                                             <td class="align-middle
                                                             @(((_selectedDiscipline == null
                                                                 || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                    ? "" : "selected_table_row"))"
+                                                                    ? "" : "selected_table_disciplines_row"))"
                                                                 style="word-wrap: break-word; max-width: 100px;">
                                                                 <labe>@discipline.Type.Name</labe>
                                                             </td>
@@ -356,7 +384,7 @@ else
                                                             <td class="align-middle text-center
                                                             @(((_selectedDiscipline == null
                                                                 || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                    ? "" : "selected_table_row"))"
+                                                                    ? "" : "selected_table_disciplines_row"))"
                                                                 style="word-wrap: break-word; max-width: 100px;">
                                                                 <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
                                                             </td>
@@ -366,7 +394,7 @@ else
                                                                 <td class="align-middle
                                                                 @((_selectedDiscipline == null ||
                                                                         !_selectedDiscipline.Id.Equals(discipline.Id)
-                                                                                        ? "" : "selected_table_row"))">
+                                                                                        ? "" : "selected_table_disciplines_row"))">
                                                                     <span class="clarity--assign-user-line"
                                                                           @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
                                                                     </span>
@@ -433,21 +461,21 @@ else
                                                                 <td class="align-middle
                                                             @(((_selectedDraw == null ||
                                                                     !_selectedDraw.Id.Equals(draw.Id))
-                                                                        ? "" : "selected_table_row"))">
+                                                                        ? "" : "selected_table_deliverables_row"))">
                                                                     <div class="align-middle h-100"><labe>@draw.Type.Name</labe></div>
                                                                 </td>
 
                                                                 <td class="align-middle
                                                             @(((_selectedDraw == null ||
                                                                     !_selectedDraw.Id.Equals(draw.Id))
-                                                                        ? "" : "selected_table_row"))">
+                                                                        ? "" : "selected_table_deliverables_row"))">
                                                                     <label>@GetDrawingMenHours(draw.Id) h</label>
                                                                 </td>
 
                                                                 <td class="align-middle
                                                             @(((_selectedDraw == null ||
                                                                 !_selectedDraw.Id.Equals(draw.Id))
-                                                                    ? "" : "selected_table_row"))">
+                                                                    ? "" : "selected_table_deliverables_row"))">
                                                                     <label>@draw.CompletionEstimation %</label>
                                                                 </td>
 
@@ -456,7 +484,7 @@ else
                                                                     <td class="align-middle
                                                                 @((_selectedDraw == null ||
                                                                         !_selectedDraw.Id.Equals(draw?.Id)
-                                                                                        ? "" : "selected_table_row"))">
+                                                                                        ? "" : "selected_table_deliverables_row"))">
                                                                         <span class="clarity--assign-user-line"
                                                                               @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
                                                                         </span>
@@ -514,7 +542,7 @@ else
                                                                 <td class="align-middle
                                                         @(((_selectedOther == null ||
                                                                 !_selectedOther.Id.Equals(_other.Id))
-                                                                    ? "" : "selected_table_row"))"
+                                                                    ? "" : "selected_table_supportiveworks_row"))"
                                                                     style="min-width: 110px;">
                                                                     <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
                                                                 </td>
@@ -522,7 +550,7 @@ else
                                                                 <td class="align-middle
                                                         @(((_selectedOther == null ||
                                                                 !_selectedOther.Id.Equals(_other.Id))
-                                                                    ? "" : "selected_table_row"))"
+                                                                    ? "" : "selected_table_supportiveworks_row"))"
                                                                     style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                                                     <label>@GetOtherMenHours(_other.Id) h</label>
                                                                 </td>

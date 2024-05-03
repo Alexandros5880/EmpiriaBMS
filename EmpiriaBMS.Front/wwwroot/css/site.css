@@ -154,6 +154,19 @@ fluent-accordion-item {
 
 
 /* Selected Table Row */
+.selected_table_projects_row {
+    background-color: rgba(209,231,221,0.7) !important;
+}
+.selected_table_disciplines_row {
+    background-color: rgba(248,215,218,0.7) !important;
+}
+.selected_table_deliverables_row {
+    background-color: rgba(207,226,255,0.7) !important;
+}
+.selected_table_supportiveworks_row {
+    background-color: rgba(255,243,205, 0.7) !important;
+}
+
 .selected_table_row {
     background-color: var(--selected-table-row-bg-color) !important;
     color: var(--selected-table-row-color) !important;
