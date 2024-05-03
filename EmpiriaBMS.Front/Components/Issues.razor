@@ -64,15 +64,15 @@
                 mt-xl-0 mt-lg-0 mt-md-2 mt-sm-2 mt-xs-2
                 mb-xl-0 mb-lg-0 mb-md-2 mb-sm-2 mb-xs-2">
         <div class="border rounded shadow-sm" style="height: 500px;">
+            <div>
+                <FluentStack VerticalAlignment="VerticalAlignment.Center">
+                    <FluentLabel Typo="Typography.PaneHeader" Class="ms-3 mb-2">
+                        Detaileis
+                    </FluentLabel>
+                </FluentStack>
+            </div>
             @if (_selectedRecord != null)
             {
-                <div>
-                    <FluentStack VerticalAlignment="VerticalAlignment.Center">
-                        <FluentLabel Typo="Typography.PaneHeader" Class="ms-3 mb-2">
-                            Detaileis
-                        </FluentLabel>
-                    </FluentStack>
-                </div>
                 <!-- Detailed Selected Issues -->
                 <IssuesDetailed Content="@_selectedRecord"
                                 DisplayActions="true"
