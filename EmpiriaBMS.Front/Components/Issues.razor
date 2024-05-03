@@ -4,16 +4,14 @@
 @inject IMapper Mapper
 @inject IDialogService DialogService
 
-<div class="row" style="background-color: green; height: min(72vh, 980px);">
+<div class="row gx-5" style="height: 90%;">
 
-    <div class="col-12">
+    <div class="col-12" ;>
         <h3>Issues</h3>
     </div>
 
-    <div class="col-12 row g-3">
-
-        <div class="col card shadow" style="height: 400px; overflow-x: auto;">
-
+    <div class="col-xl-7 col-lg-7 col">
+        <div class="ps-1 border rounded shadow" style="height: 500px; overflow-x: auto;">
             <div>
                 <FluentDataGrid Items="@FilteredItems"
                                 ResizableColumns=true
@@ -59,10 +57,11 @@
                     </PaginationTextTemplate>
                 </FluentPaginator>
             </div>
-
         </div>
+    </div>
 
-        <div class="col card shadow" style="height: 400px;">
+    <div class="col-xl-5 col-lg-5 col">
+        <div class="border rounded shadow" style="height: 500px;">
             @if (_selectedRecord != null)
             {
                 <!-- Detailed Selected Issues -->
@@ -74,7 +73,6 @@
                                 OnSave="SaveDetailed" />
             }
         </div>
-
     </div>
 
 </div>
