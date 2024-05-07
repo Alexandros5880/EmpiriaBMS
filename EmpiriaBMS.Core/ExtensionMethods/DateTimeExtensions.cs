@@ -14,10 +14,10 @@ public static class DateTimeExtensions
         return dt.AddDays(-1 * diff).Date;
     }
 
-    public static string ToEuropeFormat(this DateTime date) => date.ToString("dd/MM/yyyy");
+    public static string ToEuropeFormat(this DateTime date) => date.ToString("dd-MM-yyyy");
 
-    public static string ToAmericanDateFormat(this DateTime dateTime) => dateTime.ToString("MM/dd/yyyy");
+    public static string ToAmericanDateFormat(this DateTime dateTime) => dateTime.ToString("MM-dd-yyyy");
 
-    public static string ToAsianDateFormat(this DateTime dateTime) => dateTime.ToString("yyyy/MM/dd");
+    public static string ToAsianDateFormat(this DateTime dateTime) => dateTime.ToString("yyyy-MM-dd");
 
 }

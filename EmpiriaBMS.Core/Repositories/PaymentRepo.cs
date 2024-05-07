@@ -43,6 +43,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
                                   .ThenInclude(i => i.Type)
                                   .Include(r => r.Invoice)
                                   .ThenInclude(i => i.Project)
+                                  .Include(r => r.Type)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
@@ -55,6 +56,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
                                  .ThenInclude(i => i.Type)
                                  .Include(r => r.Invoice)
                                  .ThenInclude(i => i.Project)
+                                 .Include(r => r.Type)
                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);

@@ -23,7 +23,7 @@ public partial class Payments : ComponentBase, IDisposable
     {
         await _getProjectsInvoices();
         await _getPaymentsTypes();
-        await _getAllPayments();
+        //await _getAllPayments();
 
         StateHasChanged();
     }
@@ -69,27 +69,6 @@ public partial class Payments : ComponentBase, IDisposable
         }
     }
 
-    private async Task _getAllPayments()
-    {
-        try
-        {
-            // Get My Invoices
-            var dtos = await _dataProvider.Payments.GetAll();
-            var payments = _mapper.Map<List<PaymentVM>>(dtos);
-            _allPayments.Clear();
-            payments.ForEach(i => {
-                i.Type = null;
-                i.Invoice = null;
-                _allPayments.Add(i);
-            });
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
     private async Task _getInvoicePayments(int invoiceId)
     {
         try
@@ -98,7 +77,8 @@ public partial class Payments : ComponentBase, IDisposable
             var dtos = await _dataProvider.Invoices.GetInvoicesPayments(invoiceId);
             var payments = _mapper.Map<List<PaymentVM>>(dtos);
             _invoicesPayments.Clear();
-            payments.ForEach(i => {
+            payments.ForEach(i =>
+            {
                 i.Type = null;
                 i.Invoice = null;
                 _invoicesPayments.Add(i);
@@ -116,21 +96,6 @@ public partial class Payments : ComponentBase, IDisposable
         var selectedInvoiceId = Convert.ToInt32((string)e.Value);
         _selectedInvoice = _projectsInvoices.FirstOrDefault(i => i.Id == selectedInvoiceId);
         await _getInvoicePayments(selectedInvoiceId);
-    }
-
-    private void _onPaymentSelected(ChangeEventArgs e)
-    {
-        var selectedPaymentId = Convert.ToInt32((string)e.Value);
-        var selectedPayment = _allPayments.FirstOrDefault(i => i.Id == selectedPaymentId);
-        if (selectedPayment != null)
-        {
-            var newPayment = new PaymentVM(selectedPayment);
-            newPayment.Invoice = null;
-            newPayment.Type = null;
-            newPayment.InvoiceId = _selectedInvoice.Id;
-            newPayment.Id = 0;
-            _invoicesPayments.Add(newPayment);
-        }
     }
 
     private void _deletePayment(PaymentVM payment)
@@ -215,6 +180,16 @@ public partial class Payments : ComponentBase, IDisposable
             disposedValue = true;
         }
     }
+
+    #region Display Helper Functions
+    private string _displayDayesUntilPayment(PaymentVM payment)
+    {
+        var paymentDay = @payment.PaymentDate ?? DateTime.Now;
+        var diffTime = DateTime.Now - paymentDay;
+        return diffTime.DisplayHMS();
+    }
+    #endregion
+
 
     public void Dispose()
     {

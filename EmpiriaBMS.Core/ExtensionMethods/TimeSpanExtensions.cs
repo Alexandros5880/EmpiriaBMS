@@ -8,7 +8,7 @@ namespace System;
 
 public static class TimeSpanExtensions
 {
-    public static string DisplayHM(this TimeSpan date) => date.ToString(@"hh\:mm");
+    public static string DisplayHM(this TimeSpan time) => $"{time.Hours:D2}:{time.Minutes:D2}";
 
-    public static string DisplayHMS(this TimeSpan time) => time.ToString(@"hh\\:mm\\:ss");
+    public static string DisplayHMS(this TimeSpan time) => $"{time.Hours:D2}:{time.Minutes:D2}:{time.Seconds:D2}";
 }

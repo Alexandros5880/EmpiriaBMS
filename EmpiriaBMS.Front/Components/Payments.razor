@@ -13,33 +13,14 @@
     <div class="col-4">
         @if (_projectsInvoices.Count() > 0)
         {
-            <select class="form-select" @onchange="@(async (e) => await _onInvoiceSelected(e))">
-                @foreach (var invoice in @_projectsInvoices)
-                {
-                    <option value="@invoice.Id">
-                        <span>@invoice.Date &ensp; @invoice.Mark &ensp; @invoice.Number &ensp; @invoice.Total &ensp; @invoice.Vat &ensp; @invoice.Fee</span>
-                    </option>
-                }
-            </select>
-        }
-    </div>
-
-    <!-- Selecte Payment -->
-    <div class="col-4">
-        @if (_selectedInvoice != null)
-        {
-            var freePayments = _allPayments.Where(i => !_invoicesPayments.Select(pi => pi.Id).Contains(i.Id));
-            @if (freePayments.Count() > 0)
-            {
-                <select class="form-select" @onchange="@_onPaymentSelected">
-                    @foreach (var payment in freePayments)
-                    {
-                        <option value="@payment.Id">
-                            <span>@payment.Type.Name &ensp; @payment.Bank &ensp; @payment.Fee &ensp; @payment.PaidFee &ensp; @payment.PaymentDate?.ToEuropeFormat() &ensp;  @payment.EstimatedDate?.ToEuropeFormat() ?? "--" &ensp; </span>
-                        </option>
-                    }
-                </select>
-            }
+            <FluentSelect TOption="InvoiceVM"
+                          Label="Select a invoice"
+                          Items="@_projectsInvoices"
+                          Width="200px"
+                          Height="250px"
+                          OptionValue="@(i => i.Id.ToString())"
+                          OptionText="@(i => $"Mark: {i.Mark}, Var: {i.Vat}, Fee: {i.Fee}, Total: {i.Total}")"
+                          @onchange="@(async (e) => await _onInvoiceSelected(e))" />
         }
     </div>
 
@@ -121,7 +102,7 @@
                     </td>
 
                     <td style="min-width: 150px;">
-                        <span>@((DateTime.Now - (@payment.PaymentDate ?? DateTime.Now)).DisplayHMS())</span>
+                        <span>@_displayDayesUntilPayment(payment)</span>
                     </td>
 
                     <td style="min-width: 150px;">
