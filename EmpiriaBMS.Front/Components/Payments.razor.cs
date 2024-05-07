@@ -9,21 +9,18 @@ public partial class Payments : ComponentBase, IDisposable
 {
     private bool disposedValue;
 
-    private ObservableCollection<InvoiceVM> _projectsInvoices = new ObservableCollection<InvoiceVM>();
+    private ObservableCollection<InvoiceVM> _invoices = new ObservableCollection<InvoiceVM>();
     private ObservableCollection<PaymentTypeVM> _types = new ObservableCollection<PaymentTypeVM>();
-    private ObservableCollection<PaymentVM> _allPayments = new ObservableCollection<PaymentVM>();
-    private ObservableCollection<PaymentVM> _invoicesPayments = new ObservableCollection<PaymentVM>();
+    private ObservableCollection<PaymentVM> _payments = new ObservableCollection<PaymentVM>();
     private List<PaymentVM> _deleted = new List<PaymentVM>();
 
     [Parameter]
     public ProjectVM Project { get; set; }
-    private InvoiceVM _selectedInvoice;
 
     public async Task Prepair()
     {
         await _getProjectsInvoices();
         await _getPaymentsTypes();
-        //await _getAllPayments();
 
         StateHasChanged();
     }
@@ -35,15 +32,14 @@ public partial class Payments : ComponentBase, IDisposable
             // Get My Invoices
             var dtos = await _dataProvider.Projects.GetInvoices(Project.Id);
             var invoices = _mapper.Map<List<InvoiceVM>>(dtos);
-            _projectsInvoices.Clear();
+            _invoices.Clear();
             invoices.ForEach(i => {
                 i.Type = null;
                 i.Project = null;
-                _projectsInvoices.Add(i);
+                _invoices.Add(i);
             });
 
-            _selectedInvoice = _projectsInvoices.FirstOrDefault();
-            await _getInvoicePayments(_selectedInvoice.Id);
+            await _getPayments();
         }
         catch (Exception ex)
         {
@@ -69,19 +65,19 @@ public partial class Payments : ComponentBase, IDisposable
         }
     }
 
-    private async Task _getInvoicePayments(int invoiceId)
+    private async Task _getPayments()
     {
         try
         {
             // Get My Invoices
-            var dtos = await _dataProvider.Invoices.GetInvoicesPayments(invoiceId);
+            var dtos = await _dataProvider.Invoices.GetProjectsPayments(Project.Id);
             var payments = _mapper.Map<List<PaymentVM>>(dtos);
-            _invoicesPayments.Clear();
+            _payments.Clear();
             payments.ForEach(i =>
             {
                 i.Type = null;
                 i.Invoice = null;
-                _invoicesPayments.Add(i);
+                _payments.Add(i);
             });
         }
         catch (Exception ex)
@@ -91,26 +87,21 @@ public partial class Payments : ComponentBase, IDisposable
         }
     }
 
-    private async Task _onInvoiceSelected(ChangeEventArgs e)
-    {
-        var selectedInvoiceId = Convert.ToInt32((string)e.Value);
-        _selectedInvoice = _projectsInvoices.FirstOrDefault(i => i.Id == selectedInvoiceId);
-        await _getInvoicePayments(selectedInvoiceId);
-    }
-
     private void _deletePayment(PaymentVM payment)
     {
         if (payment.Id != 0)
             _deleted.Add(payment);
-        _invoicesPayments.Remove(payment);
+        _payments.Remove(payment);
     }
 
     private void _addPayment()
     {
-        _invoicesPayments.Add(new PaymentVM()
+        _payments.Add(new PaymentVM()
         {
-            InvoiceId = _selectedInvoice.Id,
+            InvoiceId = _invoices.FirstOrDefault().Id,
             TypeId = _types.FirstOrDefault().Id,
+            EstimatedDate = DateTime.Now.AddMonths(1),
+            PaymentDate = DateTime.Now.AddMonths(1),
         });
     }
 
@@ -125,10 +116,11 @@ public partial class Payments : ComponentBase, IDisposable
                 {
                     await _dataProvider.Payments.Delete(payment.Id);
                 }
+                _deleted.Clear();
             }
 
             // For Update
-            var updatedPayments = _invoicesPayments.Where(i => i.Id != 0).ToList();
+            var updatedPayments = _payments.Where(i => i.Id != 0).ToList();
             if (updatedPayments.Count() > 0)
             {
                 foreach (var payment in updatedPayments)
@@ -140,9 +132,9 @@ public partial class Payments : ComponentBase, IDisposable
             }
 
             // For Add
-            if (_invoicesPayments.Any(i => i.Id == 0))
+            if (_payments.Any(i => i.Id == 0))
             {
-                var newPayments = _invoicesPayments.Where(i => i.Id == 0).ToList();
+                var newPayments = _payments.Where(i => i.Id == 0).ToList();
                 foreach (var payment in newPayments)
                 {
                     payment.Type = null;
@@ -166,14 +158,12 @@ public partial class Payments : ComponentBase, IDisposable
         {
             if (disposing)
             {
-                _projectsInvoices.Clear();
-                _projectsInvoices = null;
+                _invoices.Clear();
+                _invoices = null;
                 _types.Clear();
                 _types = null;
-                _allPayments.Clear();
-                _allPayments = null;
-                _invoicesPayments.Clear();
-                _invoicesPayments = null;
+                _payments.Clear();
+                _payments = null;
                 _deleted.Clear();
                 _deleted = null;
             }

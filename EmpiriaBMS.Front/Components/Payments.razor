@@ -7,22 +7,7 @@
      style="max-width: 1000px !important; margin: 0 auto;">
 
     <!-- Title -->
-    <h3 class="col-5 text-start">Payments</h3>
-
-    <!-- Selecte Invoice -->
-    <div class="col-5">
-        @if (_projectsInvoices.Count() > 0)
-        {
-            <FluentSelect TOption="InvoiceVM"
-                          Label="Select an invoice:"
-                          Items="@_projectsInvoices"
-                          Width="400px"
-                          Height="250px"
-                          OptionValue="@(i => i.Id.ToString())"
-                          OptionText="@(i => $"Mark: {i.Mark}, Var: {i.Vat}, Fee: {i.Fee}, Total: {i.Total}")"
-                          @onchange="@(async (e) => await _onInvoiceSelected(e))" />
-        }
-    </div>
+    <h3 class="col-10 text-start">Payments</h3>
 
     <!-- Add New Invoice -->
     <span class="grommet-icons--add text-end col-2"
@@ -35,10 +20,11 @@
     <table class="table table-hover text-center text-nowrap">
         <thead class="table-success">
             <tr>
+                <th scope="col" class="sticky-header">Invoice</th>
                 <th scope="col" class="sticky-header">Type</th>
                 <th scope="col" class="sticky-header">Bank</th>
-                <th scope="col" class="sticky-header">Fee</th>
                 <th scope="col" class="sticky-header">Paid Fee</th>
+                <th scope="col" class="sticky-header">Fee</th>
                 <th scope="col" class="sticky-header">Description</th>
                 <th scope="col" class="sticky-header">Estimated Date</th>
                 <th scope="col" class="sticky-header">Payment Date</th>
@@ -48,12 +34,25 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var payment in _invoicesPayments)
+            @foreach (var payment in _payments)
             {
                 <tr class="align-middle">
 
+                    <td style="min-width: 400px;">
+                        <select class="form-select"
+                                @bind="@payment.InvoiceId" style="min-width: 150px;">
+                            @foreach (var i in @_invoices)
+                            {
+                                <option value="@i.Id">
+                                    <span>Mark: @i.Mark, Var: @i.Vat, Fee: @i.Fee, Total: @i.Total</span>
+                                </option>
+                            }
+                        </select>
+                    </td>
+
                     <td style="min-width: 150px;">
-                        <select class="form-select" @bind="@payment.TypeId" style="min-width: 150px;">
+                        <select class="form-select"
+                                @bind="@payment.TypeId" style="min-width: 150px;">
                             @foreach (var type in @_types)
                             {
                                 <option value="@type.Id">
@@ -63,42 +62,38 @@
                         </select>
                     </td>
 
-                    <td style="min-width: 100px;">
+                    <td style="min-width: 140px;">
                         <input type="text"
                                class="form-control"
-                               @bind="@payment.Bank">
-                    </td>
-
-                    <td style="min-width: 100px;">
-                        <input type="number"
-                               class="form-control"
-                               @bind="@payment.Fee">
+                               @bind-value="@payment.Bank">
                     </td>
 
                     <td style="min-width: 150px;">
                         <input type="number"
                                class="form-control"
-                               @bind="@payment.PaidFee">
+                               @bind-value="@payment.PaidFee">
+                    </td>
+
+                    <td style="min-width: 100px;">
+                        <input type="number"
+                               class="form-control"
+                               @bind-value="@payment.Fee">
                     </td>
 
                     <td style="min-width: 200px;">
-                        <textarea class="form-control"
-                                  rows="1"
-                                  @bind="@payment.Description"
-                                  style="min-width: 200px;">
-                        </textarea>
+                        <FluentTextArea Style="min-width: 200px;" @bind-Value="@payment.Description" Rows="1" Resize="TextAreaResize.Vertical"/>
                     </td>
 
                     <td style="min-width: 150px;">
                         <input type="date"
                                class="form-control"
-                               @bind="@payment.EstimatedDate">
+                               @bind-value="@payment.EstimatedDate">
                     </td>
 
                     <td style="min-width: 150px;">
                         <input type="date"
                                class="form-control"
-                               @bind="@payment.PaymentDate">
+                               @bind-value="@payment.PaymentDate">
                     </td>
 
                     <td style="min-width: 150px;">
@@ -106,7 +101,7 @@
                     </td>
 
                     <td style="min-width: 150px;">
-                        <span>@(@payment.Fee = @payment.PaidFee)</span>
+                        <span>@(@payment.Fee - @payment.PaidFee)</span>
                     </td>
 
                     <td style="min-width: 50px;">
@@ -122,6 +117,9 @@
 
 <div class="row">
     <div class="col-12 text-end">
-        <button type="button" class="btn btn-outline-secondary" @onclick="@(async () => await _save())">Save</button>
+        <FluentButton Appearance="Appearance.Outline"
+                      OnClick="@(async () => await _save())">
+            Save
+        </FluentButton>
     </div>
 </div>

@@ -86,15 +86,20 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
         }
     }
 
-    public async Task<ICollection<PaymentDto>> GetInvoicesPayments(int invoiceId)
+    public async Task<ICollection<PaymentDto>> GetProjectsPayments(int projectId)
     {
-        if (invoiceId == 0)
-            throw new ArgumentNullException(nameof(invoiceId));
+        if (projectId == 0)
+            throw new ArgumentNullException(nameof(projectId));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var projectsInvoice = await _context.Set<Invoice>()
+                                                .Where(i => i.ProjectId == projectId)
+                                                .Select(i => i.Id)
+                                                .ToListAsync();
+
             var payments = await _context.Set<Payment>()
-                                         .Where(i => i.InvoiceId == invoiceId)
+                                         .Where(p => projectsInvoice.Contains(p.InvoiceId))
                                          .ToListAsync();
 
             var dtos = Mapping.Mapper.Map<List<PaymentDto>>(payments);
