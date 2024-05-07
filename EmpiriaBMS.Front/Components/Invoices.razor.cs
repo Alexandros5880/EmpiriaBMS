@@ -18,6 +18,9 @@ public partial class Invoices : ComponentBase, IDisposable
     [Parameter]
     public ProjectVM Project { get; set; }
 
+    [Parameter]
+    public EventCallback OnSave { get; set; }
+
     public async Task Prepair()
     {
         await _getInvoicesTypes();
@@ -162,7 +165,7 @@ public partial class Invoices : ComponentBase, IDisposable
             // TODO: Log Error
         }
 
-        await Prepair();
+        await OnSave.InvokeAsync();
     }
 
     protected virtual void Dispose(bool disposing)

@@ -1218,7 +1218,7 @@ else
             <div class="col-12 justify-content-center">
                 @if (_selectedProject != null)
                 {
-                    <Invoices @ref="@_invoicesCompoment" Project="@_selectedProject" />
+                    <Invoices @ref="@_invoicesCompoment" Project="@_selectedProject" OnSave="CloseAddInvoiceClick" />
                 }
                 else
                 {
@@ -1247,7 +1247,7 @@ else
             <div class="col-12 justify-content-center">
                 @if (_selectedProject != null)
                 {
-                    <Payments @ref="@_paymentsCompoment" Project="@_selectedProject" />
+                    <Payments @ref="@_paymentsCompoment" Project="@_selectedProject" OnSave="CloseAddPaymentClick" />
                 }
                 else
                 {
