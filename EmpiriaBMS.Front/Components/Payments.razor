@@ -7,16 +7,16 @@
      style="max-width: 1000px !important; margin: 0 auto;">
 
     <!-- Title -->
-    <h3 class="col-2 text-start">Payments</h3>
+    <h3 class="col-5 text-start">Payments</h3>
 
     <!-- Selecte Invoice -->
-    <div class="col-4">
+    <div class="col-5">
         @if (_projectsInvoices.Count() > 0)
         {
             <FluentSelect TOption="InvoiceVM"
-                          Label="Select a invoice"
+                          Label="Select an invoice:"
                           Items="@_projectsInvoices"
-                          Width="200px"
+                          Width="400px"
                           Height="250px"
                           OptionValue="@(i => i.Id.ToString())"
                           OptionText="@(i => $"Mark: {i.Mark}, Var: {i.Vat}, Fee: {i.Fee}, Total: {i.Total}")"

@@ -185,8 +185,8 @@ public partial class Payments : ComponentBase, IDisposable
     private string _displayDayesUntilPayment(PaymentVM payment)
     {
         var paymentDay = @payment.PaymentDate ?? DateTime.Now;
-        var diffTime = DateTime.Now - paymentDay;
-        return diffTime.DisplayHMS();
+        var diffTime = paymentDay - DateTime.Now;
+        return diffTime.DisplayDHMS();
     }
     #endregion
 
