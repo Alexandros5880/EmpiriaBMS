@@ -284,7 +284,8 @@ else
                                                             @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "selected_table_projects_row"))"
-                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))"
+                                                                style="min-width: 100px;">
                                                                 <label>@project.DeadLine?.ToEuropeFormat()</label>
                                                             </td>
 
@@ -972,7 +973,8 @@ else
                   Hidden="@(!_isAddIssueDialogOdepened || _startLoading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: 700px !important;">
+                  style="--dialog-width: 700px !important;
+                         --dialog-height: 94vh !important;">
 
         <div class="modal-body row mb-1">
             <div class="col-12 dialog-header">
