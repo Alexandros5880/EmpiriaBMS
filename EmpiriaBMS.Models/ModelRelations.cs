@@ -223,21 +223,21 @@ public static class ModelRelations
                .HasMany(u => u.DailyTime)
                .WithOne(d => d.DailyUser)
                .HasForeignKey(d => d.DailyUserId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // User PersonalTime
         builder.Entity<User>()
                .HasMany(u => u.PersonalTime)
                .WithOne(d => d.PersonalUser)
                .HasForeignKey(d => d.PersonalUserId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // User TrainingTime
         builder.Entity<User>()
                .HasMany(u => u.TrainingTime)
                .WithOne(d => d.TrainingUser)
                .HasForeignKey(d => d.TrainingUserId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // User CorporateEvents
         builder.Entity<User>()
@@ -251,28 +251,28 @@ public static class ModelRelations
                .HasMany(p => p.DailyTime)
                .WithOne(c => c.Project)
                .HasForeignKey(c => c.ProjectId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // Discipline DailyTime
         builder.Entity<Discipline>()
                .HasMany(p => p.DailyTime)
                .WithOne(c => c.Discipline)
                .HasForeignKey(c => c.DisciplineId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // Other DailyTime
         builder.Entity<Other>()
                .HasMany(p => p.DailyTime)
                .WithOne(c => c.Other)
                .HasForeignKey(c => c.OtherId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // Drawing DailyTime
         builder.Entity<Drawing>()
                .HasMany(p => p.DailyTime)
                .WithOne(c => c.Drawing)
                .HasForeignKey(c => c.DrawingId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // SubCategorys Category
         builder.Entity<ProjectCategory>()

@@ -31,6 +31,32 @@ public class UserVM : BaseVM
         }
     }
 
+    private string _passwordHash;
+    public string PasswordHash
+    {
+        get => _passwordHash;
+        set
+        {
+            if (value == _passwordHash)
+                return;
+            _passwordHash = value;
+            NotifyPropertyChanged(nameof(PasswordHash));
+        }
+    }
+
+    private string _password;
+    public string Password
+    {
+        get => _password;
+        set
+        {
+            if (value == _password)
+                return;
+            _password = value;
+            NotifyPropertyChanged(nameof(Password));
+        }
+    }
+
     private string _lastName;
     public string LastName
     {

@@ -6,6 +6,8 @@ public class User : Entity
     // MicrosoftTeams Email
     public string ProxyAddress { get; set; }
 
+    public string? PasswordHash { get; set; }
+
     [Required]
     public string LastName { get; set; }
 
