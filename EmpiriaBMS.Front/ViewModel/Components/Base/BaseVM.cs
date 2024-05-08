@@ -43,6 +43,19 @@ public class BaseVM : BNotifyPropertyChanged, ICloneable
         }
     }
 
+    private bool _isDeleted;
+    public bool IsDeleted
+    {
+        get => _isDeleted;
+        set
+        {
+            if (value == _isDeleted)
+                return;
+            _isDeleted = value;
+            NotifyPropertyChanged(nameof(IsDeleted));
+        }
+    }
+
     public BaseVM()
     {
         CreatedDate = DateTime.Now;

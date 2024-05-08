@@ -19,22 +19,21 @@ public partial class Login
     private string password;
     private string errorMessage;
 
-    private void HandleSubmit()
+    private async Task _login()
     {
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || !Validate())
-        {
-            errorMessage = "Please enter both username and password.";
+        if (!Validate())
             return;
-        }
 
-        // TODO: Login Check For User to Server. If User Not Exists Notify CEO, CTO, COO, Admin
-        if (username == "admin" && password == "password")
+        var result = await authorizeServices.Login(username, password);
+
+        if (string.IsNullOrEmpty(result))
         {
             MyNavigationManager.NavigateTo("/dashboard");
+            errorMessage = null;
         }
         else
         {
-            errorMessage = "Invalid username or password.";
+            errorMessage = result;
         }
     }
 
@@ -46,7 +45,7 @@ public partial class Login
     {
         if (fieldname == null)
         {
-            validUserName = _isvalidUserName(username);
+            validUserName = _isvalidEmail(username);
             validPassword = !string.IsNullOrEmpty(password);
 
             return validUserName && validPassword;
@@ -59,7 +58,7 @@ public partial class Login
             switch (fieldname)
             {
                 case "Emails":
-                    validUserName = _isvalidUserName(username);
+                    validUserName = _isvalidEmail(username);
                     return validUserName;
                 case "Password":
                     validPassword = !string.IsNullOrEmpty(password);
@@ -71,6 +70,6 @@ public partial class Login
         }
     }
 
-    private bool _isvalideMAIL(string email) => GeneralValidator.IsValidEmail(email);
+    private bool _isvalidEmail(string email) => GeneralValidator.IsValidEmail(email);
     #endregion
 }

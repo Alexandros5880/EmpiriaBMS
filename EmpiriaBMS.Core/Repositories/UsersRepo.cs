@@ -44,7 +44,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public new async Task<UserDto?> Get(string email)
+    public async Task<UserDto?> Get(string email)
     {
         if (email == null)
             throw new ArgumentNullException(nameof(email));
@@ -56,6 +56,31 @@ public class UsersRepo : Repository<UserDto, User>
                              .Include(r => r.Disciplines)
                              .Include(r => r.UserRoles)
                              .FirstOrDefaultAsync(r => r.ProxyAddress.Equals(email));
+
+            return Mapping.Mapper.Map<UserDto>(u);
+        }
+    }
+
+    public async Task<UserDto?> Get(string email, string password)
+    {
+        if (email == null)
+            throw new ArgumentNullException(nameof(email));
+
+        if (password == null)
+            throw new ArgumentNullException(nameof(password));
+
+        // Create Hasher
+        var hash = PasswordHasher.HashPassword(password);
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var u = await _context
+                             .Set<User>()
+                             .Include(r => r.Disciplines)
+                             .Include(r => r.UserRoles)
+                             .FirstOrDefaultAsync(r => r.ProxyAddress.Equals(email) 
+                                                        && r.PasswordHash != null 
+                                                        && r.PasswordHash.Equals(hash));
 
             return Mapping.Mapper.Map<UserDto>(u);
         }

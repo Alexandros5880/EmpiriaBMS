@@ -97,6 +97,13 @@ public class AuthorizeServices
         return result;
     }
 
+    public async Task<string> Login(string username, string password)
+    {
+        var user = await _dataProvider.Users.Get(username, password);
+
+        return user != null ? null : "Can't login!";
+    }
+
     // TODO: When Fix Authorization with teams Remove that
     private async Task _getRandomUser()
     {

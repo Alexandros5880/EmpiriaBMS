@@ -18,6 +18,8 @@ public class Entity : IEntity
     [Column(TypeName = "datetime2")]
     public DateTime LastUpdatedDate { get; set; }
 
+    public bool IsDeleted { get; set; }
+
     public Entity()
     {
         CreatedDate = DateTime.Now.ToUniversalTime();
