@@ -16,7 +16,24 @@
         
     </div>
 
-    <FluentTextField Style="width: 100%" @bind-Value=@username TextFieldType="TextFieldType.Email">Username</FluentTextField>
+    <div>
+        <FluentTextField Style="width: 100%" @bind-Value=@username TextFieldType="TextFieldType.Email">Username</FluentTextField>
+        @if (!validUserName)
+        {
+            @if (string.IsNullOrEmpty(@username))
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+            else if (!_isvalidUserName(@username))
+            {
+                <div class="col-12">
+                    <span class="text-warning">No valid proxy address!</span>
+                </div>
+            }
+        }
+    </div>
 
     <FluentTextField Style="width: 100%" @bind-Value=@password TextFieldType="TextFieldType.Password">Password</FluentTextField>
 
