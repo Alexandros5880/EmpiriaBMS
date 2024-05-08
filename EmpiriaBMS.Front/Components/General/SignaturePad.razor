@@ -3,9 +3,12 @@
 
 @inject MicrosoftTeams MicrosoftTeams
 
-<canvas id="@Id" @ref="canvasRef"
-        style="width: 100%; height: auto; margin: 0 auto; border: 1px solid black; border-radius: 14px;"></canvas>
-<button class="btn btn-outline-warning" @onclick="ClearCanvas">Clear</button>
+<div style="height: 90%;">
+    <canvas style="height: 100%; margin: 0 auto !important; margin: 4px; border: 1px solid black !important; border-radius: 14px !important;" id="@Id" @ref="canvasRef"></canvas>
+</div>
+<FluentButton style="margin-top: 4px; margin-left: 4px;" IconStart="@(new Icons.Regular.Size16.ClearFormatting())" OnClick="@ClearCanvas" Color="orange">
+    Clear
+</FluentButton>
 
 @code {
 
@@ -36,4 +39,5 @@
     {
         return await MicrosoftTeams.GetCanvasImageData(canvasRef);
     }
+
 }
