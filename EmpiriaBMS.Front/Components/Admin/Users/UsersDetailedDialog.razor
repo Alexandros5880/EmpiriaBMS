@@ -129,30 +129,47 @@
             </div>
         </div>
 
-        <!-- Proxy Address -->
+        <!-- Proxy Address / Password -->
         <div class="col-12 row">
-            <div class="col-12">
-                <FluentTextField Style="width:100%; margin:4px;"
-                                 Value="@Content.ProxyAddress"
-                                 @oninput="@((e) => _onProxyAddressChange(e))">
-                    ProxyAddress<span class="text-danger">*</span>
-                </FluentTextField>
+
+            <!-- Proxy Address -->
+            <div class="col-xl-6 col-lg-6">
+                <div class="col-12">
+                    <FluentTextField Style="width:100%; margin:4px;"
+                                     Value="@Content.ProxyAddress"
+                                     TextFieldType="TextFieldType.Email"
+                                     @oninput="@((e) => _onProxyAddressChange(e))">
+                        ProxyAddress<span class="text-danger">*</span>
+                    </FluentTextField>
+                </div>
+                @if (!validProxyAddress)
+                {
+                    @if (string.IsNullOrEmpty(@Content.ProxyAddress))
+                    {
+                        <div class="col-12">
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                    else if (!_isValidEmail(@Content.ProxyAddress))
+                    {
+                        <div class="col-12">
+                            <span class="text-warning">No valid proxy address!</span>
+                        </div>
+                    }
+                }
             </div>
-            @if (!validProxyAddress)
-            {
-                @if (string.IsNullOrEmpty(@Content.ProxyAddress))
-                {
-                    <div class="col-12">
-                        <span class="text-warning">Field is required!</span>
-                    </div>
-                }
-                else if (!_isValidEmail(@Content.ProxyAddress))
-                {
-                    <div class="col-12">
-                        <span class="text-warning">No valid proxy address!</span>
-                    </div>
-                }
-            }
+
+            <!-- Password -->
+            <div class="col-xl-6 col-lg-6">
+                <div class="col-12">
+                    <FluentTextField Style="width:100%; margin:4px;"
+                                     @bind-Value="@Content.Password"
+                                     TextFieldType="TextFieldType.Password">
+                        Password
+                    </FluentTextField>
+                </div>
+            </div>
+
         </div>
 
         <!-- Description -->

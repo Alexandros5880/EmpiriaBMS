@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using Microsoft.Graph.Models;
 using System;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using static Microsoft.Fast.Components.FluentUI.Emojis.Objects.Color.Default;
 
@@ -46,6 +47,7 @@ public partial class UsersDetailedDialog : IDialogContentComponent<UserVM>
         var valid = Validate();
         if (!valid) return;
 
+        Content.PasswordHash = Content.Password != null ? PasswordHasher.HashPassword(Content.Password) : null;
         Content.Emails = _emails;
         Content.MyRolesIds = _roles.Where(r => r.IsSelected).Select(r => r.Id).ToList();
         await Dialog.CloseAsync(Content);

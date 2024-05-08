@@ -30,6 +30,7 @@ public partial class Login
         {
             MyNavigationManager.NavigateTo("/dashboard");
             errorMessage = null;
+            return;
         }
         else
         {

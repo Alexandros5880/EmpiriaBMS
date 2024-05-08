@@ -54,7 +54,6 @@ public class AuthorizeServices
 
         else if (runInTeams)
         {
-            // TODO: Get Teams Logged User And Mach him With Our Users
             UserInfo teamsUser = teamsUser = await _teamsUserCredential.GetUserInfoAsync();
 
             _sharedAuthData.TeamsLogedUser = teamsUser;
@@ -100,6 +99,19 @@ public class AuthorizeServices
     public async Task<string> Login(string username, string password)
     {
         var user = await _dataProvider.Users.Get(username, password);
+
+        if (user != null)
+        {
+            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(user);
+            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(user.Id))
+                                                    .Select(r => _mapper.Map<RoleVM>(r))
+                                                    .ToList();
+            var parentRole = await _dataProvider.Roles.GetParentRole(user.Id);
+            _sharedAuthData.LoggedUserParentRole = _mapper.Map<RoleVM>(parentRole);
+            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(user.Id))
+                                                    .ToList();
+            _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
+        }
 
         return user != null ? null : "Can't login!";
     }

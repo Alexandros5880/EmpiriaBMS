@@ -11,27 +11,18 @@ public static class PasswordHasher
 {
     public static string HashPassword(string password)
     {
-        using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+        using (SHA256 sha256Hash = SHA256.Create())
         {
-            // Generate a random salt
-            byte[] salt;
+            // Compute hash from the password bytes
+            byte[] hashBytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-            rng.GetBytes(salt = new byte[16]);
-
-            // Create a hash using PBKDF2
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
-            byte[] hash = pbkdf2.GetBytes(20);
-
-            // Combine the salt and hash
-            byte[] hashBytes = new byte[36];
-            Array.Copy(salt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 20);
-
-            // Convert the combined bytes to a string
-            string hashedPassword = Convert.ToBase64String(hashBytes);
-
-            return hashedPassword;
+            // Convert the byte array to a hexadecimal string
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < hashBytes.Length; i++)
+            {
+                builder.Append(hashBytes[i].ToString("x2"));
+            }
+            return builder.ToString();
         }
-        
     }
 }
