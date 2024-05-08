@@ -158,7 +158,7 @@ public partial class Dashboard : IDisposable
 
         if (_sharedAuthData.LogedUser == null)
         {
-            MyNavigationManager.NavigateTo("/login");
+            MyNavigationManager.NavigateTo("/loginpage");
             return;
         }
 

@@ -1,24 +1,34 @@
-﻿@page "/login"
+﻿@page "/loginpage"
+
+@layout MainLayout
+
 @using System.ComponentModel.DataAnnotations
+@using EmpiriaBMS.Front.Services
+
 @inject NavigationManager MyNavigationManager
+@inject AuthorizeServices authorizeServices
+@inject SharedAuthDataService _sharedAuthData
 
-<h3>Login</h3>
+<div class="centered">
 
-<h6>Test</h6>
-
-@if (errorMessage != null)
-{
-    <p class="text-danger">@errorMessage</p>
-}
-
-<form @onsubmit="HandleSubmit">
-    <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" class="form-control" id="username" @bind="username" />
+    <div>
+        <h3>Login</h3> <h5> to Embiria BMS</h5>
+        
     </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" class="form-control" id="password" @bind="password" />
+
+    <FluentTextField Style="width: 100%" @bind-Value=@username TextFieldType="TextFieldType.Email">Username</FluentTextField>
+
+    <FluentTextField Style="width: 100%" @bind-Value=@password TextFieldType="TextFieldType.Password">Password</FluentTextField>
+
+    <div class="col-12">
+        @if (errorMessage != null)
+        {
+            <p class="text-danger">@errorMessage</p>
+        }
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+
+    <FluentButton Style="margin-bottom: 4px; float: right; margin-top: 4px;" Type="ButtonType.Submit" OnClick="HandleSubmit">
+        Login
+    </FluentButton>
+
+</div>
