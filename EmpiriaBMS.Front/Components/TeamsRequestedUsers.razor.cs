@@ -18,7 +18,8 @@ public partial class TeamsRequestedUsers : ComponentBase
     IQueryable<TeamsRequestedUserVM>? FilteredItems => Source?.AsQueryable().Where(x => x.DisplayName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
-    private UserVM _selectedRecord = null;
+    private TeamsRequestedUserVM _selectedRecord = null;
+    private UserVM _selectedUser = null;
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -38,9 +39,9 @@ public partial class TeamsRequestedUsers : ComponentBase
         var record = r.Item as TeamsRequestedUserVM;
         if (record == null)
             return;
-        Console.WriteLine($"DisplayName: {record?.DisplayName}");
+        _selectedRecord = record;
         var names = record.DisplayName.Split(' ');
-        _selectedRecord = new UserVM()
+        _selectedUser = new UserVM()
         {
             FirstName = names[0],
             LastName = names[1],
@@ -52,7 +53,9 @@ public partial class TeamsRequestedUsers : ComponentBase
 
     public async Task OnCreateUser(UserVM user)
     {
+        Source.Remove(_selectedRecord);
         _selectedRecord = null;
+        _selectedUser = null;
         await OnSave.InvokeAsync(user);
     }
 
