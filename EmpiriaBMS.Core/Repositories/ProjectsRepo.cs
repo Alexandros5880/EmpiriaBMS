@@ -19,6 +19,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         {
             return await _context
                              .Set<Project>()
+                             .Where(r => !r.IsDeleted)
                              .Include(r => r.Client)
                              .Include(r => r.Invoices)
                              .Include(p => p.Stage)
@@ -38,17 +39,18 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             projects = await _context.Set<Project>()
-                                      .Include(r => r.Client)
-                                      .Include(r => r.Invoices)
-                                      .Include(p => p.Stage)
-                                      .Include(p => p.Address)
-                                      .Include(p => p.Category)
-                                      .ThenInclude(c => c.Category)
-                                      .Include(p => p.ProjectManager)
-                                      .Include(p => p.ProjectsSubConstructors)
-                                      .OrderBy(e => !e.Active)
-                                      .ThenByDescending(e => e.DeadLine)
-                                      .ToListAsync();
+                                     .Where(r => !r.IsDeleted)
+                                     .Include(r => r.Client)
+                                     .Include(r => r.Invoices)
+                                     .Include(p => p.Stage)
+                                     .Include(p => p.Address)
+                                     .Include(p => p.Category)
+                                     .ThenInclude(c => c.Category)
+                                     .Include(p => p.ProjectManager)
+                                     .Include(p => p.ProjectsSubConstructors)
+                                     .OrderBy(e => !e.Active)
+                                     .ThenByDescending(e => e.DeadLine)
+                                     .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
@@ -62,6 +64,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (pageSize == 0 || pageIndex == 0)
             {
                 projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Include(r => r.Client)
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Stage)
@@ -77,6 +80,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             projects =  await _context.Set<Project>()
+                                      .Where(r => !r.IsDeleted)
                                       .Skip((pageIndex - 1) * pageSize)
                                       .Take(pageSize)
                                       .Include(r => r.Client)
@@ -106,6 +110,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (pageSize == 0 || pageIndex == 0)
             {
                 projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Where(expresion)
                                          .Include(r => r.Client)
                                          .Include(r => r.Invoices)
@@ -122,6 +127,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             projects = await _context.Set<Project>()
+                                     .Where(r => !r.IsDeleted)
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
@@ -147,12 +153,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         {
             // Get User Roles
             var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => !r.IsDeleted)
                                         .Where(r => r.UserId == userId)
                                         .Select(r => r.RoleId)
                                         .ToListAsync();
 
             // Get Roles Permissions
             var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(pr => roleIds.Contains(pr.RoleId))
                                             .Include(pr => pr.Permission)
                                             .Select(pr => pr.Permission)
@@ -161,6 +169,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (permissions.Any(p => p.Ord == 11))
             {
                 var allProjects = await _context.Set<Project>()
+                                                .Where(r => !r.IsDeleted)
                                                 .Include(r => r.Client)
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Stage)
@@ -178,16 +187,19 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             // Filter Projects
             var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
                                              .Select(e => e.DrawingId)
                                              .ToListAsync();
 
             var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(r => !r.IsDeleted)
                                                  .Where(dd => myDrawingIds.Contains(dd.Id))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
             var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(r => !r.IsDeleted)
                                                       .Where(d => d.EngineerId == userId)
                                                       .Select(e => e.DisciplineId)
                                                       .ToListAsync();
@@ -195,11 +207,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
             var projectsFromDisciplineIds = await _context.Set<Discipline>()
-                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
-                                                        .Select(dp => dp.ProjectId)
-                                                        .ToArrayAsync();
+                                                          .Where(r => !r.IsDeleted)
+                                                          .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                          .Select(dp => dp.ProjectId)
+                                                          .ToArrayAsync();
 
             var projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Include(r => r.Client)
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Stage)
@@ -223,12 +237,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         {
             // Get User Roles
             var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => !r.IsDeleted)
                                         .Where(r => r.UserId == userId)
                                         .Select(r => r.RoleId)
                                         .ToListAsync();
 
             // Get Roles Permissions
             var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(pr => roleIds.Contains(pr.RoleId))
                                             .Include(pr => pr.Permission)
                                             .Select(pr => pr.Permission)
@@ -238,6 +254,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (permissions.Any(p => p.Ord == 11))
             {
                 var allProjects = await _context.Set<Project>()
+                                                .Where(r => !r.IsDeleted)
                                                 .Where(expresion)
                                                 .Include(r => r.Client)
                                                 .Include(r => r.Invoices)
@@ -256,16 +273,19 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             // Filter Projects
             var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
                                              .Select(e => e.DrawingId)
                                              .ToListAsync();
 
             var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(r => !r.IsDeleted)
                                                  .Where(dd => myDrawingIds.Contains(dd.Id))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
             var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(r => !r.IsDeleted)
                                                       .Where(d => d.EngineerId == userId)
                                                       .Select(e => e.DisciplineId)
                                                       .ToListAsync();
@@ -273,11 +293,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
             var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(r => !r.IsDeleted)
                                                         .Where(d => myDisciplinesIds.Contains(d.Id))
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
             var projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                          .Where(expresion)
                                          .Include(r => r.Client)
@@ -303,12 +325,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         {
             // Get User Roles
             var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => !r.IsDeleted)
                                         .Where(r => r.UserId == userId)
                                         .Select(r => r.RoleId)
                                         .ToListAsync();
 
             // Get Roles Permissions
             var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(pr => roleIds.Contains(pr.RoleId))
                                             .Include(pr => pr.Permission)
                                             .Select(pr => pr.Permission)
@@ -316,11 +340,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             if (permissions.Any(p => p.Ord == 11))
             {
-                var allProjects = await _context.Set<Project>().ToListAsync();
+                var allProjects = await _context.Set<Project>().Where(r => !r.IsDeleted).ToListAsync();
 
                 if (pageSize == 0 || pageIndex == 0)
                 {
                     projects = await _context.Set<Project>()
+                                             .Where(r => !r.IsDeleted)
                                              .OrderBy(e => !e.Active)
                                              .ThenByDescending(e => e.DeadLine)
                                              .ToListAsync();
@@ -329,6 +354,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 }
 
                 projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Skip((pageIndex - 1) * pageSize)
                                          .Take(pageSize)
                                          .Include(r => r.Invoices)
@@ -348,16 +374,19 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             // Filter Projects
             var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
                                              .Select(e => e.DrawingId)
                                              .ToListAsync();
 
             var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(r => !r.IsDeleted)
                                                  .Where(d => myDrawingIds.Contains(d.Id))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
             var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(r => !r.IsDeleted)
                                                       .Where(d => d.EngineerId == userId)
                                                       .Select(e => e.DisciplineId)
                                                       .ToListAsync();
@@ -365,6 +394,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
             var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(r => !r.IsDeleted)
                                                         .Where(d => myDisciplinesIds.Contains(d.Id))
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
@@ -372,6 +402,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (pageSize == 0 || pageIndex == 0)
             {
                 projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Stage)
@@ -389,6 +420,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             projects = await _context.Set<Project>()
+                                     .Where(r => !r.IsDeleted)
                                      .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
@@ -419,12 +451,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         {
             // Get User Roles
             var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => !r.IsDeleted)
                                         .Where(r => r.UserId == userId)
                                         .Select(r => r.RoleId)
                                         .ToListAsync();
 
             // Get Roles Permissions
             var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(pr => roleIds.Contains(pr.RoleId))
                                             .Include(pr => pr.Permission)
                                             .Select(pr => pr.Permission)
@@ -436,6 +470,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 if (pageSize == 0 || pageIndex == 0)
                 {
                     projects = await _context.Set<Project>()
+                                             .Where(r => !r.IsDeleted)
                                              .Where(expresion)
                                              .Include(r => r.Invoices)
                                              .Include(p => p.Stage)
@@ -453,6 +488,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 }
 
                 projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Where(expresion)
                                          .Skip((pageIndex - 1) * pageSize)
                                          .Take(pageSize)
@@ -474,16 +510,19 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             // Filter Projects
             var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
                                              .Select(e => e.DrawingId)
                                              .ToListAsync();
 
             var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(r => !r.IsDeleted)
                                                  .Where(d => myDrawingIds.Contains(d.Id))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
             var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(r => !r.IsDeleted)
                                                       .Where(d => d.EngineerId == userId)
                                                       .Select(e => e.DisciplineId)
                                                       .ToListAsync();
@@ -491,13 +530,15 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
             var projectsFromDisciplineIds = await _context.Set<Discipline>()
-                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
-                                                        .Select(dp => dp.ProjectId)
-                                                        .ToArrayAsync();
+                                                          .Where(r => !r.IsDeleted)
+                                                          .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                          .Select(dp => dp.ProjectId)
+                                                          .ToArrayAsync();
 
             if (pageSize == 0 || pageIndex == 0)
             {
                 projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                          .Where(expresion)
                                          .Include(r => r.Invoices)
@@ -516,6 +557,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             projects = await _context.Set<Project>()
+                                     .Where(r => !r.IsDeleted)
                                      .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)
@@ -541,6 +583,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return await _context.Set<DailyTime>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(mh => mh.ProjectId == projectId)
                                  .Include(mh => mh.TimeSpan)
                                  .Select(mh => mh.TimeSpan.Hours)
@@ -553,6 +596,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return _context.Set<DailyTime>()
+                           .Where(r => !r.IsDeleted)
                            .Where(mh => mh.ProjectId == projectId)
                            .Include(mh => mh.TimeSpan)
                            .Select(mh => mh.TimeSpan.Hours)
@@ -572,27 +616,31 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (all)
             {
                 disciplines = await _context.Set<Discipline>()
-                                             .Where(de => de.ProjectId == projectId)
-                                             .Include(d => d.Type)
-                                             .ToListAsync();
+                                            .Where(r => !r.IsDeleted)
+                                            .Where(de => de.ProjectId == projectId)
+                                            .Include(d => d.Type)
+                                            .ToListAsync();
             }
             else
             {
                 var myDrawingsIds = await _context.Set<DrawingEmployee>()
-                                            .Where(de => de.EmployeeId == userId)
-                                            .Select(de => de.DrawingId)
-                                            .ToListAsync();
+                                                  .Where(r => !r.IsDeleted)
+                                                  .Where(de => de.EmployeeId == userId)
+                                                  .Select(de => de.DrawingId)
+                                                  .ToListAsync();
 
                 var myDisciplinesIds = await _context.Set<Drawing>()
-                                                .Where(d => myDrawingsIds.Contains(d.Id))
-                                                .Select(dd => dd.DisciplineId)
-                                                .ToListAsync();
+                                                     .Where(r => !r.IsDeleted)
+                                                     .Where(d => myDrawingsIds.Contains(d.Id))
+                                                     .Select(dd => dd.DisciplineId)
+                                                     .ToListAsync();
 
                 disciplines = await _context.Set<Discipline>()
-                                             .Where(d => d.ProjectId == projectId && 
+                                            .Where(r => !r.IsDeleted)
+                                            .Where(d => d.ProjectId == projectId && 
                                                                 myDisciplinesIds.Contains(d.Id))
-                                             .Include(d => d.Type)
-                                             .ToListAsync();
+                                            .Include(d => d.Type)
+                                            .ToListAsync();
             }
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(disciplines);
@@ -603,6 +651,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
             return await _context.Set<Discipline>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(de => de.ProjectId == id)
                                  .CountAsync();
     }
@@ -615,11 +664,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             // Get Project
-            var project = await _context.Set<Project>().FirstOrDefaultAsync(p => p.Id == projectId);
+            var project = await _context.Set<Project>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(p => p.Id == projectId);
             if (project == null)
                 throw new ArgumentNullException(nameof(project));
 
-            var otherTypes = await _context.Set<OtherType>().ToListAsync();
+            var otherTypes = await _context.Set<OtherType>().Where(r => !r.IsDeleted).ToListAsync();
 
             // Calculate Disciplines Estimated Hours, Disciplines Estimated ManDays, Disciplines EstimatedCompleted
             foreach (var d in disciplines)
@@ -628,6 +677,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
                 // Calculate Discipline EstimatedCompleted
                 var disciplineMenHours = await _context.Set<DailyTime>()
+                                                       .Where(r => !r.IsDeleted)
                                                        .Where(d => d.DisciplineId == d.Id)
                                                        .Select(d => d.TimeSpan.Hours)
                                                        .SumAsync();
@@ -639,10 +689,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 d.ProjectId = projectId;
 
                 // Update Discipline
-                var exists = await _context.Set<Discipline>().AnyAsync(disc => disc.Id == d.Id);
+                var exists = await _context.Set<Discipline>().Where(r => !r.IsDeleted).AnyAsync(disc => disc.Id == d.Id);
                 if (exists)
                 {
-                    var dbDisc = await _context.Set<Discipline>().FirstOrDefaultAsync(disc => disc.Id == d.Id);
+                    var dbDisc = await _context.Set<Discipline>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(disc => disc.Id == d.Id);
                     if (dbDisc == null)
                         throw new NullReferenceException(nameof(dbDisc));
                     _context.Entry<Discipline>(dbDisc).CurrentValues.SetValues(Mapping.Mapper.Map<Discipline>(d));
@@ -668,13 +718,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             // Get Sum EstimatedManDays && EstimatedHours and update Project
-            var estimatedManDaysSum = disciplines.Select(d => d.EstimatedMandays).Sum();
-            var estimatedHoursSum = disciplines.Select(d => d.EstimatedHours).Sum();
+            var estimatedManDaysSum = disciplines.Where(r => !r.IsDeleted).Select(d => d.EstimatedMandays).Sum();
+            var estimatedHoursSum = disciplines.Where(r => !r.IsDeleted).Select(d => d.EstimatedHours).Sum();
             project.EstimatedMandays = estimatedManDaysSum;
             project.EstimatedHours = estimatedHoursSum;
 
             // Calculate Project EstimatedComplete
             var projectMenHours = await _context.Set<DailyTime>()
+                                                .Where(r => !r.IsDeleted)
                                                 .Where(d => d.ProjectId == projectId)
                                                 .Select(d => d.TimeSpan.Hours)
                                                 .SumAsync();
@@ -692,6 +743,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var p = await _context.Set<Project>()
+                                  .Where(r => !r.IsDeleted)
                                   .FirstOrDefaultAsync(p => p.Id == projectId);
 
             if (p == null)
@@ -699,7 +751,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var pmId = p.ProjectManagerId;
 
-            var pm = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == pmId);
+            var pm = await _context.Set<User>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(u => u.Id == pmId);
 
             return Mapping.Mapper.Map<UserDto>(pm);
         }
@@ -713,6 +765,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var complains = await _context.Set<Issue>()
+                                          .Where(r => !r.IsDeleted)
                                           .Where(p => p.ProjectId == projectId)
                                           .ToListAsync();
 
@@ -728,6 +781,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var invoices = await _context.Set<Invoice>()
+                                         .Where(r => !r.IsDeleted)
                                          .Where(i => i.ProjectId == projectId)
                                          .ToListAsync();
 

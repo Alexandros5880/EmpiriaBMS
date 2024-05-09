@@ -22,7 +22,7 @@ public class EmailRepo : Repository<EmailDto, Email>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var prevEmails = await _context.Set<Email>().Where(e => e.UserId == userId).ToListAsync();
+            var prevEmails = await _context.Set<Email>().Where(r => !r.IsDeleted).Where(e => e.UserId == userId).ToListAsync();
             _context.Set<Email>().RemoveRange(prevEmails);
             await _context.SaveChangesAsync();
         }

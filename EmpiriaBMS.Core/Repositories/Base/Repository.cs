@@ -53,11 +53,11 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            //entity.IsDeleted = true;
-            //await Update(entity);
+            entity.IsDeleted = true;
+            await Update(entity);
 
-            _context.Set<U>().Remove(Mapping.Mapper.Map<U>(entity));
-            await _context.SaveChangesAsync();
+            //_context.Set<U>().Remove(Mapping.Mapper.Map<U>(entity));
+            //await _context.SaveChangesAsync();
         }
 
         return entity;

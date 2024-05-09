@@ -23,12 +23,14 @@ public class ClientRepo : Repository<ClientDto, Client>
             if (pageSize == 0 || pageIndex == 0)
             {
                 items = await _context.Set<Client>()
+                                      .Where(r => !r.IsDeleted)
                                       .Include(c => c.Address)
                                       .ToListAsync();
                 return Mapping.Mapper.Map<List<ClientDto>>(items);
             }
 
             items = await _context.Set<Client>()
+                                  .Where(r => !r.IsDeleted)
                                   .Include(c => c.Address)
                                   .Skip((pageIndex - 1) * pageSize)
                                   .Take(pageSize)
@@ -45,6 +47,7 @@ public class ClientRepo : Repository<ClientDto, Client>
 
         using (var _context = _dbContextFactory.CreateDbContext())
             return await _context.Set<Email>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(r => r.UserId == userId)
                                  .ToListAsync();
     }

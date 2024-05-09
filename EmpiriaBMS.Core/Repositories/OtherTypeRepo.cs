@@ -22,16 +22,18 @@ public class OtherTypeRepo : Repository<OtherTypeDto, OtherType>, IDisposable
             if (disciplineId == 0)
             {
                 var noOtherTypes = await _context.Set<OtherType>()
-                                                   .ToListAsync();
+                                                 .Where(r => !r.IsDeleted)
+                                                 .ToListAsync();
 
                 return Mapping.Mapper.Map<List<OtherTypeDto>>(noOtherTypes);
             }
             else
             {
                 var noOtherTypesIds = await _context.Set<Other>()
-                                                      .Where(d => d.DisciplineId == disciplineId)
-                                                      .Select(d => d.TypeId)
-                                                      .ToListAsync();
+                                                    .Where(r => !r.IsDeleted)
+                                                    .Where(d => d.DisciplineId == disciplineId)
+                                                    .Select(d => d.TypeId)
+                                                    .ToListAsync();
 
                 if (noOtherTypesIds == null)
                     throw new NullReferenceException(nameof(noOtherTypesIds));
@@ -39,14 +41,16 @@ public class OtherTypeRepo : Repository<OtherTypeDto, OtherType>, IDisposable
                 if (noOtherTypesIds.Count() == 0)
                 {
                     var allOtherTypes = await _context.Set<OtherType>()
-                                                   .ToListAsync();
+                                                      .Where(r => !r.IsDeleted)
+                                                      .ToListAsync();
 
                     return Mapping.Mapper.Map<List<OtherTypeDto>>(allOtherTypes);
                 }
 
                 var noOtherTypes = await _context.Set<OtherType>()
-                                                   .Where(t => !noOtherTypesIds.Contains(t.Id))
-                                                   .ToListAsync();
+                                                 .Where(r => !r.IsDeleted)
+                                                 .Where(t => !noOtherTypesIds.Contains(t.Id))
+                                                 .ToListAsync();
 
                 return Mapping.Mapper.Map<List<OtherTypeDto>>(noOtherTypes);
             }
@@ -61,6 +65,7 @@ public class OtherTypeRepo : Repository<OtherTypeDto, OtherType>, IDisposable
                 throw new ArgumentNullException(nameof(disciplineId));
 
             var noOtherTypesIds = await _context.Set<Other>()
+                                                .Where(r => !r.IsDeleted)
                                                 .Where(d => d.DisciplineId == disciplineId)
                                                 .Select(d => d.TypeId)
                                                 .ToListAsync();
@@ -69,6 +74,7 @@ public class OtherTypeRepo : Repository<OtherTypeDto, OtherType>, IDisposable
                 throw new NullReferenceException(nameof(noOtherTypesIds));
 
             var result = await _context.Set<OtherType>()
+                                       .Where(r => !r.IsDeleted)
                                        .AnyAsync(t => !noOtherTypesIds.Contains(t.Id));
 
             return result;

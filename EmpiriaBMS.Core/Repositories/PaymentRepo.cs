@@ -20,6 +20,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         {
             var i = await _context
                              .Set<Payment>()
+                             .Where(r => !r.IsDeleted)
                              .Include(r => r.Invoice)
                              .ThenInclude(i => i.Type)
                              .Include(r => r.Invoice)
@@ -39,6 +40,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 i = await _context.Set<Payment>()
+                                  .Where(r => !r.IsDeleted)
                                   .Include(r => r.Invoice)
                                   .ThenInclude(i => i.Type)
                                   .Include(r => r.Invoice)
@@ -50,14 +52,15 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
             }
 
             i = await _context.Set<Payment>()
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .Include(r => r.Invoice)
-                                 .ThenInclude(i => i.Type)
-                                 .Include(r => r.Invoice)
-                                 .ThenInclude(i => i.Project)
-                                 .Include(r => r.Type)
-                                 .ToListAsync();
+                              .Where(r => !r.IsDeleted)
+                              .Skip((pageIndex - 1) * pageSize)
+                              .Take(pageSize)
+                              .Include(r => r.Invoice)
+                              .ThenInclude(i => i.Type)
+                              .Include(r => r.Invoice)
+                              .ThenInclude(i => i.Project)
+                              .Include(r => r.Type)
+                              .ToListAsync();
 
             return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
         }
@@ -75,6 +78,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 i = await _context.Set<Payment>()
+                                  .Where(r => !r.IsDeleted)
                                   .Where(expresion)
                                   .Include(r => r.Invoice)
                                   .ThenInclude(i => i.Type)
@@ -86,6 +90,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
             }
 
             i = await _context.Set<Payment>()
+                              .Where(r => !r.IsDeleted)
                               .Where(expresion)
                               .Skip((pageIndex - 1) * pageSize)
                               .Take(pageSize)

@@ -22,9 +22,11 @@ public class KpisRepo : IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var all = await _context.Set<Project>()
+                                    .Where(r => !r.IsDeleted)
                                     .CountAsync();
 
             var missedDeadline = await _context.Set<Project>()
+                                               .Where(r => !r.IsDeleted)
                                                .Where(p => p.DeadLine < DateTime.Now)
                                                .CountAsync();
 
@@ -39,6 +41,7 @@ public class KpisRepo : IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var userRolesWithDailyTimes = await _context.Set<UserRole>()
+                                            .Where(r => !r.IsDeleted)
                                             .Include(ur => ur.Role)
                                             .Include(ur => ur.User)
                                             .Select(ur => new
@@ -64,6 +67,7 @@ public class KpisRepo : IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var userRolesWithDailyTimes = await _context.Set<UserRole>()
+                                            .Where(r => !r.IsDeleted)
                                             .Include(ur => ur.Role)
                                             .Include(ur => ur.User)
                                             .Select(ur => new
@@ -90,12 +94,14 @@ public class KpisRepo : IDisposable
         {
             // Get User Roles
             var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => !r.IsDeleted)
                                         .Where(r => r.UserId == userId)
                                         .Select(r => r.RoleId)
                                         .ToListAsync();
 
             // Get Roles Permissions
             var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(pr => roleIds.Contains(pr.RoleId))
                                             .Include(pr => pr.Permission)
                                             .Select(pr => pr.Permission)
@@ -104,6 +110,7 @@ public class KpisRepo : IDisposable
             if (permissions.Any(p => p.Ord == 20))
             {
                 var allProjects = await _context.Set<Project>()
+                                                .Where(r => !r.IsDeleted)
                                                 .Include(r => r.Client)
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Category)
@@ -119,16 +126,19 @@ public class KpisRepo : IDisposable
 
             // Filter Projects
             var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
                                              .Select(e => e.DrawingId)
                                              .ToListAsync();
 
             var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(r => !r.IsDeleted)
                                                  .Where(dd => myDrawingIds.Contains(dd.Id))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
             var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(r => !r.IsDeleted)
                                                       .Where(d => d.EngineerId == userId)
                                                       .Select(e => e.DisciplineId)
                                                       .ToListAsync();
@@ -136,11 +146,13 @@ public class KpisRepo : IDisposable
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
             var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(r => !r.IsDeleted)
                                                         .Where(d => myDisciplinesIds.Contains(d.Id))
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
             var projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Include(r => r.Client)
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Category)
@@ -163,12 +175,14 @@ public class KpisRepo : IDisposable
         {
             // Get User Roles
             var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => !r.IsDeleted)
                                         .Where(r => r.UserId == userId)
                                         .Select(r => r.RoleId)
                                         .ToListAsync();
 
             // Get Roles Permissions
             var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(pr => roleIds.Contains(pr.RoleId))
                                             .Include(pr => pr.Permission)
                                             .Select(pr => pr.Permission)
@@ -179,6 +193,7 @@ public class KpisRepo : IDisposable
             if (permissions.Any(p => p.Ord == 20))
             {
                 var allProjects = await _context.Set<Project>()
+                                                .Where(r => !r.IsDeleted)
                                                 .Include(p => p.Category)
                                                 .Where(p => p.DeadLine < DateTime.Now)
                                                 .ToListAsync();
@@ -196,16 +211,19 @@ public class KpisRepo : IDisposable
 
             // Filter Projects
             var myDrawingIds = await _context.Set<DrawingEmployee>()
+                                             .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
                                              .Select(e => e.DrawingId)
                                              .ToListAsync();
 
             var drawingsDisciplinesIds = await _context.Set<Drawing>()
+                                                 .Where(r => !r.IsDeleted)
                                                  .Where(dd => myDrawingIds.Contains(dd.Id))
                                                  .Select(e => e.DisciplineId)
                                                  .ToListAsync();
 
             var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                      .Where(r => !r.IsDeleted)
                                                       .Where(d => d.EngineerId == userId)
                                                       .Select(e => e.DisciplineId)
                                                       .ToListAsync();
@@ -213,11 +231,13 @@ public class KpisRepo : IDisposable
             var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
             var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                        .Where(r => !r.IsDeleted)
                                                         .Where(d => myDisciplinesIds.Contains(d.Id))
                                                         .Select(dp => dp.ProjectId)
                                                         .ToArrayAsync();
 
             var projects = await _context.Set<Project>()
+                                         .Where(r => !r.IsDeleted)
                                          .Include(p => p.Category)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id)
                                                             || p.ProjectManagerId == userId)
@@ -240,6 +260,7 @@ public class KpisRepo : IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<Project> projects = await _context.Set<Project>()
+                                                   .Where(r => !r.IsDeleted)
                                                    .Include(r => r.Client)
                                                    .Include(r => r.Invoices)
                                                    .Include(p => p.Category)
@@ -259,10 +280,10 @@ public class KpisRepo : IDisposable
                 var parentCatId = project.Category?.CategoryId;
 
                 if (parentCatId != null)
-                    parentCategory = await _context.Set<ProjectCategory>().FirstOrDefaultAsync(c => c.Id == parentCatId);
+                    parentCategory = await _context.Set<ProjectCategory>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(c => c.Id == parentCatId);
 
                 // Get All Offers
-                var offers = await _context.Set<Offer>().Where(o => o.ProjectId == project.Id).ToListAsync();
+                var offers = await _context.Set<Offer>().Where(r => !r.IsDeleted).Where(o => o.ProjectId == project.Id).ToListAsync();
 
                 var data = new TenderDataDto()
                 {
@@ -291,6 +312,7 @@ public class KpisRepo : IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var payments = await _context.Set<Payment>()
+                                       .Where(r => !r.IsDeleted)
                                        .Include(p => p.Invoice)
                                        .Include(p => p.Invoice.Project)
                                        .Where(p => p.Invoice.Date < p.PaymentDate)
@@ -315,6 +337,7 @@ public class KpisRepo : IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var payments = await _context.Set<Payment>()
+                                         .Where(r => !r.IsDeleted)
                                          .Include(p => p.Invoice)
                                          .Include(p => p.Invoice.Project)
                                          .Where(p => p.PaidFee < p.Fee)

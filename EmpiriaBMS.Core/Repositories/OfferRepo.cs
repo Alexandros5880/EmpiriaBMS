@@ -15,6 +15,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var offers = await _context.Set<Offer>()
+                                       .Where(r => !r.IsDeleted)
                                        .Where(o => (projectId == 0 || o.ProjectId == projectId)
                                                 && (stateId == 0 || o.StateId == stateId)
                                                 && (typeId == 0 || o.TypeId == typeId)

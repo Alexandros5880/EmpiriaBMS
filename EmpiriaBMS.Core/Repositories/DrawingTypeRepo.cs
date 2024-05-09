@@ -22,6 +22,7 @@ public class DrawingTypeRepo : Repository<DrawingTypeDto, DrawingType>, IDisposa
             if (disciplineId == 0)
             {
                 var noDrawingTypes = await _context.Set<DrawingType>()
+                                                   .Where(r => !r.IsDeleted)
                                                    .ToListAsync();
 
                 return Mapping.Mapper.Map<List<DrawingTypeDto>>(noDrawingTypes);
@@ -29,6 +30,7 @@ public class DrawingTypeRepo : Repository<DrawingTypeDto, DrawingType>, IDisposa
             else
             {
                 var noDrawingTypesIds = await _context.Set<Drawing>()
+                                                      .Where(r => !r.IsDeleted)
                                                       .Where(d => d.DisciplineId == disciplineId)
                                                       .Select(d => d.TypeId)
                                                       .ToListAsync();
@@ -39,12 +41,14 @@ public class DrawingTypeRepo : Repository<DrawingTypeDto, DrawingType>, IDisposa
                 if (noDrawingTypesIds.Count() == 0)
                 {
                     var allDrawingTypes = await _context.Set<DrawingType>()
-                                                   .ToListAsync();
+                                                        .Where(r => !r.IsDeleted)
+                                                        .ToListAsync();
 
                     return Mapping.Mapper.Map<List<DrawingTypeDto>>(allDrawingTypes);
                 }
 
                 var noDrawingTypes = await _context.Set<DrawingType>()
+                                                   .Where(r => !r.IsDeleted)
                                                    .Where(t => !noDrawingTypesIds.Contains(t.Id))
                                                    .ToListAsync();
 
@@ -61,6 +65,7 @@ public class DrawingTypeRepo : Repository<DrawingTypeDto, DrawingType>, IDisposa
                 throw new ArgumentNullException(nameof(disciplineId));
 
             var noDrawingTypesIds = await _context.Set<Drawing>()
+                                                  .Where(r => !r.IsDeleted)
                                                   .Where(d => d.DisciplineId == disciplineId)
                                                   .Select(d => d.TypeId)
                                                   .ToListAsync();
@@ -69,6 +74,7 @@ public class DrawingTypeRepo : Repository<DrawingTypeDto, DrawingType>, IDisposa
                 throw new NullReferenceException(nameof(noDrawingTypesIds));
 
             var result = await _context.Set<DrawingType>()
+                                       .Where(r => !r.IsDeleted)
                                        .AnyAsync(t => !noDrawingTypesIds.Contains(t.Id));
 
             return result;

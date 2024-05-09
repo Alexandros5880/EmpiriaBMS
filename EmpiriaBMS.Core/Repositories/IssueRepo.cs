@@ -25,6 +25,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var i = await _context.Set<Issue>()
+                                  .Where(r => !r.IsDeleted)
                                   .Include(i => i.Project)
                                   .Include(i => i.DisplayedRole)
                                   .Include(i => i.Creator)
@@ -43,6 +44,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
             if (pageSize == 0 || pageIndex == 0)
             {
                 items = await _context.Set<Issue>()
+                                      .Where(r => !r.IsDeleted)
                                       .Include(i => i.Project)
                                       .Include(i => i.DisplayedRole)
                                       .Include(i => i.Creator)
@@ -52,6 +54,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
             }
 
             items = await _context.Set<Issue>()
+                                  .Where(r => !r.IsDeleted)
                                   .Include(i => i.Project)
                                   .Include(i => i.DisplayedRole)
                                   .Include(i => i.Creator)
@@ -107,7 +110,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         {
             foreach(var i in entities)
             {
-                var entry = await _context.Set<Issue>().FirstOrDefaultAsync(x => x.Id == i.Id);
+                var entry = await _context.Set<Issue>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(x => x.Id == i.Id);
                 if (entry != null)
                 {
                     _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Issue>(i));
@@ -125,6 +128,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var documents = await _context.Set<Document>()
+                                          .Where(r => !r.IsDeleted)
                                           .Where(d => d.IssueId == issuesId)
                                           .ToListAsync();
 
