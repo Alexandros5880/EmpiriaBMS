@@ -1,0 +1,64 @@
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.ViewModel.Components;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
+
+namespace EmpiriaBMS.Front.Components;
+
+public partial class TeamsRequestedUsers : ComponentBase
+{
+    [Parameter]
+    public List<TeamsRequestedUserVM> Source { get; set; }
+
+    [Parameter]
+    public EventCallback OnSave { get; set; }
+
+    #region Data Grid
+    private string _filterString = string.Empty;
+    IQueryable<TeamsRequestedUserVM>? FilteredItems => Source?.AsQueryable().Where(x => x.DisplayName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
+
+    private UserVM _selectedRecord = null;
+
+    private void HandleFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        {
+            _filterString = string.Empty;
+        }
+    }
+
+    private void OnRowFocused(FluentDataGridRow<TeamsRequestedUserVM> row)
+    {
+        var r = row;
+        var record = r.Item as TeamsRequestedUserVM;
+        if (record == null)
+            return;
+        Console.WriteLine($"DisplayName: {record?.DisplayName}");
+        var names = record.DisplayName.Split(' ');
+        _selectedRecord = new UserVM()
+        {
+            FirstName = names[0],
+            LastName = names[1],
+            ProxyAddress = record.ProxyAddress,
+            TeamsObjectId = record.TeamsObjectId,
+        };
+    }
+    #endregion
+
+    public async Task OnCreateUser(UserVM user)
+    {
+        _selectedRecord = null;
+        await OnSave.InvokeAsync(user);
+    }
+
+    public async Task OnCreateUserCancel()
+    {
+        
+    }
+
+}

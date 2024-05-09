@@ -78,7 +78,8 @@ public partial class Users
             var added = await DataProvider.Users.Add(dto);
             if (added != null)
             {
-                await DataProvider.Users.UpdateRoles(added.Id, myRolesIds);
+                if (myRolesIds != null)
+                    await DataProvider.Users.UpdateRoles(added.Id, myRolesIds);
                 emails.ForEach(e => e.UserId = added.Id);
                 await DataProvider.Emails.AddRange(emails);
                 await _getRecords();
@@ -114,7 +115,8 @@ public partial class Users
             var myRolesIds = vm.MyRolesIds;
             var dto = Mapper.Map<UserDto>(vm);
             await DataProvider.Users.Update(dto);
-            await DataProvider.Users.UpdateRoles(dto.Id, myRolesIds);
+            if (myRolesIds != null)
+                await DataProvider.Users.UpdateRoles(dto.Id, myRolesIds);
             await DataProvider.Emails.RemoveAll(dto.Id);
             await DataProvider.Emails.AddRange(emails);
             await _getRecords();

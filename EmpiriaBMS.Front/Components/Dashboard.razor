@@ -1051,7 +1051,7 @@ else
             </div>
 
             <div class="col-12 justify-content-center">
-                <Issues Source="@_issues.ToList()" OnSave="@(async() => await CloseTeamsRequestedUsersClick())" />
+                <TeamsRequestedUsers Source="@_teamsRequestedUsers.ToList()" OnSave="@(async() => await CloseTeamsRequestedUsersClick())" />
             </div>
 
         </div>
