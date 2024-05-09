@@ -31,19 +31,7 @@
     <FluentProgressRing />
 </FluentOverlay>
 
-@if (_startLoading)
-{
-    @*
-    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20%;">
-        <FluentProgressRing />
-    </div>
-    *@
-
-    @* <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-        <FilterProgressRing FilterLoading="@_startLoading" />
-    </div> *@
-}
-else
+@if (!_startLoading)
 {
     <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
 
