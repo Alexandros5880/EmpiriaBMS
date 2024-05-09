@@ -144,7 +144,13 @@ public class IssueRepo : Repository<IssueDto, Issue>
         var docs = Mapping.Mapper.Map<List<Document>>(documents);
 
         using (var _context = _dbContextFactory.CreateDbContext())
-            _context.Set<Document>().RemoveRange(docs);
+        {
+            foreach (var document in docs)
+            {
+                await DeleteDocument(document);
+            }
+            //_context.Set<Document>().RemoveRange(docs);
+        }
     }
 
     public void DeleteDocument(DocumentDto document)
@@ -167,6 +173,34 @@ public class IssueRepo : Repository<IssueDto, Issue>
 
         using (var _context = _dbContextFactory.CreateDbContext())
             await _context.Set<Document>().AddAsync(doc);
+    }
+
+    public async Task<Document> DeleteDocument(Document entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<Document>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    entry.IsDeleted = true;
+                    await _context.SaveChangesAsync();
+                }
+
+                return entry;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On IssueRepo.DeleteDocument({Mapping.Mapper.Map<Document>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
+        }
     }
 
 }

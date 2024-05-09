@@ -218,7 +218,12 @@ public class UsersRepo : Repository<UserDto, User>
                                                   .Where(r => r.UserId == userId)
                                                   .ToListAsync();
 
-            _context.Set<UserRole>().RemoveRange(userRolesToDelete);
+            foreach (var ur in userRolesToDelete)
+            {
+                ur.IsDeleted = true;
+                await DeleteUserRole(ur);
+            }
+            //_context.Set<UserRole>().RemoveRange(userRolesToDelete);
 
             Random random = new Random();
 
@@ -874,6 +879,34 @@ public class UsersRepo : Repository<UserDto, User>
                                 .ToListAsync();
 
             return Mapping.Mapper.Map<List<Issue>, List<IssueDto>>(issues);
+        }
+    }
+
+    public async Task<UserRole> DeleteUserRole(UserRole entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<UserRole>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    entry.IsDeleted = true;
+                    await _context.SaveChangesAsync();
+                }
+
+                return entry;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On UsersRepo.DeleteUserRole({Mapping.Mapper.Map<UserRole>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
         }
     }
 }

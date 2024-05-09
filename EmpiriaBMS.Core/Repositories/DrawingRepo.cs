@@ -305,10 +305,40 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
 
             foreach (var designer in designers)
             {
-                _context.Set<DrawingEmployee>().Remove(designer);
+                designer.IsDeleted = true;
+                await DeleteDrawingEmployee(designer);
+                //_context.Set<DrawingEmployee>().Remove(designer);
             }
 
             await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<DrawingEmployee> DeleteDrawingEmployee(DrawingEmployee entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<DrawingEmployee>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    entry.IsDeleted = true;
+                    await _context.SaveChangesAsync();
+                }
+
+                return entry;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On DrawingRepo.DeleteDrawingEmployee({Mapping.Mapper.Map<DrawingEmployee>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
         }
     }
 }

@@ -399,7 +399,13 @@ public class RolesRepo : Repository<RoleDto, Role>
                                             .ToArrayAsync();
 
             if (permissions != null)
-                _context.Set<RolePermission>().RemoveRange(permissions);
+            {
+                foreach (var permission in permissions)
+                {
+                    await DeleteRolePermission(permission);
+                }
+                //_context.Set<RolePermission>().RemoveRange(permissions);
+            }
 
             List<RolePermission> rps = new List<RolePermission>();
             foreach(var id in permissionsIds)
@@ -413,6 +419,34 @@ public class RolesRepo : Repository<RoleDto, Role>
 
             await _context.Set<RolePermission>().AddRangeAsync(rps);
             await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<RolePermission> DeleteRolePermission(RolePermission entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<RolePermission>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    entry.IsDeleted = true;
+                    await _context.SaveChangesAsync();
+                }
+
+                return entry;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On RolesRepo.DeleteRolePermission({Mapping.Mapper.Map<RolePermission>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
         }
     }
 }

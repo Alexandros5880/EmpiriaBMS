@@ -100,6 +100,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         {
             var i = await _context
                              .Set<U>()
+                             .Where(r => !r.IsDeleted)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<T>(i);
@@ -113,14 +114,17 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
             List<U> items;
             if (pageSize == 0 || pageIndex == 0)
             {
-                items =  await _context.Set<U>().ToListAsync();
+                items =  await _context.Set<U>()
+                                       .Where(r => !r.IsDeleted)
+                                       .ToListAsync();
                 return Mapping.Mapper.Map<List<T>>(items);
             }
 
             items = await _context.Set<U>()
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+                                  .Where(r => !r.IsDeleted)
+                                  .Skip((pageIndex - 1) * pageSize)
+                                  .Take(pageSize)
+                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<T>>(items);
         }
@@ -137,15 +141,18 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                items = await _context.Set<U>().Where(expresion).ToListAsync();
+                items = await _context.Set<U>()
+                                      .Where(r => !r.IsDeleted)
+                                      .Where(expresion).ToListAsync();
                 return Mapping.Mapper.Map<List<T>>(items);
             }
 
             items = await _context.Set<U>()
-                                 .Where(expresion)
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+                                  .Where(r => !r.IsDeleted)
+                                  .Where(expresion)
+                                  .Skip((pageIndex - 1) * pageSize)
+                                  .Take(pageSize)
+                                  .ToListAsync();
 
             return Mapping.Mapper.Map<List<T>>(items);
         }
@@ -155,14 +162,14 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<U>().CountAsync();
+            return await _context.Set<U>().Where(r => !r.IsDeleted).CountAsync();
         }
     }
 
     public async Task<int> Count(Expression<Func<U, bool>> expresion)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
-            return await _context.Set<U>().Where(expresion).CountAsync();
+            return await _context.Set<U>().Where(r => !r.IsDeleted).Where(expresion).CountAsync();
     }
 
     public async Task<bool> Any(Expression<System.Func<U, bool>> expresion)
@@ -172,7 +179,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
             if (expresion == null)
                 throw new ArgumentNullException(nameof(expresion));
 
-            return await _context.Set<U>().AnyAsync(expresion);
+            return await _context.Set<U>().Where(r => !r.IsDeleted).AnyAsync(expresion);
         }
     }
 
