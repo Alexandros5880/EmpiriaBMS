@@ -50,9 +50,10 @@ public class AuthorizeServices
             _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
 
             result = true;
+            return result;
         }
 
-        else if (runInTeams)
+        if (runInTeams)
         {
             UserInfo teamsUser = teamsUser = await _teamsUserCredential.GetUserInfoAsync();
 
