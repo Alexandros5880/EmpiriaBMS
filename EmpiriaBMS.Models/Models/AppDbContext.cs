@@ -33,6 +33,7 @@ public class AppDbContext : DbContext
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
     public DbSet<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public DbSet<TeamsRequestedUser> TeamsRequestedUser { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -381,6 +382,18 @@ public class AppDbContext : DbContext
             Ord = 27
         };
         builder.Entity<Permission>().HasData(per_27);
+
+        // See Teams Requested Users
+        var per_28_id = random.Next(123456789, 999999999);
+        Permission per_28 = new Permission()
+        {
+            Id = per_28_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Teams Requested Users",
+            Ord = 28
+        };
+        builder.Entity<Permission>().HasData(per_28);
         #endregion
 
         #region Roles
@@ -1105,6 +1118,17 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_87);
 
+        // CTO || See Teams Requested Users
+        RolePermission rp_89 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_28_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_89);
+
 
         // CEO
         // CEO || See Dashboard Layout
@@ -1349,6 +1373,17 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_88);
 
+        // CEO || See Teams Requested Users
+        RolePermission rp_90 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_28_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_90);
+
 
         // Guest
         // Guest || See Dashboard Layout
@@ -1420,6 +1455,17 @@ public class AppDbContext : DbContext
             PermissionId = per_11_id
         };
         builder.Entity<RolePermission>().HasData(rp_50);
+
+        // Admin || See Teams Requested Users
+        RolePermission rp_100 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_9_id,
+            PermissionId = per_28_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_100);
 
 
         // Secretariat 

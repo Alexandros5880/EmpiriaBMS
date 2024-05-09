@@ -57,9 +57,7 @@ public partial class Issues : ComponentBase
     private void OnRowFocused(FluentDataGridRow<IssueVM> row)
     {
         var r = row;
-        Console.WriteLine($"Row focused: {r.RowIndex}");
         var record = r.Item as IssueVM;
-        Console.WriteLine($"Project Name: {record?.ProjectName}");
         _selectedRecord = record;
     }
 

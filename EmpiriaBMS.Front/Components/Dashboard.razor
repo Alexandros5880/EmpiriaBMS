@@ -31,19 +31,7 @@
     <FluentProgressRing />
 </FluentOverlay>
 
-@if (_startLoading)
-{
-    @*
-    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20%;">
-        <FluentProgressRing />
-    </div>
-    *@
-
-    @* <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-        <FilterProgressRing FilterLoading="@_startLoading" />
-    </div> *@
-}
-else
+@if (!_startLoading)
 {
     <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
 
@@ -108,10 +96,27 @@ else
                                             </div>
                                         </div>
 
-                                        <!-- Issues / Display Hours Passed -->
+                                        <!-- TeamsRequestedUsers / Issues / Display Hours Passed / Refresh Page -->
                                         <div class="col-lg-3 col-md-5 col-sm-5">
                                             <div class="d-flex justify-content-between"
                                                  style="height: auto !important;">
+                                                <!-- Teams Requested Users Badge -->
+                                                @if (seeTeamsRequestedUsers)
+                                                {
+                                                    <div style="width: 50px; margin-top: 4px;">
+                                                        <FluentCounterBadge Count="@_teamsRequestedUsers.Count"
+                                                                            ShowZero="false"
+                                                                            Appearance="Appearance.Neutral"
+                                                                            HorizontalPosition="-25"
+                                                                            BottomPosition="-25">
+                                                            <FluentButton OnClick="@OpenTeamsRequestedUsersClick"
+                                                                          Appearance="Appearance.Accent">
+                                                                <FluentIcon Value="@(new Icons.Regular.Size24.People())"
+                                                                            Color="@Color.Fill" />
+                                                            </FluentButton>
+                                                        </FluentCounterBadge>
+                                                    </div>
+                                                }
                                                  <!-- Issues Badge -->
                                                 <div style="width: 50px; margin-top: 4px;">
                                                     <FluentCounterBadge Count="@_issues.Count"
@@ -136,6 +141,14 @@ else
                                                         </div>
                                                     </div>
                                                 }
+                                                <!-- Refresh Page -->
+                                                <FluentButton Style="margin-left: 12px; margin-top: 8px;"
+                                                              OnClick="@Refresh"
+                                                              Loading="@_refreshLoading"
+                                                              IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
+                                                              Color="none"
+                                                              Appearance="Appearance.Outline">
+                                                </FluentButton>
                                             </div>
                                         </div>
 
@@ -1013,6 +1026,28 @@ else
 
             <div class="col-12 justify-content-center">
                 <Issues Source="@_issues.ToList()" OnSave="@(async() => await CloseIssuesClick())" />
+            </div>
+
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Display TeamsRequestedUsers Dialog -->
+    <FluentDialog @ref="_displayTeamsRequestedUsersDialog"
+                  Hidden="@(!_isDisplayTeamsRequestedUsersDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: min(98vw, 1300px) !important;
+                         --dialog-height: min(86vh, 1400px) !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="@(async() => await CloseTeamsRequestedUsersClick())"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <TeamsRequestedUsers Source="@_teamsRequestedUsers.ToList()" />
             </div>
 
         </div>

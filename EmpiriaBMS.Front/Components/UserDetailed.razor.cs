@@ -14,6 +14,9 @@ public partial class UserDetailed : ComponentBase, IDisposable
     [Parameter]
     public UserVM User { get; set; }
 
+    [Parameter]
+    public EventCallback<UserVM> OnSave { get; set; }
+
     private List<ProjectVM> _projects = new List<ProjectVM>();
 
     private async Task _getProjects()
@@ -41,6 +44,8 @@ public partial class UserDetailed : ComponentBase, IDisposable
             await DataProvider.Users.Update(Mapper.Map<UserDto>(User));
         else
             await DataProvider.Users.Add(Mapper.Map<UserDto>(User));
+
+        await OnSave.InvokeAsync(User);
     }
 
     protected virtual void Dispose(bool disposing)

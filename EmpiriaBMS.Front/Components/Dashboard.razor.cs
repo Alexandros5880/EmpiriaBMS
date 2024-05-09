@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Dtos;
+﻿using AutoMapper;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -30,11 +31,13 @@ public partial class Dashboard : IDisposable
     bool seeKpis => _sharedAuthData.Permissions.Any(p => p.Ord == 17);
     bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
     bool seeOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 24);
+    bool seeTeamsRequestedUsers => _sharedAuthData.Permissions.Any(p => p.Ord == 28);
     #endregion
 
     // General Fields
     private bool disposedValue;
     bool _startLoading = true;
+    bool _refreshLoading = true;
     private double _userTotalHoursThisMonth = 0;
 
     #region Working Timer
@@ -75,6 +78,7 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
+    private ObservableCollection<TeamsRequestedUserVM> _teamsRequestedUsers = new ObservableCollection<TeamsRequestedUserVM>();
     #endregion
 
     #region Selected Models
@@ -111,6 +115,10 @@ public partial class Dashboard : IDisposable
     // On Add/Edit Issues Dialog
     private FluentDialog _displayIssuesDialog;
     private bool _isDisplayIssuesDialogOdepened = false;
+
+    // On Add/Edit TeamsRequestedUsers Dialog
+    private FluentDialog _displayTeamsRequestedUsersDialog;
+    private bool _isDisplayTeamsRequestedUsersDialogOdepened = false;
 
     // On Add Project Dialog
     private FluentDialog _addEditProjectDialog;
@@ -173,23 +181,41 @@ public partial class Dashboard : IDisposable
 
         if (firstRender)
         {
+            _startLoading = true;
             var runInTeams = await MicrosoftTeams.IsInTeams();
-
             await Refresh();
+            _startLoading = false;
         }
     }
 
     public async Task Refresh()
     {
-        _startLoading = true;
+        _refreshLoading = true;
+        await _getTeamsRequestedUsers();
         await _getUserTotalHoursThisMonth();
         await _getIssues();
         await _getProjects();
-        _startLoading = false;
+        _refreshLoading = false;
         StateHasChanged();
     }
 
     #region Get Records
+    private async Task _getTeamsRequestedUsers()
+    {
+        try
+        {
+            var requestedUsersDtos = await _dataProvider.TeamsRequestedUsers.GetAll();
+            var requestedUsersVms = Mapper.Map<List<TeamsRequestedUserVM>>(requestedUsersDtos);
+            _teamsRequestedUsers.Clear();
+            requestedUsersVms.ForEach(_teamsRequestedUsers.Add);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+    }
+
     private async Task _getIssues()
     {
         try
@@ -886,6 +912,24 @@ public partial class Dashboard : IDisposable
             _displayIssuesDialog.Hide();
             _isDisplayIssuesDialogOdepened = false;
             await _getIssues();
+        }
+    }
+    #endregion
+
+    #region Display TeamsRequestedUsers
+    private async Task OpenTeamsRequestedUsersClick(MouseEventArgs e)
+    {
+        _displayTeamsRequestedUsersDialog.Show();
+        _isDisplayTeamsRequestedUsersDialogOdepened = true;
+    }
+
+    private async Task CloseTeamsRequestedUsersClick()
+    {
+        if (_isDisplayTeamsRequestedUsersDialogOdepened)
+        {
+            _displayTeamsRequestedUsersDialog.Hide();
+            _isDisplayTeamsRequestedUsersDialogOdepened = false;
+            await _getTeamsRequestedUsers();
         }
     }
     #endregion

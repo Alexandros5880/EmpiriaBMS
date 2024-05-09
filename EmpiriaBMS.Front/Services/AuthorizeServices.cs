@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.TeamsFx;
 using NuGet.Protocol;
@@ -36,6 +37,7 @@ public class AuthorizeServices
         bool result = false;
 
         // TODO: When Fix Authorization with teams Remove that
+        #region Remove Section
         if (userId != 0)
         {
             var logedUser = await _dataProvider.Users.Get(userId);
@@ -52,6 +54,7 @@ public class AuthorizeServices
             result = true;
             return result;
         }
+        #endregion
 
         if (runInTeams)
         {
@@ -79,9 +82,15 @@ public class AuthorizeServices
             }
             else
             {
-                // TODO: When Fix Authorization with teams Remove that
-                // Save User and Display a message to admin to register this user
-                await _getRandomUser();
+                TeamsRequestedUserDto teamsRequestedUserDto = new TeamsRequestedUserDto()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    DisplayName = teamsUser.DisplayName,
+                    ProxyAddress = teamsUser.PreferredUserName,
+                    ObjectId = teamsUser.ObjectId
+                };
+                await _dataProvider.TeamsRequestedUsers.Add(teamsRequestedUserDto);
 
                 result = true;
             }
@@ -115,29 +124,5 @@ public class AuthorizeServices
         }
 
         return user != null ? null : "Can't login!";
-    }
-
-    // TODO: When Fix Authorization with teams Remove that
-    private async Task _getRandomUser()
-    {
-        try
-        {
-            var users = await _dataProvider.Users.GetAll();
-            var logedUser = users.FirstOrDefault();
-            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(logedUser);
-            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
-                                                    .Select(r => _mapper.Map<RoleVM>(r))
-                                                    .ToList();
-            var parentRole = await _dataProvider.Roles.GetParentRole(logedUser.Id);
-            _sharedAuthData.LoggedUserParentRole = _mapper.Map<RoleVM>(parentRole);
-            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
-                                                    .ToList();
-            _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
     }
 }

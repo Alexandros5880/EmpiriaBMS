@@ -28,6 +28,7 @@ namespace EmpiriaBMS.Core
         public OfferStateRepo OfferStates { get; set; }
         public OfferRepo Offers { get; set; }
         public EmailRepo Emails { get; set; }
+        public TeamsRequestedUserRepo TeamsRequestedUsers { get; set; }
         public KpisRepo KPIS { get; set; }
     }
 }
