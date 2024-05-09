@@ -35,6 +35,7 @@ public class MappingCoreProfile : Profile
         CreateMap<OfferStateDto, OfferState>().ReverseMap();
         CreateMap<OfferDto, Offer>().ReverseMap();
         CreateMap<EmailDto, Email>().ReverseMap();
+        CreateMap<DisciplineEngineerDto, DisciplineEngineer>().ReverseMap();
 
         // ViewModels
         CreateMap<Address, AddressVM>().ReverseMap();

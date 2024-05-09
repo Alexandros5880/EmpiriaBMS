@@ -22,6 +22,7 @@ public class ProjectSubCategoryRepo : Repository<ProjectSubCategoryDto, ProjectS
             List<ProjectSubCategory> items;
 
             items = await _context.Set<ProjectSubCategory>()
+                                  .Where(r => !r.IsDeleted)
                                   .Where(p => p.CategoryId == parentId)
                                   .ToListAsync();
 

@@ -23,6 +23,7 @@ public class DisciplineTypeRepo : Repository<DisciplineTypeDto, DisciplineType>,
                 throw new ArgumentNullException(nameof(projectId));
 
             var disciplineTypesIds = await _context.Set<Discipline>()
+                                                   .Where(r => !r.IsDeleted)
                                                    .Where(d => d.ProjectId == projectId)
                                                    .Select(d => d.TypeId)
                                                    .ToListAsync();
@@ -31,6 +32,7 @@ public class DisciplineTypeRepo : Repository<DisciplineTypeDto, DisciplineType>,
                 throw new NullReferenceException(nameof(disciplineTypesIds));
 
             var result = await _context.Set<DisciplineType>()
+                                       .Where(r => !r.IsDeleted)
                                        .AnyAsync(t => !disciplineTypesIds.Contains(t.Id));
 
             return result;

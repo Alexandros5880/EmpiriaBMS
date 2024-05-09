@@ -18,6 +18,7 @@ public class AddressRepo : Repository<AddressDto, Address>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var i = await _context.Set<Address>()
+                                  .Where(r => !r.IsDeleted)
                                   .FirstOrDefaultAsync(r => r.PlaceId == placeId);
 
             return Mapping.Mapper.Map<AddressDto>(i);

@@ -51,11 +51,11 @@ public class RolesRepo : Repository<RoleDto, Role>
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var exists = await _context.Set<Role>().AnyAsync(r => r.Name.Equals(entity.Name) && !(r.Id == entity.Id));
+                var exists = await _context.Set<Role>().Where(r => !r.IsDeleted).AnyAsync(r => r.Name.Equals(entity.Name) && !(r.Id == entity.Id));
                 if (exists)
                     return null;
 
-                var entry = await _context.Set<Role>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                var entry = await _context.Set<Role>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (entry != null)
                 {
                     _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Role>(entity));
@@ -79,7 +79,7 @@ public class RolesRepo : Repository<RoleDto, Role>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name.Equals(name));
+            var role = await _context.Roles.Where(r => !r.IsDeleted).FirstOrDefaultAsync(r => r.Name.Equals(name));
 
             return Mapping.Mapper.Map<RoleDto>(role);
         }
@@ -96,6 +96,7 @@ public class RolesRepo : Repository<RoleDto, Role>
 
 
                 roles = await _context.Set<Role>()
+                                      .Where(r => !r.IsDeleted)
                                       .Include(r => r.RolesPermissions)
                                       .Include(r => r.UserRoles)
                                       .ToListAsync();
@@ -104,6 +105,7 @@ public class RolesRepo : Repository<RoleDto, Role>
             }
 
             roles = await _context.Set<Role>()
+                                  .Where(r => !r.IsDeleted)
                                   .Include(r => r.RolesPermissions)
                                   .Include(r => r.UserRoles)
                                   .Skip((pageIndex - 1) * pageSize)
@@ -128,6 +130,7 @@ public class RolesRepo : Repository<RoleDto, Role>
                 
 
                 roles = await _context.Set<Role>()
+                                      .Where(r => !r.IsDeleted)
                                       .Where(expresion)
                                       .Include(r => r.RolesPermissions)
                                       .Include(r => r.UserRoles)
@@ -137,6 +140,7 @@ public class RolesRepo : Repository<RoleDto, Role>
             }
 
             roles = await _context.Set<Role>()
+                                  .Where(r => !r.IsDeleted)
                                   .Where(expresion)
                                   .Include(r => r.RolesPermissions)
                                   .Include(r => r.UserRoles)
@@ -156,11 +160,13 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var userIds = await _context.Set<UserRole>()
+                                        .Where(r => !r.IsDeleted)
                                         .Where(r => r.RoleId == roleId)
                                         .Select(r => r.UserId)
                                         .ToListAsync();
             
-            var users = await _context.Users.Where(u => userIds.Contains(u.Id))
+            var users = await _context.Users.Where(r => !r.IsDeleted)
+                                            .Where(u => userIds.Contains(u.Id))
                                             .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
@@ -172,12 +178,14 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var rolesIds = await _context.Set<UserRole>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(ur => ur.UserId == userId)
                                  .Include(ur => ur.Role)
                                  .Select(ur => ur.RoleId)
                                  .ToListAsync();
 
             var roles = await _context.Set<Role>()
+                                .Where(r => !r.IsDeleted)
                                 .Where(r => rolesIds.Contains(r.Id))
                                 .Include(r => r.RolesPermissions)
                                 .Include(r => r.UserRoles)
@@ -192,12 +200,14 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var rolesIds = await _context.Set<UserRole>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(ur => ur.UserId == userId)
                                  .Include(ur => ur.Role)
                                  .Select(ur => ur.RoleId)
                                  .ToListAsync();
 
             var parentRolesids = await _context.Set<Role>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(r => rolesIds.Contains(r.Id))
                                             .Select(r => r.ParentRoleId)
                                             .ToListAsync();
@@ -208,6 +218,7 @@ public class RolesRepo : Repository<RoleDto, Role>
 
 
             var parentRoles = await _context.Set<Role>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(r => distinctParentRoleIds.Contains(r.Id))
                                             .Include(r => r.ParentRole)
                                             .Select(r => r.ParentRole)
@@ -223,6 +234,7 @@ public class RolesRepo : Repository<RoleDto, Role>
 
             // Returns the parrent roles with the most permissions
             var rolesPermissions = await _context.Set<RolePermission>()
+                                             .Where(r => !r.IsDeleted)
                                              .Where(rp => distinctParentRoleIds.Contains(rp.RoleId))
                                              .ToListAsync();
 
@@ -236,7 +248,7 @@ public class RolesRepo : Repository<RoleDto, Role>
             foreach (var group in rolePermissionsGrouped)
             {
                 var roleId = group.Key;
-                var role = await _context.Set<Role>().FirstOrDefaultAsync(r => r.Id == roleId);
+                var role = await _context.Set<Role>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(r => r.Id == roleId);
                 var permissions = group.Select(rp => rp.Permission).ToList();
 
                 if (permisionsCount < permissions.Count)
@@ -256,6 +268,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var roles = await _context.Set<UserRole>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(ur => ur.UserId == userId)
                                  .Include(ur => ur.Role)
                                  .Select(ur => ur.Role)
@@ -264,6 +277,7 @@ public class RolesRepo : Repository<RoleDto, Role>
             var roleIds = roles.Select(r => r.Id);
 
             var permissionsIdsAll = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(rp => roleIds.Contains(rp.RoleId))
                                             .Select(rp => rp.PermissionId)
                                             .ToListAsync();
@@ -271,6 +285,7 @@ public class RolesRepo : Repository<RoleDto, Role>
             var permissionsIdsUnique = new HashSet<int>(permissionsIdsAll);
 
             var permissions = await _context.Set<Permission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(p => permissionsIdsUnique.Contains(p.Id))
                                             .ToListAsync();
 
@@ -283,6 +298,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var roles = await _context.Set<Role>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(r => r.IsEmployee)
                                  .ToListAsync();
 
@@ -295,6 +311,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var roles = await _context.Set<Role>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(r => !r.IsEmployee)
                                  .ToListAsync();
 
@@ -307,6 +324,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var roles =  await _context.Set<Role>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(r => r.IsEmployee)
                                  .Where(r => r.UserRoles.Select(ur => ur.UserId).Contains(userId))
                                  .ToListAsync();
@@ -320,6 +338,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var roles =  await _context.Set<Role>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(r => !r.IsEmployee)
                                  .Where(r => r.UserRoles.Select(ur => ur.UserId).Contains(userId))
                                  .ToListAsync();
@@ -333,6 +352,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(rp => rp.RoleId == roleId)
                                             .Include(rp => rp.Permission)
                                             .Select(rp => rp.Permission)
@@ -350,6 +370,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(rp => rp.RoleId != roleId)
                                             .Include(rp => rp.Permission)
                                             .Select(rp => rp.Permission)
@@ -373,11 +394,18 @@ public class RolesRepo : Repository<RoleDto, Role>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(rp => rp.RoleId == roleId)
                                             .ToArrayAsync();
 
             if (permissions != null)
-                _context.Set<RolePermission>().RemoveRange(permissions);
+            {
+                foreach (var permission in permissions)
+                {
+                    await DeleteRolePermission(permission);
+                }
+                //_context.Set<RolePermission>().RemoveRange(permissions);
+            }
 
             List<RolePermission> rps = new List<RolePermission>();
             foreach(var id in permissionsIds)
@@ -391,6 +419,34 @@ public class RolesRepo : Repository<RoleDto, Role>
 
             await _context.Set<RolePermission>().AddRangeAsync(rps);
             await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<RolePermission> DeleteRolePermission(RolePermission entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<RolePermission>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    entry.IsDeleted = true;
+                    await _context.SaveChangesAsync();
+                }
+
+                return entry;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On RolesRepo.DeleteRolePermission({Mapping.Mapper.Map<RolePermission>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
         }
     }
 }
