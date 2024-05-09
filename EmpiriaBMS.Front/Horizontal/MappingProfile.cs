@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.Horizontal;
 public class MappingProfile : Profile
@@ -30,5 +31,6 @@ public class MappingProfile : Profile
         CreateMap<OfferTypeDto, OfferTypeVM>().ReverseMap();
         CreateMap<OfferStateDto, OfferStateVM>().ReverseMap();
         CreateMap<OfferDto, OfferVM>().ReverseMap();
+        CreateMap<TeamsRequestedUserDto, TeamsRequestedUserVM>().ReverseMap();
     }
 }
