@@ -26,6 +26,8 @@ public partial class UserDetailed
     [Parameter]
     public EventCallback OnCancel { get; set; } = default!;
 
+    private FluentTextField _firstNameField;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -35,6 +37,8 @@ public partial class UserDetailed
             await _getRecords();
 
             Validate("Emails");
+
+            _firstNameField.FocusAsync();
 
             StateHasChanged();
         }

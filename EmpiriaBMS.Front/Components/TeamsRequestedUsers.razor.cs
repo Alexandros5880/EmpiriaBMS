@@ -46,7 +46,7 @@ public partial class TeamsRequestedUsers : ComponentBase
             FirstName = names[0],
             LastName = names[1],
             ProxyAddress = record.ProxyAddress,
-            TeamsObjectId = record.TeamsObjectId,
+            TeamsObjectId = record.ObjectId,
         };
     }
     #endregion
@@ -54,8 +54,15 @@ public partial class TeamsRequestedUsers : ComponentBase
     public async Task OnCreateUser(UserVM user)
     {
         Source.Remove(_selectedRecord);
-        _selectedRecord = null;
-        _selectedUser = null;
+        var dto = Mapper.Map<UserDto>(user);
+        var added = await DataProvider.Users.Add(dto);
+        if (added != null)
+        {
+            await DataProvider.TeamsRequestedUsers.DeleteByObjectId(user.TeamsObjectId);
+
+            _selectedRecord = null;
+            _selectedUser = null;
+        }
         await OnSave.InvokeAsync(user);
     }
 
