@@ -63,6 +63,9 @@ public partial class TeamsRequestedUsers : ComponentBase
             _selectedRecord = null;
             _selectedUser = null;
         }
+
+        StateHasChanged();
+
         await OnSave.InvokeAsync(user);
     }
 
