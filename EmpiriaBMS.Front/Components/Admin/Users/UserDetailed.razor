@@ -27,7 +27,8 @@
 
             <!-- Names -->
             <div class="col-12 row">
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                <!-- FirstName -->
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
                     <div class="col-12">
                         <FluentTextField Style="width:100%; margin:4px;"
                                          @bind-Value="@Content.FirstName">FirstName<span class="text-danger">*</span></FluentTextField>
@@ -42,10 +43,12 @@
                         }
                     }
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                <!-- MidName -->
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
                     <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.MidName">MidName</FluentTextField>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                <!-- LastName -->
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
                     <div class="col-12">
                         <FluentTextField Style="width:100%; margin:4px;"
                                          @bind-Value="@Content.LastName">
@@ -67,7 +70,7 @@
             <!-- Phones-->
             <div class="col-12 row">
                 <!-- Phone 1 -->
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
                     <div class="col-12">
                         <FluentTextField Style="width:100%; margin:4px;"
                                          @bind-Value="@Content.Phone1">
@@ -91,7 +94,7 @@
                     }
                 </div>
                 <!-- Phone 2 -->
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
                     <div class="col-12">
                         <FluentTextField Style="width:100%; margin:4px;"
                                          @bind-Value="@Content.Phone2">
@@ -109,7 +112,7 @@
                     }
                 </div>
                 <!-- Phone 3 -->
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
                     <div class="col-12">
                         <FluentTextField Style="width:100%; margin:4px;"
                                          @bind-Value="@Content.Phone3">
@@ -130,9 +133,8 @@
 
             <!-- Proxy Address / Password -->
             <div class="col-12 row">
-
                 <!-- Proxy Address -->
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
                     <div class="col-12">
                         <FluentTextField Style="width:100%; margin:4px;"
                                          Value="@Content.ProxyAddress"
@@ -157,9 +159,8 @@
                         }
                     }
                 </div>
-
                 <!-- Password -->
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
                     <div class="col-12">
                         <FluentTextField Style="width:100%; margin:4px;"
                                          @bind-Value="@Content.Password"
@@ -168,7 +169,6 @@
                         </FluentTextField>
                     </div>
                 </div>
-
             </div>
 
             <!-- Description -->
@@ -179,9 +179,8 @@
             </div>
 
             <div class="col-12 row">
-
                 <!-- Roles-->
-                <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-xs-12" style="margin-top: 4px;">
+                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))" style="margin-top: 4px;">
                     <div class="row">
                         <div class="col-12">
                             <h4>Select Roles:</h4>
@@ -227,9 +226,8 @@
                         </FluentPaginator>
                     </div>
                 </div>
-
                 <!-- Emails -->
-                <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-xs-12" style="margin-top: 4px;">
+                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))" style="margin-top: 4px;">
                     <div class="row">
                         <div class="col-12">
                             <h4>Emails</h4>
@@ -298,7 +296,6 @@
                         </FluentPaginator>
                     </div>
                 </div>
-
             </div>
 
         </div>

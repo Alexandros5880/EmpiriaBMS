@@ -18,6 +18,9 @@ public partial class UserDetailed
     public string Height { get; set; } = null;
 
     [Parameter]
+    public bool Vertical { get; set; } = false;
+
+    [Parameter]
     public EventCallback<UserVM> OnSave { get; set; } = default!;
 
     [Parameter]

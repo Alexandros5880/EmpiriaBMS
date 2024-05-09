@@ -61,7 +61,8 @@ public partial class TeamsRequestedUsers : ComponentBase
 
     public async Task OnCreateUserCancel()
     {
-        
+        _selectedRecord = null;
+        _selectedUser = null;
     }
 
 }
