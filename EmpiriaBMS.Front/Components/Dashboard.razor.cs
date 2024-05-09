@@ -37,6 +37,7 @@ public partial class Dashboard : IDisposable
     // General Fields
     private bool disposedValue;
     bool _startLoading = true;
+    bool _refreshLoading = true;
     private double _userTotalHoursThisMonth = 0;
 
     #region Working Timer
@@ -180,20 +181,21 @@ public partial class Dashboard : IDisposable
 
         if (firstRender)
         {
+            _startLoading = true;
             var runInTeams = await MicrosoftTeams.IsInTeams();
-
             await Refresh();
+            _startLoading = false;
         }
     }
 
     public async Task Refresh()
     {
-        _startLoading = true;
+        _refreshLoading = true;
         await _getTeamsRequestedUsers();
         await _getUserTotalHoursThisMonth();
         await _getIssues();
         await _getProjects();
-        _startLoading = false;
+        _refreshLoading = false;
         StateHasChanged();
     }
 

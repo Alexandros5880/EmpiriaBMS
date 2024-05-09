@@ -96,7 +96,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- TeamsRequestedUsers / Issues / Display Hours Passed -->
+                                        <!-- TeamsRequestedUsers / Issues / Display Hours Passed / Refresh Page -->
                                         <div class="col-lg-3 col-md-5 col-sm-5">
                                             <div class="d-flex justify-content-between"
                                                  style="height: auto !important;">
@@ -141,6 +141,14 @@
                                                         </div>
                                                     </div>
                                                 }
+                                                <!-- Refresh Page -->
+                                                <FluentButton Style="margin-left: 12px; margin-top: 8px;"
+                                                              OnClick="@Refresh"
+                                                              Loading="@_refreshLoading"
+                                                              IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
+                                                              Color="none"
+                                                              Appearance="Appearance.Outline">
+                                                </FluentButton>
                                             </div>
                                         </div>
 
