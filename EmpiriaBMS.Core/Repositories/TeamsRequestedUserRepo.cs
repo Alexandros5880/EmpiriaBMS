@@ -22,7 +22,9 @@ public class TeamsRequestedUserRepo : Repository<TeamsRequestedUserDto, TeamsReq
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var record =  await _context.Set<TeamsRequestedUser>().FirstOrDefaultAsync(t => t.ObjectId.Equals(objectId));
+            var record =  await _context.Set<TeamsRequestedUser>()
+                                        .Where(r => !r.IsDeleted)
+                                        .FirstOrDefaultAsync(t => t.ObjectId.Equals(objectId));
             var dto = Mapping.Mapper.Map<TeamsRequestedUserDto>(record);
             return dto;
         }
