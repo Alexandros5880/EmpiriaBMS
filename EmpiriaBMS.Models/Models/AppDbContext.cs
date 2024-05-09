@@ -33,6 +33,7 @@ public class AppDbContext : DbContext
     public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
     public DbSet<OtherEmployee> OthersEmployees { get; set; }
     public DbSet<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public DbSet<TeamsRequestedUser> TeamsRequestedUser { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
