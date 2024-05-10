@@ -2,6 +2,7 @@ using AutoMapper;
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Repositories;
+using EmpiriaBMS.Core.Services.EmailService;
 using EmpiriaBMS.Core.Services.GooglePlaces;
 using EmpiriaBMS.Front;
 using EmpiriaBMS.Front.Horizontal;
@@ -34,6 +35,9 @@ builder.Configuration
 
 builder.Services.AddDbContextFactory<AppDbContext>();
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
+
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<DailyEmailSender>();
 
 // TODO: AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>

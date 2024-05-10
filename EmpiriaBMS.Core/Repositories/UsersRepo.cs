@@ -241,7 +241,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<ICollection<Email>> GetEmails(int userId)
+    public async Task<ICollection<Email>> GetEmails(int userId = 0)
     {
         if (userId == 0)
             return new List<Email>();
@@ -249,7 +249,7 @@ public class UsersRepo : Repository<UserDto, User>
         using (var _context = _dbContextFactory.CreateDbContext())
             return await _context.Set<Email>()
                                  .Where(r => !r.IsDeleted)
-                                 .Where(r => r.UserId == userId)
+                                 .Where(r => userId == 0 ? true : r.UserId == userId)
                                  .ToListAsync();
     }
 
