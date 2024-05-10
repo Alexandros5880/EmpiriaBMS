@@ -27,8 +27,8 @@ public class DailyEmailSender
             // Get all users from the database or any other data source
             string[] allUsersEmails = await GetUsersEmails();
 
-            string subject = "Your Daily Update";
-            string body = "This is your daily update email.";
+            string subject = "Embiria BMS Message";
+            string body = "Please don't forget to stop working!";
 
             await _emailService.SendEmailAsync(subject, body, allUsersEmails);
         }
