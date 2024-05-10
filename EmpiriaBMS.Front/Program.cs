@@ -37,7 +37,7 @@ builder.Services.AddDbContextFactory<AppDbContext>();
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
 
 builder.Services.AddSingleton<IEmailService, EmailService>();
-builder.Services.AddSingleton<DailyEmailSender>();
+builder.Services.AddScoped<DailyEmailSender>();
 
 // TODO: AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
