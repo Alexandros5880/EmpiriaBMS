@@ -23,4 +23,6 @@ public class Contract : Entity
     public DateTime Date { get; set; }
 
     public byte[]? PMSignature { get; set; }
+
+    public string? Description { get; set; }
 }

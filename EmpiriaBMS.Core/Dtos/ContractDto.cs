@@ -21,4 +21,6 @@ public class ContractDto : EntityDto
     public DateTime Date { get; set; }
 
     public byte[]? PMSignature { get; set; }
+
+    public string? Description { get; set; }
 }

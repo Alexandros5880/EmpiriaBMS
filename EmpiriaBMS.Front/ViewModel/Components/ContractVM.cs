@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -67,6 +68,19 @@ public class ContractVM : BaseVM
                 return;
             _pMSignature = value;
             NotifyPropertyChanged(nameof(PMSignature));
+        }
+    }
+
+    private string _description { get; set; }
+    public string Description
+    {
+        get => _description;
+        set
+        {
+            if (value == _description)
+                return;
+            _description = value;
+            NotifyPropertyChanged(nameof(Description));
         }
     }
 }
