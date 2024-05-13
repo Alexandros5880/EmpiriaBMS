@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace EmpiriaBMS.Models;
 public static class ModelRelations
@@ -77,6 +78,20 @@ public static class ModelRelations
                .HasOne(de => de.Discipline)
                .WithMany(de => de.DisciplinesEngineers)
                .HasForeignKey(de => de.DisciplineId);
+
+        // Invoice Contract (OneToOne)
+        builder.Entity<Invoice>()
+               .HasOne(a => a.Contract)
+               .WithOne(b => b.Invoice)
+               .HasForeignKey<Contract>(b => b.InvoiceId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<Contract>()
+               .HasOne(b => b.Invoice)
+               .WithOne(a => a.Contract)
+               .HasForeignKey<Invoice>(a => a.ContractId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.Cascade);
 
         // Invoices Project
         builder.Entity<Invoice>()

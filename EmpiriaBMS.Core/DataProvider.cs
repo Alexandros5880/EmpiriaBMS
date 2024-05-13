@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Repositories;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Contracts;
 
 namespace EmpiriaBMS.Core;
 public class DataProvider : IDataProvider, IDisposable
@@ -32,6 +33,7 @@ public class DataProvider : IDataProvider, IDisposable
     public OfferRepo Offers { get; set; }
     public EmailRepo Emails { get; set; }
     public TeamsRequestedUserRepo TeamsRequestedUsers { get; set; }
+    public ContractRepo Contracts { get; set; }
     public KpisRepo KPIS { get; set; }
 
     public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
@@ -60,6 +62,7 @@ public class DataProvider : IDataProvider, IDisposable
         Offers = new OfferRepo(dbFactory);
         Emails = new EmailRepo(dbFactory);
         TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory);
+        Contracts = new ContractRepo(dbFactory);
         KPIS = new KpisRepo(dbFactory);
     }
 
@@ -94,6 +97,7 @@ public class DataProvider : IDataProvider, IDisposable
                 Offers.Dispose();
                 Emails.Dispose();
                 TeamsRequestedUsers.Dispose();
+                Contracts.Dispose();
                 KPIS.Dispose();
             }
             disposedValue = true;
