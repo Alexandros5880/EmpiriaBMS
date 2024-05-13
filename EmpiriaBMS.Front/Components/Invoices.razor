@@ -39,11 +39,15 @@
             <tr>
                 <th scope="col" class="sticky-header">Type</th>
                 <th scope="col" class="sticky-header">Date</th>
+                <th scope="col" class="sticky-header">Estimated Date</th>
+                <th scope="col" class="sticky-header">Days Until Payment</th>
                 <th scope="col" class="sticky-header">Mark</th>
                 <th scope="col" class="sticky-header">Number</th>
                 <th scope="col" class="sticky-header">Total</th>
                 <th scope="col" class="sticky-header">Vat</th>
                 <th scope="col" class="sticky-header">Fee</th>
+                <th scope="col" class="sticky-header">Paid Fee</th>
+                <th scope="col" class="sticky-header">Pending Fee</th>
                 <th scope="col" class="sticky-header">Delete</th>
             </tr>
         </thead>
@@ -70,6 +74,17 @@
                                @bind="@invoice.Date">
                     </td>
 
+                    <td style="min-width: 150px;">
+                        <input type="date"
+                               class="form-control"
+                               id="invoiceDate"
+                               @bind="@invoice.EstimatedDate">
+                    </td>
+
+                    <td style="min-width: 150px;">
+                        <span>@_displayDayesUntilPayment(invoice)</span>
+                    </td>
+
                     <td style="min-width: 200px;">
                         <input type="text"
                                class="form-control"
@@ -77,21 +92,21 @@
                                @bind="@invoice.Mark">
                     </td>
 
-                    <td style="min-width: 60px;">
+                    <td style="min-width: 100px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceNumber"
                                @bind="@invoice.Number">
                     </td>
 
-                    <td style="min-width: 60px;">
+                    <td style="min-width: 100px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceTotal"
                                @bind="@invoice.Total">
                     </td>
 
-                    <td style="min-width: 60px;">
+                    <td style="min-width: 100px;">
                         <input type="number"
                                class="form-control"
                                id="invoiceVat"
@@ -103,6 +118,14 @@
                                class="form-control"
                                id="invoiceFee"
                                @bind="@invoice.Fee">
+                    </td>
+
+                    <td style="min-width: 120px;">
+                        <span>@_displayPaidFee(invoice)</span>
+                    </td>
+
+                    <td style="min-width: 120px;">
+                        <span>@_displayPendingFee(invoice)</span>
                     </td>
 
                     <td style="min-width: 50px;">

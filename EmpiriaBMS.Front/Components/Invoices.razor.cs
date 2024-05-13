@@ -168,6 +168,54 @@ public partial class Invoices : ComponentBase, IDisposable
         await OnSave.InvokeAsync();
     }
 
+    #region Display Helper Functions
+    private string _displayDayesUntilPayment(InvoiceVM invoice)
+    {
+        try
+        {
+            var paymentDay = invoice.Date ?? DateTime.Now;
+            var diffTime = paymentDay - DateTime.Now;
+            return diffTime != null ? diffTime.DisplayDHMS() : "";
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log Error
+            Console.WriteLine($"Exception: {ex.Message} \nInner Exception: {ex.InnerException?.Message}.");
+            return "--";
+        }
+    }
+    private string _displayPaidFee(InvoiceVM invoice)
+    {
+        try
+        {
+            var paidFee = invoice?.Payments?.Sum(p => p?.Fee ?? 0) ?? 0;
+            return Convert.ToString(paidFee);
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log Error
+            Console.WriteLine($"Exception: {ex.Message} \nInner Exception: {ex.InnerException?.Message}.");
+            return "--";
+        }
+    }
+    private string _displayPendingFee(InvoiceVM invoice)
+    {
+        try
+        {
+            var paidFee = invoice?.Payments?.Sum(p => p?.Fee ?? 0) ?? 0;
+            var invoiceFee = invoice.Fee;
+            var diff = invoiceFee - paidFee;
+            return Convert.ToString(diff);
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log Error
+            Console.WriteLine($"Exception: {ex.Message} \nInner Exception: {ex.InnerException?.Message}.");
+            return "--";
+        }
+    }
+    #endregion
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposedValue)

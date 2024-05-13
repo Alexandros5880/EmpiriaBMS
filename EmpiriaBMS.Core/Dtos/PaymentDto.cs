@@ -5,13 +5,9 @@ namespace EmpiriaBMS.Core.Dtos;
 
 public class PaymentDto : EntityDto
 {
-    public DateTime? EstimatedDate { get; set; }
-
     public DateTime PaymentDate { get; set; }
 
     public string? Bank { get; set; }
-
-    public double PaidFee { get; set; }
 
     public double Fee { get; set; }
 

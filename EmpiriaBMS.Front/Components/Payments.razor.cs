@@ -104,7 +104,6 @@ public partial class Payments : ComponentBase, IDisposable
         {
             InvoiceId = _invoices.FirstOrDefault().Id,
             TypeId = _types.FirstOrDefault().Id,
-            EstimatedDate = DateTime.Now.AddMonths(1),
             PaymentDate = DateTime.Now.AddMonths(1),
         });
     }
@@ -174,16 +173,6 @@ public partial class Payments : ComponentBase, IDisposable
             disposedValue = true;
         }
     }
-
-    #region Display Helper Functions
-    private string _displayDayesUntilPayment(PaymentVM payment)
-    {
-        var paymentDay = @payment.PaymentDate ?? DateTime.Now;
-        var diffTime = paymentDay - DateTime.Now;
-        return diffTime.DisplayDHMS();
-    }
-    #endregion
-
 
     public void Dispose()
     {
