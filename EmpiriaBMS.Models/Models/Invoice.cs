@@ -24,7 +24,7 @@ public class Invoice : Entity
 
     public int? ContractId { get; set; }
 
-    public Contract Contract { get; set; }
+    public Contract? Contract { get; set; }
 
     public int ProjectId { get; set; }
 

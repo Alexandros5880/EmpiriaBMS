@@ -18,10 +18,10 @@
                             Pagination="@pagination"
                             TGridItem="ContractVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="160px 160px 160px 160px 100px"
+                            GridTemplateColumns="auto 160px 160px 160px 100px"
                             style="height: 70vh; overflow:auto;">
 
-                <TemplateColumn Title="Name"
+                <TemplateColumn Title="Description"
                                 Sortable="true"
                                 InitialSortDirection=SortDirection.Descending
                                 IsDefaultSortColumn=true>
@@ -39,7 +39,7 @@
                     </ChildContent>
                 </TemplateColumn>
 
-                <PropertyColumn Property="@(p => p.Invoice.Mark)" Sortable="true" Title="Invoice Mark" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => _getInvoice(p.InvoiceId).Mark)" Sortable="true" Title="Invoice Mark" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Date)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.ContractualFee)" Sortable="true" Title="Contractual Fee" Align="@Align.Start" />
 

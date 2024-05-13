@@ -45,8 +45,8 @@ public class ContractVM : BaseVM
         }
     }
 
-    private DateTime _date { get; set; }
-    public DateTime Date
+    private DateTime? _date { get; set; }
+    public DateTime? Date
     {
         get => _date;
         set

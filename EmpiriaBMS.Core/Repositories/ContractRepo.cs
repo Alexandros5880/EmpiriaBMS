@@ -27,7 +27,7 @@ public class ContractRepo : Repository<ContractDto, Contract>
                                       .Include(c => c.Invoice)
                                       .ThenInclude(i => i.Project)
                                       .ToListAsync();
-                return Mapping.Mapper.Map<List<ContractDto>>(items);
+                return Mapping.Mapper.Map <List<Contract> , List<ContractDto>>(items);
             }
 
             items = await _context.Set<Contract>()
@@ -38,7 +38,7 @@ public class ContractRepo : Repository<ContractDto, Contract>
                                   .Take(pageSize)
                                   .ToListAsync();
 
-            return Mapping.Mapper.Map<List<ContractDto>>(items);
+            return Mapping.Mapper.Map<List<Contract>, List<ContractDto>>(items);
         }
     }
 }

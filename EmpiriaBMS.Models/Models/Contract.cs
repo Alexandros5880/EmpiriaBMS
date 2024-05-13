@@ -13,7 +13,7 @@ public class Contract : Entity
     [Required]
     public int InvoiceId { get; set; }
 
-    public Invoice Invoice { get; set; }
+    public Invoice? Invoice { get; set; }
 
     [Required]
     public double ContractualFee { get; set; }
