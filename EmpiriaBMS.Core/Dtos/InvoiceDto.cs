@@ -24,6 +24,10 @@ public class InvoiceDto : EntityDto
 
     public InvoiceTypeDto? Type { get; set; }
 
+    public int ContractId { get; set; }
+
+    public ContractDto? Contract { get; set; }
+
     public int ProjectId { get; set; }
 
     public ProjectDto? Project { get; set; }

@@ -22,6 +22,10 @@ public class Invoice : Entity
 
     public string? Mark { get; set; }
 
+    public int? ContractId { get; set; }
+
+    public Contract? Contract { get; set; }
+
     public int ProjectId { get; set; }
 
     public Project Project { get; set; }

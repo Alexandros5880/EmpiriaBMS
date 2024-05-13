@@ -6,7 +6,7 @@ using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Repositories;
-public class InvoiceRepo : Repository<InvoiceDto, Invoice>, IDisposable
+public class InvoiceRepo : Repository<InvoiceDto, Invoice>
 {
     public InvoiceRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 

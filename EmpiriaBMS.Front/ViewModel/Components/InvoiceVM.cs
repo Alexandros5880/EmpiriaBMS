@@ -122,6 +122,32 @@ public class InvoiceVM : BaseVM
 
     public string TypeName => Type != null ? Type.Name : "";
 
+    private int _contractId { get; set; }
+    public int ContractId
+    {
+        get => _contractId;
+        set
+        {
+            if (value == _contractId)
+                return;
+            _contractId = value;
+            NotifyPropertyChanged(nameof(ContractId));
+        }
+    }
+
+    private ContractVM _contract { get; set; }
+    public ContractVM Contract
+    {
+        get => _contract;
+        set
+        {
+            if (value == _contract)
+                return;
+            _contract = value;
+            NotifyPropertyChanged(nameof(Contract));
+        }
+    }
+
     private int _projectId { get; set; }
     public int ProjectId
     {
