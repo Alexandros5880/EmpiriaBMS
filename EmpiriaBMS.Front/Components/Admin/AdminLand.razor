@@ -78,6 +78,20 @@
                     </FluentNavLink>
                 </FluentNavGroup>
 
+                <!-- Projects Contracts -->
+                <FluentNavGroup Title="Contracts" Icon="@(new MyIcons.Size24.Contract())">
+                    <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())"
+                                   OnClick="@(() => TabMenuClick(9))"
+                                   Class="@((tabs[22] ? "active-nav-link" : ""))">
+                        Contracts
+                    </FluentNavLink>
+@*                     <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                                   OnClick="@(() => TabMenuClick(10))"
+                                   Class="@((tabs[10] ? "active-nav-link" : ""))">
+                        Types
+                    </FluentNavLink> *@
+                </FluentNavGroup>
+
                 <!-- Projects Invoices -->
                 <FluentNavGroup Title="Invoices" Icon="@(new MyIcons.Size24.Invoices1())">
                     <FluentNavLink Icon="@(new MyIcons.Size24.Invoices2())"
@@ -281,6 +295,12 @@
             </div>
         }
         else if (tabs[21])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.SupportiveWorks.Types.SupportiveWorkTypes />
+            </div>
+        }
+        else if (tabs[22])
         {
             <div style="padding: 10px;">
                 <EmpiriaBMS.Front.Components.Admin.SupportiveWorks.Types.SupportiveWorkTypes />
