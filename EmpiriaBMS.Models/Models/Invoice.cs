@@ -14,6 +14,10 @@ public class Invoice : Entity
 
     public double? Fee { get; set; }
 
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime? EstimatedDate { get; set; }
+
     public int? Number { get; set; }
 
     public string? Mark { get; set; }

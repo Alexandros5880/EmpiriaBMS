@@ -783,6 +783,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var invoices = await _context.Set<Invoice>()
                                          .Where(r => !r.IsDeleted)
                                          .Where(i => i.ProjectId == projectId)
+                                         .Include(i => i.Payments)
                                          .ToListAsync();
 
             var dtos = Mapping.Mapper.Map<List<InvoiceDto>>(invoices);

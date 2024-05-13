@@ -1,4 +1,6 @@
 ﻿using EmpiriaBMS.Core.Dtos.Base;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Core.Dtos;
 
@@ -9,6 +11,8 @@ public class InvoiceDto : EntityDto
     public double? Vat { get; set; }
 
     public double? Fee { get; set; }
+
+    public DateTime? EstimatedDate { get; set; }
 
     public int? Number { get; set; }
 

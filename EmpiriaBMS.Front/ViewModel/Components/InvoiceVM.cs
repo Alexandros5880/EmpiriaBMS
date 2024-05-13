@@ -42,6 +42,19 @@ public class InvoiceVM : BaseVM
         }
     }
 
+    private DateTime? _estimatedDate;
+    public DateTime? EstimatedDate
+    {
+        get => _estimatedDate;
+        set
+        {
+            if (value == _estimatedDate)
+                return;
+            _estimatedDate = value;
+            NotifyPropertyChanged(nameof(EstimatedDate));
+        }
+    }
+
     private int? _number;
     public int? Number
     {

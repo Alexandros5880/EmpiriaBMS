@@ -5,19 +5,6 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class PaymentVM : BaseVM
 {
-    private DateTime? _estimatedDate;
-    public DateTime? EstimatedDate
-    {
-        get => _estimatedDate;
-        set
-        {
-            if (value == _estimatedDate)
-                return;
-            _estimatedDate = value;
-            NotifyPropertyChanged(nameof(EstimatedDate));
-        }
-    }
-
     private DateTime? _paymentDate;
     public DateTime? PaymentDate
     {
@@ -41,19 +28,6 @@ public class PaymentVM : BaseVM
                 return;
             _bank = value;
             NotifyPropertyChanged(nameof(Bank));
-        }
-    }
-
-    private double _paidFee;
-    public double PaidFee
-    {
-        get => _paidFee;
-        set
-        {
-            if (value == _paidFee)
-                return;
-            _paidFee = value;
-            NotifyPropertyChanged(nameof(PaidFee));
         }
     }
 
@@ -144,9 +118,7 @@ public class PaymentVM : BaseVM
 
     public PaymentVM(PaymentVM payment)
     {
-        EstimatedDate = payment.EstimatedDate;
         PaymentDate = payment.PaymentDate;
-        PaidFee = payment.PaidFee;
         Fee = payment.Fee;
         Bank = payment.Bank;
         TypeId = payment.TypeId;

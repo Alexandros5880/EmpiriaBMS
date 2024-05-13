@@ -7,15 +7,9 @@ public class Payment : Entity
 {
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
-    public DateTime? EstimatedDate { get; set; }
-
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
     public DateTime PaymentDate { get; set; }
 
     public string? Bank { get; set; }
-
-    public double PaidFee { get; set; }
 
     [Required]
     public double Fee { get; set; }

@@ -32,28 +32,22 @@
 
     <div class="col-12 row gx-2 mt-2">
         <!-- Bank -->
-        <div class="col-xl-4 col-lg-4 col-md-12">
+        <div class="col-xl-6 col-lg-6 col-md-12">
             <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Bank">
                 Bank
             </FluentTextField>
         </div>
         <!-- Fee -->
-        <div class="col-xl-4 col-lg-4 col-md-12">
+        <div class="col-xl-6 col-lg-6 col-md-12">
             <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Fee" Min="0">
                 Fee
-            </FluentNumberField>
-        </div>
-        <!-- PaidFee -->
-        <div class="col-xl-4 col-lg-4 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.PaidFee" Min="0">
-                Paid Fee
             </FluentNumberField>
         </div>
     </div>
 
     <div class="col-12 row gx-2 mt-2">
         <!-- Type -->
-        <div class="col-xl-4 col-lg-4 col-md-12">
+        <div class="col-xl-4 col-lg-6 col-md-12">
             <div>
                 Type<span class="text-danger">*</span>
             </div>
@@ -75,12 +69,8 @@
                 </div>
             }
         </div>
-        <!-- EstimatedDate -->
-        <div class="col-xl-4 col-lg-4 col-md-12">
-            <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.EstimatedDate" Label="EstimatedDate" />
-        </div>
         <!-- PaymentDate -->
-        <div class="col-xl-4 col-lg-4 col-md-12">
+        <div class="col-xl-6 col-lg-6 col-md-12">
             <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.PaymentDate" Label="PaymentDate" />
         </div>
     </div>

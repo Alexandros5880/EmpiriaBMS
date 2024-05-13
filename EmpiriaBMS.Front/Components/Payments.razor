@@ -23,13 +23,9 @@
                 <th scope="col" class="sticky-header">Invoice</th>
                 <th scope="col" class="sticky-header">Type</th>
                 <th scope="col" class="sticky-header">Bank</th>
-                <th scope="col" class="sticky-header">Paid Fee</th>
                 <th scope="col" class="sticky-header">Fee</th>
                 <th scope="col" class="sticky-header">Description</th>
-                <th scope="col" class="sticky-header">Estimated Date</th>
                 <th scope="col" class="sticky-header">Payment Date</th>
-                <th scope="col" class="sticky-header">Days Until Payment</th>
-                <th scope="col" class="sticky-header">Pending Fee</th>
                 <th scope="col" class="sticky-header">Delete</th>
             </tr>
         </thead>
@@ -68,12 +64,6 @@
                                @bind-value="@payment.Bank">
                     </td>
 
-                    <td style="min-width: 150px;">
-                        <input type="number"
-                               class="form-control"
-                               @bind-value="@payment.PaidFee">
-                    </td>
-
                     <td style="min-width: 100px;">
                         <input type="number"
                                class="form-control"
@@ -87,21 +77,7 @@
                     <td style="min-width: 150px;">
                         <input type="date"
                                class="form-control"
-                               @bind-value="@payment.EstimatedDate">
-                    </td>
-
-                    <td style="min-width: 150px;">
-                        <input type="date"
-                               class="form-control"
                                @bind-value="@payment.PaymentDate">
-                    </td>
-
-                    <td style="min-width: 150px;">
-                        <span>@_displayDayesUntilPayment(payment)</span>
-                    </td>
-
-                    <td style="min-width: 150px;">
-                        <span>@(@payment.Fee - @payment.PaidFee)</span>
                     </td>
 
                     <td style="min-width: 50px;">
