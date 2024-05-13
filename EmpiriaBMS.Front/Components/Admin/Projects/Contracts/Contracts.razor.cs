@@ -107,7 +107,8 @@ public partial class Contracts
 
     private async Task _delete(ContractVM record)
     {
-        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete contract of invoice with mark {record.Invoice?.Mark ?? "--"}?", "Yes", "No", "Deleting record...");
+        record.Invoice = _getInvoice(record.InvoiceId);
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete contract of project {record.Invoice?.Project?.Name ?? "--"}?", "Yes", "No", "Deleting record...");
 
         DialogResult result = await dialog.Result;
 
