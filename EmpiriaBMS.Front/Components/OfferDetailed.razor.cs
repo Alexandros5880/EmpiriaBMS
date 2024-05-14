@@ -37,8 +37,11 @@ public partial class OfferDetailed
 
         if (firstRender)
         {
-            _isNew = Offer.Id == 0;
+            
         }
+
+        _isNew = Offer.Id == 0;
+        StateHasChanged();
     }
 
     private OfferStateVM _selectedOfferState;
