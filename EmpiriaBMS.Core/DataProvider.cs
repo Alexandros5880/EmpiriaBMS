@@ -30,6 +30,7 @@ public class DataProvider : IDataProvider, IDisposable
     public ClientRepo Clients { get; set; }
     public OfferTypeRepo OfferTypes { get; set; }
     public OfferStateRepo OfferStates { get; set; }
+    public OfferResultRepo OfferResult { get; set; }
     public OfferRepo Offers { get; set; }
     public EmailRepo Emails { get; set; }
     public TeamsRequestedUserRepo TeamsRequestedUsers { get; set; }
@@ -59,6 +60,7 @@ public class DataProvider : IDataProvider, IDisposable
         Clients = new ClientRepo(dbFactory);
         OfferTypes = new OfferTypeRepo(dbFactory);
         OfferStates = new OfferStateRepo(dbFactory);
+        OfferResult = new OfferResultRepo(dbFactory);
         Offers = new OfferRepo(dbFactory);
         Emails = new EmailRepo(dbFactory);
         TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory);
@@ -94,6 +96,7 @@ public class DataProvider : IDataProvider, IDisposable
                 Clients.Dispose();
                 OfferTypes.Dispose();
                 OfferStates.Dispose();
+                OfferResult.Dispose();
                 Offers.Dispose();
                 Emails.Dispose();
                 TeamsRequestedUsers.Dispose();

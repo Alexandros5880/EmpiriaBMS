@@ -10,31 +10,45 @@ public class AppDbContext : DbContext
     const string migrationsDB = localhostDB;
 
 
-    public DbSet<User> Users { get; set; }
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<Email> Emails { get; set; }
-    public DbSet<Project> Projects { get; set; }
-    public DbSet<Discipline> Disciplines { get; set; }
-    public DbSet<DisciplineType> DisciplineTypes { get; set; }
-    public DbSet<Drawing> Drawings { get; set; }
-    public DbSet<DrawingType> DrawingTypes { get; set; }
-    public DbSet<Other> Others { get; set; }
-    public DbSet<OtherType> OtherTypes { get; set; }
+    public DbSet<User>? Users { get; set; }
+    public DbSet<Role>? Roles { get; set; }
+    public DbSet<Email>? Emails { get; set; }
+    public DbSet<Project>? Projects { get; set; }
+    public DbSet<ProjectCategory>? ProjectsCategories { get; set; }
+    public DbSet<ProjectSubCategory>? ProjectsSubCategories { get; set; }
+    public DbSet<ProjectStage>? ProjectsStages { get; set; }
+    public DbSet<Discipline>? Disciplines { get; set; }
+    public DbSet<DisciplineType>? DisciplineTypes { get; set; }
+    public DbSet<Drawing>? Drawings { get; set; }
+    public DbSet<DrawingType>? DrawingTypes { get; set; }
+    public DbSet<Other>? Others { get; set; }
+    public DbSet<OtherType>? OtherTypes { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
+    public DbSet<InvoiceType>? InvoicesTypes { get; set; }
     public DbSet<Contract>? Contracts { get; set; }
-    public DbSet<Timespan> TimeSpans { get; set; }
-    public DbSet<ProjectCategory> ProjectCategories { get; set; }
-    public DbSet<DailyTime> DailyTime { get; set; }
-    public DbSet<DailyTime> ParsonalTime { get; set; }
-    public DbSet<DailyTime> TrainingTime { get; set; }
-    public DbSet<DailyTime> CorporateEventTime { get; set; }
-    public DbSet<Issue> Issues { get; set; }
-    public DbSet<Document> Documents { get; set; }
-    public DbSet<UserRole> UsersRoles { get; set; }
-    public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
-    public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
-    public DbSet<TeamsRequestedUser> TeamsRequestedUser { get; set; }
+    public DbSet<Timespan>? TimeSpans { get; set; }
+    public DbSet<DailyTime>? DailyTime { get; set; }
+    public DbSet<DailyTime>? ParsonalTime { get; set; }
+    public DbSet<DailyTime>? TrainingTime { get; set; }
+    public DbSet<DailyTime>? CorporateEventTime { get; set; }
+    public DbSet<Issue>? Issues { get; set; }
+    public DbSet<Document>? Documents { get; set; }
+    public DbSet<Address>? Address { get; set; }
+    public DbSet<Client>? Clients { get; set; }
+    public DbSet<Offer>? Offers { get; set; }
+    public DbSet<OfferState>? OffesStates { get; set; }
+    public DbSet<OfferResult>? OffersResults { get; set; }
+    public DbSet<OfferType>? OffersTypes { get; set; }
+    public DbSet<Payment>? Payments { get; set; }
+    public DbSet<PaymentType>? PaymentsTypes { get; set; }
+    public DbSet<Permission>? Permissions { get; set; }
+    public DbSet<UserRole>? UsersRoles { get; set; }
+    public DbSet<RolePermission>? RolesPermissions { get; set; }
+    public DbSet<DrawingEmployee>? DrawingsEmployees { get; set; }
+    public DbSet<OtherEmployee>? OthersEmployees { get; set; }
+    public DbSet<ProjectSubConstructor>? ProjectsSubConstructors { get; set; }
+    public DbSet<TeamsRequestedUser>? TeamsRequestedUser { get; set; }
+    public DbSet<DisciplineEngineer>? DisciplinesEngineers { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -1933,36 +1947,53 @@ public class AppDbContext : DbContext
             Id = offer_state_2_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "UNSUCCESSFUL"
+            Name = "PREPARATION"
         };
         builder.Entity<OfferState>().HasData(offer_state_2);
-
-        var offer_state_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
-        OfferState offer_state_3 = new OfferState()
-        {
-            Id = offer_state_3_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "SUCCESSFUL"
-        };
-        builder.Entity<OfferState>().HasData(offer_state_3);
-
-        var offer_state_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
-        OfferState offer_state_4 = new OfferState()
-        {
-            Id = offer_state_4_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "WAITING FOR RESULT"
-        };
-        builder.Entity<OfferState>().HasData(offer_state_4);
 
         int[] offerStatesIds =
         {
             offer_state_1_id,
-            offer_state_2_id,
-            offer_state_3_id,
-            offer_state_4_id
+            offer_state_2_id
+        };
+        #endregion
+
+        #region Create OfferResult
+        var offer_result_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferResult offer_result_1 = new OfferResult()
+        {
+            Id = offer_result_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "UNSUCCESSFUL"
+        };
+        builder.Entity<OfferResult>().HasData(offer_result_1);
+
+        var offer_result_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferResult offer_result_2 = new OfferResult()
+        {
+            Id = offer_result_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "SUCCESSFUL"
+        };
+        builder.Entity<OfferResult>().HasData(offer_result_2);
+
+        var offer_result_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferResult offer_result_3 = new OfferResult()
+        {
+            Id = offer_result_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "WAITING FOR RESULT"
+        };
+        builder.Entity<OfferResult>().HasData(offer_result_3);
+
+        int[] offerResultsIds =
+        {
+            offer_result_1_id,
+            offer_result_2_id,
+            offer_result_3_id
         };
         #endregion
 
@@ -2871,7 +2902,8 @@ public class AppDbContext : DbContext
                 Date = DateTime.Now,
                 Code = $"Code CO-{i}",
                 TypeId = offerTypesIds[random.Next(0, 2)],
-                StateId = offerStatesIds[random.Next(0, 3)],
+                StateId = offerStatesIds[random.Next(0, 1)],
+                ResultId = offerResultsIds[random.Next(0, 2)],
                 PudgetPrice = 1000 * i * 3,
                 OfferPrice = 1000 * i * 2,
                 ProjectId = projectId
@@ -2963,7 +2995,8 @@ public class AppDbContext : DbContext
                 Date = DateTime.Now,
                 Code = $"Code CO-{i}",
                 TypeId = offerTypesIds[random.Next(0, 2)],
-                StateId = offerStatesIds[random.Next(0, 3)],
+                StateId = offerStatesIds[random.Next(0, 1)],
+                ResultId = offerResultsIds[random.Next(0, 2)],
                 PudgetPrice = 1000 * i * 4,
                 OfferPrice = 1000 * i * 3,
                 ProjectId = projectId
