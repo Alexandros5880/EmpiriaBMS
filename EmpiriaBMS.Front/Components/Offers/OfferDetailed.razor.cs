@@ -6,7 +6,7 @@ using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using System;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class OfferDetailed
 {

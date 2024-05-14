@@ -14,7 +14,7 @@ using Microsoft.Fast.Components.FluentUI.Utilities;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class Offers
 {
@@ -39,7 +39,7 @@ public partial class Offers
     private bool _isDeleteDialogOdepened = false;
 
     #region Data Grid
-    IQueryable<OfferVM>? FilteredItems => _offers?.AsQueryable().Where(x => x.Project.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase)
+    IQueryable<OfferVM> FilteredItems => _offers?.AsQueryable().Where(x => x.Project.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase)
                                                                             && (x.Project.Client == null ? true : x.Project.Client.FullName.Contains(_clientNameFilter, StringComparison.CurrentCultureIgnoreCase)));
     PaginationState pagination = new PaginationState { ItemsPerPage = 4 };
     private string _projectNameFilter = string.Empty;
@@ -206,7 +206,7 @@ public partial class Offers
         {
             _dialog.Show();
             _isDialogOdepened = true;
-        }  
+        }
     }
 
     private void _delete(OfferVM offer)
@@ -216,7 +216,7 @@ public partial class Offers
         {
             _deleteDialog.Show();
             _isDeleteDialogOdepened = true;
-        } 
+        }
     }
     #endregion
 

@@ -1,0 +1,54 @@
+﻿@inherits Microsoft.AspNetCore.Components.ComponentBase;
+
+@if (Steps != null && Steps.Count > 0)
+{
+    <div>
+        <div>
+            @Steps[currentStep]
+        </div>
+
+        <div class="wizard-navigation">
+            <button @onclick="PreviousStep" disabled="@(currentStep == 0)">Previous</button>
+            <button @onclick="NextStep" disabled="@(currentStep == Steps.Count - 1)">Next</button>
+        </div>
+    </div>
+}
+
+<style>
+    .wizard-navigation button {
+        margin: 5px;
+    }
+</style>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public List<RenderFragment> Steps { get; set; }
+
+    private int currentStep = 0;
+
+    private void NextStep()
+    {
+        if (currentStep < Steps.Count - 1)
+        {
+            currentStep++;
+        }
+    }
+
+    private void PreviousStep()
+    {
+        if (currentStep > 0)
+        {
+            currentStep--;
+        }
+    }
+
+    private void GoToStep(int stepIndex)
+    {
+        if (stepIndex >= 0 && stepIndex < Steps.Count)
+        {
+            currentStep = stepIndex;
+        }
+    }
+
+}
