@@ -10,8 +10,25 @@ namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class OfferDetailed
 {
+    private OfferVM _offer;
     [Parameter]
-    public OfferVM Offer { get; set; }
+    public OfferVM Offer
+    {
+        get => _offer;
+        set {
+            if (value.StateId != 0)
+                SelectedOfferState = States.FirstOrDefault(s => s.Id == value.StateId);
+
+            if (value.TypeId != 0)
+                SelectedOfferType = Types.FirstOrDefault(s => s.Id == value.TypeId);
+
+            if (value.ResultId != 0)
+                SelectedOfferResult = Results.FirstOrDefault(s => s.Id == value.ResultId);
+
+            _offer = value;
+            _isNew = _offer.Id == 0;
+        }
+    }
 
     [Parameter]
     public ICollection<OfferTypeVM> Types { get; set; }
@@ -31,19 +48,6 @@ public partial class OfferDetailed
     private bool _isNew = true;
     private OfferValidator _validator = new OfferValidator();
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            
-        }
-
-        _isNew = Offer.Id == 0;
-        StateHasChanged();
-    }
-
     private OfferStateVM _selectedOfferState;
     public OfferStateVM SelectedOfferState
     {
@@ -53,7 +57,8 @@ public partial class OfferDetailed
             if (_selectedOfferState != value)
             {
                 _selectedOfferState = value;
-                Offer.StateId = _selectedOfferState.Id;
+                if (Offer != null && value.Id != Offer?.StateId)
+                    Offer.StateId = _selectedOfferState.Id;
             }
         }
     }
@@ -67,7 +72,8 @@ public partial class OfferDetailed
             if (_selectedOfferType != value)
             {
                 _selectedOfferType = value;
-                Offer.TypeId = _selectedOfferType.Id;
+                if (Offer != null && value.Id != Offer?.TypeId)
+                    Offer.TypeId = _selectedOfferType.Id;
             }
         }
     }
@@ -81,7 +87,8 @@ public partial class OfferDetailed
             if (_selectedOfferResult != value)
             {
                 _selectedOfferResult = value;
-                Offer.ResultId = SelectedOfferResult.Id;
+                if (Offer != null && value.Id != Offer?.ResultId)
+                    Offer.ResultId = SelectedOfferResult.Id;
             }
         }
     }
