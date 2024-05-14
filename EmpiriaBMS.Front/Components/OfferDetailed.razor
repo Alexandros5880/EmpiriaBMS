@@ -5,14 +5,15 @@
 @inject IMapper Mapper
 
 
-<div class="row m-3 mt-4">
+<div class="row">
 
-    <div class="col-12 mt-3 row">
+    <div class="col-12 row gx-2 mt-2">
 
         <!-- State -->
-        <div class="col-4">
+        <div class="col-xl-4 col-lg-4 col-md-12">
             <FluentCombobox Id="states"
-                            Class="w-100"
+                            Height="200px"
+                            Width="100%"
                             Placeholder="Select State"
                             Label="States:"
                             Autocomplete="ComboboxAutocomplete.Both"
@@ -26,9 +27,10 @@
         </div>
 
         <!-- Type -->
-        <div class="col-4">
+        <div class="col-xl-4 col-lg-4 col-md-12">
             <FluentCombobox Id="types"
-                            Class="w-100"
+                            Height="200px"
+                            Width="100%"
                             Placeholder="Select Type"
                             Label="Types:"
                             Autocomplete="ComboboxAutocomplete.Both"
@@ -42,9 +44,10 @@
         </div>
 
         <!-- Result -->
-        <div class="col-4">
+        <div class="col-xl-4 col-lg-4 col-md-12">
             <FluentCombobox Id="results"
-                            Class="w-100"
+                            Height="200px"
+                            Width="100%"
                             Placeholder="Select Result"
                             Label="Results:"
                             Autocomplete="ComboboxAutocomplete.Both"
@@ -59,43 +62,43 @@
 
     </div>
 
-    <div class="col-12 mt-2 row">
+    <div class="col-12 row gx-3 mt-2">
 
-        <div class="col-6">
+        <div class="col-xl-6 col-lg-6 col-md-12">
             <FluentTextField Label="Code:" Class="w-100" @bind-Value="@Offer.Code" />
         </div>
 
-        <div class="col-6">
+        <div class="col-xl-6 col-lg-6 col-md-12">
             <FluentDatePicker Label="Date:" Class="w-100" @bind-Value="@Offer.Date" />
         </div>
 
     </div>
 
-    <div class="col-12 mt-2 row">
+    <div class="col-12 row gx-3 mt-2">
 
-        <div class="col-6">
+        <div class="col-xl-6 col-lg-6 col-md-12">
             <FluentNumberField Label="Pudget:" Class="w-100" @bind-Value="@Offer.PudgetPrice" />
         </div>
 
-        <div class="col-6">
+        <div class="col-xl-6 col-lg-6 col-md-12">
             <FluentNumberField Label="Offer:" Class="w-100" @bind-Value="@Offer.OfferPrice" />
         </div>
 
     </div>
 
-    <div class="col-12 mt-2 row">
+    <div class="col-12 row gx-3 mt-2">
         <FluentTextArea Label="Description:" Class="col-12" @bind-Value="@Offer.Description" />
     </div>
 
-    <div class="col-12 mt-2 row">
+    <div class="col-12 row gx-3 mt-2">
         <FluentTextArea Label="Team Text:" Class="col-12" @bind-Value="@Offer.TeamText" />
     </div>
 
-    <div class="col-12 mt-2 row">
+    <div class="col-12 row gx-3 mt-2">
         <FluentTextArea Label="Comments:" Class="col-12" @bind-Value="@Offer.Comments" />
     </div>
 
-    <div class="col-12 mt-2 row">
+    <div class="col-12 row gx-3 mt-2">
 
         <div class="col-6"> 
             <FluentButton IconStart="@(new Icons.Regular.Size16.Backpack())"
