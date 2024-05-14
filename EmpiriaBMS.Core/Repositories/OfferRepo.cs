@@ -23,6 +23,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
                                        .Include(o => o.State)
                                        .Include(o => o.Type)
                                        .Include(o => o.Project)
+                                       .ThenInclude(p => p.Client)
                                        .ToListAsync();
 
             return Mapping.Mapper.Map<List<Offer>, List<OfferDto>>(offers);

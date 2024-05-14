@@ -37,11 +37,13 @@ public partial class Offers
     private bool _isDeleteDialogOdepened = false;
 
     #region Data Grid
-    IQueryable<OfferVM>? FilteredItems => _offers?.AsQueryable().Where(x => x.Project.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<OfferVM>? FilteredItems => _offers?.AsQueryable().Where(x => x.Project.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase)
+                                                                            && (x.Project.Client == null ? true : x.Project.Client.FullName.Contains(_clientNameFilter, StringComparison.CurrentCultureIgnoreCase)));
     PaginationState pagination = new PaginationState { ItemsPerPage = 4 };
     private string _projectNameFilter = string.Empty;
+    private string _clientNameFilter = string.Empty;
 
-    private void HandleFilter(ChangeEventArgs args)
+    private void HandleProjectNameFilter(ChangeEventArgs args)
     {
         if (args.Value is string value)
         {
@@ -50,6 +52,18 @@ public partial class Offers
         else if (string.IsNullOrWhiteSpace(_projectNameFilter) || string.IsNullOrEmpty(_projectNameFilter))
         {
             _projectNameFilter = string.Empty;
+        }
+    }
+
+    private void HandleClientNameFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _clientNameFilter = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_clientNameFilter) || string.IsNullOrEmpty(_clientNameFilter))
+        {
+            _clientNameFilter = string.Empty;
         }
     }
     #endregion
@@ -103,7 +117,6 @@ public partial class Offers
         if (refresh)
             StateHasChanged();
     }
-
     #endregion
 
     private async Task Refresh()

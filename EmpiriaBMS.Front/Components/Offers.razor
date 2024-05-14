@@ -72,7 +72,7 @@
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="OfferVM"
-                            GridTemplateColumns="0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 100px"
+                            GridTemplateColumns="0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 100px"
                             style="height: 240px; overflow:auto;">
 
                 <TemplateColumn Title="Project"
@@ -86,7 +86,7 @@
                                           Autofocus=true
                                           @bind-Value="@_projectNameFilter"
                                           Placeholder="Project name..."
-                                          @oninput="@HandleFilter" />
+                                          @oninput="@HandleProjectNameFilter" />
                         </div>
                     </ColumnOptions>
                     <ChildContent>
@@ -96,6 +96,24 @@
 
                 <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 150px;" />
                 <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
+
+                <TemplateColumn Title="Client"
+                                Sortable="true"
+                                Style="min-width: 200px;">
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                          Autofocus=true
+                                          @bind-Value="@_clientNameFilter"
+                                          Placeholder="Client name..."
+                                          @oninput="@HandleClientNameFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.Project?.Client?.LastName ?? "" + " " + context.Project?.Client?.FirstName ?? "")
+                    </ChildContent>
+                </TemplateColumn>
+
                 <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Style="min-width: 150px;" />
                 <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.PudgetPrice)" Sortable="true" Title="Pudget" Style="min-width: 100px;" />
