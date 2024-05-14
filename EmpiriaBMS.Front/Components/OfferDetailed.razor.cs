@@ -20,6 +20,9 @@ public partial class OfferDetailed
     public ICollection<OfferStateVM> States { get; set; }
 
     [Parameter]
+    public ICollection<OfferResultVM> Results { get; set; }
+
+    [Parameter]
     public EventCallback OnSave { get; set; }
 
     [Parameter]
@@ -62,6 +65,20 @@ public partial class OfferDetailed
             {
                 _selectedOfferType = value;
                 Offer.TypeId = _selectedOfferType.Id;
+            }
+        }
+    }
+
+    private OfferResultVM _selectedOfferResult;
+    public OfferResultVM SelectedOfferResult
+    {
+        get => _selectedOfferResult;
+        set
+        {
+            if (_selectedOfferResult != value)
+            {
+                _selectedOfferResult = value;
+                Offer.ResultId = SelectedOfferResult.Id;
             }
         }
     }

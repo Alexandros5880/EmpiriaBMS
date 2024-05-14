@@ -21,10 +21,12 @@ public partial class Offers
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<OfferStateVM> _offerStates = new ObservableCollection<OfferStateVM>();
     private ObservableCollection<OfferTypeVM> _offerTypes = new ObservableCollection<OfferTypeVM>();
+    private ObservableCollection<OfferResultVM> _offerResults = new ObservableCollection<OfferResultVM>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
 
     private OfferStateVM _selectedOfferState;
     private OfferTypeVM _selectedOfferType;
+    private OfferResultVM _selectedOfferResult;
     private ProjectVM _selectedProject;
     private OfferVM _selectedOffer;
 
@@ -86,7 +88,7 @@ public partial class Offers
         var dtos = await _dataProvider.OfferStates.GetAll();
         var vms = Mapper.Map<List<OfferStateVM>>(dtos);
         _offerStates.Clear();
-        _offerStates.Add(new OfferStateVM { Id = 0, Name = "Select All" });
+        _offerStates.Add(new OfferStateVM { Id = 0, Name = "Select State..." });
         vms.ForEach(_offerStates.Add);
     }
 
@@ -95,8 +97,17 @@ public partial class Offers
         var dtos = await _dataProvider.OfferTypes.GetAll();
         var vms = Mapper.Map<List<OfferTypeVM>>(dtos);
         _offerTypes.Clear();
-        _offerTypes.Add(new OfferTypeVM { Id = 0, Name = "Select All" });
+        _offerTypes.Add(new OfferTypeVM { Id = 0, Name = "Select Type..." });
         vms.ForEach(_offerTypes.Add);
+    }
+
+    private async Task _getOfferResults()
+    {
+        var dtos = await _dataProvider.OfferResult.GetAll();
+        var vms = Mapper.Map<List<OfferResultVM>>(dtos);
+        _offerResults.Clear();
+        _offerResults.Add(new OfferResultVM { Id = 0, Name = "Select Result..." });
+        vms.ForEach(_offerResults.Add);
     }
 
     private async Task _getAllProjects()
@@ -104,13 +115,13 @@ public partial class Offers
         var dtos = await _dataProvider.Projects.GetAll();
         var vms = Mapper.Map<List<ProjectVM>>(dtos);
         _projects.Clear();
-        _projects.Add(new ProjectVM { Id = 0, Name = "Select All" });
+        _projects.Add(new ProjectVM { Id = 0, Name = "Select Project..." });
         vms.ForEach(_projects.Add);
     }
 
-    private async Task _getOffers(int projectId, int stateId = 0, int typeId = 0, bool refresh = false)
+    private async Task _getOffers(int projectId, int stateId = 0, int typeId = 0, int resultId = 0, bool refresh = false)
     {
-        var dtos = await _dataProvider.Offers.GetAll(projectId, stateId, typeId);
+        var dtos = await _dataProvider.Offers.GetAll(projectId, stateId, typeId, resultId);
         var vms = Mapper.Map<List<OfferVM>>(dtos);
         _offers.Clear();
         vms.ForEach(_offers.Add);
@@ -124,9 +135,11 @@ public partial class Offers
         await _getAllProjects();
         await _getOfferStates();
         await _getOfferTypes();
-        _selectedProject = _projects.FirstOrDefault(o => o.Name.Equals("Select All"));
-        _selectedOfferState = _offerStates.FirstOrDefault(o => o.Name.Equals("Select All"));
-        _selectedOfferType = _offerTypes.FirstOrDefault(o => o.Name.Equals("Select All"));
+        await _getOfferResults();
+        _selectedProject = _projects.FirstOrDefault(o => o.Name.Equals("Select Project..."));
+        _selectedOfferState = _offerStates.FirstOrDefault(o => o.Name.Equals("Select State..."));
+        _selectedOfferType = _offerTypes.FirstOrDefault(o => o.Name.Equals("Select Type..."));
+        _selectedOfferResult = _offerResults.FirstOrDefault(o => o.Name.Equals("Select Result..."));
         await _getOffers(_selectedOfferState.Id, _selectedOfferType.Id);
         StateHasChanged();
     }
@@ -135,19 +148,25 @@ public partial class Offers
     private async Task _onProjectSelectionChanged(ProjectVM project)
     {
         _selectedProject = project;
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, refresh: true);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, refresh: true);
     }
 
     private async Task _onStateSelectionChanged(OfferStateVM state)
     {
         _selectedOfferState = state;
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, refresh: true);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, refresh: true);
     }
 
     private async Task _onTypeSelectionChanged(OfferTypeVM type)
     {
         _selectedOfferType = type;
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, refresh: true);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, refresh: true);
+    }
+
+    private async Task _onResultSelectionChanged(OfferResultVM result)
+    {
+        _selectedOfferResult = result;
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, refresh: true);
     }
     #endregion
 
@@ -212,7 +231,7 @@ public partial class Offers
             _deleteDialog.Hide();
             _isDeleteDialogOdepened = false;
 
-            await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, true);
+            await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, true);
         }
     }
 

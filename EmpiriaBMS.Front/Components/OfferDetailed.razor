@@ -9,7 +9,8 @@
 
     <div class="col-12 mt-3 row">
 
-        <div class="col-6">
+        <!-- State -->
+        <div class="col-4">
             <FluentCombobox Id="states"
                             Class="w-100"
                             Placeholder="Select State"
@@ -24,7 +25,8 @@
                             @bind-SelectedOption="@SelectedOfferState" />
         </div>
 
-        <div class="col-6">
+        <!-- Type -->
+        <div class="col-4">
             <FluentCombobox Id="types"
                             Class="w-100"
                             Placeholder="Select Type"
@@ -37,6 +39,22 @@
                             OptionText="@((t) => t.Name)"
                             OptionSelected="@(i => i.Id == @Offer.TypeId)"
                             @bind-SelectedOption="@SelectedOfferType" />
+        </div>
+
+        <!-- Result -->
+        <div class="col-4">
+            <FluentCombobox Id="results"
+                            Class="w-100"
+                            Placeholder="Select Result"
+                            Label="Results:"
+                            Autocomplete="ComboboxAutocomplete.Both"
+                            AriaLabel="Pre-selected option"
+                            Items="@Results"
+                            TOption="OfferResultVM"
+                            OptionValue="@((t) => t.Id.ToString())"
+                            OptionText="@((t) => t.Name)"
+                            OptionSelected="@(i => i.Id == @Offer.ResultId)"
+                            @bind-SelectedOption="@SelectedOfferResult" />
         </div>
 
     </div>

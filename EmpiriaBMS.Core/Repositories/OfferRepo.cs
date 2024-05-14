@@ -10,7 +10,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
 {
     public OfferRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async Task<ICollection<OfferDto>> GetAll(int projectId = 0, int stateId = 0, int typeId = 0)
+    public async Task<ICollection<OfferDto>> GetAll(int projectId = 0, int stateId = 0, int typeId = 0, int resultId = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -19,9 +19,11 @@ public class OfferRepo : Repository<OfferDto, Offer>
                                        .Where(o => (projectId == 0 || o.ProjectId == projectId)
                                                 && (stateId == 0 || o.StateId == stateId)
                                                 && (typeId == 0 || o.TypeId == typeId)
+                                                && (resultId == 0 || o.ResultId == resultId)
                                              )
                                        .Include(o => o.State)
                                        .Include(o => o.Type)
+                                       .Include(o => o.Result)
                                        .Include(o => o.Project)
                                        .ThenInclude(p => p.Client)
                                        .ToListAsync();

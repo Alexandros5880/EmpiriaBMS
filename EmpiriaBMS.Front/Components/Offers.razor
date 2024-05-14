@@ -40,7 +40,7 @@
                                 OptionSelected="@(i => i.Id == _selectedProject?.Id)"
                                 SelectedOptionChanged="@(async (o) => await _onProjectSelectionChanged(o))"/>
             </div>
-            <div>
+            <div class="ms-2">
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                 AriaLabel="Pre-selected option"
                                 Height="400px"
@@ -62,6 +62,17 @@
                                 OptionSelected="@(i => i.Id == _selectedOfferType?.Id)"
                                 SelectedOptionChanged="@(async (o) => await _onTypeSelectionChanged(o))" />
             </div>
+            <div class="ms-2">
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Height="400px"
+                                Items="@_offerResults"
+                                TOption="OfferResultVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == _selectedOfferResult?.Id)"
+                                SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
+            </div>
         </div>
     </div>
 
@@ -72,14 +83,14 @@
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="OfferVM"
-                            GridTemplateColumns="0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 100px"
+                            GridTemplateColumns="auto 140px 140px 100px 160px 120px 100px 100px 100px 160px 100px"
                             style="height: 240px; overflow:auto;">
 
                 <TemplateColumn Title="Project"
                                 Sortable="true"
                                 InitialSortDirection=SortDirection.Descending
                                 IsDefaultSortColumn=true
-                                Style="min-width: 200px;">
+                                Style="min-width: 120px;">
                     <ColumnOptions>
                         <div class="search-box">
                             <FluentSearch type="search"
@@ -94,12 +105,13 @@
                     </ChildContent>
                 </TemplateColumn>
 
-                <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 150px;" />
+                <PropertyColumn Property="@(p => p.Result.Name)" Sortable="true" Title="Result" Style="min-width: 140px;" />
+                <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
 
                 <TemplateColumn Title="Client"
                                 Sortable="true"
-                                Style="min-width: 200px;">
+                                Style="min-width: 160px;">
                     <ColumnOptions>
                         <div class="search-box">
                             <FluentSearch type="search"
@@ -114,11 +126,11 @@
                     </ChildContent>
                 </TemplateColumn>
 
-                <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Style="min-width: 150px;" />
+                <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Style="min-width: 120px;" />
                 <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.PudgetPrice)" Sortable="true" Title="Pudget" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.OfferPrice)" Sortable="true" Title="Price" Style="min-width: 100px;" />
-                <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="min-width: 200px;" />
+                <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="min-width: 160px;" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
                     <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
@@ -159,7 +171,8 @@
             @if (_selectedOffer != null)
             {
                 <OfferDetailed States="@_offerStates"
-                               Types="@_offerTypes" 
+                               Types="@_offerTypes"
+                               Results="@_offerResults"
                                Offer="@_selectedOffer"
                                OnCansel="@CloseDialogClick"
                                OnSave="@(async () => await SaveDialogClick())" />
