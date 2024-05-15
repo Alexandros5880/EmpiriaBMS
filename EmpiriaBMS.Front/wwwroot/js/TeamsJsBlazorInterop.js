@@ -85,6 +85,7 @@ export function navigateToAdmin(url, objectId) {
     });
 }
 
+
 // Register MNouse Weel Event
 export function registerGlobalMouseWheelEvent(objRef, id) {
     $('[data-id="' + id + '"]').on('wheel', function (e) {
@@ -174,6 +175,8 @@ export function getCanvasImageData(canvas) {
     return byteArray;
 }
 // Canvas
+
+
 
 // Google Maps Api
 export function displayAddress(mapElementId, address) {

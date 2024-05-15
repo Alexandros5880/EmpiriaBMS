@@ -3,6 +3,7 @@
 @using EmpiriaBMS.Front.Components
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Offers;
 
 @inject IDialogService DialogService
 @inject TeamsUserCredential teamsUserCredential
@@ -170,12 +171,12 @@
         <div class="col-12 justify-content-center">
             @if (_selectedOffer != null)
             {
-                <OfferDetailed States="@_offerStates"
-                               Types="@_offerTypes"
-                               Results="@_offerResults"
-                               Offer="@_selectedOffer"
-                               OnCansel="@CloseDialogClick"
-                               OnSave="@(async () => await SaveDialogClick())" />
+                <OfferDetailedLand States="@_offerStates"
+                                   Types="@_offerTypes"
+                                   Results="@_offerResults"
+                                   Offer="@_selectedOffer"
+                                   OnCansel="@CloseDialogClick"
+                                   OnSave="@(async () => await SaveDialogClick())" />
             }
         </div>
 

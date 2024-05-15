@@ -9,7 +9,7 @@
 
         <div class="wizard-navigation">
             <button @onclick="PreviousStep" disabled="@(currentStep == 0)">Previous</button>
-            <button @onclick="NextStep" disabled="@(currentStep == Steps.Count - 1)">Next</button>
+            <button @onclick="NextStep" disabled="@(currentStep == Steps.Count - 1 && !EnalbleNext)">Next</button>
         </div>
     </div>
 }
@@ -24,6 +24,9 @@
 
     [Parameter, EditorRequired]
     public List<RenderFragment> Steps { get; set; }
+
+    [Parameter, EditorRequired]
+    public bool EnalbleNext { get; set; }
 
     private int currentStep = 0;
 

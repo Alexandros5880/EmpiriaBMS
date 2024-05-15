@@ -7,9 +7,12 @@
 
 <div class="row">
 
-    <div class="col-12">
-        <h3>@(_isNew ? "Add Offer" : "Edit Offer")</h3>
-    </div>
+    @if (DisplayTitle)
+    {
+        <div class="col-12">
+            <h3>@(_isNew ? "Add Offer" : "Edit Offer")</h3>
+        </div>
+    }
 
     <div class="col-12 row gx-2 mt-2">
 
@@ -94,14 +97,6 @@
 
     </div>
 
-    <!-- Create Contract And Project Wizard -->
-    @if (SelectedOfferResult != null && SelectedOfferResult.Name.Equals("SUCCESSFUL"))
-    {
-        <div class="col-12 mt-2 mb-2">
-            <EmpiriaBMS.Front.Components.Offers.OfferDetailedWizard />
-        </div>
-    }
-
     <!-- Description / TeamText / Comments -->
     <div class="col-12 mt-2 mb-2">
         <FluentAccordion>
@@ -131,25 +126,28 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="col-12 row gx-3 mt-2">
+    @if (DisplayActions)
+    {
+        <div class="col-12 row gx-3 mt-2">
 
-        <div class="col-6"> 
-            <FluentButton IconStart="@(new Icons.Regular.Size16.Backpack())"
-                          OnClick="@(async () => await OnCansel.InvokeAsync())"
-                          Style="float: left;">
-                Cancel
-            </FluentButton>
-        </div>
+            <div class="col-6">
+                <FluentButton IconStart="@(new Icons.Regular.Size16.Backpack())"
+                              OnClick="@(async () => Cancel())"
+                              Style="float: left;">
+                    Cancel
+                </FluentButton>
+            </div>
 
-        <div class="col-6">
-            <FluentButton IconStart="@(new Icons.Regular.Size16.Save())"
-                          OnClick="@(async () => await Save())"
-                          Style="float: right;"
-                          Disabled=false>
-                Save
-            </FluentButton>
+            <div class="col-6">
+                <FluentButton IconStart="@(new Icons.Regular.Size16.Save())"
+                              OnClick="@(async () => await Save())"
+                              Style="float: right;"
+                              Disabled=false>
+                    Save
+                </FluentButton>
+            </div>
+
         </div>
-        
-    </div>
+    }
 
 </div>

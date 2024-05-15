@@ -1,0 +1,105 @@
+﻿@using EmpiriaBMS.Front.Components.General
+
+@inherits Microsoft.AspNetCore.Components.ComponentBase;
+
+@inject MicrosoftTeams MicrosoftTeams
+
+<div class="row">
+
+    <div class="col-12">
+        <h3>@(_isNew ? "Add Offer" : "Edit Offer")</h3>
+    </div>
+
+    <div class="col-12 mt-2 mb-2 row">
+
+        <div class="bs-stepper col-12">
+
+            <div class="bs-stepper-header">
+                <div class="step">
+                    <button type="button" class="btn step-trigger" onclick="@(() => TabMenuClick(0))">
+                        <span class="bs-stepper-circle">1</span>
+                        <span class="bs-stepper-label">Main Info</span>
+                    </button>
+                </div>
+                <div class="line"></div>
+                <div class="step">
+                    <button type="button" class="btn step-trigger" onclick="@(() => TabMenuClick(1))">
+                        <span class="bs-stepper-circle">2</span>
+                        <span class="bs-stepper-label">Create Contract</span>
+                    </button>
+                </div>
+                <div class="line"></div>
+                <div class="step">
+                    <button type="button" class="btn step-trigger" onclick="@(() => TabMenuClick(2))">
+                        <span class="bs-stepper-circle">3</span>
+                        <span class="bs-stepper-label">Create Project</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-12">
+
+            <!-- Display Body -->
+            @if (tabs[0])
+            {
+                <div class="content">
+                    <div class="row">
+                        <div class="col-12">
+                            @if (Offer != null)
+                            {
+                                <OfferDetailed States="@States"
+                                               Types="@Types"
+                                               Results="@Results"
+                                               Offer="@Offer"
+                                               OnCansel="@OnCansel"
+                                               OnSave="@OnSave"
+                                               DisplayTitle="false"
+                                               DisplayActions="false" />
+                            }
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" onclick="@(() => TabMenuClick(1))">Next</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            }
+            else if (tabs[1])
+            {
+                <div class="content">
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="text-center">Create Contract</p>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" onclick="@(() => TabMenuClick(0))">Previous</button>
+                            <button class="btn btn-primary" onclick="@(() => TabMenuClick(2))">Next</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (tabs[2])
+            {
+                <div class="content">
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="text-center">Create Project</p>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" onclick="@(() => TabMenuClick(1))">Previous</button>
+                            <button class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
