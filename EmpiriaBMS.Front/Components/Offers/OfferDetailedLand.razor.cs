@@ -64,19 +64,19 @@ public partial class OfferDetailedLand
 
     private async Task _offerSave()
     {
+        TabMenuClick(1);
         _loading = true;
         // TODO: Save Offer
         await Task.Delay(1000);
-        TabMenuClick(1);
         _loading = false;
     }
 
     private async Task _contractSave()
     {
+        TabMenuClick(2);
         _loading = true;
         // TODO: Save Contract
         await Task.Delay(1000);
-        TabMenuClick(2);
         _loading = false;
     }
 
