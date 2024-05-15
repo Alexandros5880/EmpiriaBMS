@@ -325,3 +325,11 @@ background: var(--dashboard-tables-header-color) !important;
 }
 
 /* Lists */
+
+
+/* Stepper Wizard */
+.selected_step {
+    background-color: var(--primary-bg-color) !important;
+    color: var(--primary-accent-color) !important;
+}
+/* Stepper Wizard */

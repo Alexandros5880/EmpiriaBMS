@@ -16,21 +16,21 @@
 
             <div class="bs-stepper-header">
                 <div class="step">
-                    <button type="button" class="btn step-trigger" onclick="@(() => TabMenuClick(0))">
+                    <button type="button" class="btn step-trigger @(tabs[0] == true ? "selected_step" : "")" onclick="@(() => TabMenuClick(0))">
                         <span class="bs-stepper-circle">1</span>
                         <span class="bs-stepper-label">Main Info</span>
                     </button>
                 </div>
                 <div class="line"></div>
                 <div class="step">
-                    <button type="button" class="btn step-trigger" onclick="@(() => TabMenuClick(1))">
+                    <button type="button" class="btn step-trigger @(tabs[1] == true ? "selected_step" : "")" onclick="@(() => TabMenuClick(1))">
                         <span class="bs-stepper-circle">2</span>
                         <span class="bs-stepper-label">Create Contract</span>
                     </button>
                 </div>
                 <div class="line"></div>
                 <div class="step">
-                    <button type="button" class="btn step-trigger" onclick="@(() => TabMenuClick(2))">
+                    <button type="button" class="btn step-trigger @(tabs[2] == true ? "selected_step" : "")" onclick="@(() => TabMenuClick(2))">
                         <span class="bs-stepper-circle">3</span>
                         <span class="bs-stepper-label">Create Project</span>
                     </button>
