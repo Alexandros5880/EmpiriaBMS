@@ -60,6 +60,11 @@ public partial class OfferDetailedLand
         }
     }
 
+    private async Task _save()
+    {
+        await Task.Delay(1000);
+    }
+
     #region Tab Actions
     bool[] tabs = new bool[50];
 

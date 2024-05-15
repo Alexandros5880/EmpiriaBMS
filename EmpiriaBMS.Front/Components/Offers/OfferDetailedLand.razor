@@ -67,7 +67,7 @@
                                                DisplayActions="false" />
                             }
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 mt-2">
                             <button class="btn btn-primary float-end"
                                     onclick="@(() => TabMenuClick(1))"
                                     disabled="@(!_contractTabEnable)">
@@ -86,9 +86,11 @@
                              style="min-height: max(50vh, 400px) !important; max-height: max(70vh, 500px) !important; overflow-y: auto;">
                             <p class="text-center">Create Contract</p>
                         </div>
-                        <div class="col-12">
-                            <button class="btn btn-primary" onclick="@(() => TabMenuClick(0))">Previous</button>
-                            <button class="btn btn-primary" onclick="@(() => TabMenuClick(2))">Next</button>
+                        <div class="col-12 mt-2">
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-primary" onclick="@(() => TabMenuClick(0))">Previous</button>
+                                <button class="btn btn-primary ms-2" onclick="@(() => TabMenuClick(2))">Next</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,9 +103,11 @@
                              style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
                             <p class="text-center">Create Project</p>
                         </div>
-                        <div class="col-12">
-                            <button class="btn btn-primary" onclick="@(() => TabMenuClick(1))">Previous</button>
-                            <button class="btn btn-primary">Save</button>
+                        <div class="col-12 mt-2">
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-primary" onclick="@(() => TabMenuClick(1))">Previous</button>
+                                <button class="btn btn-primary ms-2" onclick="@(async() => await _save())">Save</button>
+                            </div>
                         </div>
                     </div>
                 </div>
