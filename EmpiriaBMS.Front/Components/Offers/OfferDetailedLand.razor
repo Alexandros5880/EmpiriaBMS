@@ -27,7 +27,8 @@
                 <div class="step">
                     <button type="button"
                             class="btn step-trigger @(tabs[1] == true ? "selected_step" : "")"
-                            onclick="@(() => TabMenuClick(1))">
+                            onclick="@(() => TabMenuClick(1))"
+                            disabled="@(!_contractTabEnable)">
                         <span class="bs-stepper-circle">2</span>
                         <span class="bs-stepper-label">Create Contract</span>
                     </button>
@@ -66,7 +67,11 @@
                             }
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-primary" onclick="@(() => TabMenuClick(1))">Next</button>
+                            <button class="btn btn-primary float-end"
+                                    onclick="@(() => TabMenuClick(1))"
+                                    disabled="@(!_contractTabEnable)">
+                                Next
+                            </button>
                         </div>
                     </div>
                     

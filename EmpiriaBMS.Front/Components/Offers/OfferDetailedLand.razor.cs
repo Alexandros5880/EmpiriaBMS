@@ -34,6 +34,8 @@ public partial class OfferDetailedLand
     [Parameter]
     public EventCallback OnCansel { get; set; }
 
+    private bool _contractTabEnable => Offer.ResultId == Results.FirstOrDefault(r => r.Name.Equals("SUCCESSFUL"))?.Id;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -41,7 +43,20 @@ public partial class OfferDetailedLand
         if (firstRender)
         {
             TabMenuClick(0);
+
+            Offer.PropertyChanged += Offer_PropertyChanged;
+
             StateHasChanged();
+        }
+    }
+
+    private void Offer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        switch(e.PropertyName)
+        {
+            case nameof(Offer.ResultId):
+                StateHasChanged();
+                break;
         }
     }
 
