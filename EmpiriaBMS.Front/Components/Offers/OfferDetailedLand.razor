@@ -49,68 +49,83 @@
         <div class="col-12">
 
             <!-- Display Body -->
-            @if (tabs[0])
+            @if (_loading)
             {
-                <div class="content">
-                    <div class="row">
-                        <div class="col-12"
-                             style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
-                            @if (Offer != null)
-                            {
-                                <OfferDetailed States="@States"
-                                               Types="@Types"
-                                               Results="@Results"
-                                               Offer="@Offer"
-                                               OnCansel="@OnCansel"
-                                               OnSave="@OnSave"
-                                               DisplayTitle="false"
-                                               DisplayActions="false" />
-                            }
-                        </div>
-                        <div class="col-12 mt-2">
-                            <button class="btn btn-primary float-end"
-                                    onclick="@(() => TabMenuClick(1))"
-                                    disabled="@(!_contractTabEnable)">
-                                Next
-                            </button>
-                        </div>
-                    </div>
-                    
+                <div style="display: flex; justify-content: center; align-items: center; margin-top: 5%;">
+                    <FluentProgressRing />
                 </div>
             }
-            else if (tabs[1])
+            else
             {
-                <div class="content">
-                    <div class="row">
-                        <div class="col-12"
-                             style="min-height: max(50vh, 400px) !important; max-height: max(70vh, 500px) !important; overflow-y: auto;">
-                            <p class="text-center">Create Contract</p>
+                @if (tabs[0])
+                {
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-12"
+                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
+                                @if (Offer != null)
+                                {
+                                    <OfferDetailed States="@States"
+                                                   Types="@Types"
+                                                   Results="@Results"
+                                                   Offer="@Offer"
+                                                   OnCansel="@OnCansel"
+                                                   OnSave="@OnSave"
+                                                   DisplayTitle="false"
+                                                   DisplayActions="false" />
+                                }
+                            </div>
+                            <div class="col-12 mt-2">
+                                <button class="btn btn-primary float-end"
+                                        onclick="@(async () => await _offerSave())"
+                                        disabled="@(!_contractTabEnable)">
+                                    Next
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-12 mt-2">
-                            <div class="d-flex justify-content-end">
-                                <button class="btn btn-primary" onclick="@(() => TabMenuClick(0))">Previous</button>
-                                <button class="btn btn-primary ms-2" onclick="@(() => TabMenuClick(2))">Next</button>
+
+                    </div>
+                }
+                else if (tabs[1])
+                {
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-12"
+                                 style="min-height: max(50vh, 400px) !important; max-height: max(70vh, 500px) !important; overflow-y: auto;">
+
+                                <!-- Contract Detailed -->
+                                <p class="text-center">Create Contract</p>
+
+                            </div>
+                            <div class="col-12 mt-2">
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-primary" onclick="@(() => TabMenuClick(0))">Previous</button>
+                                    <button class="btn btn-primary ms-2" onclick="@(async () => await _contractSave())">Next</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            }
-            else if (tabs[2])
-            {
-                <div class="content">
-                    <div class="row">
-                        <div class="col-12"
-                             style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
-                            <p class="text-center">Create Project</p>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <div class="d-flex justify-content-end">
-                                <button class="btn btn-primary" onclick="@(() => TabMenuClick(1))">Previous</button>
-                                <button class="btn btn-primary ms-2" onclick="@(async() => await _save())">Save</button>
+                }
+                else if (tabs[2])
+                {
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-12"
+                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
+
+                                <!-- Project Detailed -->
+                                <p class="text-center">Create Project</p>
+
+                            </div>
+                            <div class="col-12 mt-2">
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-primary" onclick="@(() => TabMenuClick(1))">Previous</button>
+                                    <button class="btn btn-primary ms-2" onclick="@(async() => await _projectSave())">Save</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             }
 
         </div>

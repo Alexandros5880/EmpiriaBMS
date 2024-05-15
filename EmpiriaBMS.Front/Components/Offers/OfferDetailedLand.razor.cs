@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.Offers;
@@ -6,6 +7,7 @@ namespace EmpiriaBMS.Front.Components.Offers;
 public partial class OfferDetailedLand
 {
     private bool _isNew = true;
+    private bool _loading = false;
 
     private OfferVM _offer;
     [Parameter]
@@ -60,9 +62,30 @@ public partial class OfferDetailedLand
         }
     }
 
-    private async Task _save()
+    private async Task _offerSave()
     {
+        _loading = true;
+        // TODO: Save Offer
         await Task.Delay(1000);
+        TabMenuClick(1);
+        _loading = false;
+    }
+
+    private async Task _contractSave()
+    {
+        _loading = true;
+        // TODO: Save Contract
+        await Task.Delay(1000);
+        TabMenuClick(2);
+        _loading = false;
+    }
+
+    private async Task _projectSave()
+    {
+        _loading = true;
+        // TODO: Save Project
+        await Task.Delay(1000);
+        _loading = false;
     }
 
     #region Tab Actions
