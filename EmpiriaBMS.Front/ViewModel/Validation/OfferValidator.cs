@@ -195,7 +195,7 @@ public class OfferValidator : BaseValidator<OfferVM>
                     CodeErr = CodeValid ? null : "Code requared!";
                     return CodeValid;
                 case nameof(OfferVM.Date):
-                    DateValid = ((DateTime)value) >= DateTime.Now;
+                    DateValid = value == null ? false : ((DateTime)value) >= DateTime.Now;
                     DateErr = DateValid ? null : "Date requared!";
                     return DateValid;
                 case nameof(OfferVM.PudgetPrice):
@@ -221,6 +221,9 @@ public class OfferValidator : BaseValidator<OfferVM>
 
     public new bool Validate(OfferVM obj)
     {
+        if (obj == null)
+            return false;
+
         try
         {
             ValidateProperty(obj, nameof(OfferVM.State), obj.StateId);

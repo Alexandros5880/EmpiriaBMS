@@ -92,7 +92,7 @@
 
         <!-- OfferPrice -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" Label="Offer:" @bind-Value="@Offer.OfferPrice" />
+            <FluentNumberField Style="width:100%; margin:4px;" Label="Price:" @bind-Value="@Offer.OfferPrice" />
         </div>
 
     </div>
@@ -128,25 +128,15 @@
     <!-- Action Buttons -->
     @if (DisplayActions)
     {
-        <div class="col-12 row gx-3 mt-2">
-
-            <div class="col-6">
-                <FluentButton IconStart="@(new Icons.Regular.Size16.Backpack())"
-                              OnClick="@(async () => Cancel())"
-                              Style="float: left;">
-                    Cancel
-                </FluentButton>
-            </div>
-
-            <div class="col-6">
+        <div class="row mt-3 mb-3">
+            <div class="col-12">
                 <FluentButton IconStart="@(new Icons.Regular.Size16.Save())"
                               OnClick="@(async () => await Save())"
                               Style="float: right;"
                               Disabled=false>
-                    Save
+                    @(_isNew ? "Add" : "Update")
                 </FluentButton>
             </div>
-
         </div>
     }
 

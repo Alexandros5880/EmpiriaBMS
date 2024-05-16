@@ -32,6 +32,9 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     [Parameter]
     public ProjectVM Project { get; set; } = new ProjectVM();
 
+    [Parameter]
+    public bool DisplayActions { get; set; } = true;
+
     private async Task _getProjectSubCategories(int id = 0)
     {
         ProjectSubCategories.Clear();

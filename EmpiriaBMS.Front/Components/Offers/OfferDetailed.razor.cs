@@ -43,9 +43,6 @@ public partial class OfferDetailed
     public EventCallback OnSave { get; set; }
 
     [Parameter]
-    public EventCallback OnCansel { get; set; }
-
-    [Parameter]
     public bool DisplayTitle { get; set; } = true;
 
     [Parameter]
@@ -116,6 +113,5 @@ public partial class OfferDetailed
         await OnSave.InvokeAsync();
     }
 
-    public async Task Cancel() =>
-        await OnCansel.InvokeAsync();
+    public bool Validate() => _validator.Validate(Offer);
 }

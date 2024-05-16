@@ -17,8 +17,15 @@ public partial class OfferDetailedLand : IDisposable
         get => _offer;
         set
         {
-            _offer = value;
-            _isNew = _offer.Id == 0;
+            if (_offer?.Id != value?.Id)
+            {
+                _offer = value;
+                _isNew = _offer.Id == 0;
+                _contract = new ContractVM();
+                _project = new ProjectVM();
+                _invoice = new InvoiceVM();
+                TabMenuClick(0);
+            }
         }
     }
 
@@ -47,14 +54,8 @@ public partial class OfferDetailedLand : IDisposable
 
     #region Compoment Refrences
     private ProjectDetailed _projectCompoment;
+    private OfferDetailed _offerCompoment;
     #endregion
-
-    protected async override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -62,10 +63,6 @@ public partial class OfferDetailedLand : IDisposable
 
         if (firstRender)
         {
-            _contract = new ContractVM();
-            _project = new ProjectVM();
-            _invoice = new InvoiceVM();
-            await TabMenuClick(0);
             Offer.PropertyChanged += Offer_PropertyChanged;
             StateHasChanged();
         }
@@ -115,32 +112,24 @@ public partial class OfferDetailedLand : IDisposable
 
         if (tabIndex == 1) // Project Tabs
         {
-            _loading = true;
-            // TODO: Save Offer
-            await Task.Delay(1000);
-            _loading = false;
-            StateHasChanged();
-
-            if (Offer.ProjectId != null || Offer.ProjectId != 0)
+            var valid = _offerCompoment.Validate();
+            if (valid)
             {
-                var project = await _dataProvider.Projects.Get((int)Offer.ProjectId);
-                _project = _mapper.Map<ProjectVM>(project);
-                _projectCompoment.PrepairForEdit();
-            }
-            else
-            {
-                _project = new ProjectVM();
+                if (Offer.ProjectId != null && Offer.ProjectId != 0)
+                {
+                    var project = await _dataProvider.Projects.Get((int)Offer.ProjectId);
+                    _project = _mapper.Map<ProjectVM>(project);
+                    _projectCompoment.PrepairForEdit();
+                }
+                else
+                {
+                    _project = new ProjectVM();
+                }
             }
         }
 
         if (tabIndex == 2) // Invoice Tab
         {
-            _loading = true;
-            // TODO: Save Project
-            await Task.Delay(1000);
-            _loading = false;
-            StateHasChanged();
-
             if (_project.Id != 0)
             {
                 var invoices = await _dataProvider.Projects.GetInvoices(_project.Id);
@@ -156,12 +145,6 @@ public partial class OfferDetailedLand : IDisposable
 
         if (tabIndex == 3) // Contract Tab
         {
-            _loading = true;
-            // TODO: Save Invoices
-            await Task.Delay(1000);
-            _loading = false;
-            StateHasChanged();
-
             if (_invoice.ContractId != 0)
             {
                 var contract = await _dataProvider.Contracts.Get(_invoice.ContractId);
@@ -176,17 +159,21 @@ public partial class OfferDetailedLand : IDisposable
                     };
             }
             else
+            {
                 _contract = new ContractVM()
                 {
                     InvoiceId = _invoice.Id,
                     Invoice = _invoice,
                     Date = DateTime.Now,
                 };
-
+            }
         }
 
-
     }
+    #endregion
+
+    #region Validation
+    private bool _validOffer => _offerCompoment == null ? false : _offerCompoment.Validate();
     #endregion
 
     #region Disable Pattern

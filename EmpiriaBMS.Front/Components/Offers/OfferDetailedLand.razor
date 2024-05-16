@@ -31,7 +31,8 @@
                 <div class="step">
                     <button type="button"
                             class="btn step-trigger @(tabs[1] == true ? "selected_step" : "")"
-                            onclick="@(async () => await TabMenuClick(1))">
+                            onclick="@(async () => await TabMenuClick(1))"
+                            disabled="@_validOffer">
                         <span class="bs-stepper-circle">2</span>
                         <span class="bs-stepper-label">Create Project</span>
                     </button>
@@ -41,7 +42,7 @@
                     <button type="button"
                             class="btn step-trigger @(tabs[2] == true ? "selected_step" : "")"
                             onclick="@(async () => await TabMenuClick(2))"
-                            disabled="@(_project == null)">
+                            disabled="@(_project == null || _project.Id == 0)">
                         <span class="bs-stepper-circle">3</span>
                         <span class="bs-stepper-label">Create Invoice</span>
                     </button>
@@ -51,7 +52,7 @@
                     <button type="button"
                             class="btn step-trigger @(tabs[3] == true ? "selected_step" : "")"
                             onclick="@(async () => await TabMenuClick(3))"
-                            disabled="@(!_contractTabEnable)">
+                            disabled="@(!_contractTabEnable || _project == null || _project.Id == 0)">
                         <span class="bs-stepper-circle">4</span>
                         <span class="bs-stepper-label">Create Contract</span>
                     </button>
@@ -79,20 +80,19 @@
                                 @if (Offer != null)
                                 {
                                     <!-- Offers Detailed -->
-                                    <OfferDetailed States="@States"
+                                    <OfferDetailed @ref="@_offerCompoment"
+                                                   States="@States"
                                                    Types="@Types"
                                                    Results="@Results"
                                                    Offer="@Offer"
-                                                   OnCansel="@OnCansel"
                                                    OnSave="@OnSave"
                                                    DisplayTitle="false"
-                                                   DisplayActions="false" />
+                                                   DisplayActions="false"/>
                                 }
                             </div>
                             <div class="col-12 mt-2">
                                 <button class="btn btn-primary float-end"
-                                        onclick="@(async () => await TabMenuClick(1))"
-                                        disabled="@(!_contractTabEnable)">
+                                        onclick="@(async () => await TabMenuClick(1))">
                                     Next
                                 </button>
                             </div>
@@ -107,7 +107,7 @@
                             <div class="col-12 my-wizard-tab">
 
                                 <!-- Project Detailed -->
-                                <ProjectDetailed @ref="@_projectCompoment" Project="@_project" />
+                                <ProjectDetailed @ref="@_projectCompoment" Project="@_project" DisplayActions="false" />
 
                             </div>
                             <div class="col-12 mt-2">
@@ -115,7 +115,7 @@
                                     <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(0))">Previous</button>
                                     <button class="btn btn-primary ms-2"
                                             onclick="@(async() => await TabMenuClick(2))"
-                                            disabled="@(_project == null)">
+                                            disabled="@(_project == null || _project.Id == 0)">
                                         Next
                                     </button>
                                 </div>
