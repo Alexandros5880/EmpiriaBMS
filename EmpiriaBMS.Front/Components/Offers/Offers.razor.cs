@@ -70,6 +70,8 @@ public partial class Offers
     }
     #endregion
 
+    private OfferDetailedLand _offersDetailedLandRef;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -195,7 +197,6 @@ public partial class Offers
     {
         _selectedOffer = null;
         _selectedOffer = new OfferVM();
-        StateHasChanged();
         _dialog.Show();
         _isDialogOdepened = true;
     }
@@ -203,7 +204,6 @@ public partial class Offers
     private void _edit(OfferVM offer)
     {
         _selectedOffer = offer;
-        StateHasChanged();
         if (_selectedOffer != null && _selectedOffer.Id != 0)
         {
             _dialog.Show();

@@ -9,7 +9,7 @@
 @inject IDialogService DialogService
 @inject MicrosoftTeams MicrosoftTeams
 
-<div class="row">
+<div class="row w-96" style="overflow-x: hidden;">
 
     @if (!string.IsNullOrEmpty(@Title))
     {
@@ -75,9 +75,10 @@
         </div>
         <!-- Mark -->
         <div class="col-xl-4 col-lg-4 col-md-12">
-            <FluentTextField Style="width:100%;" @bind-Value="@Content.Mark">
-                Mark<span class="text-danger">*</span>
-            </FluentTextField>
+            <div>
+                Mark
+            </div>
+            <FluentTextField Style="width:100%;" @bind-Value="@Content.Mark"/>
             @if (!validMark)
             {
                 <div class="col-12">

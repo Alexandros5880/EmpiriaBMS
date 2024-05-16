@@ -71,12 +71,11 @@
             }
             else
             {
-                @if (tabs[0])
+                @if (tabs[0]) // Offer Detailed
                 {
                     <div class="content">
                         <div class="row">
-                            <div class="col-12"
-                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 400px) !important; overflow-y: auto;">
+                            <div class="col-12 my-wizard-tab">
                                 @if (Offer != null)
                                 {
                                     <!-- Offers Detailed -->
@@ -101,12 +100,11 @@
 
                     </div>
                 }
-                else if (tabs[1])
+                else if (tabs[1]) // Project Detailed
                 {
                     <div class="content">
                         <div class="row">
-                            <div class="col-12"
-                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 400px) !important; overflow-y: auto;">
+                            <div class="col-12 my-wizard-tab">
 
                                 <!-- Project Detailed -->
                                 <ProjectDetailed @ref="@_projectCompoment" Project="@_project" />
@@ -125,29 +123,35 @@
                         </div>
                     </div>
                 }
-                else if (tabs[2])
+                else if (tabs[2]) // Invoice Detailed
                 {
                     <div class="content">
                         <div class="row">
-                            <div class="col-12"
-                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 400px) !important; overflow-y: auto;">
+                            <div class="col-12 my-wizard-tab">
 
                                  <div class="row">
-                                    <div class="col-12 d-flex justify-content-between">
+                                    <div class="col-12 row">
                                         <!-- Select Invoice -->
-                                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                                        Placeholder="Select Invoice..."
-                                                        Items="@_invoices"
-                                                        Height="200px"
-                                                        Width="400px"
-                                                        TOption="InvoiceVM"
-                                                        OptionText="@(c => $"P-[{c.ProjectName}]  T-[{c.TypeName}]  M-[{c.Mark}]")"
-                                                        OptionValue="@(c => c.Id.ToString())"
-                                                        @bind-SelectedOption="@_invoice"/>
+                                        <div class="col-6">
+                                            <div>
+                                                Select Invoice
+                                            </div>
+                                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                                            Placeholder="Select Invoice..."
+                                                            Items="@_invoices"
+                                                            Height="200px"
+                                                            Width="100%"
+                                                            TOption="InvoiceVM"
+                                                            OptionText="@(c => $"P-[{c.ProjectName}]  T-[{c.TypeName}]  M-[{c.Mark}]")"
+                                                            OptionValue="@(c => c.Id.ToString())"
+                                                            @bind-SelectedOption="@_invoice"/>
+                                        </div>
                                         <!-- Add Invoice -->
-                                        <FluentButton IconStart="@(new Icons.Regular.Size24.Add())" OnClick="@_addInvoice">
-                                            Add
-                                        </FluentButton>
+                                        <div class="col-6 d-flex justify-content-end">
+                                            <FluentButton Style="margin-top: 5%;" IconStart="@(new Icons.Regular.Size24.Add())" OnClick="@_addInvoice">
+                                                Add
+                                            </FluentButton>
+                                        </div>
                                     </div>
                                     <div class="col-12 m-2">
                                         <!-- Invoice Detailed -->
@@ -168,16 +172,18 @@
                         </div>
                     </div>
                 }
-                else if (tabs[3])
+                else if (tabs[3]) // Contract Detailed
                 {
                     <div class="content">
                         <div class="row">
-                            <div class="col-12"
-                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 400px) !important; overflow-y: auto;">
+                            <div class="col-12 my-wizard-tab">
 
                                 <div class="row">
-                                    <div class="col-12 d-flex justify-content-between">
-                                        <!-- Select Invoice -->
+                                    <!-- Select Invoice -->
+                                    <div class="col-6">
+                                        <div>
+                                            Select Invoice
+                                        </div>
                                         <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                                         Placeholder="Select Invoice..."
                                                         Items="@_invoices"
@@ -188,7 +194,7 @@
                                                         OptionValue="@(c => c.Id.ToString())"
                                                         @bind-SelectedOption="@_invoice" />
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-12 m-2">
                                         <!-- Contract Detailed -->
                                         <ContractDetailed Content="@_contract" DisplayActions="false" />
                                     </div>

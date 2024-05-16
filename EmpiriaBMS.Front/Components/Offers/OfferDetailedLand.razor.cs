@@ -1,10 +1,11 @@
 ﻿using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.Offers;
 
-public partial class OfferDetailedLand
+public partial class OfferDetailedLand : IDisposable
 {
     private bool _isNew = true;
     private bool _loading = false;
@@ -48,16 +49,24 @@ public partial class OfferDetailedLand
     private ProjectDetailed _projectCompoment;
     #endregion
 
+    protected async override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
 
         if (firstRender)
         {
+            _contract = new ContractVM();
+            _project = new ProjectVM();
+            _invoice = new InvoiceVM();
             await TabMenuClick(0);
-
             Offer.PropertyChanged += Offer_PropertyChanged;
-
             StateHasChanged();
         }
     }
@@ -177,6 +186,27 @@ public partial class OfferDetailedLand
         }
 
 
+    }
+    #endregion
+
+    #region Disable Pattern
+    private bool disposedValue;
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                Offer.PropertyChanged -= Offer_PropertyChanged;
+            }
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
     #endregion
 }

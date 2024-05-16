@@ -19,7 +19,7 @@
 
 <div class="mt-3">
     <FluentStack>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="AddOffer">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@((e) => AddOffer(e))">
             Add Offer
         </FluentButton>
     </FluentStack>
@@ -170,7 +170,8 @@
         <div class="col-12 justify-content-center">
             @if (_selectedOffer != null)
             {
-                <OfferDetailedLand States="@_offerStates"
+                <OfferDetailedLand @ref="@_offersDetailedLandRef"
+                                   States="@_offerStates"
                                    Types="@_offerTypes"
                                    Results="@_offerResults"
                                    Offer="@_selectedOffer"
