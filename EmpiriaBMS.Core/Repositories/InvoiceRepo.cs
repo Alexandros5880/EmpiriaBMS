@@ -20,8 +20,10 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
             var i = await _context
                              .Set<Invoice>()
                              .Where(r => !r.IsDeleted)
-                             .Include(r => r.Project)
-                             .Include(r => r.Type)
+                             .Include(i => i.Payments)
+                             .Include(i => i.Type)
+                             .Include(i => i.Contract)
+                             .Include(i => i.Project)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<InvoiceDto>(i);
@@ -38,8 +40,10 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
             {
                 i = await _context.Set<Invoice>()
                                   .Where(r => !r.IsDeleted)
-                                  .Include(r => r.Project)
-                                  .Include(r => r.Type)
+                                  .Include(i => i.Payments)
+                                         .Include(i => i.Type)
+                                         .Include(i => i.Contract)
+                                         .Include(i => i.Project)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -49,8 +53,10 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .Where(r => !r.IsDeleted)
                               .Skip((pageIndex - 1) * pageSize)
                               .Take(pageSize)
-                              .Include(r => r.Project)
-                              .Include(r => r.Type)
+                              .Include(i => i.Payments)
+                                         .Include(i => i.Type)
+                                         .Include(i => i.Contract)
+                                         .Include(i => i.Project)
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -71,8 +77,10 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                 i = await _context.Set<Invoice>()
                                   .Where(r => !r.IsDeleted)
                                   .Where(expresion)
-                                  .Include(r => r.Project)
-                                  .Include(r => r.Type)
+                                  .Include(i => i.Payments)
+                                  .Include(i => i.Type)
+                                  .Include(i => i.Contract)
+                                  .Include(i => i.Project)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -83,8 +91,10 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .Where(expresion)
                               .Skip((pageIndex - 1) * pageSize)
                               .Take(pageSize)
-                              .Include(r => r.Project)
-                              .Include(r => r.Type)
+                              .Include(i => i.Payments)
+                              .Include(i => i.Type)
+                              .Include(i => i.Contract)
+                              .Include(i => i.Project)
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);

@@ -15,6 +15,24 @@ public class ContractRepo : Repository<ContractDto, Contract>
 {
     public ContractRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<ContractDto?> Get(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var i = await _context
+                             .Set<Contract>()
+                             .Where(r => !r.IsDeleted)
+                             .Include(c => c.Invoice)
+                             .ThenInclude(i => i.Project)
+                             .FirstOrDefaultAsync(r => r.Id == id);
+
+            return Mapping.Mapper.Map<ContractDto>(i);
+        }
+    }
+
     public async Task<ICollection<ContractDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())

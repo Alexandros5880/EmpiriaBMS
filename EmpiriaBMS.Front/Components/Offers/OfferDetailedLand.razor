@@ -1,4 +1,5 @@
 ﻿@using EmpiriaBMS.Front.Components.Admin.Projects.Contracts
+@using EmpiriaBMS.Front.Components.Admin.Projects.Invoices
 @using EmpiriaBMS.Front.Components.General
 
 @inherits Microsoft.AspNetCore.Components.ComponentBase;
@@ -30,7 +31,7 @@
                 <div class="step">
                     <button type="button"
                             class="btn step-trigger @(tabs[1] == true ? "selected_step" : "")"
-                            onclick="@(async () => await _offerSave())">
+                            onclick="@(async () => await TabMenuClick(1))">
                         <span class="bs-stepper-circle">2</span>
                         <span class="bs-stepper-label">Create Project</span>
                     </button>
@@ -39,7 +40,8 @@
                 <div class="step">
                     <button type="button"
                             class="btn step-trigger @(tabs[2] == true ? "selected_step" : "")"
-                            onclick="@(async () => await _projectSave())">
+                            onclick="@(async () => await TabMenuClick(2))"
+                            disabled="@(_project == null)">
                         <span class="bs-stepper-circle">3</span>
                         <span class="bs-stepper-label">Create Invoice</span>
                     </button>
@@ -48,7 +50,7 @@
                 <div class="step">
                     <button type="button"
                             class="btn step-trigger @(tabs[3] == true ? "selected_step" : "")"
-                            onclick="@(async () => await _invoiceSave())"
+                            onclick="@(async () => await TabMenuClick(3))"
                             disabled="@(!_contractTabEnable)">
                         <span class="bs-stepper-circle">4</span>
                         <span class="bs-stepper-label">Create Contract</span>
@@ -74,7 +76,7 @@
                     <div class="content">
                         <div class="row">
                             <div class="col-12"
-                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
+                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 400px) !important; overflow-y: auto;">
                                 @if (Offer != null)
                                 {
                                     <!-- Offers Detailed -->
@@ -90,7 +92,7 @@
                             </div>
                             <div class="col-12 mt-2">
                                 <button class="btn btn-primary float-end"
-                                        onclick="@(async () => await _offerSave())"
+                                        onclick="@(async () => await TabMenuClick(1))"
                                         disabled="@(!_contractTabEnable)">
                                     Next
                                 </button>
@@ -104,7 +106,7 @@
                     <div class="content">
                         <div class="row">
                             <div class="col-12"
-                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
+                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 400px) !important; overflow-y: auto;">
 
                                 <!-- Project Detailed -->
                                 <ProjectDetailed @ref="@_projectCompoment" Project="@_project" />
@@ -112,8 +114,12 @@
                             </div>
                             <div class="col-12 mt-2">
                                 <div class="d-flex justify-content-end">
-                                    <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(1))">Previous</button>
-                                    <button class="btn btn-primary ms-2" onclick="@(async() => await _projectSave())">Save</button>
+                                    <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(0))">Previous</button>
+                                    <button class="btn btn-primary ms-2"
+                                            onclick="@(async() => await TabMenuClick(2))"
+                                            disabled="@(_project == null)">
+                                        Next
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -124,17 +130,39 @@
                     <div class="content">
                         <div class="row">
                             <div class="col-12"
-                                 style="min-height: max(50vh, 400px) !important; max-height: max(70vh, 500px) !important; overflow-y: auto;">
+                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 400px) !important; overflow-y: auto;">
 
-                                <!-- Invoice Detailed -->
-
+                                 <div class="row">
+                                    <div class="col-12 d-flex justify-content-between">
+                                        <!-- Select Invoice -->
+                                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                                        Placeholder="Select Invoice..."
+                                                        Items="@_invoices"
+                                                        Height="200px"
+                                                        Width="400px"
+                                                        TOption="InvoiceVM"
+                                                        OptionText="@(c => $"P-[{c.ProjectName}]  T-[{c.TypeName}]  M-[{c.Mark}]")"
+                                                        OptionValue="@(c => c.Id.ToString())"
+                                                        @bind-SelectedOption="@_invoice"/>
+                                        <!-- Add Invoice -->
+                                        <FluentButton IconStart="@(new Icons.Regular.Size24.Add())" OnClick="@_addInvoice">
+                                            Add
+                                        </FluentButton>
+                                    </div>
+                                    <div class="col-12 m-2">
+                                        <!-- Invoice Detailed -->
+                                        <InvoiceDetailed DisplayAcions="false" ProjectDisabled="true" Content="@_invoice" />
+                                    </div>
+                                 </div>
                             </div>
                             <div class="col-12 mt-2">
                                 <div class="d-flex justify-content-end">
-                                    <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(0))">Previous</button>
+                                    <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(1))">Previous</button>
                                     <button class="btn btn-primary ms-2"
-                                            onclick="@(async () => await _invoiceSave())"
-                                            disabled="@(!_contractTabEnable)">Next</button>
+                                            onclick="@(async () => await TabMenuClick(3))"
+                                            disabled="@(!_contractTabEnable || _invoice == null)">
+                                        Next
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -145,15 +173,30 @@
                     <div class="content">
                         <div class="row">
                             <div class="col-12"
-                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
+                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 400px) !important; overflow-y: auto;">
 
-                                <!-- Contract Detailed -->
-                                <ContractDetailed Content="@_contract" DisplayActions="false" />
-
+                                <div class="row">
+                                    <div class="col-12 d-flex justify-content-between">
+                                        <!-- Select Invoice -->
+                                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                                        Placeholder="Select Invoice..."
+                                                        Items="@_invoices"
+                                                        Height="200px"
+                                                        Width="400px"
+                                                        TOption="InvoiceVM"
+                                                        OptionText="@(c => $"P-[{c.ProjectName}]  T-[{c.TypeName}]  M-[{c.Mark}]")"
+                                                        OptionValue="@(c => c.Id.ToString())"
+                                                        @bind-SelectedOption="@_invoice" />
+                                    </div>
+                                    <div class="col-12">
+                                        <!-- Contract Detailed -->
+                                        <ContractDetailed Content="@_contract" DisplayActions="false" />
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12 mt-2">
                                 <div class="d-flex justify-content-end">
-                                    <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(1))">Previous</button>
+                                    <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(2))">Previous</button>
                                     <button class="btn btn-primary ms-2" onclick="@(async() => await _contractSave())">Save</button>
                                 </div>
                             </div>

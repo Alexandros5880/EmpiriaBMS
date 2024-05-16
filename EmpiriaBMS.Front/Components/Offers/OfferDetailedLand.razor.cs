@@ -40,6 +40,8 @@ public partial class OfferDetailedLand
     private ProjectVM _project { get; set; } = new ProjectVM();
     private InvoiceVM _invoice { get; set; } = new InvoiceVM();
 
+    List<InvoiceVM> _invoices = new List<InvoiceVM>();
+
     private bool _contractTabEnable => Offer.ResultId == Results.FirstOrDefault(r => r.Name.Equals("SUCCESSFUL"))?.Id;
 
     #region Compoment Refrences
@@ -70,31 +72,14 @@ public partial class OfferDetailedLand
         }
     }
 
-    private async Task _offerSave()
+    private void _addInvoice()
     {
-        await TabMenuClick(1);
-        _loading = true;
-        // TODO: Save Offer
-        await Task.Delay(1000);
-        _loading = false;
-    }
-
-    private async Task _projectSave()
-    {
-        await TabMenuClick(2);
-        _loading = true;
-        // TODO: Save Project
-        await Task.Delay(1000);
-        _loading = false;
-    }
-
-    private async Task _invoiceSave()
-    {
-        await TabMenuClick(3);
-        _loading = true;
-        // TODO: Save Contract
-        await Task.Delay(1000);
-        _loading = false;
+        _invoice = new InvoiceVM()
+        {
+            ProjectId = _project.Id,
+            Project = _project,
+        };
+        _invoices.Add(_invoice);
     }
 
     private async Task _contractSave()
@@ -105,10 +90,6 @@ public partial class OfferDetailedLand
         _loading = false;
     }
 
-    
-
-    
-
     #region Tab Actions
     bool[] tabs = new bool[50];
 
@@ -118,17 +99,84 @@ public partial class OfferDetailedLand
         tabs[tabIndex] = true;
         StateHasChanged();
 
-        if (tabIndex == 1)
+        if (tabIndex == 0) // Invoice Tab
         {
+            
+        }
+
+        if (tabIndex == 1) // Project Tabs
+        {
+            _loading = true;
+            // TODO: Save Offer
+            await Task.Delay(1000);
+            _loading = false;
+            StateHasChanged();
+
             if (Offer.ProjectId != null || Offer.ProjectId != 0)
             {
                 var project = await _dataProvider.Projects.Get((int)Offer.ProjectId);
                 _project = _mapper.Map<ProjectVM>(project);
                 _projectCompoment.PrepairForEdit();
             }
+            else
+            {
+                _project = new ProjectVM();
+            }
         }
 
-        
+        if (tabIndex == 2) // Invoice Tab
+        {
+            _loading = true;
+            // TODO: Save Project
+            await Task.Delay(1000);
+            _loading = false;
+            StateHasChanged();
+
+            if (_project.Id != 0)
+            {
+                var invoices = await _dataProvider.Projects.GetInvoices(_project.Id);
+                if (invoices != null && invoices.Count > 0)
+                {
+                    _invoices = _mapper.Map<List<InvoiceVM>>(invoices);
+                    _invoice = _invoices.FirstOrDefault();
+                }
+            }
+                
+                
+        }
+
+        if (tabIndex == 3) // Contract Tab
+        {
+            _loading = true;
+            // TODO: Save Invoices
+            await Task.Delay(1000);
+            _loading = false;
+            StateHasChanged();
+
+            if (_invoice.ContractId != 0)
+            {
+                var contract = await _dataProvider.Contracts.Get(_invoice.ContractId);
+                if (contract != null)
+                    _contract = _mapper.Map<ContractVM>(contract);
+                else
+                    _contract = new ContractVM()
+                    {
+                        InvoiceId = _invoice.Id,
+                        Invoice = _invoice,
+                        Date = DateTime.Now,
+                    };
+            }
+            else
+                _contract = new ContractVM()
+                {
+                    InvoiceId = _invoice.Id,
+                    Invoice = _invoice,
+                    Date = DateTime.Now,
+                };
+
+        }
+
+
     }
     #endregion
 }

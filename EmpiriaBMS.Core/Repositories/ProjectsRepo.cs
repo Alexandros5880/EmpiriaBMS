@@ -787,6 +787,9 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                          .Where(r => !r.IsDeleted)
                                          .Where(i => i.ProjectId == projectId)
                                          .Include(i => i.Payments)
+                                         .Include(i => i.Type)
+                                         .Include(i => i.Contract)
+                                         .Include(i => i.Project)
                                          .ToListAsync();
 
             var dtos = Mapping.Mapper.Map<List<InvoiceDto>>(invoices);
