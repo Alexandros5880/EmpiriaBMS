@@ -14,7 +14,7 @@
 
     <h3 class="mt-1 mb-1 ms-3">Project</h3>
 
-    <EditForm Model="@_project" class="row mt-3 gx-2 p-2">
+    <EditForm Model="@Project" class="row mt-3 gx-2 p-2">
 
         <div class="p-2 col-12">
 
@@ -23,7 +23,7 @@
                     <!-- Name -->
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <InputText id="name" @bind-Value="@_project.Name" class="form-control" />
+                        <InputText id="name" @bind-Value="@Project.Name" class="form-control" />
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -32,7 +32,7 @@
                         <label for="code">Code</label>
                         @if (seeCode)
                         {
-                            <InputText id="code" @bind-Value="@_project.Code" class="form-control" />
+                            <InputText id="code" @bind-Value="@Project.Code" class="form-control" />
                         }
                         else
                         {
@@ -48,13 +48,13 @@
                     <div class="form-group">
                         <label>Category</label>
                         <select class="form-select" @onchange="((e) => _updateProjectCategory(e))">
-                            @if (_project.Category?.CategoryId == 0)
+                            @if (Project.Category?.CategoryId == 0)
                             {
                                 <option value="0" selected>Selecte Category</option>
                             }
-                            @foreach (var category in _projectCategories)
+                            @foreach (var category in ProjectCategories)
                             {
-                                @if (_project.Category?.CategoryId == category.Id)
+                                @if (Project.Category?.CategoryId == category.Id)
                                 {
                                     <option value="@category.Id" selected>@category.Name</option>
                                 }
@@ -70,14 +70,14 @@
                     <!-- Project Sub Category -->
                     <div class="form-group">
                         <label>Sub Category</label>
-                        <select class="form-select" @onchange="((e) => _updateProjectSubCategory(e))" disabled="@(!_projectSubCategories.Any())">
-                            @if (_project.CategoryId == 0)
+                        <select class="form-select" @onchange="((e) => _updateProjectSubCategory(e))" disabled="@(!ProjectSubCategories.Any())">
+                            @if (Project.CategoryId == 0)
                             {
                                 <option value="0" selected>Selecte Sub Category</option>
                             }
-                            @foreach (var projectGroup in _projectSubCategories)
+                            @foreach (var projectGroup in ProjectSubCategories)
                             {
-                                @if (_project.CategoryId == projectGroup.Id)
+                                @if (Project.CategoryId == projectGroup.Id)
                                 {
                                     <option value="@projectGroup.Id" selected>@projectGroup.Name</option>
                                 }
@@ -99,7 +99,7 @@
                         <input type="date"
                                class="form-control"
                                id="durationDate"
-                               @bind="@_project.StartDate">
+                               @bind="@Project.StartDate">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -109,7 +109,7 @@
                         <input type="date"
                                class="form-control"
                                id="estimatedDate"
-                               @bind="@_project.DeadLine">
+                               @bind="@Project.DeadLine">
                     </div>
                 </div>
             </div>
@@ -120,13 +120,13 @@
                     <div class="form-group">
                         <label>Project Stage</label>
                         <select class="form-select" @onchange="((e) => _updateProjectStage(e))">
-                            @if (_project.StageId == 0)
+                            @if (Project.StageId == 0)
                             {
                                 <option value="0" selected>Selecte Stage</option>
                             }
-                            @foreach (var projectStage in _projectStages)
+                            @foreach (var projectStage in ProjectStages)
                             {
-                                @if (_project.StageId == projectStage.Id)
+                                @if (Project.StageId == projectStage.Id)
                                 {
                                     <option value="@projectStage.Id" selected>@projectStage.Name</option>
                                 }
@@ -141,7 +141,7 @@
                 <div class="col-lg-6 col-md-12">
                     <!-- Active -->
                     <div class="row mt-4 ms-2 float-start" style="width: 134px;">
-                        <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
+                        <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="Project.Active" />
                         <label class="col-8" for="active">Is Active</label>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                           name="composeContent"
                           id="description"
                           row="7"
-                          @bind="@_project.Description" />
+                          @bind="@Project.Description" />
             </div>
 
         </div>

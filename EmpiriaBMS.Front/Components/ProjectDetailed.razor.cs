@@ -25,30 +25,32 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     #endregion
 
     private ProjectValidator _validator = new ProjectValidator();
-    private List<ProjectSubCategoryDto> _projectSubCategories = new List<ProjectSubCategoryDto>();
-    private List<ProjectStageDto> _projectStages = new List<ProjectStageDto>();
-    private List<ProjectCategoryDto> _projectCategories = new List<ProjectCategoryDto>();
-    private ProjectVM _project = new ProjectVM();
+    private List<ProjectSubCategoryDto> ProjectSubCategories = new List<ProjectSubCategoryDto>();
+    private List<ProjectStageDto> ProjectStages = new List<ProjectStageDto>();
+    private List<ProjectCategoryDto> ProjectCategories = new List<ProjectCategoryDto>();
+
+    [Parameter]
+    public ProjectVM Project { get; set; } = new ProjectVM();
 
     private async Task _getProjectSubCategories(int id = 0)
     {
-        _projectSubCategories.Clear();
+        ProjectSubCategories.Clear();
         if (id == 0)
-            _projectSubCategories = (await DataProvider.ProjectsSubCategories.GetAll()).ToList();
+            ProjectSubCategories = (await DataProvider.ProjectsSubCategories.GetAll()).ToList();
         else
-            _projectSubCategories = (await DataProvider.ProjectsSubCategories.GetAll(id)).ToList();
+            ProjectSubCategories = (await DataProvider.ProjectsSubCategories.GetAll(id)).ToList();
     }
 
     private async Task _getProjectStages()
     {
-        _projectStages.Clear();
-        _projectStages = (await DataProvider.ProjectStages.GetAll()).ToList();
+        ProjectStages.Clear();
+        ProjectStages = (await DataProvider.ProjectStages.GetAll()).ToList();
     }
 
     private async Task _getProjectCategories()
     {
-        _projectCategories.Clear();
-        _projectCategories = (await DataProvider.ProjectsCategories.GetAll()).ToList();
+        ProjectCategories.Clear();
+        ProjectCategories = (await DataProvider.ProjectsCategories.GetAll()).ToList();
     } 
 
     public async void PrepairForNew()
@@ -57,23 +59,24 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
         await _getProjectSubCategories();
         await _getProjectStages();
         await _getProjectCategories();
-        _project = new ProjectVM();
-        _project.Active = true;
-        _project.CategoryId = 0;
-        _project.StageId = 0;
-        _project.CategoryId = 0;
+        Project = new ProjectVM();
+        Project.Active = true;
+        Project.CategoryId = 0;
+        Project.StageId = 0;
+        Project.CategoryId = 0;
         await _map.Search();
         StateHasChanged();
     }
 
-    public async void PrepairForEdit(ProjectVM project)
+    public async void PrepairForEdit(ProjectVM project = null)
     {
         isNew = false;
         await _getProjectSubCategories();
         await _getProjectStages();
         await _getProjectCategories();
-        _project = project;
-        await _map.SetAddress(project.Address);
+        if (project != null)
+            Project = project;
+        await _map.SetAddress(Project.Address);
         StateHasChanged();
     }
 
@@ -81,13 +84,13 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     {
         var id = Convert.ToInt32(e.Value);
         // Get SubCategories if If Projects Category Parent is Diffrent
-        if (_project.Category?.CategoryId != id)
+        if (Project.Category?.CategoryId != id)
         {
             await _getProjectSubCategories(id);
             StateHasChanged();
         } else
         {
-            _projectSubCategories.Clear();
+            ProjectSubCategories.Clear();
             StateHasChanged();
         }
     }
@@ -95,18 +98,18 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     private void _updateProjectStage(ChangeEventArgs e)
     {
         var id = Convert.ToInt32(e.Value);
-        _project.StageId = id;
-        var dto = _projectStages.FirstOrDefault(g => g.Id == id);
-        _project.Stage = Mapping.Mapper.Map<ProjectStage>(dto);
+        Project.StageId = id;
+        var dto = ProjectStages.FirstOrDefault(g => g.Id == id);
+        Project.Stage = Mapping.Mapper.Map<ProjectStage>(dto);
     }
 
     private void _updateProjectSubCategory(ChangeEventArgs e)
     {
         var id = Convert.ToInt32(e.Value);
-        _project.CategoryId = id;
-        var dto = _projectSubCategories.FirstOrDefault(g => g.Id == id);
-        _project.Category = Mapping.Mapper.Map<ProjectSubCategory>(dto);
-        _validator.ValidateProperty(_project, nameof(ProjectVM.CategoryId), _project.CategoryId);
+        Project.CategoryId = id;
+        var dto = ProjectSubCategories.FirstOrDefault(g => g.Id == id);
+        Project.Category = Mapping.Mapper.Map<ProjectSubCategory>(dto);
+        _validator.ValidateProperty(Project, nameof(ProjectVM.CategoryId), Project.CategoryId);
         StateHasChanged();
     }
 
@@ -114,37 +117,37 @@ public partial class ProjectDetailed : ComponentBase, IDisposable
     {
         var address = _map.GetAddress();
         if (address != null)
-            _project.Address = address;
+            Project.Address = address;
     }
 
     public async Task HandleValidSubmit()
     {
         try
         {
-            _project.Category = null;
-            _project.Stage = null;
-            _project.Category = null;
+            Project.Category = null;
+            Project.Stage = null;
+            Project.Category = null;
 
             // If Addres Save Address
-            if(_project?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(_project.Address.PlaceId))))
+            if(Project?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(Project.Address.PlaceId))))
             {
-                var dto = Mapping.Mapper.Map<AddressDto>(_project.Address);
+                var dto = Mapping.Mapper.Map<AddressDto>(Project.Address);
                 var address = await DataProvider.Address.Add(dto);
-                _project.AddressId = address.Id;
+                Project.AddressId = address.Id;
             }
-            else if (_project?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(_project.Address.PlaceId))))
+            else if (Project?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(Project.Address.PlaceId))))
             {
-                var dto = Mapping.Mapper.Map<AddressDto>(_project.Address);
+                var dto = Mapping.Mapper.Map<AddressDto>(Project.Address);
                 var address = await DataProvider.Address.Update(dto);
             }
 
             // Save Project
             ProjectDto saveProject;
-            var exists = await DataProvider.Projects.Any(p =>  p.Id == _project.Id);
+            var exists = await DataProvider.Projects.Any(p =>  p.Id == Project.Id);
             if (exists)
-                saveProject = await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(_project));
+                saveProject = await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(Project));
             else
-                saveProject = await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(_project));
+                saveProject = await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(Project));
 
             if (saveProject == null)
                 throw new NullReferenceException(nameof(saveProject));

@@ -17,7 +17,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context
+            var project = await _context
                              .Set<Project>()
                              .Where(r => !r.IsDeleted)
                              .Include(r => r.Client)
@@ -28,8 +28,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                              .ThenInclude(c => c.Category)
                              .Include(p => p.ProjectManager)
                              .Include(p => p.ProjectsSubConstructors)
-                             .Select(r => Mapping.Mapper.Map<ProjectDto>(r))
                              .FirstOrDefaultAsync(r => r.Id == id);
+            
+            var dto = Mapping.Mapper.Map<ProjectDto>(project);
+
+            return dto;
         }
     }
 

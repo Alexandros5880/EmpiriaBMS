@@ -1,8 +1,11 @@
-﻿@using EmpiriaBMS.Front.Components.General
+﻿@using EmpiriaBMS.Front.Components.Admin.Projects.Contracts
+@using EmpiriaBMS.Front.Components.General
 
 @inherits Microsoft.AspNetCore.Components.ComponentBase;
 
 @inject MicrosoftTeams MicrosoftTeams
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
 
 <div class="row">
 
@@ -18,7 +21,7 @@
                 <div class="step">
                     <button type="button"
                             class="btn step-trigger @(tabs[0] == true ? "selected_step" : "")"
-                            onclick="@(() => TabMenuClick(0))">
+                            onclick="@(async () => await TabMenuClick(0))">
                         <span class="bs-stepper-circle">1</span>
                         <span class="bs-stepper-label">Main Info</span>
                     </button>
@@ -27,19 +30,28 @@
                 <div class="step">
                     <button type="button"
                             class="btn step-trigger @(tabs[1] == true ? "selected_step" : "")"
-                            onclick="@(() => TabMenuClick(1))"
-                            disabled="@(!_contractTabEnable)">
+                            onclick="@(async () => await _offerSave())">
                         <span class="bs-stepper-circle">2</span>
-                        <span class="bs-stepper-label">Create Contract</span>
+                        <span class="bs-stepper-label">Create Project</span>
                     </button>
                 </div>
                 <div class="line"></div>
                 <div class="step">
                     <button type="button"
                             class="btn step-trigger @(tabs[2] == true ? "selected_step" : "")"
-                            onclick="@(() => TabMenuClick(2))">
+                            onclick="@(async () => await _projectSave())">
                         <span class="bs-stepper-circle">3</span>
-                        <span class="bs-stepper-label">Create Project</span>
+                        <span class="bs-stepper-label">Create Invoice</span>
+                    </button>
+                </div>
+                <div class="line"></div>
+                <div class="step">
+                    <button type="button"
+                            class="btn step-trigger @(tabs[3] == true ? "selected_step" : "")"
+                            onclick="@(async () => await _invoiceSave())"
+                            disabled="@(!_contractTabEnable)">
+                        <span class="bs-stepper-circle">4</span>
+                        <span class="bs-stepper-label">Create Contract</span>
                     </button>
                 </div>
             </div>
@@ -65,6 +77,7 @@
                                  style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
                                 @if (Offer != null)
                                 {
+                                    <!-- Offers Detailed -->
                                     <OfferDetailed States="@States"
                                                    Types="@Types"
                                                    Results="@Results"
@@ -91,16 +104,16 @@
                     <div class="content">
                         <div class="row">
                             <div class="col-12"
-                                 style="min-height: max(50vh, 400px) !important; max-height: max(70vh, 500px) !important; overflow-y: auto;">
+                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
 
-                                <!-- Contract Detailed -->
-                                <p class="text-center">Create Contract</p>
+                                <!-- Project Detailed -->
+                                <ProjectDetailed @ref="@_projectCompoment" Project="@_project" />
 
                             </div>
                             <div class="col-12 mt-2">
                                 <div class="d-flex justify-content-end">
-                                    <button class="btn btn-primary" onclick="@(() => TabMenuClick(0))">Previous</button>
-                                    <button class="btn btn-primary ms-2" onclick="@(async () => await _contractSave())">Next</button>
+                                    <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(1))">Previous</button>
+                                    <button class="btn btn-primary ms-2" onclick="@(async() => await _projectSave())">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -111,16 +124,37 @@
                     <div class="content">
                         <div class="row">
                             <div class="col-12"
-                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
+                                 style="min-height: max(50vh, 400px) !important; max-height: max(70vh, 500px) !important; overflow-y: auto;">
 
-                                <!-- Project Detailed -->
-                                <p class="text-center">Create Project</p>
+                                <!-- Invoice Detailed -->
 
                             </div>
                             <div class="col-12 mt-2">
                                 <div class="d-flex justify-content-end">
-                                    <button class="btn btn-primary" onclick="@(() => TabMenuClick(1))">Previous</button>
-                                    <button class="btn btn-primary ms-2" onclick="@(async() => await _projectSave())">Save</button>
+                                    <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(0))">Previous</button>
+                                    <button class="btn btn-primary ms-2"
+                                            onclick="@(async () => await _invoiceSave())"
+                                            disabled="@(!_contractTabEnable)">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (tabs[3])
+                {
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-12"
+                                 style="min-height: min(50vh, 400px) !important; max-height: max(60vh, 500px) !important; overflow-y: auto;">
+
+                                <!-- Contract Detailed -->
+                                <ContractDetailed Content="@_contract" DisplayActions="false" />
+
+                            </div>
+                            <div class="col-12 mt-2">
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(1))">Previous</button>
+                                    <button class="btn btn-primary ms-2" onclick="@(async() => await _contractSave())">Save</button>
                                 </div>
                             </div>
                         </div>
