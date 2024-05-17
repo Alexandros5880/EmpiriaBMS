@@ -193,13 +193,16 @@ public partial class Offers
         }
     }
 
-    private void AddOffer(MouseEventArgs e)
+    private async Task AddOffer(MouseEventArgs e)
     {
-        _selectedOffer = null;
         _selectedOffer = new OfferVM();
         StateHasChanged();
         _dialog.Show();
         _isDialogOdepened = true;
+        if (_offersDetailedLandRef != null)
+        {
+            await _offersDetailedLandRef.PrepairForAdd();
+        }
     }
 
     private void _edit(OfferVM offer)

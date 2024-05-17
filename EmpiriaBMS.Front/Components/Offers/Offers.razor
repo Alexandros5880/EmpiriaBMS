@@ -19,7 +19,7 @@
 
 <div class="mt-3">
     <FluentStack>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@((e) => AddOffer(e))">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@(async (e) => await AddOffer(e))">
             Add Offer
         </FluentButton>
     </FluentStack>
@@ -159,7 +159,7 @@
               Hidden="@(!_isDialogOdepened)"
               Modal="false"
               DialogType=@DialogType.Panel
-              style="--dialog-width: min(70vw, 900px) !important;">
+              style="--dialog-width: 800px !important;">
 
     <div class="modal-body row mb-1">
 

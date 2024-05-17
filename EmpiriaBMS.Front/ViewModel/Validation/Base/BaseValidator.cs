@@ -94,4 +94,6 @@ public class BaseValidator<T> : BNotifyPropertyChanged, IValidator<T>
             throw new ArgumentException($"Property '{propertyName}' not found in type '{type.FullName}'.");
         }
     }
+
+    public void Reset() { }
 }

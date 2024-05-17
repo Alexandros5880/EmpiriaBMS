@@ -18,53 +18,83 @@
 
         <!-- State -->
         <div class="col-xl-4 col-lg-4 col-md-12">
-            <FluentCombobox Id="states"
-                            Height="200px"
-                            Width="100%"
-                            Placeholder="Select State"
-                            Label="States:"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            AriaLabel="Pre-selected option"
-                            Items="@States"
-                            TOption="OfferStateVM"
-                            OptionValue="@((t) => t.Id.ToString())"
-                            OptionText="@((t) => t.Name)"
-                            OptionSelected="@(i => i.Id == @Offer.StateId)"
-                            @bind-SelectedOption="@SelectedOfferState" />
+            <div>
+                State<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentCombobox Id="states"
+                                Height="200px"
+                                Width="100%"
+                                Placeholder="Select State"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Items="@States"
+                                TOption="OfferStateVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == @Offer.StateId)"
+                                @bind-SelectedOption="@SelectedOfferState" />
+            </div>
+            @if (!validState)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
         </div>
 
         <!-- Type -->
         <div class="col-xl-4 col-lg-4 col-md-12">
-            <FluentCombobox Id="types"
-                            Height="200px"
-                            Width="100%"
-                            Placeholder="Select Type"
-                            Label="Types:"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            AriaLabel="Pre-selected option"
-                            Items="@Types"
-                            TOption="OfferTypeVM"
-                            OptionValue="@((t) => t.Id.ToString())"
-                            OptionText="@((t) => t.Name)"
-                            OptionSelected="@(i => i.Id == @Offer.TypeId)"
-                            @bind-SelectedOption="@SelectedOfferType" />
+            <div>
+                Type<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentCombobox Id="types"
+                                Height="200px"
+                                Width="100%"
+                                Placeholder="Select Type"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Items="@Types"
+                                TOption="OfferTypeVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == @Offer.TypeId)"
+                                @bind-SelectedOption="@SelectedOfferType" />
+            </div>
+            @if (!validType)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
         </div>
 
         <!-- Result -->
         <div class="col-xl-4 col-lg-4 col-md-12">
-            <FluentCombobox Id="results"
-                            Height="200px"
-                            Width="100%"
-                            Placeholder="Select Result"
-                            Label="Results:"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            AriaLabel="Pre-selected option"
-                            Items="@Results"
-                            TOption="OfferResultVM"
-                            OptionValue="@((t) => t.Id.ToString())"
-                            OptionText="@((t) => t.Name)"
-                            OptionSelected="@(i => i.Id == @Offer.ResultId)"
-                            @bind-SelectedOption="@SelectedOfferResult" />
+            <div>
+                Result<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentCombobox Id="results"
+                                Height="200px"
+                                Width="100%"
+                                Placeholder="Select Result"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Items="@Results"
+                                TOption="OfferResultVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == @Offer.ResultId)"
+                                @bind-SelectedOption="@SelectedOfferResult" />
+            </div>
+            @if (!validResult)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
         </div>
 
     </div>
@@ -73,12 +103,34 @@
 
         <!-- Code -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentTextField Style="width:100%; margin:4px;" Label="Code:" @bind-Value="@Offer.Code" />
+            <div>
+                Code<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentTextField Style="width:100%;" @bind-Value="@Offer.Code" />
+            </div>
+            @if (!validCode)
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
         </div>
 
         <!-- Date-->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentDatePicker Style="width:100%; margin:4px;" Label="Date:" @bind-Value="@Offer.Date" />
+            <div>
+                Date<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentDatePicker Style="width:100%;" @bind-Value="@Offer.Date" />
+            </div>
+            @if (!validDate)
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
         </div>
 
     </div>
@@ -87,12 +139,34 @@
 
         <!-- PudgetPrice -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" Label="Pudget:" @bind-Value="@Offer.PudgetPrice" />
+            <div>
+                Pudget<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentNumberField Style="width:100%;" @bind-Value="@Offer.PudgetPrice" />
+            </div>
+            @if (!validPudgetPrice)
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
         </div>
 
         <!-- OfferPrice -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" Label="Price:" @bind-Value="@Offer.OfferPrice" />
+            <div>
+                Price<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentNumberField Style="width:100%;" @bind-Value="@Offer.OfferPrice" />
+            </div>
+            @if (!validOfferPrice)
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
         </div>
 
     </div>

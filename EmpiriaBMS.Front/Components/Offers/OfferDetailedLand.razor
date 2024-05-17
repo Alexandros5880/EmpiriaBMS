@@ -32,7 +32,7 @@
                     <button type="button"
                             class="btn step-trigger @(tabs[1] == true ? "selected_step" : "")"
                             onclick="@(async () => await TabMenuClick(1))"
-                            disabled="@_validOffer">
+                            disabled="@_isNew">
                         <span class="bs-stepper-circle">2</span>
                         <span class="bs-stepper-label">Create Project</span>
                     </button>
@@ -42,7 +42,7 @@
                     <button type="button"
                             class="btn step-trigger @(tabs[2] == true ? "selected_step" : "")"
                             onclick="@(async () => await TabMenuClick(2))"
-                            disabled="@(_project == null || _project.Id == 0)">
+                            disabled="@_isNew">
                         <span class="bs-stepper-circle">3</span>
                         <span class="bs-stepper-label">Create Invoice</span>
                     </button>
@@ -52,7 +52,7 @@
                     <button type="button"
                             class="btn step-trigger @(tabs[3] == true ? "selected_step" : "")"
                             onclick="@(async () => await TabMenuClick(3))"
-                            disabled="@(!_contractTabEnable || _project == null || _project.Id == 0)">
+                            disabled="@_isNew">
                         <span class="bs-stepper-circle">4</span>
                         <span class="bs-stepper-label">Create Contract</span>
                     </button>

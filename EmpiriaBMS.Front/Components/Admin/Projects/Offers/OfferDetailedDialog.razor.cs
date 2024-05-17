@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Config;
+﻿using CsvHelper;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.Interfaces;
@@ -43,6 +44,12 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
                 State = _mapper.Map<OfferStateVM>(stateDto);
             }
 
+            if (Content.Result != null)
+            {
+                var resultDto = Mapping.Mapper.Map<OfferResultDto>(Content.Result);
+                Result = _mapper.Map<OfferResultVM>(resultDto);
+            }
+
             StateHasChanged();
         }
     }
@@ -65,6 +72,8 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     private bool validCode = true;
     private bool validType = true;
     private bool validState = true;
+    private bool validDate = true;
+    private bool validResult = true;
     private bool validPudgetPrice = true;
     private bool validOfferPrice = true;
 
@@ -76,10 +85,12 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
             validCode = !string.IsNullOrEmpty(Content.Code);
             validType = Content.TypeId != 0;
             validState = Content.StateId != 0;
+            validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
+            validResult = Content.ResultId != 0;
             validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
             validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
 
-            return validCode && validType && validState && validProject && validPudgetPrice && validOfferPrice;
+            return validCode && validType && validState && validResult && validDate && validProject && validPudgetPrice && validOfferPrice;
         }
         else
         {
@@ -87,6 +98,8 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
             validCode = true;
             validType = true;
             validState = true;
+            validResult = true;
+            validDate = true;
             validPudgetPrice = true;
             validOfferPrice = true;
 
@@ -104,6 +117,12 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
                 case "State":
                     validState = Content.StateId != 0;
                     return validState;
+                case "Result":
+                    validResult = Content.ResultId != 0;
+                    return validResult;
+                case "Date":
+                    validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
+                    return validDate;
                 case "PudgetPrice":
                     validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
                     return validPudgetPrice;
@@ -122,6 +141,7 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
     ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
+    ObservableCollection<OfferResultVM> _results = new ObservableCollection<OfferResultVM>();
 
     private ProjectVM _project = new ProjectVM();
     public ProjectVM Project
@@ -159,11 +179,24 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         }
     }
 
+    private OfferResultVM _result = new OfferResultVM();
+    public OfferResultVM Result
+    {
+        get => _result;
+        set
+        {
+            if (_result == value || value == null) return;
+            _result = value;
+            Content.ResultId = _result.Id;
+        }
+    }
+
     private async Task _getRecords()
     {
         await _getProjects();
         await _getTypes();
         await _getStates();
+        await _getResults();
     }
 
     private async Task _getProjects()
@@ -188,6 +221,14 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         var vms = _mapper.Map<List<OfferStateVM>>(dtos);
         _states.Clear();
         vms.ForEach(_states.Add);
+    }
+
+    private async Task _getResults()
+    {
+        var dtos = await _dataProvider.OfferResult.GetAll();
+        var vms = _mapper.Map<List<OfferResultVM>>(dtos);
+        _results.Clear();
+        vms.ForEach(_results.Add);
     }
     #endregion
 }

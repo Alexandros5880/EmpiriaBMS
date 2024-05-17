@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.Offers;
@@ -17,15 +18,12 @@ public partial class OfferDetailedLand : IDisposable
         get => _offer;
         set
         {
-            if (_offer?.Id != value?.Id)
-            {
-                _offer = value;
-                _isNew = _offer.Id == 0;
-                _contract = new ContractVM();
-                _project = new ProjectVM();
-                _invoice = new InvoiceVM();
-                TabMenuClick(0);
-            }
+            _offer = value;
+            _isNew = _offer.Id == 0;
+            _contract = new ContractVM();
+            _project = new ProjectVM();
+            _invoice = new InvoiceVM();
+            TabMenuClick(0);
         }
     }
 
@@ -63,9 +61,31 @@ public partial class OfferDetailedLand : IDisposable
 
         if (firstRender)
         {
+            if (_isNew)
+            {
+                _contract = new ContractVM();
+                _project = new ProjectVM();
+                _invoice = new InvoiceVM();
+                _validOffer = true;
+                _offerCompoment?.ResetValidation();
+            }
             Offer.PropertyChanged += Offer_PropertyChanged;
             StateHasChanged();
         }
+    }
+
+    public async Task PrepairForAdd()
+    {
+        _isNew = true;
+        _contract = new ContractVM();
+        _project = new ProjectVM();
+        _invoice = new InvoiceVM();
+        Offer = new OfferVM();
+        _validOffer = true;
+        Offer.PropertyChanged += Offer_PropertyChanged;
+        await TabMenuClick(0);
+        _offerCompoment?.ResetValidation();
+        StateHasChanged();
     }
 
     private void Offer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -97,23 +117,23 @@ public partial class OfferDetailedLand : IDisposable
     }
 
     #region Tab Actions
-    bool[] tabs = new bool[50];
+    bool[] tabs = new bool[5];
 
     private async Task TabMenuClick(int tabIndex)
     {
-        for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-        tabs[tabIndex] = true;
-        StateHasChanged();
 
         if (tabIndex == 0) // Invoice Tab
         {
-            
+            var _validOffer = _offerCompoment?.Validate();
+            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+            tabs[tabIndex] = true;
+            StateHasChanged();
         }
 
         if (tabIndex == 1) // Project Tabs
         {
-            var valid = _offerCompoment.Validate();
-            if (valid)
+            var _validOffer = _offerCompoment.Validate();
+            if (_validOffer)
             {
                 if (Offer.ProjectId != null && Offer.ProjectId != 0)
                 {
@@ -125,7 +145,11 @@ public partial class OfferDetailedLand : IDisposable
                 {
                     _project = new ProjectVM();
                 }
+
+                for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+                tabs[tabIndex] = true;
             }
+            StateHasChanged();
         }
 
         if (tabIndex == 2) // Invoice Tab
@@ -139,8 +163,10 @@ public partial class OfferDetailedLand : IDisposable
                     _invoice = _invoices.FirstOrDefault();
                 }
             }
-                
-                
+
+            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+            tabs[tabIndex] = true;
+            StateHasChanged();
         }
 
         if (tabIndex == 3) // Contract Tab
@@ -167,13 +193,17 @@ public partial class OfferDetailedLand : IDisposable
                     Date = DateTime.Now,
                 };
             }
+
+            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+            tabs[tabIndex] = true;
+            StateHasChanged();
         }
 
     }
     #endregion
 
     #region Validation
-    private bool _validOffer => _offerCompoment == null ? false : _offerCompoment.Validate();
+    private bool _validOffer;
     #endregion
 
     #region Disable Pattern
