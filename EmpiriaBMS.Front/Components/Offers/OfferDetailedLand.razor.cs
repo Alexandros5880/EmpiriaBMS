@@ -137,7 +137,7 @@ public partial class OfferDetailedLand : IDisposable
             var _valiProject = _projectCompoment.Validate();
             if (_valiProject)
             {
-                if (_project.Id != 0)
+                if (_project != null)
                 {
                     var invoicesDtos = Mapping.Mapper.Map<List<InvoiceDto>>(_project.Invoices);
                     _invoices = _mapper.Map<List<InvoiceVM>>(invoicesDtos);

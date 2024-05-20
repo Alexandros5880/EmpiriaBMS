@@ -26,22 +26,27 @@ public partial class InvoiceDetailed
 
         if (firstRender)
         {
-            await _getRecords();
-
-            if (Content.Project != null)
-            {
-                var projectDto = _mapper.Map<ProjectDto>(Content.Project);
-                Project = _mapper.Map<ProjectVM>(projectDto);
-            }
-
-            if (Content.Type != null)
-            {
-                var typeDto = _mapper.Map<InvoiceTypeDto>(Content.Type);
-                Type = _mapper.Map<InvoiceTypeVM>(typeDto);
-            }
-
-            StateHasChanged();
+            await Prepair();
         }
+    }
+
+    public async Task Prepair()
+    {
+        await _getRecords();
+
+        if (Content.Project != null)
+        {
+            var projectDto = _mapper.Map<ProjectDto>(Content.Project);
+            Project = _mapper.Map<ProjectVM>(projectDto);
+        }
+
+        if (Content.Type != null)
+        {
+            var typeDto = _mapper.Map<InvoiceTypeDto>(Content.Type);
+            Type = _mapper.Map<InvoiceTypeVM>(typeDto);
+        }
+
+        StateHasChanged();
     }
 
     public void Save()
