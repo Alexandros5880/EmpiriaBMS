@@ -119,22 +119,27 @@ public partial class ProjectDetailed : ComponentBase
 
         if (firstRender)
         {
-            await _getRecords();
-
-            if (Content.Id == 0)
-                Client = new ClientVM();
-
-            if (Content.Id != 0 && Content.Address != null)
-                await _map.SetAddress(Content.Address);
-
-            if (Content.Id != 0 && Content.ClientId != 0 && Content.ClientId != null)
-            {
-                var c = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
-                Client = c;
-            }
-
-            StateHasChanged();
+            await Prepair();
         }
+    }
+
+    public async Task Prepair()
+    {
+        await _getRecords();
+
+        if (Content.Id == 0)
+            Client = new ClientVM();
+
+        if (Content.Address != null)
+            await _map.SetAddress(Content.Address);
+
+        if (Content.ClientId != 0 && Content.ClientId != null)
+        {
+            var c = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
+            Client = c;
+        }
+
+        StateHasChanged();
     }
 
     public async Task SaveAsync()

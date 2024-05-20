@@ -130,29 +130,6 @@
                             <div class="col-12 my-wizard-tab">
 
                                  <div class="row">
-                                    <div class="col-12 row">
-                                        <!-- Select Invoice -->
-                                        <div class="col-6">
-                                            <div>
-                                                Select Invoice
-                                            </div>
-                                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                                            Placeholder="Select Invoice..."
-                                                            Items="@_invoices"
-                                                            Height="200px"
-                                                            Width="100%"
-                                                            TOption="InvoiceVM"
-                                                            OptionText="@(c => $"P-[{c.ProjectName}]  T-[{c.TypeName}]  M-[{c.Mark}]")"
-                                                            OptionValue="@(c => c.Id.ToString())"
-                                                            @bind-SelectedOption="@_invoice"/>
-                                        </div>
-                                        <!-- Add Invoice -->
-                                        <div class="col-6 d-flex justify-content-end">
-                                            <FluentButton Style="margin-top: 5%;" IconStart="@(new Icons.Regular.Size24.Add())" OnClick="@_addInvoice">
-                                                Add
-                                            </FluentButton>
-                                        </div>
-                                    </div>
                                     <div class="col-12 m-2">
                                         <!-- Invoice Detailed -->
                                         <InvoiceDetailed DisplayAcions="false" ProjectDisabled="true" Content="@_invoice" />

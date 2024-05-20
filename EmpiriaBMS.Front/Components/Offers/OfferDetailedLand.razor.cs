@@ -1,4 +1,7 @@
-﻿using EmpiriaBMS.Front.Components.General;
+﻿using AutoMapper;
+using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
@@ -50,7 +53,6 @@ public partial class OfferDetailedLand : IDisposable
     private ContractVM _contract { get; set; } = new ContractVM();
     private ProjectVM _project { get; set; } = new ProjectVM();
     private InvoiceVM _invoice { get; set; } = new InvoiceVM();
-
     List<InvoiceVM> _invoices = new List<InvoiceVM>();
 
     private bool _contractTabEnable => Offer.ResultId == Results.FirstOrDefault(r => r.Name.Equals("SUCCESSFUL"))?.Id;
@@ -89,16 +91,6 @@ public partial class OfferDetailedLand : IDisposable
         }
     }
 
-    private void _addInvoice()
-    {
-        _invoice = new InvoiceVM()
-        {
-            ProjectId = _project.Id,
-            Project = _project,
-        };
-        _invoices.Add(_invoice);
-    }
-
     private async Task _contractSave()
     {
         _loading = true;
@@ -126,14 +118,12 @@ public partial class OfferDetailedLand : IDisposable
             var _validOffer = _offerCompoment.Validate();
             if (_validOffer)
             {
+                if (_projectCompoment != null)
+                    await _projectCompoment.Prepair();
                 if (Offer.ProjectId != null && Offer.ProjectId != 0)
                 {
                     var project = await _dataProvider.Projects.Get((int)Offer.ProjectId);
                     _project = _mapper.Map<ProjectVM>(project);
-                }
-                else
-                {
-                    _project = new ProjectVM();
                 }
 
                 for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
@@ -149,14 +139,15 @@ public partial class OfferDetailedLand : IDisposable
             {
                 if (_project.Id != 0)
                 {
-                    var invoices = await _dataProvider.Projects.GetInvoices(_project.Id);
-                    if (invoices != null && invoices.Count > 0)
+                    var invoicesDtos = Mapping.Mapper.Map<List<InvoiceDto>>(_project.Invoices);
+                    _invoices = _mapper.Map<List<InvoiceVM>>(invoicesDtos);
+                    if (_invoices != null && _invoices.Count > 0)
                     {
-                        _invoices = _mapper.Map<List<InvoiceVM>>(invoices);
                         _invoice = _invoices.FirstOrDefault();
                     }
+                    _invoice.ProjectId = _project.Id;
+                    _invoice.Project = _project;
                 }
-
                 for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
                 tabs[tabIndex] = true;
                 StateHasChanged();
