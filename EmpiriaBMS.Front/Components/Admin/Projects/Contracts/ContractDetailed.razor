@@ -4,11 +4,8 @@
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
 
-@implements IDialogContentComponent<ContractVM>
-
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
-@inject IDialogService DialogService
 @inject MicrosoftTeams MicrosoftTeams
 
 <div class="row">
@@ -77,7 +74,6 @@
     {
         <div class="col-12 d-flex justify-content-end">
             <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
-            <FluentButton style="margin-left: 4px;" Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
         </div>
     }
 

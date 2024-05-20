@@ -16,11 +16,16 @@ public partial class ContractDetailedDialog : IDialogContentComponent<ContractVM
 
     private ContractDetailed _compoment;
 
-    private async Task SaveAsync() =>
+    private async Task SaveAsync()
+    {
         await _compoment.SaveAsync();
+        await Dialog.CloseAsync(Content);
+    }
+        
 
-    private async Task CancelAsync() =>
-        await _compoment.CancelAsync();
-
+    private async Task CancelAsync()
+    {
+        await Dialog.CloseAsync();
+    }
     
 }

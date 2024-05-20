@@ -26,31 +26,31 @@ public partial class ContractDetailed
 
         if (firstRender)
         {
-            await _getRecords();
-
-            if (Content.Invoice != null)
-            {
-                var invoiceDto = _mapper.Map<InvoiceDto>(Content.Invoice);
-                Invoice = _mapper.Map<InvoiceVM>(invoiceDto);
-            }
-
-            StateHasChanged();
+            await Prepair();
         }
+    }
+
+    public async Task Prepair()
+    {
+        await _getRecords();
+
+        if (Content.InvoiceId != 0)
+        {
+            var invoiceDto = _mapper.Map<InvoiceDto>(Content.Invoice);
+            Invoice = _invoices.FirstOrDefault(i => i.Id == Content.InvoiceId);
+        }
+        else if (Content.Invoice != null)
+        {
+            Invoice = Content.Invoice;
+        }
+
+        StateHasChanged();
     }
 
     public async Task SaveAsync()
     {
         var valid = Validate();
         if (!valid) return;
-
-        if (Dialog != null)
-            await Dialog.CloseAsync(Content);
-    }
-
-    public async Task CancelAsync()
-    {
-        if (Dialog != null)
-            await Dialog.CancelAsync();
     }
 
     #region Validation

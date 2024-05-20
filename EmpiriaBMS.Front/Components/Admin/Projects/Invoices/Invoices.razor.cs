@@ -9,9 +9,10 @@ namespace EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
 public partial class Invoices
 {
     #region Data Grid
-    private List<InvoiceVM> _records = new List<InvoiceVM>();
+    [Parameter]
+    public List<InvoiceVM> Source { get; set; }
     private string _filterString = string.Empty;
-    IQueryable<InvoiceVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<InvoiceVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private InvoiceVM _selectedRecord = new InvoiceVM();
@@ -36,7 +37,7 @@ public partial class Invoices
     private async Task _getRecords()
     {
         var dtos = await DataProvider.Invoices.GetAll();
-        _records = Mapper.Map<List<InvoiceVM>>(dtos);
+        Source = Mapper.Map<List<InvoiceVM>>(dtos);
     }
 
     private async Task _add()
@@ -115,7 +116,8 @@ public partial class Invoices
 
         if (firstRender)
         {
-            await _getRecords();
+            if (Source == null || Source.Count > 0)
+                await _getRecords();
 
             StateHasChanged();
         }
