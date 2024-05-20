@@ -22,7 +22,8 @@
                 <div class="step">
                     <button type="button"
                             class="btn step-trigger @(tabs[0] == true ? "selected_step" : "")"
-                            onclick="@(async () => await TabMenuClick(0))">
+                            onclick="@(async () => await TabMenuClick(0))"
+                            disabled="@_isNew">
                         <span class="bs-stepper-circle">1</span>
                         <span class="bs-stepper-label">Main Info</span>
                     </button>
