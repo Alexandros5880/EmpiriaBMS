@@ -17,6 +17,8 @@ using System.Collections.ObjectModel;
 namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase
 {
+    private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
+
     private ProjectVM _project;
     [Parameter]
     public ProjectVM Content
@@ -49,9 +51,7 @@ public partial class ProjectDetailed : ComponentBase
             _category = value;
             if (Content.Category != null)
                 Content.Category.CategoryId = _category.Id;
-            _getSubCategories();
-            SubCategory = null;
-            StateHasChanged();
+            _getSubCategories(refresh: true);
         }
     }
 
@@ -305,7 +305,9 @@ public partial class ProjectDetailed : ComponentBase
         _subCategories.Clear();
         vms.ForEach(_subCategories.Add);
 
-        SubCategory = _subCategories.FirstOrDefault(c => c.Id == Content.CategoryId) ?? null;
+        SubCategory = _subCategories.FirstOrDefault(c => c.CategoryId == _category.Id) ?? null;
+        _subCatCombo.Value = SubCategory.Name;
+        _subCatCombo.SelectedOption = SubCategory;
 
         if (refresh)
             StateHasChanged();

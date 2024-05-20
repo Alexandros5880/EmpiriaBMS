@@ -96,7 +96,8 @@
                     SubCategory<span class="text-danger">*</span>
                 </div>
                 <div class="col-12">
-                    <FluentCombobox Placeholder="Select SubCategory..."
+                    <FluentCombobox @ref="@_subCatCombo"
+                                    Placeholder="Select SubCategory..."
                                     Items="@_subCategories"
                                     Height="200px"
                                     Width="100%"

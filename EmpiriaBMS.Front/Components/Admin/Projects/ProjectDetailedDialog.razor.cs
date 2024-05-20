@@ -13,6 +13,8 @@ namespace EmpiriaBMS.Front.Components.Admin.Projects;
 
 public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 {
+    private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
+
     [Parameter]
     public ProjectVM Content { get; set; } = default!;
 
@@ -35,9 +37,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
             _category = value;
             if (Content.Category != null)
                 Content.Category.CategoryId = _category.Id;
-            _getSubCategories();
-            SubCategory = null;
-            StateHasChanged();
+            _getSubCategories(refresh: true);
         }
     }
 
@@ -252,7 +252,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         _subCategories.Clear();
         vms.ForEach(_subCategories.Add);
 
-        SubCategory = _subCategories.FirstOrDefault(c => c.Id == Content.CategoryId) ?? null;
+        SubCategory = _subCategories.FirstOrDefault(c => c.CategoryId == _category.Id) ?? null;
+        _subCatCombo.Value = SubCategory.Name;
+        _subCatCombo.SelectedOption = SubCategory;
 
         if (refresh)
             StateHasChanged();
