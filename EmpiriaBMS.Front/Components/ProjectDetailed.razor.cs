@@ -143,41 +143,41 @@ public partial class ProjectDetailed : ComponentBase
         if (!valid)
             return;
 
-        //try
-        //{
-        //    Project.Category = null;
-        //    Project.Stage = null;
-        //    Project.Category = null;
+        try
+        {
+            Content.Category = null;
+            Content.Stage = null;
+            Content.Category = null;
 
-        //    // If Addres Save Address
-        //    if (Project?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(Project.Address.PlaceId))))
-        //    {
-        //        var dto = Mapping.Mapper.Map<AddressDto>(Project.Address);
-        //        var address = await DataProvider.Address.Add(dto);
-        //        Project.AddressId = address.Id;
-        //    }
-        //    else if (Project?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(Project.Address.PlaceId))))
-        //    {
-        //        var dto = Mapping.Mapper.Map<AddressDto>(Project.Address);
-        //        var address = await DataProvider.Address.Update(dto);
-        //    }
+            // If Addres Save Address
+            if (Content?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(Content.Address.PlaceId))))
+            {
+                var dto = Mapping.Mapper.Map<AddressDto>(Content.Address);
+                var address = await DataProvider.Address.Add(dto);
+                Content.AddressId = address.Id;
+            }
+            else if (Content?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(Content.Address.PlaceId))))
+            {
+                var dto = Mapping.Mapper.Map<AddressDto>(Content.Address);
+                var address = await DataProvider.Address.Update(dto);
+            }
 
-        //    // Save Project
-        //    ProjectDto saveProject;
-        //    var exists = await DataProvider.Projects.Any(p => p.Id == Project.Id);
-        //    if (exists)
-        //        saveProject = await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(Project));
-        //    else
-        //        saveProject = await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(Project));
+            // Save Project
+            ProjectDto saveProject;
+            var exists = await DataProvider.Projects.Any(p => p.Id == Content.Id);
+            if (exists)
+                saveProject = await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(Content));
+            else
+                saveProject = await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(Content));
 
-        //    if (saveProject == null)
-        //        throw new NullReferenceException(nameof(saveProject));
-        //}
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine($"Exception: {ex.Message}");
-        //    // TODO: Log Error
-        //}
+            if (saveProject == null)
+                throw new NullReferenceException(nameof(saveProject));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
     }
 
     #region Client && Autocomplete

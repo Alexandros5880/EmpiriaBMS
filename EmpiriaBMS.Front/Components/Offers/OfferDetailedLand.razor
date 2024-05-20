@@ -107,15 +107,14 @@
                             <div class="col-12 my-wizard-tab">
 
                                 <!-- Project Detailed -->
-                                <ProjectDetailed @ref="@_projectCompoment" Project="@_project" DisplayActions="false" />
+                                <ProjectDetailed @ref="@_projectCompoment" Content="@_project" DisplayActions="false" />
 
                             </div>
                             <div class="col-12 mt-2">
                                 <div class="d-flex justify-content-end">
                                     <button class="btn btn-primary" onclick="@(async () => await TabMenuClick(0))">Previous</button>
                                     <button class="btn btn-primary ms-2"
-                                            onclick="@(async() => await TabMenuClick(2))"
-                                            disabled="@(_project == null || _project.Id == 0)">
+                                            onclick="@(async() => await TabMenuClick(2))">
                                         Next
                                     </button>
                                 </div>

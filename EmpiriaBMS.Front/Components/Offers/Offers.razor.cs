@@ -193,7 +193,7 @@ public partial class Offers
         }
     }
 
-    private async Task AddOffer(MouseEventArgs e)
+    private void _add(MouseEventArgs e)
     {
         _selectedOffer = new OfferVM();
         StateHasChanged();

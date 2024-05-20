@@ -19,7 +19,7 @@
 
 <div class="mt-3">
     <FluentStack>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@(async (e) => await AddOffer(e))">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@((e) => _add(e))">
             Add Offer
         </FluentButton>
     </FluentStack>

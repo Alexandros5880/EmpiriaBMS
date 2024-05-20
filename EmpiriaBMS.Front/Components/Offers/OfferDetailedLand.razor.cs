@@ -130,7 +130,6 @@ public partial class OfferDetailedLand : IDisposable
                 {
                     var project = await _dataProvider.Projects.Get((int)Offer.ProjectId);
                     _project = _mapper.Map<ProjectVM>(project);
-                    //_projectCompoment.PrepairForEdit();
                 }
                 else
                 {
