@@ -40,10 +40,9 @@ public partial class InvoiceDetailed
             Project = _mapper.Map<ProjectVM>(projectDto);
         }
 
-        if (Content.Type != null)
+        if (Content.TypeId != 0)
         {
-            var typeDto = _mapper.Map<InvoiceTypeDto>(Content.Type);
-            Type = _mapper.Map<InvoiceTypeVM>(typeDto);
+            Type = _types.FirstOrDefault(t => t.Id == Content.TypeId);
         }
 
         StateHasChanged();
@@ -60,11 +59,11 @@ public partial class InvoiceDetailed
     private bool validMark = true;
     private bool validType = true;
 
-    private bool Validate(string fieldname = null)
+    public bool Validate(string fieldname = null)
     {
         if (fieldname == null)
         {
-            validProject = Content.ProjectId != 0 && Content.ProjectId != null;
+            validProject = ProjectDisabled || Content.ProjectId != 0 && Content.ProjectId != null;
             validMark = !string.IsNullOrEmpty(Content.Mark);
             validType = Content.TypeId != 0;
 
@@ -80,7 +79,7 @@ public partial class InvoiceDetailed
             switch (fieldname)
             {
                 case "Project":
-                    validProject = Content.ProjectId != 0 && Content.ProjectId != null;
+                    validProject = ProjectDisabled || Content.ProjectId != 0 && Content.ProjectId != null;
                     return validProject;
                 case "Mark":
                     validMark = !string.IsNullOrEmpty(Content.Mark);

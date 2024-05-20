@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -60,6 +61,7 @@ public partial class OfferDetailedLand : IDisposable
     #region Compoment Refrences
     private ProjectDetailed _projectCompoment;
     private OfferDetailed _offerCompoment;
+    private InvoiceDetailed _invoiceCompoment;
     #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -137,6 +139,8 @@ public partial class OfferDetailedLand : IDisposable
             var _valiProject = _projectCompoment.Validate();
             if (_valiProject)
             {
+                if (_invoiceCompoment != null)
+                    await _invoiceCompoment.Prepair();
                 if (_project != null)
                 {
                     var invoicesDtos = Mapping.Mapper.Map<List<InvoiceDto>>(_project.Invoices);
@@ -147,6 +151,9 @@ public partial class OfferDetailedLand : IDisposable
                     }
                     _invoice.ProjectId = _project.Id;
                     _invoice.Project = _project;
+
+                    _invoice.TypeId = _invoice.TypeId;
+                    _invoice.Type = _invoice.Type;
                 }
                 for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
                 tabs[tabIndex] = true;
@@ -156,32 +163,36 @@ public partial class OfferDetailedLand : IDisposable
 
         if (tabIndex == 3) // Contract Tab
         {
-            if (_invoice.ContractId != 0)
+            var _valiInvoice = _invoiceCompoment.Validate();
+            if (_valiInvoice)
             {
-                var contract = await _dataProvider.Contracts.Get(_invoice.ContractId);
-                if (contract != null)
-                    _contract = _mapper.Map<ContractVM>(contract);
+                if (_invoice.ContractId != 0)
+                {
+                    var contract = await _dataProvider.Contracts.Get(_invoice.ContractId);
+                    if (contract != null)
+                        _contract = _mapper.Map<ContractVM>(contract);
+                    else
+                        _contract = new ContractVM()
+                        {
+                            InvoiceId = _invoice.Id,
+                            Invoice = _invoice,
+                            Date = DateTime.Now,
+                        };
+                }
                 else
+                {
                     _contract = new ContractVM()
                     {
                         InvoiceId = _invoice.Id,
                         Invoice = _invoice,
                         Date = DateTime.Now,
                     };
-            }
-            else
-            {
-                _contract = new ContractVM()
-                {
-                    InvoiceId = _invoice.Id,
-                    Invoice = _invoice,
-                    Date = DateTime.Now,
-                };
-            }
+                }
 
-            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-            tabs[tabIndex] = true;
-            StateHasChanged();
+                for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+                tabs[tabIndex] = true;
+                StateHasChanged();
+            }
         }
 
     }
