@@ -60,6 +60,23 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
+        }
+    }
+
+    public async Task<ICollection<InvoiceDto>> GetAllByProject(int projectId = 0)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Invoice> i = await _context.Set<Invoice>()
+                              .Where(r => !r.IsDeleted)
+                              .Where(r => projectId != 0 && r.ProjectId == projectId)
+                              .Include(i => i.Payments)
+                                         .Include(i => i.Type)
+                                         .Include(i => i.Contract)
+                                         .Include(i => i.Project)
+                              .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
         } 
     }
 

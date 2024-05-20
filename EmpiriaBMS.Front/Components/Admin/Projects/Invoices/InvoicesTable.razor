@@ -5,21 +5,24 @@
 @inject IMapper Mapper
 @inject IDialogService DialogService
 
-<div class="row" style="width: 76vw; overflow-x: auto; margin: 0 auto;">
+<div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow">
-        <div>
-            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
-                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
-            </FluentStack>
-        </div>
+        @if (DisplayAddButton)
+        {
+            <div>
+                <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                    <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+                </FluentStack>
+            </div>
+        }
         <div>
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
-                            OnRowFocus="HandleRowFocus"
+                            OnRowFocus="@(async (i) => await HandleRowFocus(i))"
                             GridTemplateColumns="160px 100px 100px 160px 100px 160px 100px 100px 100px"
-                            style="height: 70vh; overflow:auto;">
+                            style="height: 100% min-height: 300px; overflow:auto;">
 
                 <TemplateColumn Title="Name"
                                 Sortable="true"

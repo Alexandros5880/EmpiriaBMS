@@ -133,9 +133,18 @@
             </div>
             <!-- EstimatedHours -->
             <div class="col-lg-6 col-md-12">
-                <FluentNumberField Style="width: 100%;" @bind-Value="@Content.EstimatedHours" Min="0">
+                <div class="col-12">
                     EstimatedHours<span class="text-danger">*</span>
-                </FluentNumberField>
+                </div>
+                <div class="col-12">
+                    <FluentNumberField Style="width: 100%;" @bind-Value="@Content.EstimatedHours" Min="0" />
+                </div>
+                @if (!validEstHours)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }       
             </div>
         </div>
 
@@ -216,7 +225,6 @@
                 </div>
             </div>
         </div>
-            
 
     <!-- Action Buttons -->
     @if (DisplayActions)

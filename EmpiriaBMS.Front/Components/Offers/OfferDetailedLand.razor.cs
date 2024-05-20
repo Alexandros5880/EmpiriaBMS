@@ -101,6 +101,12 @@ public partial class OfferDetailedLand : IDisposable
         _loading = false;
     }
 
+    private void _onInvoiceSelect(InvoiceVM invoice)
+    {
+        _invoice = invoice;
+        StateHasChanged();
+    }
+
     #region Tab Actions
     bool[] tabs = new bool[5];
 
@@ -166,6 +172,7 @@ public partial class OfferDetailedLand : IDisposable
             var _valiInvoice = _invoiceCompoment.Validate();
             if (_valiInvoice)
             {
+                _invoices.Add(_invoice);
                 if (_invoice.ContractId != 0)
                 {
                     var contract = await _dataProvider.Contracts.Get(_invoice.ContractId);

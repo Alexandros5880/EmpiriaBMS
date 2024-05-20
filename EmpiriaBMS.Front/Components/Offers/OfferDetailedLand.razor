@@ -131,8 +131,14 @@
 
                                  <div class="row">
                                     <div class="col-12 m-2">
-                                        <!-- Invoice Detailed -->
-                                        <InvoiceDetailed @ref="@_invoiceCompoment" DisplayAcions="false" ProjectDisabled="true" Content="@_invoice" />
+                                        <!-- Invoices -->
+                                        <InvoicesTable Source="@_invoices" SelectedRecord="@_invoice" DisplayAddButton="false" OnSelect="@_onInvoiceSelect" Project="@_project"/>
+                                    </div>
+                                    <div class="col-12 mt-1">
+                                        <div class="border rounded" style="padding: 4px;">
+                                            <!-- Invoice Detailed -->
+                                            <InvoiceDetailed @ref="@_invoiceCompoment" DisplayAcions="false" ProjectDisabled="true" Content="@_invoice" />
+                                        </div>
                                     </div>
                                  </div>
                             </div>

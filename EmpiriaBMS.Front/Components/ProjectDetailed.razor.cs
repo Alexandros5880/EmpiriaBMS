@@ -223,6 +223,7 @@ public partial class ProjectDetailed : ComponentBase
     private bool validSubCategory = true;
     private bool validStage = true;
     private bool validPm = true;
+    private bool validEstHours = true;
 
     public bool Validate(string fieldname = null)
     {
@@ -235,8 +236,9 @@ public partial class ProjectDetailed : ComponentBase
             validSubCategory = _subCategory != null && _subCategory.Id != 0;
             validStage = _stage != null && _stage.Id != 0;
             validPm = _pm != null && _pm.Id != 0;
+            validEstHours = Content.EstimatedHours > 0;
 
-            valid = validName && validCode && validCategory && validSubCategory && validStage && validPm;
+            valid = validName && validCode && validCategory && validSubCategory && validStage && validPm && validEstHours;
         }
         else
         {
@@ -271,6 +273,10 @@ public partial class ProjectDetailed : ComponentBase
                 case "PM":
                     validPm = _pm != null && _pm.Id != 0;
                     valid = validPm;
+                    break;
+                case "EstimatedHours":
+                    validEstHours = Content.EstimatedHours > 0;
+                    valid = validEstHours;
                     break;
                 default:
                     valid = true;

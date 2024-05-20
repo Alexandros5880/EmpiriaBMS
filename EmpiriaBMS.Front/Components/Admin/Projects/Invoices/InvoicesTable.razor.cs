@@ -6,16 +6,27 @@ using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
 
-public partial class Invoices
+public partial class InvoicesTable
 {
+    [Parameter]
+    public bool DisplayAddButton { get; set; } = true;
+
+    [Parameter]
+    public ProjectVM Project { get; set; } = null;
+
+    [Parameter]
+    public EventCallback<InvoiceVM> OnSelect { get; set; }
+
     #region Data Grid
     [Parameter]
     public List<InvoiceVM> Source { get; set; }
+
     private string _filterString = string.Empty;
     IQueryable<InvoiceVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private InvoiceVM _selectedRecord = new InvoiceVM();
+    [Parameter]
+    public InvoiceVM SelectedRecord { get; set; } = new InvoiceVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -29,14 +40,15 @@ public partial class Invoices
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<InvoiceVM> row)
+    private async Task HandleRowFocus(FluentDataGridRow<InvoiceVM> row)
     {
-        _selectedRecord = row.Item as InvoiceVM;
+        SelectedRecord = row.Item as InvoiceVM;
+        await OnSelect.InvokeAsync(SelectedRecord);
     }
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.Invoices.GetAll();
+        var dtos = await DataProvider.Invoices.GetAllByProject(projectId: Project != null ? Project.Id : 0);
         Source = Mapper.Map<List<InvoiceVM>>(dtos);
     }
 
@@ -116,7 +128,7 @@ public partial class Invoices
 
         if (firstRender)
         {
-            if (Source == null || Source.Count > 0)
+            if (Source == null || Source.Count == 0)
                 await _getRecords();
 
             StateHasChanged();
