@@ -20,9 +20,14 @@ public partial class OfferDetailedLand : IDisposable
         {
             _offer = value;
             _isNew = _offer.Id == 0;
-            _contract = new ContractVM();
-            _project = new ProjectVM();
-            _invoice = new InvoiceVM();
+            if (_isNew)
+            {
+                _contract = new ContractVM();
+                _project = new ProjectVM();
+                _invoice = new InvoiceVM();
+                _offerCompoment?.ResetValidation();
+            }
+            
             TabMenuClick(0);
         }
     }
@@ -72,20 +77,6 @@ public partial class OfferDetailedLand : IDisposable
             Offer.PropertyChanged += Offer_PropertyChanged;
             StateHasChanged();
         }
-    }
-
-    public async Task PrepairForAdd()
-    {
-        _isNew = true;
-        _contract = new ContractVM();
-        _project = new ProjectVM();
-        _invoice = new InvoiceVM();
-        Offer = new OfferVM();
-        _validOffer = true;
-        Offer.PropertyChanged += Offer_PropertyChanged;
-        await TabMenuClick(0);
-        _offerCompoment?.ResetValidation();
-        StateHasChanged();
     }
 
     private void Offer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

@@ -199,10 +199,6 @@ public partial class Offers
         StateHasChanged();
         _dialog.Show();
         _isDialogOdepened = true;
-        if (_offersDetailedLandRef != null)
-        {
-            await _offersDetailedLandRef.PrepairForAdd();
-        }
     }
 
     private void _edit(OfferVM offer)
