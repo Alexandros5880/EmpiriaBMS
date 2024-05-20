@@ -130,7 +130,7 @@ public partial class OfferDetailedLand : IDisposable
                 {
                     var project = await _dataProvider.Projects.Get((int)Offer.ProjectId);
                     _project = _mapper.Map<ProjectVM>(project);
-                    _projectCompoment.PrepairForEdit();
+                    //_projectCompoment.PrepairForEdit();
                 }
                 else
                 {
@@ -145,19 +145,23 @@ public partial class OfferDetailedLand : IDisposable
 
         if (tabIndex == 2) // Invoice Tab
         {
-            if (_project.Id != 0)
+            var _valiProject = _projectCompoment.Validate();
+            if (_valiProject)
             {
-                var invoices = await _dataProvider.Projects.GetInvoices(_project.Id);
-                if (invoices != null && invoices.Count > 0)
+                if (_project.Id != 0)
                 {
-                    _invoices = _mapper.Map<List<InvoiceVM>>(invoices);
-                    _invoice = _invoices.FirstOrDefault();
+                    var invoices = await _dataProvider.Projects.GetInvoices(_project.Id);
+                    if (invoices != null && invoices.Count > 0)
+                    {
+                        _invoices = _mapper.Map<List<InvoiceVM>>(invoices);
+                        _invoice = _invoices.FirstOrDefault();
+                    }
                 }
-            }
 
-            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-            tabs[tabIndex] = true;
-            StateHasChanged();
+                for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+                tabs[tabIndex] = true;
+                StateHasChanged();
+            }
         }
 
         if (tabIndex == 3) // Contract Tab

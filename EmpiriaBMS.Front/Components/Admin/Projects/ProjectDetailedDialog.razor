@@ -85,12 +85,9 @@
                 </div>
                 @if (!validCategory)
                 {
-                    @if (_category == null)
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
                 }
             </div>
             <!-- SubCategory-->
@@ -110,12 +107,9 @@
                 </div>
                 @if (!validSubCategory)
                 {
-                    @if (Content.CategoryId == 0)
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
                 }
             </div>
         </div>
@@ -149,12 +143,9 @@
                 </div>
                 @if (!validStage)
                 {
-                    @if (Content.StageId == 0)
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
                 }
             </div>
             <!-- EstimatedHours -->
@@ -184,12 +175,9 @@
                 </div>
                 @if (!validPm)
                 {
-                    @if (Content.ProjectManagerId == 0 || Content.ProjectManagerId == null)
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
                 }
             </div>
             <!-- Client -->
