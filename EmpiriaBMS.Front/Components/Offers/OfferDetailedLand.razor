@@ -165,11 +165,10 @@
                     <div class="content">
                         <div class="row">
                             <div class="col-12 my-wizard-tab">
-
                                 <div class="row">
                                     <div class="col-12 m-2">
                                         <!-- Contract Detailed -->
-                                        <ContractDetailed Content="@_contract" DisplayActions="false" />
+                                        <ContractDetailed @ref="@_contractCompoment" Content="@_contract" Invoices="@_invoices" DisplayActions="false" />
                                     </div>
                                 </div>
                             </div>

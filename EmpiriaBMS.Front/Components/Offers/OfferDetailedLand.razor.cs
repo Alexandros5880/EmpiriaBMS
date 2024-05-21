@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.Projects.Contracts;
 using EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Services;
@@ -62,6 +63,7 @@ public partial class OfferDetailedLand : IDisposable
     private ProjectDetailed _projectCompoment;
     private OfferDetailed _offerCompoment;
     private InvoiceDetailed _invoiceCompoment;
+    private ContractDetailed _contractCompoment;
     #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -95,10 +97,16 @@ public partial class OfferDetailedLand : IDisposable
 
     private async Task _contractSave()
     {
-        _loading = true;
-        // TODO: Save Contract
-        await Task.Delay(1000);
-        _loading = false;
+        var valid = false;
+        if (_contractCompoment != null)
+            valid = _contractCompoment.Validate();
+        if (valid)
+        {
+            _loading = true;
+            // TODO: Save Contract
+            await Task.Delay(1000);
+            _loading = false;
+        }
     }
 
     private void _onInvoiceSelect(InvoiceVM invoice)

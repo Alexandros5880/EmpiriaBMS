@@ -37,7 +37,7 @@ public partial class ContractDetailed
         if (Content.InvoiceId != 0)
         {
             var invoiceDto = _mapper.Map<InvoiceDto>(Content.Invoice);
-            Invoice = _invoices.FirstOrDefault(i => i.Id == Content.InvoiceId);
+            Invoice = Invoices.FirstOrDefault(i => i.Id == Content.InvoiceId);
         }
         else if (Content.Invoice != null)
         {
@@ -57,11 +57,11 @@ public partial class ContractDetailed
     private bool validInvoice = true;
     private bool validContractualFee = true;
 
-    private bool Validate(string fieldname = null)
+    public bool Validate(string fieldname = null)
     {
         if (fieldname == null)
         {
-            validInvoice = Content.InvoiceId != 0 && Content.InvoiceId != null;
+            validInvoice = Content.Invoice != null;
             validContractualFee = Content.ContractualFee > 0;
 
             return validInvoice && validContractualFee;
@@ -73,7 +73,7 @@ public partial class ContractDetailed
             switch (fieldname)
             {
                 case "Invoice":
-                    validInvoice = Content.InvoiceId != 0 && Content.InvoiceId != null;
+                    validInvoice = Content.Invoice != null;
                     return validInvoice;
                 case "ContractualFee":
                     validContractualFee = Content.ContractualFee > 0;
@@ -88,7 +88,8 @@ public partial class ContractDetailed
     #endregion
 
     #region Get Related Records
-    ObservableCollection<InvoiceVM> _invoices = new ObservableCollection<InvoiceVM>();
+    [Parameter]
+    public List<InvoiceVM> Invoices { get; set; }
 
     private InvoiceVM _invoice = new InvoiceVM();
     public InvoiceVM Invoice
@@ -110,10 +111,11 @@ public partial class ContractDetailed
 
     private async Task _getInvoices()
     {
-        var dtos = await _dataProvider.Invoices.GetAll();
-        var vms = _mapper.Map<List<InvoiceVM>>(dtos);
-        _invoices.Clear();
-        vms.ForEach(_invoices.Add);
+        if (Invoices == null || Invoices.Count == 0)
+        {
+            var dtos = await _dataProvider.Invoices.GetAll();
+            Invoices = _mapper.Map<List<InvoiceVM>>(dtos);
+        }
     }
     #endregion
 }
