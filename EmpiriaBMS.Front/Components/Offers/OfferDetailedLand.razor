@@ -156,14 +156,14 @@
                                         <div class="col-12 card shadow">
                                             <!-- Invoice Detailed -->
                                             <InvoiceDetailed @ref="@_invoiceCompoment" DisplayAcions="false" ProjectDisabled="true" Content="@_invoice" />
-                                            <div>
+@*                                             <div>
                                                 @if (_loadingOnInvoice)
                                                 {
                                                     <FluentProgressRing />
                                                 }
-                                            </div>
+                                            </div> *@
                                             <div>
-                                                <FluentButton OnClick="@(async () => await _addInvoice())" Loading="@_loadingOnInvoice">
+                                                <FluentButton Class="float-end" OnClick="@(async () => await _addInvoice())" Loading="@_loadingOnInvoice">
                                                     <FluentIcon Value="@(new Icons.Regular.Size32.Add())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
                                                     Add
                                                 </FluentButton>
