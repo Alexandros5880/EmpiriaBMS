@@ -95,7 +95,7 @@
                         </div>
                         <div class="col-12 mt-2">
 
-                            <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(1))" Loading="@_loading">
+                            <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(1))">
                                 <FluentIcon Value="@(new Icons.Regular.Size32.Next())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
                                 Next
                             </FluentButton>
@@ -118,7 +118,7 @@
                         <div class="col-12 mt-2">
                             <div class="d-flex justify-content-end">
 
-                                <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(0))" Loading="@_loading">
+                                <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(0))">
                                     <FluentIcon Value="@(new Icons.Regular.Size32.Previous())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
                                     Previous
                                 </FluentButton>
@@ -163,7 +163,7 @@
                                                 }
                                             </div>
                                             <div>
-                                                <FluentButton OnClick="@(async () => await _addInvoice())" Loading="@_loading">
+                                                <FluentButton OnClick="@(async () => await _addInvoice())" Loading="@_loadingOnInvoice">
                                                     <FluentIcon Value="@(new Icons.Regular.Size32.Add())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
                                                     Add
                                                 </FluentButton>
@@ -176,7 +176,7 @@
                         <div class="col-12 mt-2">
                             <div class="d-flex justify-content-end">
 
-                                <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(1))" Loading="@_loading">
+                                <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(1))">
                                     <FluentIcon Value="@(new Icons.Regular.Size32.Previous())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
                                     Previous
                                 </FluentButton>
@@ -206,7 +206,7 @@
                         <div class="col-12 mt-2">
                             <div class="d-flex justify-content-end">
 
-                                <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(2))" Loading="@_loading">
+                                <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(2))">
                                     <FluentIcon Value="@(new Icons.Regular.Size32.Previous())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
                                     Previous
                                 </FluentButton>
