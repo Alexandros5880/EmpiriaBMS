@@ -130,14 +130,19 @@
                             <div class="col-12 my-wizard-tab">
 
                                  <div class="row">
+                                    @if (_invoices.Count > 0)
+                                    {
+                                        <div class="col-12 m-2">
+                                            <!-- Invoices -->
+                                            <InvoicesTable Source="@_invoices" SelectedRecord="@_invoice" DisplayAddButton="false" OnSelect="@_onInvoiceSelect" Project="@_project" />
+                                        </div>
+                                    }
                                     <div class="col-12 m-2">
-                                        <!-- Invoices -->
-                                        <InvoicesTable Source="@_invoices" SelectedRecord="@_invoice" DisplayAddButton="false" OnSelect="@_onInvoiceSelect" Project="@_project"/>
-                                    </div>
-                                    <div class="col-12 mt-1">
-                                        <div class="border rounded" style="padding: 4px;">
-                                            <!-- Invoice Detailed -->
-                                            <InvoiceDetailed @ref="@_invoiceCompoment" DisplayAcions="false" ProjectDisabled="true" Content="@_invoice" />
+                                        <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
+                                            <div class="col-12 card shadow">
+                                                <!-- Invoice Detailed -->
+                                                <InvoiceDetailed @ref="@_invoiceCompoment" DisplayAcions="false" ProjectDisabled="true" Content="@_invoice" />
+                                            </div>
                                         </div>
                                     </div>
                                  </div>
