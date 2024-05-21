@@ -11,11 +11,11 @@
         @if (AutoCompeteId != null)
         {
             <!-- Search Address -->
-            <div class="row mb-1" style="text-align: left;">
+            <div class="row m-1 mb-2" style="text-align: left;">
                 <div class="col-12 form-group">
                     <div class="d-flex justify-content-between mb-1">
                         <label for="searchaddress">Search Address</label>
-                        <label class="text-warning">Press enter!</label>
+                        <label class="text-warning">Press double enter!</label>
                     </div>
                     <input class="form-control"
                            id="@AutoCompeteId"
@@ -30,7 +30,7 @@
         @if (Id != null)
         {
             <!-- Map -->
-            <div id="@Id" class="@((hasAddress && IsMapVisible ? "visible" : "unvisible"))"></div>
+            <div @ref="@_mapRefrence" id="@Id" class="@((hasAddress && IsMapVisible ? "visible" : "unvisible"))"></div>
         }
     </div>
 </div>
@@ -53,6 +53,8 @@
     private string _searchAddress = string.Empty;
 
     private bool hasAddress = false;
+
+    private ElementReference _mapRefrence;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -105,7 +107,10 @@
     private async Task _autoCompeteSearchInputOnInput(KeyboardEventArgs e)
     {
         if (e.Key.Equals("Enter"))
+        {
             await Search();
+            await _mapRefrence.FocusAsync();
+        }
     }
     
 }

@@ -185,6 +185,8 @@ public partial class ProjectDetailed : ComponentBase
         }
     }
 
+    public ProjectVM GetProject() => Content as ProjectVM;
+
     #region Client && Autocomplete
     private bool _diplayedClientForm = false;
     private ClientVM _backupClient;
