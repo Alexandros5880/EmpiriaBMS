@@ -116,8 +116,8 @@ public partial class OfferDetailedLand : IDisposable
 
             await _upsertInvoice();
             _invoices.Add(_invoice);
-            _invoice = new InvoiceVM();
             await _upsertContract(contract.Clone() as ContractVM);
+            _invoice = new InvoiceVM();
             _invoice.Contract = new ContractVM()
             {
                 InvoiceId = _invoice.Id,
@@ -251,7 +251,8 @@ public partial class OfferDetailedLand : IDisposable
     {
         _loading = true;
 
-        if (tabIndex == 0) // Invoice Tab
+        // Offer Tab
+        if (tabIndex == 0)
         {
             var _validOffer = _offerCompoment?.Validate();
             for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
@@ -259,7 +260,8 @@ public partial class OfferDetailedLand : IDisposable
             StateHasChanged();
         }
 
-        if (tabIndex == 1) // Project Tabs
+        // Project Tabs
+        if (tabIndex == 1)
         {
             var _validOffer = _offerCompoment.Validate();
             if (_validOffer)
@@ -278,7 +280,8 @@ public partial class OfferDetailedLand : IDisposable
             StateHasChanged();
         }
 
-        if (tabIndex == 2) // Invoice Tab
+        // Invoice Tab
+        if (tabIndex == 2)
         {
             var _validProject = _projectCompoment.Validate();
             if (_validProject)
@@ -320,10 +323,10 @@ public partial class OfferDetailedLand : IDisposable
             }
         }
 
-        if (tabIndex == 3) // Ready!
+        // Ready! Tab
+        if (tabIndex == 3)
         {
-            var _validInvoice = _invoiceCompoment.Validate();
-            if (_validInvoice && _invoices.Count > 0)
+            if (_invoices.Count > 0)
             {
                 for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
                 tabs[tabIndex] = true;
