@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Components;
 using EmpiriaBMS.Core.Config;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
-using EmpiriaBMS.Front.ViewModel.Validation;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Components.Web;
 using EmpiriaBMS.Front.Components.General;

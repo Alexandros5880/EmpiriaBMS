@@ -15,6 +15,69 @@ public class ContractRepo : Repository<ContractDto, Contract>
 {
     public ContractRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<ContractDto> Add(ContractDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var result = await _context.Set<Contract>().AddAsync(Mapping.Mapper.Map<Contract>(entity));
+                await _context.SaveChangesAsync();
+
+                var Contract = await Get(result.Entity.Id);
+
+                if (Contract == null)
+                    throw new NullReferenceException(nameof(Contract));
+
+                return Mapping.Mapper.Map<ContractDto>(Contract);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On Repository.Add({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
+        }
+    }
+
+    public async Task<ContractDto> Update(ContractDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<Contract>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Contract>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                var Contract = await Get(entity.Id);
+
+                if (Contract == null)
+                    throw new NullReferenceException(nameof(Contract));
+
+                return Mapping.Mapper.Map<ContractDto>(Contract);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On Repository.Update({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
+        }
+    }
+
     public async Task<ContractDto?> Get(int id)
     {
         if (id == 0)

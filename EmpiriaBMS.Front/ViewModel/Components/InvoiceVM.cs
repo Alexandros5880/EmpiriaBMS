@@ -122,8 +122,8 @@ public class InvoiceVM : BaseVM
 
     public string TypeName => Type != null ? Type.Name : "";
 
-    private int _contractId { get; set; }
-    public int ContractId
+    private int? _contractId { get; set; }
+    public int? ContractId
     {
         get => _contractId;
         set

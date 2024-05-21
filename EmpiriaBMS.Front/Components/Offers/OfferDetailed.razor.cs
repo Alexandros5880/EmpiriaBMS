@@ -1,7 +1,6 @@
 ﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Front.ViewModel.Validation;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using System;

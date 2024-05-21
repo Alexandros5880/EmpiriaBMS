@@ -10,6 +10,69 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
 {
     public InvoiceRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<InvoiceDto> Add(InvoiceDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var result = await _context.Set<Invoice>().AddAsync(Mapping.Mapper.Map<Invoice>(entity));
+                await _context.SaveChangesAsync();
+
+                var invoice = await Get(result.Entity.Id);
+
+                if (invoice == null)
+                    throw new NullReferenceException(nameof(invoice));
+
+                return Mapping.Mapper.Map<InvoiceDto>(invoice);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On Repository.Add({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
+        }
+    }
+
+    public async Task<InvoiceDto> Update(InvoiceDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<Invoice>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Invoice>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                var invoice = await Get(entity.Id);
+
+                if (invoice == null)
+                    throw new NullReferenceException(nameof(invoice));
+
+                return Mapping.Mapper.Map<InvoiceDto>(invoice);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On Repository.Update({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
+        }
+    }
+
     public new async Task<InvoiceDto?> Get(int id)
     {
         if (id == 0)

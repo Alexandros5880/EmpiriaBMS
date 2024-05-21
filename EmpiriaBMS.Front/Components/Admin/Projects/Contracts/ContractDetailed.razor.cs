@@ -20,6 +20,9 @@ public partial class ContractDetailed
     [Parameter]
     public bool DisplayActions { get; set; } = true;
 
+    [Parameter]
+    public bool DisplayInvoice { get; set; } = true;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -33,6 +36,11 @@ public partial class ContractDetailed
     public async Task Prepair()
     {
         await _getRecords();
+
+        if (Content == null)
+        {
+            Content = new ContractVM();
+        }
 
         if (Content.InvoiceId != 0)
         {
@@ -102,7 +110,6 @@ public partial class ContractDetailed
             Content.InvoiceId = _invoice.Id;
         }
     }
-
 
     private async Task _getRecords()
     {

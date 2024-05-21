@@ -30,7 +30,6 @@ public partial class OfferDetailedLand : IDisposable
             _isNew = _offer.Id == 0;
             if (_isNew)
             {
-                _contract = new ContractVM();
                 _project = new ProjectVM();
                 _invoice = new InvoiceVM();
                 _offerCompoment?.ResetValidation();
@@ -55,7 +54,6 @@ public partial class OfferDetailedLand : IDisposable
     [Parameter]
     public EventCallback OnCansel { get; set; }
 
-    private ContractVM _contract { get; set; } = new ContractVM();
     private ProjectVM _project { get; set; } = new ProjectVM();
     private InvoiceVM _invoice { get; set; } = new InvoiceVM();
     List<InvoiceVM> _invoices = new List<InvoiceVM>();
@@ -66,7 +64,6 @@ public partial class OfferDetailedLand : IDisposable
     private ProjectDetailed _projectCompoment;
     private OfferDetailed _offerCompoment;
     private InvoiceDetailed _invoiceCompoment;
-    private ContractDetailed _contractCompoment;
     #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -77,7 +74,6 @@ public partial class OfferDetailedLand : IDisposable
         {
             if (_isNew)
             {
-                _contract = new ContractVM();
                 _project = new ProjectVM();
                 _invoice = new InvoiceVM();
                 _validOffer = true;
@@ -115,11 +111,22 @@ public partial class OfferDetailedLand : IDisposable
         var _validInvoice = _invoiceCompoment.Validate();
         if (_validInvoice)
         {
+            var contract = _invoice.Contract;
+            contract.InvoiceId = _invoice.Id;
+
             await _upsertInvoice();
             _invoices.Add(_invoice);
             _invoice = new InvoiceVM();
+            await _upsertContract(contract.Clone() as ContractVM);
+            _invoice.Contract = new ContractVM()
+            {
+                InvoiceId = _invoice.Id,
+                Invoice = _invoice,
+                Date = DateTime.Now,
+            };
         }
         _loadingOnInvoice = false;
+        StateHasChanged();
     }
 
     #region Update Records
@@ -191,11 +198,17 @@ public partial class OfferDetailedLand : IDisposable
     {
         if (_invoice is not null && _project != null && _project.Id != 0)
         {
-            _invoice.ProjectId = _project.Id;
-            var dto = _mapper.Map<InvoiceDto>(_invoice);
+            var invoice = _invoice.Clone() as InvoiceVM;
+            invoice.ProjectId = _project.Id;
+            invoice.Type = null;
+            invoice.Contract = null;
+            invoice.ContractId = null;
+            invoice.Project = null;
+
+            var dto = _mapper.Map<InvoiceDto>(invoice);
             // Save Invoice
             InvoiceDto updatedInvoice;
-            if (await _dataProvider.Invoices.Any(p => p.Id == _invoice.Id))
+            if (await _dataProvider.Invoices.Any(p => p.Id == invoice.Id))
             {
                 updatedInvoice = await _dataProvider.Invoices.Update(dto);
             }
@@ -208,15 +221,16 @@ public partial class OfferDetailedLand : IDisposable
         }
     }
 
-    private async Task _upsertContract()
+    private async Task _upsertContract(ContractVM contract)
     {
-        if (_contract is not null && _invoice != null && _invoice.Id != 0)
+        if (contract is not null && _invoice != null && _invoice.Id != 0)
         {
-            _contract.InvoiceId = _invoice.Id;
-            var dto = _mapper.Map<ContractDto>(_contract);
+            contract.Invoice = null;
+            contract.InvoiceId = _invoice.Id;
+            var dto = _mapper.Map<ContractDto>(contract);
             // Save Contract
             ContractDto updatedContract;
-            if (await _dataProvider.Invoices.Any(p => p.Id == _contract.Id))
+            if (await _dataProvider.Invoices.Any(p => p.Id == contract.Id))
             {
                 updatedContract = await _dataProvider.Contracts.Update(dto);
             }
@@ -225,7 +239,7 @@ public partial class OfferDetailedLand : IDisposable
                 updatedContract = await _dataProvider.Contracts.Add(dto);
             }
 
-            _contract = _mapper.Map<ContractVM>(updatedContract);
+            _invoice.Contract = _mapper.Map<ContractVM>(updatedContract);
         }
     }
     #endregion
@@ -289,54 +303,28 @@ public partial class OfferDetailedLand : IDisposable
 
                     _invoice.TypeId = _invoice.TypeId;
                     _invoice.Type = _invoice.Type;
-                }
-                for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-                tabs[tabIndex] = true;
-                StateHasChanged();
-            }
-        }
 
-        if (tabIndex == 3) // Contract Tab
-        {
-            var _validInvoice = _invoiceCompoment.Validate();
-            if (_validInvoice && _invoices.Count > 0)
-            {
-                if (_invoice.ContractId != 0)
-                {
-                    var contract = await _dataProvider.Contracts.Get(_invoice.ContractId);
-                    if (contract != null)
-                        _contract = _mapper.Map<ContractVM>(contract);
-                    else
-                        _contract = new ContractVM()
+                    if (_invoice.Contract == null && _invoice.ContractId == 0)
+                    {
+                        _invoice.Contract = new ContractVM()
                         {
                             InvoiceId = _invoice.Id,
                             Invoice = _invoice,
                             Date = DateTime.Now,
                         };
+                    }
                 }
-                else
-                {
-                    _contract = new ContractVM()
-                    {
-                        InvoiceId = _invoice.Id,
-                        Invoice = _invoice,
-                        Date = DateTime.Now,
-                    };
-                }
-
                 for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
                 tabs[tabIndex] = true;
                 StateHasChanged();
             }
         }
 
-        if (tabIndex == 4) // Ready!
+        if (tabIndex == 3) // Ready!
         {
-            var _validContract = _contractCompoment.Validate();
-            if (_validContract)
+            var _validInvoice = _invoiceCompoment.Validate();
+            if (_validInvoice && _invoices.Count > 0)
             {
-                
-
                 for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
                 tabs[tabIndex] = true;
                 StateHasChanged();

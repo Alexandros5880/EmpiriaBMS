@@ -18,7 +18,7 @@ public partial class InvoiceDetailed
     public bool DisplayAcions { get; set; } = true;
 
     [Parameter]
-    public bool ProjectDisabled { get; set; } = false;
+    public bool DisplayProject { get; set; } = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -63,7 +63,7 @@ public partial class InvoiceDetailed
     {
         if (fieldname == null)
         {
-            validProject = ProjectDisabled || Content.ProjectId != 0 && Content.ProjectId != null;
+            validProject = !DisplayProject || Content.ProjectId != 0 && Content.ProjectId != null;
             validMark = !string.IsNullOrEmpty(Content.Mark);
             validType = Content.TypeId != 0;
 
@@ -79,7 +79,7 @@ public partial class InvoiceDetailed
             switch (fieldname)
             {
                 case "Project":
-                    validProject = ProjectDisabled || Content.ProjectId != 0 && Content.ProjectId != null;
+                    validProject = !DisplayProject || Content.ProjectId != 0 && Content.ProjectId != null;
                     return validProject;
                 case "Mark":
                     validMark = !string.IsNullOrEmpty(Content.Mark);
@@ -128,6 +128,7 @@ public partial class InvoiceDetailed
     {
         await _getProjects();
         await _getTypes();
+        await _getRelatedContract();
     }
 
     private async Task _getProjects()
@@ -144,6 +145,35 @@ public partial class InvoiceDetailed
         var vms = _mapper.Map<List<InvoiceTypeVM>>(dtos);
         _types.Clear();
         vms.ForEach(_types.Add);
+    }
+
+    private async Task _getRelatedContract()
+    {
+        if (Content.ContractId == 0)
+        {
+            Content.Contract = new ContractVM()
+            {
+                InvoiceId = Content.Id,
+                Invoice = Content,
+                Date = DateTime.Now,
+            };
+        }
+        else
+        {
+            if (Content.ContractId == 0 || Content.ContractId == null)
+            {
+                Content.Contract = new ContractVM()
+                {
+                    InvoiceId = Content.Id,
+                    Invoice = Content,
+                    Date = DateTime.Now,
+                };
+                return;
+            }
+            var dto = await _dataProvider.Contracts.Get((int)Content.ContractId);
+            Content.Contract = _mapper.Map<ContractVM>(dto);
+        }
+
     }
     #endregion
 }

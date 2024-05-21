@@ -8,73 +8,79 @@
 @inject IMapper _mapper
 @inject MicrosoftTeams MicrosoftTeams
 
-<div class="row">
 
-    <!-- Invoice / Date -->
-    <div class="col-12 row gx-2 mt-2">
-        <!-- Invoice -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <div>
-                Invoice<span class="text-danger">*</span>
-            </div>
-            <div>
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                Placeholder="Select Invoice..."
-                                Items="@Invoices"
-                                Height="200px"
-                                Width="100%"
-                                TOption="InvoiceVM"
-                                OptionText="@(c => c.Mark)"
-                                OptionValue="@(c => c.Id.ToString())"
-                                @bind-SelectedOption="@Invoice" />
-            </div>
-            @if (!validInvoice)
+@if (Content != null)
+{
+    <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
+
+        <!-- Invoice / Date -->
+        <div class="col-12 row gx-2 mt-2">
+            @if (DisplayInvoice)
             {
-                <div>
-                    <span class="text-warning">Field is required!</span>
+                <!-- Invoice -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Invoice<span class="text-danger">*</span>
+                    </div>
+                    <div>
+                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Invoice..."
+                                        Items="@Invoices"
+                                        Height="200px"
+                                        Width="100%"
+                                        TOption="InvoiceVM"
+                                        OptionText="@(c => c.Mark)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Invoice" />
+                    </div>
+                    @if (!validInvoice)
+                    {
+                        <div>
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
                 </div>
             }
         </div>
-        <!-- Date -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <div>
-                Date
-            </div>
-            <div>
-                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.Date" />
-            </div>
-        </div>
-    </div>
 
-    <!-- ContractualFee -->
-    <div class="col-12 row gx-2 mt-2">
-        <!-- ContractualFee -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <div>
-                ContractualFee<span class="text-danger">*</span>
-            </div>
-            <div>
-                <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.ContractualFee" Min="0"/>
-            </div>
-            @if (!validContractualFee)
-            {
+        <div class="col-12 row gx-2 mt-2">
+            <!-- Date -->
+            <div class="col-xl-6 col-lg-6 col-md-12">
                 <div>
-                    <span class="text-warning">Field is required!</span>
+                    Date
                 </div>
-            }
+                <div>
+                    <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.Date" />
+                </div>
+            </div>
+            <!-- ContractualFee -->
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                <div>
+                    ContractualFee<span class="text-danger">*</span>
+                </div>
+                <div>
+                    <FluentNumberField Style="width:100%;" @bind-Value="@Content.ContractualFee" Min="0" />
+                </div>
+                @if (!validContractualFee)
+                {
+                    <div>
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
 
-    <!-- Description -->
-    <div class="col-12">
-        <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
-    </div>
-
-    @if (DisplayActions)
-    {
-        <div class="col-12 d-flex justify-content-end">
-            <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+        <!-- Description -->
+        <div class="col-12">
+            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
         </div>
-    }
 
-</div>
+        @if (DisplayActions)
+        {
+            <div class="col-12 d-flex justify-content-end">
+                <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+            </div>
+        }
+
+    </div>
+}
