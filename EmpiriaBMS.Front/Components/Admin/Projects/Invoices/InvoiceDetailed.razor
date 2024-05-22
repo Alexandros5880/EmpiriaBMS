@@ -59,7 +59,8 @@
                     Type<span class="text-danger">*</span>
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                    <FluentCombobox @ref="_typeCompoment"
+                                    Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Type..."
                                     Items="@_types"
                                     Height="200px"

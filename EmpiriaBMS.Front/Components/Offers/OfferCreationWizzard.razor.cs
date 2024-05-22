@@ -68,10 +68,11 @@ public partial class OfferCreationWizzard
             await OnSave.InvokeAsync();
     }
 
-    private void _onInvoiceSelect(InvoiceVM invoice)
+    private async Task _onInvoiceSelect(InvoiceVM invoice)
     {
         _invoice = invoice;
-        StateHasChanged();
+        _contract = _invoice.Contract;
+        await _invoiceCompoment.Prepair(invoice, true);
     }
 
     private async Task _addInvoice()
@@ -207,9 +208,10 @@ public partial class OfferCreationWizzard
         // Invoice Tab
         if (tabIndex == 2)
         {
-            if (_projectCompoment != null && _projectCompoment.Validate())
+            if (_projectCompoment != null && _projectCompoment.Validate() || !_isNew)
             {
-                _project = _projectCompoment.GetProject();
+                if (_projectCompoment != null)
+                    _project = _projectCompoment.GetProject();
 
                 #region Update Offer
                 // Update Project

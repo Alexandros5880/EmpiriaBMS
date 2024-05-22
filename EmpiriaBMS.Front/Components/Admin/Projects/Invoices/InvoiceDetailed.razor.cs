@@ -50,6 +50,8 @@ public partial class InvoiceDetailed
     [Parameter]
     public bool DisplayProject { get; set; } = false;
 
+    private FluentCombobox<InvoiceTypeVM> _typeCompoment;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -60,9 +62,15 @@ public partial class InvoiceDetailed
         }
     }
 
-    public async Task Prepair()
+    public async Task Prepair(InvoiceVM invoice = null, bool halfRefresh = false)
     {
-        await _getRecords();
+        if (!halfRefresh)
+            await _getRecords();
+
+        if (invoice != null)
+        {
+            Content = invoice;
+        }
 
         if (Content.Project != null)
         {
@@ -73,6 +81,11 @@ public partial class InvoiceDetailed
         if (Content.TypeId != 0)
         {
             Type = _types.FirstOrDefault(t => t.Id == Content.TypeId);
+            if (_typeCompoment != null)
+            {
+                _typeCompoment.SelectedOption = Type;
+                _typeCompoment.Value = Type.Name;
+            }
         }
 
         StateHasChanged();
