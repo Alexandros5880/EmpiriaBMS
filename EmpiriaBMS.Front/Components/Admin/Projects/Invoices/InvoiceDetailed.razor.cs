@@ -89,32 +89,32 @@ public partial class InvoiceDetailed
         _contract.InvoiceId = i.Id;
         var c = await _upsertContract(_contract.Clone() as ContractVM);
 
-        #region Reset Invoice
-        var inv = new InvoiceVM()
-        {
-            Date = DateTime.Now,
-            TypeId = _types.FirstOrDefault().Id,
-            Type = _types.FirstOrDefault(),
-            Mark = string.Empty,
-            Vat = 0,
-            Fee = 0,
-            Number = 0,
-            Total = 0,
-            Project = _invoice.Project,
-            ProjectId = _invoice.ProjectId,
-        };
-        _contract = new ContractVM()
-        {
-            InvoiceId = inv.Id,
-            Invoice = inv,
-            Date = DateTime.Now,
-            ContractualFee = 0,
-            Description = string.Empty
-        };
-        inv.Contract = _contract;
-        inv.ContractId = _contract.Id;
-        _invoice = inv;
-        #endregion
+        //#region Reset Invoice
+        //var inv = new InvoiceVM()
+        //{
+        //    Date = DateTime.Now,
+        //    TypeId = _types.FirstOrDefault().Id,
+        //    Type = _types.FirstOrDefault(),
+        //    Mark = string.Empty,
+        //    Vat = 0,
+        //    Fee = 0,
+        //    Number = 0,
+        //    Total = 0,
+        //    Project = _invoice.Project,
+        //    ProjectId = _invoice.ProjectId,
+        //};
+        //_contract = new ContractVM()
+        //{
+        //    InvoiceId = inv.Id,
+        //    Invoice = inv,
+        //    Date = DateTime.Now,
+        //    ContractualFee = 0,
+        //    Description = string.Empty
+        //};
+        //inv.Contract = _contract;
+        //inv.ContractId = _contract.Id;
+        //_invoice = inv;
+        //#endregion
 
         i.Contract = c;
         i.ContractId = c.Id;
