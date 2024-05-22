@@ -1,5 +1,7 @@
-﻿using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
@@ -8,8 +10,36 @@ namespace EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
 
 public partial class InvoiceDetailed
 {
+    private InvoiceVM _invoice;
     [Parameter]
-    public InvoiceVM Content { get; set; } = default!;
+    public InvoiceVM Content
+    {
+        get => _invoice;
+        set
+        {
+            if (value != _invoice && value != null)
+            {
+                _invoice = value;
+                Contract = value.Contract;
+            }
+        }
+    }
+
+    private ContractVM _contract;
+    [Parameter]
+    public ContractVM Contract
+    {
+        get => _contract;
+        set
+        {
+            if (value != _contract && value != null)
+            {
+                _contract = value;
+                Content.Contract = value;
+                Content.ContractId = value?.Id;
+            }
+        }
+    }
 
     [Parameter]
     public string Title { get; set; } = null;
@@ -48,11 +78,115 @@ public partial class InvoiceDetailed
         StateHasChanged();
     }
 
-    public void Save()
+    public async Task<InvoiceVM> Save()
     {
         var valid = Validate();
-        if (!valid) return;
+        if (!valid)
+            return null;
+
+        var i = await _upsertInvoice(_invoice.Clone() as InvoiceVM);
+        _contract.Invoice = i;
+        _contract.InvoiceId = i.Id;
+        var c = await _upsertContract(_contract.Clone() as ContractVM);
+
+        #region Reset Invoice
+        var inv = new InvoiceVM()
+        {
+            Date = DateTime.Now,
+            TypeId = _types.FirstOrDefault().Id,
+            Type = _types.FirstOrDefault(),
+            Mark = string.Empty,
+            Vat = 0,
+            Fee = 0,
+            Number = 0,
+            Total = 0,
+            Project = _invoice.Project,
+            ProjectId = _invoice.ProjectId,
+        };
+        _contract = new ContractVM()
+        {
+            InvoiceId = inv.Id,
+            Invoice = inv,
+            Date = DateTime.Now,
+            ContractualFee = 0,
+            Description = string.Empty
+        };
+        inv.Contract = _contract;
+        inv.ContractId = _contract.Id;
+        _invoice = inv;
+        #endregion
+
+        i.Contract = c;
+        i.ContractId = c.Id;
+        return i;
     }
+
+    #region Update Records
+    private async Task<InvoiceVM?> _upsertInvoice(InvoiceVM i)
+    {
+        if (i is not null && i.Project != null && i.ProjectId != 0)
+        {
+            var invoice = i.Clone() as InvoiceVM;
+            invoice.ProjectId = _project.Id;
+            invoice.Type = null;
+            invoice.Contract = null;
+            invoice.ContractId = null;
+            invoice.Project = null;
+
+            var dto = _mapper.Map<InvoiceDto>(invoice);
+
+            // Save Invoice
+            if (await _dataProvider.Invoices.Any(p => p.Id == invoice.Id))
+            {
+                InvoiceDto updatedInvoice = await _dataProvider.Invoices.Update(dto);
+                if (updatedInvoice != null)
+                    return _mapper.Map<InvoiceVM>(updatedInvoice);
+                else
+                    return null;
+            }
+            else
+            {
+                InvoiceDto updatedInvoice = await _dataProvider.Invoices.Add(dto);
+                if (updatedInvoice != null)
+                    return _mapper.Map<InvoiceVM>(updatedInvoice);
+                else
+                    return null;
+            }
+
+        }
+        else
+            return null;
+    }
+
+    private async Task<ContractVM> _upsertContract(ContractVM contract)
+    {
+        if (contract is not null && contract.Invoice != null && contract.InvoiceId != 0)
+        {
+            contract.Invoice = null;
+            contract.InvoiceId = _invoice.Id;
+            var dto = _mapper.Map<ContractDto>(contract);
+            // Save Contract
+            if (await _dataProvider.Invoices.Any(p => p.Id == contract.Id))
+            {
+                ContractDto updated = await _dataProvider.Contracts.Update(dto);
+                if (updated != null)
+                    return _mapper.Map<ContractVM>(updated);
+                else
+                    return null;
+            }
+            else
+            {
+                ContractDto updated = await _dataProvider.Contracts.Add(dto);
+                if (updated != null)
+                    return _mapper.Map<ContractVM>(updated);
+                else
+                    return null;
+            }
+        }
+        else
+            return null;
+    }
+    #endregion
 
     #region Validation
     private bool validProject = true;
@@ -149,27 +283,8 @@ public partial class InvoiceDetailed
 
     private async Task _getRelatedContract()
     {
-        if (Content.ContractId == 0)
+        if (Content.ContractId != 0 && Content.ContractId != null)
         {
-            Content.Contract = new ContractVM()
-            {
-                InvoiceId = Content.Id,
-                Invoice = Content,
-                Date = DateTime.Now,
-            };
-        }
-        else
-        {
-            if (Content.ContractId == 0 || Content.ContractId == null)
-            {
-                Content.Contract = new ContractVM()
-                {
-                    InvoiceId = Content.Id,
-                    Invoice = Content,
-                    Date = DateTime.Now,
-                };
-                return;
-            }
             var dto = await _dataProvider.Contracts.Get((int)Content.ContractId);
             Content.Contract = _mapper.Map<ContractVM>(dto);
         }

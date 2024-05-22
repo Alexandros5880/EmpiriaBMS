@@ -19,7 +19,7 @@
 
 <div class="mt-3 ms-3">
     <FluentStack>
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@((e) => _add(e))">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@(async (e) => await _add(e))">
             Add Offer
         </FluentButton>
     </FluentStack>
@@ -134,8 +134,8 @@
                 <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="min-width: 160px;" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
-                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
-                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(async () => await _edit(context))" />
+                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(async () => await _delete(context))" />
                 </TemplateColumn>
 
             </FluentDataGrid>
@@ -153,71 +153,3 @@
     </div>
 
 </div>
-
-<!-- Dialog -->
-<FluentDialog @ref="_dialog"
-              Hidden="@(!_isDialogOdepened)"
-              Modal="false"
-              DialogType=@DialogType.Panel
-              style="--dialog-width: max(50vw, 1000px) !important;">
-
-    <div class="modal-body row mb-1">
-
-        <div class="col-12 dialog-header">
-            <span class="carbon--close-outline float-end" @onclick="@CloseDialogClick"></span>
-        </div>
-
-        <div class="col-12 justify-content-center">
-            @if (_selectedOffer != null)
-            {
-                <OfferDetailedLand @ref="@_offersDetailedLandRef"
-                                   States="@_offerStates"
-                                   Types="@_offerTypes"
-                                   Results="@_offerResults"
-                                   Offer="@_selectedOffer"
-                                   OnCansel="@CloseDialogClick"
-                                   OnSave="@(async () => await SaveDialogClick())" />
-            }
-        </div>
-
-    </div>
-
-</FluentDialog>
-
-<!-- On Delete Dialog -->
-<FluentDialog @ref="_deleteDialog"
-              Hidden="@(!_isDeleteDialogOdepened)"
-              Modal="true"
-              DialogType=@DialogType.Panel
-              style="--dialog-width: auto !important;
-                         --dialog-width: auto !important;">
-
-    <div class="modal-body row mb-1">
-
-        <div class="col-12 dialog-header row">
-            <div class="col-10">
-                <h3>Delete Record</h3>
-            </div>
-            <span class="col-2 carbon--close-outline float-end" @onclick="OnDeleteClose"></span>
-        </div>
-
-        <div class="col-12 justify-content-center">
-            @if(_selectedOffer != null)
-            {
-                <p>Are you sure you want delete @_selectedOffer.Code</p>
-            }
-        </div>
-
-    </div>
-
-    <div class="row">
-        <FluentButton class="col-6"
-                      OnClick="@(async () => await OnDeleteAccept())">
-            Ok
-        </FluentButton>
-        <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
-            Cancel
-        </FluentButton>
-    </div>
-
-</FluentDialog>

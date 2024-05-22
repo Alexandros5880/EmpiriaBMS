@@ -62,7 +62,7 @@
 
         </div>
 
-        <div class="col-12">
+        <div class="col-12" style="max-width: 1000px; margin: 0 auto;">
 
             <!-- Display Body -->
             @if (tabs[0]) // Offer Detailed
@@ -74,13 +74,10 @@
                             {
                                 <!-- Offers Detailed -->
                                 <OfferDetailed @ref="@_offerCompoment"
-                                                States="@States"
-                                                Types="@Types"
-                                                Results="@Results"
-                                                Offer="@Offer"
-                                                OnSave="@OnSave"
-                                                DisplayTitle="false"
-                                                DisplayActions="false"/>
+                                               Content="@Offer"
+                                               OnSave="@OnSave"
+                                               DisplayTitle="false"
+                                               DisplayActions="false"/>
                             }
                         </div>
                         <div class="col-12 mt-2">
@@ -127,7 +124,7 @@
             {
                 @if (_invoices.Count == 0)
                 {
-                    <span class="text-warning">At least one invoice is required!</span>
+                    <span class="text-warning ms-3">At least one invoice is required!</span>
                 }
                 <div class="content">
                     <div class="row">
@@ -139,13 +136,13 @@
                                 {
                                     <div class="col-12 m-2">
                                         <!-- Invoices -->
-                                        <InvoicesTable Source="@_invoices" SelectedRecord="@_invoice" DisplayAddButton="false" OnSelect="@_onInvoiceSelect" Project="@_project" />
+                                        <InvoicesTable Source="@_invoices" SelectedRecord="@_invoice" DisplayAddButton="false" DisplayActions="false" OnSelect="@_onInvoiceSelect" Project="@_project" />
                                     </div>
                                 }
 
                                 <div class="col-12 m-2">
                                     <div class="card shadow" style="margin: 0 auto;">
-                                        <div class="w-92 m-2">
+                                        <div class="w-92 m-2 sticky-on-top">
                                             <FluentButton Class="float-end" OnClick="@(async () => await _addInvoice())" Loading="@_loadingOnInvoice">
                                                 <FluentIcon Value="@(new Icons.Regular.Size32.Add())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
                                                 Add
@@ -153,7 +150,7 @@
                                         </div>
                                         <div class="w-92">
                                             <!-- Invoice Detailed -->
-                                            <InvoiceDetailed @ref="@_invoiceCompoment" Title="Add Invoice" DisplayAcions="false" DisplayProject="false" Content="@_invoice" />
+                                            <InvoiceDetailed @ref="@_invoiceCompoment" Title="Add Invoice" DisplayAcions="false" DisplayProject="false" Content="@_invoice" Contract="@_contract" />
                                         </div>
                                     </div>
                                 </div>

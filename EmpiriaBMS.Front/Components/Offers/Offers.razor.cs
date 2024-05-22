@@ -1,5 +1,9 @@
 ﻿using BlazorBootstrap;
+using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Dtos.KPIS;
+using EmpiriaBMS.Front.Components.Admin.Projects.Clients;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -29,14 +33,6 @@ public partial class Offers
     private OfferResultVM _selectedOfferResult;
     private ProjectVM _selectedProject;
     private OfferVM _selectedOffer;
-
-    // On Add/Edit Offer Dialog
-    private FluentDialog _dialog;
-    private bool _isDialogOdepened = false;
-
-    // On Delete Dialog
-    private FluentDialog _deleteDialog;
-    private bool _isDeleteDialogOdepened = false;
 
     #region Data Grid
     IQueryable<OfferVM> FilteredItems => _offers?.AsQueryable().Where(x => x.Project.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase)
@@ -69,8 +65,6 @@ public partial class Offers
         }
     }
     #endregion
-
-    private OfferDetailedLand _offersDetailedLandRef;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -173,78 +167,83 @@ public partial class Offers
     #endregion
 
     #region Dialogs Functions
-    private void CloseDialogClick()
+    private async Task _add(MouseEventArgs e)
     {
-        if (_isDialogOdepened)
-        {
-            _dialog.Hide();
-            _isDialogOdepened = false;
-        }
-    }
+        _selectedOffer = new OfferVM();
 
-    private async Task SaveDialogClick()
-    {
-        if (_isDialogOdepened)
+        DialogParameters parameters = new()
         {
-            _dialog.Hide();
-            _isDialogOdepened = false;
+            Title = $"New Offer",
+            PrimaryActionEnabled = false,
+            SecondaryActionEnabled = false,
+            PrimaryAction = null,
+            SecondaryAction = null,
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 1000px);"
+        };
+        
+        IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            //OfferVM vm = result.Data as OfferVM;
+            //var dto = Mapper.Map<OfferDto>(vm);
+
+            // TODO: Add Offer
 
             await Refresh();
         }
     }
 
-    private void _add(MouseEventArgs e)
-    {
-        _selectedOffer = new OfferVM();
-        StateHasChanged();
-        _dialog.Show();
-        _isDialogOdepened = true;
-    }
-
-    private void _edit(OfferVM offer)
+    private async Task _edit(OfferVM offer)
     {
         _selectedOffer = offer;
-        StateHasChanged();
-        if (_selectedOffer != null && _selectedOffer.Id != 0)
+
+        DialogParameters parameters = new()
         {
-            _dialog.Show();
-            _isDialogOdepened = true;
+            Title = $"Edit Offer {_selectedOffer.Code}",
+            PrimaryActionEnabled = false,
+            SecondaryActionEnabled = false,
+            PrimaryAction = null,
+            SecondaryAction = null,
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 1000px);"
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            //OfferVM vm = result.Data as OfferVM;
+            //var dto = Mapper.Map<OfferDto>(vm);
+
+            // TODO: Update Offer
+
+            await Refresh();
         }
     }
 
-    private void _delete(OfferVM offer)
+    private async Task _delete(OfferVM offer)
     {
         _selectedOffer = offer;
-        if (_selectedOffer != null && _selectedOffer.Id != 0)
+
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the offer {_selectedOffer.Code}?", "Yes", "No", "Deleting record...");
+
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
         {
-            _deleteDialog.Show();
-            _isDeleteDialogOdepened = true;
-        }
-    }
-    #endregion
-
-    #region Delete Dialog Actions
-    private async Task OnDeleteAccept()
-    {
-        if (_isDeleteDialogOdepened)
-        {
-            if (_selectedOffer != null)
-                await _dataProvider.Offers.Delete(_selectedOffer.Id);
-
-            _deleteDialog.Hide();
-            _isDeleteDialogOdepened = false;
-
+            await _dataProvider.Offers.Delete(_selectedOffer.Id);
             await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, true);
         }
-    }
 
-    private void OnDeleteClose()
-    {
-        if (_isDeleteDialogOdepened)
-        {
-            _deleteDialog.Hide();
-            _isDeleteDialogOdepened = false;
-        }
+        await dialog.CloseAsync();
     }
     #endregion
 }

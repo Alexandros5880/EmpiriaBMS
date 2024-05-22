@@ -13,40 +13,14 @@ using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.Offers;
 
-public partial class OfferDetailedLand : IDisposable
+public partial class OfferCreationWizzard : IDisposable
 {
-    private bool _isNew = true;
+    private bool _isNew => Offer?.Id == 0;
     private bool _loading = false;
     private bool _loadingOnInvoice = false;
 
-    private OfferVM _offer;
     [Parameter]
-    public OfferVM Offer
-    {
-        get => _offer;
-        set
-        {
-            _offer = value;
-            _isNew = _offer.Id == 0;
-            if (_isNew)
-            {
-                _project = new ProjectVM();
-                _invoice = new InvoiceVM();
-                _offerCompoment?.ResetValidation();
-            }
-            
-            TabMenuClick(0);
-        }
-    }
-
-    [Parameter]
-    public ICollection<OfferTypeVM> Types { get; set; }
-
-    [Parameter]
-    public ICollection<OfferStateVM> States { get; set; }
-
-    [Parameter]
-    public ICollection<OfferResultVM> Results { get; set; }
+    public OfferVM Offer { get; set; } = default!;
 
     [Parameter]
     public EventCallback OnSave { get; set; }
@@ -54,11 +28,12 @@ public partial class OfferDetailedLand : IDisposable
     [Parameter]
     public EventCallback OnCansel { get; set; }
 
-    private ProjectVM _project { get; set; } = new ProjectVM();
-    private InvoiceVM _invoice { get; set; } = new InvoiceVM();
+    private ProjectVM _project { get; set; }
+    private InvoiceVM _invoice { get; set; }
     List<InvoiceVM> _invoices = new List<InvoiceVM>();
+    private ContractVM _contract { get; set; }
 
-    private bool _contractTabEnable => Offer.ResultId == Results.FirstOrDefault(r => r.Name.Equals("SUCCESSFUL"))?.Id;
+    private bool _contractTabEnable = false;
 
     #region Compoment Refrences
     private ProjectDetailed _projectCompoment;
@@ -72,16 +47,20 @@ public partial class OfferDetailedLand : IDisposable
 
         if (firstRender)
         {
-            if (_isNew)
-            {
-                _project = new ProjectVM();
-                _invoice = new InvoiceVM();
-                _validOffer = true;
-                _offerCompoment?.ResetValidation();
-            }
-            Offer.PropertyChanged += Offer_PropertyChanged;
-            StateHasChanged();
+            await Prepair();
         }
+    }
+
+    public async Task Prepair()
+    {
+        Offer = Offer != null ? Offer : new OfferVM()
+        {
+            Date = DateTime.Now,
+        };
+        await _getProject();
+        _getInvoice();
+        Offer.PropertyChanged += Offer_PropertyChanged;
+        await TabMenuClick(0);
     }
 
     private void Offer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -89,6 +68,7 @@ public partial class OfferDetailedLand : IDisposable
         switch(e.PropertyName)
         {
             case nameof(Offer.ResultId):
+                _contractTabEnable = Offer.ResultId != 0;
                 StateHasChanged();
                 break;
         }
@@ -108,33 +88,45 @@ public partial class OfferDetailedLand : IDisposable
     private async Task _addInvoice()
     {
         _loadingOnInvoice = true;
-        var _validInvoice = _invoiceCompoment.Validate();
-        if (_validInvoice)
-        {
-            var contract = _invoice.Contract;
-            contract.InvoiceId = _invoice.Id;
+        var invoice = await _invoiceCompoment.Save();
+        if (invoice != null)
+            _invoices.Add(invoice);
 
-            await _upsertInvoice();
-            _invoices.Add(_invoice);
-            await _upsertContract(contract.Clone() as ContractVM);
-            _invoice = new InvoiceVM();
-            _invoice.Contract = new ContractVM()
-            {
-                InvoiceId = _invoice.Id,
-                Invoice = _invoice,
-                Date = DateTime.Now,
-            };
-        }
+        //#region Reset Invoice
+        //var i = new InvoiceVM()
+        //{
+        //    Date = DateTime.Now,
+        //    TypeId = 0,
+        //    Mark = string.Empty,
+        //    Vat = 0,
+        //    Fee = 0,
+        //    Number = 0,
+        //    Total = 0
+        //};
+        //_contract = new ContractVM()
+        //{
+        //    InvoiceId = i.Id,
+        //    Invoice = i,
+        //    Date = DateTime.Now,
+        //    ContractualFee = 0,
+        //    Description = string.Empty
+        //};
+        //i.Contract = _contract;
+        //i.ContractId = _contract.Id;
+        //_invoice = i;
+        //#endregion
+
         _loadingOnInvoice = false;
-        StateHasChanged();
+        //StateHasChanged();
     }
 
     #region Update Records
-    private async Task _upsertProject()
+    private async Task<ProjectVM> _upsertProject(ProjectVM project)
     {
-        if (_project is not null)
+        if (project is not null)
         {
-            var dto = _mapper.Map<ProjectDto>(_project);    
+            var p = project.Clone() as ProjectVM;
+            var dto = _mapper.Map<ProjectDto>(p);
 
             // If Addres Save Address
             if (dto?.Address != null && !(await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
@@ -159,88 +151,57 @@ public partial class OfferDetailedLand : IDisposable
             dto.ProjectManager = null;
 
             // Save Project
-            ProjectDto updatedProject;
             if (_project.Id != 0 && await _dataProvider.Projects.Any(p => p.Id == _project.Id))
             {
-                updatedProject = await _dataProvider.Projects.Update(dto);
+                ProjectDto updated = await _dataProvider.Projects.Update(dto);
+                if (updated != null)
+                    return _mapper.Map<ProjectVM>(updated);
+                else
+                    return null;
             }
             else
             {
-                updatedProject = await _dataProvider.Projects.Add(dto);
+                ProjectDto updated = await _dataProvider.Projects.Add(dto);
+                if (updated != null)
+                    return _mapper.Map<ProjectVM>(updated);
+                else
+                    return null;
             }
-            
-            _project = _mapper.Map<ProjectVM>(updatedProject);
         }
+        else
+            return null;
     }
     
-    private async Task _upsertOffer()
+    private async Task<OfferVM> _upsertOffer(OfferVM offer)
     {
-        if (Offer is not null &&  _project != null && _project.Id != 0)
+        if (offer is not null && offer.Project != null && offer.ProjectId != 0)
         {
-            Offer.ProjectId = _project.Id;
-            var dto = _mapper.Map<OfferDto>(Offer);
+            var obj = offer.Clone() as OfferVM;
+            var dto = _mapper.Map<OfferDto>(obj);
+            dto.Type = null;
+            dto.State = null;
+            dto.Result = null;
+            dto.Project = null;
             // Save Offer
-            OfferDto updatedOffer;
-            if (await _dataProvider.Offers.Any(p => p.Id == Offer.Id))
+            if (await _dataProvider.Offers.Any(p => p.Id == offer.Id))
             {
-                updatedOffer = await _dataProvider.Offers.Update(dto);
+                OfferDto updatedOffer = await _dataProvider.Offers.Update(dto);
+                if (updatedOffer != null)
+                    return _mapper.Map<OfferVM>(updatedOffer);
+                else
+                    return null;
             }
             else
             {
-                updatedOffer = await _dataProvider.Offers.Add(dto);
+                OfferDto updatedOffer = await _dataProvider.Offers.Add(dto);
+                if (updatedOffer != null)
+                    return _mapper.Map<OfferVM>(updatedOffer);
+                else
+                    return null;
             }
-
-            Offer = _mapper.Map<OfferVM>(updatedOffer);
         }
-    }
-
-    private async Task _upsertInvoice()
-    {
-        if (_invoice is not null && _project != null && _project.Id != 0)
-        {
-            var invoice = _invoice.Clone() as InvoiceVM;
-            invoice.ProjectId = _project.Id;
-            invoice.Type = null;
-            invoice.Contract = null;
-            invoice.ContractId = null;
-            invoice.Project = null;
-
-            var dto = _mapper.Map<InvoiceDto>(invoice);
-            // Save Invoice
-            InvoiceDto updatedInvoice;
-            if (await _dataProvider.Invoices.Any(p => p.Id == invoice.Id))
-            {
-                updatedInvoice = await _dataProvider.Invoices.Update(dto);
-            }
-            else
-            {
-                updatedInvoice = await _dataProvider.Invoices.Add(dto);
-            }
-
-            _invoice = _mapper.Map<InvoiceVM>(updatedInvoice);
-        }
-    }
-
-    private async Task _upsertContract(ContractVM contract)
-    {
-        if (contract is not null && _invoice != null && _invoice.Id != 0)
-        {
-            contract.Invoice = null;
-            contract.InvoiceId = _invoice.Id;
-            var dto = _mapper.Map<ContractDto>(contract);
-            // Save Contract
-            ContractDto updatedContract;
-            if (await _dataProvider.Invoices.Any(p => p.Id == contract.Id))
-            {
-                updatedContract = await _dataProvider.Contracts.Update(dto);
-            }
-            else
-            {
-                updatedContract = await _dataProvider.Contracts.Add(dto);
-            }
-
-            _invoice.Contract = _mapper.Map<ContractVM>(updatedContract);
-        }
+        else
+            return null;
     }
     #endregion
 
@@ -257,14 +218,14 @@ public partial class OfferDetailedLand : IDisposable
             var _validOffer = _offerCompoment?.Validate();
             for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
             tabs[tabIndex] = true;
+            var offer = Offer;
             StateHasChanged();
         }
 
         // Project Tabs
         if (tabIndex == 1)
         {
-            var _validOffer = _offerCompoment.Validate();
-            if (_validOffer)
+            if (_offerCompoment != null && _offerCompoment.Validate())
             {
                 if (_projectCompoment != null)
                     await _projectCompoment.Prepair();
@@ -283,13 +244,30 @@ public partial class OfferDetailedLand : IDisposable
         // Invoice Tab
         if (tabIndex == 2)
         {
-            var _validProject = _projectCompoment.Validate();
-            if (_validProject)
+            if (_projectCompoment != null && _projectCompoment.Validate())
             {
                 _project = _projectCompoment.GetProject();
-                // If Project Valid Save Project And Offer
-                await _upsertProject();
-                await _upsertOffer();
+
+                #region Update Offer
+                // Update Project
+                var projectUpdated = await _upsertProject(_project);
+                if (projectUpdated == null)
+                    return;
+                var projectDto = _mapper.Map<ProjectDto>(projectUpdated);
+                Offer.Project = Mapping.Mapper.Map<Project>(projectDto);
+                Offer.ProjectId = projectUpdated.Id;
+
+                // Update Offer
+                var offerUpdated = await _upsertOffer(Offer);
+                if (offerUpdated == null)
+                    return;
+                Offer = offerUpdated;
+
+                // Update Offer Related Project
+                Offer.Project = Mapping.Mapper.Map<Project>(projectDto);
+                Offer.ProjectId = projectUpdated.Id;
+                _project = projectUpdated;
+                #endregion
 
                 if (_invoiceCompoment != null)
                     await _invoiceCompoment.Prepair();
@@ -360,6 +338,49 @@ public partial class OfferDetailedLand : IDisposable
     {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
+    }
+    #endregion
+
+    #region Get Related Records
+    private async Task _getProject()
+    {
+        if (Offer?.Project != null)
+        {
+            var dto = Mapping.Mapper.Map<ProjectDto>(Offer.Project);
+            _project = _mapper.Map<ProjectVM>(dto);
+        }
+        else if (Offer?.ProjectId != 0 && Offer?.ProjectId != null)
+        {
+            var dto = await _dataProvider.Projects.Get((int)Offer.ProjectId);
+            _project = _mapper.Map<ProjectVM>(dto);
+        }
+        else
+        {
+            _project = new ProjectVM();
+        }
+    }
+
+    private void _getInvoice()
+    {
+        if (_project != null && _project?.Invoices != null ? _project?.Invoices.Count > 0 : false)
+        {
+            var inv = _project.Invoices.FirstOrDefault();
+            var dto = Mapping.Mapper.Map<InvoiceDto>(inv);
+            _invoice = _mapper.Map<InvoiceVM>(dto);
+            _contract = _invoice.Contract;
+        } else
+        {
+            _contract = new ContractVM()
+            {
+                Date = DateTime.Now,
+            };
+            _invoice = new InvoiceVM()
+            {
+                Contract = _contract,
+            };
+            _contract.InvoiceId = _invoice.Id;
+            _contract.Invoice = _invoice;
+        }
     }
     #endregion
 }

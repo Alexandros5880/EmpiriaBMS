@@ -139,7 +139,7 @@
                 </div>
                 <div class="col-12">
                     <!-- Contract Detailed -->
-                    <ContractDetailed Content="@Content.Contract" DisplayActions="false" DisplayInvoice="false" />
+                    <ContractDetailed Content="@Contract" DisplayActions="false" DisplayInvoice="false" />
                 </div>
             </div>
         </div>
@@ -147,7 +147,7 @@
         @if (DisplayAcions)
         {
             <div class="col-12 mb-2 mt-1 d-flex justify-content-end">
-                <FluentButton Appearance="Appearance.Accent" OnClick="@Save">Save</FluentButton>
+                <FluentButton Appearance="Appearance.Accent" OnClick="@(async () => await Save())">Save</FluentButton>
             </div>
         }
 

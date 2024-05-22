@@ -21,6 +21,9 @@ public partial class InvoicesTable
     [Parameter]
     public List<InvoiceVM> Source { get; set; }
 
+    [Parameter]
+    public bool DisplayActions { get; set; } = true;
+
     private string _filterString = string.Empty;
     IQueryable<InvoiceVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };

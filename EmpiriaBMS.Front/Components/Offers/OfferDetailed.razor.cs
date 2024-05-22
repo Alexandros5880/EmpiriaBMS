@@ -1,48 +1,18 @@
-﻿using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class OfferDetailed
 {
-    private OfferVM _offer;
     [Parameter]
-    public OfferVM Offer
-    {
-        get => _offer;
-        set {
-            if (value.StateId != 0)
-                SelectedOfferState = States.FirstOrDefault(s => s.Id == value.StateId);
-            else
-                SelectedOfferState = null;
-
-            if (value.TypeId != 0)
-                SelectedOfferType = Types.FirstOrDefault(s => s.Id == value.TypeId);
-            else
-                SelectedOfferType = null;
-
-            if (value.ResultId != 0)
-                SelectedOfferResult = Results.FirstOrDefault(s => s.Id == value.ResultId);
-            else
-                SelectedOfferResult = null;
-
-            _offer = value;
-            _isNew = _offer.Id == 0;
-        }
-    }
-
-    [Parameter]
-    public ICollection<OfferTypeVM> Types { get; set; }
-
-    [Parameter]
-    public ICollection<OfferStateVM> States { get; set; }
-
-    [Parameter]
-    public ICollection<OfferResultVM> Results { get; set; }
+    public OfferVM Content { get; set; }
 
     [Parameter]
     public EventCallback OnSave { get; set; }
@@ -53,51 +23,38 @@ public partial class OfferDetailed
     [Parameter]
     public bool DisplayActions { get; set; } = true;
 
-    private bool _isNew = true;
+    private bool _isNew => Content.Id == 0;
 
-    private OfferStateVM _selectedOfferState;
-    public OfferStateVM SelectedOfferState
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        get => _selectedOfferState;
-        set
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
         {
-            if (_selectedOfferState != value)
-            {
-                _selectedOfferState = value;
-                if (Offer != null && value != null && value.Id != Offer?.StateId)
-                    Offer.StateId = _selectedOfferState.Id;
-            }
+            await Prepair();
         }
     }
 
-    private OfferTypeVM _selectedOfferType;
-    public OfferTypeVM SelectedOfferType
+    public async Task Prepair()
     {
-        get => _selectedOfferType;
-        set
-        {
-            if (_selectedOfferType != value)
-            {
-                _selectedOfferType = value;
-                if (Offer != null && value != null && value.Id != Offer?.TypeId)
-                    Offer.TypeId = _selectedOfferType.Id;
-            }
-        }
-    }
+        await _getRecords();
 
-    private OfferResultVM _selectedOfferResult;
-    public OfferResultVM SelectedOfferResult
-    {
-        get => _selectedOfferResult;
-        set
+        if (Content?.State != null)
         {
-            if (_selectedOfferResult != value)
-            {
-                _selectedOfferResult = value;
-                if (Offer != null && value != null && value.Id != Offer?.ResultId)
-                    Offer.ResultId = SelectedOfferResult.Id;
-            }
+            State = _states.FirstOrDefault(s => s.Id == Content.StateId);
         }
+
+        if (Content?.Type != null)
+        {
+            Type = _types.FirstOrDefault(s => s.Id == Content.TypeId);
+        }
+
+        if (Content?.Result != null)
+        {
+            Result = _results.FirstOrDefault(s => s.Id == Content.ResultId);
+        }
+
+        StateHasChanged();
     }
 
     public async Task Save()
@@ -105,7 +62,7 @@ public partial class OfferDetailed
         var valid = Validate();
         if (!valid) return;
 
-        var dto = Mapper.Map<OfferDto>(Offer);
+        var dto = Mapper.Map<OfferDto>(Content);
         OfferDto updated;
 
         if (_isNew)
@@ -130,13 +87,13 @@ public partial class OfferDetailed
     {
         if (fieldname == null)
         {
-            validCode = !string.IsNullOrEmpty(Offer.Code);
-            validType = Offer.TypeId != 0;
-            validState = Offer.StateId != 0;
-            validDate = Offer.Date == null ? false : ((DateTime)Offer.Date) >= DateTime.Now;
-            validResult = Offer.ResultId != 0;
-            validPudgetPrice = Offer.PudgetPrice != 0 && Offer.PudgetPrice != null;
-            validOfferPrice = Offer.OfferPrice != 0 && Offer.OfferPrice != null;
+            validCode = !string.IsNullOrEmpty(Content.Code);
+            validType = Content.TypeId != 0;
+            validState = Content.StateId != 0;
+            validDate = Content.Date != null;
+            validResult = Content.ResultId != 0;
+            validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
+            validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
 
             return validCode && validType && validState && validResult && validDate && validPudgetPrice && validOfferPrice;
         }
@@ -153,25 +110,25 @@ public partial class OfferDetailed
             switch (fieldname)
             {
                 case "Code":
-                    validCode = !string.IsNullOrEmpty(Offer.Code);
+                    validCode = !string.IsNullOrEmpty(Content.Code);
                     return validCode;
                 case "Type":
-                    validType = Offer.TypeId != 0;
+                    validType = Content.TypeId != 0;
                     return validType;
                 case "State":
-                    validState = Offer.StateId != 0;
+                    validState = Content.StateId != 0;
                     return validState;
                 case "Result":
-                    validResult = Offer.ResultId != 0;
+                    validResult = Content.ResultId != 0;
                     return validResult;
                 case "Date":
-                    validDate = Offer.Date == null ? false : ((DateTime)Offer.Date) >= DateTime.Now;
+                    validDate = Content.Date != null;
                     return validDate;
                 case "PudgetPrice":
-                    validPudgetPrice = Offer.PudgetPrice != 0 && Offer.PudgetPrice != null;
+                    validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
                     return validPudgetPrice;
                 case "OfferPrice":
-                    validOfferPrice = Offer.OfferPrice != 0 && Offer.OfferPrice != null;
+                    validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
                     return validOfferPrice;
                 default:
                     return true;
@@ -189,6 +146,85 @@ public partial class OfferDetailed
         validDate = true;
         validPudgetPrice = true;
         validOfferPrice = true;
+    }
+    #endregion
+
+    #region Get Related Records
+    ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
+    ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
+    ObservableCollection<OfferResultVM> _results = new ObservableCollection<OfferResultVM>();
+
+    private OfferStateVM _state = new OfferStateVM();
+    public OfferStateVM State
+    {
+        get => _state;
+        set
+        {
+            if (_state == value || value == null) return;
+            _state = value;
+            Content.StateId = _state.Id;
+            var dto = Mapper.Map<OfferStateDto>(_state);
+            Content.State = Mapping.Mapper.Map<OfferState>(dto);
+        }
+    }
+
+    private OfferTypeVM _type = new OfferTypeVM();
+    public OfferTypeVM Type
+    {
+        get => _type;
+        set
+        {
+            if (_type == value || value == null) return;
+            _type = value;
+            Content.TypeId = _type.Id;
+            var dto = Mapper.Map<OfferTypeDto>(_type);
+            Content.Type = Mapping.Mapper.Map<OfferType>(dto);
+        }
+    }
+
+    private OfferResultVM _result = new OfferResultVM();
+    public OfferResultVM Result
+    {
+        get => _result;
+        set
+        {
+            if (_result == value || value == null) return;
+            _result = value;
+            Content.ResultId = _result.Id;
+            var dto = Mapper.Map<OfferResultDto>(_result);
+            Content.Result = Mapping.Mapper.Map<OfferResult>(dto);
+        }
+    }
+
+    private async Task _getRecords()
+    {
+        await _getStates();
+        await _getTypes();
+        await _getResults();
+    }
+
+    private async Task _getStates()
+    {
+        var dtos = await _dataProvider.OfferStates.GetAll();
+        var vms = Mapper.Map<List<OfferStateVM>>(dtos);
+        _states.Clear();
+        vms.ForEach(_states.Add);
+    }
+
+    private async Task _getTypes()
+    {
+        var dtos = await _dataProvider.OfferTypes.GetAll();
+        var vms = Mapper.Map<List<OfferTypeVM>>(dtos);
+        _types.Clear();
+        vms.ForEach(_types.Add);
+    }
+
+    private async Task _getResults()
+    {
+        var dtos = await _dataProvider.OfferResult.GetAll();
+        var vms = Mapper.Map<List<OfferResultVM>>(dtos);
+        _results.Clear();
+        vms.ForEach(_results.Add);
     }
     #endregion
 }

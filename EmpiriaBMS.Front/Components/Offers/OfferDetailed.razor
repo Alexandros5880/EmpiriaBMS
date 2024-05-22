@@ -28,12 +28,12 @@
                                 Placeholder="Select State"
                                 Autocomplete="ComboboxAutocomplete.Both"
                                 AriaLabel="Pre-selected option"
-                                Items="@States"
+                                Items="@_states"
                                 TOption="OfferStateVM"
                                 OptionValue="@((t) => t.Id.ToString())"
                                 OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == @Offer.StateId)"
-                                @bind-SelectedOption="@SelectedOfferState" />
+                                OptionSelected="@(i => i.Id == @Content.StateId)"
+                                @bind-SelectedOption="@State" />
             </div>
             @if (!validState)
             {
@@ -55,12 +55,12 @@
                                 Placeholder="Select Type"
                                 Autocomplete="ComboboxAutocomplete.Both"
                                 AriaLabel="Pre-selected option"
-                                Items="@Types"
+                                Items="@_types"
                                 TOption="OfferTypeVM"
                                 OptionValue="@((t) => t.Id.ToString())"
                                 OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == @Offer.TypeId)"
-                                @bind-SelectedOption="@SelectedOfferType" />
+                                OptionSelected="@(i => i.Id == @Content.TypeId)"
+                                @bind-SelectedOption="@Type" />
             </div>
             @if (!validType)
             {
@@ -82,12 +82,12 @@
                                 Placeholder="Select Result"
                                 Autocomplete="ComboboxAutocomplete.Both"
                                 AriaLabel="Pre-selected option"
-                                Items="@Results"
+                                Items="@_results"
                                 TOption="OfferResultVM"
                                 OptionValue="@((t) => t.Id.ToString())"
                                 OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == @Offer.ResultId)"
-                                @bind-SelectedOption="@SelectedOfferResult" />
+                                OptionSelected="@(i => i.Id == @Content.ResultId)"
+                                @bind-SelectedOption="@Result" />
             </div>
             @if (!validResult)
             {
@@ -107,7 +107,7 @@
                 Code<span class="text-danger">*</span>
             </div>
             <div>
-                <FluentTextField Style="width:100%;" @bind-Value="@Offer.Code" />
+                <FluentTextField Style="width:100%;" @bind-Value="@Content.Code" />
             </div>
             @if (!validCode)
             {
@@ -123,7 +123,7 @@
                 Date<span class="text-danger">*</span>
             </div>
             <div>
-                <FluentDatePicker Style="width:100%;" @bind-Value="@Offer.Date" />
+                <FluentDatePicker Style="width:100%;" @bind-Value="@Content.Date" />
             </div>
             @if (!validDate)
             {
@@ -143,7 +143,7 @@
                 Pudget<span class="text-danger">*</span>
             </div>
             <div>
-                <FluentNumberField Style="width:100%;" @bind-Value="@Offer.PudgetPrice" />
+                <FluentNumberField Style="width:100%;" @bind-Value="@Content.PudgetPrice" />
             </div>
             @if (!validPudgetPrice)
             {
@@ -159,7 +159,7 @@
                 Price<span class="text-danger">*</span>
             </div>
             <div>
-                <FluentNumberField Style="width:100%;" @bind-Value="@Offer.OfferPrice" />
+                <FluentNumberField Style="width:100%;" @bind-Value="@Content.OfferPrice" />
             </div>
             @if (!validOfferPrice)
             {
@@ -182,15 +182,15 @@
                     <div class="row">
 
                         <div class="col-12 row gx-3 mt-2">
-                            <FluentTextArea Style="width:100%; margin:4px;" Label="Description:" Class="col-12" @bind-Value="@Offer.Description" />
+                            <FluentTextArea Style="width:100%; margin:4px;" Label="Description:" Class="col-12" @bind-Value="@Content.Description" />
                         </div>
 
                         <div class="col-12 row gx-3 mt-2">
-                            <FluentTextArea Style="width:100%; margin:4px;" Label="Team Text:" Class="col-12" @bind-Value="@Offer.TeamText" />
+                            <FluentTextArea Style="width:100%; margin:4px;" Label="Team Text:" Class="col-12" @bind-Value="@Content.TeamText" />
                         </div>
 
                         <div class="col-12 row gx-3 mt-2">
-                            <FluentTextArea Style="width:100%; margin:4px;" Label="Comments:" Class="col-12" @bind-Value="@Offer.Comments" />
+                            <FluentTextArea Style="width:100%; margin:4px;" Label="Comments:" Class="col-12" @bind-Value="@Content.Comments" />
                         </div>
 
                     </div>

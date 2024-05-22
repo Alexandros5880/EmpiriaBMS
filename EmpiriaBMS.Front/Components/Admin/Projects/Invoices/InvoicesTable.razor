@@ -24,7 +24,7 @@
                             GridTemplateColumns="160px 100px 100px 160px 100px 160px 100px 100px 100px"
                             style="height: 100% min-height: 300px; overflow:auto;">
 
-                <TemplateColumn Title="Name"
+                <TemplateColumn Title="Project"
                                 Sortable="true"
                                 InitialSortDirection=SortDirection.Descending
                                 IsDefaultSortColumn=true>
@@ -50,10 +50,13 @@
                 <PropertyColumn Property="@(p => p.Vat)" Sortable="true" Title="Vat" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Total)" Sortable="true" Title="Total" Align="@Align.Start" />
 
-                <TemplateColumn Title="Actions" Align="@Align.End">
-                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
-                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
-                </TemplateColumn>
+                @if (DisplayActions)
+                {
+                    <TemplateColumn Title="Actions" Align="@Align.End">
+                        <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                        <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                    </TemplateColumn>
+                }
 
             </FluentDataGrid>
         </div>
