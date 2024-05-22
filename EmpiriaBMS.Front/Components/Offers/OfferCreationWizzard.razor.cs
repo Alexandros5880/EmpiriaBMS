@@ -236,7 +236,7 @@ public partial class OfferCreationWizzard
                     await _invoiceCompoment.Prepair();
                 if (_project != null)
                 {
-                    var invoicesDtos = Mapping.Mapper.Map<List<InvoiceDto>>(_project.Invoices);
+                    var invoicesDtos = await _dataProvider.Projects.GetInvoices(_project.Id);
                     _invoices = _mapper.Map<List<InvoiceVM>>(invoicesDtos);
                     if (_invoices != null && _invoices.Count > 0)
                     {
