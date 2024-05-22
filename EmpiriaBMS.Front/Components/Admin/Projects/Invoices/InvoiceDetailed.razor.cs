@@ -67,13 +67,12 @@ public partial class InvoiceDetailed
     {
         if (!halfRefresh)
             await _getRecords();
-        else
-            await _getRelatedContract();
 
         if (invoice != null)
-        {
             Content = invoice;
-        }
+
+        if (halfRefresh)
+            await _getRelatedContract();
 
         if (Content.Project != null)
         {

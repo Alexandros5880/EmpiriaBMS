@@ -100,6 +100,7 @@
         else
         {
             hasAddress = false;
+            
             Address = null;
         }
     }
@@ -108,7 +109,7 @@
     {
         if (e.Key.Equals("Enter"))
         {
-            await Search();
+            await Search(_searchAddress);
             await _mapRefrence.FocusAsync();
         }
     }
