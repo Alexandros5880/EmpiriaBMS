@@ -118,6 +118,8 @@ public partial class InvoiceDetailed
 
         i.Contract = c;
         i.ContractId = c.Id;
+
+        StateHasChanged();
         return i;
     }
 

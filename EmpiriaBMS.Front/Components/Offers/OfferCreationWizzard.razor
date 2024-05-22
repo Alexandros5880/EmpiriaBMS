@@ -43,19 +43,9 @@
                     <button type="button"
                             class="btn step-trigger @(tabs[2] == true ? "selected_step" : "")"
                             onclick="@(async () => await TabMenuClick(2))"
-                            disabled="@_isNew">
+                            disabled="@(_isNew || !_contractTabEnable)">
                         <span class="bs-stepper-circle">3</span>
                         <span class="bs-stepper-label">Create Invoice</span>
-                    </button>
-                </div>
-                <div class="line"></div>
-                <div class="step">
-                    <button type="button"
-                            class="btn step-trigger @(tabs[3] == true ? "selected_step" : "")"
-                            onclick="@(async () => await TabMenuClick(3))"
-                            disabled="@_isNew">
-                        <span class="bs-stepper-circle">4</span>
-                        <span class="bs-stepper-label">Ready!</span>
                     </button>
                 </div>
             </div>
@@ -110,7 +100,7 @@
                                     Previous
                                 </FluentButton>
 
-                                <FluentButton Class="float-end ms-2" OnClick="@(async () => await TabMenuClick(2))" Loading="@_loading">
+                                <FluentButton Class="float-end ms-2" OnClick="@(async () => await TabMenuClick(2))" Loading="@_loading" Disabled="@(!_contractTabEnable)">
                                     <FluentIcon Value="@(new Icons.Regular.Size32.Next())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
                                     Next
                                 </FluentButton>
@@ -164,30 +154,6 @@
                                     <FluentIcon Value="@(new Icons.Regular.Size32.Previous())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
                                     Previous
                                 </FluentButton>
-
-                                <FluentButton Class="float-end ms-2" OnClick="@(async () => await TabMenuClick(3))" Loading="@_loading" Disabled="@(!_contractTabEnable)">
-                                    <FluentIcon Value="@(new Icons.Regular.Size32.Next())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                                    Next
-                                </FluentButton>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-            else if (tabs[3]) // Ready!
-            {
-                <div class="content" style="max-width: 900px; margin: 0 auto;">
-                    <div class="row">
-                        <div class="col-12 my-wizard-tab">
-                            <div class="row">
-                                <div class="col-12 m-2">
-                                    <h3 class="text-bg-primary text-center ">Offer Created Successfully</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <div class="d-flex justify-content-end">
 
                                 <FluentButton Class="float-end" OnClick="@(async () => await _close())" Loading="@_loading">
                                     <FluentIcon Value="@(new Icons.Regular.Size32.ClosedCaption())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.Offers;
 
-public partial class OfferCreationWizzard : IDisposable
+public partial class OfferCreationWizzard
 {
     private bool _isNew => Offer?.Id == 0;
     private bool _loading = false;
@@ -33,7 +33,7 @@ public partial class OfferCreationWizzard : IDisposable
     List<InvoiceVM> _invoices = new List<InvoiceVM>();
     private ContractVM _contract { get; set; }
 
-    private bool _contractTabEnable = false;
+    private bool _contractTabEnable => Offer?.Result?.Name?.Equals("SUCCESSFUL") ?? false;
 
     #region Compoment Refrences
     private ProjectDetailed _projectCompoment;
@@ -59,24 +59,13 @@ public partial class OfferCreationWizzard : IDisposable
         };
         await _getProject();
         _getInvoice();
-        Offer.PropertyChanged += Offer_PropertyChanged;
         await TabMenuClick(0);
-    }
-
-    private void Offer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        switch(e.PropertyName)
-        {
-            case nameof(Offer.ResultId):
-                _contractTabEnable = Offer.ResultId != 0;
-                StateHasChanged();
-                break;
-        }
     }
 
     private async Task _close()
     {
-        await OnSave.InvokeAsync();
+        if (_invoices.Count > 0)
+            await OnSave.InvokeAsync();
     }
 
     private void _onInvoiceSelect(InvoiceVM invoice)
@@ -91,33 +80,7 @@ public partial class OfferCreationWizzard : IDisposable
         var invoice = await _invoiceCompoment.Save();
         if (invoice != null)
             _invoices.Add(invoice);
-
-        //#region Reset Invoice
-        //var i = new InvoiceVM()
-        //{
-        //    Date = DateTime.Now,
-        //    TypeId = 0,
-        //    Mark = string.Empty,
-        //    Vat = 0,
-        //    Fee = 0,
-        //    Number = 0,
-        //    Total = 0
-        //};
-        //_contract = new ContractVM()
-        //{
-        //    InvoiceId = i.Id,
-        //    Invoice = i,
-        //    Date = DateTime.Now,
-        //    ContractualFee = 0,
-        //    Description = string.Empty
-        //};
-        //i.Contract = _contract;
-        //i.ContractId = _contract.Id;
-        //_invoice = i;
-        //#endregion
-
         _loadingOnInvoice = false;
-        //StateHasChanged();
     }
 
     #region Update Records
@@ -206,7 +169,7 @@ public partial class OfferCreationWizzard : IDisposable
     #endregion
 
     #region Tab Actions
-    bool[] tabs = new bool[5];
+    bool[] tabs = new bool[4];
 
     private async Task TabMenuClick(int tabIndex)
     {
@@ -301,44 +264,12 @@ public partial class OfferCreationWizzard : IDisposable
             }
         }
 
-        // Ready! Tab
-        if (tabIndex == 3)
-        {
-            if (_invoices.Count > 0)
-            {
-                for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-                tabs[tabIndex] = true;
-                StateHasChanged();
-            }
-        }
-
         _loading = false;
     }
     #endregion
 
     #region Validation
     private bool _validOffer;
-    #endregion
-
-    #region Disable Pattern
-    private bool disposedValue;
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                Offer.PropertyChanged -= Offer_PropertyChanged;
-            }
-            disposedValue = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
     #endregion
 
     #region Get Related Records

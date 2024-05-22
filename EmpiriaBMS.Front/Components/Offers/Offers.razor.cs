@@ -169,7 +169,10 @@ public partial class Offers
     #region Dialogs Functions
     private async Task _add(MouseEventArgs e)
     {
-        _selectedOffer = new OfferVM();
+        _selectedOffer = new OfferVM()
+        {
+            Date = DateTime.Now
+        };
 
         DialogParameters parameters = new()
         {
@@ -191,8 +194,6 @@ public partial class Offers
         {
             //OfferVM vm = result.Data as OfferVM;
             //var dto = Mapper.Map<OfferDto>(vm);
-
-            // TODO: Add Offer
 
             await Refresh();
         }
@@ -222,8 +223,6 @@ public partial class Offers
         {
             //OfferVM vm = result.Data as OfferVM;
             //var dto = Mapper.Map<OfferDto>(vm);
-
-            // TODO: Update Offer
 
             await Refresh();
         }
