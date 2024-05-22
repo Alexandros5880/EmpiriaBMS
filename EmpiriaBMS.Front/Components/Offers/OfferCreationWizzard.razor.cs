@@ -84,6 +84,28 @@ public partial class OfferCreationWizzard
         _loadingOnInvoice = false;
     }
 
+    private async Task _saveBase()
+    {
+        // Update Project
+        var projectUpdated = await _upsertProject(_project);
+        if (projectUpdated == null)
+            return;
+        var projectDto = _mapper.Map<ProjectDto>(projectUpdated);
+        Offer.Project = Mapping.Mapper.Map<Project>(projectDto);
+        Offer.ProjectId = projectUpdated.Id;
+
+        // Update Offer
+        var offerUpdated = await _upsertOffer(Offer);
+        if (offerUpdated == null)
+            return;
+        Offer = offerUpdated;
+
+        // Update Offer Related Project
+        Offer.Project = Mapping.Mapper.Map<Project>(projectDto);
+        Offer.ProjectId = projectUpdated.Id;
+        _project = projectUpdated;
+    }
+
     #region Update Records
     private async Task<ProjectVM> _upsertProject(ProjectVM project)
     {
@@ -213,26 +235,7 @@ public partial class OfferCreationWizzard
                 if (_projectCompoment != null)
                     _project = _projectCompoment.GetProject();
 
-                #region Update Offer
-                // Update Project
-                var projectUpdated = await _upsertProject(_project);
-                if (projectUpdated == null)
-                    return;
-                var projectDto = _mapper.Map<ProjectDto>(projectUpdated);
-                Offer.Project = Mapping.Mapper.Map<Project>(projectDto);
-                Offer.ProjectId = projectUpdated.Id;
-
-                // Update Offer
-                var offerUpdated = await _upsertOffer(Offer);
-                if (offerUpdated == null)
-                    return;
-                Offer = offerUpdated;
-
-                // Update Offer Related Project
-                Offer.Project = Mapping.Mapper.Map<Project>(projectDto);
-                Offer.ProjectId = projectUpdated.Id;
-                _project = projectUpdated;
-                #endregion
+                await _saveBase();
 
                 if (_invoiceCompoment != null)
                     await _invoiceCompoment.Prepair();

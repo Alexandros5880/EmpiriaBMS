@@ -203,4 +203,20 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
             return dtos;
         }
     }
+
+    public new async Task<ContractDto> GetContract(int invoiceId)
+    {
+        if (invoiceId == 0)
+            throw new ArgumentNullException(nameof(invoiceId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var c = await _context
+                             .Set<Contract>()
+                             .Where(r => !r.IsDeleted)
+                             .FirstOrDefaultAsync(c => c.InvoiceId == invoiceId);
+
+            return Mapping.Mapper.Map<ContractDto>(c);
+        }
+    }
 }

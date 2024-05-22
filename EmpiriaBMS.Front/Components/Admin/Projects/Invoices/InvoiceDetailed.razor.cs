@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Config;
+﻿using AutoMapper;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
@@ -66,6 +67,8 @@ public partial class InvoiceDetailed
     {
         if (!halfRefresh)
             await _getRecords();
+        else
+            await _getRelatedContract();
 
         if (invoice != null)
         {
@@ -101,33 +104,6 @@ public partial class InvoiceDetailed
         _contract.Invoice = i;
         _contract.InvoiceId = i.Id;
         var c = await _upsertContract(_contract.Clone() as ContractVM);
-
-        //#region Reset Invoice
-        //var inv = new InvoiceVM()
-        //{
-        //    Date = DateTime.Now,
-        //    TypeId = _types.FirstOrDefault().Id,
-        //    Type = _types.FirstOrDefault(),
-        //    Mark = string.Empty,
-        //    Vat = 0,
-        //    Fee = 0,
-        //    Number = 0,
-        //    Total = 0,
-        //    Project = _invoice.Project,
-        //    ProjectId = _invoice.ProjectId,
-        //};
-        //_contract = new ContractVM()
-        //{
-        //    InvoiceId = inv.Id,
-        //    Invoice = inv,
-        //    Date = DateTime.Now,
-        //    ContractualFee = 0,
-        //    Description = string.Empty
-        //};
-        //inv.Contract = _contract;
-        //inv.ContractId = _contract.Id;
-        //_invoice = inv;
-        //#endregion
 
         i.Contract = c;
         i.ContractId = c.Id;
@@ -178,7 +154,7 @@ public partial class InvoiceDetailed
         if (contract is not null && contract.Invoice != null && contract.InvoiceId != 0)
         {
             contract.Invoice = null;
-            contract.InvoiceId = _invoice.Id;
+
             var dto = _mapper.Map<ContractDto>(contract);
             // Save Contract
             if (await _dataProvider.Invoices.Any(p => p.Id == contract.Id))
@@ -298,12 +274,12 @@ public partial class InvoiceDetailed
 
     private async Task _getRelatedContract()
     {
-        if (Content.ContractId != 0 && Content.ContractId != null)
+        if (Content.Id != 0)
         {
-            var dto = await _dataProvider.Contracts.Get((int)Content.ContractId);
-            Content.Contract = _mapper.Map<ContractVM>(dto);
+            var contractDto = await _dataProvider.Invoices.GetContract(Content.Id);
+            if (contractDto != null)
+                Contract = _mapper.Map<ContractVM>(contractDto);
         }
-
     }
     #endregion
 }
