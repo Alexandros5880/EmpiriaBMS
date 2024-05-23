@@ -601,7 +601,7 @@
                 <div class="row justify-content-center mt-1 mb-1">
                     <div class="col-auto" style="width: 100%; height: 100%;">
                         <div class="m-1 row justify-content-center">
-                            <div class="col-12 p-2 row g-2" style="overflow-x:hidden; margin: 0 auto;">
+                            <div class="col-12 p-2 row g-2 mb-5" style="overflow-x:hidden; margin: 0 auto;">
 
                                 <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-xs-12">
                                     <Invoices @ref="@_invoiceListRef" OnSelect="@(async (i) => await _onSelectedInvoice(i))" SelectedRecord="@_selectedInvoice" />
@@ -626,7 +626,6 @@
                 </div>
             </FluentTab>
         }
-        
 
         <!-- Excpences -->
         @if(seeExpenses)

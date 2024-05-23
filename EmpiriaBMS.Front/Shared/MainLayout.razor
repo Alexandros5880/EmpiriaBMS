@@ -37,7 +37,7 @@
 
     <!-- Remove This -->
     <select class="form-select" @onchange="UsersSelectionChanged"
-            style="position:fixed !important; bottom:0px !important; width: auto; right: 10px;">
+            style="position:fixed !important; bottom:0px !important; width: auto; right: 10px; z-index: 1000;">
         @foreach (var _user in _allUsers)
         {
             @if (@_user.Id.Equals(_sharedAuthData?.LogedUser?.Id))
