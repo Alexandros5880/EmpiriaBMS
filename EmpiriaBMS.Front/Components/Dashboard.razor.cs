@@ -150,16 +150,6 @@ public partial class Dashboard : IDisposable
     private bool _isDeleteDialogOdepened = false;
     private string _deleteDialogMsg = "";
     private string _deleteObj = null;
-
-    // On Add/Edit Invoice Dialog
-    private FluentDialog _addEditInvoiceDialog;
-    private bool _isAddEditInvoiceDialogOdepened = false;
-    private Invoices _invoicesCompoment;
-
-    // On Add/Edit Payment Dialog
-    private FluentDialog _addEditPaymentDialog;
-    private bool _isAddEditPaymentDialogOdepened = false;
-    private Payments _paymentsCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -936,42 +926,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Add Invoice Actions
-    private async Task AddEditInvoice()
-    {
-        await _invoicesCompoment.Prepair();
-        _addEditInvoiceDialog.Show();
-        _isAddEditInvoiceDialogOdepened = true;
-    }
-
-    private void CloseAddInvoiceClick()
-    {
-        if (_isAddEditInvoiceDialogOdepened)
-        {
-            _addEditInvoiceDialog.Hide();
-            _isAddEditInvoiceDialogOdepened = false;
-        }
-    }
-    #endregion
-
-    #region Add Payment Actions
-    private async Task AddEditPayment()
-    {
-        await _paymentsCompoment.Prepair();
-        _addEditPaymentDialog.Show();
-        _isAddEditPaymentDialogOdepened = true;
-    }
-
-    private void CloseAddPaymentClick()
-    {
-        if (_isAddEditPaymentDialogOdepened)
-        {
-            _addEditPaymentDialog.Hide();
-            _isAddEditPaymentDialogOdepened = false;
-        }
-    }
-    #endregion
-
     #region Add/Edit/Delete Project Actions
     private async Task NavigateOnMap(Address address)
     {
@@ -982,14 +936,12 @@ public partial class Dashboard : IDisposable
 
     private void AddProject()
     {
-        //projectCompoment.PrepairForNew();
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
     }
 
     private void EditProject()
     {
-        //projectCompoment.PrepairForEdit(_selectedProject);
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
     }

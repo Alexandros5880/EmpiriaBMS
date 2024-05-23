@@ -1,243 +1,142 @@
 ﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
+using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components;
 
-public partial class Invoices : ComponentBase, IDisposable
+public partial class Invoices : ComponentBase
 {
-    private bool disposedValue;
-
-    private ObservableCollection<InvoiceTypeVM> _types = new ObservableCollection<InvoiceTypeVM>();
-    private ObservableCollection<InvoiceVM> _allInvoices = new ObservableCollection<InvoiceVM>();
-    private ObservableCollection<InvoiceVM> _projectsInvoices = new ObservableCollection<InvoiceVM>();
-    private List<InvoiceVM> _deleted = new List<InvoiceVM>();
+    [Parameter]
+    public bool DisplayAddButton { get; set; } = true;
 
     [Parameter]
-    public ProjectVM Project { get; set; }
+    public ProjectVM Project { get; set; } = null;
 
     [Parameter]
-    public EventCallback OnSave { get; set; }
+    public EventCallback<InvoiceVM> OnSelect { get; set; }
 
-    public async Task Prepair()
+    #region Data Grid
+    [Parameter]
+    public List<InvoiceVM> Source { get; set; }
+
+    [Parameter]
+    public bool DisplayActions { get; set; } = true;
+
+    private string _filterString = string.Empty;
+    IQueryable<InvoiceVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    [Parameter]
+    public InvoiceVM SelectedRecord { get; set; } = new InvoiceVM();
+
+    private void HandleFilter(ChangeEventArgs args)
     {
-        await _getInvoicesTypes();
-        await _getProjectsInvoices();
-        await _getAllInvoices();
-
-        StateHasChanged();
-    }
-
-    private async Task _getInvoicesTypes()
-    {
-        try
+        if (args.Value is string value)
         {
-            // Get My Invoices
-            var dtos = await _dataProvider.InvoiceTypes.GetAll();
-            var invoiceTypes = _mapper.Map<List<InvoiceTypeVM>>(dtos);
-            _types.Clear();
-            invoiceTypes.ForEach(_types.Add);
+            _filterString = value;
         }
-        catch (Exception ex)
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private async Task _getAllInvoices()
-    {
-        try
-        {
-            // Get My Invoices
-            var dtos = await _dataProvider.Invoices.GetAll();
-            var invoices = _mapper.Map<List<InvoiceVM>>(dtos);
-            _allInvoices.Clear();
-            invoices.ForEach(i => {
-                i.Type = null;
-                i.Project = null;
-                _allInvoices.Add(i);
-            });
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            _filterString = string.Empty;
         }
     }
 
-    private async Task _getProjectsInvoices()
+    private async Task HandleRowFocus(FluentDataGridRow<InvoiceVM> row)
     {
-        try
+        SelectedRecord = row.Item as InvoiceVM;
+        await OnSelect.InvokeAsync(SelectedRecord);
+    }
+
+    private async Task _getRecords()
+    {
+        var dtos = await DataProvider.Invoices.GetAllByProject(projectId: Project != null ? Project.Id : 0);
+        Source = Mapper.Map<List<InvoiceVM>>(dtos);
+    }
+
+    private async Task _add()
+    {
+        DialogParameters parameters = new()
         {
-            // Get My Invoices
-            var dtos = await _dataProvider.Projects.GetInvoices(Project.Id);
-            var invoices = _mapper.Map<List<InvoiceVM>>(dtos);
-            _projectsInvoices.Clear();
-            invoices.ForEach(i => {
-                i.Type = null;
-                i.Project = null;
-                _projectsInvoices.Add(i);
-            });
-        }
-        catch (Exception ex)
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(new InvoiceVM(), parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            InvoiceVM vm = result.Data as InvoiceVM;
+            var dto = Mapper.Map<InvoiceDto>(vm);
+            await DataProvider.Invoices.Add(dto);
+            await _getRecords();
         }
     }
 
-    private void _onInvoiceSelected(ChangeEventArgs e)
+    private async Task _edit(InvoiceVM record)
     {
-        var selectedInvoiceId = Convert.ToInt32((string)e.Value);
-        var selectedInvoice = _allInvoices.FirstOrDefault(i => i.Id == selectedInvoiceId);
-        if (selectedInvoice != null)
+        DialogParameters parameters = new()
         {
-            var newInvoice = new InvoiceVM(selectedInvoice);
-            newInvoice.Project = null;
-            newInvoice.Type = null;
-            newInvoice.ProjectId = Project.Id;
-            newInvoice.Id = 0;
-            _projectsInvoices.Add(newInvoice);
+            Title = $"Edit {record.Project?.Name: 'Record'}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            InvoiceVM vm = result.Data as InvoiceVM;
+            var dto = Mapper.Map<InvoiceDto>(vm);
+            await DataProvider.Invoices.Update(dto);
+            await _getRecords();
         }
     }
 
-    private void _deleteInvoice(InvoiceVM invoice)
+    private async Task _delete(InvoiceVM record)
     {
-        if (invoice.Id != 0)
-            _deleted.Add(invoice);
-        _projectsInvoices.Remove(invoice);
-    }
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete invoice type{record.TypeName} of project {record.ProjectName}?", "Yes", "No", "Deleting record...");
 
-    private void _addInvoice()
-    {
-        _projectsInvoices.Add(new InvoiceVM()
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
         {
-            ProjectId = Project.Id,
-            TypeId = _types.FirstOrDefault().Id,
-            Date = DateTime.Now,
-            Vat = 24,
-        });
-    }
-
-    private async Task _save()
-    {
-        try
-        {
-            // For Delete
-            if (_deleted.Count > 0)
-            {
-                foreach (var invoice in _deleted)
-                {
-                    await _dataProvider.Invoices.Delete(invoice.Id);
-                }
-            }
-
-            // For Update
-            var updatedInvoices = _projectsInvoices.Where(i => i.Id != 0).ToList();
-            if (updatedInvoices.Count() > 0)
-            {
-                foreach (var invoice in updatedInvoices)
-                {
-                    invoice.Type = null;
-                    var dto = _mapper.Map<InvoiceDto>(invoice);
-                    await _dataProvider.Invoices.Update(dto);
-                }
-            }
-
-            // For Add
-            if (_projectsInvoices.Any(i => i.Id == 0))
-            {
-                var newInvoices = _projectsInvoices.Where(i => i.Id == 0).ToList();
-                foreach (var invoice in newInvoices)
-                {
-                    invoice.Type = null;
-                    var dto = _mapper.Map<InvoiceDto>(invoice);
-                    await _dataProvider.Invoices.Add(dto);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            await DataProvider.Invoices.Delete(record.Id);
         }
 
-        await OnSave.InvokeAsync();
-    }
-
-    #region Display Helper Functions
-    private string _displayDayesUntilPayment(InvoiceVM invoice)
-    {
-        try
-        {
-            var paymentDay = invoice.Date ?? DateTime.Now;
-            var diffTime = paymentDay - DateTime.Now;
-            return diffTime != null ? diffTime.DisplayDHMS() : "";
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Error
-            Console.WriteLine($"Exception: {ex.Message} \nInner Exception: {ex.InnerException?.Message}.");
-            return "--";
-        }
-    }
-    private string _displayPaidFee(InvoiceVM invoice)
-    {
-        try
-        {
-            var paidFee = invoice?.Payments?.Sum(p => p?.Fee ?? 0) ?? 0;
-            return Convert.ToString(paidFee);
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Error
-            Console.WriteLine($"Exception: {ex.Message} \nInner Exception: {ex.InnerException?.Message}.");
-            return "--";
-        }
-    }
-    private string _displayPendingFee(InvoiceVM invoice)
-    {
-        try
-        {
-            var paidFee = invoice?.Payments?.Sum(p => p?.Fee ?? 0) ?? 0;
-            var invoiceFee = invoice.Fee;
-            var diff = invoiceFee - paidFee;
-            return Convert.ToString(diff);
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Error
-            Console.WriteLine($"Exception: {ex.Message} \nInner Exception: {ex.InnerException?.Message}.");
-            return "--";
-        }
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 
-    protected virtual void Dispose(bool disposing)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!disposedValue)
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
         {
-            if (disposing)
-            {
-                _allInvoices.Clear();
-                _allInvoices = null;
+            if (Source == null || Source.Count == 0)
+                await _getRecords();
 
-                _projectsInvoices.Clear();
-                _projectsInvoices = null;
-
-                _deleted.Clear();
-                _deleted = null;
-            }
-            disposedValue = true;
+            StateHasChanged();
         }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }
