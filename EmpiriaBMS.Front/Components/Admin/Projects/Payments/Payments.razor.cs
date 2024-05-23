@@ -54,7 +54,13 @@ public partial class Payments
             Width = "min(70%, 500px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(new PaymentVM(), parameters);
+        PaymentParameter param = new PaymentParameter()
+        {
+            Content = new PaymentVM(),
+            DisplayInvoiceSelection = true,
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(param, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
@@ -81,7 +87,13 @@ public partial class Payments
             Width = "min(70%, 500px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(record, parameters);
+        PaymentParameter param = new PaymentParameter()
+        {
+            Content = record,
+            DisplayInvoiceSelection = true,
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(param, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)

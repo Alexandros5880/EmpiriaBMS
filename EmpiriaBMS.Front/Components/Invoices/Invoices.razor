@@ -1,4 +1,4 @@
-﻿@page "/payments"
+﻿@page "/invoices"
 
 @using EmpiriaBMS.Front.Services
 @inject IDataProvider DataProvider
@@ -6,7 +6,7 @@
 @inject IDialogService DialogService
 
 <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
-    <div class="col-12 card shadow">
+    <div class="col-12 card shadow" style="height: 620px; cursor: pointer;">
         <div>
             <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
                 <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
@@ -16,12 +16,12 @@
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
                             Pagination="@pagination"
-                            TGridItem="PaymentVM"
-                            OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="auto 100px 100px 100px 100px 140px 100px"
-                            style="height: 100% min-height: 300px; overflow:auto;">
+                            TGridItem="InvoiceVM"
+                            OnRowFocus="@(async (i) => await HandleRowFocus(i))"
+                            GridTemplateColumns="160px 100px 100px 160px 100px 100px"
+                            style="height: 100%; overflow:auto;">
 
-                <TemplateColumn Title="Name"
+                <TemplateColumn Title="Project"
                                 Sortable="true"
                                 InitialSortDirection=SortDirection.Descending
                                 IsDefaultSortColumn=true>
@@ -40,13 +40,12 @@
                 </TemplateColumn>
 
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.InvoiceTypeName)" Sortable="true" Title="Invoice Type" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Bank)" Sortable="true" Title="Bank" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Fee)" Sortable="true" Title="Fee" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Payment Date" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.Date)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
-                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                    @* <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" /> *@
                     <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
                 </TemplateColumn>
 

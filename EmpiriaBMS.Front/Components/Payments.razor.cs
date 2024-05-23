@@ -1,182 +1,153 @@
 ﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.Projects.Payments;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components;
 
-public partial class Payments : ComponentBase, IDisposable
+public partial class Payments : ComponentBase
 {
-    private bool disposedValue;
-
-    private ObservableCollection<InvoiceVM> _invoices = new ObservableCollection<InvoiceVM>();
-    private ObservableCollection<PaymentTypeVM> _types = new ObservableCollection<PaymentTypeVM>();
-    private ObservableCollection<PaymentVM> _payments = new ObservableCollection<PaymentVM>();
-    private List<PaymentVM> _deleted = new List<PaymentVM>();
-
     [Parameter]
-    public ProjectVM Project { get; set; }
+    public InvoiceVM Invoice { get; set; }
 
-    [Parameter]
-    public EventCallback OnSave { get; set; }
+    #region Data Grid
+    private List<PaymentVM> _records = new List<PaymentVM>();
+    private string _filterString = string.Empty;
+    IQueryable<PaymentVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
+    private PaymentVM _selectedRecord = new PaymentVM();
 
-    public async Task Prepair()
+    private void HandleFilter(ChangeEventArgs args)
     {
-        await _getProjectsInvoices();
-        await _getPaymentsTypes();
-
-        StateHasChanged();
-    }
-
-    private async Task _getProjectsInvoices()
-    {
-        try
+        if (args.Value is string value)
         {
-            // Get My Invoices
-            var dtos = await _dataProvider.Projects.GetInvoices(Project.Id);
-            var invoices = _mapper.Map<List<InvoiceVM>>(dtos);
-            _invoices.Clear();
-            invoices.ForEach(i => {
-                i.Type = null;
-                i.Project = null;
-                _invoices.Add(i);
-            });
-
-            await _getPayments();
+            _filterString = value;
         }
-        catch (Exception ex)
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            _filterString = string.Empty;
         }
     }
 
-    private async Task _getPaymentsTypes()
+    private void HandleRowFocus(FluentDataGridRow<PaymentVM> row)
     {
-        try
-        {
-            // Get My Invoices
-            var dtos = await _dataProvider.PaymentTypes.GetAll();
-            var paymentsTypes = _mapper.Map<List<PaymentTypeVM>>(dtos);
-            _types.Clear();
-            paymentsTypes.ForEach(_types.Add);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
+        _selectedRecord = row.Item as PaymentVM;
     }
 
-    private async Task _getPayments()
+    private async Task _getRecords(int invoiceId)
     {
-        try
+        var dtos = await DataProvider.Payments.GetAllByInvoice(invoiceId);
+        _records = Mapper.Map<List<PaymentVM>>(dtos);
+    }
+
+    private async Task _add()
+    {
+        DialogParameters parameters = new()
         {
-            // Get My Invoices
-            var dtos = await _dataProvider.Invoices.GetProjectsPayments(Project.Id);
-            var payments = _mapper.Map<List<PaymentVM>>(dtos);
-            _payments.Clear();
-            payments.ForEach(i =>
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
+
+        PaymentParameter param = new PaymentParameter()
+        {
+            Content = new PaymentVM()
             {
-                i.Type = null;
-                i.Invoice = null;
-                _payments.Add(i);
-            });
+                InvoiceId = Invoice.Id
+            },
+            DisplayInvoiceSelection = false,
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(param, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            PaymentVM vm = result.Data as PaymentVM;
+            var dto = Mapper.Map<PaymentDto>(vm);
+            await DataProvider.Payments.Add(dto);
+            await _getRecords(Invoice.Id);
         }
-        catch (Exception ex)
+    }
+
+    private async Task _edit(PaymentVM record)
+    {
+        DialogParameters parameters = new()
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Title = $"Edit paymeny of project {record.ProjectName} with bank {record.Bank}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
+
+        PaymentParameter param = new PaymentParameter()
+        {
+            Content = record,
+            DisplayInvoiceSelection = false,
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(param, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            PaymentVM vm = result.Data as PaymentVM;
+            var dto = Mapper.Map<PaymentDto>(vm);
+            await DataProvider.Payments.Update(dto);
+            await _getRecords(Invoice.Id);
         }
     }
 
-    private void _deletePayment(PaymentVM payment)
+    private async Task _delete(PaymentVM record)
     {
-        if (payment.Id != 0)
-            _deleted.Add(payment);
-        _payments.Remove(payment);
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the payment of project {record.ProjectName}?", "Yes", "No", "Deleting record...");
+
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await DataProvider.Payments.Delete(record.Id);
+        }
+
+        await dialog.CloseAsync();
+        await _getRecords(Invoice.Id);
+    }
+    #endregion
+
+    public async Task Prepair(int invoiceId)
+    {
+        if (invoiceId != 0)
+        {
+            await _getRecords(invoiceId);
+            StateHasChanged();
+        }
     }
 
-    private void _addPayment()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _payments.Add(new PaymentVM()
-        {
-            InvoiceId = _invoices.FirstOrDefault().Id,
-            TypeId = _types.FirstOrDefault().Id,
-            PaymentDate = DateTime.Now.AddMonths(1),
-        });
-    }
+        await base.OnAfterRenderAsync(firstRender);
 
-    private async Task _save()
-    {
-        try
+        if (firstRender)
         {
-            // For Delete
-            if (_deleted.Count > 0)
+            if (Invoice != null)
             {
-                foreach (var payment in _deleted)
-                {
-                    await _dataProvider.Payments.Delete(payment.Id);
-                }
-                _deleted.Clear();
+                await _getRecords(Invoice.Id);
+                StateHasChanged();
             }
-
-            // For Update
-            var updatedPayments = _payments.Where(i => i.Id != 0).ToList();
-            if (updatedPayments.Count() > 0)
-            {
-                foreach (var payment in updatedPayments)
-                {
-                    payment.Type = null;
-                    var dto = _mapper.Map<PaymentDto>(payment);
-                    await _dataProvider.Payments.Update(dto);
-                }
-            }
-
-            // For Add
-            if (_payments.Any(i => i.Id == 0))
-            {
-                var newPayments = _payments.Where(i => i.Id == 0).ToList();
-                foreach (var payment in newPayments)
-                {
-                    payment.Type = null;
-                    var dto = _mapper.Map<PaymentDto>(payment);
-                    await _dataProvider.Payments.Add(dto);
-                }
-            }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-
-        await OnSave.InvokeAsync();
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                _invoices.Clear();
-                _invoices = null;
-                _types.Clear();
-                _types = null;
-                _payments.Clear();
-                _payments = null;
-                _deleted.Clear();
-                _deleted = null;
-            }
-            disposedValue = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Front.Components.Invoices;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
@@ -32,6 +33,8 @@ public partial class Dashboard : IDisposable
     bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
     bool seeOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 24);
     bool seeTeamsRequestedUsers => _sharedAuthData.Permissions.Any(p => p.Ord == 28);
+    bool seeInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 29);
+    bool seeExpenses => _sharedAuthData.Permissions.Any(p => p.Ord == 30);
     #endregion
 
     // General Fields
@@ -87,6 +90,7 @@ public partial class Dashboard : IDisposable
     private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
     private int _selectedPmId;
+    private InvoiceVM _selectedInvoice = new InvoiceVM();
     #endregion
 
     #region Dialogs
@@ -148,16 +152,6 @@ public partial class Dashboard : IDisposable
     private bool _isDeleteDialogOdepened = false;
     private string _deleteDialogMsg = "";
     private string _deleteObj = null;
-
-    // On Add/Edit Invoice Dialog
-    private FluentDialog _addEditInvoiceDialog;
-    private bool _isAddEditInvoiceDialogOdepened = false;
-    private Invoices _invoicesCompoment;
-
-    // On Add/Edit Payment Dialog
-    private FluentDialog _addEditPaymentDialog;
-    private bool _isAddEditPaymentDialogOdepened = false;
-    private Payments _paymentsCompoment;
     #endregion
 
     protected override void OnInitialized()
@@ -934,42 +928,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Add Invoice Actions
-    private async Task AddEditInvoice()
-    {
-        await _invoicesCompoment.Prepair();
-        _addEditInvoiceDialog.Show();
-        _isAddEditInvoiceDialogOdepened = true;
-    }
-
-    private void CloseAddInvoiceClick()
-    {
-        if (_isAddEditInvoiceDialogOdepened)
-        {
-            _addEditInvoiceDialog.Hide();
-            _isAddEditInvoiceDialogOdepened = false;
-        }
-    }
-    #endregion
-
-    #region Add Payment Actions
-    private async Task AddEditPayment()
-    {
-        await _paymentsCompoment.Prepair();
-        _addEditPaymentDialog.Show();
-        _isAddEditPaymentDialogOdepened = true;
-    }
-
-    private void CloseAddPaymentClick()
-    {
-        if (_isAddEditPaymentDialogOdepened)
-        {
-            _addEditPaymentDialog.Hide();
-            _isAddEditPaymentDialogOdepened = false;
-        }
-    }
-    #endregion
-
     #region Add/Edit/Delete Project Actions
     private async Task NavigateOnMap(Address address)
     {
@@ -980,14 +938,12 @@ public partial class Dashboard : IDisposable
 
     private void AddProject()
     {
-        //projectCompoment.PrepairForNew();
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
     }
 
     private void EditProject()
     {
-        //projectCompoment.PrepairForEdit(_selectedProject);
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
     }
@@ -1201,6 +1157,33 @@ public partial class Dashboard : IDisposable
     {
         changedto = tab;
     }
+    #endregion
+
+    #region Invoice
+    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceListRef;
+    private InvoiceDetailed _invoiceDetailedRef;
+    private Payments _invoicePaymentsRef;
+
+    private async Task _onSelectedInvoice(InvoiceVM invoice)
+    {
+        _selectedInvoice = invoice;
+        if (_invoiceDetailedRef != null)
+        {
+            await _invoiceDetailedRef.Prepair(_selectedInvoice, true);
+            await _invoicePaymentsRef.Prepair(_selectedInvoice.Id);
+        }
+    }
+
+    private async Task _onSaveInvoice(InvoiceVM invoice)
+    {
+        if (_invoiceListRef != null)
+        {
+            await _invoiceListRef.Refresh();
+            await _invoiceDetailedRef.Prepair();
+            await _invoicePaymentsRef.Prepair(_selectedInvoice.Id);
+        }
+            
+    } 
     #endregion
 
     private async Task ShowInformationAsync(string msg)

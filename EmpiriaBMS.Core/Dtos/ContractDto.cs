@@ -14,13 +14,13 @@ public class ContractDto : EntityDto
 {
     public int InvoiceId { get; set; }
 
-    public Invoice Invoice { get; set; }
+    public InvoiceDto Invoice { get; set; }
 
     public double ContractualFee { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateTime? Date { get; set; }
 
     public byte[]? PMSignature { get; set; }
 
-    public string? Description { get; set; }
+    public string Description { get; set; }
 }

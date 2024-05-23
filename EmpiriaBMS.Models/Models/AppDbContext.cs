@@ -409,6 +409,30 @@ public class AppDbContext : DbContext
             Ord = 28
         };
         builder.Entity<Permission>().HasData(per_28);
+
+        // See Invoices
+        var per_29_id = random.Next(123456789, 999999999);
+        Permission per_29 = new Permission()
+        {
+            Id = per_29_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Invoices",
+            Ord = 29
+        };
+        builder.Entity<Permission>().HasData(per_29);
+
+        // See Excpences
+        var per_30_id = random.Next(123456789, 999999999);
+        Permission per_30 = new Permission()
+        {
+            Id = per_30_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Excpences",
+            Ord = 30
+        };
+        builder.Entity<Permission>().HasData(per_30);
         #endregion
 
         #region Roles
@@ -1133,16 +1157,27 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_87);
 
-        // CTO || See Teams Requested Users
-        RolePermission rp_89 = new RolePermission()
+        // CTO || See Invoices
+        RolePermission rp_91 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             RoleId = role_5_id,
-            PermissionId = per_28_id
+            PermissionId = per_29_id
         };
-        builder.Entity<RolePermission>().HasData(rp_89);
+        builder.Entity<RolePermission>().HasData(rp_91);
+
+        // CTO || See Excpences
+        RolePermission rp_92 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_30_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_92);
 
 
         // CEO
@@ -1398,6 +1433,28 @@ public class AppDbContext : DbContext
             PermissionId = per_28_id
         };
         builder.Entity<RolePermission>().HasData(rp_90);
+
+        // CEO || See Invoices
+        RolePermission rp_93 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_29_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_93);
+
+        // CEO || See Excpences
+        RolePermission rp_94 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_30_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_94);
 
 
         // Guest

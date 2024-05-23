@@ -2,6 +2,7 @@
 
 @layout MainLayout
 
+@using EmpiriaBMS.Front.Components.Invoices
 @using Microsoft.Fast.Components.FluentUI
 @using EmpiriaBMS.Front.Components.General
 @using EmpiriaBMS.Front.Components
@@ -39,7 +40,7 @@
         <!-- Dashboard -->
         <FluentTab Class="my-fluent-tab mb-3" 
                    LabelClass="my-fluent-tab-label"
-                   Label="Home"
+                   Label=" Home"
                    Icon="@(new Icons.Regular.Size48.ScanDash())"
                    Id="tab-home">
             <div class="row justify-content-center mt-1 mb-1">
@@ -190,20 +191,16 @@
                                                 {
                                                     @if (_selectedProject != null)
                                                     {
-                                                        <span class="invoice col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoices"
-                                                              @onclick="@(async () => await AddEditInvoice())" />
-                                                        <span class="payment col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Payments"
-                                                              @onclick="@(async () => await AddEditPayment())" />
                                                         <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
                                                               style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
                                                               @onclick="@(async () => await NavigateOnMap(_selectedProject.Address))" />
-                                                        <span class="fluent--delete-28-regular col-1"
-                                                              @onclick="@(() => DeleteProject())" />
+                                                        @* <span class="fluent--delete-28-regular col-1"
+                                                                 @onclick="@(() => DeleteProject())" /> *@
                                                         <span class="material-symbols--edit-outline col-1"
                                                               @onclick="@(() => EditProject())" />
                                                     }
-                                                    <span class="grommet-icons--add col-1"
-                                                          @onclick="@(() => AddProject())" />
+                                                    @* <span class="grommet-icons--add col-1"
+                                                          @onclick="@(() => AddProject())" /> *@
                                                 }
                                             </div>
                                             <div class="text-center row me-2">
@@ -592,12 +589,73 @@
             </div>
         </FluentTab>
 
+        <!-- Invoices -->
+        @if (seeInvoices)
+        {
+            <FluentTab Class="my-fluent-tab"
+                       LabelClass="my-fluent-tab-label"
+                       Label=" Invoices"
+                       Icon="@(new MyIcons.Size20.Invoices2())"
+                       Id="tab-invoices">
+
+                <div class="row justify-content-center mt-1 mb-1">
+                    <div class="col-auto" style="width: 100%; height: 100%;">
+                        <div class="m-1 row justify-content-center">
+                            <div class="col-12 p-2 row g-2 mb-5" style="overflow-x:hidden; margin: 0 auto;">
+
+                                <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-xs-12">
+                                    <Invoices @ref="@_invoiceListRef" OnSelect="@(async (i) => await _onSelectedInvoice(i))" SelectedRecord="@_selectedInvoice" />
+                                </div>
+
+                                @if (_selectedInvoice != null && _selectedInvoice.Id != 0)
+                                {
+                                    <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-xs-12">
+                                        <InvoiceDetailed @ref="@_invoiceDetailedRef"
+                                                         Content="@_selectedInvoice"
+                                                         Title="Invoice Detailes"
+                                                         OnSave="@(async (i) => await _onSaveInvoice(i))" />
+                                    </div>
+                                    <div class="col-12">
+                                        <Payments @ref="@_invoicePaymentsRef" Invoice="@_selectedInvoice" />
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </FluentTab>
+        }
+
+        <!-- Excpences -->
+        @if(seeExpenses)
+        {
+            <FluentTab Class="my-fluent-tab"
+                       LabelClass="my-fluent-tab-label"
+                       Label=" Excpences"
+                       Icon="@(new MyIcons.Size20.Expenses())"
+                       Id="tab-excpences">
+
+                <div class="row justify-content-center mt-1 mb-1">
+                    <div class="col-auto" style="width: 100%; height: 100%;">
+                        <div class="m-1 row justify-content-center">
+                            <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                                <h3>Expenses</h3>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </FluentTab>
+        }
+
         <!-- KPIS -->
         @if (seeKpis)
         {
             <FluentTab Class="my-fluent-tab" 
                        LabelClass="my-fluent-tab-label" 
-                       Label="KPIs" 
+                       Label=" KPIs" 
                        Icon="@(new Icons.Regular.Size48.ChartPerson())" 
                        Id="tab-kpis">
             
@@ -620,7 +678,7 @@
         {
             <FluentTab Class="my-fluent-tab"
                        LabelClass="my-fluent-tab-label"
-                       Label="Admin"
+                       Label=" Admin"
                        Icon="@(new Icons.Regular.Size48.Settings())"
                        Id="tab-admin">
 
@@ -1234,64 +1292,6 @@
             <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
                 Cancel
             </FluentButton>
-        </div>
-
-    </FluentDialog>
-
-    <!-- On Add/Edit Invoice Dialog -->
-    <FluentDialog @ref="_addEditInvoiceDialog"
-                  Hidden="@(!_isAddEditInvoiceDialogOdepened || _startLoading)"
-                  Modal="true"
-                  DialogType=@DialogType.Panel
-                  style="--dialog-width: 70vw !important;
-                         --dialog-width: auto !important;">
-
-        <div class="modal-body row mb-1">
-
-            <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseAddInvoiceClick"></span>
-            </div>
-
-            <div class="col-12 justify-content-center">
-                @if (_selectedProject != null)
-                {
-                    <Invoices @ref="@_invoicesCompoment" Project="@_selectedProject" OnSave="CloseAddInvoiceClick" />
-                }
-                else
-                {
-                    <h3 class="warning">No Project Selected!</h3>
-                }
-            </div>
-
-        </div>
-
-    </FluentDialog>
-
-    <!-- On Add/Edit Payment Dialog -->
-    <FluentDialog @ref="_addEditPaymentDialog"
-                  Hidden="@(!_isAddEditPaymentDialogOdepened || _startLoading)"
-                  Modal="true"
-                  DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
-                         --dialog-width: auto !important;">
-
-        <div class="modal-body row mb-1">
-
-            <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseAddPaymentClick"></span>
-            </div>
-
-            <div class="col-12 justify-content-center">
-                @if (_selectedProject != null)
-                {
-                    <Payments @ref="@_paymentsCompoment" Project="@_selectedProject" OnSave="CloseAddPaymentClick" />
-                }
-                else
-                {
-                    <h3 class="warning">No Project Selected!</h3>
-                }
-            </div>
-
         </div>
 
     </FluentDialog>

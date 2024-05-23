@@ -9,13 +9,26 @@ using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects.Payments;
 
-public partial class PaymentDetailedDialog : IDialogContentComponent<PaymentVM>
+public partial class PaymentDetailedDialog : IDialogContentComponent<PaymentParameter>
 {
+    private PaymentParameter _content;
     [Parameter]
-    public PaymentVM Content { get; set; } = default!;
+    public PaymentParameter Content
+    {
+        get => _content;
+        set
+        {
+            _content = value;
+            Payment = value.Content;
+            _displayInvoiceSelection = value.DisplayInvoiceSelection;
+        }
+    }
 
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
+
+    private PaymentVM Payment;
+    private bool _displayInvoiceSelection = true;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -25,15 +38,15 @@ public partial class PaymentDetailedDialog : IDialogContentComponent<PaymentVM>
         {
             await _getRecords();
 
-            if (Content.Invoice != null)
+            if (Payment.Invoice != null)
             {
-                var invoiceDto = Mapping.Mapper.Map<InvoiceDto>(Content.Invoice);
+                var invoiceDto = Mapping.Mapper.Map<InvoiceDto>(Payment.Invoice);
                 Invoice = _mapper.Map<InvoiceVM>(invoiceDto);
             }
 
-            if (Content.Type != null)
+            if (Payment.Type != null)
             {
-                var typeDto = Mapping.Mapper.Map<PaymentTypeDto>(Content.Type);
+                var typeDto = Mapping.Mapper.Map<PaymentTypeDto>(Payment.Type);
                 Type = _mapper.Map<PaymentTypeVM>(typeDto);
             }
 
@@ -46,7 +59,7 @@ public partial class PaymentDetailedDialog : IDialogContentComponent<PaymentVM>
         var valid = Validate();
         if (!valid) return;
 
-        await Dialog.CloseAsync(Content);
+        await Dialog.CloseAsync(Payment);
     }
 
     private async Task CancelAsync()
@@ -63,9 +76,9 @@ public partial class PaymentDetailedDialog : IDialogContentComponent<PaymentVM>
     {
         if (fieldname == null)
         {
-            validType = Content.TypeId != 0;
-            validInvoice = Content.InvoiceId != 0;
-            validFee = Content.Fee > 0;
+            validType = Payment.TypeId != 0;
+            validInvoice = Payment.InvoiceId != 0;
+            validFee = Payment.Fee > 0;
 
             return validType && validInvoice && validFee;
         }
@@ -78,13 +91,13 @@ public partial class PaymentDetailedDialog : IDialogContentComponent<PaymentVM>
             switch (fieldname)
             {
                 case "Type":
-                    validType = Content.TypeId != 0;
+                    validType = Payment.TypeId != 0;
                     return validType;
                 case "Invoice":
-                    validInvoice = Content.InvoiceId != 0;
+                    validInvoice = Payment.InvoiceId != 0;
                     return validInvoice;
                 case "Fee":
-                    validFee = Content.Fee > 0;
+                    validFee = Payment.Fee > 0;
                     return validFee;
                 default:
                     return true;
@@ -106,7 +119,7 @@ public partial class PaymentDetailedDialog : IDialogContentComponent<PaymentVM>
         {
             if (_invoice == value || value == null) return;
             _invoice = value;
-            Content.InvoiceId = _invoice.Id;
+            Payment.InvoiceId = _invoice.Id;
         }
     }
 
@@ -118,7 +131,7 @@ public partial class PaymentDetailedDialog : IDialogContentComponent<PaymentVM>
         {
             if (_type == value || value == null) return;
             _type = value;
-            Content.TypeId = _type.Id;
+            Payment.TypeId = _type.Id;
         }
     }
 

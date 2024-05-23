@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.Projects.Contracts;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
-
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
+namespace EmpiriaBMS.Front.Components.Invoices;
 
 public partial class InvoiceDetailed
 {
@@ -27,7 +27,6 @@ public partial class InvoiceDetailed
     }
 
     private ContractVM _contract;
-    [Parameter]
     public ContractVM Contract
     {
         get => _contract;
@@ -51,7 +50,12 @@ public partial class InvoiceDetailed
     [Parameter]
     public bool DisplayProject { get; set; } = false;
 
+    [Parameter]
+    public EventCallback<InvoiceVM> OnSave { get; set; }
+
     private FluentCombobox<InvoiceTypeVM> _typeCompoment;
+
+    private ContractDetailed _contractDetailedRef;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -90,14 +94,17 @@ public partial class InvoiceDetailed
             }
         }
 
-        StateHasChanged();
+        if (invoice == null && !halfRefresh)
+            await _contractDetailedRef.Prepair();
+        else
+            await _contractDetailedRef.Prepair(Contract, !halfRefresh);
     }
 
-    public async Task<InvoiceVM> Save()
+    public async Task Save()
     {
         var valid = Validate();
         if (!valid)
-            return null;
+            return;
 
         var i = await _upsertInvoice(_invoice.Clone() as InvoiceVM);
         _contract.Invoice = i;
@@ -107,8 +114,20 @@ public partial class InvoiceDetailed
         i.Contract = c;
         i.ContractId = c.Id;
 
-        StateHasChanged();
-        return i;
+        Contract = new ContractVM()
+        {
+            Date = DateTime.Now,
+        };
+        Content = new InvoiceVM()
+        {
+            Date = DateTime.Now,
+            Contract = Contract,
+            ContractId = 0
+        };
+        Contract.Invoice = Content;
+        Contract.InvoiceId = 0;
+
+        await OnSave.InvokeAsync(i);
     }
 
     #region Update Records
@@ -278,7 +297,27 @@ public partial class InvoiceDetailed
             var contractDto = await _dataProvider.Invoices.GetContract(Content.Id);
             if (contractDto != null)
                 Contract = _mapper.Map<ContractVM>(contractDto);
+            else
+            {
+                Contract = new ContractVM()
+                {
+                    Date = DateTime.Now,
+                    Invoice = Content,
+                    InvoiceId = Content.Id,
+                };
+                Content.Contract = Contract;
+                Content.Id = Content.Id;
+            }
+                
         }
+
+        if (_contractDetailedRef!= null)
+        {
+            Contract.Invoice = Content;
+            Contract.InvoiceId = Content.Id;
+            await _contractDetailedRef.Prepair(Contract, false);
+        }
+            
     }
     #endregion
 }
