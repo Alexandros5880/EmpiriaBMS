@@ -39,7 +39,7 @@
         <!-- Dashboard -->
         <FluentTab Class="my-fluent-tab mb-3" 
                    LabelClass="my-fluent-tab-label"
-                   Label="Home"
+                   Label=" Home"
                    Icon="@(new Icons.Regular.Size48.ScanDash())"
                    Id="tab-home">
             <div class="row justify-content-center mt-1 mb-1">
@@ -592,12 +592,59 @@
             </div>
         </FluentTab>
 
+        <!-- Invoices -->
+        @if (seeInvoices)
+        {
+            <FluentTab Class="my-fluent-tab"
+                       LabelClass="my-fluent-tab-label"
+                       Label=" Invoices"
+                       Icon="@(new MyIcons.Size20.Invoices2())"
+                       Id="tab-invoices">
+
+                <div class="row justify-content-center mt-1 mb-1">
+                    <div class="col-auto" style="width: 100%; height: 100%;">
+                        <div class="m-1 row justify-content-center">
+                            <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                                <h3>Invoices</h3>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </FluentTab>
+        }
+        
+
+        <!-- Excpences -->
+        @if(seeExpenses)
+        {
+            <FluentTab Class="my-fluent-tab"
+                       LabelClass="my-fluent-tab-label"
+                       Label=" Excpences"
+                       Icon="@(new MyIcons.Size20.Expenses())"
+                       Id="tab-excpences">
+
+                <div class="row justify-content-center mt-1 mb-1">
+                    <div class="col-auto" style="width: 100%; height: 100%;">
+                        <div class="m-1 row justify-content-center">
+                            <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                                <h3>Expenses</h3>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </FluentTab>
+        }
+
         <!-- KPIS -->
         @if (seeKpis)
         {
             <FluentTab Class="my-fluent-tab" 
                        LabelClass="my-fluent-tab-label" 
-                       Label="KPIs" 
+                       Label=" KPIs" 
                        Icon="@(new Icons.Regular.Size48.ChartPerson())" 
                        Id="tab-kpis">
             
@@ -620,7 +667,7 @@
         {
             <FluentTab Class="my-fluent-tab"
                        LabelClass="my-fluent-tab-label"
-                       Label="Admin"
+                       Label=" Admin"
                        Icon="@(new Icons.Regular.Size48.Settings())"
                        Id="tab-admin">
 
