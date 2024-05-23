@@ -2,6 +2,7 @@
 
 @layout MainLayout
 
+@using EmpiriaBMS.Front.Components.Invoices
 @using Microsoft.Fast.Components.FluentUI
 @using EmpiriaBMS.Front.Components.General
 @using EmpiriaBMS.Front.Components
@@ -602,13 +603,19 @@
                         <div class="m-1 row justify-content-center">
                             <div class="col-12 p-2 row g-2" style="overflow-x:hidden; margin: 0 auto;">
 
-                                <div class="col">
-                                    <Invoices />
+                                <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                                    <Invoices OnSelect="@((i) => _setSelectedInvoice(i))" />
                                 </div>
 
-                                <div class="col">
-                                    <Payments />
-                                </div>
+                                @if (_selectedInvoice != null && _selectedInvoice.Id != 0)
+                                {
+                                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                        <InvoiceDetailed Content="@_selectedInvoice" Title="Invoice Detailes"/>
+                                    </div>
+                                    <div class="col-12">
+                                        <Payments Invoice="@_selectedInvoice" />
+                                    </div>
+                                }
 
                             </div>
                         </div>

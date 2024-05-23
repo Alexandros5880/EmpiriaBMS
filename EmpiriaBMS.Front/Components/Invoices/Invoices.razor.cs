@@ -6,28 +6,17 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.Invoices;
 
 public partial class Invoices : ComponentBase
 {
     [Parameter]
-    public bool DisplayAddButton { get; set; } = true;
-
-    [Parameter]
-    public ProjectVM Project { get; set; } = null;
-
-    [Parameter]
     public EventCallback<InvoiceVM> OnSelect { get; set; }
 
     #region Data Grid
-    [Parameter]
-    public List<InvoiceVM> Source { get; set; }
-
-    [Parameter]
-    public bool DisplayActions { get; set; } = true;
-
+    public List<InvoiceVM> _invoices { get; set; }
     private string _filterString = string.Empty;
-    IQueryable<InvoiceVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<InvoiceVM>? FilteredItems => _invoices?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     [Parameter]
@@ -53,8 +42,8 @@ public partial class Invoices : ComponentBase
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.Invoices.GetAllByProject(projectId: Project != null ? Project.Id : 0);
-        Source = Mapper.Map<List<InvoiceVM>>(dtos);
+        var dtos = await DataProvider.Invoices.GetAll();
+        _invoices = Mapper.Map<List<InvoiceVM>>(dtos);
     }
 
     private async Task _add()
@@ -133,7 +122,7 @@ public partial class Invoices : ComponentBase
 
         if (firstRender)
         {
-            if (Source == null || Source.Count == 0)
+            if (_invoices == null || _invoices.Count == 0)
                 await _getRecords();
 
             StateHasChanged();

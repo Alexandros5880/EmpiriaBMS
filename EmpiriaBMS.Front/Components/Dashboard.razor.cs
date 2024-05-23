@@ -89,6 +89,7 @@ public partial class Dashboard : IDisposable
     private DrawingVM _selectedDraw = new DrawingVM();
     private OtherVM _selectedOther = new OtherVM();
     private int _selectedPmId;
+    private InvoiceVM _selectedInvoice = new InvoiceVM();
     #endregion
 
     #region Dialogs
@@ -1154,6 +1155,14 @@ public partial class Dashboard : IDisposable
     private void HandleOnTabChange(FluentTab tab)
     {
         changedto = tab;
+    }
+    #endregion
+
+    #region Invoice
+    private void _setSelectedInvoice(InvoiceVM invoice)
+    {
+        _selectedInvoice = invoice;
+        StateHasChanged();
     }
     #endregion
 

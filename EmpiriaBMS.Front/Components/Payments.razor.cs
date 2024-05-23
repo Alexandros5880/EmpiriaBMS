@@ -9,6 +9,9 @@ namespace EmpiriaBMS.Front.Components;
 
 public partial class Payments : ComponentBase
 {
+    [Parameter]
+    public InvoiceVM Invoice { get; set; }
+
     #region Data Grid
     private List<PaymentVM> _records = new List<PaymentVM>();
     private string _filterString = string.Empty;
@@ -36,7 +39,7 @@ public partial class Payments : ComponentBase
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.Payments.GetAll();
+        var dtos = await DataProvider.Payments.GetAll(); ;
         _records = Mapper.Map<List<PaymentVM>>(dtos);
     }
 

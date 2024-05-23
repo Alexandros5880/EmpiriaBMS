@@ -6,15 +6,12 @@
 @inject IDialogService DialogService
 
 <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
-    <div class="col-12 card shadow">
-        @if (DisplayAddButton)
-        {
-            <div>
-                <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
-                    <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
-                </FluentStack>
-            </div>
-        }
+    <div class="col-12 card shadow" style="height: 100%;">
+        <div>
+            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+            </FluentStack>
+        </div>
         <div>
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
@@ -22,7 +19,7 @@
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
                             GridTemplateColumns="160px 100px 100px 160px 100px 160px 100px 100px 100px"
-                            style="height: 100% min-height: 300px; overflow:auto;">
+                            style="height: 96%; overflow:auto;">
 
                 <TemplateColumn Title="Project"
                                 Sortable="true"
@@ -50,13 +47,10 @@
                 <PropertyColumn Property="@(p => p.Vat)" Sortable="true" Title="Vat" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Total)" Sortable="true" Title="Total" Align="@Align.Start" />
 
-                @if (DisplayActions)
-                {
-                    <TemplateColumn Title="Actions" Align="@Align.End">
-                        <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
-                        <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
-                    </TemplateColumn>
-                }
+                <TemplateColumn Title="Actions" Align="@Align.End">
+                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                </TemplateColumn>
 
             </FluentDataGrid>
         </div>

@@ -5,7 +5,7 @@
 @inject IMapper Mapper
 @inject IDialogService DialogService
 
-<div class="row" style="width: 76vw; overflow-x: auto; margin: 0 auto;">
+<div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow">
         <div>
             <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
@@ -19,7 +19,7 @@
                             TGridItem="PaymentVM"
                             OnRowFocus="HandleRowFocus"
                             GridTemplateColumns="auto 100px 140px 100px 100px 100px 140px 100px"
-                            style="height: 70vh; overflow:auto;">
+                            style="height: 100% min-height: 300px; overflow:auto;">
 
                 <TemplateColumn Title="Name"
                                 Sortable="true"
