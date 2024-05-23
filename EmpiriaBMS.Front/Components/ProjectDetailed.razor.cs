@@ -130,7 +130,7 @@ public partial class ProjectDetailed : ComponentBase
             Client = new ClientVM();
 
         if (Content.Address != null)
-            await _map.SetAddress(Content.Address);
+            await _myMapRef.SetAddress(Content.Address);
 
         if (Content.ClientId != 0 && Content.ClientId != null)
         {
@@ -357,11 +357,11 @@ public partial class ProjectDetailed : ComponentBase
     #endregion
 
     #region Map Address
-    private Map _map;
+    private Map _myMapRef;
 
     private void _onSearchAddressChange()
     {
-        var address = _map.GetAddress();
+        var address = _myMapRef.GetAddress();
         if (address != null)
             Content.Address = address;
     }

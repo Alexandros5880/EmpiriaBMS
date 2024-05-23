@@ -30,7 +30,7 @@
         @if (Id != null)
         {
             <!-- Map -->
-            <div @ref="@_mapRefrence" id="@Id" class="@((hasAddress && IsMapVisible ? "visible" : "unvisible"))"></div>
+            <div id="@Id" class="@((hasAddress && IsMapVisible ? "visible" : "unvisible"))"></div>
         }
     </div>
 </div>
@@ -53,8 +53,6 @@
     private string _searchAddress = string.Empty;
 
     private bool hasAddress = false;
-
-    private ElementReference _mapRefrence;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -110,7 +108,6 @@
         if (e.Key.Equals("Enter"))
         {
             await Search(_searchAddress);
-            await _mapRefrence.FocusAsync();
         }
     }
     

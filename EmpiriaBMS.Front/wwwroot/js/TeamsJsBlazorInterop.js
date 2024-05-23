@@ -194,10 +194,11 @@ export function displayAddress(mapElementId, address) {
                     map: map,
                     position: results[0].geometry.location
                 });
+                console.log('Geocode was successful location: ' + results[0].geometry.location);
             } else {
                 console.log('Geocode was not successful for the following reason: ' + status);
             }
-        });
+        }, error => console.log('Geocode error: ' + error));
     });
 }
 

@@ -215,15 +215,11 @@
         </div>
 
         <!-- Address (Map) -->
-        <div class="col-12">
-            <div class="row mt-1 mb-3">
-                <div class="col-12">
-                    <Map @ref="@_map"
-                         Id="adminProjectMap"
-                         AutoCompeteId="autocompeteAdminProjectMap"
-                         OnFindAddress="@(() => _onSearchAddressChange())" />
-                </div>
-            </div>
+        <div class="col-12 border rounded mb-3 mt-3 p-2" style="margin: 0 auto;">
+            <Map @ref="@_myMapRef"
+                     Id="offerProjectMap"
+                     AutoCompeteId="autocompeteOfferProjectMap"
+                     OnFindAddress="@(() => _onSearchAddressChange())" />
         </div>
 
     <!-- Action Buttons -->
