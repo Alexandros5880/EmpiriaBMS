@@ -48,6 +48,7 @@
                 <PropertyColumn Property="@(p => p.Total)" Sortable="true" Title="Total" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
+                    @* <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" /> *@
                     <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
                 </TemplateColumn>
 
