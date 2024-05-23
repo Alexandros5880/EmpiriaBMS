@@ -1,0 +1,13 @@
+﻿.my-wizard-tab {
+    min-height: min(50vh, 400px) !important;
+    max-height: max(60vh, 440px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+.sticky-on-top {
+    position: static !important;
+    top: 10px !important;
+    right: 10px !important;
+    /*z-index: 1000 !important;*/
+}

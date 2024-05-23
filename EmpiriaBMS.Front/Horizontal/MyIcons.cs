@@ -340,6 +340,28 @@ public static class MyIcons
             {
             }
         }
+        public class Result : Icon
+        {
+            public Result()
+                : base("Result",
+                        IconVariant.Regular,
+                        IconSize.Size10,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\" viewBox=\"0 0 2048 2048\"><path fill=\"#444791\" d=\"M1664 1792v-128H0v128zm384-1408V256h-128v128zm0 1024v-128h-128v128zm-384 0v-128H0v128zm0-1152H0v128h1664zm0 512V640H0v128z\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Save : Icon
+        {
+            public Save()
+                : base("Save",
+                        IconVariant.Regular,
+                        IconSize.Size10,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\" viewBox=\"0 0 24 24\"><path fill=\"#444791\" d=\"M2 2h14.414L22 7.586V22H2zm2 2v16h2v-6h12v6h2V8.414L15.586 4H13v4H6V4zm4 0v2h3V4zm8 16v-4H8v4z\"/></svg>"
+                      )
+            {
+            }
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -671,6 +693,28 @@ public static class MyIcons
                         IconVariant.Regular,
                         IconSize.Size12,
                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 36 36\"><path fill=\"#444791\" d=\"M8 8.2h16v1.6H8zm0 8h8.086v1.6H8zm15.378-4H8v1.6h13.779zM12.794 29.072a2.47 2.47 0 0 0 2.194.824h7.804a.7.7 0 0 0 0-1.4h-7.804c-.911-.016-.749-.807-.621-1.052a3.962 3.962 0 0 0 .387-.915a1.183 1.183 0 0 0-.616-1.322a1.899 1.899 0 0 0-2.24.517c-.344.355-.822.898-1.28 1.426c.283-1.109.65-2.532 1.01-3.92a1.315 1.315 0 0 0-.755-1.626a1.425 1.425 0 0 0-1.775.793c-.432.831-3.852 6.562-3.886 6.62a.7.7 0 1 0 1.202.718c.128-.215 2.858-4.788 3.719-6.315c-.648 2.5-1.362 5.282-1.404 5.532a.869.869 0 0 0 .407.969a.92.92 0 0 0 1.106-.224c.126-.114.362-.385.957-1.076a62.093 62.093 0 0 1 1.703-1.921c.218-.23.35-.128.222.098a2.291 2.291 0 0 0-.33 2.274\"/><path fill=\"#444791\" d=\"M28 21.695V32H4V4h24v4.993l1.33-1.33a4.304 4.304 0 0 1 .67-.54V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v30a1 1 0 0 0 1 1h26a1 1 0 0 0 1-1V21.427a2.91 2.91 0 0 1-2 .268\"/><path fill=\"#444791\" d=\"m34.128 11.861l-.523-.523a1.898 1.898 0 0 0-.11-2.423a1.956 1.956 0 0 0-2.75.162L18.22 21.6l-.837 3.142a.234.234 0 0 0 .296.294l3.131-.847l11.692-11.692l.494.495a.371.371 0 0 1 0 .525l-4.917 4.917a.8.8 0 0 0 1.132 1.131l4.917-4.917a1.972 1.972 0 0 0 0-2.788\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Result : Icon
+        {
+            public Result()
+                : base("Result",
+                        IconVariant.Regular,
+                        IconSize.Size12,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 2048 2048\"><path fill=\"#444791\" d=\"M1664 1792v-128H0v128zm384-1408V256h-128v128zm0 1024v-128h-128v128zm-384 0v-128H0v128zm0-1152H0v128h1664zm0 512V640H0v128z\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Save : Icon
+        {
+            public Save()
+                : base("Save",
+                        IconVariant.Regular,
+                        IconSize.Size12,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\"><path fill=\"#444791\" d=\"M2 2h14.414L22 7.586V22H2zm2 2v16h2v-6h12v6h2V8.414L15.586 4H13v4H6V4zm4 0v2h3V4zm8 16v-4H8v4z\"/></svg>"
                       )
             {
             }
@@ -1010,6 +1054,28 @@ public static class MyIcons
             {
             }
         }
+        public class Result : Icon
+        {
+            public Result()
+                : base("Result",
+                        IconVariant.Regular,
+                        IconSize.Size16,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 2048 2048\"><path fill=\"#444791\" d=\"M1664 1792v-128H0v128zm384-1408V256h-128v128zm0 1024v-128h-128v128zm-384 0v-128H0v128zm0-1152H0v128h1664zm0 512V640H0v128z\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Save : Icon
+        {
+            public Save()
+                : base("Save",
+                        IconVariant.Regular,
+                        IconSize.Size16,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\"><path fill=\"#444791\" d=\"M2 2h14.414L22 7.586V22H2zm2 2v16h2v-6h12v6h2V8.414L15.586 4H13v4H6V4zm4 0v2h3V4zm8 16v-4H8v4z\"/></svg>"
+                      )
+            {
+            }
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -1330,6 +1396,28 @@ public static class MyIcons
                         IconVariant.Regular,
                         IconSize.Size20,
                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 36 36\"><path fill=\"#444791\" d=\"M8 8.2h16v1.6H8zm0 8h8.086v1.6H8zm15.378-4H8v1.6h13.779zM12.794 29.072a2.47 2.47 0 0 0 2.194.824h7.804a.7.7 0 0 0 0-1.4h-7.804c-.911-.016-.749-.807-.621-1.052a3.962 3.962 0 0 0 .387-.915a1.183 1.183 0 0 0-.616-1.322a1.899 1.899 0 0 0-2.24.517c-.344.355-.822.898-1.28 1.426c.283-1.109.65-2.532 1.01-3.92a1.315 1.315 0 0 0-.755-1.626a1.425 1.425 0 0 0-1.775.793c-.432.831-3.852 6.562-3.886 6.62a.7.7 0 1 0 1.202.718c.128-.215 2.858-4.788 3.719-6.315c-.648 2.5-1.362 5.282-1.404 5.532a.869.869 0 0 0 .407.969a.92.92 0 0 0 1.106-.224c.126-.114.362-.385.957-1.076a62.093 62.093 0 0 1 1.703-1.921c.218-.23.35-.128.222.098a2.291 2.291 0 0 0-.33 2.274\"/><path fill=\"#444791\" d=\"M28 21.695V32H4V4h24v4.993l1.33-1.33a4.304 4.304 0 0 1 .67-.54V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v30a1 1 0 0 0 1 1h26a1 1 0 0 0 1-1V21.427a2.91 2.91 0 0 1-2 .268\"/><path fill=\"#444791\" d=\"m34.128 11.861l-.523-.523a1.898 1.898 0 0 0-.11-2.423a1.956 1.956 0 0 0-2.75.162L18.22 21.6l-.837 3.142a.234.234 0 0 0 .296.294l3.131-.847l11.692-11.692l.494.495a.371.371 0 0 1 0 .525l-4.917 4.917a.8.8 0 0 0 1.132 1.131l4.917-4.917a1.972 1.972 0 0 0 0-2.788\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Result : Icon
+        {
+            public Result()
+                : base("Result",
+                        IconVariant.Regular,
+                        IconSize.Size20,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 2048 2048\"><path fill=\"#444791\" d=\"M1664 1792v-128H0v128zm384-1408V256h-128v128zm0 1024v-128h-128v128zm-384 0v-128H0v128zm0-1152H0v128h1664zm0 512V640H0v128z\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Save : Icon
+        {
+            public Save()
+                : base("Save",
+                        IconVariant.Regular,
+                        IconSize.Size20,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"#444791\" d=\"M2 2h14.414L22 7.586V22H2zm2 2v16h2v-6h12v6h2V8.414L15.586 4H13v4H6V4zm4 0v2h3V4zm8 16v-4H8v4z\"/></svg>"
                       )
             {
             }
@@ -1669,6 +1757,28 @@ public static class MyIcons
             {
             }
         }
+        public class Result : Icon
+        {
+            public Result()
+                : base("Result",
+                        IconVariant.Regular,
+                        IconSize.Size24,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 2048 2048\"><path fill=\"#444791\" d=\"M1664 1792v-128H0v128zm384-1408V256h-128v128zm0 1024v-128h-128v128zm-384 0v-128H0v128zm0-1152H0v128h1664zm0 512V640H0v128z\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Save : Icon
+        {
+            public Save()
+                : base("Save",
+                        IconVariant.Regular,
+                        IconSize.Size24,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path fill=\"#444791\" d=\"M2 2h14.414L22 7.586V22H2zm2 2v16h2v-6h12v6h2V8.414L15.586 4H13v4H6V4zm4 0v2h3V4zm8 16v-4H8v4z\"/></svg>"
+                      )
+            {
+            }
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -2000,6 +2110,28 @@ public static class MyIcons
                         IconVariant.Regular,
                         IconSize.Size28,
                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 36 36\"><path fill=\"#444791\" d=\"M8 8.2h16v1.6H8zm0 8h8.086v1.6H8zm15.378-4H8v1.6h13.779zM12.794 29.072a2.47 2.47 0 0 0 2.194.824h7.804a.7.7 0 0 0 0-1.4h-7.804c-.911-.016-.749-.807-.621-1.052a3.962 3.962 0 0 0 .387-.915a1.183 1.183 0 0 0-.616-1.322a1.899 1.899 0 0 0-2.24.517c-.344.355-.822.898-1.28 1.426c.283-1.109.65-2.532 1.01-3.92a1.315 1.315 0 0 0-.755-1.626a1.425 1.425 0 0 0-1.775.793c-.432.831-3.852 6.562-3.886 6.62a.7.7 0 1 0 1.202.718c.128-.215 2.858-4.788 3.719-6.315c-.648 2.5-1.362 5.282-1.404 5.532a.869.869 0 0 0 .407.969a.92.92 0 0 0 1.106-.224c.126-.114.362-.385.957-1.076a62.093 62.093 0 0 1 1.703-1.921c.218-.23.35-.128.222.098a2.291 2.291 0 0 0-.33 2.274\"/><path fill=\"#444791\" d=\"M28 21.695V32H4V4h24v4.993l1.33-1.33a4.304 4.304 0 0 1 .67-.54V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v30a1 1 0 0 0 1 1h26a1 1 0 0 0 1-1V21.427a2.91 2.91 0 0 1-2 .268\"/><path fill=\"#444791\" d=\"m34.128 11.861l-.523-.523a1.898 1.898 0 0 0-.11-2.423a1.956 1.956 0 0 0-2.75.162L18.22 21.6l-.837 3.142a.234.234 0 0 0 .296.294l3.131-.847l11.692-11.692l.494.495a.371.371 0 0 1 0 .525l-4.917 4.917a.8.8 0 0 0 1.132 1.131l4.917-4.917a1.972 1.972 0 0 0 0-2.788\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Result : Icon
+        {
+            public Result()
+                : base("Result",
+                        IconVariant.Regular,
+                        IconSize.Size28,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 2048 2048\"><path fill=\"#444791\" d=\"M1664 1792v-128H0v128zm384-1408V256h-128v128zm0 1024v-128h-128v128zm-384 0v-128H0v128zm0-1152H0v128h1664zm0 512V640H0v128z\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Save : Icon
+        {
+            public Save()
+                : base("Save",
+                        IconVariant.Regular,
+                        IconSize.Size28,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\"><path fill=\"#444791\" d=\"M2 2h14.414L22 7.586V22H2zm2 2v16h2v-6h12v6h2V8.414L15.586 4H13v4H6V4zm4 0v2h3V4zm8 16v-4H8v4z\"/></svg>"
                       )
             {
             }
@@ -2339,6 +2471,28 @@ public static class MyIcons
             {
             }
         }
+        public class Result : Icon
+        {
+            public Result()
+                : base("Result",
+                        IconVariant.Regular,
+                        IconSize.Size32,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" viewBox=\"0 0 2048 2048\"><path fill=\"#444791\" d=\"M1664 1792v-128H0v128zm384-1408V256h-128v128zm0 1024v-128h-128v128zm-384 0v-128H0v128zm0-1152H0v128h1664zm0 512V640H0v128z\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Save : Icon
+        {
+            public Save()
+                : base("Save",
+                        IconVariant.Regular,
+                        IconSize.Size32,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" viewBox=\"0 0 24 24\"><path fill=\"#444791\" d=\"M2 2h14.414L22 7.586V22H2zm2 2v16h2v-6h12v6h2V8.414L15.586 4H13v4H6V4zm4 0v2h3V4zm8 16v-4H8v4z\"/></svg>"
+                      )
+            {
+            }
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -2670,6 +2824,28 @@ public static class MyIcons
                         IconVariant.Regular,
                         IconSize.Size48,
                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 36 36\"><path fill=\"#444791\" d=\"M8 8.2h16v1.6H8zm0 8h8.086v1.6H8zm15.378-4H8v1.6h13.779zM12.794 29.072a2.47 2.47 0 0 0 2.194.824h7.804a.7.7 0 0 0 0-1.4h-7.804c-.911-.016-.749-.807-.621-1.052a3.962 3.962 0 0 0 .387-.915a1.183 1.183 0 0 0-.616-1.322a1.899 1.899 0 0 0-2.24.517c-.344.355-.822.898-1.28 1.426c.283-1.109.65-2.532 1.01-3.92a1.315 1.315 0 0 0-.755-1.626a1.425 1.425 0 0 0-1.775.793c-.432.831-3.852 6.562-3.886 6.62a.7.7 0 1 0 1.202.718c.128-.215 2.858-4.788 3.719-6.315c-.648 2.5-1.362 5.282-1.404 5.532a.869.869 0 0 0 .407.969a.92.92 0 0 0 1.106-.224c.126-.114.362-.385.957-1.076a62.093 62.093 0 0 1 1.703-1.921c.218-.23.35-.128.222.098a2.291 2.291 0 0 0-.33 2.274\"/><path fill=\"#444791\" d=\"M28 21.695V32H4V4h24v4.993l1.33-1.33a4.304 4.304 0 0 1 .67-.54V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v30a1 1 0 0 0 1 1h26a1 1 0 0 0 1-1V21.427a2.91 2.91 0 0 1-2 .268\"/><path fill=\"#444791\" d=\"m34.128 11.861l-.523-.523a1.898 1.898 0 0 0-.11-2.423a1.956 1.956 0 0 0-2.75.162L18.22 21.6l-.837 3.142a.234.234 0 0 0 .296.294l3.131-.847l11.692-11.692l.494.495a.371.371 0 0 1 0 .525l-4.917 4.917a.8.8 0 0 0 1.132 1.131l4.917-4.917a1.972 1.972 0 0 0 0-2.788\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Result : Icon
+        {
+            public Result()
+                : base("Result",
+                        IconVariant.Regular,
+                        IconSize.Size48,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 2048 2048\"><path fill=\"#444791\" d=\"M1664 1792v-128H0v128zm384-1408V256h-128v128zm0 1024v-128h-128v128zm-384 0v-128H0v128zm0-1152H0v128h1664zm0 512V640H0v128z\"/></svg>"
+                      )
+            {
+            }
+        }
+        public class Save : Icon
+        {
+            public Save()
+                : base("Save",
+                        IconVariant.Regular,
+                        IconSize.Size48,
+                        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 24 24\"><path fill=\"#444791\" d=\"M2 2h14.414L22 7.586V22H2zm2 2v16h2v-6h12v6h2V8.414L15.586 4H13v4H6V4zm4 0v2h3V4zm8 16v-4H8v4z\"/></svg>"
                       )
             {
             }

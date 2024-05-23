@@ -33,6 +33,7 @@ public class MappingCoreProfile : Profile
         CreateMap<ClientDto, Client>().ReverseMap();
         CreateMap<OfferTypeDto, OfferType>().ReverseMap();
         CreateMap<OfferStateDto, OfferState>().ReverseMap();
+        CreateMap<OfferResultDto, OfferResult>().ReverseMap();
         CreateMap<OfferDto, Offer>().ReverseMap();
         CreateMap<EmailDto, Email>().ReverseMap();
         CreateMap<DisciplineEngineerDto, DisciplineEngineer>().ReverseMap();

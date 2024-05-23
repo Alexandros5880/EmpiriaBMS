@@ -5,6 +5,7 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class OfferVM : BaseVM
 {
+    // Type
     private int _typeId;
     public int TypeId
     {
@@ -33,6 +34,7 @@ public class OfferVM : BaseVM
 
     public string TypeName => Type != null ? Type.Name : "";
 
+    // State
     private int  _stateId;
     public int StateId
     {
@@ -61,6 +63,36 @@ public class OfferVM : BaseVM
 
     public string StateName => State != null ? State.Name : "";
 
+    // Result
+    private int _resultId;
+    public int ResultId
+    {
+        get => _resultId;
+        set
+        {
+            if (value == _resultId)
+                return;
+            _resultId = value;
+            NotifyPropertyChanged(nameof(ResultId));
+        }
+    }
+
+    private OfferResult _result;
+    public OfferResult Result
+    {
+        get => _result;
+        set
+        {
+            if (value == _result)
+                return;
+            _result = value;
+            NotifyPropertyChanged(nameof(Result));
+        }
+    }
+
+    public string ResultName => Result != null ? Result.Name : "";
+
+    // Other Properties
     private string _code;
     public string Code
     {

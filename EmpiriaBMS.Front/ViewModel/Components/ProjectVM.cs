@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Front.ViewModel.Components.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class ProjectVM : BaseVM
@@ -291,6 +292,7 @@ public class ProjectVM : BaseVM
 
     // Extra Hellping Properties
     private string? _pmName;
+    [NotMapped]
     public string? PmName
     {
         get => _pmName;
@@ -303,6 +305,9 @@ public class ProjectVM : BaseVM
         }
     }
 
+    [NotMapped]
     public string PMFullName => ProjectManager != null ? $"{ProjectManager.LastName} {ProjectManager.MidName} {ProjectManager.FirstName}" : "";
+
+    [NotMapped]
     public string ClientFullName => Client != null ? $"{Client.LastName} {Client.MidName} {Client.FirstName}" : "";
 }

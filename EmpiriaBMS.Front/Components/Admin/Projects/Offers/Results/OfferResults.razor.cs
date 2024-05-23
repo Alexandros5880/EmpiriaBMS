@@ -1,20 +1,20 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Projects.Offers;
+using EmpiriaBMS.Front.Components.Admin.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
+namespace EmpiriaBMS.Front.Components.Admin.Projects.Offers.Results;
 
-public partial class Invoices
+public partial class OfferResults
 {
     #region Data Grid
-    private List<InvoiceVM> _records = new List<InvoiceVM>();
+    private List<OfferResultVM> _records = new List<OfferResultVM>();
     private string _filterString = string.Empty;
-    IQueryable<InvoiceVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<OfferResultVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private InvoiceVM _selectedRecord = new InvoiceVM();
+    private OfferResultVM _selectedRecord = new OfferResultVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -28,15 +28,15 @@ public partial class Invoices
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<InvoiceVM> row)
+    private void HandleRowFocus(FluentDataGridRow<OfferResultVM> row)
     {
-        _selectedRecord = row.Item as InvoiceVM;
+        _selectedRecord = row.Item as OfferResultVM;
     }
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.Invoices.GetAll();
-        _records = Mapper.Map<List<InvoiceVM>>(dtos);
+        var dtos = await DataProvider.OfferResult.GetAll();
+        _records = Mapper.Map<List<OfferResultVM>>(dtos);
     }
 
     private async Task _add()
@@ -50,58 +50,56 @@ public partial class Invoices
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true,
-            Width = "min(70%, 500px);"
+            PreventScroll = true
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(new InvoiceVM(), parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new OfferResultVM(), parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            InvoiceVM vm = result.Data as InvoiceVM;
-            var dto = Mapper.Map<InvoiceDto>(vm);
-            await DataProvider.Invoices.Add(dto);
+            OfferResultVM vm = result.Data as OfferResultVM;
+            var dto = Mapper.Map<OfferResultDto>(vm);
+            await DataProvider.OfferResult.Add(dto);
             await _getRecords();
         }
     }
 
-    private async Task _edit(InvoiceVM record)
+    private async Task _edit(OfferResultVM record)
     {
         DialogParameters parameters = new()
         {
-            Title = $"Edit {record.Project?.Name: 'Record'}",
+            Title = $"Edit {record.Name}",
             PrimaryActionEnabled = true,
             SecondaryActionEnabled = true,
             PrimaryAction = "Save",
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true,
-            Width = "min(70%, 500px);"
+            PreventScroll = true
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(record, parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            InvoiceVM vm = result.Data as InvoiceVM;
-            var dto = Mapper.Map<InvoiceDto>(vm);
-            await DataProvider.Invoices.Update(dto);
+            OfferResultVM vm = result.Data as OfferResultVM;
+            var dto = Mapper.Map<OfferResultDto>(vm);
+            await DataProvider.OfferResult.Update(dto);
             await _getRecords();
         }
     }
 
-    private async Task _delete(InvoiceVM record)
+    private async Task _delete(OfferResultVM record)
     {
-        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete invoice type{record.TypeName} of project {record.ProjectName}?", "Yes", "No", "Deleting record...");
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the offer state {record.Name}?", "Yes", "No", "Deleting record...");
 
         DialogResult result = await dialog.Result;
 
         if (!result.Cancelled)
         {
-            await DataProvider.Invoices.Delete(record.Id);
+            await DataProvider.OfferResult.Delete(record.Id);
         }
 
         await dialog.CloseAsync();

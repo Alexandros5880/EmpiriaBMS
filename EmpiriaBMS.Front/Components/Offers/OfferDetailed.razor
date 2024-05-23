@@ -1,0 +1,217 @@
+﻿@using Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Front.Services
+
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+
+
+<div class="row">
+
+    @if (DisplayTitle)
+    {
+        <div class="col-12">
+            <h3>@(_isNew ? "Add Offer" : "Edit Offer")</h3>
+        </div>
+    }
+
+    <div class="col-12 row gx-2 mt-2">
+
+        <!-- State -->
+        <div class="col-xl-4 col-lg-4 col-md-12">
+            <div>
+                State<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentCombobox Id="states"
+                                Height="200px"
+                                Width="100%"
+                                Placeholder="Select State"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Items="@_states"
+                                TOption="OfferStateVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == @Content.StateId)"
+                                @bind-SelectedOption="@State" />
+            </div>
+            @if (!validState)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+
+        <!-- Type -->
+        <div class="col-xl-4 col-lg-4 col-md-12">
+            <div>
+                Type<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentCombobox Id="types"
+                                Height="200px"
+                                Width="100%"
+                                Placeholder="Select Type"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Items="@_types"
+                                TOption="OfferTypeVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == @Content.TypeId)"
+                                @bind-SelectedOption="@Type" />
+            </div>
+            @if (!validType)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+
+        <!-- Result -->
+        <div class="col-xl-4 col-lg-4 col-md-12">
+            <div>
+                Result<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentCombobox Id="results"
+                                Height="200px"
+                                Width="100%"
+                                Placeholder="Select Result"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Items="@_results"
+                                TOption="OfferResultVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == @Content.ResultId)"
+                                @bind-SelectedOption="@Result" />
+            </div>
+            @if (!validResult)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+
+    </div>
+
+    <div class="col-12 row gx-3 mt-2">
+
+        <!-- Code -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <div>
+                Code<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentTextField Style="width:100%;" @bind-Value="@Content.Code" />
+            </div>
+            @if (!validCode)
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+
+        <!-- Date-->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <div>
+                Date<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentDatePicker Style="width:100%;" @bind-Value="@Content.Date" />
+            </div>
+            @if (!validDate)
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+
+    </div>
+
+    <div class="col-12 row gx-3 mt-2">
+
+        <!-- PudgetPrice -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <div>
+                Pudget<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentNumberField Style="width:100%;" @bind-Value="@Content.PudgetPrice" />
+            </div>
+            @if (!validPudgetPrice)
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+
+        <!-- OfferPrice -->
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <div>
+                Price<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentNumberField Style="width:100%;" @bind-Value="@Content.OfferPrice" />
+            </div>
+            @if (!validOfferPrice)
+            {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+
+    </div>
+
+    <!-- Description / TeamText / Comments -->
+    <div class="col-12 mt-2 mb-2">
+        <FluentAccordion>
+            <FluentAccordionItem Heading="Extra Info">
+                <HeadingTemplate>
+                    Extra <span style="color:lightblue">Info</span>
+                </HeadingTemplate>
+                <ChildContent>
+                    <div class="row">
+
+                        <div class="col-12 row gx-3 mt-2">
+                            <FluentTextArea Style="width:100%; margin:4px;" Label="Description:" Class="col-12" @bind-Value="@Content.Description" />
+                        </div>
+
+                        <div class="col-12 row gx-3 mt-2">
+                            <FluentTextArea Style="width:100%; margin:4px;" Label="Team Text:" Class="col-12" @bind-Value="@Content.TeamText" />
+                        </div>
+
+                        <div class="col-12 row gx-3 mt-2">
+                            <FluentTextArea Style="width:100%; margin:4px;" Label="Comments:" Class="col-12" @bind-Value="@Content.Comments" />
+                        </div>
+
+                    </div>
+                </ChildContent>
+            </FluentAccordionItem>
+        </FluentAccordion>
+    </div>
+
+    <!-- Action Buttons -->
+    @if (DisplayActions)
+    {
+        <div class="row mt-3 mb-3">
+            <div class="col-12">
+                <FluentButton IconStart="@(new Icons.Regular.Size16.Save())"
+                              OnClick="@(async () => await Save())"
+                              Style="float: right;"
+                              Disabled=false>
+                    @(_isNew ? "Add" : "Update")
+                </FluentButton>
+            </div>
+        </div>
+    }
+
+</div>

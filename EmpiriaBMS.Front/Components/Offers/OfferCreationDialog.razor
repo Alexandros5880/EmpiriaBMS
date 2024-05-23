@@ -1,0 +1,17 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
+@using EmpiriaBMS.Models.Models
+
+@implements IDialogContentComponent<OfferVM>
+
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<FluentDialogBody>
+    <OfferCreationWizzard Offer="@Content" OnSave="@(async () => await SaveAsync())" OnCansel="@(async () => await CancelAsync())" />
+</FluentDialogBody>

@@ -1,9 +1,7 @@
-﻿@using EmpiriaBMS.Front.ViewModel.Components;
-@using Microsoft.AspNetCore.Components;
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
 @using EmpiriaBMS.Front.Services
-@using EmpiriaBMS.Core.Config;
-@using EmpiriaBMS.Core.Dtos;
-@using System.Text.Json;
+@using Color = Microsoft.Fast.Components.FluentUI.Color
+@using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 
 @inject IMapper Mapper
 @inject IDataProvider DataProvider
@@ -14,160 +12,229 @@
 
     <h3 class="mt-1 mb-1 ms-3">Project</h3>
 
-    <EditForm Model="@_project" class="row mt-3 gx-2 p-2">
-
-        <div class="p-2 col-12">
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- Name -->
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <InputText id="name" @bind-Value="@_project.Name" class="form-control" />
-                    </div>
+    <div class="col-12 row gx-2">
+            <!-- Name -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    <FluentTextField Style="width: 100%;" @bind-Value="@Content.Name">
+                        Name<span class="text-danger">*</span>
+                    </FluentTextField>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- Code -->
-                    <div class="form-group">
-                        <label for="code">Code</label>
-                        @if (seeCode)
-                        {
-                            <InputText id="code" @bind-Value="@_project.Code" class="form-control" />
-                        }
-                        else
-                        {
-                            <InputText id="code" @bind-Value="@defaultCodeValue" class="form-control" disabled />
-                        }
-                    </div>
-                </div>
+                @if (!validName)
+                {
+                    @if (string.IsNullOrEmpty(@Content?.Name))
+                    {
+                        <div class="col-12">
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                }
             </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- Project Category -->
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select class="form-select" @onchange="((e) => _updateProjectCategory(e))">
-                            @if (_project.Category?.CategoryId == 0)
-                            {
-                                <option value="0" selected>Selecte Category</option>
-                            }
-                            @foreach (var category in _projectCategories)
-                            {
-                                @if (_project.Category?.CategoryId == category.Id)
-                                {
-                                    <option value="@category.Id" selected>@category.Name</option>
-                                }
-                                else
-                                {
-                                    <option value="@category.Id">@category.Name</option>
-                                }
-                            }
-                        </select>
-                    </div>
+            <!-- Code-->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    <FluentTextField Style="width: 100%;" @bind-Value="@Content.Code">
+                        Code<span class="text-danger">*</span>
+                    </FluentTextField>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- Project Sub Category -->
-                    <div class="form-group">
-                        <label>Sub Category</label>
-                        <select class="form-select" @onchange="((e) => _updateProjectSubCategory(e))" disabled="@(!_projectSubCategories.Any())">
-                            @if (_project.CategoryId == 0)
-                            {
-                                <option value="0" selected>Selecte Sub Category</option>
-                            }
-                            @foreach (var projectGroup in _projectSubCategories)
-                            {
-                                @if (_project.CategoryId == projectGroup.Id)
-                                {
-                                    <option value="@projectGroup.Id" selected>@projectGroup.Name</option>
-                                }
-                                else
-                                {
-                                    <option value="@projectGroup.Id">@projectGroup.Name</option>
-                                }
-                            }
-                        </select>
-                    </div>
-                </div>
+                @if (!validCode)
+                {
+                    @if (string.IsNullOrEmpty(@Content?.Code))
+                    {
+                        <div class="col-12">
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                }
             </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- StartDate -->
-                    <div class="form-group">
-                        <label for="durationDate">StartDate</label>
-                        <input type="date"
-                               class="form-control"
-                               id="durationDate"
-                               @bind="@_project.StartDate">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- DeadLine -->
-                    <div class="form-group">
-                        <label for="estimatedDate">DeadLine</label>
-                        <input type="date"
-                               class="form-control"
-                               id="estimatedDate"
-                               @bind="@_project.DeadLine">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <!-- Project Stage -->
-                    <div class="form-group">
-                        <label>Project Stage</label>
-                        <select class="form-select" @onchange="((e) => _updateProjectStage(e))">
-                            @if (_project.StageId == 0)
-                            {
-                                <option value="0" selected>Selecte Stage</option>
-                            }
-                            @foreach (var projectStage in _projectStages)
-                            {
-                                @if (_project.StageId == projectStage.Id)
-                                {
-                                    <option value="@projectStage.Id" selected>@projectStage.Name</option>
-                                }
-                                else
-                                {
-                                    <option value="@projectStage.Id">@projectStage.Name</option>
-                                }
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <!-- Active -->
-                    <div class="row mt-4 ms-2 float-start" style="width: 134px;">
-                        <input class="col-4 big-checkbox" id="active" type="checkbox" @bind="_project.Active" />
-                        <label class="col-8" for="active">Is Active</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Description -->
-            <div class="col-12 form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control"
-                          name="composeContent"
-                          id="description"
-                          row="7"
-                          @bind="@_project.Description" />
-            </div>
-
         </div>
 
-    </EditForm>
+        <div class="col-12 row gx-2">
+            <!-- Category -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Category<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Placeholder="Select Category..."
+                                    Items="@_categories"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="ProjectCategoryVM"
+                                    OptionText="@(c => c.Name)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Category" />
+                </div>
+                @if (!validCategory)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+            <!-- SubCategory-->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    SubCategory<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                <FluentCombobox @ref="@_subCatCombo"
+                                Placeholder="Select SubCategory..."
+                                Items="@_subCategories"
+                                Height="200px"
+                                Width="100%"
+                                TOption="ProjectSubCategoryVM"
+                                OptionText="@(c => c.Name)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                @bind-SelectedOption="@SubCategory"/>
+                </div>
+                @if (!validSubCategory)
+                {
+                <div class="col-12">
+                    <span class="text-warning">Field is required!</span>
+                </div>
+                }
+            </div>
+        </div>
 
-    <div class="row mt-3 mb-3">
+        <div class="col-12 row gx-2">
+            <!-- StartDate -->
+            <div class="col-lg-6 col-md-12">
+                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.StartDate" Label="Start Date" />
+            </div>
+            <!-- DeadLine-->
+            <div class="col-lg-6 col-md-12">
+                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.DeadLine" Label="DeadLine" />
+            </div>
+        </div>
+
+        <div class="col-12 row gx-2">
+            <!-- Stage -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Stage<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Placeholder="Select Stage..."
+                                    Items="@_stages"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="ProjectStageVM"
+                                    OptionText="@(c => c.Name)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Stage" />
+                </div>
+                @if (!validStage)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+            <!-- EstimatedHours -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    EstimatedHours<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentNumberField Style="width: 100%;" @bind-Value="@Content.EstimatedHours" Min="0" />
+                </div>
+                @if (!validEstHours)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }       
+            </div>
+        </div>
+
+        <div class="col-12 row gx-2">
+            <!-- Project Manager -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Project Manager<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select PM..."
+                                    Items="@_pms"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="UserVM"
+                                    OptionText="@(c => c.FullName)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Pm"/>
+                </div>
+                @if (!validPm)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+            <!-- Client -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Client
+                </div>
+                <div class="col-12 row">
+                    <div class="col-11">
+                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Client..."
+                                        Items="_clients"
+                                        Height="200px"
+                                        Width="100%"
+                                        TOption="ClientVM"
+                                        OptionText="@(c => c.FullName)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Client" />
+                    </div>
+                    <div class="col-1">
+                        <FluentIcon Value="@(new Icons.Regular.Size32.Add())"
+                                    Color="Color.Accent"
+                                    Slot="start"
+                                    OnClick="@_addClient" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Form (For Add) -->
+        @if(_diplayedClientForm)
+        {
+            <div class="col-12 border rounded mb-3 mt-3 p-2" style="margin: 0 auto;">
+                <ClientDetailed Content="@Client"
+                                OnCancel="@(() => _closeClientForm())"
+                                OnSave="@((client) => _closeClientForm(client))" />
+            </div>
+        }
+
+        <!-- Description -->
         <div class="col-12">
-            <Map @ref="@_map"
-                 Id="projectMap"
-                 AutoCompeteId="autocompeteProjectMap"
-                 OnFindAddress="@(() => _onSearchAddressChange())" />
+            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="2" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
         </div>
-    </div>
+
+        <!-- Address (Map) -->
+        <div class="col-12 border rounded mb-3 mt-3 p-2" style="margin: 0 auto;">
+            <Map @ref="@_myMapRef"
+                     Id="offerProjectMap"
+                     AutoCompeteId="autocompeteOfferProjectMap"
+                     OnFindAddress="@(() => _onSearchAddressChange())" />
+        </div>
+
+    <!-- Action Buttons -->
+    @if (DisplayActions)
+    {
+        <div class="row mt-3 mb-3">
+            <div class="col-12">
+                <FluentButton IconStart="@(new Icons.Regular.Size16.Save())"
+                              OnClick="@(async () => await SaveAsync())"
+                              Style="float: right;"
+                              Disabled=false>
+                    @(_isNew ? "Add" : "Update")
+                </FluentButton>
+            </div>
+        </div>
+    }
 
 </div>

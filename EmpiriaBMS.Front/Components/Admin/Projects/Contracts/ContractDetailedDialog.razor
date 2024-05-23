@@ -30,59 +30,6 @@
 @* Body *@
 <FluentDialogBody>
 
-    <div class="col-12 row gx-2 mt-2">
-        <!-- Invoice -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <div>
-                Invoice<span class="text-danger">*</span>
-            </div>
-            <div>
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                Placeholder="Select Invoice..."
-                                Items="@_invoices"
-                                Height="200px"
-                                Width="100%"
-                                TOption="InvoiceVM"
-                                OptionText="@(c => c.Mark)"
-                                OptionValue="@(c => c.Id.ToString())"
-                                @bind-SelectedOption="@Invoice" />
-            </div>
-            @if (!validInvoice)
-            {
-                <div>
-                    <span class="text-warning">Field is required!</span>
-                </div>
-            }
-        </div>
-        <!-- Date -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.Date" Label="Date" />
-        </div>
-    </div>
-
-    <div class="col-12 row gx-2 mt-2">
-        <!-- ContractualFee -->
-        <div class="col-xl-6 col-lg-6 col-md-12">
-            <div>
-                ContractualFee<span class="text-danger">*</span>
-            </div>
-            <div>
-                <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.ContractualFee" Min="0">
-                    ContractualFee
-                </FluentNumberField>
-            </div>
-            @if (!validContractualFee)
-            {
-                <div>
-                    <span class="text-warning">Field is required!</span>
-                </div>
-            }
-        </div>
-    </div>
-
-    <!-- Description -->
-    <div class="col-12">
-        <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
-    </div>
+    <ContractDetailed @ref="@_compoment" Content="@Content" Dialog="@Dialog" DisplayActions="true" />
 
 </FluentDialogBody>

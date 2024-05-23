@@ -1,22 +1,29 @@
-﻿using CsvHelper;
-using EmpiriaBMS.Core.Config;
+﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Front.ViewModel.Interfaces;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Fast.Components.FluentUI;
+using System;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Offers;
+namespace EmpiriaBMS.Front.Components.Offers;
 
-public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
+public partial class OfferDetailed
 {
     [Parameter]
-    public OfferVM Content { get; set; } = default!;
+    public OfferVM Content { get; set; }
 
-    [CascadingParameter]
-    public FluentDialog Dialog { get; set; } = default!;
+    [Parameter]
+    public EventCallback OnSave { get; set; }
+
+    [Parameter]
+    public bool DisplayTitle { get; set; } = true;
+
+    [Parameter]
+    public bool DisplayActions { get; set; } = true;
+
+    private bool _isNew => Content.Id == 0;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -24,51 +31,50 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
 
         if (firstRender)
         {
-            await _getRecords();
-
-            if (Content.Project != null)
-            {
-                var projectDto = Mapping.Mapper.Map<ProjectDto>(Content.Project);
-                Project = _mapper.Map<ProjectVM>(projectDto);
-            }
-
-            if (Content.Type != null)
-            {
-                var typeDto = Mapping.Mapper.Map<OfferTypeDto>(Content.Type);
-                Type = _mapper.Map<OfferTypeVM>(typeDto);
-            }
-
-            if (Content.State != null)
-            {
-                var stateDto = Mapping.Mapper.Map<OfferStateDto>(Content.State);
-                State = _mapper.Map<OfferStateVM>(stateDto);
-            }
-
-            if (Content.Result != null)
-            {
-                var resultDto = Mapping.Mapper.Map<OfferResultDto>(Content.Result);
-                Result = _mapper.Map<OfferResultVM>(resultDto);
-            }
-
-            StateHasChanged();
+            await Prepair();
         }
     }
 
-    private async Task SaveAsync()
+    public async Task Prepair()
+    {
+        await _getRecords();
+
+        if (Content?.State != null)
+        {
+            State = _states.FirstOrDefault(s => s.Id == Content.StateId);
+        }
+
+        if (Content?.Type != null)
+        {
+            Type = _types.FirstOrDefault(s => s.Id == Content.TypeId);
+        }
+
+        if (Content?.Result != null)
+        {
+            Result = _results.FirstOrDefault(s => s.Id == Content.ResultId);
+        }
+
+        StateHasChanged();
+    }
+
+    public async Task Save()
     {
         var valid = Validate();
         if (!valid) return;
 
-        await Dialog.CloseAsync(Content);
-    }
+        var dto = Mapper.Map<OfferDto>(Content);
+        OfferDto updated;
 
-    private async Task CancelAsync()
-    {
-        await Dialog.CancelAsync();
+        if (_isNew)
+            updated = await _dataProvider.Offers.Add(dto);
+
+        else
+            updated = await _dataProvider.Offers.Update(dto);
+
+        await OnSave.InvokeAsync();
     }
 
     #region Validation
-    private bool validProject = true;
     private bool validCode = true;
     private bool validType = true;
     private bool validState = true;
@@ -77,24 +83,22 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     private bool validPudgetPrice = true;
     private bool validOfferPrice = true;
 
-    private bool Validate(string fieldname = null)
+    public bool Validate(string fieldname = null)
     {
         if (fieldname == null)
         {
-            validProject = Content.ProjectId != 0 && Content.ProjectId != null;
             validCode = !string.IsNullOrEmpty(Content.Code);
             validType = Content.TypeId != 0;
             validState = Content.StateId != 0;
-            validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
+            validDate = Content.Date != null;
             validResult = Content.ResultId != 0;
             validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
             validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
 
-            return validCode && validType && validState && validResult && validDate && validProject && validPudgetPrice && validOfferPrice;
+            return validCode && validType && validState && validResult && validDate && validPudgetPrice && validOfferPrice;
         }
         else
         {
-            validProject = true;
             validCode = true;
             validType = true;
             validState = true;
@@ -105,9 +109,6 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
 
             switch (fieldname)
             {
-                case "Project":
-                    validProject = Content.ProjectId != 0 && Content.ProjectId != null;
-                    return validProject;
                 case "Code":
                     validCode = !string.IsNullOrEmpty(Content.Code);
                     return validCode;
@@ -121,7 +122,7 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
                     validResult = Content.ResultId != 0;
                     return validResult;
                 case "Date":
-                    validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
+                    validDate = Content.Date != null;
                     return validDate;
                 case "PudgetPrice":
                     validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
@@ -135,23 +136,35 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
 
         }
     }
+
+    public void ResetValidation()
+    {
+        validCode = true;
+        validType = true;
+        validState = true;
+        validResult = true;
+        validDate = true;
+        validPudgetPrice = true;
+        validOfferPrice = true;
+    }
     #endregion
 
     #region Get Related Records
-    ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
-    ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
     ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
+    ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
     ObservableCollection<OfferResultVM> _results = new ObservableCollection<OfferResultVM>();
 
-    private ProjectVM _project = new ProjectVM();
-    public ProjectVM Project
+    private OfferStateVM _state = new OfferStateVM();
+    public OfferStateVM State
     {
-        get => _project;
+        get => _state;
         set
         {
-            if (_project == value || value == null) return;
-            _project = value;
-            Content.ProjectId = _project.Id;
+            if (_state == value || value == null) return;
+            _state = value;
+            Content.StateId = _state.Id;
+            var dto = Mapper.Map<OfferStateDto>(_state);
+            Content.State = Mapping.Mapper.Map<OfferState>(dto);
         }
     }
 
@@ -164,18 +177,8 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
             if (_type == value || value == null) return;
             _type = value;
             Content.TypeId = _type.Id;
-        }
-    }
-
-    private OfferStateVM _state = new OfferStateVM();
-    public OfferStateVM State
-    {
-        get => _state;
-        set
-        {
-            if (_state == value || value == null) return;
-            _state = value;
-            Content.StateId = _state.Id;
+            var dto = Mapper.Map<OfferTypeDto>(_type);
+            Content.Type = Mapping.Mapper.Map<OfferType>(dto);
         }
     }
 
@@ -188,45 +191,38 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
             if (_result == value || value == null) return;
             _result = value;
             Content.ResultId = _result.Id;
+            var dto = Mapper.Map<OfferResultDto>(_result);
+            Content.Result = Mapping.Mapper.Map<OfferResult>(dto);
         }
     }
 
     private async Task _getRecords()
     {
-        await _getProjects();
-        await _getTypes();
         await _getStates();
+        await _getTypes();
         await _getResults();
-    }
-
-    private async Task _getProjects()
-    {
-        var dtos = await _dataProvider.Projects.GetAll();
-        var vms = _mapper.Map<List<ProjectVM>>(dtos);
-        _projects.Clear();
-        vms.ForEach(_projects.Add);
-    }
-
-    private async Task _getTypes()
-    {
-        var dtos = await _dataProvider.OfferTypes.GetAll();
-        var vms = _mapper.Map<List<OfferTypeVM>>(dtos);
-        _types.Clear();
-        vms.ForEach(_types.Add);
     }
 
     private async Task _getStates()
     {
         var dtos = await _dataProvider.OfferStates.GetAll();
-        var vms = _mapper.Map<List<OfferStateVM>>(dtos);
+        var vms = Mapper.Map<List<OfferStateVM>>(dtos);
         _states.Clear();
         vms.ForEach(_states.Add);
+    }
+
+    private async Task _getTypes()
+    {
+        var dtos = await _dataProvider.OfferTypes.GetAll();
+        var vms = Mapper.Map<List<OfferTypeVM>>(dtos);
+        _types.Clear();
+        vms.ForEach(_types.Add);
     }
 
     private async Task _getResults()
     {
         var dtos = await _dataProvider.OfferResult.GetAll();
-        var vms = _mapper.Map<List<OfferResultVM>>(dtos);
+        var vms = Mapper.Map<List<OfferResultVM>>(dtos);
         _results.Clear();
         vms.ForEach(_results.Add);
     }

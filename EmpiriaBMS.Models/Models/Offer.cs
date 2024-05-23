@@ -14,6 +14,10 @@ public class Offer : Entity
     public OfferState State { get; set; }
 
     [Required]
+    public int ResultId { get; set; }
+    public OfferResult Result { get; set; }
+
+    [Required]
     public string Code { get; set; }
 
     [DataType(DataType.DateTime)]

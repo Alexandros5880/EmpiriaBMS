@@ -1,4 +1,4 @@
-﻿@page "/admin/projects/invoices"
+﻿@page "/admin/projects/offers/results"
 
 @using EmpiriaBMS.Front.Services
 @inject IDataProvider DataProvider
@@ -16,9 +16,9 @@
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
                             Pagination="@pagination"
-                            TGridItem="InvoiceVM"
+                            TGridItem="OfferResultVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="160px 100px 100px 160px 100px 160px 100px 100px 100px"
+                            GridTemplateColumns="auto auto 100px"
                             style="height: 70vh; overflow:auto;">
 
                 <TemplateColumn Title="Name"
@@ -30,22 +30,16 @@
                             <FluentSearch type="search"
                                           Autofocus=true
                                           @bind-Value="@_filterString"
-                                          Placeholder="Project..."
+                                          Placeholder="Name..."
                                           @oninput="@HandleFilter" />
                         </div>
                     </ColumnOptions>
                     <ChildContent>
-                        @(context.ProjectName)
+                        @(context.Name)
                     </ChildContent>
                 </TemplateColumn>
 
-                <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Date)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Fee)" Sortable="true" Title="Fee" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Vat)" Sortable="true" Title="Vat" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Total)" Sortable="true" Title="Total" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="text-wrap: wrap;" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
                     <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />

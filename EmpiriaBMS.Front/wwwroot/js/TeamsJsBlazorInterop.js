@@ -85,6 +85,7 @@ export function navigateToAdmin(url, objectId) {
     });
 }
 
+
 // Register MNouse Weel Event
 export function registerGlobalMouseWheelEvent(objRef, id) {
     $('[data-id="' + id + '"]').on('wheel', function (e) {
@@ -175,6 +176,8 @@ export function getCanvasImageData(canvas) {
 }
 // Canvas
 
+
+
 // Google Maps Api
 export function displayAddress(mapElementId, address) {
     var map = new google.maps.Map(document.getElementById(mapElementId), {
@@ -191,10 +194,11 @@ export function displayAddress(mapElementId, address) {
                     map: map,
                     position: results[0].geometry.location
                 });
+                console.log('Geocode was successful location: ' + results[0].geometry.location);
             } else {
                 console.log('Geocode was not successful for the following reason: ' + status);
             }
-        });
+        }, error => console.log('Geocode error: ' + error));
     });
 }
 

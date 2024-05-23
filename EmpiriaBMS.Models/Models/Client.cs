@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 
@@ -11,4 +12,7 @@ public class Client : User
     public Address? Address { get; set; }
 
     public ICollection<Project> Projects { get; set; }
+
+    [NotMapped]
+    public string FullName => $"{LastName} {MidName} {FirstName}";
 }

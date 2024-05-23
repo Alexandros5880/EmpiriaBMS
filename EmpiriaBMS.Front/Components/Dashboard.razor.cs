@@ -980,14 +980,14 @@ public partial class Dashboard : IDisposable
 
     private void AddProject()
     {
-        projectCompoment.PrepairForNew();
+        //projectCompoment.PrepairForNew();
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
     }
 
     private void EditProject()
     {
-        projectCompoment.PrepairForEdit(_selectedProject);
+        //projectCompoment.PrepairForEdit(_selectedProject);
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
     }
@@ -1011,10 +1011,14 @@ public partial class Dashboard : IDisposable
 
     public async Task _addEditProjectDialogAccept()
     {
-        await projectCompoment.HandleValidSubmit();
-        _addEditProjectDialog.Hide();
-        _isAddEditProjectDialogOdepened = false;
-        await Refresh();
+        var valid = projectCompoment.Validate();
+        if (valid)
+        {
+            await projectCompoment.SaveAsync();
+            _addEditProjectDialog.Hide();
+            _isAddEditProjectDialogOdepened = false;
+            await Refresh();
+        }
     }
 
     public void _addEditProjectDialogCansel()

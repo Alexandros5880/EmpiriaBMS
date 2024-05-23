@@ -13,6 +13,8 @@ namespace EmpiriaBMS.Front.Components.Admin.Projects;
 
 public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 {
+    private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
+
     [Parameter]
     public ProjectVM Content { get; set; } = default!;
 
@@ -33,13 +35,12 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         {
             if (_category == value || value == null) return;
             _category = value;
-            Content.Category.CategoryId = _category.Id;
-            _getSubCategories();
-            SubCategory = null;
-            StateHasChanged();
+            if (Content.Category != null)
+                Content.Category.CategoryId = _category.Id;
+            _getSubCategories(refresh: true);
         }
     }
-    
+
     private ProjectSubCategoryVM _subCategory = new ProjectSubCategoryVM();
     public ProjectSubCategoryVM SubCategory
     {
@@ -49,6 +50,13 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
             if (_subCategory == value || value == null) return;
             _subCategory = value;
             Content.CategoryId = _subCategory?.Id ?? 0;
+            var subCat = _subCategories.FirstOrDefault(c => c.Id == _subCategory.Id);
+            var dto = Mapper.Map<ProjectSubCategoryDto>(subCat);
+            Content.Category = Mapping.Mapper.Map<ProjectSubCategory>(dto);
+
+            Content.Category.CategoryId = Category.Id;
+            var parentCatDto = Mapper.Map<ProjectCategoryDto>(Category);
+            Content.Category.Category = Mapping.Mapper.Map<ProjectCategory>(parentCatDto);
         }
     }
 
@@ -173,10 +181,10 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         {
             validName = !string.IsNullOrEmpty(Content.Name);
             validCode = !string.IsNullOrEmpty(Content.Code);
-            validCategory = _category != null;
-            validSubCategory = Content.CategoryId != 0;
-            validStage = Content.StageId != 0;
-            validPm = Content.ProjectManagerId != 0 && Content.ProjectManagerId != null;
+            validCategory = _category != null && _category.Id != 0;
+            validSubCategory = _subCategory != null && _subCategory.Id != 0;
+            validStage = _stage != null && _stage.Id != 0;
+            validPm = _pm != null && _pm.Id != 0;
 
             return validName && validCode && validCategory && validSubCategory && validStage && validPm;
         }
@@ -197,16 +205,16 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
                     validCode = !string.IsNullOrEmpty(Content.Code);
                     return validCode;
                 case "Category":
-                    validCategory = _category != null;
+                    validCategory = _category != null && _category.Id != 0;
                     return validCategory;
                 case "SubCategory":
-                    validSubCategory = Content.CategoryId != 0;
+                    validSubCategory = _subCategory != null && _subCategory.Id != 0;
                     return validSubCategory;
                 case "Stage":
-                    validStage = Content.StageId != 0;
+                    validStage = _stage != null && _stage.Id != 0;
                     return validStage;
                 case "PM":
-                    validPm = Content.ProjectManagerId != 0;
+                    validPm = _pm != null && _pm.Id != 0;
                     return validPm;
                 default:
                     return true;
@@ -244,7 +252,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         _subCategories.Clear();
         vms.ForEach(_subCategories.Add);
 
-        SubCategory = _subCategories.FirstOrDefault(c => c.Id == Content.CategoryId) ?? null;
+        SubCategory = _subCategories.FirstOrDefault(c => c.CategoryId == _category.Id) ?? null;
+        _subCatCombo.Value = SubCategory.Name;
+        _subCatCombo.SelectedOption = SubCategory;
 
         if (refresh)
             StateHasChanged();

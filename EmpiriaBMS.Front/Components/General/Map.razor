@@ -11,9 +11,12 @@
         @if (AutoCompeteId != null)
         {
             <!-- Search Address -->
-            <div class="row mb-1" style="text-align: left;">
+            <div class="row m-1 mb-2" style="text-align: left;">
                 <div class="col-12 form-group">
-                    <label for="searchaddress">Search Address</label>
+                    <div class="d-flex justify-content-between mb-1">
+                        <label for="searchaddress">Search Address</label>
+                        <label class="text-warning">Press double enter!</label>
+                    </div>
                     <input class="form-control"
                            id="@AutoCompeteId"
                            type="text"
@@ -95,6 +98,7 @@
         else
         {
             hasAddress = false;
+            
             Address = null;
         }
     }
@@ -102,7 +106,9 @@
     private async Task _autoCompeteSearchInputOnInput(KeyboardEventArgs e)
     {
         if (e.Key.Equals("Enter"))
-            await Search();
+        {
+            await Search(_searchAddress);
+        }
     }
     
 }
