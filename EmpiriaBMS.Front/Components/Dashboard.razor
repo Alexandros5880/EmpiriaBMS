@@ -190,20 +190,20 @@
                                                 {
                                                     @if (_selectedProject != null)
                                                     {
-                                                        <span class="invoice col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoices"
+                                                        @* <span class="invoice col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoices"
                                                               @onclick="@(async () => await AddEditInvoice())" />
                                                         <span class="payment col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Payments"
-                                                              @onclick="@(async () => await AddEditPayment())" />
+                                                              @onclick="@(async () => await AddEditPayment())" /> *@
                                                         <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
                                                               style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
                                                               @onclick="@(async () => await NavigateOnMap(_selectedProject.Address))" />
-                                                        <span class="fluent--delete-28-regular col-1"
-                                                              @onclick="@(() => DeleteProject())" />
+                                                        @* <span class="fluent--delete-28-regular col-1"
+                                                                 @onclick="@(() => DeleteProject())" /> *@
                                                         <span class="material-symbols--edit-outline col-1"
                                                               @onclick="@(() => EditProject())" />
                                                     }
-                                                    <span class="grommet-icons--add col-1"
-                                                          @onclick="@(() => AddProject())" />
+                                                    @* <span class="grommet-icons--add col-1"
+                                                          @onclick="@(() => AddProject())" /> *@
                                                 }
                                             </div>
                                             <div class="text-center row me-2">
