@@ -11,7 +11,7 @@
 @inject MicrosoftTeams MicrosoftTeams
 
 <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
-    <div class="col-12 card shadow" style="height: 100%; overflow:auto;">
+    <div class="col-12 card shadow" style="height: 98%; overflow:auto;">
         @if (Content != null)
         {
             <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
@@ -142,7 +142,7 @@
                         </div>
                         <div class="col-12">
                             <!-- Contract Detailed -->
-                            <ContractDetailed Content="@Contract" DisplayActions="false" DisplayInvoice="false" />
+                            <ContractDetailed @ref="@_contractDetailedRef" Content="@Contract" DisplayActions="false" DisplayInvoice="false" />
                         </div>
                     </div>
                 </div>

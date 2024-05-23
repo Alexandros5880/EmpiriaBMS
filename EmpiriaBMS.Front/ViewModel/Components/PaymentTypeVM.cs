@@ -32,5 +32,5 @@ public class PaymentTypeVM : BaseVM, ITypeVM
         }
     }
 
-    public ICollection<Payment> Payments { get; set; }
+    public ICollection<PaymentVM> Payments { get; set; }
 }

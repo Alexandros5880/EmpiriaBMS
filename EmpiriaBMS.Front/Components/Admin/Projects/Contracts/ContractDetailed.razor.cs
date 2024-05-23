@@ -33,17 +33,20 @@ public partial class ContractDetailed
         }
     }
 
-    public async Task Prepair()
+    public async Task Prepair(ContractVM contract = null, bool getRelated = true)
     {
-        await _getRecords();
+        if (getRelated)
+            await _getRecords();
+
+        if (contract != null)
+            Content = contract;
 
         if (Content == null)
-        {
             Content = new ContractVM();
-        }
 
         if (Content.InvoiceId != 0)
         {
+            Content.Invoice.Contract = null;
             var invoiceDto = _mapper.Map<InvoiceDto>(Content.Invoice);
             Invoice = Invoices.FirstOrDefault(i => i.Id == Content.InvoiceId);
         }
@@ -59,6 +62,24 @@ public partial class ContractDetailed
     {
         var valid = Validate();
         if (!valid) return;
+
+        if (Content is not null && Content.Invoice != null && Content.InvoiceId != 0)
+        {
+            Content.Invoice = null;
+
+            var dto = _mapper.Map<ContractDto>(Content);
+            // Save Contract
+            if (await _dataProvider.Contracts.Any(p => p.Id == Content.Id))
+            {
+                var updated = await _dataProvider.Contracts.Update(dto);
+                Content = _mapper.Map<ContractVM>(updated);
+            }
+            else
+            {
+                var updated = await _dataProvider.Contracts.Add(dto);
+                Content = _mapper.Map<ContractVM>(updated);
+            }
+        }
     }
 
     #region Validation

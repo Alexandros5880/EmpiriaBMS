@@ -4,7 +4,7 @@
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
 
-@implements IDialogContentComponent<PaymentVM>
+@implements IDialogContentComponent<PaymentParameter>
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
@@ -33,21 +33,23 @@
     <div class="col-12 row gx-2 mt-2">
         <!-- Bank -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.Bank">
-                Bank
-            </FluentTextField>
+            <div>
+                Bank<span class="text-danger">*</span>
+            </div>
+            <FluentTextField Style="width:100%;" @bind-Value="@Payment.Bank"/>
         </div>
         <!-- Fee -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Fee" Min="0">
-                Fee
-            </FluentNumberField>
+            <div>
+                Fee<span class="text-danger">*</span>
+            </div>
+            <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Payment.Fee" Min="0"/>
         </div>
     </div>
 
     <div class="col-12 row gx-2 mt-2">
         <!-- Type -->
-        <div class="col-xl-4 col-lg-6 col-md-12">
+        <div class="col-xl-6 col-lg-6 col-md-12">
             <div>
                 Type<span class="text-danger">*</span>
             </div>
@@ -71,40 +73,46 @@
         </div>
         <!-- PaymentDate -->
         <div class="col-xl-6 col-lg-6 col-md-12">
-            <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.PaymentDate" Label="PaymentDate" />
+            <div>
+                Date
+            </div>
+            <FluentDatePicker Style="width: 100%;" @bind-Value="@Payment.PaymentDate"/>
         </div>
     </div>
 
-    <div class="col-12 row gx-3 mt-2">
-        <!-- Invoice -->
-        <div class="col-12">
-            <div>
-                Invoice<span class="text-danger">*</span>
-            </div>
-            <div>
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                Placeholder="Select Invoice..."
-                                Items="@_invoices"
-                                Height="200px"
-                                Width="100%"
-                                TOption="InvoiceVM"
-                                OptionText="@(c => $"P-[{c.ProjectName}]  T-[{c.TypeName}]  M-[{c.Mark}]")"
-                                OptionValue="@(c => c.Id.ToString())"
-                                @bind-SelectedOption="@Invoice" />
-            </div>
-            @if (!validInvoice)
-            {
+    @if (_displayInvoiceSelection)
+    {
+        <div class="col-12 row gx-3 mt-2">
+            <!-- Invoice -->
+            <div class="col-12">
                 <div>
-                    <span class="text-warning">Field is required!</span>
+                    Invoice<span class="text-danger">*</span>
                 </div>
-            }
+                <div>
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Invoice..."
+                                    Items="@_invoices"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="InvoiceVM"
+                                    OptionText="@(c => $"P-[{c.ProjectName}]  T-[{c.TypeName}]  M-[{c.Mark}]")"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Invoice" />
+                </div>
+                @if (!validInvoice)
+                {
+                    <div>
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
+    }
 
     <div class="col-12 row gx-3 mt-2">
         <!-- Description -->
         <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+            <FluentTextArea Style="width:100%;" @bind-Value="@Payment.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
         </div>
     </div>
 

@@ -37,9 +37,9 @@ public partial class Payments : ComponentBase
         _selectedRecord = row.Item as PaymentVM;
     }
 
-    private async Task _getRecords()
+    private async Task _getRecords(int invoiceId)
     {
-        var dtos = await DataProvider.Payments.GetAll(); ;
+        var dtos = await DataProvider.Payments.GetAllByInvoice(invoiceId);
         _records = Mapper.Map<List<PaymentVM>>(dtos);
     }
 
@@ -58,7 +58,16 @@ public partial class Payments : ComponentBase
             Width = "min(70%, 500px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(new PaymentVM(), parameters);
+        PaymentParameter param = new PaymentParameter()
+        {
+            Content = new PaymentVM()
+            {
+                InvoiceId = Invoice.Id
+            },
+            DisplayInvoiceSelection = false,
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(param, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
@@ -66,7 +75,7 @@ public partial class Payments : ComponentBase
             PaymentVM vm = result.Data as PaymentVM;
             var dto = Mapper.Map<PaymentDto>(vm);
             await DataProvider.Payments.Add(dto);
-            await _getRecords();
+            await _getRecords(Invoice.Id);
         }
     }
 
@@ -85,7 +94,13 @@ public partial class Payments : ComponentBase
             Width = "min(70%, 500px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(record, parameters);
+        PaymentParameter param = new PaymentParameter()
+        {
+            Content = record,
+            DisplayInvoiceSelection = false,
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(param, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
@@ -93,7 +108,7 @@ public partial class Payments : ComponentBase
             PaymentVM vm = result.Data as PaymentVM;
             var dto = Mapper.Map<PaymentDto>(vm);
             await DataProvider.Payments.Update(dto);
-            await _getRecords();
+            await _getRecords(Invoice.Id);
         }
     }
 
@@ -109,9 +124,18 @@ public partial class Payments : ComponentBase
         }
 
         await dialog.CloseAsync();
-        await _getRecords();
+        await _getRecords(Invoice.Id);
     }
     #endregion
+
+    public async Task Prepair(int invoiceId)
+    {
+        if (invoiceId != 0)
+        {
+            await _getRecords(invoiceId);
+            StateHasChanged();
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -119,9 +143,11 @@ public partial class Payments : ComponentBase
 
         if (firstRender)
         {
-            await _getRecords();
-
-            StateHasChanged();
+            if (Invoice != null)
+            {
+                await _getRecords(Invoice.Id);
+                StateHasChanged();
+            }
         }
     }
 }

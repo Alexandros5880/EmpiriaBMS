@@ -34,6 +34,8 @@ public partial class Invoices : ComponentBase
         }
     }
 
+    public async Task Refresh() => await _getRecords();
+
     private async Task HandleRowFocus(FluentDataGridRow<InvoiceVM> row)
     {
         SelectedRecord = row.Item as InvoiceVM;
@@ -42,63 +44,70 @@ public partial class Invoices : ComponentBase
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.Invoices.GetAll();
-        _invoices = Mapper.Map<List<InvoiceVM>>(dtos);
+        var dtosInv = await DataProvider.Invoices.GetAll();
+        _invoices = Mapper.Map<List<InvoiceVM>>(dtosInv);
     }
 
     private async Task _add()
     {
-        DialogParameters parameters = new()
+        SelectedRecord = new InvoiceVM()
         {
-            Title = $"New Record",
-            PrimaryActionEnabled = true,
-            SecondaryActionEnabled = true,
-            PrimaryAction = "Save",
-            SecondaryAction = "Cancel",
-            TrapFocus = true,
-            Modal = true,
-            PreventScroll = true,
-            Width = "min(70%, 500px);"
+            Date = DateTime.Now,
         };
+        StateHasChanged();
+        await OnSelect.InvokeAsync(SelectedRecord);
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(new InvoiceVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        //DialogParameters parameters = new()
+        //{
+        //    Title = $"New Record",
+        //    PrimaryActionEnabled = true,
+        //    SecondaryActionEnabled = true,
+        //    PrimaryAction = "Save",
+        //    SecondaryAction = "Cancel",
+        //    TrapFocus = true,
+        //    Modal = true,
+        //    PreventScroll = true,
+        //    Width = "min(70%, 500px);"
+        //};
 
-        if (result.Data is not null)
-        {
-            InvoiceVM vm = result.Data as InvoiceVM;
-            var dto = Mapper.Map<InvoiceDto>(vm);
-            await DataProvider.Invoices.Add(dto);
-            await _getRecords();
-        }
+        //IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(new InvoiceVM(), parameters);
+        //DialogResult? result = await dialog.Result;
+
+        //if (result.Data is not null)
+        //{
+        //    InvoiceVM vm = result.Data as InvoiceVM;
+        //    var dto = Mapper.Map<InvoiceDto>(vm);
+        //    await DataProvider.Invoices.Add(dto);
+        //    await _getRecords();
+        //}
     }
 
-    private async Task _edit(InvoiceVM record)
-    {
-        DialogParameters parameters = new()
-        {
-            Title = $"Edit {record.Project?.Name: 'Record'}",
-            PrimaryActionEnabled = true,
-            SecondaryActionEnabled = true,
-            PrimaryAction = "Save",
-            SecondaryAction = "Cancel",
-            TrapFocus = true,
-            Modal = true,
-            PreventScroll = true,
-            Width = "min(70%, 500px);"
-        };
+    //private async Task _edit(InvoiceVM record)
+    //{
+    //    DialogParameters parameters = new()
+    //    {
+    //        Title = $"Edit {record.Project?.Name: 'Record'}",
+    //        PrimaryActionEnabled = true,
+    //        SecondaryActionEnabled = true,
+    //        PrimaryAction = "Save",
+    //        SecondaryAction = "Cancel",
+    //        TrapFocus = true,
+    //        Modal = true,
+    //        PreventScroll = true,
+    //        Width = "min(70%, 500px);"
+    //    };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+    //    IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(record, parameters);
+    //    DialogResult? result = await dialog.Result;
 
-        if (result.Data is not null)
-        {
-            InvoiceVM vm = result.Data as InvoiceVM;
-            var dto = Mapper.Map<InvoiceDto>(vm);
-            await DataProvider.Invoices.Update(dto);
-            await _getRecords();
-        }
-    }
+    //    if (result.Data is not null)
+    //    {
+    //        InvoiceVM vm = result.Data as InvoiceVM;
+    //        var dto = Mapper.Map<InvoiceDto>(vm);
+    //        await DataProvider.Invoices.Update(dto);
+    //        await _getRecords();
+    //    }
+    //}
 
     private async Task _delete(InvoiceVM record)
     {

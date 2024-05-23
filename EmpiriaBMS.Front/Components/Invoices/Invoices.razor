@@ -18,8 +18,8 @@
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
-                            GridTemplateColumns="160px 100px 100px 160px 100px 160px 100px 100px 100px"
-                            style="height: 96%; overflow:auto;">
+                            GridTemplateColumns="160px 100px 100px 160px 100px 100px"
+                            style="height: 100%; overflow:auto;">
 
                 <TemplateColumn Title="Project"
                                 Sortable="true"
@@ -43,9 +43,6 @@
                 <PropertyColumn Property="@(p => p.Date)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Fee)" Sortable="true" Title="Fee" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Vat)" Sortable="true" Title="Vat" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Total)" Sortable="true" Title="Total" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
                     @* <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" /> *@

@@ -156,7 +156,7 @@ public partial class InvoiceDetailed
 
             var dto = _mapper.Map<ContractDto>(contract);
             // Save Contract
-            if (await _dataProvider.Invoices.Any(p => p.Id == contract.Id))
+            if (await _dataProvider.Contracts.Any(p => p.Id == contract.Id))
             {
                 ContractDto updated = await _dataProvider.Contracts.Update(dto);
                 if (updated != null)

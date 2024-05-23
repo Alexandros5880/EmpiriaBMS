@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Front.Components.Invoices;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
@@ -1159,11 +1160,30 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Invoice
-    private void _setSelectedInvoice(InvoiceVM invoice)
+    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceListRef;
+    private InvoiceDetailed _invoiceDetailedRef;
+    private Payments _invoicePaymentsRef;
+
+    private async Task _onSelectedInvoice(InvoiceVM invoice)
     {
         _selectedInvoice = invoice;
-        StateHasChanged();
+        if (_invoiceDetailedRef != null)
+        {
+            await _invoiceDetailedRef.Prepair(_selectedInvoice, true);
+            await _invoicePaymentsRef.Prepair(_selectedInvoice.Id);
+        }
     }
+
+    private async Task _onSaveInvoice(InvoiceVM invoice)
+    {
+        if (_invoiceListRef != null)
+        {
+            await _invoiceListRef.Refresh();
+            await _invoiceDetailedRef.Prepair();
+            await _invoicePaymentsRef.Prepair(_selectedInvoice.Id);
+        }
+            
+    } 
     #endregion
 
     private async Task ShowInformationAsync(string msg)

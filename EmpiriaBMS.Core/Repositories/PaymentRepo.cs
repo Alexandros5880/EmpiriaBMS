@@ -103,4 +103,25 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
             return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
         }
     }
+
+    public new async Task<ICollection<PaymentDto>> GetAllByInvoice(int invoiceId)
+    {
+        if (invoiceId == 0)
+            throw new ArgumentNullException(nameof(invoiceId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Payment> i = await _context.Set<Payment>()
+                              .Where(r => !r.IsDeleted)
+                              .Where(r => r.InvoiceId == invoiceId)
+                              .Include(r => r.Invoice)
+                              .ThenInclude(i => i.Type)
+                              .Include(r => r.Invoice)
+                              .ThenInclude(i => i.Project)
+                              .Include(r => r.Type)
+                              .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
+        }
+    }
 }
