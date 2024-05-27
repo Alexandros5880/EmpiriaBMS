@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.ExtensionMethods;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
 
@@ -52,6 +57,23 @@ public partial class InvoiceDetailed
     public bool DisplayProject { get; set; } = false;
 
     private FluentCombobox<InvoiceTypeVM> _typeCompoment;
+    private FluentCombobox<(string Value, string Text)> _vatCompoment;
+
+    private List<(string Value, string Text)> _vats = Enum.GetValues(typeof(Vat)).Cast<Vat>()
+                                                          .Select(e => e.ToTuple())
+                                                          .ToList();
+
+    private (string Value, string Text) _selectedVat;
+    public (string Value, string Text) SelectedVat
+    {
+        get => _selectedVat;
+        set
+        {
+            _selectedVat = value;
+            Vat vat = (Vat)Enum.Parse(typeof(Vat), value.Value);
+            Content.Vat = vat;
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -89,6 +111,9 @@ public partial class InvoiceDetailed
                 _typeCompoment.Value = Type.Name;
             }
         }
+
+        SelectedVat = _vats.FirstOrDefault(r => r.Value == Content.Vat.ToString());
+        _vatCompoment.Value = SelectedVat.Text;
 
         StateHasChanged();
     }

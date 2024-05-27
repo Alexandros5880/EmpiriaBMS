@@ -95,13 +95,26 @@
         <div class="col-12 row gx-2 mt-1">
             <!-- Vat -->
             <div class="col-xl-6 col-lg-6 col-md-12">
-                <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Vat" Min="0">
+                <div>
                     Vat
-                </FluentNumberField>
+                </div>
+                <div>
+                    <FluentCombobox @ref="_vatCompoment"
+                                    Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Result..."
+                                    Items="_vats"
+                                    Height="200px"
+                                    Width="100%"
+                                    Class="float-end"
+                                    TOption="(string Value, string Text)"
+                                    OptionText="@(c => c.Text)"
+                                    OptionValue="@(c => c.Text)"
+                                    @bind-SelectedOption="SelectedVat"/>
+                </div>
             </div>
             <!-- Fee -->
             <div class="col-xl-6 col-lg-6 col-md-12">
-                <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Fee" Min="0">
+                <FluentNumberField Style="width:100%;" @bind-Value="@Content.Fee" Min="0">
                     Fee
                 </FluentNumberField>
             </div>
@@ -110,22 +123,27 @@
         <div class="col-12 row gx-2 mt-1">
             <!-- Number -->
             <div class="col-xl-6 col-lg-6 col-md-12">
-                <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Number" Min="0">
+                <div>
                     Number
-                </FluentNumberField>
+                </div>
+                <FluentNumberField Style="width:100%;" @bind-Value="@Content.Number" Min="0"/>
             </div>
             <!-- Total -->
             <div class="col-xl-6 col-lg-6 col-md-12">
-                <FluentNumberField Style="width:100%; margin:4px;" @bind-Value="@Content.Total" Min="0">
+                <div>
                     Total
-                </FluentNumberField>
+                </div>
+                <FluentNumberField Style="width:100%;" @bind-Value="@Content.Total" Min="0"/>
             </div>
         </div>
 
         <div class="col-12 row gx-3 mt-1">
             <!-- Date -->
             <div class="col-xl-6 col-lg-6 col-md-12">
-                <FluentDatePicker Style="width:100%; margin:4px;" @bind-Value="@Content.Date" Label="Date" />
+                <div>
+                    Fate
+                </div>
+                <FluentDatePicker Style="width:100%;" @bind-Value="@Content.Date"/>
             </div>
             <!-- None -->
             <div class="col-xl-6 col-lg-6 col-md-12">

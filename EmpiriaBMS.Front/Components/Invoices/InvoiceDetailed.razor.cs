@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.ExtensionMethods;
 using EmpiriaBMS.Front.Components.Admin.Projects.Contracts;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
@@ -57,6 +59,24 @@ public partial class InvoiceDetailed
 
     private ContractDetailed _contractDetailedRef;
 
+    private FluentCombobox<(string Value, string Text)> _vatCompoment;
+
+    private List<(string Value, string Text)> _vats = Enum.GetValues(typeof(Vat)).Cast<Vat>()
+                                                          .Select(e => e.ToTuple())
+                                                          .ToList();
+
+    private (string Value, string Text) _selectedVat;
+    public (string Value, string Text) SelectedVat
+    {
+        get => _selectedVat;
+        set
+        {
+            _selectedVat = value;
+            Vat vat = (Vat)Enum.Parse(typeof(Vat), value.Value);
+            Content.Vat = vat;
+        }
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -94,10 +114,15 @@ public partial class InvoiceDetailed
             }
         }
 
+        SelectedVat = _vats.FirstOrDefault(r => r.Value == Content.Vat.ToString());
+        _vatCompoment.Value = SelectedVat.Text;
+
         if (invoice == null && !halfRefresh)
-            await _contractDetailedRef.Prepair();
+            await _contractDetailedRef?.Prepair();
         else
             await _contractDetailedRef.Prepair(Contract, !halfRefresh);
+
+        StateHasChanged();
     }
 
     public async Task Save()

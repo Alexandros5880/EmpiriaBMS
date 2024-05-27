@@ -156,7 +156,17 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         }
     }
 
-    private (string Value, string Text) SelectedResult;
+    private (string Value, string Text) _selectedResult;
+    public (string Value, string Text) SelectedResult
+    {
+        get => _selectedResult;
+        set
+        {
+            _selectedResult = value;
+            OfferResult result = (OfferResult)Enum.Parse(typeof(Vat), value.Value);
+            Content.Result = result;
+        }
+    }
 
     private async Task _getRecords()
     {

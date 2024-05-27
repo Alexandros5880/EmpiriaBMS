@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
@@ -16,8 +17,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private double? _vat;
-    public double? Vat
+    private Vat _vat;
+    public Vat Vat
     {
         get => _vat;
         set
