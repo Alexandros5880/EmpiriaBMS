@@ -82,7 +82,6 @@ public partial class OfferDetailed
     private bool validType = true;
     private bool validState = true;
     private bool validDate = true;
-    private bool validResult = true;
     private bool validPudgetPrice = true;
     private bool validOfferPrice = true;
 
@@ -94,18 +93,16 @@ public partial class OfferDetailed
             validType = Content.TypeId != 0;
             validState = Content.StateId != 0;
             validDate = Content.Date != null;
-            validResult = Content.ResultId != 0;
             validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
             validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
 
-            return validCode && validType && validState && validResult && validDate && validPudgetPrice && validOfferPrice;
+            return validCode && validType && validState && validDate && validPudgetPrice && validOfferPrice;
         }
         else
         {
             validCode = true;
             validType = true;
             validState = true;
-            validResult = true;
             validDate = true;
             validPudgetPrice = true;
             validOfferPrice = true;
@@ -121,9 +118,6 @@ public partial class OfferDetailed
                 case "State":
                     validState = Content.StateId != 0;
                     return validState;
-                case "Result":
-                    validResult = Content.ResultId != 0;
-                    return validResult;
                 case "Date":
                     validDate = Content.Date != null;
                     return validDate;
@@ -145,7 +139,6 @@ public partial class OfferDetailed
         validCode = true;
         validType = true;
         validState = true;
-        validResult = true;
         validDate = true;
         validPudgetPrice = true;
         validOfferPrice = true;

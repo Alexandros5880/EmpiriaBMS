@@ -4,6 +4,7 @@ using EmpiriaBMS.Core.Dtos.KPIS;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 
 
@@ -111,7 +112,9 @@ public class KpisRepo : IDisposable
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Where(r => !r.IsDeleted)
-                                                .Include(r => r.Client)
+                                                .Include(p => p.Offer)
+                                                .ThenInclude(o => o.Led)
+                                                .ThenInclude(l => l.Client)
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Category)
                                                 .Include(p => p.ProjectManager)
@@ -153,7 +156,9 @@ public class KpisRepo : IDisposable
 
             var projects = await _context.Set<Project>()
                                          .Where(r => !r.IsDeleted)
-                                         .Include(r => r.Client)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(l => l.Client)
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Category)
                                          .Include(p => p.ProjectManager)
@@ -261,7 +266,9 @@ public class KpisRepo : IDisposable
         {
             List<Project> projects = await _context.Set<Project>()
                                                    .Where(r => !r.IsDeleted)
-                                                   .Include(r => r.Client)
+                                                   .Include(r => r.Offer)
+                                                   .ThenInclude(o => o.Led)
+                                                   .ThenInclude(l => l.Client)
                                                    .Include(r => r.Invoices)
                                                    .Include(p => p.Category)
                                                    .Include(p => p.Stage)
@@ -283,7 +290,21 @@ public class KpisRepo : IDisposable
                     parentCategory = await _context.Set<ProjectCategory>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(c => c.Id == parentCatId);
 
                 // Get All Offers
-                var offers = await _context.Set<Offer>().Where(r => !r.IsDeleted).Where(o => o.ProjectId == project.Id).ToListAsync();
+                var offers = await _context.Set<Project>()
+                                         .Where(p => !p.IsDeleted)
+                                         .Where(p => (project.Id == 0 || p.Id == project.Id))
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(l => l.Client)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.State)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Type)
+                                         .Select(p => p.Offer)
+                                         .Where(o => !o.IsDeleted)
+                                         .ToListAsync();
+
+                var client = project.Offer?.Led?.Client;
 
                 var data = new TenderDataDto()
                 {
@@ -293,10 +314,10 @@ public class KpisRepo : IDisposable
                     ProjectSubCategory = project.Category?.Name ?? "",
                     ProjectPrice = offers.Sum(o => o.OfferPrice) ?? 0,
                     ProjectPudgedPrice = offers.Sum(o => o.PudgetPrice) ?? 0,
-                    ClientCompanyName = project.Client?.CompanyName ?? "",
-                    ClientFullName = project.Client != null ? project.Client?.LastName + " " + project.Client?.FirstName : "",
-                    ClientPhone = project.Client?.Phone1 ?? project.Client?.Phone2 ?? project.Client?.Phone3 ?? "",
-                    ClientEmail = project.Client?.Emails?.FirstOrDefault()?.Address ?? ""
+                    ClientCompanyName = project.Offer?.Led?.Client?.CompanyName ?? "",
+                    ClientFullName = client?.FullName ?? "",
+                    ClientPhone = client?.Phone1 ?? client?.Phone2 ?? client?.Phone3 ?? "",
+                    ClientEmail = client?.Emails?.FirstOrDefault()?.Address ?? ""
                 };
 
                 tenderData.Add(data);

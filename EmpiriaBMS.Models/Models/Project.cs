@@ -22,9 +22,6 @@ public class Project : Entity
     public int StageId { get; set; }
     public ProjectStage Stage { get; set; }
 
-    public int? AddressId { get; set; }
-    public Address? Address { get; set; }
-
     public bool Active { get; set; }
 
     [DataType(DataType.DateTime)]
@@ -42,13 +39,8 @@ public class Project : Entity
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 
-    public int? ClientId { get; set; }
-    public Client? Client { get; set; }
-
-    public int? LedId { get; set; }
-    public Led? Led { get; set; }
-
-    public ICollection<Offer> Offers { get; set; }
+    public int? OfferId { get; set; }
+    public Offer? Offer { get; set; }
 
     public ICollection<Invoice> Invoices { get; set; }
 

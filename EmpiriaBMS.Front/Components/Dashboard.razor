@@ -191,13 +191,16 @@
                                                 {
                                                     @if (_selectedProject != null)
                                                     {
-                                                        <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
+
+                                                        @* <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
                                                               style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
-                                                              @onclick="@(async () => await NavigateOnMap(_selectedProject.Address))" />
+                                                              @onclick="@(async () => await NavigateOnMap(_selectedProject.Address))" /> *@
+
                                                         @* <span class="fluent--delete-28-regular col-1"
                                                                  @onclick="@(() => DeleteProject())" /> *@
-                                                        <span class="material-symbols--edit-outline col-1"
-                                                              @onclick="@(() => EditProject())" />
+
+                                                        @* <span class="material-symbols--edit-outline col-1"
+                                                              @onclick="@(() => EditProject())" /> *@
                                                     }
                                                     @* <span class="grommet-icons--add col-1"
                                                           @onclick="@(() => AddProject())" /> *@

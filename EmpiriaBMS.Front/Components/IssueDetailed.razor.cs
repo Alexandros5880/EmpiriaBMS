@@ -25,13 +25,9 @@ public partial class IssueDetailed : ComponentBase, IDisposable
             if (value != null)
             {
                 _project = value;
-                UserDto u = Mapping.Mapper.Map<ClientDto>(_project.Client);
-                _customer = Mapper.Map<ClientVM>(u);
             }
         }
     }
-
-    private UserVM _customer;
 
     private IssueVM _issue = new IssueVM()
     {

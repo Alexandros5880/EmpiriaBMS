@@ -46,8 +46,7 @@ public partial class Offers
     private OfferVM _selectedOffer;
 
     #region Data Grid
-    IQueryable<OfferVM> FilteredItems => _offers?.AsQueryable().Where(x => x.Project.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase)
-                                                                            && (x.Project.Client == null ? true : x.Project.Client.FullName.Contains(_clientNameFilter, StringComparison.CurrentCultureIgnoreCase)));
+    IQueryable<OfferVM> FilteredItems => _offers?.AsQueryable();
     PaginationState pagination = new PaginationState { ItemsPerPage = 4 };
     private string _projectNameFilter = string.Empty;
     private string _clientNameFilter = string.Empty;

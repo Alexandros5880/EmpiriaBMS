@@ -2860,6 +2860,23 @@ public class AppDbContext : DbContext
         List<Project> projects = new List<Project>();
         for (var i = 1; i <= projectSubCategories.Count(); i++)
         {
+            // Offers
+            var offerId = random.Next(123456789, 999999999) + i * 3;
+            Offer offer = new Offer()
+            {
+                Id = offerId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Code = $"Code CO-{i}",
+                TypeId = offerTypesIds[random.Next(0, 2)],
+                StateId = offerStatesIds[random.Next(0, 1)],
+                Result = OfferResult.SUCCESSFUL,
+                PudgetPrice = 1000 * i * 3,
+                OfferPrice = 1000 * i * 2,
+            };
+            builder.Entity<Offer>().HasData(offer);
+
             // Projects 
             var projectId = random.Next(123456789, 999999999) + i * 2;
             Project project = new Project()
@@ -2879,7 +2896,8 @@ public class AppDbContext : DbContext
                 StageId = ProjectStages[stagesIndex],
                 CategoryId = projectSubCategories[i-1].Id,
                 Active = i % 2 == 0 ? true : false,
-                ProjectManagerId = projectManagers[projectManagersIndex].Id
+                ProjectManagerId = projectManagers[projectManagersIndex].Id,
+                OfferId = offerId
             };
             builder.Entity<Project>().HasData(project);
             projects.Add(project);
@@ -2909,24 +2927,6 @@ public class AppDbContext : DbContext
                 TypeId = it_1_id
             };
             builder.Entity<Invoice>().HasData(invoice);
-
-            // Offers
-            var offerId = random.Next(123456789, 999999999) + i * 3;
-            Offer offer = new Offer()
-            {
-                Id = offerId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Date = DateTime.Now,
-                Code = $"Code CO-{i}",
-                TypeId = offerTypesIds[random.Next(0, 2)],
-                StateId = offerStatesIds[random.Next(0, 1)],
-                Result = OfferResult.SUCCESSFUL,
-                PudgetPrice = 1000 * i * 3,
-                OfferPrice = 1000 * i * 2,
-                ProjectId = projectId
-            };
-            builder.Entity<Offer>().HasData(offer);
         }
 
         // // Project Production Management 
@@ -2961,6 +2961,23 @@ public class AppDbContext : DbContext
 
         for (var i = 1; i <= 7; i++)
         {
+            // Offers
+            var offerId = random.Next(123456789, 999999999) + i * 3;
+            Offer offer = new Offer()
+            {
+                Id = offerId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Code = $"Code CO-{i}",
+                TypeId = offerTypesIds[random.Next(0, 2)],
+                StateId = offerStatesIds[random.Next(0, 1)],
+                Result = OfferResult.SUCCESSFUL,
+                PudgetPrice = 1000 * i * 4,
+                OfferPrice = 1000 * i * 3
+            };
+            builder.Entity<Offer>().HasData(offer);
+
             // Projects 
             var projectId = random.Next(123456789, 999999999) + i * 22;
             Project project = new Project()
@@ -2980,7 +2997,8 @@ public class AppDbContext : DbContext
                 StageId = ProjectStages[stagesIndex],
                 CategoryId = projectSubCategories[subCategoriesIndex].Id,
                 Active = i % 2 == 0 ? true : false,
-                ProjectManagerId = projectManagers[projectManagersIndex].Id
+                ProjectManagerId = projectManagers[projectManagersIndex].Id,
+                OfferId = offerId
             };
             builder.Entity<Project>().HasData(project);
             projects.Add(project);
@@ -3002,24 +3020,6 @@ public class AppDbContext : DbContext
                 TypeId = it_1_id
             };
             builder.Entity<Invoice>().HasData(invoice);
-
-            // Offers
-            var offerId = random.Next(123456789, 999999999) + i * 3;
-            Offer offer = new Offer()
-            {
-                Id = offerId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Date = DateTime.Now,
-                Code = $"Code CO-{i}",
-                TypeId = offerTypesIds[random.Next(0, 2)],
-                StateId = offerStatesIds[random.Next(0, 1)],
-                Result = OfferResult.SUCCESSFUL,
-                PudgetPrice = 1000 * i * 4,
-                OfferPrice = 1000 * i * 3,
-                ProjectId = projectId
-            };
-            builder.Entity<Offer>().HasData(offer);
 
             projectManagersIndex++;
             if (projectManagersIndex >= projectManagersLength)

@@ -9,9 +9,11 @@ public class OfferDto : EntityDto
     public int TypeId { get; set; }
     public OfferType Type { get; set; }
 
-
     public int StateId { get; set; }
     public OfferState State { get; set; }
+
+    public int? LedId { get; set; }
+    public Led? Led { get; set; }
 
     public OfferResult Result { get; set; }
 
@@ -31,7 +33,5 @@ public class OfferDto : EntityDto
 
     public string? Comments { get; set; }
 
-    public int? ProjectId { get; set; }
-
-    public Project? Project { get; set; }
+    public ICollection<Project>? Projects { get; set; }
 }

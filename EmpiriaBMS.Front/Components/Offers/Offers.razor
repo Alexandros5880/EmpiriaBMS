@@ -87,7 +87,7 @@
                             TGridItem="OfferVM"
                             GridTemplateColumns="auto 140px 140px 100px 160px 120px 100px 100px 100px 160px 100px"
                             style="height: 240px; overflow:auto;">
-
+@* 
                 <TemplateColumn Title="Project"
                                 Sortable="true"
                                 InitialSortDirection=SortDirection.Descending
@@ -105,12 +105,12 @@
                     <ChildContent>
                         @(context.Project?.Name ?? "--")
                     </ChildContent>
-                </TemplateColumn>
+                </TemplateColumn> *@
 
                 <PropertyColumn Property="@(p => p.Result)" Sortable="true" Title="Result" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
-
+@* 
                 <TemplateColumn Title="Client"
                                 Sortable="true"
                                 Style="min-width: 160px;">
@@ -126,7 +126,7 @@
                     <ChildContent>
                         @(context.Project?.Client?.LastName ?? "" + " " + context.Project?.Client?.FirstName ?? "")
                     </ChildContent>
-                </TemplateColumn>
+                </TemplateColumn> *@
 
                 <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Style="min-width: 120px;" />
                 <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />

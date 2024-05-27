@@ -65,34 +65,38 @@ public class OfferVM : BaseVM
 
     public string StateName => State != null ? State.Name : "";
 
+    // Led
+    private int? _ledId;
+    public int? LedId
+    {
+        get => _ledId;
+        set
+        {
+            if (value == _ledId)
+                return;
+            _ledId = value;
+            NotifyPropertyChanged(nameof(LedId));
+        }
+    }
+
+    private Led? _led;
+    public Led? Led
+    {
+        get => _led;
+        set
+        {
+            if (value == _led)
+                return;
+            _led = value;
+            NotifyPropertyChanged(nameof(Led));
+        }
+    }
+
+    public string LedName => Led != null ? Led.Name : "";
+
     // Result
-    private int _resultId;
-    public int ResultId
-    {
-        get => _resultId;
-        set
-        {
-            if (value == _resultId)
-                return;
-            _resultId = value;
-            NotifyPropertyChanged(nameof(ResultId));
-        }
-    }
-
-    private OfferResult _result;
-    public OfferResult Result
-    {
-        get => _result;
-        set
-        {
-            if (value == _result)
-                return;
-            _result = value;
-            NotifyPropertyChanged(nameof(Result));
-        }
-    }
-
-    public string ResultName => Result != null ? Result.GetDisplayName() : "";
+    public OfferResult Result { get; set; }
+    public string ResultName => Result.GetDisplayName();
 
     // Other Properties
     private string _code;
@@ -199,31 +203,5 @@ public class OfferVM : BaseVM
         }
     }
 
-    private int? _projectId;
-    public int? ProjectId
-    {
-        get => _projectId;
-        set
-        {
-            if (value == _projectId)
-                return;
-            _projectId = value;
-            NotifyPropertyChanged(nameof(ProjectId));
-        }
-    }
-
-    private Project? _project;
-    public Project? Project
-    {
-        get => _project;
-        set
-        {
-            if (value == _project)
-                return;
-            _project = value;
-            NotifyPropertyChanged(nameof(Project));
-        }
-    }
-
-    public string ProjectName => Project != null ? Project.Name : "";
+    public ICollection<Project>? Projects { get; set; }
 }
