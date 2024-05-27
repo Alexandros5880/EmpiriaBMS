@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EmpiriaBMS.Models.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
@@ -14,7 +15,6 @@ public class Offer : Entity
     public OfferState State { get; set; }
 
     [Required]
-    public int ResultId { get; set; }
     public OfferResult Result { get; set; }
 
     [Required]

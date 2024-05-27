@@ -17,6 +17,10 @@ using Microsoft.Fast.Components.FluentUI;
 using Microsoft.Fast.Components.FluentUI.Utilities;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
+using EmpiriaBMS.Models.Enum;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using EmpiriaBMS.Core.ExtensionMethods;
 
 namespace EmpiriaBMS.Front.Components.Offers;
 
@@ -25,12 +29,19 @@ public partial class Offers
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<OfferStateVM> _offerStates = new ObservableCollection<OfferStateVM>();
     private ObservableCollection<OfferTypeVM> _offerTypes = new ObservableCollection<OfferTypeVM>();
-    private ObservableCollection<OfferResultVM> _offerResults = new ObservableCollection<OfferResultVM>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
+
+    private List<(string Value, string Text)> _offerResults = Enum.GetValues(typeof(OfferResult))
+                                                                  .Cast<OfferResult>()
+                                                                  .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
+                                                                      .First()
+                                                                      .GetCustomAttribute<DisplayAttribute>()?
+                                                                      .GetName() ?? e.ToString()))
+                                                                  .ToList();
 
     private OfferStateVM _selectedOfferState;
     private OfferTypeVM _selectedOfferType;
-    private OfferResultVM _selectedOfferResult;
+    private (string Value, string Text) _selectedOfferResult;
     private ProjectVM _selectedProject;
     private OfferVM _selectedOffer;
 
@@ -97,15 +108,6 @@ public partial class Offers
         vms.ForEach(_offerTypes.Add);
     }
 
-    private async Task _getOfferResults()
-    {
-        var dtos = await _dataProvider.OfferResult.GetAll();
-        var vms = Mapper.Map<List<OfferResultVM>>(dtos);
-        _offerResults.Clear();
-        _offerResults.Add(new OfferResultVM { Id = 0, Name = "Select Result..." });
-        vms.ForEach(_offerResults.Add);
-    }
-
     private async Task _getAllProjects()
     {
         var dtos = await _dataProvider.Projects.GetAll();
@@ -115,9 +117,9 @@ public partial class Offers
         vms.ForEach(_projects.Add);
     }
 
-    private async Task _getOffers(int projectId, int stateId = 0, int typeId = 0, int resultId = 0, bool refresh = false)
+    private async Task _getOffers(int projectId, int stateId = 0, int typeId = 0, OfferResult? result = null, bool refresh = false)
     {
-        var dtos = await _dataProvider.Offers.GetAll(projectId, stateId, typeId, resultId);
+        var dtos = await _dataProvider.Offers.GetAll(projectId, stateId, typeId, result);
         var vms = Mapper.Map<List<OfferVM>>(dtos);
         _offers.Clear();
         vms.ForEach(_offers.Add);
@@ -131,12 +133,13 @@ public partial class Offers
         await _getAllProjects();
         await _getOfferStates();
         await _getOfferTypes();
-        await _getOfferResults();
         _selectedProject = _projects.FirstOrDefault(o => o.Name.Equals("Select Project..."));
         _selectedOfferState = _offerStates.FirstOrDefault(o => o.Name.Equals("Select State..."));
         _selectedOfferType = _offerTypes.FirstOrDefault(o => o.Name.Equals("Select Type..."));
-        _selectedOfferResult = _offerResults.FirstOrDefault(o => o.Name.Equals("Select Result..."));
-        await _getOffers(_selectedOfferState.Id, _selectedOfferType.Id);
+        _selectedOfferResult = OfferResult.SUCCESSFUL.ToTuple();
+        OfferResult e;
+        Enum.TryParse(_selectedOfferResult.Value, out e);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, e, refresh: true);
         StateHasChanged();
     }
 
@@ -144,25 +147,33 @@ public partial class Offers
     private async Task _onProjectSelectionChanged(ProjectVM project)
     {
         _selectedProject = project;
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, refresh: true);
+        OfferResult result;
+        Enum.TryParse(_selectedOfferResult.Value, out result);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, result, refresh: true);
     }
 
     private async Task _onStateSelectionChanged(OfferStateVM state)
     {
         _selectedOfferState = state;
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, refresh: true);
+        OfferResult result;
+        Enum.TryParse(_selectedOfferResult.Value, out result);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, result, refresh: true);
     }
 
     private async Task _onTypeSelectionChanged(OfferTypeVM type)
     {
         _selectedOfferType = type;
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, refresh: true);
+        OfferResult result;
+        Enum.TryParse(_selectedOfferResult.Value, out result);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, result, refresh: true);
     }
 
-    private async Task _onResultSelectionChanged(OfferResultVM result)
+    private async Task _onResultSelectionChanged((string Value, string Text) result)
     {
         _selectedOfferResult = result;
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, refresh: true);
+        OfferResult e;
+        Enum.TryParse(result.Value, out e);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, e, refresh: true);
     }
     #endregion
 
@@ -239,7 +250,9 @@ public partial class Offers
         if (!result.Cancelled)
         {
             await _dataProvider.Offers.Delete(_selectedOffer.Id);
-            await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedOfferResult.Id, true);
+            OfferResult or;
+            Enum.TryParse(_selectedOfferResult.Value, out or);
+            await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, or, true);
         }
 
         await dialog.CloseAsync();

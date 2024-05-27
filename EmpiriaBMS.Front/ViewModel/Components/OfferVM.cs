@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+﻿using EmpiriaBMS.Core.ExtensionMethods;
+using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
@@ -90,7 +92,7 @@ public class OfferVM : BaseVM
         }
     }
 
-    public string ResultName => Result != null ? Result.Name : "";
+    public string ResultName => Result != null ? Result.GetDisplayName() : "";
 
     // Other Properties
     private string _code;

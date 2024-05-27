@@ -76,18 +76,16 @@
                 Result<span class="text-danger">*</span>
             </div>
             <div>
-                <FluentCombobox Id="results"
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                Placeholder="Select Result..."
+                                Items="_results"
                                 Height="200px"
                                 Width="100%"
-                                Placeholder="Select Result"
-                                Autocomplete="ComboboxAutocomplete.Both"
-                                AriaLabel="Pre-selected option"
-                                Items="@_results"
-                                TOption="OfferResultVM"
-                                OptionValue="@((t) => t.Id.ToString())"
-                                OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == @Content.ResultId)"
-                                @bind-SelectedOption="@Result" />
+                                Class="float-end"
+                                TOption="(string Value, string Text)"
+                                OptionText="@(c => c.Text)"
+                                OptionValue="@(c => c.Value)"
+                                @bind-SelectedOption="SelectedResult" />
             </div>
             @if (!validResult)
             {

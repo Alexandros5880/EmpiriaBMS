@@ -2,10 +2,13 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace EmpiriaBMS.Front.Components.Offers;
 
@@ -49,9 +52,9 @@ public partial class OfferDetailed
             Type = _types.FirstOrDefault(s => s.Id == Content.TypeId);
         }
 
-        if (Content?.Result != null)
+        if (Content.Result != null)
         {
-            Result = _results.FirstOrDefault(s => s.Id == Content.ResultId);
+            SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
         }
 
         StateHasChanged();
@@ -152,7 +155,13 @@ public partial class OfferDetailed
     #region Get Related Records
     ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
     ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
-    ObservableCollection<OfferResultVM> _results = new ObservableCollection<OfferResultVM>();
+    private List<(string Value, string Text)> _results = Enum.GetValues(typeof(OfferResult))
+                                                         .Cast<OfferResult>()
+                                                         .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
+                                                            .First()
+                                                            .GetCustomAttribute<DisplayAttribute>()?
+                                                            .GetName() ?? e.ToString()))
+                                                         .ToList();
 
     private OfferStateVM _state = new OfferStateVM();
     public OfferStateVM State
@@ -182,25 +191,12 @@ public partial class OfferDetailed
         }
     }
 
-    private OfferResultVM _result = new OfferResultVM();
-    public OfferResultVM Result
-    {
-        get => _result;
-        set
-        {
-            if (_result == value || value == null) return;
-            _result = value;
-            Content.ResultId = _result.Id;
-            var dto = Mapper.Map<OfferResultDto>(_result);
-            Content.Result = Mapping.Mapper.Map<OfferResult>(dto);
-        }
-    }
+    private (string Value, string Text) SelectedResult;
 
     private async Task _getRecords()
     {
         await _getStates();
         await _getTypes();
-        await _getResults();
     }
 
     private async Task _getStates()
@@ -217,14 +213,6 @@ public partial class OfferDetailed
         var vms = Mapper.Map<List<OfferTypeVM>>(dtos);
         _types.Clear();
         vms.ForEach(_types.Add);
-    }
-
-    private async Task _getResults()
-    {
-        var dtos = await _dataProvider.OfferResult.GetAll();
-        var vms = Mapper.Map<List<OfferResultVM>>(dtos);
-        _results.Clear();
-        vms.ForEach(_results.Add);
     }
     #endregion
 }

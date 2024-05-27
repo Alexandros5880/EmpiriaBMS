@@ -65,14 +65,15 @@
             </div>
             <div class="ms-2">
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                AriaLabel="Pre-selected option"
-                                Height="400px"
-                                Items="@_offerResults"
-                                TOption="OfferResultVM"
-                                OptionValue="@((t) => t.Id.ToString())"
-                                OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == _selectedOfferResult?.Id)"
+                                Placeholder="Select Result..."
+                                Items="_offerResults"
+                                Width="400px"
+                                Class="float-end"
+                                TOption="(string Value, string Text)"
+                                OptionText="@(c => c.Text)"
+                                OptionValue="@(c => c.Value)"
                                 SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
+
             </div>
         </div>
     </div>
@@ -106,7 +107,7 @@
                     </ChildContent>
                 </TemplateColumn>
 
-                <PropertyColumn Property="@(p => p.Result.Name)" Sortable="true" Title="Result" Style="min-width: 140px;" />
+                <PropertyColumn Property="@(p => p.Result)" Sortable="true" Title="Result" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
 

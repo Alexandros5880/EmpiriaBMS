@@ -118,10 +118,10 @@
                                     Height="200px"
                                     Width="100%"
                                     Class="float-end"
-                                    TOption="OfferResultVM"
-                                    OptionText="@(c => c.Name)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Result" />
+                                    TOption="(string Value, string Text)"
+                                    OptionText="@(c => c.Text)"
+                                    OptionValue="@(c => c.Value)"
+                                    @bind-SelectedOption="SelectedResult"/>
                 </div>
                 @if (!validResult)
                 {

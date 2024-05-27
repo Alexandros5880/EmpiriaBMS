@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -84,7 +85,6 @@ public class OfferRepo : Repository<OfferDto, Offer>
                                        .Where(r => !r.IsDeleted)
                                        .Include(o => o.State)
                                        .Include(o => o.Type)
-                                       .Include(o => o.Result)
                                        .Include(o => o.Project)
                                        .ThenInclude(p => p.Client)
                                        .FirstOrDefaultAsync(o => o.Id == id);
@@ -93,7 +93,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         }
     }
 
-    public async Task<ICollection<OfferDto>> GetAll(int projectId = 0, int stateId = 0, int typeId = 0, int resultId = 0)
+    public async Task<ICollection<OfferDto>> GetAll(int projectId = 0, int stateId = 0, int typeId = 0, OfferResult? result = null)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -102,11 +102,10 @@ public class OfferRepo : Repository<OfferDto, Offer>
                                        .Where(o => (projectId == 0 || o.ProjectId == projectId)
                                                 && (stateId == 0 || o.StateId == stateId)
                                                 && (typeId == 0 || o.TypeId == typeId)
-                                                && (resultId == 0 || o.ResultId == resultId)
+                                                && (result == null || o.Result == result)
                                              )
                                        .Include(o => o.State)
                                        .Include(o => o.Type)
-                                       .Include(o => o.Result)
                                        .Include(o => o.Project)
                                        .ThenInclude(p => p.Client)
                                        .ToListAsync();

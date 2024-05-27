@@ -7,6 +7,7 @@ using EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Humanizer;
 using Microsoft.AspNetCore.Components;
@@ -33,7 +34,7 @@ public partial class OfferCreationWizzard
     List<InvoiceVM> _invoices = new List<InvoiceVM>();
     private ContractVM _contract { get; set; }
 
-    private bool _contractTabEnable => Offer?.Result?.Name?.Equals("SUCCESSFUL") ?? false;
+    private bool _contractTabEnable => Offer?.Result == OfferResult.SUCCESSFUL;
 
     #region Compoment Refrences
     private ProjectDetailed _projectCompoment;
@@ -166,7 +167,7 @@ public partial class OfferCreationWizzard
             var dto = _mapper.Map<OfferDto>(obj);
             dto.Type = null;
             dto.State = null;
-            dto.Result = null;
+            dto.Result = OfferResult.WAITING;
             dto.Project = null;
             // Save Offer
             if (await _dataProvider.Offers.Any(p => p.Id == offer.Id))

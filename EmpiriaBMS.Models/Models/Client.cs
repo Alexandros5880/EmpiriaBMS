@@ -15,4 +15,6 @@ public class Client : User
 
     [NotMapped]
     public string FullName => $"{LastName} {MidName} {FirstName}";
+    
+    public ICollection<Led> Leds { get; set; }
 }

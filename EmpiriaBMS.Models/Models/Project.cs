@@ -45,6 +45,9 @@ public class Project : Entity
     public int? ClientId { get; set; }
     public Client? Client { get; set; }
 
+    public int? LedId { get; set; }
+    public Led? Led { get; set; }
+
     public ICollection<Offer> Offers { get; set; }
 
     public ICollection<Invoice> Invoices { get; set; }
