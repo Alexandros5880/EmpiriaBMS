@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EmpiriaBMS.Models.Enum;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
@@ -37,7 +38,6 @@ public class AppDbContext : DbContext
     public DbSet<Client>? Clients { get; set; }
     public DbSet<Offer>? Offers { get; set; }
     public DbSet<OfferState>? OffesStates { get; set; }
-    public DbSet<OfferResult>? OffersResults { get; set; }
     public DbSet<OfferType>? OffersTypes { get; set; }
     public DbSet<Payment>? Payments { get; set; }
     public DbSet<PaymentType>? PaymentsTypes { get; set; }
@@ -2015,45 +2015,6 @@ public class AppDbContext : DbContext
         };
         #endregion
 
-        #region Create OfferResult
-        var offer_result_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
-        OfferResult offer_result_1 = new OfferResult()
-        {
-            Id = offer_result_1_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "UNSUCCESSFUL"
-        };
-        builder.Entity<OfferResult>().HasData(offer_result_1);
-
-        var offer_result_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
-        OfferResult offer_result_2 = new OfferResult()
-        {
-            Id = offer_result_2_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "SUCCESSFUL"
-        };
-        builder.Entity<OfferResult>().HasData(offer_result_2);
-
-        var offer_result_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
-        OfferResult offer_result_3 = new OfferResult()
-        {
-            Id = offer_result_3_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "WAITING FOR RESULT"
-        };
-        builder.Entity<OfferResult>().HasData(offer_result_3);
-
-        int[] offerResultsIds =
-        {
-            offer_result_1_id,
-            offer_result_2_id,
-            offer_result_3_id
-        };
-        #endregion
-
         #region Create Secretaries
         List<User> secretaries = new List<User>();
 
@@ -2960,7 +2921,7 @@ public class AppDbContext : DbContext
                 Code = $"Code CO-{i}",
                 TypeId = offerTypesIds[random.Next(0, 2)],
                 StateId = offerStatesIds[random.Next(0, 1)],
-                ResultId = offerResultsIds[random.Next(0, 2)],
+                Result = OfferResult.SUCCESSFUL,
                 PudgetPrice = 1000 * i * 3,
                 OfferPrice = 1000 * i * 2,
                 ProjectId = projectId
@@ -3053,7 +3014,7 @@ public class AppDbContext : DbContext
                 Code = $"Code CO-{i}",
                 TypeId = offerTypesIds[random.Next(0, 2)],
                 StateId = offerStatesIds[random.Next(0, 1)],
-                ResultId = offerResultsIds[random.Next(0, 2)],
+                Result = OfferResult.SUCCESSFUL,
                 PudgetPrice = 1000 * i * 4,
                 OfferPrice = 1000 * i * 3,
                 ProjectId = projectId

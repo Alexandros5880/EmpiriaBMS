@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Models.Enum;
 
-public enum LedResult
+public enum OfferResult
 {
+    [Display(Name = "UNSUCCESSFUL")]
+    UNSUCCESSFUL,
     [Display(Name = "SUCCESSFUL")]
     SUCCESSFUL,
-    [Display(Name = "UNSUCCESSFUL")]
-    UNSUCCESSFUL
+    [Display(Name = "WAITING FOR RESUL")]
+    WAITING
 }

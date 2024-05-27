@@ -149,13 +149,6 @@ public static class ModelRelations
                .HasForeignKey(c => c.StateId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // OfferResult Offers
-        builder.Entity<OfferResult>()
-               .HasMany(p => p.Offers)
-               .WithOne(c => c.Result)
-               .HasForeignKey(c => c.ResultId)
-               .OnDelete(DeleteBehavior.Cascade);
-
         // Roles Parent And Children
         builder.Entity<Role>()
                .HasOne(r => r.ParentRole)
@@ -217,7 +210,7 @@ public static class ModelRelations
                .HasMany(p => p.Leds)
                .WithOne(c => c.Client)
                .HasForeignKey(c => c.ClientId)
-               .OnDelete(DeleteBehavior.SetNull);
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // Client Address
         builder.Entity<Address>()

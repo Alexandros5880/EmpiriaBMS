@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaBMS.Core.Dtos;
 
@@ -12,9 +13,7 @@ public class OfferDto : EntityDto
     public int StateId { get; set; }
     public OfferState State { get; set; }
 
-    public int ResultId { get; set; }
     public OfferResult Result { get; set; }
-
 
     public string Code { get; set; }
 

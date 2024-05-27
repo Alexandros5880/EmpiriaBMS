@@ -14,7 +14,7 @@ public class Led : Entity
     public string Country { get; set; }
 
     public int ClientId { get; set; }
-    public Client Client { get; set; }
+    public Client? Client { get; set; }
 
     public double PotencialFee { get; set; }
 

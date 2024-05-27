@@ -31,7 +31,6 @@ public class MappingProfile : Profile
         CreateMap<ClientDto, ClientVM>().ReverseMap();
         CreateMap<OfferTypeDto, OfferTypeVM>().ReverseMap();
         CreateMap<OfferStateDto, OfferStateVM>().ReverseMap();
-        CreateMap<OfferResultDto, OfferResultVM>().ReverseMap();
         CreateMap<OfferDto, OfferVM>().ReverseMap();
         CreateMap<TeamsRequestedUserDto, TeamsRequestedUserVM>().ReverseMap();
         CreateMap<ContractDto, ContractVM>().ReverseMap();

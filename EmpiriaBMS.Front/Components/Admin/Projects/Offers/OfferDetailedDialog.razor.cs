@@ -3,10 +3,13 @@ using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.Interfaces;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects.Offers;
 
@@ -46,8 +49,7 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
 
             if (Content.Result != null)
             {
-                var resultDto = Mapping.Mapper.Map<OfferResultDto>(Content.Result);
-                Result = _mapper.Map<OfferResultVM>(resultDto);
+                SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
             }
 
             StateHasChanged();
@@ -141,7 +143,13 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
     ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
-    ObservableCollection<OfferResultVM> _results = new ObservableCollection<OfferResultVM>();
+    private List<(string Value, string Text)> _results = Enum.GetValues(typeof(OfferResult))
+                                                             .Cast<OfferResult>()
+                                                             .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
+                                                                .First()
+                                                                .GetCustomAttribute<DisplayAttribute>()?
+                                                                .GetName() ?? e.ToString()))
+                                                             .ToList();
 
     private ProjectVM _project = new ProjectVM();
     public ProjectVM Project
@@ -179,24 +187,13 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         }
     }
 
-    private OfferResultVM _result = new OfferResultVM();
-    public OfferResultVM Result
-    {
-        get => _result;
-        set
-        {
-            if (_result == value || value == null) return;
-            _result = value;
-            Content.ResultId = _result.Id;
-        }
-    }
+    private (string Value, string Text) SelectedResult;
 
     private async Task _getRecords()
     {
         await _getProjects();
         await _getTypes();
         await _getStates();
-        await _getResults();
     }
 
     private async Task _getProjects()
@@ -221,14 +218,6 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         var vms = _mapper.Map<List<OfferStateVM>>(dtos);
         _states.Clear();
         vms.ForEach(_states.Add);
-    }
-
-    private async Task _getResults()
-    {
-        var dtos = await _dataProvider.OfferResult.GetAll();
-        var vms = _mapper.Map<List<OfferResultVM>>(dtos);
-        _results.Clear();
-        vms.ForEach(_results.Add);
     }
     #endregion
 }
