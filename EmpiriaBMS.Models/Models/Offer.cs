@@ -14,6 +14,9 @@ public class Offer : Entity
     public int StateId { get; set; }
     public OfferState State { get; set; }
 
+    public int? LedId { get; set; }
+    public Led? Led { get; set; }
+
     [Required]
     public OfferResult Result { get; set; }
 
@@ -36,7 +39,5 @@ public class Offer : Entity
 
     public string? Comments { get; set; }
 
-    public int? ProjectId { get; set; }
-
-    public Project? Project { get; set; }
+    public ICollection<Project>? Projects { get; set; }
 }

@@ -122,32 +122,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _addressId;
-    public int? AddressId
-    {
-        get => _addressId;
-        set
-        {
-            if (value == _addressId)
-                return;
-            _addressId = value;
-            NotifyPropertyChanged(nameof(AddressId));
-        }
-    }
-
-    private Address? _address;
-    public Address? Address
-    {
-        get => _address;
-        set
-        {
-            if (value == _address)
-                return;
-            _address = value;
-            NotifyPropertyChanged(nameof(Address));
-        }
-    }
-
     private bool _active;
     public bool Active
     {
@@ -239,33 +213,32 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _clientId;
-    public int? ClientId
+    private int? _offerId;
+    public int? OfferId
     {
-        get => _clientId;
+        get => _offerId;
         set
         {
-            if (value == _clientId)
+            if (value == _offerId)
                 return;
-            _clientId = value;
-            NotifyPropertyChanged(nameof(ClientId));
+            _offerId = value;
+            NotifyPropertyChanged(nameof(OfferId));
         }
     }
 
-    private Client? _client;
-    public Client? Client
+    private Offer? _offer;
+    public Offer? Offer
     {
-        get => _client;
+        get => _offer;
         set
         {
-            if (value == _client)
+            if (value == _offer)
                 return;
-            _client = value;
-            NotifyPropertyChanged(nameof(Client));
+            _offer = value;
+            NotifyPropertyChanged(nameof(Offer));
         }
     }
 
-    public ICollection<Offer> Offers { get; set; }
     public ICollection<Invoice> Invoices { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
@@ -309,5 +282,5 @@ public class ProjectVM : BaseVM
     public string PMFullName => ProjectManager != null ? $"{ProjectManager.LastName} {ProjectManager.MidName} {ProjectManager.FirstName}" : "";
 
     [NotMapped]
-    public string ClientFullName => Client != null ? $"{Client.LastName} {Client.MidName} {Client.FirstName}" : "";
+    public string ClientFullName => Offer?.Led?.Client?.FullName ?? "";
 }

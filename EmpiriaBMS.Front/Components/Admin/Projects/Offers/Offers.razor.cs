@@ -11,7 +11,7 @@ public partial class Offers
     #region Data Grid
     private List<OfferVM> _records = new List<OfferVM>();
     private string _filterString = string.Empty;
-    IQueryable<OfferVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<OfferVM>? FilteredItems => _records?.AsQueryable();//.Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private OfferVM _selectedRecord = new OfferVM();
@@ -71,7 +71,7 @@ public partial class Offers
     {
         DialogParameters parameters = new()
         {
-            Title = $"Edit {record.Project?.Name : 'Record'}",
+            Title = $"Edit {record.TypeName : 'Record'}",
             PrimaryActionEnabled = true,
             SecondaryActionEnabled = true,
             PrimaryAction = "Save",
@@ -97,7 +97,7 @@ public partial class Offers
 
     private async Task _delete(OfferVM record)
     {
-        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the offer of type {record.TypeName} of project {record.ProjectName}?", "Yes", "No", "Deleting record...");
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the offer of type {record.TypeName} ?", "Yes", "No", "Deleting record...");
 
         DialogResult result = await dialog.Result;
 

@@ -92,8 +92,6 @@ public partial class OfferCreationWizzard
         if (projectUpdated == null)
             return;
         var projectDto = _mapper.Map<ProjectDto>(projectUpdated);
-        Offer.Project = Mapping.Mapper.Map<Project>(projectDto);
-        Offer.ProjectId = projectUpdated.Id;
 
         // Update Offer
         var offerUpdated = await _upsertOffer(Offer);
@@ -102,8 +100,6 @@ public partial class OfferCreationWizzard
         Offer = offerUpdated;
 
         // Update Offer Related Project
-        Offer.Project = Mapping.Mapper.Map<Project>(projectDto);
-        Offer.ProjectId = projectUpdated.Id;
         _project = projectUpdated;
     }
 
@@ -115,26 +111,9 @@ public partial class OfferCreationWizzard
             var p = project.Clone() as ProjectVM;
             var dto = _mapper.Map<ProjectDto>(p);
 
-            // If Addres Save Address
-            if (dto?.Address != null && !(await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
-            {
-                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
-                var address = await _dataProvider.Address.Add(addressDto);
-                dto.AddressId = address.Id;
-            }
-            else if (dto?.Address != null && (await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
-            {
-                var address = await _dataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
-                dto.AddressId = address.Id;
-            }
-
             // Remove Related Objects For DB Conflicts
             dto.Category = null;
-            dto.Client = null;
-            if (dto.ClientId == 0)
-                dto.ClientId = null;
             dto.Stage = null;
-            dto.Address = null;
             dto.ProjectManager = null;
 
             // Save Project
@@ -161,14 +140,13 @@ public partial class OfferCreationWizzard
     
     private async Task<OfferVM> _upsertOffer(OfferVM offer)
     {
-        if (offer is not null && offer.Project != null && offer.ProjectId != 0)
+        if (offer is not null)
         {
             var obj = offer.Clone() as OfferVM;
             var dto = _mapper.Map<OfferDto>(obj);
             dto.Type = null;
             dto.State = null;
             dto.Result = OfferResult.WAITING;
-            dto.Project = null;
             // Save Offer
             if (await _dataProvider.Offers.Any(p => p.Id == offer.Id))
             {
@@ -216,11 +194,7 @@ public partial class OfferCreationWizzard
             {
                 if (_projectCompoment != null)
                     await _projectCompoment.Prepair();
-                if (Offer.ProjectId != null && Offer.ProjectId != 0)
-                {
-                    var project = await _dataProvider.Projects.Get((int)Offer.ProjectId);
-                    _project = _mapper.Map<ProjectVM>(project);
-                }
+
 
                 for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
                 tabs[tabIndex] = true;
@@ -281,20 +255,20 @@ public partial class OfferCreationWizzard
     #region Get Related Records
     private async Task _getProject()
     {
-        if (Offer?.Project != null)
-        {
-            var dto = Mapping.Mapper.Map<ProjectDto>(Offer.Project);
-            _project = _mapper.Map<ProjectVM>(dto);
-        }
-        else if (Offer?.ProjectId != 0 && Offer?.ProjectId != null)
-        {
-            var dto = await _dataProvider.Projects.Get((int)Offer.ProjectId);
-            _project = _mapper.Map<ProjectVM>(dto);
-        }
-        else
-        {
-            _project = new ProjectVM();
-        }
+        //if (Offer?.Project != null)
+        //{
+        //    var dto = Mapping.Mapper.Map<ProjectDto>(Offer.Project);
+        //    _project = _mapper.Map<ProjectVM>(dto);
+        //}
+        //else if (Offer?.ProjectId != 0 && Offer?.ProjectId != null)
+        //{
+        //    var dto = await _dataProvider.Projects.Get((int)Offer.ProjectId);
+        //    _project = _mapper.Map<ProjectVM>(dto);
+        //}
+        //else
+        //{
+        //    _project = new ProjectVM();
+        //}
     }
 
     private void _getInvoice()

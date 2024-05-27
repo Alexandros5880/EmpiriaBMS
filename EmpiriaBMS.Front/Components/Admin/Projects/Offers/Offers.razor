@@ -21,7 +21,7 @@
                             GridTemplateColumns="200px 100px 140px 140px 140px 140px 140px 100px"
                             style="height: 70vh; overflow:auto;">
 
-                <TemplateColumn Title="Name"
+                @* <TemplateColumn Title="Name"
                                 Sortable="true"
                                 InitialSortDirection=SortDirection.Descending
                                 IsDefaultSortColumn=true>
@@ -37,7 +37,7 @@
                     <ChildContent>
                         @(context.ProjectName)
                     </ChildContent>
-                </TemplateColumn>
+                </TemplateColumn> *@
 
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
 

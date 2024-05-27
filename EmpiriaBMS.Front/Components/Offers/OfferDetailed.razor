@@ -73,7 +73,7 @@
         <!-- Result -->
         <div class="col-xl-4 col-lg-4 col-md-12">
             <div>
-                Result<span class="text-danger">*</span>
+                Result
             </div>
             <div>
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
@@ -87,12 +87,6 @@
                                 OptionValue="@(c => c.Value)"
                                 @bind-SelectedOption="SelectedResult" />
             </div>
-            @if (!validResult)
-            {
-                <div>
-                    <span class="text-warning">Field is required!</span>
-                </div>
-            }
         </div>
 
     </div>

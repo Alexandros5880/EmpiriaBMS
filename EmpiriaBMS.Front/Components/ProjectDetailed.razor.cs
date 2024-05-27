@@ -38,7 +38,6 @@ public partial class ProjectDetailed : ComponentBase
     ObservableCollection<ProjectSubCategoryVM> _subCategories = new ObservableCollection<ProjectSubCategoryVM>();
     ObservableCollection<ProjectStageVM> _stages = new ObservableCollection<ProjectStageVM>();
     ObservableCollection<UserVM> _pms = new ObservableCollection<UserVM>();
-    ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
 
     public ProjectCategoryVM _category = new ProjectCategoryVM();
     public ProjectCategoryVM Category
@@ -97,21 +96,6 @@ public partial class ProjectDetailed : ComponentBase
         }
     }
 
-    private ClientVM _client = new ClientVM();
-    public ClientVM Client
-    {
-        get => _client;
-        set
-        {
-            if (_client == value || value == null)
-                return;
-            _client = value;
-            Content.ClientId = _client.Id;
-            var dto = Mapper.Map<ClientDto>(_client);
-            Content.Client = Mapping.Mapper.Map<Client>(dto);
-        }
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -125,18 +109,6 @@ public partial class ProjectDetailed : ComponentBase
     public async Task Prepair()
     {
         await _getRecords();
-
-        if (Content.Id == 0)
-            Client = new ClientVM();
-
-        if (Content.Address != null)
-            await _myMapRef.SetAddress(Content.Address);
-
-        if (Content.ClientId != 0 && Content.ClientId != null)
-        {
-            var c = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
-            Client = c;
-        }
 
         StateHasChanged();
     }
@@ -152,19 +124,6 @@ public partial class ProjectDetailed : ComponentBase
             Content.Category = null;
             Content.Stage = null;
             Content.Category = null;
-
-            // If Addres Save Address
-            if (Content?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(Content.Address.PlaceId))))
-            {
-                var dto = Mapping.Mapper.Map<AddressDto>(Content.Address);
-                var address = await DataProvider.Address.Add(dto);
-                Content.AddressId = address.Id;
-            }
-            else if (Content?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(Content.Address.PlaceId))))
-            {
-                var dto = Mapping.Mapper.Map<AddressDto>(Content.Address);
-                var address = await DataProvider.Address.Update(dto);
-            }
 
             // Save Project
             ProjectDto saveProject;
@@ -190,30 +149,6 @@ public partial class ProjectDetailed : ComponentBase
     private bool _diplayedClientForm = false;
     private ClientVM _backupClient;
 
-    private void _addClient()
-    {
-        _backupClient = Client.Clone() as ClientVM;
-        Client = new ClientVM();
-        _diplayedClientForm = true;
-        StateHasChanged();
-    }
-
-    private async void _closeClientForm(ClientVM client = null)
-    {
-        _diplayedClientForm = false;
-        if (client != null)
-        {
-            await _getClients();
-            var c = _clients.FirstOrDefault(c => c.Id == client.Id);
-            Client = c;
-        }
-        else
-        {
-            Client = _backupClient.Clone() as ClientVM;
-            _backupClient = null;
-        }
-        StateHasChanged();
-    }
 
     #endregion
 
@@ -295,7 +230,6 @@ public partial class ProjectDetailed : ComponentBase
         await _getCategories();
         await _getStages();
         await _getProjectManagers();
-        await _getClients();
     }
 
     private async Task _getCategories()
@@ -344,16 +278,6 @@ public partial class ProjectDetailed : ComponentBase
 
         Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId) ?? null;
     }
-
-    private async Task _getClients()
-    {
-        var dtos = await DataProvider.Clients.GetAll();
-        var vms = Mapper.Map<List<ClientVM>>(dtos);
-        _clients.Clear();
-        vms.ForEach(_clients.Add);
-
-        Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId) ?? null;
-    }
     #endregion
 
     #region Map Address
@@ -361,9 +285,9 @@ public partial class ProjectDetailed : ComponentBase
 
     private void _onSearchAddressChange()
     {
-        var address = _myMapRef.GetAddress();
-        if (address != null)
-            Content.Address = address;
+        //var address = _myMapRef.GetAddress();
+        //if (address != null)
+        //    Content.Address = address;
     }
     #endregion
 }

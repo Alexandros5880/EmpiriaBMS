@@ -29,12 +29,6 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         {
             await _getRecords();
 
-            if (Content.Project != null)
-            {
-                var projectDto = Mapping.Mapper.Map<ProjectDto>(Content.Project);
-                Project = _mapper.Map<ProjectVM>(projectDto);
-            }
-
             if (Content.Type != null)
             {
                 var typeDto = Mapping.Mapper.Map<OfferTypeDto>(Content.Type);
@@ -70,12 +64,10 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     }
 
     #region Validation
-    private bool validProject = true;
     private bool validCode = true;
     private bool validType = true;
     private bool validState = true;
     private bool validDate = true;
-    private bool validResult = true;
     private bool validPudgetPrice = true;
     private bool validOfferPrice = true;
 
@@ -83,33 +75,26 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     {
         if (fieldname == null)
         {
-            validProject = Content.ProjectId != 0 && Content.ProjectId != null;
             validCode = !string.IsNullOrEmpty(Content.Code);
             validType = Content.TypeId != 0;
             validState = Content.StateId != 0;
             validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
-            validResult = Content.ResultId != 0;
             validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
             validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
 
-            return validCode && validType && validState && validResult && validDate && validProject && validPudgetPrice && validOfferPrice;
+            return validCode && validType && validState && validDate && validPudgetPrice && validOfferPrice;
         }
         else
         {
-            validProject = true;
             validCode = true;
             validType = true;
             validState = true;
-            validResult = true;
             validDate = true;
             validPudgetPrice = true;
             validOfferPrice = true;
 
             switch (fieldname)
             {
-                case "Project":
-                    validProject = Content.ProjectId != 0 && Content.ProjectId != null;
-                    return validProject;
                 case "Code":
                     validCode = !string.IsNullOrEmpty(Content.Code);
                     return validCode;
@@ -119,9 +104,6 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
                 case "State":
                     validState = Content.StateId != 0;
                     return validState;
-                case "Result":
-                    validResult = Content.ResultId != 0;
-                    return validResult;
                 case "Date":
                     validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
                     return validDate;
@@ -140,7 +122,6 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     #endregion
 
     #region Get Related Records
-    ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
     ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
     private List<(string Value, string Text)> _results = Enum.GetValues(typeof(OfferResult))
@@ -150,18 +131,6 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
                                                                 .GetCustomAttribute<DisplayAttribute>()?
                                                                 .GetName() ?? e.ToString()))
                                                              .ToList();
-
-    private ProjectVM _project = new ProjectVM();
-    public ProjectVM Project
-    {
-        get => _project;
-        set
-        {
-            if (_project == value || value == null) return;
-            _project = value;
-            Content.ProjectId = _project.Id;
-        }
-    }
 
     private OfferTypeVM _type = new OfferTypeVM();
     public OfferTypeVM Type
@@ -191,17 +160,8 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
 
     private async Task _getRecords()
     {
-        await _getProjects();
         await _getTypes();
         await _getStates();
-    }
-
-    private async Task _getProjects()
-    {
-        var dtos = await _dataProvider.Projects.GetAll();
-        var vms = _mapper.Map<List<ProjectVM>>(dtos);
-        _projects.Clear();
-        vms.ForEach(_projects.Add);
     }
 
     private async Task _getTypes()

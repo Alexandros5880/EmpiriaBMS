@@ -33,31 +33,8 @@
     <div class="row my-content">
 
         <div class="col-12 row gx-2 mt-2">
-            <!-- Project -->
-            <div class="col-xl-4 col-lg-4 col-md-12">
-                <div>
-                    Project<span class="text-danger">*</span>
-                </div>
-                <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                    Placeholder="Select Project..."
-                                    Items="@_projects"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="ProjectVM"
-                                    OptionText="@(c => c.Name)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Project" />
-                </div>
-                @if (!validProject)
-                {
-                    <div>
-                        <span class="text-warning">Field is required!</span>
-                    </div>
-                }
-            </div>
             <!-- Type -->
-            <div class="col-xl-4 col-lg-4 col-md-12">
+            <div class="col-xl-6 col-lg-6 col-md-12">
                 <div>
                     Type<span class="text-danger">*</span>
                 </div>
@@ -80,7 +57,7 @@
                 }
             </div>
             <!-- State -->
-            <div class="col-xl-4 col-lg-4 col-md-12">
+            <div class="col-xl-6 col-lg-6 col-md-12">
                 <div>
                     State<span class="text-danger">*</span>
                 </div>
@@ -109,7 +86,7 @@
             <!-- Result -->
             <div class="col-xl-4 col-lg-4 col-md-12">
                 <div>
-                    Result<span class="text-danger">*</span>
+                    Result
                 </div>
                 <div>
                     <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
@@ -123,12 +100,6 @@
                                     OptionValue="@(c => c.Value)"
                                     @bind-SelectedOption="SelectedResult"/>
                 </div>
-                @if (!validResult)
-                {
-                    <div>
-                        <span class="text-warning">Field is required!</span>
-                    </div>
-                }
             </div>
             <!-- Code -->
             <div class="col-xl-4 col-lg-4 col-md-12">

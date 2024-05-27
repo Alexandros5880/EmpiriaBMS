@@ -30,6 +30,7 @@ namespace EmpiriaBMS.Core
         public EmailRepo Emails { get; set; }
         public TeamsRequestedUserRepo TeamsRequestedUsers { get; set; }
         public ContractRepo Contracts { get; set; }
+        public LedRepo Leds { get; set; }
         public KpisRepo KPIS { get; set; }
     }
 }

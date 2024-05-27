@@ -13,6 +13,6 @@ public class Address : Entity
     public double Latitude { get; set; }
     public double Longitude { get; set; }
 
-    public List<Project> Projects { get; set; }
+    public List<Led> Leds { get; set; }
     public List<Client> Clients { get; set; }
 }
