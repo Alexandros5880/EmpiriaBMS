@@ -1,6 +1,9 @@
 ﻿@page "/admin/projects/invoices"
 
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Models.Enum
+@using EmpiriaBMS.Core.ExtensionMethods
+
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 @inject IDialogService DialogService
@@ -47,7 +50,11 @@
                 <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Fee)" Sortable="true" Title="Fee" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Vat)" Sortable="true" Title="Vat" Align="@Align.Start" />
+                <TemplateColumn Title="Vat" Sortable="true" Align="@Align.Start">
+                    <ChildContent>
+                        @(context.Vat.GetDisplayName())
+                    </ChildContent>
+                </TemplateColumn>
                 <PropertyColumn Property="@(p => p.Total)" Sortable="true" Title="Total" Align="@Align.Start" />
 
                 @if (DisplayActions)

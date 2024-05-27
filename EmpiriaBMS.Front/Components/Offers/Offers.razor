@@ -4,6 +4,7 @@
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
 @using EmpiriaBMS.Front.Components.Offers;
+@using EmpiriaBMS.Core.ExtensionMethods;
 
 @inject IDialogService DialogService
 @inject TeamsUserCredential teamsUserCredential
@@ -107,7 +108,7 @@
                     </ChildContent>
                 </TemplateColumn> *@
 
-                <PropertyColumn Property="@(p => p.Result)" Sortable="true" Title="Result" Style="min-width: 140px;" />
+                <PropertyColumn Property="@(p => p.Result.GetDisplayName())" Sortable="true" Title="Result" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
 @* 

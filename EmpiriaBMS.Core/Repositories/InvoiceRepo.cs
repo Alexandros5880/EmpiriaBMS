@@ -132,7 +132,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         {
             List<Invoice> i = await _context.Set<Invoice>()
                               .Where(r => !r.IsDeleted)
-                              .Where(r => projectId != 0 && r.ProjectId == projectId)
+                              .Where(r => projectId == 0 || r.ProjectId == projectId)
                               .Include(i => i.Payments)
                                          .Include(i => i.Type)
                                          .Include(i => i.Contract)

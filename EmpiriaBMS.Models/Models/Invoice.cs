@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaBMS.Models.Models;
 public class Invoice : Entity
@@ -10,7 +11,7 @@ public class Invoice : Entity
 
     public double? Total { get; set; }
 
-    public double? Vat { get; set; }
+    public Vat Vat { get; set; }
 
     public double? Fee { get; set; }
 
