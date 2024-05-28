@@ -20,7 +20,6 @@ using System.Linq.Expressions;
 using EmpiriaBMS.Models.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using EmpiriaBMS.Core.ExtensionMethods;
 
 namespace EmpiriaBMS.Front.Components.Offers;
 
