@@ -1,15 +1,8 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Config;
+﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Projects.Contracts;
-using EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
-using EmpiriaBMS.Front.Components.General;
-using EmpiriaBMS.Front.Services;
+using EmpiriaBMS.Front.Components.Admin.Invoices;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
-using EmpiriaBMS.Models.Models;
-using Humanizer;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.Offers;

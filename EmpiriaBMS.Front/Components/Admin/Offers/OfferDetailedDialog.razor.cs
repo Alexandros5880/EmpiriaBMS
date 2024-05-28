@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Offers;
+namespace EmpiriaBMS.Front.Components.Admin.Offers;
 
 public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
 {

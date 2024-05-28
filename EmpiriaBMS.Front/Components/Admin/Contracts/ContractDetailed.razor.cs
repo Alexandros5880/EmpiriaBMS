@@ -1,13 +1,9 @@
 ﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Fast.Components.FluentUI;
-using NuGet.Protocol;
-using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Contracts;
+namespace EmpiriaBMS.Front.Components.Admin.Contracts;
 
 public partial class ContractDetailed
 {

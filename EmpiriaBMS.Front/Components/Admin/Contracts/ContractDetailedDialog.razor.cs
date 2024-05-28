@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Contracts;
+namespace EmpiriaBMS.Front.Components.Admin.Contracts;
 
 public partial class ContractDetailedDialog : IDialogContentComponent<ContractVM>
 {

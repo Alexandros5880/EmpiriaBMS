@@ -1,10 +1,9 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Projects.Offers;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
+namespace EmpiriaBMS.Front.Components.Admin.Invoices;
 
 public partial class InvoicesTable
 {

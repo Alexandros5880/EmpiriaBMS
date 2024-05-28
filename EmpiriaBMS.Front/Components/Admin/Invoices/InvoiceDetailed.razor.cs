@@ -1,18 +1,12 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ExtensionMethods;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
-using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
+namespace EmpiriaBMS.Front.Components.Admin.Invoices;
 
 public partial class InvoiceDetailed
 {

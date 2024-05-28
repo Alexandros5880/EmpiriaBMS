@@ -7,7 +7,7 @@ using Microsoft.Fast.Components.FluentUI;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Payments;
+namespace EmpiriaBMS.Front.Components.Admin.Payments;
 
 public partial class PaymentDetailedDialog : IDialogContentComponent<PaymentParameter>
 {

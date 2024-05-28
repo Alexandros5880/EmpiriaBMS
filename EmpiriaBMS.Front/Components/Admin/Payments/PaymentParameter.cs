@@ -1,6 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Payments;
+namespace EmpiriaBMS.Front.Components.Admin.Payments;
 
 public class PaymentParameter
 {

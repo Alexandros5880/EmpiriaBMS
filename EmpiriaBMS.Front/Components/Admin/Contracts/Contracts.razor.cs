@@ -1,11 +1,9 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
-using EmpiriaBMS.Front.Components.Admin.Projects.Offers;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Contracts;
+namespace EmpiriaBMS.Front.Components.Admin.Contracts;
 
 public partial class Contracts
 {

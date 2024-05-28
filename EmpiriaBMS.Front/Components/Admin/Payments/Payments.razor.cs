@@ -1,20 +1,19 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Offers.Types;
+namespace EmpiriaBMS.Front.Components.Admin.Payments;
 
-public partial class OfferTypes
+public partial class Payments
 {
     #region Data Grid
-    private List<OfferTypeVM> _records = new List<OfferTypeVM>();
+    private List<PaymentVM> _records = new List<PaymentVM>();
     private string _filterString = string.Empty;
-    IQueryable<OfferTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<PaymentVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private OfferTypeVM _selectedRecord = new OfferTypeVM();
+    private PaymentVM _selectedRecord = new PaymentVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -28,15 +27,15 @@ public partial class OfferTypes
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<OfferTypeVM> row)
+    private void HandleRowFocus(FluentDataGridRow<PaymentVM> row)
     {
-        _selectedRecord = row.Item as OfferTypeVM;
+        _selectedRecord = row.Item as PaymentVM;
     }
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.OfferTypes.GetAll();
-        _records = Mapper.Map<List<OfferTypeVM>>(dtos);
+        var dtos = await DataProvider.Payments.GetAll();
+        _records = Mapper.Map<List<PaymentVM>>(dtos);
     }
 
     private async Task _add()
@@ -50,56 +49,70 @@ public partial class OfferTypes
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new OfferTypeVM(), parameters);
+        PaymentParameter param = new PaymentParameter()
+        {
+            Content = new PaymentVM(),
+            DisplayInvoiceSelection = true,
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(param, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            OfferTypeVM vm = result.Data as OfferTypeVM;
-            var dto = Mapper.Map<OfferTypeDto>(vm);
-            await DataProvider.OfferTypes.Add(dto);
+            PaymentVM vm = result.Data as PaymentVM;
+            var dto = Mapper.Map<PaymentDto>(vm);
+            await DataProvider.Payments.Add(dto);
             await _getRecords();
         }
     }
 
-    private async Task _edit(OfferTypeVM record)
+    private async Task _edit(PaymentVM record)
     {
         DialogParameters parameters = new()
         {
-            Title = $"Edit {record.Name}",
+            Title = $"Edit paymeny of project {record.ProjectName} with bank {record.Bank}",
             PrimaryActionEnabled = true,
             SecondaryActionEnabled = true,
             PrimaryAction = "Save",
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
+        PaymentParameter param = new PaymentParameter()
+        {
+            Content = record,
+            DisplayInvoiceSelection = true,
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(param, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            OfferTypeVM vm = result.Data as OfferTypeVM;
-            var dto = Mapper.Map<OfferTypeDto>(vm);
-            await DataProvider.OfferTypes.Update(dto);
+            PaymentVM vm = result.Data as PaymentVM;
+            var dto = Mapper.Map<PaymentDto>(vm);
+            await DataProvider.Payments.Update(dto);
             await _getRecords();
         }
     }
 
-    private async Task _delete(OfferTypeVM record)
+    private async Task _delete(PaymentVM record)
     {
-        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the offer type {record.Name}?", "Yes", "No", "Deleting record...");
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the payment of project {record.ProjectName}?", "Yes", "No", "Deleting record...");
 
         DialogResult result = await dialog.Result;
 
         if (!result.Cancelled)
         {
-            await DataProvider.OfferTypes.Delete(record.Id);
+            await DataProvider.Payments.Delete(record.Id);
         }
 
         await dialog.CloseAsync();

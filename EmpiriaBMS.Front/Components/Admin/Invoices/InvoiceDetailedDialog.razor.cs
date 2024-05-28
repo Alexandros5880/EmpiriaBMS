@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
+namespace EmpiriaBMS.Front.Components.Admin.Invoices;
 
 public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
 {

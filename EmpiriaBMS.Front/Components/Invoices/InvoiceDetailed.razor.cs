@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ExtensionMethods;
-using EmpiriaBMS.Front.Components.Admin.Projects.Contracts;
+using EmpiriaBMS.Front.Components.Admin.Contracts;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
