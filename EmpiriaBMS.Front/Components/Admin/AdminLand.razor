@@ -26,6 +26,77 @@
                 </FluentNavLink>
             </FluentNavGroup>
 
+            <!-- Leds -->
+            <FluentNavLink Icon="@(new MyIcons.Size24.Result())"
+                           OnClick="@(() => TabMenuClick(23))"
+                           Class="@((tabs[23] ? "active-nav-link" : ""))">
+                Leds
+            </FluentNavLink>
+
+            <!--  Offers -->
+            <FluentNavGroup Title="Offers" Icon="@(new MyIcons.Size24.Offers1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())"
+                               OnClick="@(() => TabMenuClick(9))"
+                               Class="@((tabs[9] ? "active-nav-link" : ""))">
+                    Offers
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(10))"
+                               Class="@((tabs[10] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.States())"
+                               OnClick="@(() => TabMenuClick(11))"
+                               Class="@((tabs[11] ? "active-nav-link" : ""))">
+                    States
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Categories())"
+                               OnClick="@(() => TabMenuClick(5))"
+                               Class="@((tabs[5] ? "active-nav-link" : ""))">
+                    Categories
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.SubCategories())"
+                               OnClick="@(() => TabMenuClick(6))"
+                               Class="@((tabs[6] ? "active-nav-link" : ""))">
+                    Sub Categories
+                </FluentNavLink>
+            </FluentNavGroup>
+
+            <!-- Projects Invoices -->
+            <FluentNavGroup Title="Invoices" Icon="@(new MyIcons.Size24.Invoices1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Invoices2())"
+                               OnClick="@(() => TabMenuClick(12))"
+                               Class="@((tabs[12] ? "active-nav-link" : ""))">
+                    Invoices
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(13))"
+                               Class="@((tabs[13] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
+            </FluentNavGroup>
+
+            <!-- Projects Contracts -->
+            <FluentNavLink Icon="@(new MyIcons.Size24.Contract())"
+                           OnClick="@(() => TabMenuClick(22))"
+                           Class="@((tabs[22] ? "active-nav-link" : ""))">
+                Contracts
+            </FluentNavLink>
+
+            <!-- Projects Payments -->
+            <FluentNavGroup Title="Payments" Icon="@(new MyIcons.Size24.Payments1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Payments2())"
+                               OnClick="@(() => TabMenuClick(14))"
+                               Class="@((tabs[14] ? "active-nav-link" : ""))">
+                    Payments
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(15))"
+                               Class="@((tabs[15] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
+            </FluentNavGroup>
+
             <!-- Projects -->
             <FluentNavGroup Title="Projects" Icon="@(new MyIcons.Size24.Projects1())">
                 <FluentNavLink Icon="@(new MyIcons.Size24.Projects2())"
@@ -58,65 +129,6 @@
                                Class="@((tabs[8] ? "active-nav-link" : ""))">
                     Issues
                 </FluentNavLink>
-
-                <!-- Projects Offers -->
-                <FluentNavGroup Title="Offers" Icon="@(new MyIcons.Size24.Offers1())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())"
-                                   OnClick="@(() => TabMenuClick(9))"
-                                   Class="@((tabs[9] ? "active-nav-link" : ""))">
-                        Offers
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
-                                   OnClick="@(() => TabMenuClick(10))"
-                                   Class="@((tabs[10] ? "active-nav-link" : ""))">
-                        Types
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.States())"
-                                   OnClick="@(() => TabMenuClick(11))"
-                                   Class="@((tabs[11] ? "active-nav-link" : ""))">
-                        States
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Result())"
-                                   OnClick="@(() => TabMenuClick(23))"
-                                   Class="@((tabs[23] ? "active-nav-link" : ""))">
-                        Results
-                    </FluentNavLink>
-                </FluentNavGroup>
-
-                <!-- Projects Contracts -->
-                <FluentNavLink Icon="@(new MyIcons.Size24.Contract())"
-                               OnClick="@(() => TabMenuClick(22))"
-                               Class="@((tabs[22] ? "active-nav-link" : ""))">
-                    Contracts
-                </FluentNavLink>
-
-                <!-- Projects Invoices -->
-                <FluentNavGroup Title="Invoices" Icon="@(new MyIcons.Size24.Invoices1())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Invoices2())"
-                                   OnClick="@(() => TabMenuClick(12))"
-                                   Class="@((tabs[12] ? "active-nav-link" : ""))">
-                        Invoices
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
-                                   OnClick="@(() => TabMenuClick(13))"
-                                   Class="@((tabs[13] ? "active-nav-link" : ""))">
-                        Types
-                    </FluentNavLink>
-                </FluentNavGroup>
-
-                <!-- Projects Payments -->
-                <FluentNavGroup Title="Payments" Icon="@(new MyIcons.Size24.Payments1())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Payments2())"
-                                   OnClick="@(() => TabMenuClick(14))"
-                                   Class="@((tabs[14] ? "active-nav-link" : ""))">
-                        Payments
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
-                                   OnClick="@(() => TabMenuClick(15))"
-                                   Class="@((tabs[15] ? "active-nav-link" : ""))">
-                        Types
-                    </FluentNavLink>
-                </FluentNavGroup>
             </FluentNavGroup>
 
             <!-- Disciplines -->
@@ -307,7 +319,7 @@
         else if (tabs[23])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Offers.Results.OfferResults />
+                <!-- Leds Page -->
             </div>
         }
 
