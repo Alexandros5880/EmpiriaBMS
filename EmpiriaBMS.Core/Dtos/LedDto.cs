@@ -15,8 +15,6 @@ public class LedDto : EntityDto
 {
     public string Name { get; set; }
 
-    public string Country { get; set; }
-
     public int ClientId { get; set; }
     public Client? Client { get; set; }
 

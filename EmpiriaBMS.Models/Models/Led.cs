@@ -12,7 +12,6 @@ namespace EmpiriaBMS.Models.Models;
 public class Led : Entity
 {
     public string Name { get; set; }
-    public string Country { get; set; }
 
     public int ClientId { get; set; }
     public Client? Client { get; set; }
