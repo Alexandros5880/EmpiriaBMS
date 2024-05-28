@@ -41,73 +41,71 @@ public partial class Leds
 
     private async Task _add()
     {
-        //DialogParameters parameters = new()
-        //{
-        //    Title = $"New Record",
-        //    PrimaryActionEnabled = true,
-        //    SecondaryActionEnabled = true,
-        //    PrimaryAction = "Save",
-        //    SecondaryAction = "Cancel",
-        //    TrapFocus = true,
-        //    Modal = true,
-        //    PreventScroll = true,
-        //    Width = "min(70%, 500px);"
-        //};
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
 
-        //IDialogReference dialog = await DialogService.ShowDialogAsync<ContractDetailedDialog>(new ContractVM(), parameters);
-        //DialogResult? result = await dialog.Result;
+        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(new LedVM(), parameters);
+        DialogResult? result = await dialog.Result;
 
-        //if (result.Data is not null)
-        //{
-        //    ContractVM vm = result.Data as ContractVM;
-        //    var dto = Mapper.Map<ContractDto>(vm);
-        //    await DataProvider.Contracts.Add(dto);
-        //    await _getRecords();
-        //}
+        if (result.Data is not null)
+        {
+            LedVM vm = result.Data as LedVM;
+            var dto = Mapper.Map<LedDto>(vm);
+            await DataProvider.Leds.Add(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _edit(LedVM record)
     {
-        //record.Invoice = _getInvoice(record.InvoiceId);
-        //DialogParameters parameters = new()
-        //{
-        //    Title = $"Edit contract for {record.Invoice?.Project?.Name} project",
-        //    PrimaryActionEnabled = true,
-        //    SecondaryActionEnabled = true,
-        //    PrimaryAction = "Save",
-        //    SecondaryAction = "Cancel",
-        //    TrapFocus = true,
-        //    Modal = true,
-        //    PreventScroll = true,
-        //    Width = "min(70%, 500px);"
-        //};
+        DialogParameters parameters = new()
+        {
+            Title = $"Edit Record {record.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(70%, 500px);"
+        };
 
-        //IDialogReference dialog = await DialogService.ShowDialogAsync<ContractDetailedDialog>(record, parameters);
-        //DialogResult? result = await dialog.Result;
+        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
 
-        //if (result.Data is not null)
-        //{
-        //    ContractVM vm = result.Data as ContractVM;
-        //    var dto = Mapper.Map<ContractDto>(vm);
-        //    await DataProvider.Contracts.Update(dto);
-        //    await _getRecords();
-        //}
+        if (result.Data is not null)
+        {
+            LedVM vm = result.Data as LedVM;
+            var dto = Mapper.Map<LedDto>(vm);
+            await DataProvider.Leds.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _delete(LedVM record)
     {
-        //record.Invoice = _getInvoice(record.InvoiceId);
-        //var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete contract of project {record.Invoice?.Project?.Name ?? "--"}?", "Yes", "No", "Deleting record...");
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete led {record.Name}?", "Yes", "No", "Deleting record...");
 
-        //DialogResult result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
-        //if (!result.Cancelled)
-        //{
-        //    await DataProvider.Contracts.Delete(record.Id);
-        //}
+        if (!result.Cancelled)
+        {
+            await DataProvider.Leds.Delete(record.Id);
+        }
 
-        //await dialog.CloseAsync();
-        //await _getRecords();
+        await dialog.CloseAsync();
+        await _getRecords();
     }
     #endregion
 

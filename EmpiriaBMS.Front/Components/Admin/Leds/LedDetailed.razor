@@ -1,0 +1,25 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
+@using EmpiriaBMS.Front.Services
+@using Color = Microsoft.Fast.Components.FluentUI.Color
+@using EmpiriaBMS.Front.Components.Admin.Projects.Clients
+@using EmpiriaBMS.Core.Hellpers
+
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
+@inject MicrosoftTeams MicrosoftTeams
+
+@if (Content != null)
+{
+    <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
+
+        
+
+        @if (DisplayActions)
+        {
+            <div class="col-12 d-flex justify-content-end">
+                <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+            </div>
+        }
+
+    </div>
+}
