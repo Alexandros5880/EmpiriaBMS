@@ -125,6 +125,18 @@
             </div>
         </div>
 
+        <!-- Address (Map) -->
+        <div class="col-12">
+            <div class="row mt-3 mb-3">
+                <div class="col-12">
+                    <Map @ref="@_map"
+                        Id="adminProjectMap"
+                        AutoCompeteId="autocompeteAdminProjectMap"
+                        OnFindAddress="@(() => _onSearchAddressChange())" />
+                </div>
+            </div>
+        </div>
+
         @if (DisplayActions)
         {
             <div class="col-12 d-flex justify-content-end">

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
@@ -56,6 +57,10 @@ public partial class LedDetailed
 
         if (Content is not null)
         {
+            Content.Offer = null;
+            Content.Client = null;
+            Content.Address = null;
+
             var dto = _mapper.Map<LedDto>(Content);
             // Save Led
             if (await _dataProvider.Leds.Any(p => p.Id == Content.Id))
@@ -84,13 +89,16 @@ public partial class LedDetailed
             validName = !string.IsNullOrEmpty(Content.Name);
             validClient = !string.IsNullOrEmpty(Content?.Client?.FullName) || Content.ClientId != 0;
             validPotencialFee = Content?.PotencialFee > 0;
-            validOffer = !string.IsNullOrEmpty(Content?.Offer.Code) || Content.OfferId != 0;
+            validOffer = !string.IsNullOrEmpty(Content?.Offer?.Code) || (Content.OfferId != 0 && Content.OfferId != null);
 
             return validName && validClient && validPotencialFee && validOffer;
         }
         else
         {
             validName = true;
+            validClient = true;
+            validPotencialFee = true;
+            validOffer = true;
 
             switch (fieldname)
             {
@@ -104,7 +112,7 @@ public partial class LedDetailed
                     validClient = validPotencialFee = Content?.PotencialFee > 0; ;
                     return validPotencialFee;
                 case "Offer":
-                    validOffer = !string.IsNullOrEmpty(Content?.Offer.Code) || Content.OfferId != 0;
+                    validOffer = !string.IsNullOrEmpty(Content?.Offer?.Code) || Content.OfferId != 0;
                     return validOffer;
                 default:
                     return true;
@@ -128,6 +136,7 @@ public partial class LedDetailed
             if (_client == value || value == null) return;
             _client = value;
             Content.ClientId = _client.Id;
+            //Content.Client = _client;
         }
     }
 
@@ -143,6 +152,7 @@ public partial class LedDetailed
             if (_offer == value || value == null) return;
             _offer = value;
             Content.OfferId = _offer.Id;
+            //Content.Offer = _offer;
         }
     }
 
@@ -192,6 +202,17 @@ public partial class LedDetailed
         vms.ForEach(_offers.Add);
 
         Offer = _offers.FirstOrDefault(c => c.Id == Content.OfferId) ?? null;
+    }
+    #endregion
+
+    #region Map Address
+    private Map _map;
+
+    private void _onSearchAddressChange()
+    {
+        var address = _map.GetAddress();
+        if (address != null)
+            Content.Address = address;
     }
     #endregion
 }

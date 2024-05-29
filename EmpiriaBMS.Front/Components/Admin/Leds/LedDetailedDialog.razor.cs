@@ -17,10 +17,12 @@ public partial class LedDetailedDialog : IDialogContentComponent<LedVM>
 
     private async Task SaveAsync()
     {
+        var valid = _compoment.Validate();
+        if (!valid)
+            return;
         await _compoment.SaveAsync();
         await Dialog.CloseAsync(Content);
     }
-
 
     private async Task CancelAsync()
     {
