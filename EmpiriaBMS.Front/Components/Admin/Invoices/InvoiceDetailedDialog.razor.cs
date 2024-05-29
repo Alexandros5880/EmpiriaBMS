@@ -20,8 +20,12 @@ public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
 
     private async Task SaveAsync()
     {
-        _compomentRef.Save();
-        await Dialog.CloseAsync(Content);
+        var valid = _compomentRef.Validate();
+        if (valid)
+        {
+            await _compomentRef.Save();
+            await Dialog.CloseAsync(Content);
+        }
     }
 
     private async Task CancelAsync() =>

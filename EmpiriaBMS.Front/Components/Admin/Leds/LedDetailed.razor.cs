@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -16,7 +17,7 @@ namespace EmpiriaBMS.Front.Components.Admin.Leds;
 public partial class LedDetailed
 {
     [Parameter]
-    public LedVM Content { get; set; } = default!;
+    public LedVM Content { get; set; }
 
     [Parameter]
     public FluentDialog Dialog { get; set; } = null;
@@ -39,11 +40,13 @@ public partial class LedDetailed
         if (record != null)
             Content = record;
 
-        if (record == null)
+        if (record == null || record.Id == 0)
+        {
             Content = new LedVM()
             {
                 ExpectedDurationDate = DateTime.Now.AddMonths(1),
             };
+        }
 
         await _getRecords();
 
@@ -53,15 +56,29 @@ public partial class LedDetailed
     public async Task SaveAsync()
     {
         var valid = Validate();
-        if (!valid) return;
 
-        if (Content is not null)
+        if (valid)
         {
-            Content.Offer = null;
-            Content.Client = null;
-            Content.Address = null;
-
             var dto = _mapper.Map<LedDto>(Content);
+
+            // Save Address
+            // If Addres Then Save Address
+            if (dto?.Address != null && !(await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await _dataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var address = await _dataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                dto.AddressId = address.Id;
+            }
+
+            dto.Offer = null;
+            dto.Client = null;
+            dto.Address = null;
+            
             // Save Led
             if (await _dataProvider.Leds.Any(p => p.Id == Content.Id))
             {
@@ -86,7 +103,7 @@ public partial class LedDetailed
     {
         if (fieldname == null)
         {
-            validName = !string.IsNullOrEmpty(Content.Name);
+            validName = Content.Name != null && Content.Name.Length > 0;
             validClient = !string.IsNullOrEmpty(Content?.Client?.FullName) || Content.ClientId != 0;
             validPotencialFee = Content?.PotencialFee > 0;
             validOffer = !string.IsNullOrEmpty(Content?.Offer?.Code) || (Content.OfferId != 0 && Content.OfferId != null);
@@ -103,7 +120,7 @@ public partial class LedDetailed
             switch (fieldname)
             {
                 case "Name":
-                    validName = !string.IsNullOrEmpty(Content.Name);
+                    validName = Content.Name != null && Content.Name.Length > 0;
                     return validName;
                 case "Client":
                     validClient = !string.IsNullOrEmpty(Content?.Client?.FullName) || Content.ClientId != 0;
@@ -123,7 +140,6 @@ public partial class LedDetailed
     #endregion
 
     #region Get Related Records
-
     // Client Selection
     ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
 

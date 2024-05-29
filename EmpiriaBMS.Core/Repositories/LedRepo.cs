@@ -15,6 +15,59 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
 {
     public LedRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<LedDto> Add(LedDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var result = await _context.Set<Led>().AddAsync(Mapping.Mapper.Map<Led>(entity));
+                await _context.SaveChangesAsync();
+
+                return Mapping.Mapper.Map<LedDto>(result.Entity);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On LedRepo.Add({Mapping.Mapper.Map<Led>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
+        }
+    }
+
+    public async Task<LedDto> Update(LedDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<Led>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Led>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                return Mapping.Mapper.Map<LedDto>(entry);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On LedRepo.Update({Mapping.Mapper.Map<Led>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
+        }
+    }
+
     public async Task<LedDto?> Get(int id)
     {
         if (id == 0)

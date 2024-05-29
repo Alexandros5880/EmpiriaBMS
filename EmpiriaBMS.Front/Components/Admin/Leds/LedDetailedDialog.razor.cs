@@ -8,7 +8,7 @@ namespace EmpiriaBMS.Front.Components.Admin.Leds;
 public partial class LedDetailedDialog : IDialogContentComponent<LedVM>
 {
     [Parameter]
-    public LedVM Content { get; set; } = default!;
+    public LedVM Content { get; set; }
 
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
@@ -17,11 +17,7 @@ public partial class LedDetailedDialog : IDialogContentComponent<LedVM>
 
     private async Task SaveAsync()
     {
-        var valid = _compoment.Validate();
-        if (!valid)
-            return;
         await _compoment.SaveAsync();
-        await Dialog.CloseAsync(Content);
     }
 
     private async Task CancelAsync()

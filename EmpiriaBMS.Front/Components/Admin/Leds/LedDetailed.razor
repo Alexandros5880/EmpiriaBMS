@@ -23,12 +23,9 @@
                 </div>
                 @if (!validName)
                 {
-                    @if (string.IsNullOrEmpty(@Content?.Name))
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
                 }
             </div>
             <!-- PotencialFee-->
@@ -145,4 +142,10 @@
         }
 
     </div>
+} else
+{
+    <FluentOverlay Opacity="0.1"
+                   BackgroundColor="#444791">
+        <FluentProgressRing />
+    </FluentOverlay>
 }
