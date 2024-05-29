@@ -10,9 +10,120 @@
 
 @if (Content != null)
 {
-    <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
+    <div class="row gx-2">
 
-        
+        <div class="col-12 row gx-2">
+            <!-- Name -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Name<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentTextField Style="width: 100%;" @bind-Value="@Content.Name"/>
+                </div>
+                @if (!validName)
+                {
+                    @if (string.IsNullOrEmpty(@Content?.Name))
+                    {
+                        <div class="col-12">
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                }
+            </div>
+            <!-- PotencialFee-->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    PotencialFee<span class="text-danger">*</span>
+                </div>
+                <FluentNumberField Style="width: 100%;" @bind-Value="@Content.PotencialFee" Min="0" />
+                @if (!validPotencialFee)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-12 row gx-2">
+            <!-- Offer -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Offer<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Offer..."
+                                    Items="@_offers"
+                                    Height="100px"
+                                    Width="100%"
+                                    TOption="OfferVM"
+                                    OptionText="@(c => c.Code)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Offer" />
+                </div>
+                @if (!validOffer)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+            <!-- Client-->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Client<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Client..."
+                                    Items="@_clients"
+                                    Height="100px"
+                                    Width="100%"
+                                    TOption="ClientVM"
+                                    OptionText="@(c => c.FullName)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Client" />
+                </div>
+                @if (!validClient)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-12 row gx-2">
+            <!-- Result -->
+            <div class="col-lg-6 col-md-12">
+                <div>
+                    Result
+                </div>
+                <div>
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Result..."
+                                    Items="_results"
+                                    Height="100px"
+                                    Width="100%"
+                                    Class="float-end"
+                                    TOption="(string Value, string Text)"
+                                    OptionText="@(c => c.Text)"
+                                    OptionValue="@(c => c.Value)"
+                                    @bind-SelectedOption="SelectedResult" />
+                </div>
+            </div>
+            <!-- ExpectedDurationDate-->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    ExpectedDurationDate
+                </div>
+                <div>
+                    <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.ExpectedDurationDate"/>
+                </div>
+            </div>
+        </div>
 
         @if (DisplayActions)
         {

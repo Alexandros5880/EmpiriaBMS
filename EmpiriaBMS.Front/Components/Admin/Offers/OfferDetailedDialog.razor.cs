@@ -163,7 +163,7 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         set
         {
             _selectedResult = value;
-            OfferResult result = (OfferResult)Enum.Parse(typeof(Vat), value.Value);
+            OfferResult result = (OfferResult)Enum.Parse(typeof(OfferResult), value.Value);
             Content.Result = result;
         }
     }
