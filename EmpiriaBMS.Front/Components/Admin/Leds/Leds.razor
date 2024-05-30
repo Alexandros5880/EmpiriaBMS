@@ -6,7 +6,7 @@
 @inject IMapper Mapper
 @inject IDialogService DialogService
 
-<div class="row" style="width: 76vw; overflow-x: auto; margin: 0 auto;">
+<div class="row" style="overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow">
         <div>
             <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
@@ -19,9 +19,10 @@
                             Pagination="@pagination"
                             TGridItem="LedVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="auto 160px 160px 160px 100px"
+                            GridTemplateColumns="120px 160px 160px 160px 160px 180px 160px 100px"
                             style="height: 70vh; overflow:auto;">
 
+                <!-- Name -->
                 <TemplateColumn Title="Name"
                                 Sortable="true"
                                 InitialSortDirection=SortDirection.Descending
@@ -40,20 +41,46 @@
                     </ChildContent>
                 </TemplateColumn>
 
-                <PropertyColumn Property="@(p => p.Name)" Sortable="true" Title="Name" Align="@Align.Start" />
+                <!-- Client -->
+                <TemplateColumn Title="Client"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ChildContent>
+                        @(context.Client?.FullName)
+                    </ChildContent>
+                </TemplateColumn>
 
-                <PropertyColumn Property="@(p => p.Client.FullName)" Sortable="true" Title="Client" Align="@Align.Start" />
+                <!-- Offer -->
+                <TemplateColumn Title="Offer"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ChildContent>
+                        @(context.Offer?.Code)
+                    </ChildContent>
+                </TemplateColumn>
 
-                <PropertyColumn Property="@(p => p.Offer.Code)" Sortable="true" Title="Offer Code" Align="@Align.Start" />
-
+                <!-- PotencialFee -->
                 <PropertyColumn Property="@(p => p.PotencialFee)" Sortable="true" Title="Potencial Fee" Align="@Align.Start" />
 
+                <!-- Result -->
                 <PropertyColumn Property="@(p => p.Result.GetDisplayName())" Sortable="true" Title="Result" Align="@Align.Start" />
 
-                <PropertyColumn Property="@(p => p.Address.FormattedAddress)" Sortable="true" Title="Address" Align="@Align.Start" />
+                <!-- Address -->
+                <TemplateColumn Title="Address"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ChildContent>
+                        @(context.Address?.FormattedAddress)
+                    </ChildContent>
+                </TemplateColumn>
 
+                <!-- ExpectedDurationDate -->
                 <PropertyColumn Property="@(p => p.ExpectedDurationDate)" Format="dd-mm-yyyy" Sortable="true" Title="Duratio nDate" Align="@Align.Start" />
 
+                <!-- Actions -->
                 <TemplateColumn Title="Actions" Align="@Align.End">
                     <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
                     <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
