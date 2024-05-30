@@ -57,6 +57,8 @@ public partial class LedDetailed
             SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
 
         StateHasChanged();
+
+        await RefreshMap();
     }
 
     public async Task<LedVM> SaveAsync()
@@ -240,6 +242,13 @@ public partial class LedDetailed
     #region Map Address
     private Map _map;
 
+    public async Task RefreshMap()
+    {
+        if (Content.Id != 0 && Content.Address != null)
+        {
+            await _map.SetAddress(Content.Address);
+        }
+    }
     private void _onSearchAddressChange()
     {
         var address = _map.GetAddress();
