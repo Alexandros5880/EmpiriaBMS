@@ -54,7 +54,11 @@ public partial class Leds
             Width = "min(70%, 500px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(new LedVM(), parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(new LedVM()
+        {
+            ExpectedDurationDate = DateTime.Now,
+            Result = Models.Enum.LedResult.UNSUCCESSFUL
+        }, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)

@@ -17,45 +17,53 @@ namespace EmpiriaBMS.Front.Components.Admin.Leds;
 public partial class LedDetailed
 {
     [Parameter]
-    public LedVM Content { get; set; }
-
-    [Parameter]
-    public FluentDialog Dialog { get; set; } = null;
-
-    [Parameter]
     public bool DisplayActions { get; set; } = true;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            await Prepair();
-        }
-    }
+    public LedVM Content { get; set; }
 
     public async Task Prepair(LedVM record = null)
     {
-        if (record != null)
-            Content = record;
-
         if (record == null || record.Id == 0)
         {
             Content = new LedVM()
             {
                 ExpectedDurationDate = DateTime.Now.AddMonths(1),
+                Result = LedResult.UNSUCCESSFUL
             };
+
+        }
+        else
+        {
+            Content = record;
         }
 
         await _getRecords();
 
+        if (Content.Offer != null)
+        {
+            var offerDto = Mapping.Mapper.Map<OfferDto>(Content.Offer);
+            Offer = _mapper.Map<OfferVM>(offerDto);
+        }
+
+        if (Content.Client != null)
+        {
+            var clientDto = Mapping.Mapper.Map<ClientDto>(Content.Client);
+            Client = _mapper.Map<ClientVM>(clientDto);
+        }
+
+        if (Content.Result == null)
+            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
+        else
+            SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+
         StateHasChanged();
     }
 
-    public async Task SaveAsync()
+    public async Task<LedVM> SaveAsync()
     {
         var valid = Validate();
+
+        StateHasChanged();
 
         if (valid)
         {
@@ -90,6 +98,11 @@ public partial class LedDetailed
                 var updated = await _dataProvider.Leds.Add(dto);
                 Content = _mapper.Map<LedVM>(updated);
             }
+
+            return Content;
+        } else
+        {
+            return null;
         }
     }
 
@@ -152,7 +165,8 @@ public partial class LedDetailed
             if (_client == value || value == null) return;
             _client = value;
             Content.ClientId = _client.Id;
-            //Content.Client = _client;
+            var dto = _mapper.Map<ClientDto>(_client);
+            Content.Client = Mapping.Mapper.Map<Client>(dto);
         }
     }
 
@@ -168,11 +182,13 @@ public partial class LedDetailed
             if (_offer == value || value == null) return;
             _offer = value;
             Content.OfferId = _offer.Id;
-            //Content.Offer = _offer;
+            var dto = _mapper.Map<OfferDto>(_offer);
+            Content.Offer = Mapping.Mapper.Map<Offer>(dto);
         }
     }
 
     // Result Selection
+    private FluentCombobox<(string Value, string Text)> _resultCombo;
     private List<(string Value, string Text)> _results = Enum.GetValues(typeof(LedResult))
                                                              .Cast<LedResult>()
                                                              .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())

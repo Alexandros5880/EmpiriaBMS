@@ -15,9 +15,21 @@ public partial class LedDetailedDialog : IDialogContentComponent<LedVM>
 
     private LedDetailed _compoment;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await _compoment.Prepair(Content);
+        }
+    }
+
     private async Task SaveAsync()
     {
-        await _compoment.SaveAsync();
+        Content = await _compoment.SaveAsync();
+        if (Content != null)
+            await Dialog.CloseAsync(Content);
     }
 
     private async Task CancelAsync()
