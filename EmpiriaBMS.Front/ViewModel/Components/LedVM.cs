@@ -20,19 +20,6 @@ public class LedVM : BaseVM
         }
     }
 
-    private string _country;
-    public string Country
-    {
-        get => _country;
-        set
-        {
-            if (value == _country)
-                return;
-            _country = value;
-            NotifyPropertyChanged(nameof(Country));
-        }
-    }
-
     private int _clientId;
     public int ClientId
     {
@@ -46,8 +33,8 @@ public class LedVM : BaseVM
         }
     }
 
-    private ClientVM? _client;
-    public ClientVM? Client
+    private Client? _client;
+    public Client? Client
     {
         get => _client;
         set
@@ -72,8 +59,8 @@ public class LedVM : BaseVM
         }
     }
 
-    private OfferVM? _offer;
-    public OfferVM? Offer
+    private Offer? _offer;
+    public Offer? Offer
     {
         get => _offer;
         set
@@ -98,8 +85,8 @@ public class LedVM : BaseVM
         }
     }
 
-    private AddressVM? _address;
-    public AddressVM? Address
+    private Address? _address;
+    public Address? Address
     {
         get => _address;
         set

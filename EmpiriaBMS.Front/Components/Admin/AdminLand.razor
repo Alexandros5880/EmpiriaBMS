@@ -1,7 +1,7 @@
 ﻿<h3>Administration</h3>
 
-<FluentStack Orientation="Orientation.Horizontal" Width="100%">
-    <div style="max-height: 78vh;">
+<div class="row">
+    <div class="col-3" style="max-height: 78vh;">
         <FluentNavMenu Width="280"
                        Collapsible="false"
                        Title="Collapsible demo"
@@ -23,6 +23,77 @@
                                OnClick="@(() => TabMenuClick(2))"
                                Class="@((tabs[2] ? "active-nav-link" : ""))">
                     Permissions
+                </FluentNavLink>
+            </FluentNavGroup>
+
+            <!-- Leds -->
+            <FluentNavLink Icon="@(new MyIcons.Size24.Result())"
+                           OnClick="@(() => TabMenuClick(23))"
+                           Class="@((tabs[23] ? "active-nav-link" : ""))">
+                Leds
+            </FluentNavLink>
+
+            <!--  Offers -->
+            <FluentNavGroup Title="Offers" Icon="@(new MyIcons.Size24.Offers1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())"
+                               OnClick="@(() => TabMenuClick(9))"
+                               Class="@((tabs[9] ? "active-nav-link" : ""))">
+                    Offers
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(10))"
+                               Class="@((tabs[10] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.States())"
+                               OnClick="@(() => TabMenuClick(11))"
+                               Class="@((tabs[11] ? "active-nav-link" : ""))">
+                    States
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Categories())"
+                               OnClick="@(() => TabMenuClick(5))"
+                               Class="@((tabs[5] ? "active-nav-link" : ""))">
+                    Categories
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.SubCategories())"
+                               OnClick="@(() => TabMenuClick(6))"
+                               Class="@((tabs[6] ? "active-nav-link" : ""))">
+                    Sub Categories
+                </FluentNavLink>
+            </FluentNavGroup>
+
+            <!-- Projects Invoices -->
+            <FluentNavGroup Title="Invoices" Icon="@(new MyIcons.Size24.Invoices1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Invoices2())"
+                               OnClick="@(() => TabMenuClick(12))"
+                               Class="@((tabs[12] ? "active-nav-link" : ""))">
+                    Invoices
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(13))"
+                               Class="@((tabs[13] ? "active-nav-link" : ""))">
+                    Types
+                </FluentNavLink>
+            </FluentNavGroup>
+
+            <!-- Projects Contracts -->
+            <FluentNavLink Icon="@(new MyIcons.Size24.Contract())"
+                           OnClick="@(() => TabMenuClick(22))"
+                           Class="@((tabs[22] ? "active-nav-link" : ""))">
+                Contracts
+            </FluentNavLink>
+
+            <!-- Projects Payments -->
+            <FluentNavGroup Title="Payments" Icon="@(new MyIcons.Size24.Payments1())">
+                <FluentNavLink Icon="@(new MyIcons.Size24.Payments2())"
+                               OnClick="@(() => TabMenuClick(14))"
+                               Class="@((tabs[14] ? "active-nav-link" : ""))">
+                    Payments
+                </FluentNavLink>
+                <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
+                               OnClick="@(() => TabMenuClick(15))"
+                               Class="@((tabs[15] ? "active-nav-link" : ""))">
+                    Types
                 </FluentNavLink>
             </FluentNavGroup>
 
@@ -58,65 +129,6 @@
                                Class="@((tabs[8] ? "active-nav-link" : ""))">
                     Issues
                 </FluentNavLink>
-
-                <!-- Projects Offers -->
-                <FluentNavGroup Title="Offers" Icon="@(new MyIcons.Size24.Offers1())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())"
-                                   OnClick="@(() => TabMenuClick(9))"
-                                   Class="@((tabs[9] ? "active-nav-link" : ""))">
-                        Offers
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
-                                   OnClick="@(() => TabMenuClick(10))"
-                                   Class="@((tabs[10] ? "active-nav-link" : ""))">
-                        Types
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.States())"
-                                   OnClick="@(() => TabMenuClick(11))"
-                                   Class="@((tabs[11] ? "active-nav-link" : ""))">
-                        States
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Result())"
-                                   OnClick="@(() => TabMenuClick(23))"
-                                   Class="@((tabs[23] ? "active-nav-link" : ""))">
-                        Results
-                    </FluentNavLink>
-                </FluentNavGroup>
-
-                <!-- Projects Contracts -->
-                <FluentNavLink Icon="@(new MyIcons.Size24.Contract())"
-                               OnClick="@(() => TabMenuClick(22))"
-                               Class="@((tabs[22] ? "active-nav-link" : ""))">
-                    Contracts
-                </FluentNavLink>
-
-                <!-- Projects Invoices -->
-                <FluentNavGroup Title="Invoices" Icon="@(new MyIcons.Size24.Invoices1())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Invoices2())"
-                                   OnClick="@(() => TabMenuClick(12))"
-                                   Class="@((tabs[12] ? "active-nav-link" : ""))">
-                        Invoices
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
-                                   OnClick="@(() => TabMenuClick(13))"
-                                   Class="@((tabs[13] ? "active-nav-link" : ""))">
-                        Types
-                    </FluentNavLink>
-                </FluentNavGroup>
-
-                <!-- Projects Payments -->
-                <FluentNavGroup Title="Payments" Icon="@(new MyIcons.Size24.Payments1())">
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Payments2())"
-                                   OnClick="@(() => TabMenuClick(14))"
-                                   Class="@((tabs[14] ? "active-nav-link" : ""))">
-                        Payments
-                    </FluentNavLink>
-                    <FluentNavLink Icon="@(new MyIcons.Size24.Types())"
-                                   OnClick="@(() => TabMenuClick(15))"
-                                   Class="@((tabs[15] ? "active-nav-link" : ""))">
-                        Types
-                    </FluentNavLink>
-                </FluentNavGroup>
             </FluentNavGroup>
 
             <!-- Disciplines -->
@@ -163,7 +175,7 @@
 
         </FluentNavMenu>
     </div>
-    <div>
+    <div class="col-9">
 
         <!-- Display Body -->
         @if (tabs[0])
@@ -223,43 +235,43 @@
         else if (tabs[9])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Offers.Offers />
+                <EmpiriaBMS.Front.Components.Admin.Offers.Offers />
             </div>
         }
         else if (tabs[10])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Offers.Types.OfferTypes />
+                <EmpiriaBMS.Front.Components.Admin.Offers.Types.OfferTypes />
             </div>
         }
         else if (tabs[11])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Offers.States.OfferStates />
+                <EmpiriaBMS.Front.Components.Admin.Offers.States.OfferStates />
             </div>
         }
         else if (tabs[12])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Invoices.InvoicesTable />
+                <EmpiriaBMS.Front.Components.Admin.Invoices.InvoicesTable />
             </div>
         }
         else if (tabs[13])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Invoices.Types.InvoiceTypes />
+                <EmpiriaBMS.Front.Components.Admin.Invoices.Types.InvoiceTypes />
             </div>
         }
         else if (tabs[14])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Payments.Payments />
+                <EmpiriaBMS.Front.Components.Admin.Payments.Payments />
             </div>
         }
         else if (tabs[15])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Payments.Types.PaymentTypes />
+                <EmpiriaBMS.Front.Components.Admin.Payments.Types.PaymentTypes />
             </div>
         }
         else if (tabs[16])
@@ -301,15 +313,15 @@
         else if (tabs[22])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Contracts.Contracts />
+                <EmpiriaBMS.Front.Components.Admin.Contracts.Contracts />
             </div>
         }
         else if (tabs[23])
         {
             <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Projects.Offers.Results.OfferResults />
+                <EmpiriaBMS.Front.Components.Admin.Leds.Leds />
             </div>
         }
 
     </div>
-</FluentStack>
+</div>

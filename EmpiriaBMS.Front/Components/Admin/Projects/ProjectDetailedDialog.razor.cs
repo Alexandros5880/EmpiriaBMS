@@ -223,14 +223,4 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 
     #endregion
 
-    #region Map Address
-    private Map _map;
-
-    private void _onSearchAddressChange()
-    {
-        //var address = _map.GetAddress();
-        //if (address != null)
-        //    Content.Address = address;
-    }
-    #endregion
 }

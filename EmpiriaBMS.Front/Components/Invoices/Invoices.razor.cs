@@ -1,10 +1,7 @@
-﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Projects.Invoices;
-using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
-using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Invoices;
 

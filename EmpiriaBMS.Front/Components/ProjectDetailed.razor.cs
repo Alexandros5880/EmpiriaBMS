@@ -145,13 +145,6 @@ public partial class ProjectDetailed : ComponentBase
 
     public ProjectVM GetProject() => Content as ProjectVM;
 
-    #region Client && Autocomplete
-    private bool _diplayedClientForm = false;
-    private ClientVM _backupClient;
-
-
-    #endregion
-
     #region Validation
     private bool validName = true;
     private bool validCode = true;
@@ -277,17 +270,6 @@ public partial class ProjectDetailed : ComponentBase
         vms.ForEach(_pms.Add);
 
         Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId) ?? null;
-    }
-    #endregion
-
-    #region Map Address
-    private Map _myMapRef;
-
-    private void _onSearchAddressChange()
-    {
-        //var address = _myMapRef.GetAddress();
-        //if (address != null)
-        //    Content.Address = address;
     }
     #endregion
 }

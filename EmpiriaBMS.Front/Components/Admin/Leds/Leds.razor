@@ -1,0 +1,102 @@
+﻿@page "/admin/projects/leds"
+
+@using EmpiriaBMS.Front.Services
+
+@inject IDataProvider DataProvider
+@inject IMapper Mapper
+@inject IDialogService DialogService
+
+<div class="row" style="overflow-x: auto; margin: 0 auto;">
+    <div class="col-12 card shadow">
+        <div>
+            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+            </FluentStack>
+        </div>
+        <div>
+            <FluentDataGrid Items="@FilteredItems"
+                            ResizableColumns=true
+                            Pagination="@pagination"
+                            TGridItem="LedVM"
+                            OnRowFocus="HandleRowFocus"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            style="height: 70vh; overflow:auto;">
+
+                <!-- Name -->
+                <TemplateColumn Title="Name"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                          Autofocus=true
+                                          @bind-Value="@_filterString"
+                                          Placeholder="Name..."
+                                          @oninput="@HandleFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.Name)
+                    </ChildContent>
+                </TemplateColumn>
+
+                <!-- Client -->
+                <TemplateColumn Title="Client"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ChildContent>
+                        @(context.Client?.FullName)
+                    </ChildContent>
+                </TemplateColumn>
+
+                <!-- Offer -->
+                <TemplateColumn Title="Offer"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ChildContent>
+                        @(context.Offer?.Code)
+                    </ChildContent>
+                </TemplateColumn>
+
+                <!-- PotencialFee -->
+                <PropertyColumn Property="@(p => p.PotencialFee)" Sortable="true" Title="Potencial Fee" Align="@Align.Start" />
+
+                <!-- Result -->
+                <PropertyColumn Property="@(p => p.Result.GetDisplayName())" Sortable="true" Title="Result" Align="@Align.Start" />
+
+                <!-- Address -->
+                <TemplateColumn Title="Address"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ChildContent>
+                        @(context.Address?.FormattedAddress)
+                    </ChildContent>
+                </TemplateColumn>
+
+                <!-- ExpectedDurationDate -->
+                <PropertyColumn Property="@(p => p.ExpectedDurationDate)" Format="dd-mm-yyyy" Sortable="true" Title="Duratio nDate" Align="@Align.Start" />
+
+                <!-- Actions -->
+                <TemplateColumn Title="Actions" Align="@Align.End">
+                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                </TemplateColumn>
+
+            </FluentDataGrid>
+        </div>
+        <div style="min-width: 50%;">
+            <FluentPaginator State="@pagination">
+                <SummaryTemplate>
+                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                </SummaryTemplate>
+                <PaginationTextTemplate>
+                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                </PaginationTextTemplate>
+            </FluentPaginator>
+        </div>
+    </div>
+</div>

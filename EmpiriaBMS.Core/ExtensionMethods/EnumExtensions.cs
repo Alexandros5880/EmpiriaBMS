@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmpiriaBMS.Core.ExtensionMethods;
+namespace System;
 
 public static class EnumExtensions
 {

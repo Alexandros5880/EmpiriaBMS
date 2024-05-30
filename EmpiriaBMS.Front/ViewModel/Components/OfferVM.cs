@@ -1,5 +1,4 @@
-﻿using EmpiriaBMS.Core.ExtensionMethods;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 

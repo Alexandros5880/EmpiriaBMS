@@ -1,5 +1,5 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Projects.Payments;
+using EmpiriaBMS.Front.Components.Admin.Payments;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
