@@ -7,7 +7,7 @@
 @inject IMapper Mapper
 @inject IDialogService DialogService
 
-<div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
+<div class="row" style="overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow">
         @if (DisplayAddButton)
         {
@@ -23,7 +23,7 @@
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
-                            GridTemplateColumns="160px 100px 100px 160px 100px 160px 100px 100px 100px"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 100% min-height: 300px; overflow:auto;">
 
                 <TemplateColumn Title="Project"
