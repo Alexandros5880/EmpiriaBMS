@@ -322,7 +322,14 @@ public static class ModelRelations
                .HasMany(p => p.Projects)
                .WithOne(c => c.Category)
                .HasForeignKey(c => c.CategoryId)
-               .OnDelete(DeleteBehavior.Cascade);
+               .OnDelete(DeleteBehavior.ClientCascade);
+
+        // Offers SubCategory
+        builder.Entity<ProjectSubCategory>()
+               .HasMany(p => p.Offers)
+               .WithOne(o => o.Category)
+               .HasForeignKey(c => c.CategoryId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // Leds Address
         builder.Entity<Address>()

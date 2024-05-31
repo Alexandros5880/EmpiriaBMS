@@ -64,6 +64,35 @@ public class OfferVM : BaseVM
 
     public string StateName => State != null ? State.Name : "";
 
+    // Project Category
+    private int? _categoryId;
+    public int? CategoryId
+    {
+        get => _categoryId;
+        set
+        {
+            if (value == _categoryId)
+                return;
+            _categoryId = value;
+            NotifyPropertyChanged(nameof(CategoryId));
+        }
+    }
+
+    private ProjectSubCategory _category;
+    public ProjectSubCategory Category
+    {
+        get => _category;
+        set
+        {
+            if (value == _category)
+                return;
+            _category = value;
+            NotifyPropertyChanged(nameof(Category));
+        }
+    }
+
+    public string ProjectCategoryName => Category != null ? Category.Name : "";
+
     // Led
     private int? _ledId;
     public int? LedId

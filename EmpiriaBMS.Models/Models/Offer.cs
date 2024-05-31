@@ -14,6 +14,9 @@ public class Offer : Entity
     public int StateId { get; set; }
     public OfferState State { get; set; }
 
+    public int? CategoryId { get; set; }
+    public ProjectSubCategory Category { get; set; }
+
     public int? LedId { get; set; }
     public Led? Led { get; set; }
 

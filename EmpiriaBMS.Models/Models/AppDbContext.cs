@@ -2874,6 +2874,7 @@ public class AppDbContext : DbContext
                 Result = OfferResult.SUCCESSFUL,
                 PudgetPrice = 1000 * i * 3,
                 OfferPrice = 1000 * i * 2,
+                CategoryId = projectSubCategories[i - 1].Id,
             };
             builder.Entity<Offer>().HasData(offer);
 
@@ -2974,7 +2975,8 @@ public class AppDbContext : DbContext
                 StateId = offerStatesIds[random.Next(0, 1)],
                 Result = OfferResult.SUCCESSFUL,
                 PudgetPrice = 1000 * i * 4,
-                OfferPrice = 1000 * i * 3
+                OfferPrice = 1000 * i * 3,
+                CategoryId = projectSubCategories[subCategoriesIndex].Id,
             };
             builder.Entity<Offer>().HasData(offer);
 

@@ -13,4 +13,6 @@ public class ProjectSubCategory : Entity
     public ProjectCategory Category { get; set; }
 
     public ICollection<Project> Projects { get; set; }
+
+    public ICollection<Offer> Offers { get; set; }
 }
