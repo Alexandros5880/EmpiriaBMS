@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace EmpiriaBMS.Models;
 public static class ModelRelations
@@ -317,15 +316,15 @@ public static class ModelRelations
                .HasForeignKey(c => c.CategoryId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // Projects SubCategory
+        // Offers SubCategory
         builder.Entity<ProjectSubCategory>()
-               .HasMany(p => p.Projects)
-               .WithOne(c => c.Category)
-               .HasForeignKey(c => c.CategoryId)
+               .HasMany(p => p.Offers)
+               .WithOne(o => o.SubCategory)
+               .HasForeignKey(c => c.SubCategoryId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // Offers SubCategory
-        builder.Entity<ProjectSubCategory>()
+        builder.Entity<ProjectCategory>()
                .HasMany(p => p.Offers)
                .WithOne(o => o.Category)
                .HasForeignKey(c => c.CategoryId)

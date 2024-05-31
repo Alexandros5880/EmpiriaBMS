@@ -53,47 +53,20 @@
         <!-- Category -->
         <div class="col-lg-6 col-md-12">
             <div class="col-12">
-                Category<span class="text-danger">*</span>
+                Category
             </div>
             <div class="col-12">
-                <FluentCombobox Placeholder="Select Category..."
-                                Items="@_categories"
-                                Height="200px"
-                                Width="100%"
-                                TOption="ProjectCategoryVM"
-                                OptionText="@(c => c.Name)"
-                                OptionValue="@(c => c.Id.ToString())"
-                                @bind-SelectedOption="@Category" />
+                <span>@(Content.Offer?.Category?.Name ?? "--")</span>
             </div>
-            @if (!validCategory)
-            {
-                <div class="col-12">
-                    <span class="text-warning">Field is required!</span>
-                </div>
-            }
         </div>
         <!-- SubCategory-->
         <div class="col-lg-6 col-md-12">
             <div class="col-12">
-                SubCategory<span class="text-danger">*</span>
+                SubCategory
             </div>
             <div class="col-12">
-            <FluentCombobox @ref="@_subCatCombo"
-                            Placeholder="Select SubCategory..."
-                            Items="@_subCategories"
-                            Height="200px"
-                            Width="100%"
-                            TOption="ProjectSubCategoryVM"
-                            OptionText="@(c => c.Name)"
-                            OptionValue="@(c => c.Id.ToString())"
-                            @bind-SelectedOption="@SubCategory"/>
+                <span>@(Content.Offer?.SubCategory?.Name ?? "--")</span>
             </div>
-            @if (!validSubCategory)
-            {
-            <div class="col-12">
-                <span class="text-warning">Field is required!</span>
-            </div>
-            }
         </div>
     </div>
 

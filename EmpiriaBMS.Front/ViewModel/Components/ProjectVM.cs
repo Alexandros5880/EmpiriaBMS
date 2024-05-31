@@ -1,5 +1,5 @@
-﻿using EmpiriaBMS.Models.Models;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
@@ -67,32 +67,6 @@ public class ProjectVM : BaseVM
                 return;
             _estimatedHours = value;
             NotifyPropertyChanged(nameof(EstimatedHours));
-        }
-    }
-
-    private int? _categoryId;
-    public int? CategoryId
-    {
-        get => _categoryId;
-        set
-        {
-            if (value == _categoryId)
-                return;
-            _categoryId = value;
-            NotifyPropertyChanged(nameof(CategoryId));
-        }
-    }
-
-    private ProjectSubCategory _category;
-    public ProjectSubCategory Category
-    {
-        get => _category;
-        set
-        {
-            if (value == _category)
-                return;
-            _category = value;
-            NotifyPropertyChanged(nameof(Category));
         }
     }
 

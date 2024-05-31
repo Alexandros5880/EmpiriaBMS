@@ -1,6 +1,6 @@
-﻿using EmpiriaBMS.Models.Models;
-using EmpiriaBMS.Core.Dtos.Base;
+﻿using EmpiriaBMS.Core.Dtos.Base;
 using EmpiriaBMS.Models.Enum;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Dtos;
 
@@ -13,7 +13,10 @@ public class OfferDto : EntityDto
     public OfferState State { get; set; }
 
     public int? CategoryId { get; set; }
-    public ProjectSubCategory Category { get; set; }
+    public ProjectCategory Category { get; set; }
+
+    public int? SubCategoryId { get; set; }
+    public ProjectSubCategory SubCategory { get; set; }
 
     public int? LedId { get; set; }
     public Led? Led { get; set; }

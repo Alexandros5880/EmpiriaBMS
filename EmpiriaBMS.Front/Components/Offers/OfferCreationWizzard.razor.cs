@@ -105,7 +105,7 @@ public partial class OfferCreationWizzard
             var dto = _mapper.Map<ProjectDto>(p);
 
             // Remove Related Objects For DB Conflicts
-            dto.Category = null;
+            dto.Offer = null;
             dto.Stage = null;
             dto.ProjectManager = null;
 
@@ -130,7 +130,7 @@ public partial class OfferCreationWizzard
         else
             return null;
     }
-    
+
     private async Task<OfferVM> _upsertOffer(OfferVM offer)
     {
         if (offer is not null)
@@ -272,7 +272,8 @@ public partial class OfferCreationWizzard
             var dto = Mapping.Mapper.Map<InvoiceDto>(inv);
             _invoice = _mapper.Map<InvoiceVM>(dto);
             _contract = _invoice.Contract;
-        } else
+        }
+        else
         {
             _contract = new ContractVM()
             {
