@@ -18,30 +18,16 @@
                             Pagination="@pagination"
                             TGridItem="OfferVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 70vh; overflow:auto;">
-
-                @* <TemplateColumn Title="Name"
-                                Sortable="true"
-                                InitialSortDirection=SortDirection.Descending
-                                IsDefaultSortColumn=true>
-                    <ColumnOptions>
-                        <div class="search-box">
-                            <FluentSearch type="search"
-                                          Autofocus=true
-                                          @bind-Value="@_filterString"
-                                          Placeholder="Project..."
-                                          @oninput="@HandleFilter" />
-                        </div>
-                    </ColumnOptions>
-                    <ChildContent>
-                        @(context.ProjectName)
-                    </ChildContent>
-                </TemplateColumn> *@
 
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
 
                 <PropertyColumn Property="@(p => p.StateName)" Sortable="true" Title="State" Align="@Align.Start" />
+
+                <PropertyColumn Property="@(p => p.Category.Name)" Sortable="true" Title="Category" Align="@Align.Start" />
+
+                <PropertyColumn Property="@(p => p.SubCategory.Name)" Sortable="true" Title="SubCategory" Align="@Align.Start" />
 
                 <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Align="@Align.Start" />
 
