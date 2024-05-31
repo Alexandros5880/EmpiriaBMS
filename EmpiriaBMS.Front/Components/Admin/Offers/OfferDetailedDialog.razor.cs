@@ -59,11 +59,14 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
             // SubCategory
             if (Content.SubCategory != null)
             {
-                SubCategory = _subCategories.FirstOrDefault(s => s.Id == Content.SubCategoryId);
+                var subCategoryDto = Mapping.Mapper.Map<ProjectSubCategoryDto>(Content.SubCategory);
+                SubCategory = _mapper.Map<ProjectSubCategoryVM>(subCategoryDto);
             }
             else if (Content.SubCategoryId != 0)
             {
                 SubCategory = _subCategories.FirstOrDefault(s => s.Id == Content.SubCategoryId);
+                _subCatCombo.Value = SubCategory.Name;
+                _subCatCombo.SelectedOption = SubCategory;
             }
 
             StateHasChanged();
@@ -211,8 +214,7 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         {
             if (_subCategory == value || value == null) return;
             _subCategory = value;
-            var subCat = _subCategories.FirstOrDefault(c => c.Id == _subCategory.Id);
-            var dto = _mapper.Map<ProjectSubCategoryDto>(subCat);
+            var dto = _mapper.Map<ProjectSubCategoryDto>(_subCategory);
             Content.SubCategory = Mapping.Mapper.Map<ProjectSubCategory>(dto);
         }
     }
@@ -274,15 +276,16 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         // SubCategory
         if (Content.SubCategory != null)
         {
-            SubCategory = _subCategories.FirstOrDefault(s => s.Id == Content.SubCategoryId);
+            var subCategoryDto = Mapping.Mapper.Map<ProjectSubCategoryDto>(Content.SubCategory);
+            SubCategory = _mapper.Map<ProjectSubCategoryVM>(subCategoryDto);
             _subCatCombo.Value = SubCategory.Name;
-            _subCatCombo.SelectedOption = SubCategory;
+            //_subCatCombo.SelectedOption = SubCategory;
         }
         else if (Content.SubCategoryId != 0)
         {
             SubCategory = _subCategories.FirstOrDefault(s => s.Id == Content.SubCategoryId);
             _subCatCombo.Value = SubCategory.Name;
-            _subCatCombo.SelectedOption = SubCategory;
+            //_subCatCombo.SelectedOption = SubCategory;
         }
 
         if (refresh)
