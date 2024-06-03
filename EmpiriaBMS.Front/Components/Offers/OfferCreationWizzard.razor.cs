@@ -1,8 +1,10 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.Admin.Invoices;
+using EmpiriaBMS.Front.Components.Admin.Leds;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.Offers;
@@ -12,6 +14,8 @@ public partial class OfferCreationWizzard
     private bool _isNew => Offer?.Id == 0;
     private bool _loading = false;
     private bool _loadingOnInvoice = false;
+
+    public LedVM Led { get; set; } = default!;
 
     [Parameter]
     public OfferVM Offer { get; set; } = default!;
@@ -23,13 +27,17 @@ public partial class OfferCreationWizzard
     public EventCallback OnCansel { get; set; }
 
     private ProjectVM _project { get; set; }
+    List<ProjectVM> _projects = new List<ProjectVM>();
+
     private InvoiceVM _invoice { get; set; }
     List<InvoiceVM> _invoices = new List<InvoiceVM>();
+
     private ContractVM _contract { get; set; }
 
     private bool _contractTabEnable => Offer?.Result == OfferResult.SUCCESSFUL;
 
     #region Compoment Refrences
+    private LedDetailed _ledCompoment;
     private ProjectDetailed _projectCompoment;
     private OfferDetailed _offerCompoment;
     private InvoiceDetailed _invoiceCompoment;
@@ -50,8 +58,18 @@ public partial class OfferCreationWizzard
         Offer = Offer != null ? Offer : new OfferVM()
         {
             Date = DateTime.Now,
+            Led = new Led()
         };
-        await _getProject();
+
+        if (Offer?.Led == null)
+        {
+            Offer.Led = new Led();
+        }
+
+        var ledDto = Mapping.Mapper.Map<LedDto>(Offer.Led);
+        Led = _mapper.Map<LedVM>(ledDto);
+
+        await _getProjects();
         _getInvoice();
         await TabMenuClick(0);
     }
@@ -62,11 +80,17 @@ public partial class OfferCreationWizzard
             await OnSave.InvokeAsync();
     }
 
+    private async Task _onProjectSelect(ProjectVM project)
+    {
+        _project = project;
+        //await _projectCompoment.Prepair(project, true);
+    }
+
     private async Task _onInvoiceSelect(InvoiceVM invoice)
     {
         _invoice = invoice;
         _contract = _invoice.Contract;
-        await _invoiceCompoment.Prepair(invoice, true);
+        await _invoiceCompoment.Prepair();
     }
 
     private async Task _addInvoice()
@@ -80,20 +104,46 @@ public partial class OfferCreationWizzard
 
     private async Task _saveBase()
     {
-        // Update Project
-        var projectUpdated = await _upsertProject(_project);
-        if (projectUpdated == null)
-            return;
-        var projectDto = _mapper.Map<ProjectDto>(projectUpdated);
+        // Save Led
+        if (_tabIndex == 0)
+        {
 
-        // Update Offer
-        var offerUpdated = await _upsertOffer(Offer);
-        if (offerUpdated == null)
-            return;
-        Offer = offerUpdated;
+        }
 
-        // Update Offer Related Project
-        _project = projectUpdated;
+        // Save Led && Offer
+        else if (_tabIndex == 1)
+        {
+
+        }
+
+        // Save Led && Offer && Projects
+        else if (_tabIndex == 2)
+        {
+
+        }
+
+        // Save Led && Offer && Projects && Invoices
+        else if (_tabIndex == 3)
+        {
+
+        }
+
+
+
+        //// Update Project
+        //var projectUpdated = await _upsertProject(_project);
+        //if (projectUpdated == null)
+        //    return;
+        //var projectDto = _mapper.Map<ProjectDto>(projectUpdated);
+
+        //// Update Offer
+        //var offerUpdated = await _upsertOffer(Offer);
+        //if (offerUpdated == null)
+        //    return;
+        //Offer = offerUpdated;
+
+        //// Update Offer Related Project
+        //_project = projectUpdated;
     }
 
     #region Update Records
@@ -165,23 +215,35 @@ public partial class OfferCreationWizzard
 
     #region Tab Actions
     bool[] tabs = new bool[4];
+    int _tabIndex = 0;
 
     private async Task TabMenuClick(int tabIndex)
     {
         _loading = true;
+        _tabIndex = tabIndex;
 
-        // Offer Tab
+        // Led Tab
         if (tabIndex == 0)
         {
-            var _validOffer = _offerCompoment?.Validate();
+            //var _validLed = _ledCompoment?.Validate();
             for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
             tabs[tabIndex] = true;
-            var offer = Offer;
+            StateHasChanged();
+            await _ledCompoment.Prepair(Led);
+        }
+
+        // Offer Tab
+        else if (tabIndex == 1)
+        {
+            //var _validOffer = _offerCompoment?.Validate();
+            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+            tabs[tabIndex] = true;
+            //var offer = Offer;
             StateHasChanged();
         }
 
         // Project Tabs
-        if (tabIndex == 1)
+        else if (tabIndex == 2)
         {
             if (_offerCompoment != null && _offerCompoment.Validate())
             {
@@ -196,7 +258,7 @@ public partial class OfferCreationWizzard
         }
 
         // Invoice Tab
-        if (tabIndex == 2)
+        else if (tabIndex == 3)
         {
             if (_projectCompoment != null && _projectCompoment.Validate() || !_isNew)
             {
@@ -246,22 +308,11 @@ public partial class OfferCreationWizzard
     #endregion
 
     #region Get Related Records
-    private async Task _getProject()
+    private async Task _getProjects()
     {
-        //if (Offer?.Project != null)
-        //{
-        //    var dto = Mapping.Mapper.Map<ProjectDto>(Offer.Project);
-        //    _project = _mapper.Map<ProjectVM>(dto);
-        //}
-        //else if (Offer?.ProjectId != 0 && Offer?.ProjectId != null)
-        //{
-        //    var dto = await _dataProvider.Projects.Get((int)Offer.ProjectId);
-        //    _project = _mapper.Map<ProjectVM>(dto);
-        //}
-        //else
-        //{
-        //    _project = new ProjectVM();
-        //}
+        var dtos = await _dataProvider.Projects.GetOffersProjects(Offer?.Id);
+
+        //_project = _mapper.Map<ProjectVM>(dto);
     }
 
     private void _getInvoice()

@@ -1,6 +1,4 @@
-﻿using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.General;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
@@ -15,7 +13,11 @@ public partial class Projects
     IQueryable<ProjectVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private ProjectVM _selectedRecord = new ProjectVM();
+    [Parameter]
+    public ProjectVM SelectedRecord { get; set; } = new ProjectVM();
+
+    [Parameter]
+    public EventCallback<ProjectVM> OnSelect { get; set; }
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -29,9 +31,10 @@ public partial class Projects
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<ProjectVM> row)
+    private async Task HandleRowFocus(FluentDataGridRow<ProjectVM> row)
     {
-        _selectedRecord = row.Item as ProjectVM;
+        SelectedRecord = row.Item as ProjectVM;
+        await OnSelect.InvokeAsync(SelectedRecord);
     }
 
     private async Task _getRecords()

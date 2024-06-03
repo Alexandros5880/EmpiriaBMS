@@ -685,6 +685,39 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
+    public async Task<ICollection<ProjectDto>> GetOffersProjects(int? offerId)
+    {
+        if (offerId == null || offerId == 0)
+            return new List<ProjectDto>();
+
+        List<Project> projects;
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            projects = await _context.Set<Project>()
+                                     .Where(r => !r.IsDeleted)
+                                     .Where(r => r.OfferId == offerId)
+                                     .Include(r => r.Invoices)
+                                      .Include(p => p.Stage)
+                                      .Include(p => p.Offer)
+                                      .ThenInclude(o => o.Category)
+                                      .Include(p => p.Offer)
+                                      .ThenInclude(o => o.SubCategory)
+                                      .Include(p => p.Offer)
+                                      .ThenInclude(o => o.Led)
+                                      .ThenInclude(l => l.Address)
+                                      .Include(p => p.Offer)
+                                      .ThenInclude(o => o.Led)
+                                      .ThenInclude(l => l.Client)
+                                      .Include(p => p.ProjectManager)
+                                      .Include(p => p.ProjectsSubConstructors)
+                                     .OrderBy(e => !e.Active)
+                                     .ThenByDescending(e => e.DeadLine)
+                                     .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+        }
+    }
+
     public async Task<long> GetMenHoursAsync(int projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())

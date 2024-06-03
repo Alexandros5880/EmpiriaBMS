@@ -17,7 +17,7 @@
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="ProjectVM"
-                            OnRowFocus="HandleRowFocus"
+                            OnRowFocus="@(async (p) => await HandleRowFocus(p))"
                             GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 70vh; overflow:auto;">
 

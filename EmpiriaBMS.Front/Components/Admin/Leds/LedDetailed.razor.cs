@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Config;
+﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -19,7 +17,11 @@ public partial class LedDetailed
     [Parameter]
     public bool DisplayActions { get; set; } = true;
 
+    [Parameter]
     public LedVM Content { get; set; }
+
+    [Parameter]
+    public EventCallback OnSave { get; set; }
 
     public async Task Prepair(LedVM record = null)
     {
@@ -88,7 +90,7 @@ public partial class LedDetailed
             dto.Offer = null;
             dto.Client = null;
             dto.Address = null;
-            
+
             // Save Led
             if (await _dataProvider.Leds.Any(p => p.Id == Content.Id))
             {
@@ -101,9 +103,12 @@ public partial class LedDetailed
                 Content = _mapper.Map<LedVM>(updated);
             }
 
+            await OnSave.InvokeAsync();
             return Content;
-        } else
+        }
+        else
         {
+            await OnSave.InvokeAsync();
             return null;
         }
     }
