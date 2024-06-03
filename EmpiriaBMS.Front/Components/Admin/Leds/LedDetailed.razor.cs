@@ -125,7 +125,7 @@ public partial class LedDetailed
         }
     }
 
-    private void _onResultChanged((string Value, string Text) resultOption)
+    private async Task _onResultChanged((string Value, string Text) resultOption)
     {
         Validate();
         SelectedResult = resultOption;
