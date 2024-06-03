@@ -21,6 +21,9 @@ public partial class LedDetailed
     public LedVM Content { get; set; }
 
     [Parameter]
+    public bool DisplayOffer { get; set; } = true;
+
+    [Parameter]
     public EventCallback OnSave { get; set; }
 
     [Parameter]
@@ -145,7 +148,7 @@ public partial class LedDetailed
             validName = Content.Name != null && Content.Name.Length > 0;
             validClient = !string.IsNullOrEmpty(Content?.Client?.FullName) || Content.ClientId != 0;
             validPotencialFee = Content?.PotencialFee > 0;
-            validOffer = !string.IsNullOrEmpty(Content?.Offer?.Code) || (Content.OfferId != 0 && Content.OfferId != null);
+            validOffer = !DisplayOffer || (!string.IsNullOrEmpty(Content?.Offer?.Code) || (Content.OfferId != 0 && Content.OfferId != null));
 
             return validName && validClient && validPotencialFee && validOffer;
         }
@@ -168,7 +171,7 @@ public partial class LedDetailed
                     validClient = validPotencialFee = Content?.PotencialFee > 0; ;
                     return validPotencialFee;
                 case "Offer":
-                    validOffer = !string.IsNullOrEmpty(Content?.Offer?.Code) || Content.OfferId != 0;
+                    validOffer = !DisplayOffer || (!string.IsNullOrEmpty(Content?.Offer?.Code) || (Content.OfferId != 0 && Content.OfferId != null));
                     return validOffer;
                 default:
                     return true;

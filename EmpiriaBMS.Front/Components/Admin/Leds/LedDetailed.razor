@@ -55,55 +55,6 @@
             </div>
 
             <div class="col-12 row gx-2">
-                <!-- Offer -->
-                <div class="col-lg-6 col-md-12">
-                    <div class="col-12">
-                        Offer<span class="text-danger">*</span>
-                    </div>
-                    <div class="col-12">
-                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                        Placeholder="Select Offer..."
-                                        Items="@_offers"
-                                        Height="100px"
-                                        Width="100%"
-                                        TOption="OfferVM"
-                                        OptionText="@(c => c.Code)"
-                                        OptionValue="@(c => c.Id.ToString())"
-                                        @bind-SelectedOption="@Offer" />
-                    </div>
-                    @if (!validOffer)
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
-                </div>
-                <!-- Client-->
-                <div class="col-lg-6 col-md-12">
-                    <div class="col-12">
-                        Client<span class="text-danger">*</span>
-                    </div>
-                    <div class="col-12">
-                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                        Placeholder="Select Client..."
-                                        Items="@_clients"
-                                        Height="100px"
-                                        Width="100%"
-                                        TOption="ClientVM"
-                                        OptionText="@(c => c.FullName)"
-                                        OptionValue="@(c => c.Id.ToString())"
-                                        @bind-SelectedOption="@Client" />
-                    </div>
-                    @if (!validClient)
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <div class="col-12 row gx-2">
                 <!-- Result -->
                 <div class="col-lg-6 col-md-12">
                     <div>
@@ -131,6 +82,65 @@
                     <div>
                         <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.ExpectedDurationDate"/>
                     </div>
+                </div>
+            </div>
+
+            <div class="col-12 row gx-2">
+                <!-- Offer -->
+                @if (DisplayOffer)
+                {
+                    <div class="col-lg-6 col-md-12">
+                        <div class="col-12">
+                            Offer<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-12">
+                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                            Placeholder="Select Offer..."
+                                            Items="@_offers"
+                                            Height="100px"
+                                            Width="100%"
+                                            TOption="OfferVM"
+                                            OptionText="@(c => c.Code)"
+                                            OptionValue="@(c => c.Id.ToString())"
+                                            @bind-SelectedOption="@Offer" />
+                        </div>
+                        @if (!validOffer)
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="col-12 row gx-2">
+                <!-- Client-->
+                <div class="col-lg-6 col-md-12">
+                    <div class="col-12">
+                        Client<span class="text-danger">*</span>
+                    </div>
+                    <div class="col-12">
+                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Client..."
+                                        Items="@_clients"
+                                        Height="100px"
+                                        Width="100%"
+                                        TOption="ClientVM"
+                                        OptionText="@(c => c.FullName)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Client" />
+                    </div>
+                    @if (!validClient)
+                    {
+                        <div class="col-12">
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                </div>
+                <!-- Client Detailed Form -->
+                <div class="col-lg-6 col-md-12">
+                    <ClientDetailed IsMapVisible="false" Autonomuse="false" Content="@_client" />
                 </div>
             </div>
 
