@@ -12,6 +12,7 @@ namespace EmpiriaBMS.Front.Components.Admin.Offers;
 
 public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
 {
+    private FluentCombobox<(string Value, string Text)> _resultCombo;
     private FluentCombobox<ProjectCategoryVM> _catCombo;
     private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
 
@@ -44,6 +45,8 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
             if (Content.Result != null)
             {
                 SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
             }
 
             // Category

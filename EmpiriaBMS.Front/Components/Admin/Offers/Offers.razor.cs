@@ -1,5 +1,4 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
@@ -51,7 +50,7 @@ public partial class Offers
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(70vw, 900px);",
+            Width = "min(70vw, 700px);",
             Height = "max(70vh, 700px) !important;",
         };
 
@@ -71,7 +70,7 @@ public partial class Offers
     {
         DialogParameters parameters = new()
         {
-            Title = $"Edit {record.TypeName : 'Record'}",
+            Title = $"Edit {record.TypeName: 'Record'}",
             PrimaryActionEnabled = true,
             SecondaryActionEnabled = true,
             PrimaryAction = "Save",
@@ -79,8 +78,8 @@ public partial class Offers
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(70%, 500px);",
-            Height = "max(70vh, 700px) !important;"
+            Width = "min(70vw, 700px);",
+            Height = "max(70vh, 700px) !important;",
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferDetailedDialog>(record, parameters);

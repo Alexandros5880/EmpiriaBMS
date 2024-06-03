@@ -138,7 +138,8 @@
                     Result
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                    <FluentCombobox @ref="@_resultCombo"
+                                    Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Result..."
                                     Items="_results"
                                     Height="200px"
