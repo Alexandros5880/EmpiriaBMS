@@ -89,14 +89,15 @@
                     Category<span class="text-danger">*</span>
                 </div>
                 <div class="col-12">
-                    <FluentCombobox Placeholder="Select Category..."
+                    <FluentCombobox @ref="@_catCombo"
+                                    Placeholder="Select Category..."
                                     Items="@_categories"
                                     Height="200px"
                                     Width="100%"
                                     TOption="ProjectCategoryVM"
                                     OptionText="@(c => c.Name)"
                                     OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Category" />
+                                    SelectedOptionChanged="@(async (e) => await _onCategoryChanged(e))"/>
                 </div>
                 @if (!validCategory)
                 {
