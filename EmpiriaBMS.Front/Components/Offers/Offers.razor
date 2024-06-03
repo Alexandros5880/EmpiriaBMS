@@ -85,31 +85,14 @@
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="OfferVM"
-                            GridTemplateColumns="auto 140px 140px 100px 160px 120px 100px 100px 100px 160px 100px"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 240px; overflow:auto;">
-@* 
-                <TemplateColumn Title="Project"
-                                Sortable="true"
-                                InitialSortDirection=SortDirection.Descending
-                                IsDefaultSortColumn=true
-                                Style="min-width: 120px;">
-                    <ColumnOptions>
-                        <div class="search-box">
-                            <FluentSearch type="search"
-                                          Autofocus=true
-                                          @bind-Value="@_projectNameFilter"
-                                          Placeholder="Project name..."
-                                          @oninput="@HandleProjectNameFilter" />
-                        </div>
-                    </ColumnOptions>
-                    <ChildContent>
-                        @(context.Project?.Name ?? "--")
-                    </ChildContent>
-                </TemplateColumn> *@
 
                 <PropertyColumn Property="@(p => p.Result.GetDisplayName())" Sortable="true" Title="Result" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.Category.Name)" Sortable="true" Title="Category" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.SubCategory.Name)" Sortable="true" Title="SubCategory" Align="@Align.Start" />
 @* 
                 <TemplateColumn Title="Client"
                                 Sortable="true"

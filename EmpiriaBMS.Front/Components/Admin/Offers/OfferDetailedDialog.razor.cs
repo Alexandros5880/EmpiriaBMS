@@ -1,10 +1,7 @@
-﻿using CsvHelper;
-using EmpiriaBMS.Core.Config;
+﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Front.ViewModel.Interfaces;
 using EmpiriaBMS.Models.Enum;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
@@ -15,6 +12,10 @@ namespace EmpiriaBMS.Front.Components.Admin.Offers;
 
 public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
 {
+    private FluentCombobox<(string Value, string Text)> _resultCombo;
+    private FluentCombobox<ProjectCategoryVM> _catCombo;
+    private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
+
     [Parameter]
     public OfferVM Content { get; set; } = default!;
 
@@ -44,6 +45,27 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
             if (Content.Result != null)
             {
                 SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
+
+            // Category
+            ProjectCategoryVM category = null;
+            if (Content.Category != null)
+            {
+                category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
+                Category = category;
+                _catCombo.Value = Category.Name;
+                _catCombo.SelectedOption = Category;
+                await _getSubCategories();
+            }
+            else if (Content.CategoryId != 0)
+            {
+                category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
+                Category = category;
+                _catCombo.Value = Category.Name;
+                _catCombo.SelectedOption = Category;
+                await _getSubCategories();
             }
 
             StateHasChanged();
@@ -54,6 +76,11 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     {
         var valid = Validate();
         if (!valid) return;
+
+        Content.TypeId = Type.Id;
+        Content.StateId = State.Id;
+        Content.CategoryId = Category.Id;
+        Content.SubCategoryId = SubCategory.Id;
 
         await Dialog.CloseAsync(Content);
     }
@@ -70,19 +97,23 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     private bool validDate = true;
     private bool validPudgetPrice = true;
     private bool validOfferPrice = true;
+    private bool validCategory = true;
+    private bool validSubCategory = true;
 
     private bool Validate(string fieldname = null)
     {
         if (fieldname == null)
         {
             validCode = !string.IsNullOrEmpty(Content.Code);
-            validType = Content.TypeId != 0;
-            validState = Content.StateId != 0;
+            validType = Type != null && Type.Id != 0;
+            validState = State != null && State.Id != 0;
             validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
             validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
             validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
+            validCategory = Category != null && Category.Id != 0;
+            validSubCategory = SubCategory != null && SubCategory.Id != 0;
 
-            return validCode && validType && validState && validDate && validPudgetPrice && validOfferPrice;
+            return validCode && validType && validState && validDate && validPudgetPrice && validOfferPrice && validCategory && validSubCategory;
         }
         else
         {
@@ -92,6 +123,7 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
             validDate = true;
             validPudgetPrice = true;
             validOfferPrice = true;
+            validCategory = true;
 
             switch (fieldname)
             {
@@ -99,10 +131,10 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
                     validCode = !string.IsNullOrEmpty(Content.Code);
                     return validCode;
                 case "Type":
-                    validType = Content.TypeId != 0;
+                    validType = Type != null && Type.Id != 0;
                     return validType;
                 case "State":
-                    validState = Content.StateId != 0;
+                    validState = State != null && State.Id != 0;
                     return validState;
                 case "Date":
                     validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
@@ -113,6 +145,12 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
                 case "OfferPrice":
                     validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
                     return validOfferPrice;
+                case "Category":
+                    validCategory = Category != null && Category.Id != 0;
+                    return validCategory;
+                case "SubCategory":
+                    validSubCategory = SubCategory != null && SubCategory.Id != 0;
+                    return validSubCategory;
                 default:
                     return true;
             }
@@ -124,6 +162,8 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
     #region Get Related Records
     ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
     ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
+    ObservableCollection<ProjectCategoryVM> _categories = new ObservableCollection<ProjectCategoryVM>();
+    ObservableCollection<ProjectSubCategoryVM> _subCategories = new ObservableCollection<ProjectSubCategoryVM>();
     private List<(string Value, string Text)> _results = Enum.GetValues(typeof(OfferResult))
                                                              .Cast<OfferResult>()
                                                              .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
@@ -140,7 +180,6 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         {
             if (_type == value || value == null) return;
             _type = value;
-            Content.TypeId = _type.Id;
         }
     }
 
@@ -152,7 +191,29 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         {
             if (_state == value || value == null) return;
             _state = value;
-            Content.StateId = _state.Id;
+
+        }
+    }
+
+    public ProjectCategoryVM _category = new ProjectCategoryVM();
+    public ProjectCategoryVM Category
+    {
+        get => _category;
+        set
+        {
+            if (_category == value || value == null) return;
+            _category = value;
+        }
+    }
+
+    private ProjectSubCategoryVM _subCategory = new ProjectSubCategoryVM();
+    public ProjectSubCategoryVM SubCategory
+    {
+        get => _subCategory;
+        set
+        {
+            if (_subCategory == value || value == null) return;
+            _subCategory = value;
         }
     }
 
@@ -168,10 +229,17 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         }
     }
 
+    private async Task _onCategoryChanged(ProjectCategoryVM category)
+    {
+        Category = category;
+        await _getSubCategories();
+    }
+
     private async Task _getRecords()
     {
         await _getTypes();
         await _getStates();
+        await _getCategories();
     }
 
     private async Task _getTypes()
@@ -188,6 +256,45 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
         var vms = _mapper.Map<List<OfferStateVM>>(dtos);
         _states.Clear();
         vms.ForEach(_states.Add);
+    }
+
+    private async Task _getCategories()
+    {
+        var dtos = await _dataProvider.ProjectsCategories.GetAll();
+        var vms = _mapper.Map<List<ProjectCategoryVM>>(dtos);
+        _categories.Clear();
+        vms.ForEach(_categories.Add);
+
+        Category = null;
+        SubCategory = null;
+    }
+
+    private async Task _getSubCategories()
+    {
+        if (_category == null) return;
+        var dtos = await _dataProvider.ProjectsSubCategories.GetAll(_category.Id);
+        var vms = _mapper.Map<List<ProjectSubCategoryVM>>(dtos);
+        _subCategories.Clear();
+        vms.ForEach(_subCategories.Add);
+
+        StateHasChanged();
+
+        // SubCategory
+        if (Content.SubCategory != null)
+        {
+            var subCategoryDto = Mapping.Mapper.Map<ProjectSubCategoryDto>(Content.SubCategory);
+            SubCategory = _mapper.Map<ProjectSubCategoryVM>(subCategoryDto);
+            _subCatCombo.Value = SubCategory.Name;
+            _subCatCombo.SelectedOption = SubCategory;
+        }
+        else if (Content.SubCategoryId != 0)
+        {
+            SubCategory = _subCategories.FirstOrDefault(s => s.Id == Content.SubCategoryId);
+            _subCatCombo.Value = SubCategory.Name;
+            _subCatCombo.SelectedOption = SubCategory;
+        }
+
+        StateHasChanged();
     }
     #endregion
 }

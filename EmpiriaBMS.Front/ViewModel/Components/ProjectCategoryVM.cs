@@ -45,4 +45,6 @@ public class ProjectCategoryVM : BaseVM
     }
 
     public ICollection<ProjectSubCategory> SubCategories { get; set; }
+
+    public ICollection<Offer> Offers { get; set; }
 }

@@ -73,6 +73,8 @@ public class ProjectSubCategoryVM : BaseVM
 
     public ICollection<Project> Projects { get; set; }
 
+    public ICollection<Offer> Offers { get; set; }
+
     [NotMapped]
     public string ParentCategoryName => Category != null ? Category.Name : "";
 }

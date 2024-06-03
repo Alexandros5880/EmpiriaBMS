@@ -10,4 +10,6 @@ public class ProjectCategory : Entity
     public bool CanAssignePM { get; set; }
 
     public ICollection<ProjectSubCategory> SubCategories { get; set; }
+
+    public ICollection<Offer> Offers { get; set; }
 }

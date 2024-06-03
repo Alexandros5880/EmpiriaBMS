@@ -87,6 +87,8 @@ public class OfferRepo : Repository<OfferDto, Offer>
                                        .Include(o => o.Type)
                                        .Include(o => o.Led)
                                        .ThenInclude(p => p.Client)
+                                       .Include(o => o.SubCategory)
+                                       .Include(o => o.Category)
                                        .FirstOrDefaultAsync(o => o.Id == id);
 
             return Mapping.Mapper.Map<Offer, OfferDto>(offer);
@@ -107,6 +109,10 @@ public class OfferRepo : Repository<OfferDto, Offer>
                                        .ThenInclude(o => o.State)
                                        .Include(p => p.Offer)
                                        .ThenInclude(o => o.Type)
+                                       .Include(p => p.Offer)
+                                       .ThenInclude(o => o.SubCategory)
+                                       .Include(p => p.Offer)
+                                       .ThenInclude(o => o.Category)
                                        .Select(p => p.Offer)
                                        .Where(o => !o.IsDeleted
                                                     && (stateId == 0 || o.StateId == stateId)

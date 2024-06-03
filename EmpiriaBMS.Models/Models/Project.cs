@@ -1,6 +1,6 @@
 ﻿
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 public class Project : Entity
@@ -15,9 +15,6 @@ public class Project : Entity
     public long EstimatedMandays { get; set; }
 
     public long EstimatedHours { get; set; }
-
-    public int? CategoryId { get; set; }
-    public ProjectSubCategory Category { get; set; }
 
     public int StageId { get; set; }
     public ProjectStage Stage { get; set; }

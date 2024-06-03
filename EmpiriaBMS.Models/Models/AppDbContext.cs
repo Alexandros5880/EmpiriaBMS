@@ -2849,12 +2849,15 @@ public class AppDbContext : DbContext
             RoleId = role_9_id
         };
         builder.Entity<UserRole>().HasData(admin_2);
-    #endregion
+        #endregion
 
         var projectManagersLength = projectManagers.Count();
         var projectManagersIndex = 0;
         var stagesLength = ProjectStages.Count();
         var stagesIndex = 0;
+
+        var categoriesLength = projectCategories.Count();
+        var categoriesIndex = 0;
 
         #region Create 5 Projects
         List<Project> projects = new List<Project>();
@@ -2874,6 +2877,8 @@ public class AppDbContext : DbContext
                 Result = OfferResult.SUCCESSFUL,
                 PudgetPrice = 1000 * i * 3,
                 OfferPrice = 1000 * i * 2,
+                CategoryId = projectCategories[categoriesIndex].Id,
+                SubCategoryId = projectSubCategories[i - 1].Id,
             };
             builder.Entity<Offer>().HasData(offer);
 
@@ -2894,7 +2899,6 @@ public class AppDbContext : DbContext
                 DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
                 StageId = ProjectStages[stagesIndex],
-                CategoryId = projectSubCategories[i-1].Id,
                 Active = i % 2 == 0 ? true : false,
                 ProjectManagerId = projectManagers[projectManagersIndex].Id,
                 OfferId = offerId
@@ -2903,11 +2907,15 @@ public class AppDbContext : DbContext
             projects.Add(project);
 
             projectManagersIndex++;
-            if (projectManagersIndex >= projectManagersLength-1)
+            if (projectManagersIndex >= projectManagersLength - 1)
                 projectManagersIndex = 0;
 
+            categoriesIndex++;
+            if (categoriesIndex >= categoriesLength)
+                categoriesIndex = 0;
+
             stagesIndex++;
-            if (stagesIndex >= stagesLength-1)
+            if (stagesIndex >= stagesLength - 1)
                 stagesIndex = 0;
 
             // Invoices
@@ -2928,33 +2936,12 @@ public class AppDbContext : DbContext
             };
             builder.Entity<Invoice>().HasData(invoice);
         }
-
-        // // Project Production Management 
-        var projectPmId = random.Next(123456789, 999999999) + 11 * 2;
-        Project projectPM = new Project()
-        {
-            Id = projectPmId,
-            CreatedDate = createdDate,
-            LastUpdatedDate = createdDate,
-            Code = "D-22-16-PM",
-            Name = "Project_PM",
-            Description = "Test Description Project_PM",
-            StartDate = createdDate,
-            DeadLine = createdDate.AddMonths(3),
-            EstimatedMandays = 100 / 8,
-            EstimatedHours = 1500,
-            DeclaredCompleted = 0,
-            EstimatedCompleted = 0,
-            StageId = ProjectStages[4],
-            CategoryId = projectSubCategories[4].Id,
-            Active = true
-        };
-        builder.Entity<Project>().HasData(projectPM);
         #endregion
 
         #region Create 7 Projects Missed DeadLine
         projectManagersIndex = 0;
         stagesIndex = 0;
+        categoriesIndex = 0;
 
         var subCategoriesLength = projectSubCategories.Count();
         var subCategoriesIndex = 0;
@@ -2974,7 +2961,9 @@ public class AppDbContext : DbContext
                 StateId = offerStatesIds[random.Next(0, 1)],
                 Result = OfferResult.SUCCESSFUL,
                 PudgetPrice = 1000 * i * 4,
-                OfferPrice = 1000 * i * 3
+                OfferPrice = 1000 * i * 3,
+                CategoryId = projectCategories[categoriesIndex].Id,
+                SubCategoryId = projectSubCategories[subCategoriesIndex].Id,
             };
             builder.Entity<Offer>().HasData(offer);
 
@@ -2995,7 +2984,6 @@ public class AppDbContext : DbContext
                 DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
                 StageId = ProjectStages[stagesIndex],
-                CategoryId = projectSubCategories[subCategoriesIndex].Id,
                 Active = i % 2 == 0 ? true : false,
                 ProjectManagerId = projectManagers[projectManagersIndex].Id,
                 OfferId = offerId
@@ -3029,6 +3017,10 @@ public class AppDbContext : DbContext
             if (subCategoriesIndex >= subCategoriesLength)
                 subCategoriesIndex = 0;
 
+            categoriesIndex++;
+            if (categoriesIndex >= categoriesLength)
+                categoriesIndex = 0;
+
             stagesIndex++;
             if (stagesIndex >= stagesLength)
                 stagesIndex = 0;
@@ -3037,7 +3029,7 @@ public class AppDbContext : DbContext
 
         #region Create Discipline Types
         List<DisciplineType> disciplineTypes = new List<DisciplineType>();
-            string[] dicTypeNames = {
+        string[] dicTypeNames = {
             "HVAC",
             "Sewage",
             "Potable Water",
@@ -3109,25 +3101,11 @@ public class AppDbContext : DbContext
                 disciplines.Add(discipline);
             }
         }
-
-        // Add Discipline Project Manager Hours To Project PM Hours
-        var discipline_pm_hours_Id = random.Next(123456789, 999999999) * 8;
-        Discipline discipline_pm_hours = new Discipline()
-        {
-            Id = discipline_pm_hours_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            TypeId = discipline_pm_hours_type_Id,
-            EstimatedHours = 500,
-            ProjectId = projectPmId,
-            DeclaredCompleted = 0
-        };
-        builder.Entity<Discipline>().HasData(discipline_pm_hours);
         #endregion
 
         #region Create Drawing Types
         List<DrawingType> drawingTypes = new List<DrawingType>();
-            string[] drawTypeNames = {
+        string[] drawTypeNames = {
             "Documents",
             "Calculations",
             "Drawings"
@@ -3167,24 +3145,6 @@ public class AppDbContext : DbContext
                 builder.Entity<Drawing>().HasData(drawing);
                 drawings.Add(drawing);
             }
-        }
-
-        // Create Drawings For Discipline Project Manager Hours
-        for (int j = 0; j < drawingTypes.Count; j++)
-        {
-            var drawing_Id = random.Next(123456789, 999999999);
-            Drawing drawing = new Drawing()
-            {
-                Id = drawing_Id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                TypeId = drawingTypes[j].Id,
-                DisciplineId = discipline_pm_hours_Id,
-                CompletionEstimation = 0,
-                CompletionDate = DateTime.Now.AddDays(11)
-            };
-            builder.Entity<Drawing>().HasData(drawing);
-            drawings.Add(drawing);
         }
         #endregion
 
@@ -3232,22 +3192,6 @@ public class AppDbContext : DbContext
                 };
                 builder.Entity<Other>().HasData(other);
             }
-        }
-
-        // Create Others For Discipline Project Manager Hours
-        for (int j = 0; j < otherTypes.Count; j++)
-        {
-            var other_Id = random.Next(123456789, 999999999);
-            Other other = new Other()
-            {
-                Id = other_Id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                TypeId = otherTypes[j].Id,
-                DisciplineId = discipline_pm_hours_Id,
-                CompletionEstimation = 0
-            };
-            builder.Entity<Other>().HasData(other);
         }
         #endregion
 
@@ -3304,8 +3248,6 @@ public class AppDbContext : DbContext
         //    }
         //}
         #endregion
-
-
     }
 
     static int GetUniqueRandomNumber(Random random, List<int> selectedNumbers, int min, int max)

@@ -321,7 +321,7 @@
                                                                 @((_selectedProject == null ||
                                                                         !_selectedProject.Id.Equals(project.Id)
                                                                                         ? "" : "selected_table_projects_row"))">
-                                                                    @if (project.Category?.CanAssignePM ?? false)
+                                                                    @if (project.Offer.SubCategory?.CanAssignePM ?? false)
                                                                     {
                                                                         @if (!string.IsNullOrEmpty(project.PmName))
                                                                         {

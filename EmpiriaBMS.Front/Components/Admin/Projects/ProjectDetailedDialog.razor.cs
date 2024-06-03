@@ -1,63 +1,20 @@
-﻿using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.General;
-using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Front.ViewModel.Interfaces;
-using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
-using Microsoft.Kiota.Abstractions;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects;
 
 public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 {
-    private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
-
     [Parameter]
     public ProjectVM Content { get; set; } = default!;
 
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
 
-    ObservableCollection<ProjectCategoryVM> _categories = new ObservableCollection<ProjectCategoryVM>();
-    ObservableCollection<ProjectSubCategoryVM> _subCategories = new ObservableCollection<ProjectSubCategoryVM>();
     ObservableCollection<ProjectStageVM> _stages = new ObservableCollection<ProjectStageVM>();
     ObservableCollection<UserVM> _pms = new ObservableCollection<UserVM>();
-
-    public ProjectCategoryVM _category = new ProjectCategoryVM();
-    public ProjectCategoryVM Category
-    {
-        get => _category;
-        set
-        {
-            if (_category == value || value == null) return;
-            _category = value;
-            if (Content.Category != null)
-                Content.Category.CategoryId = _category.Id;
-            _getSubCategories(refresh: true);
-        }
-    }
-
-    private ProjectSubCategoryVM _subCategory = new ProjectSubCategoryVM();
-    public ProjectSubCategoryVM SubCategory
-    {
-        get => _subCategory;
-        set
-        {
-            if (_subCategory == value || value == null) return;
-            _subCategory = value;
-            Content.CategoryId = _subCategory?.Id ?? 0;
-            var subCat = _subCategories.FirstOrDefault(c => c.Id == _subCategory.Id);
-            var dto = Mapper.Map<ProjectSubCategoryDto>(subCat);
-            Content.Category = Mapping.Mapper.Map<ProjectSubCategory>(dto);
-
-            Content.Category.CategoryId = Category.Id;
-            var parentCatDto = Mapper.Map<ProjectCategoryDto>(Category);
-            Content.Category.Category = Mapping.Mapper.Map<ProjectCategory>(parentCatDto);
-        }
-    }
 
     private ProjectStageVM _stage = new ProjectStageVM();
     public ProjectStageVM Stage
@@ -112,8 +69,6 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     #region Validation
     private bool validName = true;
     private bool validCode = true;
-    private bool validCategory = true;
-    private bool validSubCategory = true;
     private bool validStage = true;
     private bool validPm = true;
 
@@ -123,18 +78,15 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         {
             validName = !string.IsNullOrEmpty(Content.Name);
             validCode = !string.IsNullOrEmpty(Content.Code);
-            validCategory = _category != null && _category.Id != 0;
-            validSubCategory = _subCategory != null && _subCategory.Id != 0;
             validStage = _stage != null && _stage.Id != 0;
             validPm = _pm != null && _pm.Id != 0;
 
-            return validName && validCode && validCategory && validSubCategory && validStage && validPm;
+            return validName && validCode && validStage && validPm;
         }
         else
         {
             validName = true;
             validCode = true;
-            validCategory = true;
             validStage = true;
             validPm = true;
 
@@ -146,12 +98,6 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
                 case "Code":
                     validCode = !string.IsNullOrEmpty(Content.Code);
                     return validCode;
-                case "Category":
-                    validCategory = _category != null && _category.Id != 0;
-                    return validCategory;
-                case "SubCategory":
-                    validSubCategory = _subCategory != null && _subCategory.Id != 0;
-                    return validSubCategory;
                 case "Stage":
                     validStage = _stage != null && _stage.Id != 0;
                     return validStage;
@@ -169,36 +115,8 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     #region Get Related Records
     private async Task _getRecords()
     {
-        await _getCategories();
         await _getStages();
         await _getProjectManagers();
-    }
-
-    private async Task _getCategories()
-    {
-        var dtos = await DataProvider.ProjectsCategories.GetAll();
-        var vms = Mapper.Map<List<ProjectCategoryVM>>(dtos);
-        _categories.Clear();
-        vms.ForEach(_categories.Add);
-
-        Category = _categories.FirstOrDefault(c => c.Id == Content.Category?.CategoryId) ?? null;
-        SubCategory = null;
-    }
-
-    private async Task _getSubCategories(bool refresh = false)
-    {
-        if (_category == null) return;
-        var dtos = await DataProvider.ProjectsSubCategories.GetAll(_category.Id);
-        var vms = Mapper.Map<List<ProjectSubCategoryVM>>(dtos);
-        _subCategories.Clear();
-        vms.ForEach(_subCategories.Add);
-
-        SubCategory = _subCategories.FirstOrDefault(c => c.CategoryId == _category.Id) ?? null;
-        _subCatCombo.Value = SubCategory.Name;
-        _subCatCombo.SelectedOption = SubCategory;
-
-        if (refresh)
-            StateHasChanged();
     }
 
     private async Task _getStages()

@@ -1,5 +1,5 @@
-﻿using EmpiriaBMS.Models.Models;
-using EmpiriaBMS.Core.Dtos.Base;
+﻿using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Dtos;
 
@@ -14,9 +14,6 @@ public class ProjectDto : EntityDto
     public long EstimatedMandays { get; set; }
 
     public long EstimatedHours { get; set; }
-
-    public int? CategoryId { get; set; }
-    public ProjectSubCategory Category { get; set; }
 
     public int StageId { get; set; }
     public ProjectStage Stage { get; set; }

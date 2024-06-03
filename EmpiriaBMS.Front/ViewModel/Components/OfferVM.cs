@@ -36,7 +36,7 @@ public class OfferVM : BaseVM
     public string TypeName => Type != null ? Type.Name : "";
 
     // State
-    private int  _stateId;
+    private int _stateId;
     public int StateId
     {
         get => _stateId;
@@ -63,6 +63,64 @@ public class OfferVM : BaseVM
     }
 
     public string StateName => State != null ? State.Name : "";
+
+    // Project Category
+    private int? _categoryId;
+    public int? CategoryId
+    {
+        get => _categoryId;
+        set
+        {
+            if (value == _categoryId)
+                return;
+            _categoryId = value;
+            NotifyPropertyChanged(nameof(CategoryId));
+        }
+    }
+
+    private ProjectCategory _category;
+    public ProjectCategory Category
+    {
+        get => _category;
+        set
+        {
+            if (value == _category)
+                return;
+            _category = value;
+            NotifyPropertyChanged(nameof(Category));
+        }
+    }
+
+    public string ProjectCategoryName => Category != null ? Category.Name : "";
+
+    // Project SubCategory
+    private int? _subCategoryId;
+    public int? SubCategoryId
+    {
+        get => _subCategoryId;
+        set
+        {
+            if (value == _subCategoryId)
+                return;
+            _subCategoryId = value;
+            NotifyPropertyChanged(nameof(SubCategoryId));
+        }
+    }
+
+    private ProjectSubCategory _subCategory;
+    public ProjectSubCategory SubCategory
+    {
+        get => _subCategory;
+        set
+        {
+            if (value == _subCategory)
+                return;
+            _subCategory = value;
+            NotifyPropertyChanged(nameof(SubCategory));
+        }
+    }
+
+    public string ProjectSubCategoryName => SubCategory != null ? SubCategory.Name : "";
 
     // Led
     private int? _ledId;

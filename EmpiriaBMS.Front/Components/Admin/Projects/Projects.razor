@@ -18,7 +18,7 @@
                             Pagination="@pagination"
                             TGridItem="ProjectVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 70vh; overflow:auto;">
 
                 <TemplateColumn Title="Name"
@@ -40,6 +40,15 @@
                 </TemplateColumn>
 
                 <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Align="@Align.Start" />
+
+                <TemplateColumn Sortable="true" Title="Category" Align="@Align.Start">
+                    <span>@(context.Offer?.Category?.Name ?? "--")</span>
+                </TemplateColumn>
+
+                <TemplateColumn Sortable="true" Title="SubCategory" Align="@Align.Start">
+                    <span>@(context.Offer?.SubCategory?.Name ?? "--")</span>
+                </TemplateColumn>
+
                 <PropertyColumn Property="@(p => p.Active)" Sortable="true" Title="Active" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.StartDate)" Sortable="true" Title="StartDate" Format="dd-mm-yyyy" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.DeadLine)" Sortable="true" Title="DeadLine" Format="dd-mm-yyyy" Align="@Align.Start" />

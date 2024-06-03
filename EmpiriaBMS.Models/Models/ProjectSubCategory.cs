@@ -12,5 +12,5 @@ public class ProjectSubCategory : Entity
     public int? CategoryId { get; set; }
     public ProjectCategory Category { get; set; }
 
-    public ICollection<Project> Projects { get; set; }
+    public ICollection<Offer> Offers { get; set; }
 }

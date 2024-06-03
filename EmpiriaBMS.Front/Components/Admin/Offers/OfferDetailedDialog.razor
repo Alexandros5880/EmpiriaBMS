@@ -82,6 +82,55 @@
             </div>
         </div>
 
+        <div class="col-12 row gx-2">
+            <!-- Category -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Category<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox @ref="@_catCombo"
+                                    Placeholder="Select Category..."
+                                    Items="@_categories"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="ProjectCategoryVM"
+                                    OptionText="@(c => c.Name)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    SelectedOptionChanged="@(async (e) => await _onCategoryChanged(e))"/>
+                </div>
+                @if (!validCategory)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+            <!-- SubCategory-->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    SubCategory<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox @ref="@_subCatCombo"
+                                    Placeholder="Select SubCategory..."
+                                    Items="@_subCategories"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="ProjectSubCategoryVM"
+                                    OptionText="@(c => c.Name)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@SubCategory" />
+                </div>
+                @if (!validSubCategory)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+        </div>
+
         <div class="col-12 row gx-3 mt-2">
             <!-- Result -->
             <div class="col-xl-4 col-lg-4 col-md-12">
@@ -89,7 +138,8 @@
                     Result
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                    <FluentCombobox @ref="@_resultCombo"
+                                    Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Result..."
                                     Items="_results"
                                     Height="200px"

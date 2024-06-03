@@ -4,7 +4,6 @@ using EmpiriaBMS.Core.Dtos.KPIS;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 
 
@@ -34,7 +33,7 @@ public class KpisRepo : IDisposable
             decimal division = Convert.ToDecimal(missedDeadline) / Convert.ToDecimal(all);
             decimal result = Convert.ToDecimal(division * 100);
             return result;
-        }  
+        }
     }
 
     public async Task<Dictionary<string, long>> GetHoursPerRole()
@@ -112,11 +111,18 @@ public class KpisRepo : IDisposable
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Where(r => !r.IsDeleted)
+                                                .Include(r => r.Invoices)
+                                                .Include(p => p.Stage)
+                                                .Include(p => p.Offer)
+                                                .ThenInclude(o => o.Category)
+                                                .Include(p => p.Offer)
+                                                .ThenInclude(o => o.SubCategory)
+                                                .Include(p => p.Offer)
+                                                .ThenInclude(o => o.Led)
+                                                .ThenInclude(l => l.Address)
                                                 .Include(p => p.Offer)
                                                 .ThenInclude(o => o.Led)
                                                 .ThenInclude(l => l.Client)
-                                                .Include(r => r.Invoices)
-                                                .Include(p => p.Category)
                                                 .Include(p => p.ProjectManager)
                                                 .Include(p => p.ProjectsSubConstructors)
                                                 .Where(p => p.DeadLine < DateTime.Now)
@@ -156,11 +162,18 @@ public class KpisRepo : IDisposable
 
             var projects = await _context.Set<Project>()
                                          .Where(r => !r.IsDeleted)
+                                         .Include(r => r.Invoices)
+                                         .Include(p => p.Stage)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Category)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.SubCategory)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(l => l.Address)
                                          .Include(p => p.Offer)
                                          .ThenInclude(o => o.Led)
                                          .ThenInclude(l => l.Client)
-                                         .Include(r => r.Invoices)
-                                         .Include(p => p.Category)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id)
@@ -199,15 +212,28 @@ public class KpisRepo : IDisposable
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Where(r => !r.IsDeleted)
-                                                .Include(p => p.Category)
+                                                .Include(r => r.Invoices)
+                                                .Include(p => p.Stage)
+                                                .Include(p => p.Offer)
+                                                .ThenInclude(o => o.Category)
+                                                .Include(p => p.Offer)
+                                                .ThenInclude(o => o.SubCategory)
+                                                .Include(p => p.Offer)
+                                                .ThenInclude(o => o.Led)
+                                                .ThenInclude(l => l.Address)
+                                                .Include(p => p.Offer)
+                                                .ThenInclude(o => o.Led)
+                                                .ThenInclude(l => l.Client)
+                                                .Include(p => p.ProjectManager)
+                                                .Include(p => p.ProjectsSubConstructors)
                                                 .Where(p => p.DeadLine < DateTime.Now)
                                                 .ToListAsync();
 
                 projectTypesWithDeadLines = allProjects
-                                                .GroupBy(p => p.Category.Name)
+                                                .GroupBy(p => p.Offer.SubCategory.Name)
                                                 .ToDictionary(
                                                     g => g.Key ?? "Uknown Category",
-                                                    g => allProjects.Where(p => p.Category.Name.Equals(g.Key)).Count()
+                                                    g => allProjects.Where(p => p.Offer.SubCategory.Name.Equals(g.Key)).Count()
                                                 );
 
 
@@ -243,16 +269,29 @@ public class KpisRepo : IDisposable
 
             var projects = await _context.Set<Project>()
                                          .Where(r => !r.IsDeleted)
-                                         .Include(p => p.Category)
+                                         .Include(r => r.Invoices)
+                                         .Include(p => p.Stage)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Category)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.SubCategory)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(l => l.Address)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(l => l.Client)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id)
                                                             || p.ProjectManagerId == userId)
                                          .Where(p => p.DeadLine < DateTime.Now)
                                          .ToListAsync();
 
-            projectTypesWithDeadLines = projects.GroupBy(p => p.Category.Name)
+            projectTypesWithDeadLines = projects.GroupBy(p => p.Offer.SubCategory.Name)
                                                 .ToDictionary(
                                                     g => g.Key ?? "Uknown Category",
-                                                    g => projects.Where(p => p.Category.Name.Equals(g.Key)).Count()
+                                                    g => projects.Where(p => p.Offer.SubCategory.Name.Equals(g.Key)).Count()
                                                 );
 
 
@@ -266,14 +305,20 @@ public class KpisRepo : IDisposable
         {
             List<Project> projects = await _context.Set<Project>()
                                                    .Where(r => !r.IsDeleted)
-                                                   .Include(r => r.Offer)
-                                                   .ThenInclude(o => o.Led)
-                                                   .ThenInclude(l => l.Client)
                                                    .Include(r => r.Invoices)
-                                                   .Include(p => p.Category)
-                                                   .Include(p => p.Stage)
-                                                   .Include(p => p.ProjectManager)
-                                                   .Include(p => p.ProjectsSubConstructors)
+                                                    .Include(p => p.Stage)
+                                                    .Include(p => p.Offer)
+                                                    .ThenInclude(o => o.Category)
+                                                    .Include(p => p.Offer)
+                                                    .ThenInclude(o => o.SubCategory)
+                                                    .Include(p => p.Offer)
+                                                    .ThenInclude(o => o.Led)
+                                                    .ThenInclude(l => l.Address)
+                                                    .Include(p => p.Offer)
+                                                    .ThenInclude(o => o.Led)
+                                                    .ThenInclude(l => l.Client)
+                                                    .Include(p => p.ProjectManager)
+                                                    .Include(p => p.ProjectsSubConstructors)
                                                    .Where(p => p.DeadLine < DateTime.Now)
                                                    .OrderBy(e => !e.Active)
                                                    .ThenBy(e => e.DeadLine)
@@ -284,7 +329,7 @@ public class KpisRepo : IDisposable
             foreach (var project in projects)
             {
                 ProjectCategory parentCategory = null;
-                var parentCatId = project.Category?.CategoryId;
+                var parentCatId = project.Offer.SubCategory?.CategoryId;
 
                 if (parentCatId != null)
                     parentCategory = await _context.Set<ProjectCategory>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(c => c.Id == parentCatId);
@@ -311,7 +356,7 @@ public class KpisRepo : IDisposable
                     ProjectName = project.Name ?? "",
                     ProjectStage = project.Stage?.Name ?? "",
                     ProjectCategory = parentCategory?.Name ?? "",
-                    ProjectSubCategory = project.Category?.Name ?? "",
+                    ProjectSubCategory = project.Offer.SubCategory?.Name ?? "",
                     ProjectPrice = offers.Sum(o => o.OfferPrice) ?? 0,
                     ProjectPudgedPrice = offers.Sum(o => o.PudgetPrice) ?? 0,
                     ClientCompanyName = project.Offer?.Led?.Client?.CompanyName ?? "",
