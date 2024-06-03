@@ -34,7 +34,9 @@ public partial class OfferCreationWizzard
 
     private ContractVM _contract { get; set; }
 
-    private bool _contractTabEnable => Offer?.Result == OfferResult.SUCCESSFUL;
+    private bool _offerTabEnable => Led?.Result == LedResult.SUCCESSFUL && (_ledCompoment?.Validate() ?? false);
+    private bool _projectsTabEnable => Offer?.Result == OfferResult.SUCCESSFUL;
+    private bool _invoiceTabEnable => _projects.Count > 0;
 
     #region Compoment Refrences
     private LedDetailed _ledCompoment;
@@ -59,11 +61,17 @@ public partial class OfferCreationWizzard
         {
             Date = DateTime.Now,
             Led = new Led()
+            {
+                Result = LedResult.UNSUCCESSFUL
+            }
         };
 
         if (Offer?.Led == null)
         {
-            Offer.Led = new Led();
+            Offer.Led = new Led()
+            {
+                Result = LedResult.UNSUCCESSFUL
+            };
         }
 
         var ledDto = Mapping.Mapper.Map<LedDto>(Offer.Led);
@@ -78,6 +86,13 @@ public partial class OfferCreationWizzard
     {
         if (_invoices.Count > 0)
             await OnSave.InvokeAsync();
+    }
+
+    private void _onLedResultChanged((string Value, string Text) resultOption)
+    {
+        LedResult result = (LedResult)Enum.Parse(typeof(LedResult), resultOption.Value);
+        Led.Result = result;
+        StateHasChanged();
     }
 
     private async Task _onProjectSelect(ProjectVM project)
@@ -238,8 +253,6 @@ public partial class OfferCreationWizzard
             //var _validOffer = _offerCompoment?.Validate();
             for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
             tabs[tabIndex] = true;
-            //var offer = Offer;
-            StateHasChanged();
         }
 
         // Project Tabs
@@ -254,7 +267,6 @@ public partial class OfferCreationWizzard
                 for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
                 tabs[tabIndex] = true;
             }
-            StateHasChanged();
         }
 
         // Invoice Tab
@@ -295,11 +307,11 @@ public partial class OfferCreationWizzard
                 }
                 for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
                 tabs[tabIndex] = true;
-                StateHasChanged();
             }
         }
 
         _loading = false;
+        StateHasChanged();
     }
     #endregion
 

@@ -23,6 +23,9 @@ public partial class LedDetailed
     [Parameter]
     public EventCallback OnSave { get; set; }
 
+    [Parameter]
+    public EventCallback<(string Value, string Text)> OnResultChanged { get; set; }
+
     public async Task Prepair(LedVM record = null)
     {
         if (record == null || record.Id == 0)
@@ -53,10 +56,19 @@ public partial class LedDetailed
             Client = _mapper.Map<ClientVM>(clientDto);
         }
 
-        if (Content.Result == null)
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
-        else
+        if (Content.Result != null)
+        {
             SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+            _resultCombo.Value = SelectedResult.Value;
+            _resultCombo.SelectedOption = SelectedResult;
+        }
+        else
+        {
+            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
+            _resultCombo.Value = SelectedResult.Value;
+            _resultCombo.SelectedOption = SelectedResult;
+        }
+
 
         StateHasChanged();
 
@@ -111,6 +123,13 @@ public partial class LedDetailed
             await OnSave.InvokeAsync();
             return null;
         }
+    }
+
+    private void _onResultChanged((string Value, string Text) resultOption)
+    {
+        Validate();
+        SelectedResult = resultOption;
+        await OnResultChanged.InvokeAsync(resultOption);
     }
 
     #region Validation

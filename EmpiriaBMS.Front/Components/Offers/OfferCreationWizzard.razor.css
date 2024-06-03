@@ -1,6 +1,6 @@
 ﻿.my-wizard-tab {
     min-height: min(50vh, 400px) !important;
-    max-height: max(60vh, 440px) !important;
+    max-height: max(60vh, 460px) !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
 }

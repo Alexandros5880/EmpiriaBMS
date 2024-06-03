@@ -20,7 +20,7 @@
 
 @if (Content != null)
 {
-    <div class="content">
+    <div >
         <div class="row gx-2 ">
 
             <div class="col-12 row gx-2">
@@ -120,7 +120,7 @@
                                         TOption="(string Value, string Text)"
                                         OptionText="@(c => c.Text)"
                                         OptionValue="@(c => c.Value)"
-                                        @bind-SelectedOption="SelectedResult" />
+                                        SelectedOptionChanged="@(async (e) => await _onResultChanged(e))"/>
                     </div>
                 </div>
                 <!-- ExpectedDurationDate-->
