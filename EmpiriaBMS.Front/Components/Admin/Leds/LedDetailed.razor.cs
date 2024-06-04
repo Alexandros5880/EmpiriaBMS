@@ -83,16 +83,21 @@ public partial class LedDetailed
         if (Content.Result != null)
         {
             SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
-            _resultCombo.Value = SelectedResult.Value;
-            _resultCombo.SelectedOption = SelectedResult;
+            if (_resultCombo != null)
+            {
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
         }
         else
         {
             SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
-            _resultCombo.Value = SelectedResult.Value;
-            _resultCombo.SelectedOption = SelectedResult;
+            if (_resultCombo != null)
+            {
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
         }
-
 
         StateHasChanged();
 

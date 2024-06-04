@@ -90,6 +90,8 @@ public partial class OfferCreationWizzard
             await OnSave.InvokeAsync();
     }
 
+
+    #region Led Tab
     private void _onLedResultChanged((string Value, string Text) resultOption)
     {
         LedResult result = (LedResult)Enum.Parse(typeof(LedResult), resultOption.Value);
@@ -101,11 +103,47 @@ public partial class OfferCreationWizzard
     {
         _loading = true;
 
-        if (Led != null)
-            Led = await _ledCompoment.SaveAsync();
+        var valid = _ledCompoment.Validate();
+
+        if (valid)
+        {
+            var dto = _mapper.Map<LedDto>(Led);
+
+            // Save Address
+            // If Addres Then Save Address
+            if (dto?.Address != null && !(await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await _dataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var address = await _dataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                dto.AddressId = address.Id;
+            }
+
+            dto.Offer = null;
+            dto.Client = null;
+            dto.Address = null;
+
+            // Save Led
+            if (await _dataProvider.Leds.Any(p => p.Id == Led.Id))
+            {
+                var updated = await _dataProvider.Leds.Update(dto);
+                Led = _mapper.Map<LedVM>(updated);
+            }
+            else
+            {
+                var updated = await _dataProvider.Leds.Add(dto);
+                Led = _mapper.Map<LedVM>(updated);
+            }
+        }
 
         _loading = false;
     }
+    #endregion
+
 
     private async Task _onProjectSelect(ProjectVM project)
     {
@@ -264,6 +302,8 @@ public partial class OfferCreationWizzard
         // Offer Tab
         else if (tabIndex == 1)
         {
+            await _saveLed();
+
             //var _validOffer = _offerCompoment?.Validate();
             for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
             tabs[tabIndex] = true;
