@@ -47,7 +47,7 @@ public partial class LedDetailed
         if (client != null)
         {
             _clients.Add(client);
-            client = client;
+            Client = client;
             _toogleClientForm(false);
         }
     }

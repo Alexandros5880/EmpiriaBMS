@@ -27,10 +27,11 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
             using (var _context = _dbContextFactory.CreateDbContext())
             {
                 var led = Mapping.Mapper.Map<Led>(entity);
+                led.Result = Models.Enum.LedResult.UNSUCCESSFUL;
                 var result = await _context.Set<Led>().AddAsync(led);
                 await _context.SaveChangesAsync();
-
-                return Mapping.Mapper.Map<LedDto>(result.Entity);
+                Led endry = result.Entity;
+                return Mapping.Mapper.Map<LedDto>(endry);
             }
         }
         catch (Exception ex)
