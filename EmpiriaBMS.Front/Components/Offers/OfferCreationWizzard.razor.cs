@@ -34,6 +34,7 @@ public partial class OfferCreationWizzard
 
     private ContractVM _contract { get; set; }
 
+    private bool _ledSaveEnable => _ledCompoment?.Validate() ?? false;
     private bool _offerTabEnable => Led?.Result == LedResult.SUCCESSFUL && (_ledCompoment?.Validate() ?? false);
     private bool _projectsTabEnable => Offer?.Result == OfferResult.SUCCESSFUL;
     private bool _invoiceTabEnable => _projects.Count > 0;
