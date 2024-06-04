@@ -34,10 +34,11 @@ public partial class OfferCreationWizzard
 
     private ContractVM _contract { get; set; }
 
-    private bool _ledSaveEnable => _ledCompoment?.Validate() ?? false;
+    #region Actions Enabled Variables
     private bool _offerTabEnable => Led?.Result == LedResult.SUCCESSFUL && (_ledCompoment?.Validate() ?? false);
     private bool _projectsTabEnable => Offer?.Result == OfferResult.SUCCESSFUL;
     private bool _invoiceTabEnable => _projects.Count > 0;
+    #endregion
 
     #region Compoment Refrences
     private LedDetailed _ledCompoment;
@@ -96,6 +97,53 @@ public partial class OfferCreationWizzard
         StateHasChanged();
     }
 
+    private async Task _saveLed()
+    {
+        _loading = true;
+        StateHasChanged();
+
+        if (Led != null)
+        {
+            var validLed = _ledCompoment.Validate();
+            if (validLed)
+            {
+                LedDto dto = _mapper.Map<LedDto>(Led);
+
+                // Save Address
+                var addressExists = await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId));
+                if (dto?.Address != null && !(addressExists))
+                {
+                    var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                    var address = await _dataProvider.Address.Add(addressDto);
+                    dto.AddressId = address.Id;
+                }
+                else if (dto?.Address != null && (await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+                {
+                    var address = await _dataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                    dto.AddressId = address.Id;
+                }
+
+                // Save Led
+                if (Led.Id == 0)
+                {
+                    var added = _dataProvider.Leds.Add(dto);
+                    Led = _mapper.Map<LedVM>(added);
+                }
+                else
+                {
+                    var updated = _dataProvider.Leds.Update(dto);
+                    Led = _mapper.Map<LedVM>(updated);
+                }
+            }
+        }
+
+        _loading = false;
+        StateHasChanged();
+    }
+
+
+
+
     private async Task _onProjectSelect(ProjectVM project)
     {
         _project = project;
@@ -117,6 +165,8 @@ public partial class OfferCreationWizzard
             _invoices.Add(invoice);
         _loadingOnInvoice = false;
     }
+
+
 
     private async Task _saveBase()
     {

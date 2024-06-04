@@ -3,11 +3,6 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -25,9 +20,14 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
             entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
+            entity.Offer = null;
+            entity.Client = null;
+            entity.Address = null;
+
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var result = await _context.Set<Led>().AddAsync(Mapping.Mapper.Map<Led>(entity));
+                var led = Mapping.Mapper.Map<Led>(entity);
+                var result = await _context.Set<Led>().AddAsync(led);
                 await _context.SaveChangesAsync();
 
                 return Mapping.Mapper.Map<LedDto>(result.Entity);
@@ -35,7 +35,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Add({Mapping.Mapper.Map<Led>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On LedRepo.Add(LedDto): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -49,12 +49,17 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
 
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
+            entity.Offer = null;
+            entity.Client = null;
+            entity.Address = null;
+
             using (var _context = _dbContextFactory.CreateDbContext())
             {
                 var entry = await _context.Set<Led>().FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (entry != null)
                 {
-                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Led>(entity));
+                    var led = Mapping.Mapper.Map<Led>(entity);
+                    _context.Entry(entry).CurrentValues.SetValues(led);
                     await _context.SaveChangesAsync();
                 }
 
@@ -63,7 +68,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Update({Mapping.Mapper.Map<Led>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On LedRepo.Update(LedDto): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }
