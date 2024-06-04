@@ -116,7 +116,7 @@
 
             <div class="col-12 row gx-2">
                 <!-- Client-->
-                <div class="col-lg-6 col-md-12">
+                <div class="col-10">
                     <div class="col-12">
                         Client<span class="text-danger">*</span>
                     </div>
@@ -138,10 +138,38 @@
                         </div>
                     }
                 </div>
-                <!-- Client Detailed Form -->
-                <div class="col-lg-6 col-md-12">
-                    <ClientDetailed IsMapVisible="false" Autonomuse="false" Content="@_client" />
+                <!-- Client-->
+                <div class="col-2">
+                    @if (_displayClientForm)
+                    {
+                        <FluentIcon Class="float-end mt-4 ms-1"
+                                    OnClick="@( () => _toogleClientForm(false) )" 
+                                    Value="@(new MyIcons.Size32.Close())"
+                                    Color="Microsoft.Fast.Components.FluentUI.Color.Accent"
+                                    Slot="start" />
+                    }
+                    else
+                    {
+                        <FluentButton Class="float-end mt-4 ms-1" OnClick="@( () => _toogleClientForm(true) )">
+                            <FluentIcon Value="@(new Icons.Regular.Size32.Add())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
+                            Add
+                        </FluentButton>
+                    }
                 </div>
+                <!-- Client Detailed Form -->
+                @if (_displayClientForm)
+                {
+                    <div class="col-12">
+                        <div class="rounded border w-96 p-2 mt-1">
+                            <ClientDetailed IsMapVisible="false"
+                                            DisplayTitle="false"
+                                            DisplayActions="true"
+                                            Content="@_client"
+                                            OnCancel="@(() => _toogleClientForm(false))"
+                                            OnSave="@((client) => _onNewClientSave(client))"/>
+                        </div>
+                    </div>
+                }
             </div>
 
             <!-- Address (Map) -->

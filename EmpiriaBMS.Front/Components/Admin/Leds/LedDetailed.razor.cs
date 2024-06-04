@@ -24,10 +24,31 @@ public partial class LedDetailed
     public bool DisplayOffer { get; set; } = true;
 
     [Parameter]
-    public EventCallback OnSave { get; set; }
+    public EventCallback<LedVM> OnSave { get; set; }
 
     [Parameter]
     public EventCallback<(string Value, string Text)> OnResultChanged { get; set; }
+
+    private bool _displayClientForm = false;
+
+    private void _toogleClientForm(bool? display = null)
+    {
+        if (display == null)
+            _displayClientForm = !_displayClientForm;
+        else
+            _displayClientForm = (bool)display;
+        StateHasChanged();
+    }
+
+    private void _onNewClientSave(ClientVM client)
+    {
+        if (client != null)
+        {
+            _clients.Add(client);
+            client = client;
+            _toogleClientForm(false);
+        }
+    }
 
     public async Task Prepair(LedVM record = null)
     {
@@ -118,12 +139,12 @@ public partial class LedDetailed
                 Content = _mapper.Map<LedVM>(updated);
             }
 
-            await OnSave.InvokeAsync();
+            await OnSave.InvokeAsync(Content);
             return Content;
         }
         else
         {
-            await OnSave.InvokeAsync();
+            await OnSave.InvokeAsync(null);
             return null;
         }
     }

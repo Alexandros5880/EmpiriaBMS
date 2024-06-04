@@ -24,7 +24,10 @@ public partial class ClientDetailed
     public EventCallback OnCancel { get; set; }
 
     [Parameter]
-    public bool Autonomuse { get; set; } = true;
+    public bool DisplayTitle { get; set; } = true;
+
+    [Parameter]
+    public bool DisplayActions { get; set; } = true;
 
     [Parameter]
     public bool IsMapVisible { get; set; } = false;
