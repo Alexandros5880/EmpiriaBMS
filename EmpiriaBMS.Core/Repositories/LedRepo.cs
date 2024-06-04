@@ -10,7 +10,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
 {
     public LedRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async Task<LedDto> Add(LedDto entity, bool update = false)
+    public new async Task<LedDto> Add(LedDto entity, bool update = false)
     {
         try
         {
@@ -20,28 +20,22 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
             entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-            entity.Offer = null;
-            entity.Client = null;
-            entity.Address = null;
-
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var led = Mapping.Mapper.Map<Led>(entity);
-                led.Result = Models.Enum.LedResult.UNSUCCESSFUL;
-                var result = await _context.Set<Led>().AddAsync(led);
+                var result = await _context.Set<Led>().AddAsync(Mapping.Mapper.Map<Led>(entity));
                 await _context.SaveChangesAsync();
-                Led endry = result.Entity;
-                return Mapping.Mapper.Map<LedDto>(endry);
+
+                return Mapping.Mapper.Map<LedDto>(result.Entity);
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Add(LedDto): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.WriteLine($"Exception On LedRepo.Add(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
 
-    public async Task<LedDto> Update(LedDto entity)
+    public new async Task<LedDto> Update(LedDto entity)
     {
         try
         {
@@ -50,17 +44,12 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
 
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
-            entity.Offer = null;
-            entity.Client = null;
-            entity.Address = null;
-
             using (var _context = _dbContextFactory.CreateDbContext())
             {
                 var entry = await _context.Set<Led>().FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (entry != null)
                 {
-                    var led = Mapping.Mapper.Map<Led>(entity);
-                    _context.Entry(entry).CurrentValues.SetValues(led);
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Led>(entity));
                     await _context.SaveChangesAsync();
                 }
 
@@ -69,12 +58,12 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Update(LedDto): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On LedRepo.Update(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
 
-    public async Task<LedDto?> Get(int id)
+    public new async Task<LedDto?> Get(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));

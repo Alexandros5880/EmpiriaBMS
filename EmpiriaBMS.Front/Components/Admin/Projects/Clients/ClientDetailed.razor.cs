@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core;
+﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Components.General;
@@ -28,9 +26,6 @@ public partial class ClientDetailed
 
     [Parameter]
     public bool DisplayActions { get; set; } = true;
-
-    [Parameter]
-    public bool IsMapVisible { get; set; } = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -132,14 +127,14 @@ public partial class ClientDetailed
         var validRegex = _isValidEmail(newEmailAddress);
         if (!validRegex)
             return;
-                
+
         var email = _emails.FirstOrDefault(r => r.Address.Equals(preEmailAddress));
         if (email != null)
         {
             var index = _emails.IndexOf(email);
             _emails[index].Address = newEmailAddress;
         }
-        
+
         else
         {
             _emails.Add(new Email()

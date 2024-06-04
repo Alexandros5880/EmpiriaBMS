@@ -31,8 +31,6 @@ public partial class LedDetailed
 
     private bool _displayClientForm = false;
 
-    private bool _isMapVisible { get; set; } = false;
-
     private void _toogleClientForm(bool? display = null)
     {
         if (display == null)

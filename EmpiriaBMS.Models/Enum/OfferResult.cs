@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Models.Enum;
 
 public enum OfferResult
 {
     [Display(Name = "UNSUCCESSFUL")]
-    UNSUCCESSFUL,
+    UNSUCCESSFUL = 0,
     [Display(Name = "SUCCESSFUL")]
-    SUCCESSFUL,
+    SUCCESSFUL = 1,
     [Display(Name = "WAITING FOR RESUL")]
-    WAITING
+    WAITING = 2
 }

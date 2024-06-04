@@ -1,5 +1,4 @@
-﻿using EmpiriaBMS.Core.Services.GooglePlaces.ViewModels;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 
@@ -33,8 +32,8 @@ public class LedVM : BaseVM
         }
     }
 
-    private Client? _client;
-    public Client? Client
+    private Client _client;
+    public Client Client
     {
         get => _client;
         set
@@ -59,8 +58,8 @@ public class LedVM : BaseVM
         }
     }
 
-    private Offer? _offer;
-    public Offer? Offer
+    private Offer _offer;
+    public Offer Offer
     {
         get => _offer;
         set
@@ -85,8 +84,8 @@ public class LedVM : BaseVM
         }
     }
 
-    private Address? _address;
-    public Address? Address
+    private Address _address;
+    public Address Address
     {
         get => _address;
         set

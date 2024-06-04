@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Models.Enum;
 
 public enum LedResult
 {
     [Display(Name = "SUCCESSFUL")]
-    SUCCESSFUL,
+    SUCCESSFUL = 0,
     [Display(Name = "UNSUCCESSFUL")]
-    UNSUCCESSFUL
+    UNSUCCESSFUL = 1
 }

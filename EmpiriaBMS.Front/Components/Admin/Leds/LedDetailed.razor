@@ -161,8 +161,7 @@
                 {
                     <div class="col-12">
                         <div class="rounded border w-96 p-2 mt-1">
-                            <ClientDetailed IsMapVisible="false"
-                                            DisplayTitle="false"
+                            <ClientDetailed DisplayTitle="false"
                                             DisplayActions="true"
                                             Content="@_client"
                                             OnCancel="@(() => _toogleClientForm(false))"
@@ -177,18 +176,13 @@
                 <div>
                     <h4>Address</h4>
                 </div>
-                <div>
-                    <FluentSwitch @bind-Value="@_isMapVisible">
-                        Display Map
-                    </FluentSwitch>
-                </div>
                 <!-- Search Address / (Map) -->
                 <div style="margin: 0 auto;">
                     <Map @ref="@_map"
                          Id="adminProjectMap"
                          AutoCompeteId="autocompeteAdminProjectMap"
                          OnFindAddress="@(() => _onSearchAddressChange())"
-                         IsMapVisible="@_isMapVisible" />
+                         IsMapVisible="false" />
                 </div>
             </div>
 
