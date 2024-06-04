@@ -174,13 +174,21 @@
 
             <!-- Address (Map) -->
             <div class="col-12">
-                <div class="row mt-3 mb-3">
-                    <div class="col-12">
-                        <Map @ref="@_map"
-                            Id="adminProjectMap"
-                            AutoCompeteId="autocompeteAdminProjectMap"
-                            OnFindAddress="@(() => _onSearchAddressChange())" />
-                    </div>
+                <div>
+                    <h4>Address</h4>
+                </div>
+                <div>
+                    <FluentSwitch @bind-Value="@_isMapVisible">
+                        Display Map
+                    </FluentSwitch>
+                </div>
+                <!-- Search Address / (Map) -->
+                <div style="margin: 0 auto;">
+                    <Map @ref="@_map"
+                         Id="adminProjectMap"
+                         AutoCompeteId="autocompeteAdminProjectMap"
+                         OnFindAddress="@(() => _onSearchAddressChange())"
+                         IsMapVisible="@_isMapVisible" />
                 </div>
             </div>
 
