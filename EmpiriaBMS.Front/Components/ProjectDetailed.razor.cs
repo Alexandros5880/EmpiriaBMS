@@ -59,18 +59,21 @@ public partial class ProjectDetailed : ComponentBase
         }
     }
 
-    public async Task Prepair()
+    public async Task Prepair(ProjectVM project = null)
     {
+        if (project != null)
+            Content = project;
+
         await _getRecords();
 
         StateHasChanged();
     }
 
-    public async Task SaveAsync()
+    public async Task<ProjectVM> SaveAsync()
     {
         var valid = Validate();
         if (!valid)
-            return;
+            return null;
 
         try
         {
@@ -88,11 +91,17 @@ public partial class ProjectDetailed : ComponentBase
 
             if (saveProject == null)
                 throw new NullReferenceException(nameof(saveProject));
+
+            var projectVm = Mapper.Map<ProjectVM>(saveProject);
+
+            return projectVm;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Exception: {ex.Message}");
             // TODO: Log Error
+
+            return null;
         }
     }
 

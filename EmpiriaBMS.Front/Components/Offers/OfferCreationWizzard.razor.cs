@@ -13,7 +13,6 @@ public partial class OfferCreationWizzard
 {
     private bool _isNew => Offer?.Id == 0;
     private bool _loading = false;
-    private bool _loadingOnInvoice = false;
 
     public LedVM Led { get; set; } = default!;
 
@@ -26,25 +25,10 @@ public partial class OfferCreationWizzard
     [Parameter]
     public EventCallback OnCansel { get; set; }
 
-    private ProjectVM _project { get; set; }
-    List<ProjectVM> _projects = new List<ProjectVM>();
-
-    private InvoiceVM _invoice { get; set; }
-    List<InvoiceVM> _invoices = new List<InvoiceVM>();
-
-    private ContractVM _contract { get; set; }
-
     #region Actions Enabled Variables
     private bool _offerTabEnable => Led?.Result == LedResult.SUCCESSFUL && (_ledCompoment?.Validate() ?? false);
-    private bool _projectsTabEnable => _offerTabEnable && (Offer?.Result == OfferResult.SUCCESSFUL);
+    private bool _projectsTabEnable => _offerTabEnable && (Offer?.Result == OfferResult.SUCCESSFUL) && (_offerCompoment?.Validate() ?? false);
     private bool _invoiceTabEnable => _offerTabEnable && _projectsTabEnable && _projects.Count > 0;
-    #endregion
-
-    #region Compoment Refrences
-    private LedDetailed _ledCompoment;
-    private ProjectDetailed _projectCompoment;
-    private OfferDetailed _offerCompoment;
-    private InvoiceDetailed _invoiceCompoment;
     #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -91,6 +75,8 @@ public partial class OfferCreationWizzard
     }
 
     #region Led Tab
+    private LedDetailed _ledCompoment;
+
     private void _onLedResultChanged((string Value, string Text) resultOption)
     {
         LedResult result = (LedResult)Enum.Parse(typeof(LedResult), resultOption.Value);
@@ -144,6 +130,8 @@ public partial class OfferCreationWizzard
     #endregion
 
     #region Offer Tab
+    private OfferDetailed _offerCompoment;
+
     private void _onOfferResultChanged((string Value, string Text) resultOption)
     {
         OfferResult result = (OfferResult)Enum.Parse(typeof(OfferResult), resultOption.Value);
@@ -183,6 +171,105 @@ public partial class OfferCreationWizzard
         }
 
         _loading = false;
+    }
+    #endregion
+
+    #region Project Tab
+    private ProjectDetailed _projectCompoment;
+    private bool _loadingOnProject = false;
+    private ProjectVM _project { get; set; }
+    List<ProjectVM> _projects = new List<ProjectVM>();
+
+    private async Task _addProject()
+    {
+        _loadingOnProject = true;
+        var project = await _projectCompoment.SaveAsync();
+        if (project != null)
+            _projects.Add(project);
+        _loadingOnProject = false;
+    }
+
+    private ProjectVM _getNewProject()
+    {
+        var offerDto = _mapper.Map<OfferDto>(Offer);
+        var offerVm = Mapping.Mapper.Map<Offer>(offerDto);
+        return new ProjectVM()
+        {
+            Offer = offerVm,
+            OfferId = offerVm.Id
+        };
+    }
+
+    private async Task _onProjectSelect(ProjectVM project)
+    {
+        _project = project;
+        //await _projectCompoment.Prepair(project, true);
+    }
+
+    private async Task _saveProjects()
+    {
+        _loading = true;
+
+        var valid = _projects.Count > 0;
+
+        if (valid)
+        {
+            _projects.ForEach(p =>
+            {
+                p.Stage = null;
+                p.ProjectManager = null;
+                p.Offer = null;
+            });
+            var dtos = _mapper.Map<List<ProjectDto>>(_projects);
+
+            // Save Projects
+            List<ProjectVM> projects = new List<ProjectVM>();
+            foreach (var dto in dtos)
+            {
+                ProjectVM project;
+                if (await _dataProvider.Projects.Any(p => p.Id == dto.Id))
+                {
+                    var updated = await _dataProvider.Projects.Update(dto);
+                    project = _mapper.Map<ProjectVM>(updated);
+                }
+                else
+                {
+                    var updated = await _dataProvider.Projects.Add(dto);
+                    project = _mapper.Map<ProjectVM>(updated);
+                }
+                projects.Add(project);
+            }
+
+            _projects.Clear();
+            _projects.AddRange(projects);
+            _project = _getNewProject();
+        }
+
+        _loading = false;
+    }
+    #endregion
+
+    #region Invoices Tab
+    private InvoiceDetailed _invoiceCompoment;
+    private bool _loadingOnInvoice = false;
+    private InvoiceVM _invoice { get; set; }
+    List<InvoiceVM> _invoices = new List<InvoiceVM>();
+    private ContractVM _contract { get; set; }
+
+    private async Task _onInvoiceSelect(InvoiceVM invoice)
+    {
+        _invoice = invoice;
+        _contract = _invoice.Contract;
+        await _invoiceCompoment.Prepair();
+    }
+
+    private async Task _addInvoice()
+    {
+        _loadingOnInvoice = true;
+        var invoice = await _invoiceCompoment.Save();
+        if (invoice != null)
+            _invoices.Add(invoice);
+        _loadingOnInvoice = false;
     }
     #endregion
 
@@ -228,15 +315,16 @@ public partial class OfferCreationWizzard
             {
                 await _saveOffer();
 
-                if (_offerCompoment != null && _offerCompoment.Validate())
+                for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+                tabs[tabIndex] = true;
+                StateHasChanged();
+
+                if (_projectCompoment != null)
                 {
-                    if (_projectCompoment != null)
-                        await _projectCompoment.Prepair();
+                    var project = _getNewProject();
+                    await _projectCompoment.Prepair(project);
                 }
             }
-
-            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-            tabs[tabIndex] = true;
         }
 
         // Invoice Tab
@@ -244,38 +332,35 @@ public partial class OfferCreationWizzard
         {
             if (_prevTabIndex < 3)
             {
-                if (_projectCompoment != null && _projectCompoment.Validate() || !_isNew)
+                await _saveProjects();
+
+                if (_projectCompoment != null)
+                    _project = _projectCompoment.GetProject();
+
+                if (_invoiceCompoment != null)
+                    await _invoiceCompoment.Prepair();
+                if (_project != null)
                 {
-                    if (_projectCompoment != null)
-                        _project = _projectCompoment.GetProject();
-
-                    await _saveBase();
-
-                    if (_invoiceCompoment != null)
-                        await _invoiceCompoment.Prepair();
-                    if (_project != null)
+                    var invoicesDtos = await _dataProvider.Projects.GetInvoices(_project.Id);
+                    _invoices = _mapper.Map<List<InvoiceVM>>(invoicesDtos);
+                    if (_invoices != null && _invoices.Count > 0)
                     {
-                        var invoicesDtos = await _dataProvider.Projects.GetInvoices(_project.Id);
-                        _invoices = _mapper.Map<List<InvoiceVM>>(invoicesDtos);
-                        if (_invoices != null && _invoices.Count > 0)
-                        {
-                            _invoice = _invoices.FirstOrDefault();
-                        }
-                        _invoice.ProjectId = _project.Id;
-                        _invoice.Project = _project;
+                        _invoice = _invoices.FirstOrDefault();
+                    }
+                    _invoice.ProjectId = _project.Id;
+                    _invoice.Project = _project;
 
-                        _invoice.TypeId = _invoice.TypeId;
-                        _invoice.Type = _invoice.Type;
+                    _invoice.TypeId = _invoice.TypeId;
+                    _invoice.Type = _invoice.Type;
 
-                        if (_invoice.Contract == null && _invoice.ContractId == 0)
+                    if (_invoice.Contract == null && _invoice.ContractId == 0)
+                    {
+                        _invoice.Contract = new ContractVM()
                         {
-                            _invoice.Contract = new ContractVM()
-                            {
-                                InvoiceId = _invoice.Id,
-                                Invoice = _invoice,
-                                Date = DateTime.Now,
-                            };
-                        }
+                            InvoiceId = _invoice.Id,
+                            Invoice = _invoice,
+                            Date = DateTime.Now,
+                        };
                     }
                 }
             }
@@ -288,117 +373,6 @@ public partial class OfferCreationWizzard
         StateHasChanged();
     }
     #endregion
-
-
-    private async Task _saveBase()
-    {
-        // Update Project
-        var projectUpdated = await _upsertProject(_project);
-        if (projectUpdated == null)
-            return;
-        var projectDto = _mapper.Map<ProjectDto>(projectUpdated);
-
-        // Update Offer
-        var offerUpdated = await _upsertOffer(Offer);
-        if (offerUpdated == null)
-            return;
-        Offer = offerUpdated;
-
-        // Update Offer Related Project
-        _project = projectUpdated;
-    }
-
-    private async Task _onProjectSelect(ProjectVM project)
-    {
-        _project = project;
-        //await _projectCompoment.Prepair(project, true);
-    }
-
-    private async Task _onInvoiceSelect(InvoiceVM invoice)
-    {
-        _invoice = invoice;
-        _contract = _invoice.Contract;
-        await _invoiceCompoment.Prepair();
-    }
-
-    private async Task _addInvoice()
-    {
-        _loadingOnInvoice = true;
-        var invoice = await _invoiceCompoment.Save();
-        if (invoice != null)
-            _invoices.Add(invoice);
-        _loadingOnInvoice = false;
-    }
-
-
-    #region Update Records
-    private async Task<ProjectVM> _upsertProject(ProjectVM project)
-    {
-        if (project is not null)
-        {
-            var p = project.Clone() as ProjectVM;
-            var dto = _mapper.Map<ProjectDto>(p);
-
-            // Remove Related Objects For DB Conflicts
-            dto.Offer = null;
-            dto.Stage = null;
-            dto.ProjectManager = null;
-
-            // Save Project
-            if (_project.Id != 0 && await _dataProvider.Projects.Any(p => p.Id == _project.Id))
-            {
-                ProjectDto updated = await _dataProvider.Projects.Update(dto);
-                if (updated != null)
-                    return _mapper.Map<ProjectVM>(updated);
-                else
-                    return null;
-            }
-            else
-            {
-                ProjectDto updated = await _dataProvider.Projects.Add(dto);
-                if (updated != null)
-                    return _mapper.Map<ProjectVM>(updated);
-                else
-                    return null;
-            }
-        }
-        else
-            return null;
-    }
-
-    private async Task<OfferVM> _upsertOffer(OfferVM offer)
-    {
-        if (offer is not null)
-        {
-            var obj = offer.Clone() as OfferVM;
-            var dto = _mapper.Map<OfferDto>(obj);
-            dto.Type = null;
-            dto.State = null;
-            dto.Result = OfferResult.WAITING;
-            // Save Offer
-            if (await _dataProvider.Offers.Any(p => p.Id == offer.Id))
-            {
-                OfferDto updatedOffer = await _dataProvider.Offers.Update(dto);
-                if (updatedOffer != null)
-                    return _mapper.Map<OfferVM>(updatedOffer);
-                else
-                    return null;
-            }
-            else
-            {
-                OfferDto updatedOffer = await _dataProvider.Offers.Add(dto);
-                if (updatedOffer != null)
-                    return _mapper.Map<OfferVM>(updatedOffer);
-                else
-                    return null;
-            }
-        }
-        else
-            return null;
-    }
-    #endregion
-
-
 
     #region Validation
     private bool _validOffer;
