@@ -87,6 +87,8 @@ public class OfferRepo : Repository<OfferDto, Offer>
                                        .Include(o => o.Type)
                                        .Include(o => o.Led)
                                        .ThenInclude(p => p.Client)
+                                       .Include(o => o.Led)
+                                       .ThenInclude(l => l.Address)
                                        .Include(o => o.SubCategory)
                                        .Include(o => o.Category)
                                        .FirstOrDefaultAsync(o => o.Id == id);
@@ -105,6 +107,9 @@ public class OfferRepo : Repository<OfferDto, Offer>
                                        .Include(p => p.Offer)
                                        .ThenInclude(o => o.Led)
                                        .ThenInclude(l => l.Client)
+                                       .Include(p => p.Offer)
+                                       .ThenInclude(o => o.Led)
+                                       .ThenInclude(l => l.Address)
                                        .Include(p => p.Offer)
                                        .ThenInclude(o => o.State)
                                        .Include(p => p.Offer)

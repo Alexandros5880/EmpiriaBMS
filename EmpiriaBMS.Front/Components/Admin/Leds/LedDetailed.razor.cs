@@ -99,9 +99,9 @@ public partial class LedDetailed
             }
         }
 
-        StateHasChanged();
-
         await RefreshMap();
+
+        StateHasChanged();
     }
 
     public async Task<LedVM> SaveAsync()
@@ -297,11 +297,12 @@ public partial class LedDetailed
 
     public async Task RefreshMap()
     {
-        if (Content.Id != 0 && Content.Address != null)
+        if (Content.Address != null)
         {
             await _map.SetAddress(Content.Address);
         }
     }
+
     private void _onSearchAddressChange()
     {
         var address = _map.GetAddress();
