@@ -66,14 +66,16 @@
         <div class="col-12" style="max-width: 1000px; margin: 0 auto;">
 
             <!-- Display Body -->
-            @if (tabs[0]) // Offer Detailed
+            
+            <!-- Led Detailed -->
+            @if (tabs[0])
             {
                 <div class="content" style="max-width: 900px; margin: 0 auto;">
                     <div class="row">
                         <div class="col-12 my-wizard-tab">
                             @if (Offer != null)
                             {
-                                <!-- Offers Detailed -->
+                                <!-- Led Detailed -->
                                 <LedDetailed @ref="@_ledCompoment"
                                              Content="@Led"
                                              OnSave="@OnSave"
@@ -103,7 +105,9 @@
 
                 </div>
             }
-            @if (tabs[1]) // Offer Detailed
+            
+            <!-- Offer Detailed -->
+            @if (tabs[1])
             {
                 <div class="content" style="max-width: 900px; margin: 0 auto;">
                     <div class="row">
@@ -115,32 +119,36 @@
                                                Content="@Offer"
                                                OnSave="@OnSave"
                                                DisplayTitle="false"
-                                               DisplayActions="false"/>
+                                               DisplayActions="false"
+                                               OnResultChanged="@_onOfferResultChanged" />
                             }
                         </div>
                         <div class="col-12 mt-2">
+                            <FluentStack Orientation="Orientation.Horizontal">
 
-                            <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(0))">
-                                <FluentIcon Value="@(new Icons.Regular.Size32.Previous())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                                Previous
-                            </FluentButton>
+                                <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(0))">
+                                    <FluentIcon Value="@(new Icons.Regular.Size32.Previous())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
+                                    Previous
+                                </FluentButton>
 
-                            <FluentButton Class="float-end ms-2" OnClick="@(async () => await _saveBase())" Disabled="@(!_projectsTabEnable)" Loading="@_loading">
-                                <FluentIcon Value="@(new MyIcons.Size32.Save())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                                Save
-                            </FluentButton>
+                                <FluentButton Class="float-end ms-2" OnClick="@(async () => await _saveOffer())" Disabled="@(!_projectsTabEnable)" Loading="@_loading">
+                                    <FluentIcon Value="@(new MyIcons.Size32.Save())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
+                                    Save
+                                </FluentButton>
 
-                            <FluentButton Class="float-end ms-2" OnClick="@(async () => await TabMenuClick(2))" Loading="@_loading" Disabled="@(!_projectsTabEnable)">
-                                <FluentIcon Value="@(new Icons.Regular.Size32.Next())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                                Next
-                            </FluentButton>
+                                <FluentButton Class="float-end ms-2" OnClick="@(async () => await TabMenuClick(2))" Loading="@_loading" Disabled="@(!_projectsTabEnable)">
+                                    <FluentIcon Value="@(new Icons.Regular.Size32.Next())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
+                                    Next
+                                </FluentButton>
 
+                            </FluentStack>
                         </div>
                     </div>
-
                 </div>
             }
-            else if (tabs[2]) // Projects
+            
+            <!-- Projects -->
+            @if (tabs[2])
             {
                 <div class="content row" style="max-width: 900px; margin: 0 auto;">
                     <div class="col-12 my-wizard-tab">
@@ -195,7 +203,10 @@
                     </div>
                 </div>
             }
-            else if (tabs[3]) // Invoice Detailed
+            <!-- Invoices -->
+            
+            <!-- Invoices -->
+            @if (tabs[3])
             {
                 @if (_invoices.Count == 0)
                 {
