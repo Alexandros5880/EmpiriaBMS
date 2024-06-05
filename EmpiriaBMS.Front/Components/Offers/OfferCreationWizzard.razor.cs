@@ -156,11 +156,12 @@ public partial class OfferCreationWizzard
         _loading = true;
 
         var valid = _offerCompoment.Validate();
+        Offer = _offerCompoment.GetOffer();
+        Offer.LedId = Led.Id;
 
         if (valid)
         {
             var dto = _mapper.Map<OfferDto>(Offer);
-
 
             dto.Led = null;
             dto.Type = null;
@@ -188,11 +189,16 @@ public partial class OfferCreationWizzard
     #region Tab Actions
     bool[] tabs = new bool[4];
     int _tabIndex = 0;
+    int _prevTabIndex = 0;
 
     private async Task TabMenuClick(int tabIndex)
     {
         _loading = true;
         _tabIndex = tabIndex;
+
+        for (int i = 0; i < tabs.Length; i++)
+            if (tabs[i] == true)
+                _prevTabIndex = i;
 
         // Led Tab
         if (tabIndex == 0)
@@ -207,7 +213,8 @@ public partial class OfferCreationWizzard
         // Offer Tab
         else if (tabIndex == 1)
         {
-            await _saveLed();
+            if (_prevTabIndex < 1)
+                await _saveLed();
 
             //var _validOffer = _offerCompoment?.Validate();
             for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
@@ -217,58 +224,64 @@ public partial class OfferCreationWizzard
         // Project Tabs
         else if (tabIndex == 2)
         {
-            await _saveOffer();
-
-            if (_offerCompoment != null && _offerCompoment.Validate())
+            if (_prevTabIndex < 2)
             {
-                if (_projectCompoment != null)
-                    await _projectCompoment.Prepair();
+                await _saveOffer();
 
-
-                for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-                tabs[tabIndex] = true;
+                if (_offerCompoment != null && _offerCompoment.Validate())
+                {
+                    if (_projectCompoment != null)
+                        await _projectCompoment.Prepair();
+                }
             }
+
+            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+            tabs[tabIndex] = true;
         }
 
         // Invoice Tab
         else if (tabIndex == 3)
         {
-            if (_projectCompoment != null && _projectCompoment.Validate() || !_isNew)
+            if (_prevTabIndex < 3)
             {
-                if (_projectCompoment != null)
-                    _project = _projectCompoment.GetProject();
-
-                await _saveBase();
-
-                if (_invoiceCompoment != null)
-                    await _invoiceCompoment.Prepair();
-                if (_project != null)
+                if (_projectCompoment != null && _projectCompoment.Validate() || !_isNew)
                 {
-                    var invoicesDtos = await _dataProvider.Projects.GetInvoices(_project.Id);
-                    _invoices = _mapper.Map<List<InvoiceVM>>(invoicesDtos);
-                    if (_invoices != null && _invoices.Count > 0)
-                    {
-                        _invoice = _invoices.FirstOrDefault();
-                    }
-                    _invoice.ProjectId = _project.Id;
-                    _invoice.Project = _project;
+                    if (_projectCompoment != null)
+                        _project = _projectCompoment.GetProject();
 
-                    _invoice.TypeId = _invoice.TypeId;
-                    _invoice.Type = _invoice.Type;
+                    await _saveBase();
 
-                    if (_invoice.Contract == null && _invoice.ContractId == 0)
+                    if (_invoiceCompoment != null)
+                        await _invoiceCompoment.Prepair();
+                    if (_project != null)
                     {
-                        _invoice.Contract = new ContractVM()
+                        var invoicesDtos = await _dataProvider.Projects.GetInvoices(_project.Id);
+                        _invoices = _mapper.Map<List<InvoiceVM>>(invoicesDtos);
+                        if (_invoices != null && _invoices.Count > 0)
                         {
-                            InvoiceId = _invoice.Id,
-                            Invoice = _invoice,
-                            Date = DateTime.Now,
-                        };
+                            _invoice = _invoices.FirstOrDefault();
+                        }
+                        _invoice.ProjectId = _project.Id;
+                        _invoice.Project = _project;
+
+                        _invoice.TypeId = _invoice.TypeId;
+                        _invoice.Type = _invoice.Type;
+
+                        if (_invoice.Contract == null && _invoice.ContractId == 0)
+                        {
+                            _invoice.Contract = new ContractVM()
+                            {
+                                InvoiceId = _invoice.Id,
+                                Invoice = _invoice,
+                                Date = DateTime.Now,
+                            };
+                        }
                     }
                 }
-                for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-                tabs[tabIndex] = true;
             }
+
+            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+            tabs[tabIndex] = true;
         }
 
         _loading = false;

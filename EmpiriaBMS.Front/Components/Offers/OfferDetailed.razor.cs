@@ -39,71 +39,59 @@ public partial class OfferDetailed
 
         if (firstRender)
         {
-            await Prepair();
-        }
-    }
+            await _getRecords();
 
-    public async Task Prepair()
-    {
-        await _getRecords();
-
-        if (Content.Type != null)
-        {
-            var typeDto = Mapping.Mapper.Map<OfferTypeDto>(Content.Type);
-            Type = _mapper.Map<OfferTypeVM>(typeDto);
-        }
-
-        if (Content.State != null)
-        {
-            var stateDto = Mapping.Mapper.Map<OfferStateDto>(Content.State);
-            State = _mapper.Map<OfferStateVM>(stateDto);
-        }
-
-        if (Content.Result != null)
-        {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
-            if (_resultCombo != null)
+            if (Content.Type != null)
             {
+                var typeDto = Mapping.Mapper.Map<OfferTypeDto>(Content.Type);
+                Type = _mapper.Map<OfferTypeVM>(typeDto);
+            }
+
+            if (Content.State != null)
+            {
+                var stateDto = Mapping.Mapper.Map<OfferStateDto>(Content.State);
+                State = _mapper.Map<OfferStateVM>(stateDto);
+            }
+
+            if (Content.Result != null)
+            {
+                SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
                 _resultCombo.Value = SelectedResult.Value;
                 _resultCombo.SelectedOption = SelectedResult;
             }
-        }
-        else
-        {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
-            if (_resultCombo != null)
+
+            // Category
+            ProjectCategoryVM category = null;
+            if (Content.Category != null)
             {
-                _resultCombo.Value = SelectedResult.Value;
-                _resultCombo.SelectedOption = SelectedResult;
+                category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
+                Category = category;
+                _catCombo.Value = Category.Name;
+                _catCombo.SelectedOption = Category;
+                await _getSubCategories();
             }
-        }
+            else if (Content.CategoryId != 0)
+            {
+                category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
+                Category = category;
+                _catCombo.Value = Category.Name;
+                _catCombo.SelectedOption = Category;
+                await _getSubCategories();
+            }
 
-        // Category
-        ProjectCategoryVM category = null;
-        if (Content.Category != null)
-        {
-            category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
-            Category = category;
-            _catCombo.Value = Category.Name;
-            _catCombo.SelectedOption = Category;
-            await _getSubCategories();
+            StateHasChanged();
         }
-        else if (Content.CategoryId != 0)
-        {
-            category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
-            Category = category;
-            _catCombo.Value = Category.Name;
-            _catCombo.SelectedOption = Category;
-            await _getSubCategories();
-        }
-
-        StateHasChanged();
     }
 
-    public async Task Save()
+    public async Task SaveAsync()
     {
         var valid = Validate();
         if (!valid) return;
+
+        Content.TypeId = Type.Id;
+        Content.StateId = State.Id;
+        Content.CategoryId = Category.Id;
+        Content.SubCategoryId = SubCategory.Id;
 
         var dto = _mapper.Map<OfferDto>(Content);
         OfferDto updated;
@@ -117,11 +105,14 @@ public partial class OfferDetailed
         await OnSave.InvokeAsync();
     }
 
-    private async Task _onResultChanged((string Value, string Text) resultOption)
+    public OfferVM GetOffer()
     {
-        Validate();
-        SelectedResult = resultOption;
-        await OnResultChanged.InvokeAsync(resultOption);
+        Content.TypeId = Type.Id;
+        Content.StateId = State.Id;
+        Content.CategoryId = Category.Id;
+        Content.SubCategoryId = SubCategory.Id;
+
+        return Content;
     }
 
     #region Validation
