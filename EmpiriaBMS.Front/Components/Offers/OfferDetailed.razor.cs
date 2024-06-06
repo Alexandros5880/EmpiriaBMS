@@ -43,12 +43,13 @@ public partial class OfferDetailed
         }
     }
 
-    public async Task Prepair(OfferVM offer = null)
+    public async Task Prepair(OfferVM offer = null, bool full = true)
     {
-        await _getRecords();
-
         if (offer != null)
             Content = offer;
+
+        if (full)
+            await _getRecords();
 
         if (Content.Type != null)
         {

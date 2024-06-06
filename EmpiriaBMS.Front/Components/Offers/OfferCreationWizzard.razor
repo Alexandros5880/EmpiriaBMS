@@ -19,6 +19,7 @@
 
         <div class="bs-stepper col-12">
 
+            <!-- Tabs Buttons -->
             <div class="bs-stepper-header">
                 <div class="step">
                     <button type="button"
@@ -49,23 +50,12 @@
                         <span class="bs-stepper-label">Create Project</span>
                     </button>
                 </div>
-                <div class="line"></div>
-                <div class="step">
-                    <button type="button"
-                            class="btn step-trigger @(tabs[3] == true ? "selected_step" : "")"
-                            onclick="@(async () => await TabMenuClick(3))"
-                            disabled="@(_isNew || !_invoiceTabEnable)">
-                        <span class="bs-stepper-circle">4</span>
-                        <span class="bs-stepper-label">Create Invoice</span>
-                    </button>
-                </div>
             </div>
 
         </div>
 
-        <div class="col-12" style="max-width: 1000px; margin: 0 auto;">
-
-            <!-- Display Body -->
+        <!-- Display Body -->
+        <div class="col-12" style="max-width: 1000px; margin: 0 auto;">    
             
             <!-- Led Detailed -->
             @if (tabs[0])
@@ -194,68 +184,6 @@
                                 Save
                             </FluentButton>
 
-                            <FluentButton Class="float-end ms-2" OnClick="@(async () => await TabMenuClick(3))" Loading="@_loading" Disabled="@(!_invoiceTabEnable)">
-                                <FluentIcon Value="@(new Icons.Regular.Size32.Next())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                                Next
-                            </FluentButton>
-
-                        </div>
-                    </div>
-                </div>
-            }
-            
-            <!-- Invoices -->
-            @if (tabs[3])
-            {
-                @if (_invoices.Count == 0)
-                {
-                    <span class="text-warning ms-3">At least one invoice is required!</span>
-                }
-                <div class="content" style="max-width: 900px; margin: 0 auto;">
-                    <div class="row">
-                        <div class="col-12 my-wizard-tab">
-
-                            <div class="row gx-1">
-
-                                @if (_invoices.Count > 0)
-                                {
-                                    <div class="col-12 m-2">
-                                        <!-- Invoices -->
-                                        <InvoicesTable Source="@_invoices" SelectedRecord="@_invoice" DisplayAddButton="false" DisplayActions="false" OnSelect="@_onInvoiceSelect" Project="@_project" />
-                                    </div>
-                                }
-
-                                <div class="col-12 m-2">
-                                    <div class="card shadow" style="margin: 0 auto;">
-                                        <div class="w-92 m-2 sticky-on-top">
-                                            <FluentButton Class="float-end" OnClick="@(async () => await _addInvoice())" Loading="@_loadingOnInvoice">
-                                                <FluentIcon Value="@(new Icons.Regular.Size32.Add())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                                                Add
-                                            </FluentButton>
-                                        </div>
-                                        <div class="w-92">
-                                            <!-- Invoice Detailed -->
-                                            <InvoiceDetailed @ref="@_invoiceCompoment" Title="Add Invoice" DisplayAcions="false" DisplayProject="false" Content="@_invoice" Contract="@_contract" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <div class="d-flex justify-content-end">
-
-                                <FluentButton Class="float-end" OnClick="@(async () => await TabMenuClick(2))">
-                                    <FluentIcon Value="@(new Icons.Regular.Size32.Previous())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                                    Previous
-                                </FluentButton>
-
-                                <FluentButton Class="float-end" OnClick="@(async () => await _close())" Loading="@_loading">
-                                    <FluentIcon Value="@(new Icons.Regular.Size32.ClosedCaption())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                                    End
-                                </FluentButton>
-
-                            </div>
                         </div>
                     </div>
                 </div>

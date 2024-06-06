@@ -50,7 +50,7 @@ public partial class LedDetailed
         }
     }
 
-    public async Task Prepair(LedVM record = null)
+    public async Task Prepair(LedVM record = null, bool full = true)
     {
         if (record == null || record.Id == 0)
         {
@@ -66,7 +66,8 @@ public partial class LedDetailed
             Content = record;
         }
 
-        await _getRecords();
+        if (full)
+            await _getRecords();
 
         if (Content.Offer != null)
         {
