@@ -83,6 +83,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         {
             var offer = await _context.Set<Offer>()
                                        .Where(r => !r.IsDeleted)
+                                       .Include(o => o.Led)
                                        .Include(o => o.State)
                                        .Include(o => o.Type)
                                        .Include(o => o.Led)

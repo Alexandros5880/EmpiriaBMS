@@ -3,7 +3,6 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
@@ -113,6 +112,9 @@ public partial class LedDetailed
 
         if (valid)
         {
+            Content.OfferId = Offer.Id;
+            Content.ClientId = Client.Id;
+
             var dto = _mapper.Map<LedDto>(Content);
 
             // Save Address
@@ -172,9 +174,9 @@ public partial class LedDetailed
         if (fieldname == null)
         {
             validName = Content.Name != null && Content.Name.Length > 0;
-            validClient = !string.IsNullOrEmpty(Content?.Client?.FullName) || Content.ClientId != 0;
+            validClient = !string.IsNullOrEmpty(Client?.FullName) || Client?.Id != 0;
             validPotencialFee = Content?.PotencialFee > 0;
-            validOffer = !DisplayOffer || (!string.IsNullOrEmpty(Content?.Offer?.Code) || (Content.OfferId != 0 && Content.OfferId != null));
+            validOffer = !DisplayOffer || (!string.IsNullOrEmpty(Offer?.Code) || (Offer.Id != 0 && Offer.Id != null));
 
             return validName && validClient && validPotencialFee && validOffer;
         }
@@ -191,13 +193,13 @@ public partial class LedDetailed
                     validName = Content.Name != null && Content.Name.Length > 0;
                     return validName;
                 case "Client":
-                    validClient = !string.IsNullOrEmpty(Content?.Client?.FullName) || Content.ClientId != 0;
+                    validClient = !string.IsNullOrEmpty(Client?.FullName) || Client?.Id != 0;
                     return validClient;
                 case "validPotencialFee":
                     validClient = validPotencialFee = Content?.PotencialFee > 0; ;
                     return validPotencialFee;
                 case "Offer":
-                    validOffer = !DisplayOffer || (!string.IsNullOrEmpty(Content?.Offer?.Code) || (Content.OfferId != 0 && Content.OfferId != null));
+                    validOffer = !DisplayOffer || (!string.IsNullOrEmpty(Offer?.Code) || (Offer.Id != 0 && Offer.Id != null));
                     return validOffer;
                 default:
                     return true;
@@ -219,9 +221,6 @@ public partial class LedDetailed
         {
             if (_client == value || value == null) return;
             _client = value;
-            Content.ClientId = _client.Id;
-            var dto = _mapper.Map<ClientDto>(_client);
-            Content.Client = Mapping.Mapper.Map<Client>(dto);
         }
     }
 
@@ -236,9 +235,6 @@ public partial class LedDetailed
         {
             if (_offer == value || value == null) return;
             _offer = value;
-            Content.OfferId = _offer.Id;
-            var dto = _mapper.Map<OfferDto>(_offer);
-            Content.Offer = Mapping.Mapper.Map<Offer>(dto);
         }
     }
 
