@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Fast.Components.FluentUI;
@@ -167,7 +168,10 @@ public partial class Offers
     {
         _selectedOffer = new OfferVM()
         {
-            Date = DateTime.Now
+            Led = new Led()
+            {
+                Result = LedResult.UNSUCCESSFUL
+            }
         };
 
         DialogParameters parameters = new()
