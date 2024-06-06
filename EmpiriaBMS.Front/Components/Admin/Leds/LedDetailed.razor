@@ -18,159 +18,150 @@
 </style>
 
 
-@if (Content != null)
-{
-    <div >
-        <div class="row gx-2 ">
+<div>
+    <div class="row gx-2 ">
 
-            <div class="col-12 row gx-2">
-                <!-- Name -->
-                <div class="col-lg-6 col-md-12">
-                    <div class="col-12">
-                        Name<span class="text-danger">*</span>
-                    </div>
-                    <div class="col-12">
-                        <FluentTextField Style="width: 100%;" @bind-Value="@Content.Name"/>
-                    </div>
-                    @if (!validName)
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
+        <div class="col-12 row gx-2">
+            <!-- Name -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Name<span class="text-danger">*</span>
                 </div>
-                <!-- PotencialFee-->
-                <div class="col-lg-6 col-md-12">
-                    <div class="col-12">
-                        PotencialFee<span class="text-danger">*</span>
-                    </div>
-                    <FluentNumberField Style="width: 100%;" @bind-Value="@Content.PotencialFee" Min="0" />
-                    @if (!validPotencialFee)
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
+                <div class="col-12">
+                    <FluentTextField Style="width: 100%;" @bind-Value="@Content.Name" />
                 </div>
-            </div>
-
-            <div class="col-12 row gx-2">
-                <!-- Result -->
-                <div class="col-lg-6 col-md-12">
-                    <div>
-                        Result
-                    </div>
-                    <div>
-                        <FluentCombobox @ref="@_resultCombo"
-                                        Autocomplete="ComboboxAutocomplete.Both"
-                                        Placeholder="Select Result..."
-                                        Items="_results"
-                                        Height="100px"
-                                        Width="100%"
-                                        Class="float-end"
-                                        TOption="(string Value, string Text)"
-                                        OptionText="@(c => c.Text)"
-                                        OptionValue="@(c => c.Value)"
-                                        SelectedOptionChanged="@(async (e) => await _onResultChanged(e))"/>
-                    </div>
-                </div>
-                <!-- ExpectedDurationDate-->
-                <div class="col-lg-6 col-md-12">
-                    <div class="col-12">
-                        ExpectedDurationDate
-                    </div>
-                    <div>
-                        <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.ExpectedDurationDate"/>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 row gx-2">
-                <!-- Client-->
-                <div class="col-10">
-                    <div class="col-12">
-                        Client<span class="text-danger">*</span>
-                    </div>
-                    <div class="col-12">
-                        <FluentCombobox @ref="@_clientCombo"
-                                        Autocomplete="ComboboxAutocomplete.Both"
-                                        Placeholder="Select Client..."
-                                        Items="@_clients"
-                                        Height="100px"
-                                        Width="100%"
-                                        TOption="ClientVM"
-                                        OptionText="@(c => c.FullName)"
-                                        OptionValue="@(c => c.Id.ToString())"
-                                        @bind-SelectedOption="@Client" />
-                    </div>
-                    @if (!validClient)
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
-                </div>
-                <!-- Client-->
-                <div class="col-2">
-                    @if (_displayClientForm)
-                    {
-                        <FluentIcon Class="float-end mt-4 ms-1"
-                                    OnClick="@( () => _toogleClientForm(false) )" 
-                                    Value="@(new MyIcons.Size32.Close())"
-                                    Color="Microsoft.Fast.Components.FluentUI.Color.Accent"
-                                    Slot="start" />
-                    }
-                    else
-                    {
-                        <FluentButton Class="float-end mt-4 ms-1" OnClick="@( () => _toogleClientForm(true) )">
-                            <FluentIcon Value="@(new Icons.Regular.Size32.Add())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                            Add
-                        </FluentButton>
-                    }
-                </div>
-                <!-- Client Detailed Form -->
-                @if (_displayClientForm)
+                @if (!validName)
                 {
                     <div class="col-12">
-                        <div class="rounded border w-96 p-2 mt-1">
-                            <ClientDetailed DisplayTitle="false"
-                                            DisplayActions="true"
-                                            Content="@_client"
-                                            OnCancel="@(() => _toogleClientForm(false))"
-                                            OnSave="@((client) => _onNewClientSave(client))"/>
-                        </div>
+                        <span class="text-warning">Field is required!</span>
                     </div>
                 }
             </div>
-
-            <!-- Address (Map) -->
-            <div class="col-12">
-                <div>
-                    <h4>Address</h4>
+            <!-- PotencialFee-->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    PotencialFee<span class="text-danger">*</span>
                 </div>
-                <!-- Search Address / (Map) -->
-                <div style="margin: 0 auto;">
-                    <Map @ref="@_map"
-                         Id="adminProjectMap"
-                         AutoCompeteId="autocompeteAdminProjectMap"
-                         OnFindAddress="@(() => _onSearchAddressChange())"
-                         IsMapVisible="false" />
+                <FluentNumberField Style="width: 100%;" @bind-Value="@Content.PotencialFee" Min="0" />
+                @if (!validPotencialFee)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-12 row gx-2">
+            <!-- Result -->
+            <div class="col-lg-6 col-md-12">
+                <div>
+                    Result
+                </div>
+                <div>
+                    <FluentCombobox @ref="@_resultCombo"
+                                    Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Result..."
+                                    Items="_results"
+                                    Height="100px"
+                                    Width="100%"
+                                    Class="float-end"
+                                    TOption="(string Value, string Text)"
+                                    OptionText="@(c => c.Text)"
+                                    OptionValue="@(c => c.Value)"
+                                    SelectedOptionChanged="@(async (e) => await _onResultChanged(e))" />
                 </div>
             </div>
+            <!-- ExpectedDurationDate-->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    ExpectedDurationDate
+                </div>
+                <div>
+                    <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.ExpectedDurationDate" />
+                </div>
+            </div>
+        </div>
 
-            @if (DisplayActions)
+        <div class="col-12 row gx-2">
+            <!-- Client-->
+            <div class="col-10">
+                <div class="col-12">
+                    Client<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox @ref="@_clientCombo"
+                                    Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select Client..."
+                                    Items="@_clients"
+                                    Height="100px"
+                                    Width="100%"
+                                    TOption="ClientVM"
+                                    OptionText="@(c => c.FullName)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Client" />
+                </div>
+                @if (!validClient)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+            <!-- Client-->
+            <div class="col-2">
+                @if (_displayClientForm)
+                {
+                    <FluentIcon Class="float-end mt-4 ms-1"
+                                OnClick="@( () => _toogleClientForm(false) )"
+                                Value="@(new MyIcons.Size32.Close())"
+                                Color="Microsoft.Fast.Components.FluentUI.Color.Accent"
+                                Slot="start" />
+                }
+                else
+                {
+                    <FluentButton Class="float-end mt-4 ms-1" OnClick="@( () => _toogleClientForm(true) )">
+                        <FluentIcon Value="@(new Icons.Regular.Size32.Add())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
+                        Add
+                    </FluentButton>
+                }
+            </div>
+            <!-- Client Detailed Form -->
+            @if (_displayClientForm)
             {
-                <div class="col-12 d-flex justify-content-end">
-                    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+                <div class="col-12">
+                    <div class="rounded border w-96 p-2 mt-1">
+                        <ClientDetailed DisplayTitle="false"
+                                        DisplayActions="true"
+                                        Content="@_client"
+                                        OnCancel="@(() => _toogleClientForm(false))"
+                                        OnSave="@((client) => _onNewClientSave(client))" />
+                    </div>
                 </div>
             }
-
         </div>
+
+        <!-- Address (Map) -->
+        <div class="col-12">
+            <div>
+                <h4>Address</h4>
+            </div>
+            <!-- Search Address / (Map) -->
+            <div style="margin: 0 auto;">
+                <Map @ref="@_map"
+                     Id="adminProjectMap"
+                     AutoCompeteId="autocompeteAdminProjectMap"
+                     OnFindAddress="@(() => _onSearchAddressChange())"
+                     IsMapVisible="false" />
+            </div>
+        </div>
+
+        @if (DisplayActions)
+        {
+            <div class="col-12 d-flex justify-content-end">
+                <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+            </div>
+        }
+
     </div>
-} else
-{
-    <FluentOverlay Opacity="0.1"
-                   BackgroundColor="#444791">
-        <FluentProgressRing />
-    </FluentOverlay>
-}
+</div>

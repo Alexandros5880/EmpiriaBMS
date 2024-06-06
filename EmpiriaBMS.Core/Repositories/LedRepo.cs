@@ -63,6 +63,31 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
     }
 
+    public new async Task<OfferDto?> GetOffer(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var i = await _context
+                                .Set<Offer>()
+                                .Where(r => !r.IsDeleted)
+                                .Include(o => o.Led)
+                                .Include(o => o.State)
+                                .Include(o => o.Type)
+                                .Include(o => o.Led)
+                                .ThenInclude(p => p.Client)
+                                .Include(o => o.Led)
+                                .ThenInclude(l => l.Address)
+                                .Include(o => o.SubCategory)
+                                .Include(o => o.Category)
+                             .FirstOrDefaultAsync(r => r.LedId == id);
+
+            return Mapping.Mapper.Map<OfferDto>(i);
+        }
+    }
+
     public new async Task<LedDto?> Get(int id)
     {
         if (id == 0)
@@ -75,7 +100,6 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
                              .Where(r => !r.IsDeleted)
                              .Include(l => l.Address)
                              .Include(l => l.Client)
-                             .Include(l => l.Offer)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<LedDto>(i);
@@ -93,7 +117,6 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
                                        .Where(r => !r.IsDeleted)
                                        .Include(l => l.Address)
                                        .Include(l => l.Client)
-                                       .Include(l => l.Offer)
                                        .ToListAsync();
                 return Mapping.Mapper.Map<List<LedDto>>(items);
             }
@@ -104,7 +127,6 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
                                   .Take(pageSize)
                                   .Include(l => l.Address)
                                   .Include(l => l.Client)
-                                  .Include(l => l.Offer)
                                   .ToListAsync();
 
             return Mapping.Mapper.Map<List<LedDto>>(items);

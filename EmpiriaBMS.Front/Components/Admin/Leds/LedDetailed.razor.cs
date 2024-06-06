@@ -67,16 +67,6 @@ public partial class LedDetailed
 
         StateHasChanged();
 
-        if (Content.Offer != null)
-        {
-            var offerDto = Mapping.Mapper.Map<OfferDto>(Content.Offer);
-            Offer = _mapper.Map<OfferVM>(offerDto);
-        }
-        else if (Content.OfferId != 0 && Content.OfferId != null)
-        {
-            Offer = _offers.FirstOrDefault(c => c.Id == Content.OfferId);
-        }
-
         if (Content.Client != null)
         {
             var clientDto = Mapping.Mapper.Map<ClientDto>(Content.Client);
@@ -121,7 +111,6 @@ public partial class LedDetailed
 
         if (valid)
         {
-            Content.OfferId = Offer.Id;
             Content.ClientId = Client.Id;
 
             var dto = _mapper.Map<LedDto>(Content);
@@ -173,9 +162,7 @@ public partial class LedDetailed
 
     public LedVM GetLed()
     {
-        Content.OfferId = Offer.Id;
         Content.ClientId = Client.Id;
-
         return Content;
     }
 
@@ -235,21 +222,6 @@ public partial class LedDetailed
         }
     }
 
-    // Offer Selection
-    private FluentCombobox<OfferVM> _offerCombo;
-    ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
-
-    private OfferVM _offer = new OfferVM();
-    public OfferVM Offer
-    {
-        get => _offer;
-        set
-        {
-            if (_offer == value || value == null) return;
-            _offer = value;
-        }
-    }
-
     // Result Selection
     private FluentCombobox<(string Value, string Text)> _resultCombo;
     private List<(string Value, string Text)> _results = Enum.GetValues(typeof(LedResult))
@@ -276,7 +248,6 @@ public partial class LedDetailed
     private async Task _getRecords()
     {
         await _getClients();
-        await _getOffers();
     }
 
     private async Task _getClients()
@@ -287,16 +258,6 @@ public partial class LedDetailed
         vms.ForEach(_clients.Add);
 
         Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId) ?? null;
-    }
-
-    private async Task _getOffers()
-    {
-        var dtos = await _dataProvider.Offers.GetAll();
-        var vms = _mapper.Map<List<OfferVM>>(dtos);
-        _offers.Clear();
-        vms.ForEach(_offers.Add);
-
-        Offer = _offers.FirstOrDefault(c => c.Id == Content.OfferId) ?? null;
     }
     #endregion
 

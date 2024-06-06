@@ -45,32 +45,6 @@ public class LedVM : BaseVM
         }
     }
 
-    private int? _offerId;
-    public int? OfferId
-    {
-        get => _offerId;
-        set
-        {
-            if (value == _offerId)
-                return;
-            _offerId = value;
-            NotifyPropertyChanged(nameof(OfferId));
-        }
-    }
-
-    private Offer _offer;
-    public Offer Offer
-    {
-        get => _offer;
-        set
-        {
-            if (value == _offer)
-                return;
-            _offer = value;
-            NotifyPropertyChanged(nameof(Offer));
-        }
-    }
-
     private int? _addressId;
     public int? AddressId
     {

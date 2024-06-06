@@ -100,19 +100,19 @@ public partial class OfferCreationWizzard
 
             dto.Client = null;
             dto.Address = null;
-            if (dto.OfferId == 0)
-                dto.OfferId = null;
 
             // Save Led
             if (await _dataProvider.Leds.Any(p => p.Id == Led.Id))
             {
                 var updated = await _dataProvider.Leds.Update(dto);
-                Led = _mapper.Map<LedVM>(updated);
+                if (updated != null)
+                    Led = _mapper.Map<LedVM>(updated);
             }
             else
             {
                 var updated = await _dataProvider.Leds.Add(dto);
-                Led = _mapper.Map<LedVM>(updated);
+                if (updated != null)
+                    Led = _mapper.Map<LedVM>(updated);
             }
         }
 
@@ -152,12 +152,14 @@ public partial class OfferCreationWizzard
             if (await _dataProvider.Offers.Any(p => p.Id == Offer.Id))
             {
                 var updated = await _dataProvider.Offers.Update(dto);
-                Offer = _mapper.Map<OfferVM>(updated);
+                if (updated != null)
+                    Offer = _mapper.Map<OfferVM>(updated);
             }
             else
             {
                 var updated = await _dataProvider.Offers.Add(dto);
-                Offer = _mapper.Map<OfferVM>(updated);
+                if (updated != null)
+                    Offer = _mapper.Map<OfferVM>(updated);
             }
         }
 
