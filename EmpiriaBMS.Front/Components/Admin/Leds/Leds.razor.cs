@@ -1,5 +1,4 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Contracts;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
@@ -51,7 +50,7 @@ public partial class Leds
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(70%, 500px);"
+            Width = "min(70%, 700px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(new LedVM()
@@ -82,7 +81,7 @@ public partial class Leds
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(70%, 500px);"
+            Width = "min(70%, 700px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(record, parameters);

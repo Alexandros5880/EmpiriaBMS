@@ -98,7 +98,6 @@ public partial class OfferCreationWizzard
                 dto.AddressId = address.Id;
             }
 
-            dto.Offer = null;
             dto.Client = null;
             dto.Address = null;
             if (dto.OfferId == 0)
@@ -154,17 +153,11 @@ public partial class OfferCreationWizzard
             {
                 var updated = await _dataProvider.Offers.Update(dto);
                 Offer = _mapper.Map<OfferVM>(updated);
-                Led.OfferId = Offer.Id;
-                var offerDto = _mapper.Map<OfferDto>(Offer);
-                Led.Offer = Mapping.Mapper.Map<Offer>(offerDto);
             }
             else
             {
                 var updated = await _dataProvider.Offers.Add(dto);
                 Offer = _mapper.Map<OfferVM>(updated);
-                Led.OfferId = Offer.Id;
-                var offerDto = _mapper.Map<OfferDto>(Offer);
-                Led.Offer = Mapping.Mapper.Map<Offer>(offerDto);
             }
         }
 

@@ -20,9 +20,6 @@ public partial class LedDetailed
     public LedVM Content { get; set; }
 
     [Parameter]
-    public bool DisplayOffer { get; set; } = true;
-
-    [Parameter]
     public EventCallback<LedVM> OnSave { get; set; }
 
     [Parameter]
@@ -68,6 +65,8 @@ public partial class LedDetailed
         if (full)
             await _getRecords();
 
+        StateHasChanged();
+
         if (Content.Offer != null)
         {
             var offerDto = Mapping.Mapper.Map<OfferDto>(Content.Offer);
@@ -93,6 +92,7 @@ public partial class LedDetailed
             SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
             if (_resultCombo != null)
             {
+                var value = SelectedResult.Value;
                 _resultCombo.Value = SelectedResult.Value;
                 _resultCombo.SelectedOption = SelectedResult;
             }
@@ -102,6 +102,7 @@ public partial class LedDetailed
             SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
             if (_resultCombo != null)
             {
+                var value = SelectedResult.Value;
                 _resultCombo.Value = SelectedResult.Value;
                 _resultCombo.SelectedOption = SelectedResult;
             }
@@ -139,7 +140,6 @@ public partial class LedDetailed
                 dto.AddressId = address.Id;
             }
 
-            dto.Offer = null;
             dto.Client = null;
             dto.Address = null;
 
@@ -183,7 +183,6 @@ public partial class LedDetailed
     private bool validName = true;
     private bool validClient = true;
     private bool validPotencialFee = true;
-    private bool validOffer = true;
 
     public bool Validate(string fieldname = null)
     {
@@ -192,16 +191,14 @@ public partial class LedDetailed
             validName = Content.Name != null && Content.Name.Length > 0;
             validClient = !string.IsNullOrEmpty(Client?.FullName) || Client?.Id != 0;
             validPotencialFee = Content?.PotencialFee > 0;
-            validOffer = !DisplayOffer || (!string.IsNullOrEmpty(Offer?.Code) || (Offer.Id != 0 && Offer.Id != null));
 
-            return validName && validClient && validPotencialFee && validOffer;
+            return validName && validClient && validPotencialFee;
         }
         else
         {
             validName = true;
             validClient = true;
             validPotencialFee = true;
-            validOffer = true;
 
             switch (fieldname)
             {
@@ -214,9 +211,6 @@ public partial class LedDetailed
                 case "validPotencialFee":
                     validClient = validPotencialFee = Content?.PotencialFee > 0; ;
                     return validPotencialFee;
-                case "Offer":
-                    validOffer = !DisplayOffer || (!string.IsNullOrEmpty(Offer?.Code) || (Offer.Id != 0 && Offer.Id != null));
-                    return validOffer;
                 default:
                     return true;
             }
@@ -227,6 +221,7 @@ public partial class LedDetailed
 
     #region Get Related Records
     // Client Selection
+    private FluentCombobox<ClientVM> _clientCombo;
     ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
 
     private ClientVM _client = new ClientVM();
@@ -241,6 +236,7 @@ public partial class LedDetailed
     }
 
     // Offer Selection
+    private FluentCombobox<OfferVM> _offerCombo;
     ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
 
     private OfferVM _offer = new OfferVM();
@@ -309,7 +305,7 @@ public partial class LedDetailed
 
     public async Task RefreshMap()
     {
-        if (Content.Address != null)
+        if (Content.Address != null && _map != null)
         {
             await _map.SetAddress(Content.Address);
         }
