@@ -26,8 +26,8 @@ public partial class OfferCreationWizzard
     public EventCallback OnCansel { get; set; }
 
     #region Actions Enabled Variables
-    private bool _offerTabEnable => Led?.Result == LedResult.SUCCESSFUL && (_ledCompoment?.Validate() ?? false);
-    private bool _projectsTabEnable => _offerTabEnable && (Offer?.Result == OfferResult.SUCCESSFUL) && (_offerCompoment?.Validate() ?? false);
+    private bool _offerTabEnable => Led?.Result == LedResult.SUCCESSFUL;
+    private bool _projectsTabEnable => _offerTabEnable && Offer?.Result == OfferResult.SUCCESSFUL;
     private bool _invoiceTabEnable => _offerTabEnable && _projectsTabEnable && _projects.Count > 0;
     #endregion
 
@@ -81,7 +81,6 @@ public partial class OfferCreationWizzard
     {
         LedResult result = (LedResult)Enum.Parse(typeof(LedResult), resultOption.Value);
         Led.Result = result;
-        StateHasChanged();
     }
 
     private async Task _saveLed()
@@ -290,40 +289,62 @@ public partial class OfferCreationWizzard
         // Led Tab
         if (tabIndex == 0)
         {
-            //var _validLed = _ledCompoment?.Validate();
             for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
             tabs[tabIndex] = true;
+
             StateHasChanged();
-            await _ledCompoment.Prepair(Led);
+            if (_prevTabIndex == 0)
+                await _ledCompoment.Prepair(Led);
         }
 
         // Offer Tab
         else if (tabIndex == 1)
         {
-            if (_prevTabIndex < 1)
+            // If prev tab was Led validate and save Led
+            if (_prevTabIndex == 0)
+            {
+                bool validLed = _ledCompoment?.Validate() ?? false;
+                if (validLed == false)
+                {
+                    _loading = false;
+                    StateHasChanged();
+                    return;
+                }
                 await _saveLed();
+            }
 
-            //var _validOffer = _offerCompoment?.Validate();
             for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
             tabs[tabIndex] = true;
+
+            StateHasChanged();
+            if (_prevTabIndex == 0)
+                await _offerCompoment.Prepair(Offer);
         }
 
         // Project Tabs
         else if (tabIndex == 2)
         {
-            if (_prevTabIndex < 2)
+            // If prev tab was Offer validate and save Offer
+            if (_prevTabIndex == 1)
             {
-                await _saveOffer();
-
-                for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-                tabs[tabIndex] = true;
-                StateHasChanged();
-
-                if (_projectCompoment != null)
+                bool validOffer = _offerCompoment?.Validate() ?? false;
+                if (validOffer == false)
                 {
-                    var project = _getNewProject();
-                    await _projectCompoment.Prepair(project);
+                    _loading = false;
+                    StateHasChanged();
+                    return;
                 }
+                await _saveLed();
+            }
+
+            for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
+            tabs[tabIndex] = true;
+
+            StateHasChanged();
+            if (_prevTabIndex == 1)
+            {
+                var project = _getNewProject();
+                await _projectCompoment.Prepair(project);
             }
         }
 

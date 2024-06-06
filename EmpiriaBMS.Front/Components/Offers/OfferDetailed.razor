@@ -130,7 +130,7 @@
                                 TOption="(string Value, string Text)"
                                 OptionText="@(c => c.Text)"
                                 OptionValue="@(c => c.Value)"
-                                @bind-SelectedOption="SelectedResult" />
+                                SelectedOptionChanged="@(async (e) => await _onResultChanged(e))" />
             </div>
         </div>
         <!-- Code -->

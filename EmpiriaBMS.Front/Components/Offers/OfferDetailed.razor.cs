@@ -39,48 +39,68 @@ public partial class OfferDetailed
 
         if (firstRender)
         {
-            await _getRecords();
+            await Prepair();
+        }
+    }
 
-            if (Content.Type != null)
-            {
-                var typeDto = Mapping.Mapper.Map<OfferTypeDto>(Content.Type);
-                Type = _mapper.Map<OfferTypeVM>(typeDto);
-            }
+    public async Task Prepair(OfferVM offer = null)
+    {
+        await _getRecords();
 
-            if (Content.State != null)
-            {
-                var stateDto = Mapping.Mapper.Map<OfferStateDto>(Content.State);
-                State = _mapper.Map<OfferStateVM>(stateDto);
-            }
+        if (offer != null)
+            Content = offer;
 
-            if (Content.Result != null)
+        if (Content.Type != null)
+        {
+            var typeDto = Mapping.Mapper.Map<OfferTypeDto>(Content.Type);
+            Type = _mapper.Map<OfferTypeVM>(typeDto);
+        }
+
+        if (Content.State != null)
+        {
+            var stateDto = Mapping.Mapper.Map<OfferStateDto>(Content.State);
+            State = _mapper.Map<OfferStateVM>(stateDto);
+        }
+
+        if (Content.Result != null)
+        {
+            SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+            if (_resultCombo != null)
             {
-                SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
                 _resultCombo.Value = SelectedResult.Value;
                 _resultCombo.SelectedOption = SelectedResult;
             }
-
-            // Category
-            ProjectCategoryVM category = null;
-            if (Content.Category != null)
-            {
-                category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
-                Category = category;
-                _catCombo.Value = Category.Name;
-                _catCombo.SelectedOption = Category;
-                await _getSubCategories();
-            }
-            else if (Content.CategoryId != 0)
-            {
-                category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
-                Category = category;
-                _catCombo.Value = Category.Name;
-                _catCombo.SelectedOption = Category;
-                await _getSubCategories();
-            }
-
-            StateHasChanged();
         }
+        else
+        {
+            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
+            if (_resultCombo != null)
+            {
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
+        }
+
+        // Category
+        ProjectCategoryVM category = null;
+        if (Content.Category != null)
+        {
+            category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
+            Category = category;
+            _catCombo.Value = Category.Name;
+            _catCombo.SelectedOption = Category;
+            await _getSubCategories();
+        }
+        else if (Content.CategoryId != 0)
+        {
+            category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
+            Category = category;
+            _catCombo.Value = Category.Name;
+            _catCombo.SelectedOption = Category;
+            await _getSubCategories();
+        }
+
+        StateHasChanged();
     }
 
     public async Task SaveAsync()
@@ -103,6 +123,12 @@ public partial class OfferDetailed
             updated = await _dataProvider.Offers.Update(dto);
 
         await OnSave.InvokeAsync();
+    }
+
+    private async Task _onResultChanged((string Value, string Text) resultOption)
+    {
+        SelectedResult = resultOption;
+        await OnResultChanged.InvokeAsync(resultOption);
     }
 
     public OfferVM GetOffer()

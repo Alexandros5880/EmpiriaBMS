@@ -156,7 +156,6 @@ public partial class LedDetailed
 
     private async Task _onResultChanged((string Value, string Text) resultOption)
     {
-        Validate();
         SelectedResult = resultOption;
         await OnResultChanged.InvokeAsync(resultOption);
     }
