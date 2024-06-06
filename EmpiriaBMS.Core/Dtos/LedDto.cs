@@ -14,10 +14,10 @@ public class LedDto : EntityDto
     public Client Client { get; set; }
 
     public int? OfferId { get; set; }
-    public Offer Offer { get; set; }
+    public Offer? Offer { get; set; }
 
     public int? AddressId { get; set; }
-    public Address Address { get; set; }
+    public Address? Address { get; set; }
 
     public double PotencialFee { get; set; }
 

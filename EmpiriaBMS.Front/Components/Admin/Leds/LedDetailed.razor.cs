@@ -73,11 +73,19 @@ public partial class LedDetailed
             var offerDto = Mapping.Mapper.Map<OfferDto>(Content.Offer);
             Offer = _mapper.Map<OfferVM>(offerDto);
         }
+        else if (Content.OfferId != 0 && Content.OfferId != null)
+        {
+            Offer = _offers.FirstOrDefault(c => c.Id == Content.OfferId);
+        }
 
         if (Content.Client != null)
         {
             var clientDto = Mapping.Mapper.Map<ClientDto>(Content.Client);
             Client = _mapper.Map<ClientVM>(clientDto);
+        }
+        else if (Content.ClientId != 0)
+        {
+            Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
         }
 
         if (Content.Result != null)
@@ -161,6 +169,14 @@ public partial class LedDetailed
     {
         SelectedResult = resultOption;
         await OnResultChanged.InvokeAsync(resultOption);
+    }
+
+    public LedVM GetLed()
+    {
+        Content.OfferId = Offer.Id;
+        Content.ClientId = Client.Id;
+
+        return Content;
     }
 
     #region Validation

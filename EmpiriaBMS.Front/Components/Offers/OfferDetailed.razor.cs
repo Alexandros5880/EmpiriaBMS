@@ -56,11 +56,19 @@ public partial class OfferDetailed
             var typeDto = Mapping.Mapper.Map<OfferTypeDto>(Content.Type);
             Type = _mapper.Map<OfferTypeVM>(typeDto);
         }
+        else if (Content.TypeId != 0)
+        {
+            Type = _types.FirstOrDefault(c => c.Id == Content.TypeId);
+        }
 
         if (Content.State != null)
         {
             var stateDto = Mapping.Mapper.Map<OfferStateDto>(Content.State);
             State = _mapper.Map<OfferStateVM>(stateDto);
+        }
+        else if (Content.StateId != 0)
+        {
+            State = _states.FirstOrDefault(c => c.Id == Content.StateId);
         }
 
         if (Content.Result != null)

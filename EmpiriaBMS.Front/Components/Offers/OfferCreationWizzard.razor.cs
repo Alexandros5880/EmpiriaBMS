@@ -27,7 +27,6 @@ public partial class OfferCreationWizzard
     #region Actions Enabled Variables
     private bool _offerTabEnable => Led?.Result == LedResult.SUCCESSFUL;
     private bool _projectsTabEnable => _offerTabEnable && Offer?.Result == OfferResult.SUCCESSFUL;
-    private bool _invoiceTabEnable => _offerTabEnable && _projectsTabEnable && _projects.Count > 0;
     #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -79,6 +78,7 @@ public partial class OfferCreationWizzard
         _loading = true;
 
         var valid = _ledCompoment.Validate();
+        Led = _ledCompoment.GetLed();
 
         if (valid)
         {
@@ -101,6 +101,8 @@ public partial class OfferCreationWizzard
             dto.Offer = null;
             dto.Client = null;
             dto.Address = null;
+            if (dto.OfferId == 0)
+                dto.OfferId = null;
 
             // Save Led
             if (await _dataProvider.Leds.Any(p => p.Id == Led.Id))
@@ -152,11 +154,17 @@ public partial class OfferCreationWizzard
             {
                 var updated = await _dataProvider.Offers.Update(dto);
                 Offer = _mapper.Map<OfferVM>(updated);
+                Led.OfferId = Offer.Id;
+                var offerDto = _mapper.Map<OfferDto>(Offer);
+                Led.Offer = Mapping.Mapper.Map<Offer>(offerDto);
             }
             else
             {
                 var updated = await _dataProvider.Offers.Add(dto);
                 Offer = _mapper.Map<OfferVM>(updated);
+                Led.OfferId = Offer.Id;
+                var offerDto = _mapper.Map<OfferDto>(Offer);
+                Led.Offer = Mapping.Mapper.Map<Offer>(offerDto);
             }
         }
 
