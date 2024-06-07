@@ -1,13 +1,6 @@
 ﻿using EmpiriaBMS.Core.Repositories;
-using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core;
 public class DataProvider : IDataProvider, IDisposable
@@ -21,13 +14,30 @@ public class DataProvider : IDataProvider, IDisposable
     public DrawingRepo Drawings { get; set; }
     public OtherRepo Others { get; set; }
     public InvoiceRepo Invoices { get; set; }
-    public ProjectTypeRepo ProjectsTypes { get; set; }
+    public ProjectCategoryRepo ProjectsCategories { get; set; }
     public OtherTypeRepo OthersTypes { get; set; }
     public DrawingTypeRepo DrawingsTypes { get; set; }
     public DisciplineTypeRepo DisciplinesTypes { get; set; }
     public PermissionRepo Permissions { get; set; }
+    public IssueRepo Issues { get; set; }
+    public PaymentRepo Payments { get; set; }
+    public InvoiceTypeRepo InvoiceTypes { get; set; }
+    public PaymentTypeRepo PaymentTypes { get; set; }
+    public ProjectStageRepo ProjectStages { get; set; }
+    public ProjectSubCategoryRepo ProjectsSubCategories { get; set; }
+    public AddressRepo Address { get; set; }
+    public ClientRepo Clients { get; set; }
+    public OfferTypeRepo OfferTypes { get; set; }
+    public OfferStateRepo OfferStates { get; set; }
+    public OfferRepo Offers { get; set; }
+    public EmailRepo Emails { get; set; }
+    public TeamsRequestedUserRepo TeamsRequestedUsers { get; set; }
+    public ContractRepo Contracts { get; set; }
+    public LedRepo Leds { get; set; }
+    public KpisRepo KPIS { get; set; }
 
-    public DataProvider(IDbContextFactory<AppDbContext> dbFactory) {
+    public DataProvider(IDbContextFactory<AppDbContext> dbFactory)
+    {
         Roles = new RolesRepo(dbFactory);
         Users = new UsersRepo(dbFactory);
         Projects = new ProjectsRepo(dbFactory);
@@ -35,11 +45,27 @@ public class DataProvider : IDataProvider, IDisposable
         Drawings = new DrawingRepo(dbFactory);
         Others = new OtherRepo(dbFactory);
         Invoices = new InvoiceRepo(dbFactory);
-        ProjectsTypes = new ProjectTypeRepo(dbFactory);
+        ProjectsCategories = new ProjectCategoryRepo(dbFactory);
         OthersTypes = new OtherTypeRepo(dbFactory);
         DrawingsTypes = new DrawingTypeRepo(dbFactory);
         DisciplinesTypes = new DisciplineTypeRepo(dbFactory);
         Permissions = new PermissionRepo(dbFactory);
+        Issues = new IssueRepo(dbFactory);
+        Payments = new PaymentRepo(dbFactory);
+        InvoiceTypes = new InvoiceTypeRepo(dbFactory);
+        PaymentTypes = new PaymentTypeRepo(dbFactory);
+        ProjectStages = new ProjectStageRepo(dbFactory);
+        ProjectsSubCategories = new ProjectSubCategoryRepo(dbFactory);
+        Address = new AddressRepo(dbFactory);
+        Clients = new ClientRepo(dbFactory);
+        OfferTypes = new OfferTypeRepo(dbFactory);
+        OfferStates = new OfferStateRepo(dbFactory);
+        Offers = new OfferRepo(dbFactory);
+        Emails = new EmailRepo(dbFactory);
+        TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory);
+        Contracts = new ContractRepo(dbFactory);
+        Leds = new LedRepo(dbFactory, Offers, Projects, Invoices, Contracts);
+        KPIS = new KpisRepo(dbFactory);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -55,11 +81,27 @@ public class DataProvider : IDataProvider, IDisposable
                 Drawings.Dispose();
                 Others.Dispose();
                 Invoices.Dispose();
-                ProjectsTypes.Dispose();
+                ProjectsCategories.Dispose();
                 OthersTypes.Dispose();
                 DrawingsTypes.Dispose();
                 DisciplinesTypes.Dispose();
                 Permissions.Dispose();
+                Issues.Dispose();
+                Payments.Dispose();
+                InvoiceTypes.Dispose();
+                PaymentTypes.Dispose();
+                ProjectStages.Dispose();
+                ProjectsSubCategories.Dispose();
+                Address.Dispose();
+                Clients.Dispose();
+                OfferTypes.Dispose();
+                OfferStates.Dispose();
+                Offers.Dispose();
+                Emails.Dispose();
+                TeamsRequestedUsers.Dispose();
+                Contracts.Dispose();
+                Leds.Dispose();
+                KPIS.Dispose();
             }
             disposedValue = true;
         }

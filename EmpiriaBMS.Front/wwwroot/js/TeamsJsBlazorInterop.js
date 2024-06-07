@@ -61,53 +61,6 @@ export function inTeams() {
   return false;
 }
 
-export function applyTimeMask(para) {
-    var timeInput = document.getElementById(para.elementId);
-    if (timeInput) {
-        timeInput.addEventListener('input', function () {
-
-            // Validate Mask
-            var val = this.value;
-            var lastLength;
-            do {
-                lastLength = val.length;
-                val = replaceBadInputs(val);
-            } while (val.length > 0 && lastLength !== val.length);
-            this.value = val;
-
-            // Validate Min Max Time
-            validateMinMaxTime(this, val, para.minTime, para.maxTime);
-
-        });
-
-        function replaceBadInputs(val) {
-            val = val.replace(/[^\dh:]/, "");
-            val = val.replace(/^[^0-2]/, "");
-            val = val.replace(/^([2-9])[4-9]/, "$1");
-            val = val.replace(/^\d[:h]/, "");
-            val = val.replace(/^([01][0-9])[^:h]/, "$1");
-            val = val.replace(/^(2[0-3])[^:h]/, "$1");
-            val = val.replace(/^(\d{2}[:h])[^0-5]/, "$1");
-            val = val.replace(/^(\d{2}h)./, "$1");
-            val = val.replace(/^(\d{2}:[0-5])[^0-9]/, "$1");
-            val = val.replace(/^(\d{2}:\d[0-9])./, "$1");
-            return val;
-        }
-
-        function validateMinMaxTime(self, val, min, max) {
-            var inputTime = val;
-            var minTime = min; // '08:00'
-            var maxTime = max; // '18:00'
-
-            if (inputTime < minTime || inputTime > maxTime) {
-                $(self).addClass('invalid');
-            } else {
-                $(self).removeClass('invalid');
-            }
-        }
-    }
-};
-
 export function getScreenSize() {
     return {
         width: window.innerWidth,
@@ -132,6 +85,48 @@ export function navigateToAdmin(url, objectId) {
     });
 }
 
+
+// Register MNouse Weel Event
+export function registerGlobalMouseWheelEvent(objRef, id) {
+    $('[data-id="' + id + '"]').on('wheel', function (e) {
+        var deltaY = e.originalEvent.deltaY;
+        var focusedElement = $(':focus');
+        if (focusedElement.is('[data-id="' + id + '"]')) {
+            var inputType = focusedElement.data("input-type");
+            var inputId = focusedElement.data("id");
+
+            //var currentValue = parseInt(focusedElement.val());
+            //var max = parseInt(focusedElement.attr("max"));
+            //var min = parseInt(focusedElement.attr("min"));
+
+            //console.log("currentValue: ", currentValue);
+            //console.log("max: ", max);
+            //console.log("min: ", min);
+            //if (currentValue > max) {
+            //    focusedElement.val(max);
+            //    console.log("currentValue > max");
+            //}
+            //else if (currentValue < min) {
+            //    focusedElement.val(min);
+            //    console.log("currentValue < min");
+            //}
+
+            if (id == inputId) {
+                if (inputType === "hours") {
+                    objRef.invokeMethodAsync('OnMouseWheel', deltaY, "hours");
+                    //DotNet.invokeMethodAsync('EmpiriaBMS.Front', 'OnMouseWheel', deltaY, "hours");
+                } else if (inputType === "minutes") {
+                    objRef.invokeMethodAsync('OnMouseWheel', deltaY, "minutes");
+                    //DotNet.invokeMethodAsync('EmpiriaBMS.Front', 'OnMouseWheel', deltaY, "minutes");
+                }
+            }
+        }
+    });
+}
+// Register MNouse Weel Event
+
+
+// Cookies
 export function setCookie(key, value) {
     localStorage.setItem(key, value);
 }
@@ -139,3 +134,109 @@ export function setCookie(key, value) {
 export function getCookie(key) {
     return localStorage.getItem(key);
 }
+// Cookies
+
+
+// Canvas
+var signaturePad;
+
+export function initializeCanvas(canvas) {
+    fitToContainer(canvas);
+    signaturePad = new SignaturePad(canvas);
+}
+
+function fitToContainer(canvas) {
+    // Make it visually fill the positioned parent
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    // ...then set the internal size to match
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+}
+
+export function clearCanvas(canvas) {
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+export function getCanvasImageData(canvas) {
+    var imgData = canvas.toDataURL(); // Get image data as base64 URL
+    var base64 = imgData.replace(/^data:image\/(png|jpeg);base64,/, ""); // Remove header
+    var byteCharacters = atob(base64); // Decode base64 to byte characters
+    var byteNumbers = new Array(byteCharacters.length);
+
+    // Convert byte characters to byte numbers
+    for (var i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    // Create byte array
+    var byteArray = new Uint8Array(byteNumbers);
+    return byteArray;
+}
+// Canvas
+
+
+
+// Google Maps Api
+export function displayAddress(mapElementId, address) {
+    var map = new google.maps.Map(document.getElementById(mapElementId), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 12
+    });
+    var geocoder = new google.maps.Geocoder();
+
+    address.forEach(function (add) {
+        geocoder.geocode({ 'address': add }, function (results, status) {
+            if (status === 'OK') {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+                console.log('Geocode was successful location: ' + results[0].geometry.location);
+            } else {
+                console.log('Geocode was not successful for the following reason: ' + status);
+            }
+        }, error => console.log('Geocode error: ' + error));
+    });
+}
+
+// Navigate
+export function openDirectionsInNewWindow(directionsUrl) {
+    window.open(directionsUrl, '_blank');
+};
+
+// Autocomplete
+export function initializeAutocomplete(inputElementId) {
+    const input = document.getElementById(inputElementId);
+    const autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) {
+            // Place details not found for the input.
+            return;
+        }
+        // Handle place details (if needed)
+    });
+};
+// Google Maps Api
+
+
+
+// Download Document
+export function downloadFile(fileName, contentType, base64Content) {
+    const byteArray = Uint8Array.from(atob(base64Content), c => c.charCodeAt(0));
+    const blob = new Blob([byteArray], { type: contentType });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
+// Download Document

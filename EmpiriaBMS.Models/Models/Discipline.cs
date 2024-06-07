@@ -1,22 +1,18 @@
-﻿using EmpiriaMS.Models.Models;
-using EmpiriaMS.Models.Models.Base;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Models.Models;
 
 public class Discipline : Entity
 {
+    public long EstimatedMandays { get; set; }
+
     public long EstimatedHours { get; set; }
 
     public float EstimatedCompleted { get; set; }
 
-    public float Completed { get; set; }
+    public float DeclaredCompleted { get; set; }
 
+    [Required]
     public int ProjectId { get; set; }
     public Project Project { get; set; }
 

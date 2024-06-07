@@ -2,10 +2,16 @@
 
 @layout MainLayout
 
+@using EmpiriaBMS.Front.Components.Invoices
 @using Microsoft.Fast.Components.FluentUI
 @using EmpiriaBMS.Front.Components.General
+@using EmpiriaBMS.Front.Components
+@using EmpiriaBMS.Front.Components.Offers
+@using EmpiriaBMS.Front.Components.KPIS
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Admin
+@using Color = Microsoft.Fast.Components.FluentUI.Color;
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -13,365 +19,694 @@
 @inject IWebHostEnvironment HostEnvironment
 @inject IConfiguration Configuration
 @inject NavigationManager MyNavigationManager
-@inject IDataProvider DataProvider
+@inject IDataProvider _dataProvider
 @inject IMapper Mapper
 @inject TimerService TimerService
+@inject AuthorizeServices authorizeServices
 @inject SharedAuthDataService _sharedAuthData
+@inject IDialogService DialogService
 
-@if (_startLoading)
-{
-    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20%;">
-        <FluentProgressRing />
-    </div>
-}
-else
-{
-    <div class="row justify-content-center mt-1 mb-1">
-        <div class="col-auto" style="width: 100%; height: 100%;">
-            <div class="m-1 row justify-content-center">
-                <div class="col-12 p-2"
-                        style="overflow-x:hidden; margin: 0 auto;">
-                    
-                    <!-- Headder -->
-                    <div class="mt-2 shadow p-2">
-                        @if (_sharedAuthData.LogedUser != null)
-                        {
-                            <div class="row ms-2 me-8" style="overflow:hidden;">
-                                
-                                <!-- User Name + Roles + Current Date -->
-                                <div class="col-lg-4 col-md-8 col-sm-8 row">
-                                    <div class="col">
-                                        <h4 class="mt-3">
-                                            @_sharedAuthData.LogedUser.LastName
-                                            @foreach (var role in _sharedAuthData.LoggedUserRoles)
-                                            {
-                                                <span>&nbsp;&nbsp; @role.Name</span>
-                                            }
-                                        </h4>
-                                    </div>
-                                    <div class="col mt-3">
-                                        <h4>@CurentDate</h4>
-                                    </div>
-                                </div>
-
-                                @if (!_isEndWorkDialogOdepened)
-                                {
-
-                                    <!-- Start / Stop Buttons -->
-                                    <div class="col-lg-5 col-md-8 col-sm-8">
-                                        <div class="d-grid">
-                                            @if (EditMyHours)
-                                            {
-                                                @if (isWorkingMode)
-                                                {
-                                                    <button type="button" class="btn btn-danger btn-lg w-50"
-                                                            @onclick="@(async () => await StopWorkClick())">
-                                                        <span>@elapsedTime.ToString(@"hh\:mm\:ss")</span>
-                                                    </button>
-                                                }
-                                                else
-                                                {
-                                                    <button type="button" class="btn btn-success btn-lg w-50"
-                                                            @onclick="@StartWorkClick">
-                                                        Press Work Start
-                                                    </button>
-                                                }
-                                            }
-                                        </div>
-                                    </div>
-
-                                    <!-- Display Hours Passed -->
-                                    @if (SeeMyHours)
-                                    {
-                                        <div class="col-lg-3 col-md-4 col-sm-4
-                                                row primary-bg-color rounded-1 text-center"
-                                             style="max-height: 70px !important;">
-                                            <span class="mt-3 h5"
-                                                  @onclick="@(() => OnMyHoursClick())">
-                                                <span>My Total Hours This Week: </span>
-                                                <b>@_sharedAuthData.LogesUserHours</b>
-                                            </span>
-                                        </div>
-                                    }
-                            
-                                }
-
-                            </div>
-                        }
-                    </div>
-
-                    <div class="row mt-4 p-1
-                                gx-xl-2 gx-lg-2 gx-md-2 gx-sm-2
-                                gy-xl-0 gy-lg-5 gy-md-5 gy-sm-5">
-                        
-                        <div class="col row">
-                            <!-- Table Projects -->
-                            <div class="col-12">
-                                @if (!_isEndWorkDialogOdepened)
-                                {
-                                    <div class="text-center">
-                                        <h3>Projects</h3>
-                                    </div>
-                                    <div class="table-responsive p-1 table-container">
-                                        <table class="table table-hover table-success text-center">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" class="sticky-header">Project</th>
-                                                    <th scope="col" class="sticky-header">Work Package Declared Completed</th>
-                                                    <th scope="col" class="sticky-header">Estimated Hours Completed</th>
-                                                    <th scope="col" class="sticky-header">Deadline</th>
-                                                    @if (AssignPm)
-                                                    {
-                                                        <th scope="col">PM</th>
-                                                    }
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var project in _projects)
-                                                {
-                                                    <tr class="align-middle
-                                                                @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-danger" : ""))"
-                                                        @onclick="@(async () => await OnSelectProject(project.Id))">
-                                                    
-                                                        <td class="align-middle
-                                                            @((_selectedProject == null || 
-                                                                    !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "highlight_1"))"
-                                                            style="word-wrap: break-word;">
-                                                            <labe>@project.Name</labe>
-                                                        </td>
-                                                    
-                                                        <td class="align-middle
-                                                            @((_selectedProject == null ||
-                                                                    !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "highlight_1"))">
-                                                            <label>@(project.WorkPackegedCompleted.ToString("##0.0")) %</label>
-                                                        </td>
-                                                    
-                                                        <td class="align-middle
-                                                            @((_selectedProject == null ||
-                                                                    !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "highlight_1"))">
-                                                            <label>@(project.EstimatedCompleted.ToString("##0.0")) %</label>
-                                                        </td>
-                                                    
-                                                        <td class="align-middle
-                                                            @((_selectedProject == null ||
-                                                                    !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "highlight_1"))">
-                                                            <label>@project.DeadlineDisplay</label>
-                                                        </td>
-
-                                                        @if (AssignPm)
-                                                        {
-                                                            <td class="align-middle">
-                                                                @if (@project.PmName != null) {
-                                                                    <span @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                        @project.PmName
-                                                                    </span>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span class="clarity--assign-user-line"
-                                                                            @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                    </span>
-                                                                }
-                                                            </td>
-                                                        }
-
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
-                        <div class="col row">
-                            <!-- Table Disciplines -->
-                            <div class="col-12">
-                                @if (_selectedProject != null && !_isEndWorkDialogOdepened)
-                                {
-                                    <div class="text-center">
-                                        <h3>Disciplines</h3>
-                                    </div>
-                                    <div class="table-responsive p-1 table-container">
-                                        <table class="table table-hover table-danger text-center">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" class="sticky-header">Discipline</th>
-                                                    <th scope="col" class="sticky-header">Estimated Discipline Hours</th>
-                                                    @if (AssignEngineer)
-                                                    {
-                                                        <th scope="col"></th>
-                                                    }
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var discipline in _disciplines)
-                                                {
-                                                    <tr class="align-middle
-                                                                @(( @GetDisciplineMenHours(discipline.Id) > discipline.EstimatedHours ? "table-danger" : ""))"
-                                                        @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
-                                                    
-                                                        <td class="align-middle
-                                                            @(((_selectedDiscipline == null
-                                                                || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                    ? "" : "highlight_2"))">
-                                                            <labe>@discipline.Type.Name</labe>
-                                                        </td>
-                                                    
-                                                        <td class="align-middle text-center
-                                                            @(((_selectedDiscipline == null
-                                                                || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                    ? "" : "highlight_2"))">
-                                                            <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
-                                                        </td>
-
-                                                        @if (AssignEngineer)
-                                                        {
-                                                            <td class="align-middle">
-                                                                <span class="clarity--assign-user-line"
-                                                                        @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
-                                                                </span>
-                                                            </td>
-                                                        }
-
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
-                        <div class="col row">
-                            
-                            <!-- Table Draws -->
-                            <div class="col-12">
-                                @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
-                                {
-                                    <div class="text-center">
-                                        <h3>Deliverables</h3>
-                                    </div>
-                                    <div class="table-responsive p-1 table-container">
-                                        <table class="table table-hover table-primary text-center">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" class="sticky-header">Drawing</th>
-                                                    <th scope="col" class="sticky-header">Total Hours</th>
-                                                    <th scope="col" class="sticky-header">Declared Completion</th>
-                                                    @if (AssignDesigner)
-                                                    {
-                                                        <th scope="col"></th>
-                                                    }
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var draw in _draws)
-                                                {
-                                                    <tr class="align-middle"
-                                                        @onclick="@(() => OnSelectDraw(draw))">
-
-                                                        <td class="align-middle
-                                                            @(((_selectedDraw == null ||
-                                                                    !_selectedDraw.Id.Equals(draw.Id))
-                                                                        ? "" : "highlight_3"))">
-                                                            <div class="align-middle h-100"><labe>@draw.Type.Name</labe></div>
-                                                        </td>
-
-                                                        <td class="align-middle
-                                                            @(((_selectedDraw == null ||
-                                                                    !_selectedDraw.Id.Equals(draw.Id))
-                                                                        ? "" : "highlight_3"))">
-                                                            <label>@GetDrawingMenHours(draw.Id) h</label>
-                                                        </td>
-
-                                                        <td class="align-middle
-                                                            @(((_selectedDraw == null ||
-                                                                !_selectedDraw.Id.Equals(draw.Id))
-                                                                    ? "" : "highlight_3"))">
-                                                            <label>@draw.CompletionEstimation %</label>
-                                                        </td>
-
-                                                        @if (AssignDesigner)
-                                                        {
-                                                            <td class="align-middle">
-                                                                <span class="clarity--assign-user-line"
-                                                                        @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
-                                                                </span>
-                                                            </td>
-                                                        }
-
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                }
-                            </div>
-
-                            <!-- Table Others -->
-                            <div class="col-12">
-                                @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
-                                {
-                                    <div class="text-center">
-                                        <h3>Supportive Works</h3>
-                                    </div>
-                                    <div class="table-responsive p-1 table-container">
-                                        <table class="table table-hover table-warning text-center">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" class="sticky-header">Other</th>
-                                                    <th scope="col" class="sticky-header">Total Hours</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var _other in _others)
-                                                {
-                                                    <tr class="align-middle" @onclick="@(() => OnSelectDoc(_other))">
-
-                                                        <td class="align-middle
-                                                        @(((_selectedOther == null ||
-                                                                !_selectedOther.Id.Equals(_other.Id))
-                                                                    ? "" : "highlight_4"))"
-                                                            style="min-width: 110px;">
-                                                            <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
-                                                        </td>
-
-                                                        <td class="align-middle
-                                                        @(((_selectedOther == null ||
-                                                                !_selectedOther.Id.Equals(_other.Id))
-                                                                    ? "" : "highlight_4"))"
-                                                            style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                            <label>@GetOtherMenHours(_other.Id) h</label>
-                                                        </td>
-
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                }
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-<FilterProgressRing FilterLoading="@_filterLoading" />
+<!-- Loading -->
+<FluentOverlay @bind-Visible="@_startLoading"
+               Opacity="0.1"
+               BackgroundColor="#444791">
+    <FluentProgressRing />
+</FluentOverlay>
 
 @if (!_startLoading)
 {
-    <!-- On "Press Work End" Button Click Dialog -->
+    <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
+
+        <!-- Dashboard -->
+        <FluentTab Class="my-fluent-tab mb-3" 
+                   LabelClass="my-fluent-tab-label"
+                   Label=" Home"
+                   Icon="@(new Icons.Regular.Size48.ScanDash())"
+                   Id="tab-home">
+            <div class="row justify-content-center mt-1 mb-1">
+                <div class="col-auto" style="width: 100%; height: 100%;">
+                    <div class="m-1 row justify-content-center">
+                        <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                            <!-- Headder -->
+                            <div class="mt-2 shadow p-2">
+                                @if (_sharedAuthData.LogedUser != null)
+                                {
+                                    <div class="row ms-2 me-8" style="overflow:hidden;">
+
+                                        <!-- User Name + Roles + Current Date -->
+                                        <div class="col-lg-4 col-md-8 col-sm-8 row">
+                                            <div class="col">
+                                                <h4 class="mt-3">
+                                                    @{
+                                                        var rolesNames = "";
+                                                        foreach (var role in _sharedAuthData.LoggedUserRoles)
+                                                        {
+                                                            rolesNames += $"   {role.Name}";
+                                                        }
+                                                    }
+                                                    <span class="my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@rolesNames">
+                                                        @_sharedAuthData.LogedUser.LastName &ensp; @_sharedAuthData.LogedUser.FirstName
+                                                    </span>
+                                                </h4>
+                                            </div>
+                                            <div class="col mt-3">
+                                                <h4>@CurentDate</h4>
+                                            </div>
+                                        </div>
+
+                                        <!-- Start / Stop Buttons -->
+                                        <div class="col-lg-5 col-md-7 col-sm-7">
+                                            <div class="d-grid">
+                                                @if (EditMyHours && !_isEndWorkDialogOdepened)
+                                                {
+                                                    @if (isWorkingMode)
+                                                    {
+                                                        <button type="button" class="btn btn-danger btn-lg w-50"
+                                                                @onclick="@(async () => await StopWorkClick())">
+                                                            <span>@elapsedTime.ToString(@"hh\:mm\:ss")</span>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-success btn-lg w-50"
+                                                                @onclick="@StartWorkClick">
+                                                            Press Work Start
+                                                        </button>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <!-- TeamsRequestedUsers / Issues / Display Hours Passed / Refresh Page -->
+                                        <div class="col-lg-3 col-md-5 col-sm-5">
+                                            <div class="d-flex justify-content-between"
+                                                 style="height: auto !important;">
+                                                <!-- Teams Requested Users Badge -->
+                                                @if (seeTeamsRequestedUsers)
+                                                {
+                                                    <div style="width: 50px; margin-top: 4px;">
+                                                        <FluentCounterBadge Count="@_teamsRequestedUsers.Count"
+                                                                            ShowZero="false"
+                                                                            Appearance="Appearance.Neutral"
+                                                                            HorizontalPosition="-25"
+                                                                            BottomPosition="-25">
+                                                            <FluentButton OnClick="@OpenTeamsRequestedUsersClick"
+                                                                          Appearance="Appearance.Accent">
+                                                                <FluentIcon Value="@(new Icons.Regular.Size24.People())"
+                                                                            Color="@Color.Fill" />
+                                                            </FluentButton>
+                                                        </FluentCounterBadge>
+                                                    </div>
+                                                }
+                                                 <!-- Issues Badge -->
+                                                <div style="width: 50px; margin-top: 4px;">
+                                                    <FluentCounterBadge Count="@_issues.Count"
+                                                                        ShowZero="false"
+                                                                        Appearance="Appearance.Neutral"
+                                                                        HorizontalPosition="-25"
+                                                                        BottomPosition="-25">
+                                                        <FluentButton OnClick="@OpenIssuesClick"
+                                                                      Appearance="Appearance.Accent">
+                                                            <FluentIcon Value="@(new Icons.Regular.Size24.Alert())"
+                                                                        Color="@Color.Fill" />
+                                                        </FluentButton>
+                                                    </FluentCounterBadge>
+                                                </div>
+                                                <!-- Display Hours Passed -->
+                                                @if (SeeMyHours)
+                                                {
+                                                    <div class="primary-bg-color rounded float-end">
+                                                        <div class="h5 text-center m-2">
+                                                            <span class="align-middle">My Total Hours This Month: </span>
+                                                            <b class="align-middle">@_userTotalHoursThisMonth</b>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                <!-- Refresh Page -->
+                                                <FluentButton Style="margin-left: 12px; margin-top: 8px;"
+                                                              OnClick="@Refresh"
+                                                              Loading="@_refreshLoading"
+                                                              IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
+                                                              Color="none"
+                                                              Appearance="Appearance.Outline">
+                                                </FluentButton>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Offers-->
+                            @if (seeOffers)
+                            {
+                                <div class="mt-5">
+                                    <FluentAccordion>
+                                        <FluentAccordionItem Expanded="true">
+                                            <HeadingTemplate>
+                                                <div class="accordion-header">
+                                                    <h3>Offers</h3>
+                                                </div>
+                                            </HeadingTemplate>
+                                            <ChildContent>
+                                                <Offers />
+                                            </ChildContent>
+                                        </FluentAccordionItem>
+                                    </FluentAccordion>
+                                </div>
+                            }
+
+                            <div class="mt-4 row">
+
+                                <div class="@((seeAdmin ? "col-lg" : "")) col-md col-sm mt-3"
+                                     style="min-width: @(isWorkingMode ? "660px" : "500px")">
+                                    <!-- Table Projects -->
+                                    @if (!_isEndWorkDialogOdepened)
+                                    {
+                                        <div style="height: 74px;">
+                                            <div class="text-center row me-2">
+                                                <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
+                                                @if (isWorkingMode && editProject)
+                                                {
+                                                    @if (_selectedProject != null)
+                                                    {
+
+                                                        @* <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
+                                                              style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
+                                                              @onclick="@(async () => await NavigateOnMap(_selectedProject.Address))" /> *@
+
+                                                        @* <span class="fluent--delete-28-regular col-1"
+                                                                 @onclick="@(() => DeleteProject())" /> *@
+
+                                                        @* <span class="material-symbols--edit-outline col-1"
+                                                              @onclick="@(() => EditProject())" /> *@
+                                                    }
+                                                    @* <span class="grommet-icons--add col-1"
+                                                          @onclick="@(() => AddProject())" /> *@
+                                                }
+                                            </div>
+                                            <div class="text-center row me-2">
+                                                <FluentSearch @bind-Value="@_projectNameFilter"
+                                                              @oninput="@HandleProjectFilter"
+                                                              Placeholder="Search Project" 
+                                                              Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive p-1 table-container"
+                                             style="overflow-x: auto !important;">
+                                            <table class="table table-hover table-success text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col" class="sticky-header">Status</th>
+                                                        <th scope="col" class="sticky-header">Project</th>
+                                                        <th scope="col" class="sticky-header">Work Package Declared Completed</th>
+                                                        <th scope="col" class="sticky-header">Estimated Hours Completed</th>
+                                                        <th scope="col" class="sticky-header">Deadline</th>
+                                                        @if (isWorkingMode)
+                                                        {
+                                                            <th scope="col" class="sticky-header">Issue</th>
+                                                        }
+                                                        @if (isWorkingMode && AssignPm)
+                                                        {
+                                                            <th scope="col" class="sticky-header">PM</th>
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @*
+                                                        @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-warning" : ""))
+                                                        @(( project.DeadLine < DateTime.Now ? "table-danger" : ""))
+                                                        @(( project.EstimatedCompleted >= 100 || !project.Active ? "table-secondary" : ""))
+                                                    *@
+                                                    @foreach (var project in _filteredProjects)
+                                                    {
+                                                        <tr class="align-middle">
+
+                                                            <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                                style="word-wrap: break-word; max-width: 110px;"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
+
+                                                                @if (@GetProjectMenHours(project.Id) > project.EstimatedHours)
+                                                                {
+                                                                    <span class="icon-worked-hours-passed"></span>
+                                                                }
+                                                                else if (project.DeadLine < DateTime.Now)
+                                                                {
+                                                                    <span class="icon-missed-deadline"></span>
+                                                                }
+                                                                else if (project.EstimatedCompleted >= 100 || !project.Active)
+                                                                {
+                                                                    <span class="icon-estimation-completion-passed"></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="icon-all-ok"></span>
+                                                                }
+
+                                                            </td>
+
+                                                            <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                                style="word-wrap: break-word; max-width: 110px;"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                                <labe>@project.Name</labe>
+                                                            </td>
+
+                                                            <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                                <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
+                                                            </td>
+
+                                                            <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                                <label>@(project.EstimatedCompleted.ToString("##0.0")) %</label>
+                                                            </td>
+
+                                                            <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                                @onclick="@(async () => await OnSelectProject(project.Id))"
+                                                                style="min-width: 100px;">
+                                                                <label>@project.DeadLine?.ToEuropeFormat()</label>
+                                                            </td>
+
+                                                            @if (isWorkingMode)
+                                                            {
+                                                                <td class="align-middle
+                                                                @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))">
+                                                                    <span class="majesticons--chat-2-text"
+                                                                          @onclick="@OnAddIssueClick">
+                                                                    </span>
+                                                                </td>
+                                                            }
+
+                                                            @if (isWorkingMode && AssignPm)
+                                                            {
+                                                                <td class="align-middle
+                                                                @((_selectedProject == null ||
+                                                                        !_selectedProject.Id.Equals(project.Id)
+                                                                                        ? "" : "selected_table_projects_row"))">
+                                                                    @if (project.Offer.SubCategory?.CanAssignePM ?? false)
+                                                                    {
+                                                                        @if (!string.IsNullOrEmpty(project.PmName))
+                                                                        {
+                                                                            <button type="button" class="btn btn-outline-info default-color"
+                                                                                    @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                                @project.PmName
+                                                                            </button>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="clarity--assign-user-line"
+                                                                                  @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="@((seeAdmin ? "col-xl col-lg" : "")) col-md col-sm mt-3"
+                                     style="min-width:440px">
+                                    <!-- Table Disciplines -->
+                                    @if (_selectedProject != null && !_isEndWorkDialogOdepened)
+                                    {
+                                        <div style="height: 74px;">
+                                            <div class="text-center row me-2">
+                                                <h3 class="@((isWorkingMode ? "col-8" : "col-11"))">Disciplines</h3>
+                                                @if (isWorkingMode && editDiscipline)
+                                                {
+                                                    @if (_selectedDiscipline != null)
+                                                    {
+                                                        <span class="fluent--delete-28-regular col-1"
+                                                              @onclick="@(() => DeleteDiscipline())" />
+                                                        <span class="material-symbols--edit-outline col-1"
+                                                              @onclick="@(async () => await EditDiscipline())" />
+                                                    }
+                                                    @if (_hasDisciplinesSelections)
+                                                    {
+                                                        <span class="grommet-icons--add col-1"
+                                                              @onclick="@(async () => await AddDiscipline())" />
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive p-1 table-container">
+                                            <table class="table table-hover table-danger text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Discipline</th>
+                                                        <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Estimated Discipline Hours</th>
+                                                        @if (isWorkingMode && AssignEngineer)
+                                                        {
+                                                            <th scope="col"></th>
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var discipline in _disciplines)
+                                                    {
+                                                        <tr class="align-middle
+                                                                @(( @GetDisciplineMenHours(discipline.Id) > discipline.EstimatedHours ? "table-danger" : ""))"
+                                                            @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
+
+                                                            <td class="align-middle
+                                                            @(((_selectedDiscipline == null
+                                                                || !_selectedDiscipline.Id.Equals(discipline.Id))
+                                                                    ? "" : "selected_table_disciplines_row"))"
+                                                                style="word-wrap: break-word; max-width: 100px;">
+                                                                <labe>@discipline.Type.Name</labe>
+                                                            </td>
+
+                                                            <td class="align-middle text-center
+                                                            @(((_selectedDiscipline == null
+                                                                || !_selectedDiscipline.Id.Equals(discipline.Id))
+                                                                    ? "" : "selected_table_disciplines_row"))"
+                                                                style="word-wrap: break-word; max-width: 100px;">
+                                                                <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
+                                                            </td>
+
+                                                            @if (isWorkingMode && AssignEngineer)
+                                                            {
+                                                                <td class="align-middle
+                                                                @((_selectedDiscipline == null ||
+                                                                        !_selectedDiscipline.Id.Equals(discipline.Id)
+                                                                                        ? "" : "selected_table_disciplines_row"))">
+                                                                    <span class="clarity--assign-user-line"
+                                                                          @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
+                                                                    </span>
+                                                                </td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="row @((seeAdmin ? "col-xl col-lg" : "")) col-md col-sm mt-3"
+                                     style="min-width:460px">
+
+                                    <!-- Table Deliverables -->
+                                    <div class="col" style="min-width:460px">
+                                        @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
+                                        {
+                                            <div style="height: 74px;">
+                                                <div class="text-center row me-2">
+                                                    <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Deliverables</h3>
+                                                    @if (isWorkingMode && editDeliverable)
+                                                    {
+                                                        @if (_selectedDraw != null)
+                                                        {
+                                                            <span class="fluent--delete-28-regular col-1"
+                                                                  @onclick="@(() => DeleteDeliverable())" />
+                                                            @if (_hasDrawingsSelections)
+                                                            {
+                                                                <span class="material-symbols--edit-outline col-1"
+                                                                      @onclick="@(() => EditDeliverable())" />
+                                                            }
+                                                        }
+                                                        @if (_hasDrawingsSelections)
+                                                        {
+                                                            <span class="grommet-icons--add col-1"
+                                                                  @onclick="@(() => AddDeliverable())" />
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive p-1 table-container">
+                                                <table class="table table-hover table-primary text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" class="sticky-header">Drawing</th>
+                                                            <th scope="col" class="sticky-header">Total Hours</th>
+                                                            <th scope="col" class="sticky-header">Declared Completion</th>
+                                                            @if (isWorkingMode && AssignDesigner)
+                                                            {
+                                                                <th scope="col"></th>
+                                                            }
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var draw in _draws)
+                                                        {
+                                                            <tr class="align-middle"
+                                                                @onclick="@(() => OnSelectDraw(draw))">
+
+                                                                <td class="align-middle
+                                                            @(((_selectedDraw == null ||
+                                                                    !_selectedDraw.Id.Equals(draw.Id))
+                                                                        ? "" : "selected_table_deliverables_row"))">
+                                                                    <div class="align-middle h-100"><labe>@draw.Type.Name</labe></div>
+                                                                </td>
+
+                                                                <td class="align-middle
+                                                            @(((_selectedDraw == null ||
+                                                                    !_selectedDraw.Id.Equals(draw.Id))
+                                                                        ? "" : "selected_table_deliverables_row"))">
+                                                                    <label>@GetDrawingMenHours(draw.Id) h</label>
+                                                                </td>
+
+                                                                <td class="align-middle
+                                                            @(((_selectedDraw == null ||
+                                                                !_selectedDraw.Id.Equals(draw.Id))
+                                                                    ? "" : "selected_table_deliverables_row"))">
+                                                                    <label>@draw.CompletionEstimation %</label>
+                                                                </td>
+
+                                                                @if (isWorkingMode && AssignDesigner)
+                                                                {
+                                                                    <td class="align-middle
+                                                                @((_selectedDraw == null ||
+                                                                        !_selectedDraw.Id.Equals(draw?.Id)
+                                                                                        ? "" : "selected_table_deliverables_row"))">
+                                                                        <span class="clarity--assign-user-line"
+                                                                              @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
+                                                                        </span>
+                                                                    </td>
+                                                                }
+
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <!-- Table Others -->
+                                    <div class="col" style="min-width:460px">
+                                        @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
+                                        {
+                                            <div style="height: 74px;">
+                                                <div class="text-center row me-2">
+                                                    <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Supportive Works</h3>
+                                                    @if (isWorkingMode && editOther)
+                                                    {
+                                                        @if (_selectedOther != null)
+                                                        {
+                                                            <span class="fluent--delete-28-regular col-1"
+                                                                  @onclick="@(() => DeleteOther())" />
+                                                            @if (_hasOthersSelections)
+                                                            {
+                                                                <span class="material-symbols--edit-outline col-1"
+                                                                      @onclick="@(() => EditOther())" />
+                                                            }
+                                                        }
+                                                        @if (_hasOthersSelections)
+                                                        {
+                                                            <span class="grommet-icons--add col-1"
+                                                                  @onclick="@(() => AddOther())" />
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive p-1 table-container">
+                                                <table class="table table-hover table-warning text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" class="sticky-header">Other</th>
+                                                            <th scope="col" class="sticky-header">Total Hours</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var _other in _others)
+                                                        {
+                                                            <tr class="align-middle" @onclick="@(() => OnSelectDoc(_other))">
+
+                                                                <td class="align-middle
+                                                        @(((_selectedOther == null ||
+                                                                !_selectedOther.Id.Equals(_other.Id))
+                                                                    ? "" : "selected_table_supportiveworks_row"))"
+                                                                    style="min-width: 110px;">
+                                                                    <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
+                                                                </td>
+
+                                                                <td class="align-middle
+                                                        @(((_selectedOther == null ||
+                                                                !_selectedOther.Id.Equals(_other.Id))
+                                                                    ? "" : "selected_table_supportiveworks_row"))"
+                                                                    style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                                                    <label>@GetOtherMenHours(_other.Id) h</label>
+                                                                </td>
+
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </FluentTab>
+
+        <!-- Invoices -->
+        @if (seeInvoices)
+        {
+            <FluentTab Class="my-fluent-tab"
+                       LabelClass="my-fluent-tab-label"
+                       Label=" Invoices"
+                       Icon="@(new MyIcons.Size20.Invoices2())"
+                       Id="tab-invoices">
+
+                <div class="row justify-content-center mt-1 mb-1">
+                    <div class="col-auto" style="width: 100%; height: 100%;">
+                        <div class="m-1 row justify-content-center">
+                            <div class="col-12 p-2 row g-2 mb-5" style="overflow-x:hidden; margin: 0 auto;">
+
+                                <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-xs-12">
+                                    <Invoices @ref="@_invoiceListRef" OnSelect="@(async (i) => await _onSelectedInvoice(i))" SelectedRecord="@_selectedInvoice" />
+                                </div>
+
+                                @if (_selectedInvoice != null && _selectedInvoice.Id != 0)
+                                {
+                                    <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-xs-12">
+                                        <InvoiceDetailed @ref="@_invoiceDetailedRef"
+                                                         Content="@_selectedInvoice"
+                                                         Title="Invoice Detailes"
+                                                         OnSave="@(async (i) => await _onSaveInvoice(i))" />
+                                    </div>
+                                    <div class="col-12">
+                                        <Payments @ref="@_invoicePaymentsRef" Invoice="@_selectedInvoice" />
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </FluentTab>
+        }
+
+        <!-- Excpences -->
+        @if(seeExpenses)
+        {
+            <FluentTab Class="my-fluent-tab"
+                       LabelClass="my-fluent-tab-label"
+                       Label=" Excpences"
+                       Icon="@(new MyIcons.Size20.Expenses())"
+                       Id="tab-excpences">
+
+                <div class="row justify-content-center mt-1 mb-1">
+                    <div class="col-auto" style="width: 100%; height: 100%;">
+                        <div class="m-1 row justify-content-center">
+                            <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                                <h3>Expenses</h3>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </FluentTab>
+        }
+
+        <!-- KPIS -->
+        @if (seeKpis)
+        {
+            <FluentTab Class="my-fluent-tab" 
+                       LabelClass="my-fluent-tab-label" 
+                       Label=" KPIs" 
+                       Icon="@(new Icons.Regular.Size48.ChartPerson())" 
+                       Id="tab-kpis">
+            
+                    <div class="row justify-content-center mt-1 mb-1">
+                        <div class="col-auto" style="width: 100%; height: 100%;">
+                            <div class="m-1 row justify-content-center">
+                                <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                                    <KpisLand />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </FluentTab>
+        }
+
+        <!-- Admin -->
+        @if (seeAdmin)
+        {
+            <FluentTab Class="my-fluent-tab"
+                       LabelClass="my-fluent-tab-label"
+                       Label=" Admin"
+                       Icon="@(new Icons.Regular.Size48.Settings())"
+                       Id="tab-admin">
+
+                <div class="row justify-content-center mt-1 mb-1">
+                    <div class="col-auto" style="width: 100%; height: 100%;">
+                        <div class="m-1 row justify-content-center">
+                            <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                                <AdminLand />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </FluentTab>
+        }
+
+    </FluentTabs>
+   
+}
+
+<!-- Dialogs -->
+@if (!_startLoading)
+{
+    <!-- On "Press Work End" Button Dialog -->
     <FluentDialog @ref="_endWorkDialog"
                   Hidden="@(!_isEndWorkDialogOdepened || _startLoading)"
                   Modal="false"
@@ -389,6 +724,48 @@ else
         <div class="modal-body">
 
             <div class="mt-2 row gx-3">
+
+                @if(WorkOnLeds)
+                {
+                    <!-- Select Led -->
+                    <div class="col">
+                        <div class="text-center">
+                            <h5>Select Led</h5>
+                        </div>
+                        <select class="form-select form-select-lg"
+                                aria-label="Select Led"
+                                @onchange="@(async (ChangeEventArgs e) => await OnSelectLed(Convert.ToInt32(e.Value)))">
+                            <option value="0" selected>Select Led</option>
+                            @foreach (var led in _leds)
+                            {
+                                <option value="@led.Id">
+                                    @led.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                @if (WorkOnOffers)
+                {
+                    <!-- Select Offer -->
+                    <div class="col">
+                        <div class="text-center">
+                            <h5>Select Offer</h5>
+                        </div>
+                        <select class="form-select form-select-lg"
+                                aria-label="Select Offer"
+                                @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
+                            <option value="0" selected>Select Offer</option>
+                            @foreach (var offer in _offers)
+                            {
+                                <option value="@offer.Id">
+                                    @offer.Code
+                                </option>
+                            }
+                        </select>
+                    </div>
+                }
 
                 <!-- Select Project -->
                 <div class="col">
@@ -438,7 +815,7 @@ else
                     <div class="table-responsive"
                          style="height: 300px;">
                         <table class="table table-hover table-borderless">
-                            <thead class="table-primary">
+                            <thead>
                                 <tr>
                                     <th scope="col" class="sticky-header">Drawing</th>
                                     <th scope="col" class="sticky-header">Time</th>
@@ -453,10 +830,8 @@ else
                                             <div class="align-middle h-100"><labe>@_draw.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
-                                            <TimeInput MinHours="0"
-                                                       MaxHours="@remainingTime.Hours"
-                                                       MinMinutes="0"
-                                                       MaxMinutes="60"
+                                            <TimeInput MinTime="TimeSpan.Zero"
+                                                       MaxTime="@remainingTime"
                                                        Time="_draw.Time"
                                                        OnPropertyChanged=@((time) => _onDrawTimeChanged(_draw, time)) />
                                         </td>
@@ -491,7 +866,7 @@ else
                     <div class="table-responsive"
                          style="height: 300px;">
                         <table class="table table-hover table-borderless">
-                            <thead class="table-primary">
+                            <thead>
                                 <tr>
                                     <th scope="col" class="sticky-header">Other</th>
                                     <th scope="col" class="sticky-header">Time</th>
@@ -505,10 +880,8 @@ else
                                             <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
-                                            <TimeInput MinHours="0"
-                                                       MaxHours="@remainingTime.Hours"
-                                                       MinMinutes="0"
-                                                       MaxMinutes="60"
+                                            <TimeInput MinTime="TimeSpan.Zero"
+                                                       MaxTime="@remainingTime"
                                                        Time="@_other.Time"
                                                        OnPropertyChanged=@((time) => _onOtherTimeChanged(_other, time)) />
                                         </td>
@@ -521,13 +894,56 @@ else
 
             </div>
 
-            <!-- Set User Extra Time -->
-            <div class="mt-1">
-                <SetUserTime LogedUserTimes="@_editLogedUserTimes"
-                             RemainingTime="@remainingTime"
-                             OnPersonalTimeChanged="@_onPersonalTimeChanged"
-                             OnTrainingTimeChanged="@_onTrainingTimeChanged"
-                             OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+            
+            <div class="mt-1 row">
+
+                <!-- Set User With High Roles Time -->
+                <div class="col-12 border rounded mb-1">
+                    <div class="row gx-3 m-2" >
+                        @if (WorkOnLeds && _selectedLed != null)
+                        {
+                            <div class="col-4 text-center">
+                                <span class="mb-2 fs-5">Led</span>
+                                <TimeInput MinTime="TimeSpan.Zero"
+                                           MaxTime="@remainingTime"
+                                           Time="_selectedLed.Time"
+                                           OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedLed, time)) />
+                            </div>
+                        }
+
+                        @if (WorkOnOffers && _selectedOffer != null)
+                        {
+                            <div class="col-4 text-center">
+                                <span class="mb-2 fs-5">Offer</span>
+                                <TimeInput MinTime="TimeSpan.Zero"
+                                           MaxTime="@remainingTime"
+                                           Time="_selectedOffer.Time"
+                                           OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
+                            </div>
+                        }
+
+                        @if (WorkOnProject && _selectedProject != null)
+                        {
+                            <div class="col-4 text-center">
+                                <span class="mb-2 fs-5">Project</span>
+                                <TimeInput MinTime="TimeSpan.Zero"
+                                           MaxTime="@remainingTime"
+                                           Time="_selectedProject.Time"
+                                           OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Set User Extra Time -->
+                <div class="col-12 border rounded mb-1">
+                    <SetUserTime LogedUserTimes="@_editLogedUserTimes"
+                                 RemainingTime="@remainingTime"
+                                 OnPersonalTimeChanged="@_onPersonalTimeChanged"
+                                 OnTrainingTimeChanged="@_onTrainingTimeChanged"
+                                 OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+                </div>
+                
             </div>
 
         </div>
@@ -546,7 +962,7 @@ else
 
     </FluentDialog>
 
-    <!-- On "Add Designers" Button Click Dialog -->
+    <!-- On "Add Designers" Button Dialog -->
     <FluentDialog @ref="_addDesignerDialog"
                   Hidden="@(!_isAddDesignerDialogOdepened || _startLoading)"
                   Modal="false"
@@ -565,25 +981,23 @@ else
 
                     <div class="mt-1 p-2 modal-content">
                         <div class="d-flex justify-content-around">
-                            <div class="table-responsive p-1 w-100 h-100 m-3">
-                                <div class="text-center">
-                                    <h3>Select Designers</h3>
-                                </div>
-                                <table class="table table-borderless rounded-3">
+                            <div class="table-responsive p-1 w-100 h-100"
+                                 style="max-height: 300px !important; overflow-y: auto;">
+                                 <table class="bg-transparent">
                                     <tbody>
                                         @foreach (var designer in _designers)
                                         {
                                             <tr clss="align-middle d-flex">
                                                 <td class="align-middle">
-                                                    <input class="form-check-input big-checkbox"
+                                                    <input class="form-check-input big-checkbox mt-2"
                                                            type="checkbox"
                                                            id="isSelectedDesigner"
                                                            @bind=@designer.IsSelected>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <label>
+                                                    <div class="ms-3 mt-2">
                                                         @designer.LastName &nbsp; @designer.FirstName
-                                                    </label>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         }
@@ -610,7 +1024,7 @@ else
 
     </FluentDialog>
 
-    <!-- On "Add Engineers" Button Click Dialog -->
+    <!-- On "Add Engineers" Button Dialog -->
     <FluentDialog @ref="_addEngineerDialog"
                   Hidden="@(!_isAddEngineerDialogOdepened || _startLoading)"
                   Modal="false"
@@ -629,25 +1043,23 @@ else
 
                     <div class="mt-1 p-2 modal-content">
                         <div class="d-flex justify-content-around">
-                            <div class="table-responsive p-1 w-100 h-100 m-3">
-                                <div class="text-center">
-                                    <h3>Select Engineers</h3>
-                                </div>
-                                <table class="table table-borderless rounded-3">
+                            <div class="table-responsive p-1 w-100 h-100"
+                                 style="max-height: 300px !important; overflow-y: auto;">
+                                <table class="bg-transparent">
                                     <tbody>
                                         @foreach (var engineer in _engineers)
                                         {
                                             <tr clss="align-middle d-flex">
                                                 <td class="align-middle">
-                                                    <input class="form-check-input big-checkbox"
+                                                    <input class="form-check-input big-checkbox mt-2"
                                                            type="checkbox"
                                                            id="isSelectedDesigner"
                                                            @bind=@engineer.IsSelected>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <label>
+                                                    <div class="ms-3 mt-2">
                                                         @engineer.LastName &nbsp; @engineer.FirstName
-                                                    </label>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         }
@@ -674,7 +1086,7 @@ else
 
     </FluentDialog>
 
-    <!-- On "Add Project Managers" Button Click Dialog -->
+    <!-- On "Add Project Managers" Button Dialog -->
     <FluentDialog @ref="_addPMDialog"
                   Hidden="@(!_isAddPMDialogOdepened || _startLoading)"
                   Modal="false"
@@ -689,14 +1101,13 @@ else
         <div class="modal-body row">
             <div class="m-1 row justify-content-center">
                 <div class="col-12 p-2">
-
-                    <select class="form-select form-select-lg">
+                    <select class="form-select form-select-lg" @bind="_selectedPmId">
                         @foreach (var pm in _projectManagers)
                         {
                             <option value="@pm.Id"
-                                    selected="@pm.IsSelected"
+                                    selected="@pm.Id.Equals(_selectedPmId)"
                                     @onchange="@(e => ToggleSelection(pm, e.Value.ToString()))">
-                                @pm.LastName &nbsp; @pm.FirstName
+                                <span>@pm.LastName &nbsp; @pm.FirstName</span>
                             </option>
                         }
                     </select>
@@ -717,30 +1128,258 @@ else
 
     </FluentDialog>
 
-    <!-- On MyHours Clck Dialog  -->
-    <FluentDialog @ref="_myHoursDialog"
-                  Hidden="@(!_isMyHoursDialogOdepened || _startLoading)"
-                  Modal="false"
+    <!-- On Add Issues Dialog -->
+    <FluentDialog @ref="_addIssueDialog"
+                  Hidden="@(!_isAddIssueDialogOdepened || _startLoading)"
+                  Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: 400px !important;
-                         --dialog-height: 300px !important;">
-
-        <div class="dialog-header">
-            <span class="carbon--close-outline float-end" @onclick="CloseMyHoursClick"></span>
-        </div>
-
-        <div class="badge text-dark text-wrap fs-5">
-            My Total Hours This Week
-        </div>
+                  style="--dialog-width: 700px !important;
+                         --dialog-height: 94vh !important;">
 
         <div class="modal-body row mb-1">
-            <div class="m-1 row justify-content-center">
-                <div class="col-12 p-2">
-
-                    <UserTime LogedUserTimes="@_logedUserTimes" />
-
-                </div>
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddIssueClick"></span>
             </div>
+            <div class="col-12 justify-content-center">
+                <IssueDetailed @ref="@issueCompoment" Project="@_selectedProject"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addIssueDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addIssueDialogCansel())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Display Issues Dialog -->
+    <FluentDialog @ref="_displayIssuesDialog"
+                  Hidden="@(!_isDisplayIssuesDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: min(98vw, 1300px) !important;
+                         --dialog-height: min(86vh, 1400px) !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="@(async() => await CloseIssuesClick())"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <Issues Source="@_issues.ToList()" OnSave="@(async() => await CloseIssuesClick())" />
+            </div>
+
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Display TeamsRequestedUsers Dialog -->
+    <FluentDialog @ref="_displayTeamsRequestedUsersDialog"
+                  Hidden="@(!_isDisplayTeamsRequestedUsersDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: min(98vw, 1300px) !important;
+                         --dialog-height: min(86vh, 1400px) !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="@(async() => await CloseTeamsRequestedUsersClick())"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <TeamsRequestedUsers Source="@_teamsRequestedUsers.ToList()" />
+            </div>
+
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Project Dialog -->
+    <FluentDialog @ref="_addEditProjectDialog"
+                  Hidden="@(!_isAddEditProjectDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: min(80vw, 700px) !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddProjectClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center" style="max-height: 500px; overflow-y: auto;">
+                <ProjectDetailed @ref="@projectCompoment" Content="@_selectedProject"/>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditProjectDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddProjectClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Discipline Dialog -->
+    <FluentDialog @ref="_addEditDisciplineDialog"
+                  Hidden="@(!_isAddEditDisciplineDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddDisciplineClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                @if (_selectedProject != null)
+                {
+                    <DisciplineDetailed @ref="@disciplineCompoment" ProjectId="@_selectedProject.Id" />
+                }
+                else
+                {
+                    <h3 class="warning">No Project Selected!</h3>
+                }
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditDisciplineDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddDisciplineClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Deliverable Dialog -->
+    <FluentDialog @ref="_addEditDeliverableDialog"
+                  Hidden="@(!_isAddEditDeliverableDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddDeliverableClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                @if(_selectedDiscipline != null)
+                {
+                    <DrawingDetailed @ref="@drawingCompoment" DisciplineId="@_selectedDiscipline.Id" />
+                } 
+                else
+                {
+                    <h3 class="warning">No Discipline Selected!</h3>
+                }
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditDeliverableDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddDeliverableClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Other Dialog -->
+    <FluentDialog @ref="_addEditOtherDialog"
+                  Hidden="@(!_isAddEditOtherDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddOtherClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                @if (_selectedDiscipline != null)
+                {
+                    <OtherDetailed @ref="@otherCompoment" DisciplineId="@_selectedDiscipline.Id" />
+                }
+                else
+                {
+                    <h3 class="warning">No Discipline Selected!</h3>
+                }
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditOtherDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddOtherClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Delete Dialog -->
+    <FluentDialog @ref="_deleteDialog"
+                  Hidden="@(!_isDeleteDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header row">
+                <div class="col-10">
+                    <h3>Delete Record</h3>
+                </div>
+                <span class="col-2 carbon--close-outline float-end" @onclick="OnDeleteClose"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <p>@_deleteDialogMsg</p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await OnDeleteAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
+                Cancel
+            </FluentButton>
         </div>
 
     </FluentDialog>

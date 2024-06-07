@@ -1,0 +1,43 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Components;
+@using Microsoft.AspNetCore.Components;
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Core.Config;
+@using EmpiriaBMS.Core.Dtos;
+@using System.Text.Json;
+
+@inject IMapper Mapper
+@inject IDataProvider DataProvider
+@inject SharedAuthDataService _sharedAuthData
+
+<div class="w-96 h-100"
+     style="overflow-x: hidden; overflow-y: auto; max-height: 700px;">
+
+    <h3 class="mt-1 mb-1 ms-3">Other</h3>
+
+    <EditForm Model="@_other" class="row mt-3 gx-2 p-2">
+
+        <div class="p-2 col-12">
+
+            <!-- Other Types -->
+            <div class="form-group">
+                <label>Other Type</label>
+                <select class="form-select" @onchange="(async (e) => await _updateOtherType(e))">
+                    @foreach (var otherType in _otherTypes)
+                    {
+                        @if (_other.TypeId == otherType.Id)
+                        {
+                            <option value="@otherType.Id" selected>@otherType.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@otherType.Id">@otherType.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+
+        </div>
+
+    </EditForm>
+
+</div>

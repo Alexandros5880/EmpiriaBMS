@@ -1,0 +1,64 @@
+﻿@page "/loginpage"
+
+@layout MainLayout
+
+@using System.ComponentModel.DataAnnotations
+@using EmpiriaBMS.Front.Services
+
+@inject NavigationManager MyNavigationManager
+@inject AuthorizeServices authorizeServices
+@inject SharedAuthDataService _sharedAuthData
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+
+<div class="centered">
+
+    <div>
+        <h3>Login</h3> <h5> to Embiria BMS</h5>
+        
+    </div>
+
+    <div>
+        <FluentTextField Style="width: 100%" @bind-Value=@username TextFieldType="TextFieldType.Email">Username</FluentTextField>
+        @if (!validUserName)
+        {
+            @if (string.IsNullOrEmpty(@username))
+            {
+                <div class="col-12">
+                    <span class="text-danger">Field is required!</span>
+                </div>
+            }
+            else if (!_isvalidEmail(@username))
+            {
+                <div class="col-12">
+                    <span class="text-danger">No valid proxy address!</span>
+                </div>
+            }
+        }
+    </div>
+
+    <div>
+        <FluentTextField Style="width: 100%" @bind-Value=@password TextFieldType="TextFieldType.Password">Password</FluentTextField>
+        @if (!validPassword)
+        {
+            @if (string.IsNullOrEmpty(@password))
+            {
+                <div class="col-12">
+                    <span class="text-danger">Field is required!</span>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="col-12">
+        @if (errorMessage != null)
+        {
+            <p class="text-danger">@errorMessage</p>
+        }
+    </div>
+
+    <FluentButton Style="margin-bottom: 4px; float: right; margin-top: 4px;" Type="ButtonType.Submit" OnClick="_login">
+        Login
+    </FluentButton>
+
+</div>

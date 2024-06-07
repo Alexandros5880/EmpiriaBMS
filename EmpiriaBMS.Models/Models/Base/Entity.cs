@@ -1,16 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Update.Internal;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EmpiriaMS.Models.Models.Base;
+namespace EmpiriaBMS.Models.Models;
 public class Entity : IEntity
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Required]
@@ -22,6 +17,8 @@ public class Entity : IEntity
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime LastUpdatedDate { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     public Entity()
     {

@@ -1,0 +1,83 @@
+﻿
+
+@inject IMapper Mapper
+@inject IDataProvider DataProvider
+
+<div class="w-98 h-100" style="overflow-x: hidden; overflow-y: auto; max-height: 700px;">
+    
+    <h3 class="mt-1 mb-1">@Title</h3>
+
+    <EditForm Model="@User"
+              class="mb-2 row mt-3 gx-2">
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <!-- First Name -->
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <InputText id="firstName" @bind-Value="@User.FirstName" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <!-- Last Name -->
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <InputText id="lastName" @bind-Value="@User.LastName" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <!-- Mid Name -->
+                <div class="form-group">
+                    <label for="midName">Mid Name</label>
+                    <InputText id="midName" @bind-Value="@User.MidName" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <!-- Proxy Address -->
+                <div class="form-group">
+                    <label for="proxyAddress">Proxy Address</label>
+                    <InputText id="proxyAddress" @bind-Value="@User.ProxyAddress" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <!-- Phone1 -->
+                <div class="form-group">
+                    <label for="phone1">Phone1</label>
+                    <InputText id="phone1" @bind-Value="@User.Phone1" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <!-- Phone2 -->
+                <div class="form-group">
+                    <label for="phone2">Phone2</label>
+                    <InputText id="phone2" @bind-Value="@User.Phone2" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <!-- Phone3 -->
+                <div class="form-group">
+                    <label for="phone3">Phone3</label>
+                    <InputText id="phone3" @bind-Value="@User.Phone3" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <InputText id="description" @bind-Value="@User.Description" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+    </EditForm>
+
+</div>

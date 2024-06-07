@@ -1,13 +1,5 @@
-﻿using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EmpiriaBMS.Core.Dtos.Base;
+﻿using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Dtos;
 
@@ -19,49 +11,36 @@ public class ProjectDto : EntityDto
 
     public string? Code { get; set; }
 
-    public string? Drawing { get; set; }
-
     public long EstimatedMandays { get; set; }
 
     public long EstimatedHours { get; set; }
 
-    public float EstimatedCompleted { get; set; }
+    public int StageId { get; set; }
+    public ProjectStage Stage { get; set; }
 
-    public float Completed { get; set; }
+    public bool Active { get; set; }
 
-    public float WorkPackegedCompleted { get; set; }
+    public DateTime? StartDate { get; set; }
 
     public DateTime? DeadLine { get; set; }
 
-    public DateTime? WorkPackege { get; set; }
+    public float EstimatedCompleted { get; set; }
 
-    public DateTime? DurationDate { get; set; }
+    public float DeclaredCompleted { get; set; }
 
-    public DateTime? EstPaymentDate { get; set; }
+    public int? ProjectManagerId { get; set; }
+    public User? ProjectManager { get; set; }
 
-    public DateTime? PaymentDate { get; set; }
+    public int? OfferId { get; set; }
+    public Offer? Offer { get; set; }
 
-    public int? DelayInPayment { get; set; }
+    public ICollection<Invoice> Invoices { get; set; }
 
-    public string? PaymentDetailes { get; set; }
+    public ICollection<DailyTime> DailyTime { get; set; }
 
-    public double? DayCost { get; set; }
+    public ICollection<Discipline> Disciplines { get; set; }
 
-    public string? Bank { get; set; }
+    public ICollection<Issue> Complains { get; set; }
 
-    public double? PaidFee { get; set; }
-
-    public int? DaysUntilPayment { get; set; }
-
-    public double? PendingPayments { get; set; }
-
-    public int? CalculationDaly { get; set; }
-
-    public User? Customer { get; set; }
-
-    public Invoice? Invoice { get; set; }
-
-    public ProjectType Type { get; set; }
-
-    public User? SubContractor { get; set; }
+    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 }

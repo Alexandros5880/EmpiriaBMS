@@ -1,5 +1,6 @@
 @inherits LayoutComponentBase
 
+@using EmpiriaBMS.Core.Dtos
 @using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
@@ -19,155 +20,71 @@
 @inject AuthorizeServices authorizeServices
 @inject SharedAuthDataService _sharedAuthData
 @inject HttpClient HttpClient
+@inject IDialogService DialogService
 
-@if(isLoading)
+
+@if (!isLoading)
 {
-    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-        <FilterProgressRing FilterLoading="@isLoading"/>
-    </div>
-}
-else
-{
-    <div class="container-fluid">
-        <div class="row flex-nowrap">
-            @if (SeeAdmin)
-            {
-                <!-- NavBar -->
-                <div class="col-auto col-md-3 col-xl-2 px-0
-                            bg-dark bg-gradient">
-                    <div class="d-flex flex-column
-                                align-items-start align-items-md-start align-items-sm-center align-items-xs-center
-                                px-3 pt-2 text-white min-vh-100">
-                        <a href="#" class="d-none d-md-inline d-flex
-                                           align-items-center
-                                           pb-3 mb-md-0 me-md-auto
-                                           text-white text-decoration-none">
-                            <span class="fs-5 d-none d-md-inline">Menu</span>
-                        </a>
-                        <ul class="nav nav-pills flex-column 
-                                   mb-auto
-                                   align-items-start align-items-md-start align-items-sm-center align-items-xs-center"
-                            id="menu">
-                            @if (SeeDashboard)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white mb-2 align-middle px-0"
-                                       herf="/dashboard"
-                                       @onclick="@(() => selectUrl("/dashboard"))">
-                                        <span class="arcticons--nextcloud-tables"></span>
-                                        <span class="ms-1 d-none d-md-inline">Dashboard</span>
-                                    </a>
-                                </li>
-                            }
-                            <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/Projects/Table"))">
-                                    <span class="file-icons--microsoft-project"></span>
-                                    <span class="ms-1 d-none d-md-inline">Projects</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/Users/Table"))">
-                                    <span class="ph--users-four-light"></span>
-                                    <span class="ms-1 d-none d-md-inline">Users</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/Roles/Table"))">
-                                    <span class="oui--app-users-roles"></span>
-                                    <span class="ms-1 d-none d-md-inline">Roles</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/ProjectTypes/Table"))">
-                                    <span class="arcticons--ptv"></span>
-                                    <span class="ms-1 d-none d-md-inline">Project Types</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/DisciplineTypes/Table"))">
-                                    <span class="gala--layer"></span>
-                                    <span class="ms-1 d-none d-md-inline">Disciplines Types</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/DrawingTypes/Table"))">
-                                    <span class="streamline--hand-held-tablet-drawing"></span>
-                                    <span class="ms-1 d-none d-md-inline">Drawing Types</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white mb-2 align-middle px-0"
-                                   @onclick="@(() => selectUrl("/mvc/Admin/OtherTypes/Table"))">
-                                    <span class="material-symbols--other-admission-outline-sharp"></span>
-                                    <span class="ms-1 d-none d-md-inline">Other Types</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <hr>
-                        <!-- Side NavBar Down Profile Button -->
-                        <div class="dropdown pb-4">
-                            <a href="#"
-                               class="d-flex text-white text-decoration-none dropdown-toggle
-                                      align-items-center"
-                               id="dropdownUser1"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                                <span class="d-none d-lg-inline mx-1">@_userName</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                                <li><a class="dropdown-item" href="#">New project...</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Sign out</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            }
-            <div class="col py-3">
-                @if (SeeAdmin && !_selectedUrl.Equals("/dashboard"))
-                {
-                    <iframe src="@_selectedUrl" style="width: 100%; height: 100%; border: none;"></iframe>
-                }
-                else
-                {
-                    @Body
-                }
+    @if (refreshed)
+    {
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                @Body
+                <FluentDialogProvider />
             </div>
         </div>
-    </div>
+    }
 
     <!-- Remove This -->
-    <select class="form-select" @onchange="RoleSelectionChanged"
-            style="position:fixed !important; bottom:0px !important; width: 200px; right: 10px;">
-        @foreach (var role in _allRoles)
+    <select class="form-select" @onchange="UsersSelectionChanged"
+            style="position:fixed !important; bottom:0px !important; width: auto; right: 10px; z-index: 1000;">
+        @foreach (var _user in _allUsers)
         {
-            @if (@role.Name.Equals(_sharedAuthData.DefaultRoleName))
+            @if (@_user.Id.Equals(_sharedAuthData?.LogedUser?.Id))
             {
-                <option value="@role.Id" selected>@role.Name</option>
+                <option value="@_user?.Id" selected>
+                    @_user.LastName @_user.FirstName  -->  [
+                    @foreach (var r in _user.Roles)
+                    {
+                        <span>&nbsp; &nbsp; @r.Name &nbsp; &nbsp;</span>
+                    }
+                    ]
+                </option>
             }
             else
             {
-                <option value="@role.Id">@role.Name</option>
+                <option value="@_user?.Id">
+                    @_user.LastName @_user.FirstName  -->  [
+                    @foreach (var r in _user.Roles)
+                    {
+                        <span>&nbsp; &nbsp; @r.Name &nbsp; &nbsp;</span>
+                    }
+                    ]
+                </option>
             }
         }
     </select>
+}
+else
+{
+    <Welcome />
+
+    @*
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20%;">
+        <FluentProgressRing />
+    </div>
+    *@
+
+    @* <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <FilterProgressRing FilterLoading="@_startLoading" />
+    </div> *@
+
 }
 
 @code {
     bool _runInTeams = false;
     bool isLoading = true;
-    private string _selectedUrl = "";
+    bool refreshed = true;
 
     #region Authorization Properties
     public bool SeeAdmin
@@ -195,22 +112,19 @@ else
         if (firstRender)
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetAllRoles(); // TODO: Remove This
+            await GetAllUsers(); // TODO: Remove This
             authorizeServices.CallBackOnAuthorize += _afterAuthCallBack;
-            await authorizeServices.Authorize(runInTeams: _runInTeams);
+            var result = await authorizeServices.Authorize(runInTeams: _runInTeams);
+            if (!result)
+                NavigationManager.NavigateTo("/loginpage");
         }
     }
 
-    private void _afterAuthCallBack()
+    private async Task _afterAuthCallBack()
     {
         isLoading = false;
-        selectUrl("/mvc/Admin/Projects/Table");
+        await Task.Delay(1);
         StateHasChanged();
-    }
-
-    private void selectUrl(string url)
-    {
-        _selectedUrl = url;
     }
 
     private string GetEnvironmentName()
@@ -219,25 +133,21 @@ else
     }
 
     // TODO: Remove This
-    // Engineer, Designer, Project Manager, CTO, COO, Guest, CEO, Customer, Admin
-    private ICollection<RoleVM> _allRoles = new List<RoleVM>();
+    private ICollection<UserDto> _allUsers = new List<UserDto>();
 
-    private async Task RoleSelectionChanged(ChangeEventArgs e)
+    private async Task UsersSelectionChanged(ChangeEventArgs e)
     {
-        isLoading = true;
-        var selectRoleId = Convert.ToInt32(e.Value);
-        await authorizeServices.Authorize(selectRoleId, _runInTeams);
-        _sharedAuthData.DefaultRoleName = _allRoles.FirstOrDefault(r => r.Id == selectRoleId).Name;
-        isLoading = false;
-        isLoading = false;
+        refreshed = false;
+        var selectUserId = Convert.ToInt32(e.Value);
+        await authorizeServices.Authorize(selectUserId, _runInTeams);
+        refreshed = true;
         StateHasChanged();
     }
 
-    private async Task GetAllRoles()
+    private async Task GetAllUsers()
     {
-        var rolesDtos = await DataProvider.Roles.GetAll();
-        var roles = Mapper.Map<List<RoleVM>>(rolesDtos);
-        _allRoles.Clear();
-        roles.ForEach(_allRoles.Add);
+        var users = await DataProvider.Users.GetAllWithRoles();
+        _allUsers.Clear();
+        users.ToList().ForEach(_allUsers.Add);
     }
 }

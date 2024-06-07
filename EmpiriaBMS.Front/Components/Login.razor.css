@@ -1,0 +1,12 @@
+﻿
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(68,71,145, 0.3);
+    padding: 20px;
+    width: 400px;
+    border-radius: 4px;
+}

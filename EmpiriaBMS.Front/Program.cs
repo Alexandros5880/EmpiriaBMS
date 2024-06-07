@@ -2,6 +2,8 @@ using AutoMapper;
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Repositories;
+using EmpiriaBMS.Core.Services.EmailService;
+using EmpiriaBMS.Core.Services.GooglePlaces;
 using EmpiriaBMS.Front;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
@@ -22,11 +24,20 @@ var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
 builder.Services.AddSingleton<TimerService>();
-builder.Services.AddSingleton<SharedAuthDataService>();
+builder.Services.AddScoped<SharedAuthDataService>();
 builder.Services.AddScoped<AuthorizeServices>();
 builder.Services.AddBlazorBootstrap();
-builder.Services.AddDbContextFactory<AppDbContext>(); // DbContext Dependency Injection
+
+// Add configuration
+builder.Configuration
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
+
+builder.Services.AddDbContextFactory<AppDbContext>();
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
+
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddScoped<DailyEmailSender>();
 
 // TODO: AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
@@ -35,6 +46,9 @@ var mapperConfig = new MapperConfiguration(mc =>
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
+
+// Google PLaces Api Service
+builder.Services.AddScoped<GooglePlacesService>();
 
 
 builder.Services.AddFluentUIComponents();
@@ -73,16 +87,16 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllers();
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "mvc/{controller=Home}/{action=Index}/{id?}"
-    );
-    endpoints.MapRazorPages();
-    endpoints.MapControllerRoute(
-        name: "admin",
-        pattern: "mvc/{area:exists}/{controller=Home}/{action=Index}/{id?}"
-    );
+    //endpoints.MapControllers();
+    //endpoints.MapControllerRoute(
+    //    name: "default",
+    //    pattern: "mvc/{controller=Home}/{action=Index}/{id?}"
+    //);
+    //endpoints.MapRazorPages();
+    //endpoints.MapControllerRoute(
+    //    name: "admin",
+    //    pattern: "mvc/{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    //);
     endpoints.MapBlazorHub();//.RequireAuthorization();
     endpoints.MapFallbackToPage("/_Host");
 });

@@ -1,14 +1,24 @@
-﻿using EmpiriaMS.Models.Models;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.ObjectModel;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class ProjectVM : BaseVM
 {
+    // Not Mapped
+    private TimeSpan _time = TimeSpan.Zero;
+    public TimeSpan Time
+    {
+        get => _time;
+        set
+        {
+            if (value == _time)
+                return;
+            _time = value;
+            NotifyPropertyChanged(nameof(Time));
+        }
+    }
+
     private string? _name;
     public string? Name
     {
@@ -48,19 +58,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _drawing;
-    public string? Drawing
-    {
-        get => _drawing;
-        set
-        {
-            if (value == _drawing)
-                return;
-            _drawing = value;
-            NotifyPropertyChanged(nameof(Drawing));
-        }
-    }
-
     private long _estimatedMandays;
     public long EstimatedMandays
     {
@@ -83,46 +80,59 @@ public class ProjectVM : BaseVM
             if (value == _estimatedHours)
                 return;
             _estimatedHours = value;
-            NotifyPropertyChanged(nameof(_estimatedHours));
+            NotifyPropertyChanged(nameof(EstimatedHours));
         }
     }
 
-    private float _estimatedCompleted;
-    public float EstimatedCompleted
+    private int? _stageId;
+    public int? StageId
     {
-        get => _estimatedCompleted;
+        get => _stageId;
         set
         {
-            if (value == _estimatedCompleted)
+            if (value == _stageId)
                 return;
-            _estimatedCompleted = value;
-            NotifyPropertyChanged(nameof(EstimatedCompleted));
+            _stageId = value;
+            NotifyPropertyChanged(nameof(StageId));
         }
     }
 
-    private float _completed;
-    public float Completed
+    private ProjectStage _stage;
+    public ProjectStage Stage
     {
-        get => _completed;
+        get => _stage;
         set
         {
-            if (value == _completed)
+            if (value == _stage)
                 return;
-            _completed = value;
-            NotifyPropertyChanged(nameof(Completed));
+            _stage = value;
+            NotifyPropertyChanged(nameof(Stage));
         }
     }
 
-    private float _workPackegedCompleted;
-    public float WorkPackegedCompleted
+    private bool _active;
+    public bool Active
     {
-        get => _workPackegedCompleted;
+        get => _active;
         set
         {
-            if (value == _workPackegedCompleted)
+            if (value == _active)
                 return;
-            _workPackegedCompleted = value;
-            NotifyPropertyChanged(nameof(WorkPackegedCompleted));
+            _active = value;
+            NotifyPropertyChanged(nameof(Active));
+        }
+    }
+
+    private DateTime? _startDate;
+    public DateTime? StartDate
+    {
+        get => _startDate;
+        set
+        {
+            if (value == _startDate)
+                return;
+            _startDate = value;
+            NotifyPropertyChanged(nameof(StartDate));
         }
     }
 
@@ -139,215 +149,111 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private DateTime? _durationDate;
-    public DateTime? DurationDate
+    private float _estimatedCompleted;
+    public float EstimatedCompleted
     {
-        get => _durationDate;
+        get => _estimatedCompleted;
         set
         {
-            if (value == _durationDate)
+            if (value == _estimatedCompleted)
                 return;
-            _durationDate = value;
-            NotifyPropertyChanged(nameof(DurationDate));
+            _estimatedCompleted = value;
+            NotifyPropertyChanged(nameof(EstimatedCompleted));
         }
     }
 
-    private DateTime? _workPackege;
-    public DateTime? WorkPackege
+    private float _declaredCompleted;
+    public float DeclaredCompleted
     {
-        get => _workPackege;
+        get => _declaredCompleted;
         set
         {
-            if (value == _workPackege)
+            if (value == _declaredCompleted)
                 return;
-            _workPackege = value;
-            NotifyPropertyChanged(nameof(WorkPackege));
+            _declaredCompleted = value;
+            NotifyPropertyChanged(nameof(DeclaredCompleted));
         }
     }
 
-    private DateTime? _estPaymentDate;
-    public DateTime? EstPaymentDate
+    private int? _projectManagerId;
+    public int? ProjectManagerId
     {
-        get => _estPaymentDate;
+        get => _projectManagerId;
         set
         {
-            if (value == _estPaymentDate)
+            if (value == _projectManagerId)
                 return;
-            _estPaymentDate = value;
-            NotifyPropertyChanged(nameof(EstPaymentDate));
+            _projectManagerId = value;
+            NotifyPropertyChanged(nameof(ProjectManagerId));
         }
     }
 
-    private DateTime? _paymentDate;
-    public DateTime? PaymentDate
+    private User? _projectManager;
+    public User? ProjectManager
     {
-        get => _paymentDate;
+        get => _projectManager;
         set
         {
-            if (value == _paymentDate)
+            if (value == _projectManager)
                 return;
-            _paymentDate = value;
-            NotifyPropertyChanged(nameof(PaymentDate));
+            _projectManager = value;
+            NotifyPropertyChanged(nameof(ProjectManager));
         }
     }
 
-    private int? _delayInPayment;
-    public int? DelayInPayment
+    private int? _offerId;
+    public int? OfferId
     {
-        get => _delayInPayment;
+        get => _offerId;
         set
         {
-            if (value == _delayInPayment)
+            if (value == _offerId)
                 return;
-            _delayInPayment = value;
-            NotifyPropertyChanged(nameof(DelayInPayment));
+            _offerId = value;
+            NotifyPropertyChanged(nameof(OfferId));
         }
     }
 
-    private string? _paymentDetailes;
-    public string? PaymentDetailes
+    private Offer? _offer;
+    public Offer? Offer
     {
-        get => _paymentDetailes;
+        get => _offer;
         set
         {
-            if (value == _paymentDetailes)
+            if (value == _offer)
                 return;
-            _paymentDetailes = value;
-            NotifyPropertyChanged(nameof(PaymentDetailes));
+            _offer = value;
+            NotifyPropertyChanged(nameof(Offer));
         }
     }
 
-    private double? _dayCost;
-    public double? DayCost
+    public ICollection<Invoice> Invoices { get; set; }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<Discipline> Disciplines { get; set; }
+
+    public ICollection<Issue> Complains { get; set; }
+
+    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+
+    public ProjectVM()
     {
-        get => _dayCost;
-        set
-        {
-            if (value == _dayCost)
-                return;
-            _dayCost = value;
-            NotifyPropertyChanged(nameof(DayCost));
-        }
+        DeadLine = DateTime.Now.AddMonths(1);
+        StartDate = DateTime.Now;
+        Name = "";
+        Code = "";
+        Description = "";
+        Active = true;
+        EstimatedMandays = 0;
+        EstimatedHours = 0;
+        EstimatedCompleted = 0;
+        _declaredCompleted = 0;
     }
 
-    private string? _bank;
-    public string? Bank
-    {
-        get => _bank;
-        set
-        {
-            if (value == _bank)
-                return;
-            _bank = value;
-            NotifyPropertyChanged(nameof(Bank));
-        }
-    }
-
-    private double? _paidFee;
-    public double? PaidFee
-    {
-        get => _paidFee;
-        set
-        {
-            if (value == _paidFee)
-                return;
-            _paidFee = value;
-            NotifyPropertyChanged(nameof(PaidFee));
-        }
-    }
-
-    private int? _daysUntilPayment;
-    public int? DaysUntilPayment
-    {
-        get => _daysUntilPayment;
-        set
-        {
-            if (value == _daysUntilPayment)
-                return;
-            _daysUntilPayment = value;
-            NotifyPropertyChanged(nameof(DaysUntilPayment));
-        }
-    }
-
-    private double? _pendingPayments;
-    public double? PendingPayments
-    {
-        get => _pendingPayments;
-        set
-        {
-            if (value == _pendingPayments)
-                return;
-            _pendingPayments = value;
-            NotifyPropertyChanged(nameof(PendingPayments));
-        }
-    }
-
-    private int? _calculationDaly;
-    public int? CalculationDaly
-    {
-        get => _calculationDaly;
-        set
-        {
-            if (value == _calculationDaly)
-                return;
-            _calculationDaly = value;
-            NotifyPropertyChanged(nameof(CalculationDaly));
-        }
-    }
-
-    private User? _customer;
-    public User? Customer
-    {
-        get => _customer;
-        set
-        {
-            if (value == _customer)
-                return;
-            _customer = value;
-            NotifyPropertyChanged(nameof(Customer));
-        }
-    }
-
-    private Invoice? _invoice;
-    public Invoice? Invoice
-    {
-        get => _invoice;
-        set
-        {
-            if (value == _invoice)
-                return;
-            _invoice = value;
-            NotifyPropertyChanged(nameof(Invoice));
-        }
-    }
-
-    private ProjectType _type;
-    public ProjectType Type
-    {
-        get => _type;
-        set
-        {
-            if (value == _type)
-                return;
-            _type = value;
-            NotifyPropertyChanged(nameof(Type));
-        }
-    }
-
-    private User? _subContractor;
-    public User? SubContractor
-    {
-        get => _subContractor;
-        set
-        {
-            if (value == _subContractor)
-                return;
-            _subContractor = value;
-            NotifyPropertyChanged(nameof(SubContractor));
-        }
-    }
-
+    // Extra Hellping Properties
     private string? _pmName;
+    [NotMapped]
     public string? PmName
     {
         get => _pmName;
@@ -360,15 +266,9 @@ public class ProjectVM : BaseVM
         }
     }
 
-    public List<Project> Projects { get; set; }
+    [NotMapped]
+    public string PMFullName => ProjectManager != null ? $"{ProjectManager.LastName} {ProjectManager.MidName} {ProjectManager.FirstName}" : "";
 
     [NotMapped]
-    public string DeadlineDisplay => $"{DeadLine.Value.Day}/{DeadLine.Value.Month}/{DeadLine.Value.Year}";
-
-    public ProjectVM()
-    {
-        DurationDate = DateTime.Now.AddYears(1);
-        EstPaymentDate = DateTime.Now.AddYears(1);
-        PaymentDate = DateTime.Now.AddYears(1);
-    }
+    public string ClientFullName => Offer?.Led?.Client?.FullName ?? "";
 }

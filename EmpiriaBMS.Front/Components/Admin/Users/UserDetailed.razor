@@ -1,0 +1,313 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
+@using EmpiriaBMS.Models.Models
+@using EmpiriaBMS.Front.Services
+
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
+@inject IDialogService _dialogService
+
+<div class="row" style="width: 94% !important; height: 96% !important; margin: 0 auto; margin-bottom: 4px;">
+
+    <!-- Header-->
+    @if (Title != null)
+    {
+        <div class="col-12">
+            <FluentStack VerticalAlignment="VerticalAlignment.Center">
+                <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+                <FluentLabel Typo="Typography.PaneHeader">
+                    @Title
+                </FluentLabel>
+            </FluentStack>
+        </div>
+    }
+
+    <!-- Body-->
+    <div class="col-12">
+        <div class="row" style="height: @((Height != null ? Height : "84%")); width: 100%; overflow-y: auto; overflow-x: hidden;">
+
+            <!-- Names -->
+            <div class="col-12 row">
+                <!-- FirstName -->
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
+                    <div class="col-12">
+                        <FluentTextField @ref="_firstNameField"
+                                         Style=" width:100%; margin:4px;"
+                                         @bind-Value="@Content.FirstName">FirstName<span class="text-danger">*</span></FluentTextField>
+                    </div>
+                    @if (!validFirstName)
+                    {
+                        @if (string.IsNullOrEmpty(@Content.FirstName))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                    }
+                </div>
+                <!-- MidName -->
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
+                    <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.MidName">MidName</FluentTextField>
+                </div>
+                <!-- LastName -->
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
+                    <div class="col-12">
+                        <FluentTextField Style="width:100%; margin:4px;"
+                                         @bind-Value="@Content.LastName">
+                            LastName<span class="text-danger">*</span>
+                        </FluentTextField>
+                    </div>
+                    @if (!validLastName)
+                    {
+                        @if (string.IsNullOrEmpty(@Content.LastName))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Phones-->
+            <div class="col-12 row">
+                <!-- Phone 1 -->
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
+                    <div class="col-12">
+                        <FluentTextField Style="width:100%; margin:4px;"
+                                         @bind-Value="@Content.Phone1">
+                            Phone1<span class="text-danger">*</span>
+                        </FluentTextField>
+                    </div>
+                    @if (!validPhone1)
+                    {
+                        @if (string.IsNullOrEmpty(@Content.Phone1))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                        else if (!_isValidPhoneNumber(@Content.Phone1))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Invalid Phone!</span>
+                            </div>
+                        }
+                    }
+                </div>
+                <!-- Phone 2 -->
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
+                    <div class="col-12">
+                        <FluentTextField Style="width:100%; margin:4px;"
+                                         @bind-Value="@Content.Phone2">
+                            Phone2
+                        </FluentTextField>
+                    </div>
+                    @if (!validPhone2)
+                    {
+                        @if (!_isValidPhoneNumber(@Content.Phone2) && !string.IsNullOrEmpty(@Content.Phone2))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Invalid Phone!</span>
+                            </div>
+                        }
+                    }
+                </div>
+                <!-- Phone 3 -->
+                <div class="@((!Vertical ? "col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
+                    <div class="col-12">
+                        <FluentTextField Style="width:100%; margin:4px;"
+                                         @bind-Value="@Content.Phone3">
+                            Phone3
+                        </FluentTextField>
+                    </div>
+                    @if (!validPhone3)
+                    {
+                        @if (!_isValidPhoneNumber(@Content.Phone3) && !string.IsNullOrEmpty(@Content.Phone3))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Invalid Phone!</span>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Proxy Address / Password -->
+            <div class="col-12 row">
+                <!-- Proxy Address -->
+                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
+                    <div class="col-12">
+                        <FluentTextField Style="width:100%; margin:4px;"
+                                         Value="@Content.ProxyAddress"
+                                         TextFieldType="TextFieldType.Email"
+                                         @oninput="@((e) => _onProxyAddressChange(e))">
+                            ProxyAddress<span class="text-danger">*</span>
+                        </FluentTextField>
+                    </div>
+                    @if (!validProxyAddress)
+                    {
+                        @if (string.IsNullOrEmpty(@Content.ProxyAddress))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                        else if (!_isValidEmail(@Content.ProxyAddress))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">No valid proxy address!</span>
+                            </div>
+                        }
+                    }
+                </div>
+                <!-- Password -->
+                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))">
+                    <div class="col-12">
+                        <FluentTextField Style="width:100%; margin:4px;"
+                                         @bind-Value="@Content.Password"
+                                         TextFieldType="TextFieldType.Password">
+                            Password
+                        </FluentTextField>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12 row">
+                <div class="col-12">
+                    <FluentTextArea Style="width:100%; margin:4px;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+                </div>
+            </div>
+
+            <div class="col-12 row">
+                <!-- Roles-->
+                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))" style="margin-top: 4px;">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Select Roles:</h4>
+                        </div>
+                        <div class="col-12 row">
+                            <div class="col-12">
+                                <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-left: 10px;">
+                                    <FluentSearch type="search"
+                                                  Autofocus=true
+                                                  @bind-Value="@_filterRoleString"
+                                                  Placeholder="Search..."
+                                                  @oninput="@HandleRoleFilter" />
+                                </FluentStack>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <FluentDataGrid Items="@FilteredRoles"
+                                        ResizableColumns=true
+                                        Pagination="@paginationRoles"
+                                        TGridItem="RoleVM"
+                                        GridTemplateColumns="100px auto"
+                                        Style="height: 240px;">
+
+                            <TemplateColumn Title="Selected">
+                                <FluentCheckbox TValue="bool"
+                                                ValueChanged="@((val) => _onRoleSelectionChange(context.Id, val))"
+                                                Value="@context.IsSelected" />
+                            </TemplateColumn>
+
+                            <PropertyColumn Property="@(p => p.Name)" Sortable="true" Title="Name" Align="@Align.Start" />
+
+                        </FluentDataGrid>
+                    </div>
+                    <div style="min-width: 50%;">
+                        <FluentPaginator State="@paginationRoles">
+                            <SummaryTemplate>
+                                <strong>@(paginationRoles.TotalItemCount ?? 0)</strong> rows
+                            </SummaryTemplate>
+                            <PaginationTextTemplate>
+                                <strong>@(paginationRoles.CurrentPageIndex + 1)</strong> / <strong>@(paginationRoles.LastPageIndex + 1)</strong>
+                            </PaginationTextTemplate>
+                        </FluentPaginator>
+                    </div>
+                </div>
+                <!-- Emails -->
+                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))" style="margin-top: 4px;">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Emails</h4>
+                            @if (!validEmails)
+                            {
+                                <span class="text-warning">At least one email required!</span>
+                            }
+                        </div>
+                        <div class="col-12 row">
+                            <div class="col-6">
+                                <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-left: 10px;">
+                                    <FluentSearch type="search"
+                                                  Autofocus=true
+                                                  @bind-Value="@_filterEmailString"
+                                                  Placeholder="Search..."
+                                                  @oninput="@HandleEmailsFilter" />
+                                </FluentStack>
+                            </div>
+                            <div class="col-6">
+                                <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                                    <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _addEmail())">Add</FluentButton>
+                                </FluentStack>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <FluentDataGrid @ref="@myEmailsGrid"
+                                        Items="@FilteredEmails"
+                                        ResizableColumns=true
+                                        Pagination="@paginationEmails"
+                                        TGridItem="Email"
+                                        GridTemplateColumns="auto 100px"
+                                        Style="height: 240px;">
+
+                            <TemplateColumn Title="Address" Sortable="true" Style="text-wrap: wrap;">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <FluentTextField Value="@context.Address"
+                                                         TextFieldType="TextFieldType.Email"
+                                                         @oninput="@((e) => _onEmailAddressChange(context.Address, e))"
+                                                         Style="width: 300px;" />
+                                    </div>
+                                    <div class="col-12">
+                                        @if (!_isValidEmail(@context.Address))
+                                        {
+                                            <span class="text-warning">No valid email!</span>
+                                        }
+                                    </div>
+                                </div>
+                            </TemplateColumn>
+
+                            <TemplateColumn Title="Actions" Align="@Align.End">
+                                <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _deleteEmail(context))" />
+                            </TemplateColumn>
+
+                        </FluentDataGrid>
+                    </div>
+                    <div style="min-width: 50%;">
+                        <FluentPaginator State="@paginationEmails">
+                            <SummaryTemplate>
+                                <strong>@(paginationEmails.TotalItemCount ?? 0)</strong> rows
+                            </SummaryTemplate>
+                            <PaginationTextTemplate>
+                                <strong>@(paginationEmails.CurrentPageIndex + 1)</strong> / <strong>@(paginationEmails.LastPageIndex + 1)</strong>
+                            </PaginationTextTemplate>
+                        </FluentPaginator>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer-->
+    <div class="col-12">
+        <FluentStack VerticalAlignment="VerticalAlignment.Center">
+            <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+            <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+        </FluentStack>
+    </div>
+
+</div>

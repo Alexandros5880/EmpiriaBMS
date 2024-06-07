@@ -1,16 +1,18 @@
-﻿
+﻿@inject MicrosoftTeams MicrosoftTeams
+@using Microsoft.JSInterop
+
 <div class="input-group text-center" style="width:118px; margin: 0 auto !important;">
     
     <input class="form-control"
            type="number"
-           value="@Time.Hours"
-           placeholder="HH"
+           @bind="@Hours"
+           placeholder="H"
            style="min-width: 45px !important; max-width: 45px !important;"
-           min="@MinHours"
-           max="@MaxHours"
-           onmousewheel="if(e.deltaY > 1) value++; else if (e.deltaY < -1) value--;"
-           onkeyup="if(value<min) value=min; if(value>max) value=max;"
-           @onchange=@((e) => _onHoursChanged(e)) />
+           min="@MinTime.Hours"
+           max="@_remainingTime.TotalHours"
+           data-input-type="hours"
+           data-id="@HoursId"
+           @onfocus="@(() => _remainingTime = MaxTime)"/>
 
     <div class="input-group-append">
         <span class="input-group-text">:</span>
@@ -18,84 +20,13 @@
     
     <input class="form-control"
            type="number"
-           value="@Time.Minutes"
-           placeholder="MM"
+           @bind="@Minutes"
+           placeholder="M"
            style="min-width: 45px !important; max-width: 45px !important;"
-           min="@MinMinutes"
-           max="@MaxMinutes"
-           onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
-           onkeyup="if(value<min) value=min; if(value>max) value=max;"
-           @onchange=@((e) => _onMinutesChanged(e)) />
+           min="@MinTime.Minutes"
+           max="@(_remainingTime.TotalMinutes % 60)"
+           data-input-type="minutes"
+           data-id="@MinutesId"
+           @onfocus="@(() => _remainingTime = MaxTime)"/>
 
 </div>
-
-@code {
-    [Parameter]
-    public TimeSpan Time { get; set; }
-
-    private int _minHours = 0;
-    [Parameter]
-    public int MinHours
-    {
-        get => _minHours;
-        set
-        {
-            if (value == _minHours) return;
-            _minHours = value;
-        }
-    }
-
-    private int _maxHours = 24;
-    [Parameter]
-    public int MaxHours
-    {
-        get => _maxHours;
-        set
-        {
-            if (value == _maxHours) return;
-            _maxHours = value;
-        }
-    }
-
-    private int _minMinutes = 0;
-    [Parameter]
-    public int MinMinutes
-    {
-        get => _minMinutes;
-        set
-        {
-            if (value == _minMinutes) return;
-            _minMinutes = value;
-        }
-    }
-
-    private int _maxMinutes = 60;
-    [Parameter]
-    public int MaxMinutes
-    {
-        get => _maxMinutes;
-        set
-        {
-            if (value == _maxMinutes) return;
-            _maxMinutes = value;
-        }
-    }
-
-    [Parameter]
-    public EventCallback<TimeSpan> OnPropertyChanged { get; set; }
-
-    private async Task _onHoursChanged(ChangeEventArgs e)
-    {
-        int hours = Convert.ToInt32(e.Value);
-        Time = new TimeSpan(hours, Time.Minutes, Time.Seconds);
-        await OnPropertyChanged.InvokeAsync(Time);
-    }
-
-    private async Task _onMinutesChanged(ChangeEventArgs e)
-    {
-        var minutes = Convert.ToInt32(e.Value);
-        Time = new TimeSpan(Time.Hours, minutes, Time.Seconds);
-        await OnPropertyChanged.InvokeAsync(Time);
-    }
-
-}

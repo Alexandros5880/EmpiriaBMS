@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.TeamsFx;
 using NuGet.Protocol;
@@ -16,7 +17,7 @@ public class AuthorizeServices
     private readonly IMapper _mapper;
     private readonly SharedAuthDataService _sharedAuthData;
 
-    public Action CallBackOnAuthorize { get; set; }
+    public Func<Task> CallBackOnAuthorize { get; set; }
 
     public AuthorizeServices(
         IDataProvider dataProvider,
@@ -30,19 +31,33 @@ public class AuthorizeServices
         _sharedAuthData = sharedData;
     }
 
-    public async Task Authorize(int roleId = 0, bool runInTeams = true)
+    public async Task<bool> Authorize(int userId = 0, bool runInTeams = true)
     {
         _sharedAuthData.Clear();
+        bool result = false;
 
         // TODO: When Fix Authorization with teams Remove that
-        if (roleId != 0)
+        #region Remove Section
+        if (userId != 0)
         {
-            await _getRandomUserByRole(roleId);
-        }
+            var logedUser = await _dataProvider.Users.Get(userId);
+            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(logedUser);
+            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
+                                                    .Select(r => _mapper.Map<RoleVM>(r))
+                                                    .ToList();
+            var parentRole = await _dataProvider.Roles.GetParentRole(logedUser.Id);
+            _sharedAuthData.LoggedUserParentRole = _mapper.Map<RoleVM>(parentRole);
+            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
+                                                    .ToList();
+            _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
 
-        else if (runInTeams)
+            result = true;
+            return result;
+        }
+        #endregion
+
+        if (runInTeams)
         {
-            // TODO: Get Teams Logged User And Mach him With Our Users
             UserInfo teamsUser = teamsUser = await _teamsUserCredential.GetUserInfoAsync();
 
             _sharedAuthData.TeamsLogedUser = teamsUser;
@@ -54,110 +69,60 @@ public class AuthorizeServices
             {
                 var logedUser = await _dataProvider.Users.Get(teamsUser.PreferredUserName);
                 _sharedAuthData.LogedUser = _mapper.Map<UserVM>(logedUser);
-                _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
                 _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(logedUser.Id))
                                                         .Select(r => _mapper.Map<RoleVM>(r))
                                                         .ToList();
-
+                var parentRole = await _dataProvider.Roles.GetParentRole(logedUser.Id);
+                _sharedAuthData.LoggedUserParentRole = _mapper.Map<RoleVM>(parentRole);
                 _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(logedUser.Id))
                                                         .ToList();
                 _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
+
+                result = true;
             }
             else
             {
-                // TODO: When Fix Authorization with teams Remove that
-                await _getRandomUserByRole();
+                TeamsRequestedUserDto teamsRequestedUserDto = new TeamsRequestedUserDto()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    DisplayName = teamsUser.DisplayName,
+                    ProxyAddress = teamsUser.PreferredUserName,
+                    ObjectId = teamsUser.ObjectId
+                };
+                await _dataProvider.TeamsRequestedUsers.Add(teamsRequestedUserDto);
+
+                result = true;
             }
         }
         else
         {
-            // TODO: Go to login page
+            result = false;
         }
 
         if (CallBackOnAuthorize != null)
-            CallBackOnAuthorize.Invoke();
+            await CallBackOnAuthorize.Invoke();
+
+        return result;
     }
 
-
-    // TODO: When Fix Authorization with teams Remove that
-    private async Task _getLogedUser(string objectId)
+    public async Task<string> Login(string username, string password)
     {
-        try
+        var user = await _dataProvider.Users.Get(username, password);
+
+        if (user != null)
         {
-            var users = await _dataProvider.Roles.GetUsers(_sharedAuthData.DefaultRoleId);
-            var dbUser = users.FirstOrDefault();
-
-            if (dbUser == null)
-                throw new NullReferenceException(nameof(dbUser));
-
-            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(dbUser);
-
-            _sharedAuthData.LogesUserHours = await _dataProvider.Users
-                            .GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
-
-            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
-                                                        .Select(r => _mapper.Map<RoleVM>(r))
-                                                        .ToList();
-
-            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
+            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(user);
+            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(user.Id))
+                                                    .Select(r => _mapper.Map<RoleVM>(r))
                                                     .ToList();
-            _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
-
-            // if (_loggedUserRoles.Select(r => r.Name).ToList().Contains("Admin"))
-            // {
-
-            // }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
-
-    private async Task _getRandomUserByRole(int roleId = 0)
-    {
-        try
-        {
-            _sharedAuthData.DefaultRoleId = roleId != 0 ? roleId : await _getRoleId(_sharedAuthData.DefaultRoleName);
-
-            var users = await _dataProvider.Roles.GetUsers(_sharedAuthData.DefaultRoleId);
-            var dbUser = users.FirstOrDefault();
-
-            if (dbUser == null)
-                throw new NullReferenceException(nameof(dbUser));
-
-            _sharedAuthData.LogedUser = _mapper.Map<UserVM>(dbUser);
-
-            _sharedAuthData.LogesUserHours = await _dataProvider.Users.GetUserHoursFromLastMonday(_sharedAuthData.LogedUser.Id, DateTime.Now);
-
-            _sharedAuthData.LoggedUserRoles = (await _dataProvider.Roles.GetRoles(dbUser.Id))
-                                                        .Select(r => _mapper.Map<RoleVM>(r))
-                                                        .ToList();
-
-            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(dbUser.Id))
+            var parentRole = await _dataProvider.Roles.GetParentRole(user.Id);
+            _sharedAuthData.LoggedUserParentRole = _mapper.Map<RoleVM>(parentRole);
+            _sharedAuthData.Permissions = (await _dataProvider.Roles.GetPermissions(user.Id))
                                                     .ToList();
             _sharedAuthData.PermissionOrds = _sharedAuthData.Permissions.Select(p => p.Ord).ToList();
         }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
-        }
-    }
 
-    private async Task<int> _getRoleId(string roleName)
-    {
-        try
-        {
-            var role = await _dataProvider.Roles.Get(roleName);
-            return role?.Id ?? 0;
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Error
-            Debug.WriteLine($"Exception: {ex.Message}");
-            return 0;
-        }
+        return user != null ? null : "Can't login!";
     }
 }

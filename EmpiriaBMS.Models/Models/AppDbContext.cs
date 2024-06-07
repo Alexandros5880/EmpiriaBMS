@@ -1,43 +1,62 @@
-﻿using EmpiriaBMS.Models;
-using EmpiriaMS.Models.Models;
+﻿using EmpiriaBMS.Models.Enum;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Reflection.Emit;
-using System.Xml.Linq;
 
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
 {
-    const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
-    const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
-    const string localContainerDB = "Data Source=db,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
-    const string azureDB = "Server=tcp:empiriabms.database.windows.net,1433;Initial Catalog=EmpiriaBMS_DB;Persist Security Info=False;User ID=alexandros5880;Password=-Plat123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
-    public DbSet<User> Users { get; set; }
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<Email> Emails { get; set; }
-    public DbSet<Project> Projects { get; set; }
-    public DbSet<Discipline> Disciplines { get; set; }
-    public DbSet<DisciplineType> DisciplineTypes { get; set; }
-    public DbSet<Drawing> Drawings { get; set; }
-    public DbSet<DrawingType> DrawingTypes { get; set; }
-    public DbSet<Other> Others { get; set; }
-    public DbSet<OtherType> OtherTypes { get; set; }
+    //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
+    const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
+    const string azure_staging_DB = "Data Source=empiriabms-staging.database.windows.net;Initial Catalog=EmpiriaBMS-Staging;User Id=admin-user;Password=!@#$123456asdfgh";
+    const string migrationsDB = localhostDB;
+
+
+    public DbSet<User>? Users { get; set; }
+    public DbSet<Role>? Roles { get; set; }
+    public DbSet<Email>? Emails { get; set; }
+    public DbSet<Project>? Projects { get; set; }
+    public DbSet<ProjectCategory>? ProjectsCategories { get; set; }
+    public DbSet<ProjectSubCategory>? ProjectsSubCategories { get; set; }
+    public DbSet<ProjectStage>? ProjectsStages { get; set; }
+    public DbSet<Discipline>? Disciplines { get; set; }
+    public DbSet<DisciplineType>? DisciplineTypes { get; set; }
+    public DbSet<Drawing>? Drawings { get; set; }
+    public DbSet<DrawingType>? DrawingTypes { get; set; }
+    public DbSet<Other>? Others { get; set; }
+    public DbSet<OtherType>? OtherTypes { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
-    public DbSet<Timespan> TimeSpans { get; set; }
-    public DbSet<ProjectType> ProjectType { get; set; }
-    public DbSet<DailyTime> DailyTime { get; set; }
-    public DbSet<DailyTime> ParsonalTime { get; set; }
-    public DbSet<DailyTime> TrainingTime { get; set; }
-    public DbSet<DailyTime> CorporateEventTime { get; set; }
-    public DbSet<UserRole> UsersRoles { get; set; }
-    public DbSet<DrawingEmployee> DrawingsEmployees { get; set; }
-    public DbSet<OtherEmployee> OthersEmployees { get; set; }
-    public DbSet<ProjectPmanager> ProjectsPmanagers { get; set; }
+    public DbSet<InvoiceType>? InvoicesTypes { get; set; }
+    public DbSet<Contract>? Contracts { get; set; }
+    public DbSet<Timespan>? TimeSpans { get; set; }
+    public DbSet<DailyTime>? DailyTime { get; set; }
+    public DbSet<DailyTime>? ParsonalTime { get; set; }
+    public DbSet<DailyTime>? TrainingTime { get; set; }
+    public DbSet<DailyTime>? CorporateEventTime { get; set; }
+    public DbSet<Issue>? Issues { get; set; }
+    public DbSet<Document>? Documents { get; set; }
+    public DbSet<Address>? Address { get; set; }
+    public DbSet<Client>? Clients { get; set; }
+    public DbSet<Led>? Leds { get; set; }
+    public DbSet<Offer>? Offers { get; set; }
+    public DbSet<OfferState>? OffesStates { get; set; }
+    public DbSet<OfferType>? OffersTypes { get; set; }
+    public DbSet<Payment>? Payments { get; set; }
+    public DbSet<PaymentType>? PaymentsTypes { get; set; }
+    public DbSet<Permission>? Permissions { get; set; }
+    public DbSet<UserRole>? UsersRoles { get; set; }
+    public DbSet<RolePermission>? RolesPermissions { get; set; }
+    public DbSet<DrawingEmployee>? DrawingsEmployees { get; set; }
+    public DbSet<OtherEmployee>? OthersEmployees { get; set; }
+    public DbSet<ProjectSubConstructor>? ProjectsSubConstructors { get; set; }
+    public DbSet<TeamsRequestedUser>? TeamsRequestedUser { get; set; }
+    public DbSet<DisciplineEngineer>? DisciplinesEngineers { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(localhostDB);
+        //string enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        string connectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
+        optionsBuilder.UseSqlServer(connectionString);
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.EnableDetailedErrors();
         optionsBuilder.EnableServiceProviderCaching();
@@ -187,74 +206,273 @@ public class AppDbContext : DbContext
             Ord = 11
         };
         builder.Entity<Permission>().HasData(per_11);
+
+        // Dashboard Edit Project
+        var per_12_id = random.Next(123456789, 999999999);
+        Permission per_12 = new Permission()
+        {
+            Id = per_12_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Edit Project On Dashboard",
+            Ord = 12
+        };
+        builder.Entity<Permission>().HasData(per_12);
+
+        // Display Projects Code
+        var per_13_id = random.Next(123456789, 999999999);
+        Permission per_13 = new Permission()
+        {
+            Id = per_13_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Display Projects Code",
+            Ord = 13
+        };
+        builder.Entity<Permission>().HasData(per_13);
+
+        // Dashboard Edit Discipline
+        var per_14_id = random.Next(123456789, 999999999);
+        Permission per_14 = new Permission()
+        {
+            Id = per_14_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Dashboard Edit Discipline",
+            Ord = 14
+        };
+        builder.Entity<Permission>().HasData(per_14);
+
+        // Dashboard Edit Deliverable
+        var per_15_id = random.Next(123456789, 999999999);
+        Permission per_15 = new Permission()
+        {
+            Id = per_15_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Dashboard Edit Deliverable",
+            Ord = 15
+        };
+        builder.Entity<Permission>().HasData(per_15);
+
+        // Dashboard Edit Other
+        var per_16_id = random.Next(123456789, 999999999);
+        Permission per_16 = new Permission()
+        {
+            Id = per_16_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Dashboard Edit Other",
+            Ord = 16
+        };
+        builder.Entity<Permission>().HasData(per_16);
+
+        // Dashboard See KPIS
+        var per_17_id = random.Next(123456789, 999999999);
+        Permission per_17 = new Permission()
+        {
+            Id = per_17_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Dashboard See KPIS",
+            Ord = 17
+        };
+        builder.Entity<Permission>().HasData(per_17);
+
+        // See Hours Per Role KPI
+        var per_18_id = random.Next(123456789, 999999999);
+        Permission per_18 = new Permission()
+        {
+            Id = per_18_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Hours Per Role KPI",
+            Ord = 18
+        };
+        builder.Entity<Permission>().HasData(per_18);
+
+        // See Active Delayed Projects KPI
+        var per_19_id = random.Next(123456789, 999999999);
+        Permission per_19 = new Permission()
+        {
+            Id = per_19_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Active Delayed Projects KPI",
+            Ord = 19
+        };
+        builder.Entity<Permission>().HasData(per_19);
+
+        // See All Projects Missed DeadLine KPI
+        var per_20_id = random.Next(123456789, 999999999);
+        Permission per_20 = new Permission()
+        {
+            Id = per_20_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See All Projects Missed DeadLine KPI",
+            Ord = 20
+        };
+        builder.Entity<Permission>().HasData(per_20);
+
+        // See Employee Turnover KPI
+        var per_21_id = random.Next(123456789, 999999999);
+        Permission per_21 = new Permission()
+        {
+            Id = per_21_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Employee Turnover KPI",
+            Ord = 21
+        };
+        builder.Entity<Permission>().HasData(per_21);
+
+        // See My Projects Missed DeadLine KPI
+        var per_22_id = random.Next(123456789, 999999999);
+        Permission per_22 = new Permission()
+        {
+            Id = per_22_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See My Projects Missed DeadLine KPI",
+            Ord = 22
+        };
+        builder.Entity<Permission>().HasData(per_22);
+
+        // See Active Delayed Project Types Counter KPI
+        var per_23_id = random.Next(123456789, 999999999);
+        Permission per_23 = new Permission()
+        {
+            Id = per_23_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Active Delayed Project Types Counter KPI",
+            Ord = 23
+        };
+        builder.Entity<Permission>().HasData(per_23);
+
+        // Dashboard See Offers
+        var per_24_id = random.Next(123456789, 999999999);
+        Permission per_24 = new Permission()
+        {
+            Id = per_24_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Offers",
+            Ord = 24
+        };
+        builder.Entity<Permission>().HasData(per_24);
+
+        // See Tender Table KPI
+        var per_25_id = random.Next(123456789, 999999999);
+        Permission per_25 = new Permission()
+        {
+            Id = per_25_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Tender Table KPI",
+            Ord = 25
+        };
+        builder.Entity<Permission>().HasData(per_25);
+
+        // See Delayed Payments KPI
+        var per_26_id = random.Next(123456789, 999999999);
+        Permission per_26 = new Permission()
+        {
+            Id = per_26_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Delayed Payments KPI",
+            Ord = 26
+        };
+        builder.Entity<Permission>().HasData(per_26);
+
+        // See Pendings Payments KPI
+        var per_27_id = random.Next(123456789, 999999999);
+        Permission per_27 = new Permission()
+        {
+            Id = per_27_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Pendings Payments KPI",
+            Ord = 27
+        };
+        builder.Entity<Permission>().HasData(per_27);
+
+        // See Teams Requested Users
+        var per_28_id = random.Next(123456789, 999999999);
+        Permission per_28 = new Permission()
+        {
+            Id = per_28_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Teams Requested Users",
+            Ord = 28
+        };
+        builder.Entity<Permission>().HasData(per_28);
+
+        // See Invoices
+        var per_29_id = random.Next(123456789, 999999999);
+        Permission per_29 = new Permission()
+        {
+            Id = per_29_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Invoices",
+            Ord = 29
+        };
+        builder.Entity<Permission>().HasData(per_29);
+
+        // See Excpences
+        var per_30_id = random.Next(123456789, 999999999);
+        Permission per_30 = new Permission()
+        {
+            Id = per_30_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Excpences",
+            Ord = 30
+        };
+        builder.Entity<Permission>().HasData(per_30);
+
+        // Work on Project
+        var per_31_id = random.Next(123456789, 999999999);
+        Permission per_31 = new Permission()
+        {
+            Id = per_31_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Work on Project",
+            Ord = 31
+        };
+        builder.Entity<Permission>().HasData(per_31);
+
+        // Work on Offers
+        var per_32_id = random.Next(123456789, 999999999);
+        Permission per_32 = new Permission()
+        {
+            Id = per_32_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Work on Offers",
+            Ord = 32
+        };
+        builder.Entity<Permission>().HasData(per_32);
+
+        // Work on Leds
+        var per_33_id = random.Next(123456789, 999999999);
+        Permission per_33 = new Permission()
+        {
+            Id = per_33_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Work on Leds",
+            Ord = 33
+        };
+        builder.Entity<Permission>().HasData(per_33);
         #endregion
 
         #region Roles
-        // Designer
-        var role_1_id = random.Next(123456789, 999999999);
-        Role role_1 = new()
-        {
-            Id = role_1_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Designer",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_1);
-
-        // Engineer
-        var role_2_id = random.Next(123456789, 999999999);
-        Role role_2 = new()
-        {
-            Id = role_2_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Engineer",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_2);
-
-        // Project Manager
-        var role_3_id = random.Next(123456789, 999999999);
-        Role role_3 = new()
-        {
-            Id = role_3_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Project Manager",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_3);
-
-        // COO
-        var role_4_id = random.Next(123456789, 999999999);
-        Role role_4 = new()
-        {
-            Id = role_4_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "COO",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_4);
-
-        // CTO
-        var role_5_id = random.Next(123456789, 999999999);
-        Role role_5 = new()
-        {
-            Id = role_5_id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "CTO",
-            IsEmployee = true,
-            IsEditable = false
-        };
-        builder.Entity<Role>().HasData(role_5);
-
         // CEO
         var role_6_id = random.Next(123456789, 999999999);
         Role role_6 = new()
@@ -267,6 +485,90 @@ public class AppDbContext : DbContext
             IsEditable = false
         };
         builder.Entity<Role>().HasData(role_6);
+
+        // COO
+        var role_4_id = random.Next(123456789, 999999999);
+        Role role_4 = new()
+        {
+            Id = role_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "COO",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_6_id
+        };
+        builder.Entity<Role>().HasData(role_4);
+
+        // CTO
+        var role_5_id = random.Next(123456789, 999999999);
+        Role role_5 = new()
+        {
+            Id = role_5_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "CTO",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_4_id
+        };
+        builder.Entity<Role>().HasData(role_5);
+
+        // Secretariat
+        var role_10_id = random.Next(123456789, 999999999);
+        Role role_10 = new()
+        {
+            Id = role_10_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Secretariat",
+            IsEmployee = false,
+            IsEditable = false,
+            ParentRoleId = role_5_id
+        };
+        builder.Entity<Role>().HasData(role_10);
+
+        // Project Manager
+        var role_3_id = random.Next(123456789, 999999999);
+        Role role_3 = new()
+        {
+            Id = role_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Project Manager",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_5_id
+        };
+        builder.Entity<Role>().HasData(role_3);
+
+        // Engineer
+        var role_2_id = random.Next(123456789, 999999999);
+        Role role_2 = new()
+        {
+            Id = role_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Engineer",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_3_id
+        };
+        builder.Entity<Role>().HasData(role_2);
+
+        // Designer
+        var role_1_id = random.Next(123456789, 999999999);
+        Role role_1 = new()
+        {
+            Id = role_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Designer",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_2_id
+        };
+        builder.Entity<Role>().HasData(role_1);
 
         // Guest
         var role_7_id = random.Next(123456789, 999999999);
@@ -307,18 +609,18 @@ public class AppDbContext : DbContext
         };
         builder.Entity<Role>().HasData(role_9);
 
-        // Secretariat
-        var role_10_id = random.Next(123456789, 999999999);
-        Role role_10 = new()
+        // Engineer SUB
+        var role_11_id = random.Next(123456789, 999999999);
+        Role role_11 = new()
         {
-            Id = role_10_id,
+            Id = role_11_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "Secretariat",
+            Name = "Engineer SUB",
             IsEmployee = false,
             IsEditable = false
         };
-        builder.Entity<Role>().HasData(role_10);
+        builder.Entity<Role>().HasData(role_11);
         #endregion
 
         #region Create Prmissions Roles Connection
@@ -492,6 +794,39 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_43);
 
+        // Project Manager || Dashboard See KPIS
+        RolePermission rp_68 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_3_id,
+            PermissionId = per_17_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_68);
+
+        // Project Manager || See My Projects Missed DeadLine KPI
+        RolePermission rp_69 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_3_id,
+            PermissionId = per_22_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_69);
+
+        // Project Manager || See Active Delayed Project Types Counter KPI
+        RolePermission rp_77 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_3_id,
+            PermissionId = per_23_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_77);
+
 
         // COO
         // COO || See Dashboard Layout
@@ -592,6 +927,39 @@ public class AppDbContext : DbContext
             PermissionId = per_11_id
         };
         builder.Entity<RolePermission>().HasData(rp_49);
+
+        // COO || Work on Project
+        RolePermission rp_102 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_4_id,
+            PermissionId = per_31_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_102);
+
+        // COO || Work on Offers
+        RolePermission rp_103 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_4_id,
+            PermissionId = per_32_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_103);
+
+        // COO || Work on Leds
+        RolePermission rp_106 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_4_id,
+            PermissionId = per_33_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_106);
 
 
         // CTO
@@ -705,6 +1073,215 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_48);
 
+        // CTO || Dashboard Edit Project
+        RolePermission rp_60 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_12_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_60);
+
+        // CTO || Dashboard Edit Discipline
+        RolePermission rp_63 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_14_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_63);
+
+        // CTO || Dashboard Edit Deliverable
+        RolePermission rp_64 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_15_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_64);
+
+        // CTO || Dashboard Edit Other
+        RolePermission rp_65 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_16_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_65);
+
+        // CTO || Dashboard See KPIS
+        RolePermission rp_66 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_17_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_66);
+
+        // CTO || See Hours Per Role KPI
+        RolePermission rp_70 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_18_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_70);
+
+        // CTO || See Active Delayed Projects KPI
+        RolePermission rp_71 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_19_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_71);
+
+        // CTO || See All Projects Missed DeadLine KPI
+        RolePermission rp_72 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_20_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_72);
+
+        // CTO || See Active Delayed Project Types Counter KPI
+        RolePermission rp_78 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_23_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_78);
+
+        // CTO || Display Projects Code
+        RolePermission rp_80 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_13_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_80);
+
+        // CTO || See Offers
+        RolePermission rp_81 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_24_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_81);
+
+        // CTO || See Tender Table KPI
+        RolePermission rp_83 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_25_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_83);
+
+        // CTO || See Delayed Payments KPI
+        RolePermission rp_85 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_26_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_85);
+
+        // CTO || See Pendings Payments KPI
+        RolePermission rp_87 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_27_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_87);
+
+        // CTO || See Invoices
+        RolePermission rp_91 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_29_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_91);
+
+        // CTO || See Excpences
+        RolePermission rp_92 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_30_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_92);
+
+        // CTO || Work on Project
+        RolePermission rp_101 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_31_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_101);
+
+        // CTO || Work on Offers
+        RolePermission rp_104 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_32_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_104);
+
+        // CTO || Work on Leds
+        RolePermission rp_107 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_33_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_107);
+
 
         // CEO
         // CEO || See Dashboard Layout
@@ -774,15 +1351,15 @@ public class AppDbContext : DbContext
         builder.Entity<RolePermission>().HasData(rp_25);
 
         // CEO || See Admin Layout
-        RolePermission rp_26 = new RolePermission()
-        {
-            Id = random.Next(123456789, 999999999) * 9,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            RoleId = role_6_id,
-            PermissionId = per_7_id
-        };
-        builder.Entity<RolePermission>().HasData(rp_26);
+        //RolePermission rp_26 = new RolePermission()
+        //{
+        //    Id = random.Next(123456789, 999999999) * 9,
+        //    CreatedDate = DateTime.Now,
+        //    LastUpdatedDate = DateTime.Now,
+        //    RoleId = role_6_id,
+        //    PermissionId = per_7_id
+        //};
+        //builder.Entity<RolePermission>().HasData(rp_26);
 
         // CEO || See All Disciplines
         RolePermission rp_39 = new RolePermission()
@@ -806,7 +1383,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_44);
 
-        // COO || See All Projects
+        // CEO || See All Projects
         RolePermission rp_47 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -816,6 +1393,204 @@ public class AppDbContext : DbContext
             PermissionId = per_11_id
         };
         builder.Entity<RolePermission>().HasData(rp_47);
+
+        // CEO || Display Projects Code
+        RolePermission rp_61 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_13_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_61);
+
+        // CEO || Dashboard Add Project
+        RolePermission rp_62 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_12_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_62);
+
+        // CEO || Dashboard See KPIS
+        RolePermission rp_67 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_17_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_67);
+
+        // CEO || See Hours Per Role KPI
+        RolePermission rp_73 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_18_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_73);
+
+        // CEO || See Active Delayed Projects KPI
+        RolePermission rp_74 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_19_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_74);
+
+        // CEO || See All Projects Missed DeadLine KPI
+        RolePermission rp_75 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_20_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_75);
+
+        // CEO || See Employee Turnover KPI
+        RolePermission rp_76 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_21_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_76);
+
+        // CEO || See Active Delayed Project Types Counter KPI
+        RolePermission rp_79 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_23_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_79);
+
+        // CEO || See Offers
+        RolePermission rp_82 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_24_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_82);
+
+        // CEO || See Tender Table KPI
+        RolePermission rp_84 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_25_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_84);
+
+        // CEO || See Delayed Payments KPI
+        RolePermission rp_86 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_26_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_86);
+
+        // CEO || See Pendings Payments KPI
+        RolePermission rp_88 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_27_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_88);
+
+        // CEO || See Teams Requested Users
+        RolePermission rp_90 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_28_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_90);
+
+        // CEO || See Invoices
+        RolePermission rp_93 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_29_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_93);
+
+        // CEO || See Excpences
+        RolePermission rp_94 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_30_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_94);
+
+        // CEO || Work on Project
+        RolePermission rp_105 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_31_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_105);
+
+        // CEO || Work on Offers
+        RolePermission rp_108 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_32_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_108);
+
+        // CEO || Work on Leds
+        RolePermission rp_109 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_33_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_109);
 
 
         // Guest
@@ -889,6 +1664,17 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_50);
 
+        // Admin || See Teams Requested Users
+        RolePermission rp_100 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_9_id,
+            PermissionId = per_28_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_100);
+
 
         // Secretariat 
         // Secretariat || See Dashboard Layout
@@ -958,204 +1744,411 @@ public class AppDbContext : DbContext
         builder.Entity<RolePermission>().HasData(rp_59);
         #endregion
 
-        #region Create Random Users With Roles:  Admin, CEO, CTO, COO, Guest,
-        // Admin
-        var adminId = random.Next(123456789, 999999999) + random.Next(0, 333) + 1;
-        User admin = new User()
-        {
-            Id = adminId,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "Admin",
-            ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com",
-        };
-        builder.Entity<User>().HasData(admin);
-        Email email_1 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "alexandrosplatanios15@gmail.com",
-            UserId = adminId
-        };
-        builder.Entity<Email>().HasData(email_1);
-        UserRole adminRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = adminId,
-            RoleId = role_9_id
-        };
-        builder.Entity<UserRole>().HasData(adminRole);
+        #region Create 4 Project Categories
+        List<ProjectCategory> projectCategories = new List<ProjectCategory>();
 
-        // CEO
-        var ceoId = random.Next(123456789, 999999999) + random.Next(0, 333) + 2;
-        User ceo = new User()
+        var project_category_1_Id = random.Next(123456789, 999999999) + 33;
+        ProjectCategory project_category_1 = new ProjectCategory()
         {
-            Id = ceoId,
+            Id = project_category_1_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "CEO",
-            ProxyAddress = "ceo@gmail.com",
+            Name = "BUILDINGS",
+            Description = "Buildings Description",
+            CanAssignePM = true
         };
-        builder.Entity<User>().HasData(ceo);
-        Email email_2 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "ceo@gmail.com",
-            UserId = ceoId
-        };
-        builder.Entity<Email>().HasData(email_2);
-        UserRole ceoRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = ceoId,
-            RoleId = role_6_id
-        };
-        builder.Entity<UserRole>().HasData(ceoRole);
+        builder.Entity<ProjectCategory>().HasData(project_category_1);
+        projectCategories.Add(project_category_1);
 
-        // CTO
-        var ctoId = random.Next(123456789, 999999999) + random.Next(0, 333) + 3;
-        User cto = new User()
+        var project_category_2_Id = random.Next(123456789, 999999999) + 33;
+        ProjectCategory project_category_2 = new ProjectCategory()
         {
-            Id = ctoId,
+            Id = project_category_2_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "CTO",
-            ProxyAddress = "cto@gmail.com",
+            Name = "INFRASTRUCTURE",
+            Description = "Infrastructure Description",
+            CanAssignePM = true
         };
-        builder.Entity<User>().HasData(cto);
-        Email email_3 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "cto@gmail.com",
-            UserId = ctoId
-        };
-        builder.Entity<Email>().HasData(email_3);
-        UserRole ctoRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = ctoId,
-            RoleId = role_5_id
-        };
-        builder.Entity<UserRole>().HasData(ctoRole);
+        builder.Entity<ProjectCategory>().HasData(project_category_2);
+        projectCategories.Add(project_category_2);
 
-        // COO
-        var cooId = random.Next(123456789, 999999999) + random.Next(0, 333) + 4;
-        User coo = new User()
+        var project_category_3_Id = random.Next(123456789, 999999999) + 33;
+        ProjectCategory project_category_3 = new ProjectCategory()
         {
-            Id = cooId,
+            Id = project_category_3_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "COO",
-            ProxyAddress = "coo@gmail.com",
+            Name = "ENERGY",
+            Description = "Energy Description",
+            CanAssignePM = true
         };
-        builder.Entity<User>().HasData(coo);
-        Email email_4 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "coo@gmail.com",
-            UserId = cooId
-        };
-        builder.Entity<Email>().HasData(email_4);
-        UserRole cooRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = cooId,
-            RoleId = role_4_id
-        };
-        builder.Entity<UserRole>().HasData(cooRole);
+        builder.Entity<ProjectCategory>().HasData(project_category_3);
+        projectCategories.Add(project_category_3);
 
-        // Guest
-        var guestId = random.Next(123456789, 999999999) + random.Next(0, 333) + 5;
-        User guest = new User()
+        var project_category_4_Id = random.Next(123456789, 999999999) + 33;
+        ProjectCategory project_category_4 = new ProjectCategory()
         {
-            Id = guestId,
+            Id = project_category_4_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "Guest",
-            ProxyAddress = "guest@gmail.com",
+            Name = "CONSULTING",
+            Description = "Consulting Description",
+            CanAssignePM = true
         };
-        builder.Entity<User>().HasData(guest);
-        Email email_5 = new Email()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Address = "guest@gmail.com",
-            UserId = guestId
-        };
-        builder.Entity<Email>().HasData(email_5);
-        UserRole guestRole = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = guestId,
-            RoleId = role_7_id
-        };
-        builder.Entity<UserRole>().HasData(guestRole);
+        builder.Entity<ProjectCategory>().HasData(project_category_4);
+        projectCategories.Add(project_category_4);
 
-        // Project Manager
-        var pmId = random.Next(123456789, 999999999) + random.Next(0, 333) + 5;
-        User pm = new User()
+        var project_category_5_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_5 = new ProjectCategory()
         {
-            Id = pmId,
+            Id = project_category_5_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            LastName = "Alexandros",
-            FirstName = "Platanios",
-            Phone1 = "694927778",
-            Description = "Project Manager",
-            ProxyAddress = "pm@gmail.com",
+            Name = "PRODUCTION MANAGMENT",
+            Description = "Production Management Description",
+            CanAssignePM = false
         };
-        builder.Entity<User>().HasData(pm);
-        Email email_27 = new Email()
+        builder.Entity<ProjectCategory>().HasData(project_category_5);
+        projectCategories.Add(project_category_5);
+
+        var project_category_6_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_6 = new ProjectCategory()
         {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            Id = project_category_6_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Address = "pm@gmail.com",
-            UserId = pmId
+            Name = "TRANSPORT",
+            Description = "Transport Description",
+            CanAssignePM = false
         };
-        builder.Entity<Email>().HasData(email_27);
-        UserRole pmRole = new UserRole()
+        builder.Entity<ProjectCategory>().HasData(project_category_6);
+        projectCategories.Add(project_category_6);
+
+        var project_category_7_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_7 = new ProjectCategory()
         {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            Id = project_category_7_Id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            UserId = pmId,
-            RoleId = role_3_id
+            Name = "ENVIRONMENT",
+            Description = "Environment Description",
+            CanAssignePM = false
         };
-        builder.Entity<UserRole>().HasData(pmRole);
+        builder.Entity<ProjectCategory>().HasData(project_category_7);
+        projectCategories.Add(project_category_7);
+
+        var project_category_8_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_8 = new ProjectCategory()
+        {
+            Id = project_category_8_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "ENVIRONMENT CONSULTING",
+            Description = "Environment Consulting Description",
+            CanAssignePM = false
+        };
+        builder.Entity<ProjectCategory>().HasData(project_category_8);
+        projectCategories.Add(project_category_8);
+        #endregion
+
+        #region Create Project Sub Categories
+        /*
+         * projectCategories[0] = BUILDINGS
+         * projectCategories[1] = INFRASTRUCTURE
+         * projectCategories[2] = ENERGY
+         * projectCategories[3] = CONSULTING
+         * projectCategories[4] = PRODUCTION MANAGMENT
+         * projectCategories[5] = TRANSPORT
+         * projectCategories[6] = ENVIRONMENT
+         * projectCategories[7] = ENVIRONMENT CONSULTING
+         */
+        Dictionary<string, ProjectCategory> ProjectSubCatsNameCat = new Dictionary<string, ProjectCategory>();
+        ProjectSubCatsNameCat.Add("RENEWABLES - INTERCONNECTION HV", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - INTERCONNECTION", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - PV", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - PV - TDD", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - PV - CONSTRUCTION SUPERVISION", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - WIND", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - HYDRO", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("POWER PLANTS - PIPELINES", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("DISTRIBUTION NETWORKS", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("NATURAL GAS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("ENERGY AUDITS & CONSULTING", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("FIRE SAFETY", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("OFFICE BUILDINGS", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("BANKS", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("MALLS, SHOPPING CENTRES, BARS etc", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("INDUSTRIAL", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("RESIDENTIAL", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("HOTELS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("ENERGY CERTIFICATES", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("CAR STATIONS", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("SCHOOLS & UNIVERSITIES", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("SPORT CENTRES", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("HOSPITALS & WELFARE", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("PUBLIC BUILDINGS", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("RESTORATIONS - SQUARES", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("MUSEUMS & CULTURAL BUILDINGS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("DATA CENTERS", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("BUILDINGS GENERAL", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("ROAD NETWORKS", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("TOLL STATIONS & BUILDINGS", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("TRAIN STATIONS", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("TUNNELS", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("BUS STATIONS", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("PORTS, MARINAS & PORT TERMINALS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("AIRPORTS & TERMINALS", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("SUBWAYS & STATIONS", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("TRASPORT GENERAL", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("WASTE WATER TREATMENT", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("RECYCLING & LANDFILL PLANTS", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("DAMS", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("SEWAGE AND DRAINAGE NETWORKS", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("ENVIRONMENTAL STUDIES", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("LEGALIZATION PROCEDURES", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("PROPERTY EVALUATIONS", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("EU PROJECTS", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("ENGINEERING CONSULTING - GENERAL", projectCategories[5]);
+
+        List<ProjectSubCategory> projectSubCategories = new List<ProjectSubCategory>();
+
+        foreach (var item in ProjectSubCatsNameCat)
+        {
+            string subCatName = item.Key;
+            int catId = item.Value.Id;
+            var canAssignePM = item.Value.CanAssignePM;
+
+            var project_sub_category_id = random.Next(123456789, 999999999) + 33;
+            ProjectSubCategory project_sub_category = new ProjectSubCategory()
+            {
+                Id = project_sub_category_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = subCatName,
+                CategoryId = catId,
+                CanAssignePM = canAssignePM
+            };
+            builder.Entity<ProjectSubCategory>().HasData(project_sub_category);
+            projectSubCategories.Add(project_sub_category);
+        }
+        #endregion
+
+        #region Create ProjectStages
+        var project_stage_1_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_1 = new ProjectStage()
+        {
+            Id = project_stage_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Buildings",
+        };
+        builder.Entity<ProjectStage>().HasData(project_stage_1);
+
+        var project_stage_2_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_2 = new ProjectStage()
+        {
+            Id = project_stage_2_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Final Design",
+        };
+        builder.Entity<ProjectStage>().HasData(project_stage_2);
+
+        var project_stage_3_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_3 = new ProjectStage()
+        {
+            Id = project_stage_3_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Detailed Design",
+        };
+        builder.Entity<ProjectStage>().HasData(project_stage_3);
+
+        var project_stage_4_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_4 = new ProjectStage()
+        {
+            Id = project_stage_4_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Construction Supervision",
+        };
+        builder.Entity<ProjectStage>().HasData(project_stage_4);
+
+        var project_stage_5_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_5 = new ProjectStage()
+        {
+            Id = project_stage_5_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Us Build Joins",
+        };
+        builder.Entity<ProjectStage>().HasData(project_stage_5);
+
+
+
+        int[] ProjectStages = {
+            project_stage_1_Id,
+            project_stage_2_Id,
+            project_stage_3_Id,
+            project_stage_4_Id,
+            project_stage_5_Id
+        };
+        #endregion
+
+        #region Create InvoiceTypes
+        var it_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        InvoiceType it_1 = new InvoiceType()
+        {
+            Id = it_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PUBLIC"
+        };
+        builder.Entity<InvoiceType>().HasData(it_1);
+
+        var it_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        InvoiceType it_2 = new InvoiceType()
+        {
+            Id = it_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PRIVATE"
+        };
+        builder.Entity<InvoiceType>().HasData(it_2);
+
+        var it_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        InvoiceType it_3 = new InvoiceType()
+        {
+            Id = it_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "INTERNATIONAL"
+        };
+        builder.Entity<InvoiceType>().HasData(it_3);
+        #endregion
+
+        #region Create 5 PaymentTypes
+        // BANK
+        var pmt_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_1 = new PaymentType()
+        {
+            Id = pmt_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"BANK"
+        };
+        builder.Entity<PaymentType>().HasData(pmt_1);
+
+        // TRANSFER
+        var pmt_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_2 = new PaymentType()
+        {
+            Id = pmt_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"TRANSFER"
+        };
+        builder.Entity<PaymentType>().HasData(pmt_2);
+
+        // CASH
+        var pmt_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_3 = new PaymentType()
+        {
+            Id = pmt_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"CASH"
+        };
+        builder.Entity<PaymentType>().HasData(pmt_3);
+
+        // CHECK
+        var pmt_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_4 = new PaymentType()
+        {
+            Id = pmt_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"CHECK"
+        };
+        builder.Entity<PaymentType>().HasData(pmt_4);
+        #endregion
+
+        #region Create OfferTypes
+        var offer_type_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_1 = new OfferType()
+        {
+            Id = offer_type_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PUBLIC"
+        };
+        builder.Entity<OfferType>().HasData(offer_type_1);
+
+        var offer_type_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_2 = new OfferType()
+        {
+            Id = offer_type_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PRIVATE"
+        };
+        builder.Entity<OfferType>().HasData(offer_type_2);
+
+        var offer_type_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_3 = new OfferType()
+        {
+            Id = offer_type_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "INTERNATIONAL"
+        };
+        builder.Entity<OfferType>().HasData(offer_type_3);
+
+        var offer_type_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_4 = new OfferType()
+        {
+            Id = offer_type_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "HEDNO"
+        };
+        builder.Entity<OfferType>().HasData(offer_type_4);
+
+        int[] offerTypesIds =
+        {
+            offer_type_1_id,
+            offer_type_2_id,
+            offer_type_3_id
+        };
+        #endregion
+
+        #region Create OfferState
+        var offer_state_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferState offer_state_1 = new OfferState()
+        {
+            Id = offer_state_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "SUBMITTED"
+        };
+        builder.Entity<OfferState>().HasData(offer_state_1);
+
+        var offer_state_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferState offer_state_2 = new OfferState()
+        {
+            Id = offer_state_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PREPARATION"
+        };
+        builder.Entity<OfferState>().HasData(offer_state_2);
+
+        int[] offerStatesIds =
+        {
+            offer_state_1_id,
+            offer_state_2_id
+        };
         #endregion
 
         #region Create Secretaries
@@ -1490,16 +2483,6 @@ public class AppDbContext : DbContext
             RoleId = role_2_id
         };
         builder.Entity<UserRole>().HasData(engineerRole_5_em);
-        // Admin
-        UserRole engineerRole_5_em_2 = new UserRole()
-        {
-            Id = random.Next(123456789, 999999999) + 12,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            UserId = engineer_5_Id,
-            RoleId = role_9_id
-        };
-        builder.Entity<UserRole>().HasData(engineerRole_5_em_2);
         // CEO
         UserRole engineerRole_5_em_3 = new UserRole()
         {
@@ -1555,6 +2538,16 @@ public class AppDbContext : DbContext
             RoleId = role_4_id
         };
         builder.Entity<UserRole>().HasData(engineerRole_6_em_coo);
+        // CTO
+        UserRole engineerRole_17_em_coo = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6_Id,
+            RoleId = role_5_id
+        };
+        builder.Entity<UserRole>().HasData(engineerRole_17_em_coo);
 
         // ΤΖΑΝΗΣ ΒΑΣΙΛΕΙΟΣ
         var engineer_7_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 16;
@@ -1907,63 +2900,6 @@ public class AppDbContext : DbContext
         builder.Entity<UserRole>().HasData(engineerRole_16_em);
         #endregion
 
-        #region Create 4 Project Types
-        // Project Type Buildings
-        var project_type_1_Id = random.Next(123456789, 999999999) + 33;
-        ProjectType project_type_1 = new ProjectType()
-        {
-            Id = project_type_1_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Buildings",
-            Description = "Buildings Description"
-        };
-        builder.Entity<ProjectType>().HasData(project_type_1);
-
-        // Project Type Infrastructure
-        var project_type_2_Id = random.Next(123456789, 999999999) + 33;
-        ProjectType project_type_2 = new ProjectType()
-        {
-            Id = project_type_2_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Infrastructure",
-            Description = "Infrastructure Description"
-        };
-        builder.Entity<ProjectType>().HasData(project_type_2);
-
-        // Project Type Energy
-        var project_type_3_Id = random.Next(123456789, 999999999) + 33;
-        ProjectType project_type_3 = new ProjectType()
-        {
-            Id = project_type_3_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Energy",
-            Description = "Energy Description"
-        };
-        builder.Entity<ProjectType>().HasData(project_type_3);
-
-        // Project Type Consulting
-        var project_type_4_Id = random.Next(123456789, 999999999) + 33;
-        ProjectType project_type_4 = new ProjectType()
-        {
-            Id = project_type_4_Id,
-            CreatedDate = DateTime.Now,
-            LastUpdatedDate = DateTime.Now,
-            Name = "Consulting",
-            Description = "Consulting Description"
-        };
-        builder.Entity<ProjectType>().HasData(project_type_4);
-
-        int[] projectTypes = {
-            project_type_1_Id,
-            project_type_2_Id,
-            project_type_3_Id,
-            project_type_4_Id
-        };
-        #endregion
-
         #region Create 3 Project Managers
         List<User> projectManagers = new List<User>();
 
@@ -2004,10 +2940,84 @@ public class AppDbContext : DbContext
         projectManagers.Add(engineer_10);
         #endregion
 
-        #region Create 4 Projects
-        List<Project> projects = new List<Project>();
-        for (var i = 1; i <= projectTypes.Count(); i++)
+        #region Create 2 Admins
+        // Alexandros Platanios
+        var admin_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        User admin_1 = new User()
         {
+            Id = admin_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "Platanios",
+            FirstName = "Alexandros",
+            Phone1 = "694927778",
+            Description = "Admin",
+            ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com"
+        };
+        builder.Entity<User>().HasData(admin_1);
+        Email email_admin_1 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "empiriasoft@empiriasoftplat.onmicrosoft.com",
+            UserId = admin_1_Id
+        };
+        builder.Entity<Email>().HasData(email_admin_1);
+        // Admin
+        UserRole admin_role_1 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) / 3,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = admin_1_Id,
+            RoleId = role_9_id
+        };
+        builder.Entity<UserRole>().HasData(admin_role_1);
+
+        // ΚΟΤΣΩΝΗ ΚΑΤΕΡΙΝΑ
+        UserRole admin_2 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) / 3,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6.Id,
+            RoleId = role_9_id
+        };
+        builder.Entity<UserRole>().HasData(admin_2);
+        #endregion
+
+        var projectManagersLength = projectManagers.Count();
+        var projectManagersIndex = 0;
+        var stagesLength = ProjectStages.Count();
+        var stagesIndex = 0;
+
+        var categoriesLength = projectCategories.Count();
+        var categoriesIndex = 0;
+
+        #region Create 5 Projects
+        List<Project> projects = new List<Project>();
+        for (var i = 1; i <= projectSubCategories.Count(); i++)
+        {
+            // Offers
+            var offerId = random.Next(123456789, 999999999) + i * 3;
+            Offer offer = new Offer()
+            {
+                Id = offerId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Code = $"Code CO-{i}",
+                TypeId = offerTypesIds[random.Next(0, 2)],
+                StateId = offerStatesIds[random.Next(0, 1)],
+                Result = OfferResult.SUCCESSFUL,
+                PudgetPrice = 1000 * i * 3,
+                OfferPrice = 1000 * i * 2,
+                CategoryId = projectCategories[categoriesIndex].Id,
+                SubCategoryId = projectSubCategories[i - 1].Id,
+            };
+            builder.Entity<Offer>().HasData(offer);
+
             // Projects 
             var projectId = random.Next(123456789, 999999999) + i * 2;
             Project project = new Project()
@@ -2018,63 +3028,31 @@ public class AppDbContext : DbContext
                 Code = "D-22-16" + Convert.ToString(i),
                 Name = "Project_" + Convert.ToString(i),
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
-                Drawing = "KL-" + Convert.ToString(i),
-                DurationDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                EstPaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                PaymentDate = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                StartDate = createdDate,
                 DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                WorkPackege = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
-                DelayInPayment = Convert.ToInt32(Math.Pow(i, 2)),
-                PaymentDetailes = "Payment Detailes For Project_" + Convert.ToString(i * random.Next(1, 7)),
-                DayCost = 7 + i - 1 * 2,
-                Bank = i % 2 == 0 ? "ALPHA" : "NBG_IBANK",
-                PaidFee = 7 - 1 * 2,
-                DaysUntilPayment = (createdDate.AddDays(Convert.ToInt32(Math.Pow(i, 2))) - createdDate).Days,
-                PendingPayments = i,
-                CalculationDaly = i < 5 ? i : i - (i - 1),
-                EstimatedMandays = 100/8,
+                EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
-                Completed = 0,
-                WorkPackegedCompleted = 0,
+                DeclaredCompleted = 0,
                 EstimatedCompleted = 0,
-                TypeId = projectTypes[i-1]
+                StageId = ProjectStages[stagesIndex],
+                Active = i % 2 == 0 ? true : false,
+                ProjectManagerId = projectManagers[projectManagersIndex].Id,
+                OfferId = offerId
             };
             builder.Entity<Project>().HasData(project);
             projects.Add(project);
 
-            // Customers
-            var customerId = random.Next(123456789, 999999999) + i * 10 + 28;
-            User customer = new User()
-            {
-                Id = customerId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                LastName = "Alexandros_" + Convert.ToString(i),
-                FirstName = "Platanios_Customer_" + Convert.ToString(i),
-                ProxyAddress = "alexpl_{i}@gmail.com",
-                Phone1 = "694927778" + Convert.ToString(i),
-                Description = "Test Description Customer " + Convert.ToString(i),
-                ProjectId = projectId,
-            };
-            builder.Entity<User>().HasData(customer);
-            Email email_28 = new Email()
-            {
-                Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Address = "alexpl_{i}@gmail.com",
-                UserId = customerId
-            };
-            builder.Entity<Email>().HasData(email_28);
-            UserRole userRole_c = new UserRole()
-            {
-                Id = random.Next(123456789, 999999999) + i * 2,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = customerId,
-                RoleId = role_8_id
-            };
-            builder.Entity<UserRole>().HasData(userRole_c);
+            projectManagersIndex++;
+            if (projectManagersIndex >= projectManagersLength - 1)
+                projectManagersIndex = 0;
+
+            categoriesIndex++;
+            if (categoriesIndex >= categoriesLength)
+                categoriesIndex = 0;
+
+            stagesIndex++;
+            if (stagesIndex >= stagesLength - 1)
+                stagesIndex = 0;
 
             // Invoices
             var invoiceId = random.Next(123456789, 999999999) + i * 3;
@@ -2085,24 +3063,114 @@ public class AppDbContext : DbContext
                 LastUpdatedDate = DateTime.Now,
                 Date = DateTime.Now,
                 Total = i * Math.Pow(1, 3),
-                Vat = i % 2 == 0 ? 24 : 17,
-                Fee = 3000 + Math.Pow(10, i),
+                Vat = i % 2 == 0 ? Vat.TwentyFour : Vat.Seventeen,
+                Fee = 1000 * i,
                 Number = random.Next(10000, 90000),
                 Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
                 ProjectId = projectId,
+                TypeId = it_1_id
             };
             builder.Entity<Invoice>().HasData(invoice);
         }
         #endregion
 
+        #region Create 7 Projects Missed DeadLine
+        projectManagersIndex = 0;
+        stagesIndex = 0;
+        categoriesIndex = 0;
+
+        var subCategoriesLength = projectSubCategories.Count();
+        var subCategoriesIndex = 0;
+
+        for (var i = 1; i <= 7; i++)
+        {
+            // Offers
+            var offerId = random.Next(123456789, 999999999) + i * 3;
+            Offer offer = new Offer()
+            {
+                Id = offerId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Code = $"Code CO-{i}",
+                TypeId = offerTypesIds[random.Next(0, 2)],
+                StateId = offerStatesIds[random.Next(0, 1)],
+                Result = OfferResult.SUCCESSFUL,
+                PudgetPrice = 1000 * i * 4,
+                OfferPrice = 1000 * i * 3,
+                CategoryId = projectCategories[categoriesIndex].Id,
+                SubCategoryId = projectSubCategories[subCategoriesIndex].Id,
+            };
+            builder.Entity<Offer>().HasData(offer);
+
+            // Projects 
+            var projectId = random.Next(123456789, 999999999) + i * 22;
+            Project project = new Project()
+            {
+                Id = projectId,
+                CreatedDate = createdDate,
+                LastUpdatedDate = createdDate,
+                Code = "D-22-16" + Convert.ToString(i + 2),
+                Name = "Project_Missed_DeadLine_" + Convert.ToString(i + 2),
+                Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
+                StartDate = createdDate.AddMonths(-(i * 2)),
+                DeadLine = createdDate.AddMonths(-i),
+                EstimatedMandays = 100 / 8,
+                EstimatedHours = 1500,
+                DeclaredCompleted = 0,
+                EstimatedCompleted = 0,
+                StageId = ProjectStages[stagesIndex],
+                Active = i % 2 == 0 ? true : false,
+                ProjectManagerId = projectManagers[projectManagersIndex].Id,
+                OfferId = offerId
+            };
+            builder.Entity<Project>().HasData(project);
+            projects.Add(project);
+
+            // Invoices
+            var invoiceId = random.Next(123456789, 999999999) + i * 3;
+            Invoice invoice = new Invoice()
+            {
+                Id = invoiceId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Total = i * Math.Pow(1, 3),
+                Vat = i % 2 == 0 ? Vat.TwentyFour : Vat.Seventeen,
+                Fee = 1100 * i,
+                Number = random.Next(10000, 90000),
+                Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
+                ProjectId = projectId,
+                TypeId = it_1_id
+            };
+            builder.Entity<Invoice>().HasData(invoice);
+
+            projectManagersIndex++;
+            if (projectManagersIndex >= projectManagersLength)
+                projectManagersIndex = 0;
+
+            subCategoriesIndex++;
+            if (subCategoriesIndex >= subCategoriesLength)
+                subCategoriesIndex = 0;
+
+            categoriesIndex++;
+            if (categoriesIndex >= categoriesLength)
+                categoriesIndex = 0;
+
+            stagesIndex++;
+            if (stagesIndex >= stagesLength)
+                stagesIndex = 0;
+        }
+        #endregion
+
         #region Create Discipline Types
         List<DisciplineType> disciplineTypes = new List<DisciplineType>();
-        string[] dicTypeNames = { 
-            "HVAC", 
-            "Sewage", 
-            "Potable Water", 
-            "Drainage", 
-            "Fire Detection", 
+        string[] dicTypeNames = {
+            "HVAC",
+            "Sewage",
+            "Potable Water",
+            "Drainage",
+            "Fire Detection",
             "Fire Suppression",
             "Elevators",
             "Natural Gas",
@@ -2116,6 +3184,7 @@ public class AppDbContext : DbContext
             "Outsource",
             "TenderDocument",
             "Construction Supervision",
+            "DWG Admin/Clearing"
         };
         for (var i = 0; i < dicTypeNames.Length; i++)
         {
@@ -2130,6 +3199,17 @@ public class AppDbContext : DbContext
             builder.Entity<DisciplineType>().HasData(dt);
             disciplineTypes.Add(dt);
         }
+
+        // Add Discipline Type Project Manager Hours.
+        var discipline_pm_hours_type_Id = random.Next(123456789, 999999999);
+        DisciplineType dt_pm_hours = new DisciplineType()
+        {
+            Id = discipline_pm_hours_type_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Project Manager Hours",
+        };
+        builder.Entity<DisciplineType>().HasData(dt_pm_hours);
         #endregion
 
         #region Create 3 Random Disciplines
@@ -2140,7 +3220,7 @@ public class AppDbContext : DbContext
             List<int> randomTypeIndexes = new List<int>();
             for (int j = 0; j < 3; j++)
             {
-                int typeIndex = GetUniqueRandomNumber(random, randomTypeIndexes, 0, disciplineTypes.Count-1);
+                int typeIndex = GetUniqueRandomNumber(random, randomTypeIndexes, 0, disciplineTypes.Count - 1);
                 var discipline_Id = random.Next(123456789, 999999999) * 8;
                 Discipline discipline = new Discipline()
                 {
@@ -2148,9 +3228,10 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     TypeId = disciplineTypes[typeIndex].Id,
-                    EstimatedHours = 500,
+                    EstimatedMandays = 50 + j,
+                    EstimatedHours = (50 + j) * 8,
                     ProjectId = projects[i].Id,
-                    Completed = 0
+                    DeclaredCompleted = 0
                 };
                 builder.Entity<Discipline>().HasData(discipline);
                 disciplines.Add(discipline);
@@ -2210,7 +3291,9 @@ public class AppDbContext : DbContext
             "Printing",
             "On-Site",
             "Meetings",
-            "Administration"
+            "Administration",
+            "Soft Copy",
+            "Hours To Be Erased"
         };
         for (var i = 0; i < otherTypeNames.Length; i++)
         {
@@ -2244,29 +3327,7 @@ public class AppDbContext : DbContext
                     CompletionEstimation = 0
                 };
                 builder.Entity<Other>().HasData(other);
-                others.Add(other);
             }
-        }
-        #endregion
-
-        #region Connect Project Manager With Every Project
-        var pm_index = 0;
-        for (var i = 0; i < projects.Count; i++)
-        {
-            ProjectPmanager dq_other = new ProjectPmanager()
-            {
-                Id = random.Next(123456789, 999999999) + i,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                ProjectId = projects[i].Id,
-                ProjectManagerId = projectManagers[pm_index].Id
-            };
-            builder.Entity<ProjectPmanager>().HasData(dq_other);
-
-            if (pm_index < projectManagers.Count - 1)
-                pm_index++;
-            else
-                pm_index = 0;
         }
         #endregion
 
@@ -2323,7 +3384,6 @@ public class AppDbContext : DbContext
         //    }
         //}
         #endregion
-
     }
 
     static int GetUniqueRandomNumber(Random random, List<int> selectedNumbers, int min, int max)

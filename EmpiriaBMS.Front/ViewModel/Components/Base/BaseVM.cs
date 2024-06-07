@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Front.ViewModel.Components.Base;
-public class BaseVM : BNotifyPropertyChanged
+public class BaseVM : BNotifyPropertyChanged, ICloneable
 {
     private int _id;
     public int Id
@@ -43,9 +43,24 @@ public class BaseVM : BNotifyPropertyChanged
         }
     }
 
+    private bool _isDeleted;
+    public bool IsDeleted
+    {
+        get => _isDeleted;
+        set
+        {
+            if (value == _isDeleted)
+                return;
+            _isDeleted = value;
+            NotifyPropertyChanged(nameof(IsDeleted));
+        }
+    }
+
     public BaseVM()
     {
         CreatedDate = DateTime.Now;
         LastUpdatedDate = DateTime.Now;
     }
+
+    public object Clone() => this.MemberwiseClone();
 }

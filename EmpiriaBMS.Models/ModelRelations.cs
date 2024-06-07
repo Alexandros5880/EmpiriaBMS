@@ -1,13 +1,5 @@
 ﻿using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Models;
 public static class ModelRelations
@@ -38,60 +30,17 @@ public static class ModelRelations
                .WithMany(c => c.UserRoles)
                .HasForeignKey(sc => sc.RoleId);
 
-        // User Emails
-        builder.Entity<Email>()
-               .HasOne(e => e.User)
-               .WithMany(u => u.Emails)
-               .HasForeignKey(e => e.UserId);
-               //.IsRequired();
-
-        // Project Disciplines
-        builder.Entity<Project>()
-               .HasMany(p => p.Disciplines)
-               .WithOne(c => c.Project)
-               .HasForeignKey(c => c.ProjectId);
-
-        // DisciplineType Desciplines
-        builder.Entity<DisciplineType>()
-               .HasMany(p => p.Disciplines)
-               .WithOne(c => c.Type)
-               .HasForeignKey(c => c.TypeId);
-
-        // Projects ProjectManagers
-        builder.Entity<ProjectPmanager>()
-               .HasKey(de => new { de.ProjectManagerId, de.ProjectId });
-        builder.Entity<ProjectPmanager>()
-               .HasOne(de => de.ProjectManager)
-               .WithMany(de => de.ProjectsPmanagers)
-               .HasForeignKey(de => de.ProjectManagerId);
-        builder.Entity<ProjectPmanager>()
-               .HasOne(de => de.Project)
-               .WithMany(de => de.ProjectsPmanagers)
-               .HasForeignKey(de => de.ProjectId);
-
-        // Discipline Draws
-        builder.Entity<Discipline>()
-               .HasMany(p => p.Drawings)
-               .WithOne(c => c.Discipline)
-               .HasForeignKey(c => c.DisciplineId);
-
-        // DrawingType Drawings
-        builder.Entity<DrawingType>()
-               .HasMany(p => p.Drawings)
-               .WithOne(c => c.Type)
-               .HasForeignKey(c => c.TypeId);
-
-        // Discipline Others
-        builder.Entity<Discipline>()
-               .HasMany(p => p.Others)
-               .WithOne(c => c.Discipline)
-               .HasForeignKey(c => c.DisciplineId);
-
-        // OtherType Others
-        builder.Entity<OtherType>()
-               .HasMany(p => p.Others)
-               .WithOne(c => c.Type)
-               .HasForeignKey(c => c.TypeId);
+        // SubContractors Projects
+        builder.Entity<ProjectSubConstructor>()
+               .HasKey(ps => new { ps.SubContractorId, ps.ProjectId });
+        builder.Entity<ProjectSubConstructor>()
+               .HasOne(ps => ps.SubContractor)
+               .WithMany(s => s.ProjectsSubConstructors)
+               .HasForeignKey(ps => ps.SubContractorId);
+        builder.Entity<ProjectSubConstructor>()
+               .HasOne(ps => ps.Project)
+               .WithMany(p => p.ProjectsSubConstructors)
+               .HasForeignKey(ps => ps.ProjectId);
 
         // Drawings Employees
         builder.Entity<DrawingEmployee>()
@@ -117,12 +66,6 @@ public static class ModelRelations
                .WithMany(de => de.OthersEmployees)
                .HasForeignKey(de => de.EmployeeId);
 
-        // SubContractor Project
-        builder.Entity<User>()
-                    .HasMany(p => p.Projects)
-                    .WithOne(c => c.SubContractor)
-                    .HasForeignKey(c => c.SubContractorId);
-
         // Engineers Disciplines
         builder.Entity<DisciplineEngineer>()
                .HasKey(de => new { de.DisciplineId, de.EngineerId });
@@ -135,68 +78,292 @@ public static class ModelRelations
                .WithMany(de => de.DisciplinesEngineers)
                .HasForeignKey(de => de.DisciplineId);
 
-        // Project Invoice
+        // Invoice Contract (OneToOne)
+        builder.Entity<Invoice>()
+               .HasOne(a => a.Contract)
+               .WithOne(b => b.Invoice)
+               .HasForeignKey<Contract>(b => b.InvoiceId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<Contract>()
+               .HasOne(b => b.Invoice)
+               .WithOne(a => a.Contract)
+               .HasForeignKey<Invoice>(a => a.ContractId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Led Offer (OneToOne)
+        builder.Entity<Offer>()
+               .HasOne(b => b.Led)
+               .WithOne()
+               .HasForeignKey<Offer>(o => o.LedId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Invoices Project
+        builder.Entity<Invoice>()
+               .HasOne(i => i.Project)
+               .WithMany(p => p.Invoices)
+               .HasForeignKey(i => i.ProjectId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Projects Offer
         builder.Entity<Project>()
+               .HasOne(i => i.Offer)
+               .WithMany(p => p.Projects)
+               .HasForeignKey(i => i.OfferId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // InvoiceType Invoices
+        builder.Entity<InvoiceType>()
+               .HasMany(p => p.Invoices)
+               .WithOne(c => c.Type)
+               .HasForeignKey(c => c.TypeId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Payments Invoice
+        builder.Entity<Payment>()
                .HasOne(p => p.Invoice)
+               .WithMany(i => i.Payments)
+               .HasForeignKey(p => p.InvoiceId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // PaymentType Payments
+        builder.Entity<PaymentType>()
+               .HasMany(p => p.Payments)
+               .WithOne(c => c.Type)
+               .HasForeignKey(c => c.TypeId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // OfferType Offers
+        builder.Entity<OfferType>()
+               .HasMany(p => p.Offers)
+               .WithOne(c => c.Type)
+               .HasForeignKey(c => c.TypeId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // OfferState Offers
+        builder.Entity<OfferState>()
+               .HasMany(p => p.Offers)
+               .WithOne(c => c.State)
+               .HasForeignKey(c => c.StateId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Roles Parent And Children
+        builder.Entity<Role>()
+               .HasOne(r => r.ParentRole)
+               .WithMany(r => r.ChildRoles)
+               .HasForeignKey(r => r.ParentRoleId)
+               .OnDelete(DeleteBehavior.ClientSetNull);
+
+        // Role Issues
+        builder.Entity<Role>()
+               .HasMany(p => p.Issues)
+               .WithOne(c => c.DisplayedRole)
+               .HasForeignKey(c => c.DisplayedRoleId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // User Issues
+        builder.Entity<User>()
+               .HasMany(p => p.MyIssues)
+               .WithOne(c => c.Creator)
+               .HasForeignKey(c => c.CreatorId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // User Emails
+        builder.Entity<Email>()
+               .HasOne(e => e.User)
+               .WithMany(u => u.Emails)
+               .HasForeignKey(e => e.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Project Disciplines
+        builder.Entity<Project>()
+               .HasMany(p => p.Disciplines)
                .WithOne(c => c.Project)
-               .HasForeignKey<Invoice>(c => c.ProjectId);
+               .HasForeignKey(c => c.ProjectId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // DisciplineType Desciplines
+        builder.Entity<DisciplineType>()
+               .HasMany(p => p.Disciplines)
+               .WithOne(c => c.Type)
+               .HasForeignKey(c => c.TypeId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // ProjectManager Project
+        builder.Entity<User>()
+               .HasMany(p => p.PMProjects)
+               .WithOne(c => c.ProjectManager)
+               .HasForeignKey(c => c.ProjectManagerId)
+               .OnDelete(DeleteBehavior.ClientSetNull);
+
+        // Offer Project
+        builder.Entity<Offer>()
+               .HasMany(p => p.Projects)
+               .WithOne(c => c.Offer)
+               .HasForeignKey(c => c.OfferId)
+               .OnDelete(DeleteBehavior.SetNull);
+
+        // Led Client
+        builder.Entity<Client>()
+               .HasMany(p => p.Leds)
+               .WithOne(c => c.Client)
+               .HasForeignKey(c => c.ClientId)
+               .OnDelete(DeleteBehavior.ClientCascade);
+
+        // Client Address
+        builder.Entity<Address>()
+               .HasMany(p => p.Clients)
+               .WithOne(c => c.Address)
+               .HasForeignKey(c => c.AddressId)
+               .OnDelete(DeleteBehavior.SetNull);
+
+        // Discipline Draws
+        builder.Entity<Discipline>()
+               .HasMany(p => p.Drawings)
+               .WithOne(c => c.Discipline)
+               .HasForeignKey(c => c.DisciplineId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // DrawingType Drawings
+        builder.Entity<DrawingType>()
+               .HasMany(p => p.Drawings)
+               .WithOne(c => c.Type)
+               .HasForeignKey(c => c.TypeId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Discipline Others
+        builder.Entity<Discipline>()
+               .HasMany(p => p.Others)
+               .WithOne(c => c.Discipline)
+               .HasForeignKey(c => c.DisciplineId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // OtherType Others
+        builder.Entity<OtherType>()
+               .HasMany(p => p.Others)
+               .WithOne(c => c.Type)
+               .HasForeignKey(c => c.TypeId)
+               .OnDelete(DeleteBehavior.Cascade);
 
         // User DailyTime
         builder.Entity<User>()
-                    .HasMany(u => u.DailyTime)
-                    .WithOne(d => d.DailyUser)
-                    .HasForeignKey(d => d.DailyUserId)
-                    .OnDelete(DeleteBehavior.Restrict);
+               .HasMany(u => u.DailyTime)
+               .WithOne(d => d.DailyUser)
+               .HasForeignKey(d => d.DailyUserId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // User PersonalTime
         builder.Entity<User>()
-                    .HasMany(u => u.PersonalTime)
-                    .WithOne(d => d.PersonalUser)
-                    .HasForeignKey(d => d.PersonalUserId)
-                    .OnDelete(DeleteBehavior.Restrict);
+               .HasMany(u => u.PersonalTime)
+               .WithOne(d => d.PersonalUser)
+               .HasForeignKey(d => d.PersonalUserId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // User TrainingTime
         builder.Entity<User>()
-                    .HasMany(u => u.TrainingTime)
-                    .WithOne(d => d.TrainingUser)
-                    .HasForeignKey(d => d.TrainingUserId)
-                    .OnDelete(DeleteBehavior.Restrict);
+               .HasMany(u => u.TrainingTime)
+               .WithOne(d => d.TrainingUser)
+               .HasForeignKey(d => d.TrainingUserId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // User CorporateEvents
         builder.Entity<User>()
-                    .HasMany(u => u.CorporateEventTime)
-                    .WithOne(d => d.CorporateUser)
-                    .HasForeignKey(d => d.CorporateUserId)
-                    .OnDelete(DeleteBehavior.Restrict);
+               .HasMany(u => u.CorporateEventTime)
+               .WithOne(d => d.CorporateUser)
+               .HasForeignKey(d => d.CorporateUserId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Led DailyTime
+        builder.Entity<Led>()
+               .HasMany(p => p.DailyTime)
+               .WithOne(c => c.Led)
+               .HasForeignKey(c => c.LedId)
+               .OnDelete(DeleteBehavior.ClientCascade);
+
+        // Offer DailyTime
+        builder.Entity<Offer>()
+               .HasMany(p => p.DailyTime)
+               .WithOne(c => c.Offer)
+               .HasForeignKey(c => c.OfferId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // Project DailyTime
         builder.Entity<Project>()
-                    .HasMany(p => p.DailyTime)
-                    .WithOne(c => c.Project)
-                    .HasForeignKey(c => c.ProjectId);
+               .HasMany(p => p.DailyTime)
+               .WithOne(c => c.Project)
+               .HasForeignKey(c => c.ProjectId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // Discipline DailyTime
         builder.Entity<Discipline>()
-                    .HasMany(p => p.DailyTime)
-                    .WithOne(c => c.Discipline)
-                    .HasForeignKey(c => c.DisciplineId);
+               .HasMany(p => p.DailyTime)
+               .WithOne(c => c.Discipline)
+               .HasForeignKey(c => c.DisciplineId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // Other DailyTime
         builder.Entity<Other>()
-                    .HasMany(p => p.DailyTime)
-                    .WithOne(c => c.Other)
-                    .HasForeignKey(c => c.OtherId);
+               .HasMany(p => p.DailyTime)
+               .WithOne(c => c.Other)
+               .HasForeignKey(c => c.OtherId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
         // Drawing DailyTime
         builder.Entity<Drawing>()
-                    .HasMany(p => p.DailyTime)
-                    .WithOne(c => c.Drawing)
-                    .HasForeignKey(c => c.DrawingId);
+               .HasMany(p => p.DailyTime)
+               .WithOne(c => c.Drawing)
+               .HasForeignKey(c => c.DrawingId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
-        // Projects ProjectType
-        builder.Entity<ProjectType>()
-                    .HasMany(p => p.Projects)
-                    .WithOne(c => c.Type)
-                    .HasForeignKey(c => c.TypeId);
+        // SubCategorys Category
+        builder.Entity<ProjectCategory>()
+               .HasMany(p => p.SubCategories)
+               .WithOne(c => c.Category)
+               .HasForeignKey(c => c.CategoryId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Offers SubCategory
+        builder.Entity<ProjectSubCategory>()
+               .HasMany(p => p.Offers)
+               .WithOne(o => o.SubCategory)
+               .HasForeignKey(c => c.SubCategoryId)
+               .OnDelete(DeleteBehavior.ClientCascade);
+
+        // Offers SubCategory
+        builder.Entity<ProjectCategory>()
+               .HasMany(p => p.Offers)
+               .WithOne(o => o.Category)
+               .HasForeignKey(c => c.CategoryId)
+               .OnDelete(DeleteBehavior.ClientCascade);
+
+        // Leds Address
+        builder.Entity<Address>()
+               .HasMany(p => p.Leds)
+               .WithOne(c => c.Address)
+               .HasForeignKey(c => c.AddressId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+        // Projects ProjectStage
+        builder.Entity<ProjectStage>()
+               .HasMany(p => p.Projects)
+               .WithOne(c => c.Stage)
+               .HasForeignKey(c => c.StageId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Complain Project
+        builder.Entity<Project>()
+               .HasMany(p => p.Complains)
+               .WithOne(c => c.Project)
+               .HasForeignKey(c => c.ProjectId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Issue Documents
+        builder.Entity<Document>()
+               .HasOne(d => d.Issue)
+               .WithMany(i => i.Documents)
+               .HasForeignKey(d => d.IssueId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

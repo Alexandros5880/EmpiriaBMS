@@ -1,0 +1,16 @@
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using ChartJs.Blazor;
+
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+
+<div class="row" style="max-width: 30vw !important;">
+    <div class="col-11">
+        <h5>Projects missed deadline: </h5>
+    </div>
+    <div class="col-1">
+        <h6>@_missedDeadLineProject.ToString("N2")%</h6>
+    </div>
+</div>

@@ -1,7 +1,5 @@
-﻿using EmpiriaMS.Models.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
@@ -19,8 +17,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private double? _vat;
-    public double? Vat
+    private Vat _vat;
+    public Vat Vat
     {
         get => _vat;
         set
@@ -42,6 +40,19 @@ public class InvoiceVM : BaseVM
                 return;
             _fee = value;
             NotifyPropertyChanged(nameof(Fee));
+        }
+    }
+
+    private DateTime? _estimatedDate;
+    public DateTime? EstimatedDate
+    {
+        get => _estimatedDate;
+        set
+        {
+            if (value == _estimatedDate)
+                return;
+            _estimatedDate = value;
+            NotifyPropertyChanged(nameof(EstimatedDate));
         }
     }
 
@@ -71,8 +82,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private DateTime _date;
-    public DateTime Date
+    private DateTime? _date;
+    public DateTime? Date
     {
         get => _date;
         set
@@ -84,8 +95,75 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private Project? _project;
-    public Project? Project
+    private int _typeId { get; set; }
+    public int TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
+    private InvoiceTypeVM _type { get; set; }
+    public InvoiceTypeVM Type
+    {
+        get => _type;
+        set
+        {
+            if (value == _type)
+                return;
+            _type = value;
+            NotifyPropertyChanged(nameof(Type));
+        }
+    }
+
+    public string TypeName => Type != null ? Type.Name : "";
+
+    private int? _contractId { get; set; }
+    public int? ContractId
+    {
+        get => _contractId;
+        set
+        {
+            if (value == _contractId)
+                return;
+            _contractId = value;
+            NotifyPropertyChanged(nameof(ContractId));
+        }
+    }
+
+    private ContractVM _contract { get; set; }
+    public ContractVM Contract
+    {
+        get => _contract;
+        set
+        {
+            if (value == _contract)
+                return;
+            _contract = value;
+            NotifyPropertyChanged(nameof(Contract));
+        }
+    }
+
+    private int _projectId { get; set; }
+    public int ProjectId
+    {
+        get => _projectId;
+        set
+        {
+            if (value == _projectId)
+                return;
+            _projectId = value;
+            NotifyPropertyChanged(nameof(ProjectId));
+        }
+    }
+
+    private ProjectVM _project { get; set; }
+    public ProjectVM Project
     {
         get => _project;
         set
@@ -97,8 +175,28 @@ public class InvoiceVM : BaseVM
         }
     }
 
+    public string ProjectName => Project != null ? Project.Name : "";
+
+    public ICollection<PaymentVM> Payments { get; set; }
+
     public InvoiceVM()
     {
         Date = DateTime.Now;
+    }
+
+    public InvoiceVM(InvoiceVM invoice)
+    {
+        Date = invoice.Date;
+        Total = invoice.Total;
+        Vat = invoice.Vat;
+        Fee = invoice.Fee;
+        Number = invoice.Number;
+        Mark = invoice.Mark;
+        Date = invoice.Date;
+        TypeId = invoice.TypeId;
+        Type = null;
+        ProjectId = invoice.ProjectId;
+        Project = null;
+        Payments = invoice.Payments;
     }
 }

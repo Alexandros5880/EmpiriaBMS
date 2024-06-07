@@ -1,29 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EmpiriaMS.Models.Models.Base;
+using EmpiriaBMS.Models.Enum;
 
-namespace EmpiriaMS.Models.Models;
+namespace EmpiriaBMS.Models.Models;
 public class Invoice : Entity
 {
+    [Required]
+    public int TypeId { get; set; }
+    public InvoiceType Type { get; set; }
+
     public double? Total { get; set; }
 
-    public double? Vat { get; set; }
+    public Vat Vat { get; set; }
 
     public double? Fee { get; set; }
+
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime? EstimatedDate { get; set; }
 
     public int? Number { get; set; }
 
     public string? Mark { get; set; }
 
+    public int? ContractId { get; set; }
+
+    public Contract? Contract { get; set; }
+
+    public int ProjectId { get; set; }
+
+    public Project Project { get; set; }
+
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
-    public int? ProjectId { get; set; }
-    public Project? Project { get; set; }
+    public ICollection<Payment> Payments { get; set; }
 }

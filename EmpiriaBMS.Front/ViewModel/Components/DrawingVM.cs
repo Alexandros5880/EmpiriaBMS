@@ -6,6 +6,33 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class DrawingVM : BaseVM
 {
+    // Not Mapped
+    private TimeSpan _time = TimeSpan.Zero;
+    public TimeSpan Time
+    {
+        get => _time;
+        set
+        {
+            if (value == _time)
+                return;
+            _time = value;
+            NotifyPropertyChanged(nameof(Time));
+        }
+    }
+
+    private int? _typeId;
+    public int? TypeId
+    {
+        get => _typeId;
+        set
+        {
+            if (value == _typeId)
+                return;
+            _typeId = value;
+            NotifyPropertyChanged(nameof(TypeId));
+        }
+    }
+
     private DrawingType _type;
     public DrawingType Type
     {
@@ -19,18 +46,8 @@ public class DrawingVM : BaseVM
         }
     }
 
-    private TimeSpan _time = TimeSpan.Zero;
-    public TimeSpan Time
-    {
-        get => _time;
-        set
-        {
-            if (value == _time)
-                return;
-            _time = value;
-            NotifyPropertyChanged(nameof(Time));
-        }
-    }
+    [NotMapped]
+    public string TypeName => Type != null ? Type.Name : "";
 
     private float _completionEstimation;
     public float CompletionEstimation
@@ -58,6 +75,19 @@ public class DrawingVM : BaseVM
         }
     }
 
+    private int? __disciplineId;
+    public int? DisciplineId
+    {
+        get => __disciplineId;
+        set
+        {
+            if (value == __disciplineId)
+                return;
+            __disciplineId = value;
+            NotifyPropertyChanged(nameof(DisciplineId));
+        }
+    }
+
     private Discipline _discipline;
     public Discipline Discipline
     {
@@ -70,6 +100,12 @@ public class DrawingVM : BaseVM
             NotifyPropertyChanged(nameof(Discipline));
         }
     }
+
+    [NotMapped]
+    public string DisciplineTypeName => Discipline != null && Discipline.Type != null ? Discipline.Type.Name : "";
+
+    [NotMapped]
+    public string ProjectName => Discipline != null && Discipline.Project != null ? Discipline.Project.Name : "";
 
     [NotMapped]
     public string CompletionDateDisplay => $"{CompletionDate.Value.Day}/{CompletionDate.Value.Month}/{CompletionDate.Value.Year}";

@@ -1,12 +1,49 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class DisciplineVM : BaseVM
 {
+    private bool? _isSelected = false;
+    public bool? IsSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (value == _isSelected)
+                return;
+            _isSelected = value;
+            NotifyPropertyChanged(nameof(IsSelected));
+        }
+    }
+
+    private long _estimatedMandays;
+    public long EstimatedMandays
+    {
+        get => _estimatedMandays;
+        set
+        {
+            if (value == _estimatedMandays)
+                return;
+            _estimatedMandays = value;
+            NotifyPropertyChanged(nameof(EstimatedMandays));
+        }
+    }
+
+    private long _estimatedHours;
+    public long EstimatedHours
+    {
+        get => _estimatedHours;
+        set
+        {
+            if (value == _estimatedHours)
+                return;
+            _estimatedHours = value;
+            NotifyPropertyChanged(nameof(EstimatedHours));
+        }
+    }
+
     private int _typeId;
     public int TypeId
     {
@@ -33,18 +70,35 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private long _estimatedHours;
-    public long EstimatedHours
+    public string TypeName => Type != null ? Type.Name : "";
+
+    private int _projectId;
+    public int ProjectId
     {
-        get => _estimatedHours;
+        get => _projectId;
         set
         {
-            if (value == _estimatedHours)
+            if (value == _projectId)
                 return;
-            _estimatedHours = value;
-            NotifyPropertyChanged(nameof(EstimatedHours));
+            _projectId = value;
+            NotifyPropertyChanged(nameof(ProjectId));
         }
     }
+
+    private Project _project;
+    public Project Project
+    {
+        get => _project;
+        set
+        {
+            if (value == _project)
+                return;
+            _project = value;
+            NotifyPropertyChanged(nameof(Project));
+        }
+    }
+
+    public string ProjectName => Project != null ? Project.Name : "";
 
     private float _estimatedCompleted;
     public float EstimatedCompleted
@@ -59,16 +113,24 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private float _completed;
-    public float Completed
+    private float _declaredCompleted;
+    public float DeclaredCompleted
     {
-        get => _completed;
+        get => _declaredCompleted;
         set
         {
-            if (value == _completed)
+            if (value == _declaredCompleted)
                 return;
-            _completed = value;
-            NotifyPropertyChanged(nameof(Completed));
+            _declaredCompleted = value;
+            NotifyPropertyChanged(nameof(DeclaredCompleted));
         }
+    }
+
+    public DisciplineVM()
+    {
+        EstimatedMandays = 0;
+        EstimatedHours = 0;
+        EstimatedCompleted = 0;
+        DeclaredCompleted = 0;
     }
 }

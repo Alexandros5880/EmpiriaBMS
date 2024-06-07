@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using EmpiriaBMS.Front.ViewModel.Components.Base;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class UserVM : BaseVM
@@ -30,6 +28,32 @@ public class UserVM : BaseVM
                 return;
             _proxyAddress = value;
             NotifyPropertyChanged(nameof(ProxyAddress));
+        }
+    }
+
+    private string _passwordHash;
+    public string PasswordHash
+    {
+        get => _passwordHash;
+        set
+        {
+            if (value == _passwordHash)
+                return;
+            _passwordHash = value;
+            NotifyPropertyChanged(nameof(PasswordHash));
+        }
+    }
+
+    private string _password;
+    public string Password
+    {
+        get => _password;
+        set
+        {
+            if (value == _password)
+                return;
+            _password = value;
+            NotifyPropertyChanged(nameof(Password));
         }
     }
 
@@ -69,6 +93,19 @@ public class UserVM : BaseVM
                 return;
             _midName = value;
             NotifyPropertyChanged(nameof(MidName));
+        }
+    }
+
+    private string? _teamsObjectId;
+    public string? TeamsObjectId
+    {
+        get => _teamsObjectId;
+        set
+        {
+            if (value == _teamsObjectId)
+                return;
+            _teamsObjectId = value;
+            NotifyPropertyChanged(nameof(TeamsObjectId));
         }
     }
 
@@ -124,18 +161,12 @@ public class UserVM : BaseVM
         }
     }
 
-    private Project _project;
-    public Project Project
-    {
-        get => _project;
-        set
-        {
-            if (value == _project)
-                return;
-            _project = value;
-            NotifyPropertyChanged(nameof(Project));
-        }
-    }
+    public string FullName => $"{LastName} {MidName} {FirstName}";
 
     public ICollection<Email> Emails { get; set; }
+
+    public List<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+
+    [NotMapped]
+    public ICollection<int>? MyRolesIds { get; set; }
 }

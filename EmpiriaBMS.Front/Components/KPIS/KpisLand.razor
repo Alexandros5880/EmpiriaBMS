@@ -1,0 +1,153 @@
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using ChartJs.Blazor;
+
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+
+<div class="container-fluid m-2" style="max-width: 98% !important;">
+
+    <FluentLayout Style="margin-top: 10px;">
+
+        <FluentHeader>
+            <h3>Key Performance Indicators (KPIS)</h3>
+            <FluentSpacer />
+            Aligned to the end
+        </FluentHeader>
+
+        <FluentStack Orientation="Orientation.Horizontal" Width="100%" HorizontalGap="33">
+
+            <FluentNavMenu Width="340">
+                @if (SeeTenderTableKPI)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 0))"
+                                   Class="@((tabs[0] ? "active-nav-link" : ""))">Tender Table</FluentNavLink>
+                }
+                @if (SeeHoursPerRoleKPI)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 1))"
+                                   Class="@((tabs[1] ? "active-nav-link" : ""))">Hours Per Role/User</FluentNavLink>
+                }
+                
+                @if (SeeActiveDelayedProjectsKPI)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 2))"
+                                   Class="@((tabs[2] ? "active-nav-link" : ""))">Delayed Projects Bar</FluentNavLink>
+                }
+                
+                @if (SeeActiveDelayedProjectsTypesCounterKPI)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 3))"
+                                   Class="@((tabs[3] ? "active-nav-link" : ""))">Delayed Project Types Bar</FluentNavLink>
+                }
+                
+                @if (SeeDelayedPaymentsKPI)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 4))"
+                                   Class="@((tabs[4] ? "active-nav-link" : ""))">Delayed Payments</FluentNavLink>
+                }
+                
+                @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 5))"
+                                   Class="@((tabs[5] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
+                }
+                
+                @if (SeeEmployeeTurnoverKPI)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 6))"
+                                   Class="@((tabs[6] ? "active-nav-link" : ""))">Employees Turnover</FluentNavLink>
+                }
+                
+                @if (SeePendingsPaymentsKPI)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 7))"
+                                   Class="@((tabs[7] ? "active-nav-link" : ""))">Pending Peyments</FluentNavLink>
+                }
+                
+            </FluentNavMenu>
+
+            <FluentBodyContent Style="max-width: min(80vw, 1100px);">
+                @if (tabs[0])
+                {
+                    @if (SeeTenderTableKPI)
+                    {
+                        <div style="margin-top: 50px;">
+                            <TenderTable />
+                        </div>
+                    }
+                }
+                else if (tabs[1])
+                {
+                    @if (SeeHoursPerRoleKPI)
+                    {
+                        <div style="margin-top: 50px;">
+                            <HouresPerRoleUserKPI />
+                        </div>
+                    }
+                }
+                else if (tabs[2])
+                {
+                    @if (SeeActiveDelayedProjectsKPI)
+                    {
+                        <div style="margin-top: 50px;">
+                            <DelayedProjectsKPI />
+                        </div>
+                    }
+                }
+                else if (tabs[3])
+                {
+                    @if (SeeActiveDelayedProjectsTypesCounterKPI)
+                    {
+                        <div style="margin-top: 50px;">
+                            <DelayedProjectTypesKPI />
+                        </div>
+                    }
+                }
+                else if (tabs[4])
+                {
+                    @if (SeeDelayedPaymentsKPI)
+                    {
+                        <div style="margin-top: 50px;">
+                            <DelayedPaymentsKpi />
+                        </div>
+                    }
+                }
+                else if (tabs[5])
+                {
+                    @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
+                    {
+                        <div style="margin-top: 50px;">
+                            <ProjectsMissedDeadlineKPI />
+                        </div>
+                    }
+                }
+                else if (tabs[6])
+                {
+                    @if (SeeEmployeeTurnoverKPI)
+                    {
+                        <div style="margin-top: 50px;">
+                            <EmployeeTurnoverKPI />
+                        </div>
+                    }
+                }
+                else if (tabs[7])
+                {
+                    @if (SeePendingsPaymentsKPI)
+                    {
+                        <div style="margin-top: 50px;">
+                            <PandingPaymentsKPI />
+                        </div>
+                    }
+                }
+            </FluentBodyContent>
+
+        </FluentStack>
+
+        <FluentFooter Style="@("height: 40px; color: white; text-align: center;")">
+            Footer Text
+        </FluentFooter>
+    </FluentLayout>
+
+</div>

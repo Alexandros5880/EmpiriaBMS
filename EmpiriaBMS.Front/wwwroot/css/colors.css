@@ -2,17 +2,19 @@
 @import "variables";
 
 :root {
+    --warning: #ffcc00;
     --main-bg-color: #f5f5f5;
-    --selected_1-row-bg-color: rgba(209, 231, 221, 0.5);
-    --selected_2-row-bg-color: rgba(248,215,218, 0.5);
-    --selected_3-row-bg-color: rgba(207, 226, 255, 0.5);
-    --selected_4-row-bg-color: rgba(255,243,205, 0.5);
+    --selected-table-row-bg-color: rgba(68,71,145, 0.5);
+    --selected-table-row-color: rgba(255,255,255, 1);
     --hover-row-bg-color: rgb(251, 252, 252);
     --primary-accent-color: #5A5C91;
-    --primary-bg-color: rgb(68,71,145, 0.3);
-    --primary-hover-bg-color: rgb(68,71,145, 0.5);
+    --primary-bg-color: rgba(68,71,145, 0.3);
+    --primary-bg-solid-color: rgb(191,193,215);
+    --primary-hover-bg-color: rgba(68,71,145, 0.5);
+    --admin-nav-bar-color: rgba(245, 245, 245, 1);
+    --admin-nav-bar-hover-color: rgba(245, 245, 245, 0.5);
+    /*    --dashboard-tables-header-color: rgba(181,124,124, 0.7);*/
 }
-
 
 .btn-primary, .btn-primary:active, .btn-primary:visited {
     background-color: var(--primary-bg-color) !important;

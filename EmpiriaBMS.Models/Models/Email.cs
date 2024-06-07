@@ -1,6 +1,4 @@
-﻿using EmpiriaBMS.Models.Models;
-using EmpiriaMS.Models.Models.Base;
-
+﻿
 namespace EmpiriaBMS.Models.Models;
 
 public class Email : Entity

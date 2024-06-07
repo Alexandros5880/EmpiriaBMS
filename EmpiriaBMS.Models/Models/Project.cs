@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EmpiriaMS.Models.Models.Base;
-using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EmpiriaMS.Models.Models;
+namespace EmpiriaBMS.Models.Models;
 public class Project : Entity
 {
     [Required]
@@ -18,67 +12,40 @@ public class Project : Entity
 
     public string? Code { get; set; }
 
-    public string? Drawing { get; set; }
-
     public long EstimatedMandays { get; set; }
 
     public long EstimatedHours { get; set; }
 
-    public float EstimatedCompleted { get; set; }
+    public int StageId { get; set; }
+    public ProjectStage Stage { get; set; }
 
-    public float Completed { get; set; }
+    public bool Active { get; set; }
 
-    public float WorkPackegedCompleted { get; set; }
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime? StartDate { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
     public DateTime? DeadLine { get; set; }
 
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime? WorkPackege { get; set; }
+    public float EstimatedCompleted { get; set; }
 
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime? DurationDate { get; set; }
+    public float DeclaredCompleted { get; set; }
 
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime? EstPaymentDate { get; set; }
+    public int? ProjectManagerId { get; set; }
+    public User? ProjectManager { get; set; }
 
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime? PaymentDate { get; set; }
+    public int? OfferId { get; set; }
+    public Offer? Offer { get; set; }
 
-    public int? DelayInPayment { get; set; }
-
-    public string? PaymentDetailes { get; set; }
-
-    public double? DayCost { get; set; }
-
-    public string? Bank { get; set; }
-
-    public double? PaidFee { get; set; }
-
-    public int? DaysUntilPayment { get; set; }
-
-    public double? PendingPayments { get; set; }
-
-    public int? CalculationDaly { get; set; }
-
-    public int TypeId { get; set; }
-    public ProjectType Type { get; set; }
-
-    public int? SubContractorId { get; set; }
-    public User? SubContractor { get; set; }
-
-    public User? Customer { get; set; }
-
-    public Invoice? Invoice { get; set; }
+    public ICollection<Invoice> Invoices { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }
 
-    public ICollection<ProjectPmanager> ProjectsPmanagers { get; set; }
+    public ICollection<Issue> Complains { get; set; }
+
+    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 }

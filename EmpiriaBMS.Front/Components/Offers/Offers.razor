@@ -1,0 +1,139 @@
+﻿@using Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Front.Components.General
+@using EmpiriaBMS.Front.Components
+@using EmpiriaBMS.Front.Horizontal
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Offers;
+
+@inject IDialogService DialogService
+@inject TeamsUserCredential teamsUserCredential
+@inject MicrosoftTeams MicrosoftTeams
+@inject IWebHostEnvironment HostEnvironment
+@inject IConfiguration Configuration
+@inject NavigationManager MyNavigationManager
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+@inject TimerService TimerService
+@inject AuthorizeServices authorizeServices
+@inject SharedAuthDataService _sharedAuthData
+
+<div class="mt-3 ms-3">
+    <FluentStack>
+        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@(async (e) => await _add(e))">
+            Add Offer
+        </FluentButton>
+    </FluentStack>
+</div>
+
+<div class="row m-3 mt-4">
+
+    <div class="col-12">
+        <!-- Filters -->
+        <div class="d-flex justify-content-start">
+            <div>
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Height="400px"
+                                Items="@_projects"
+                                TOption="ProjectVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == _selectedProject?.Id)"
+                                SelectedOptionChanged="@(async (o) => await _onProjectSelectionChanged(o))"/>
+            </div>
+            <div class="ms-2">
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Height="400px"
+                                Items="@_offerStates"
+                                TOption="OfferStateVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == _selectedOfferState?.Id)"
+                                SelectedOptionChanged="@(async (o) => await _onStateSelectionChanged(o))" />
+            </div>
+            <div class="ms-2">
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Height="400px"
+                                Items="@_offerTypes"
+                                TOption="OfferTypeVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == _selectedOfferType?.Id)"
+                                SelectedOptionChanged="@(async (o) => await _onTypeSelectionChanged(o))" />
+            </div>
+            <div class="ms-2">
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                Placeholder="Select Result..."
+                                Items="_offerResults"
+                                Width="400px"
+                                Class="float-end"
+                                TOption="(string Value, string Text)"
+                                OptionText="@(c => c.Text)"
+                                OptionValue="@(c => c.Value)"
+                                SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Offers Table -->
+    <div class="col-12 border border-1 rounded mt-1">
+        <div>
+            <FluentDataGrid Items="@FilteredItems"
+                            ResizableColumns=true
+                            Pagination="@pagination"
+                            TGridItem="OfferVM"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            style="height: 240px; overflow:auto;">
+
+                <PropertyColumn Property="@(p => p.Result.GetDisplayName())" Sortable="true" Title="Result" Style="min-width: 140px;" />
+                <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
+                <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.Category.Name)" Sortable="true" Title="Category" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.SubCategory.Name)" Sortable="true" Title="SubCategory" Align="@Align.Start" />
+@* 
+                <TemplateColumn Title="Client"
+                                Sortable="true"
+                                Style="min-width: 160px;">
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                          Autofocus=true
+                                          @bind-Value="@_clientNameFilter"
+                                          Placeholder="Client name..."
+                                          @oninput="@HandleClientNameFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.Project?.Client?.LastName ?? "" + " " + context.Project?.Client?.FirstName ?? "")
+                    </ChildContent>
+                </TemplateColumn> *@
+
+                <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Style="min-width: 120px;" />
+                <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.PudgetPrice)" Sortable="true" Title="Pudget" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.OfferPrice)" Sortable="true" Title="Price" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="min-width: 160px;" />
+
+                <TemplateColumn Title="Actions" Align="@Align.End">
+                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(async () => await _edit(context))" />
+                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(async () => await _delete(context))" />
+                </TemplateColumn>
+
+            </FluentDataGrid>
+        </div>
+        <div style="max-width: 64vw; margin: 0 auto;">
+            <FluentPaginator State="@pagination">
+                <SummaryTemplate>
+                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                </SummaryTemplate>
+                <PaginationTextTemplate>
+                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                </PaginationTextTemplate>
+            </FluentPaginator>
+        </div>
+    </div>
+
+</div>

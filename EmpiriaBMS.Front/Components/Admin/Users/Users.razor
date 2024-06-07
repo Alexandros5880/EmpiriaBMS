@@ -3,71 +3,64 @@
 @using EmpiriaBMS.Front.Services
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
+@inject IDialogService DialogService
 
-<div class="row">
-    <div class="col-12 card shadow p-1 mt-2">
-        <div class="d-flex justify-content-between m-1">
-            <div><h3>Users</h3></div>
-            <div>
-                <span class="codicon--add">
-                </span>
-            </div>
+<div class="row" style="overflow-x: auto; margin: 0 auto;">
+    <div class="col-12 card shadow">
+        <div>
+            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())" >Add</FluentButton>
+            </FluentStack>
         </div>
-        <div class="table-responsive p-1 table-container">
-            <table class="table table-hover text-center">
-                <thead>
-                    <tr>
-                        <th scope="col" class="sticky-header"><h5>User</h5></th>
-                        <th scope="col" class="sticky-header"><h5>Email</h5></th>
-                        <th scope="col" class="sticky-header"><h5>Edit</h5></th>
-                        <th scope="col" class="sticky-header"><h5>Delete</h5></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in _users)
-                    {
-                        <tr class="align-middle"
-                            @onclick="@(() => _onSelectUser(user.Id))">
+        <div>
+            <FluentDataGrid Items="@FilteredItems"
+                            ResizableColumns=true
+                            Pagination="@pagination"
+                            TGridItem="UserVM"
+                            OnRowFocus="HandleRowFocus"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            style="height: 70vh; overflow:auto;">
 
-                            <td class="align-middle
-                                    @((_selectedUser == null ||
-                                            !_selectedUser.Id.Equals(user.Id)
-                                                            ? "" : "highlight_1"))"
-                                style="word-wrap: break-word;">
-                                <labe>@user.LastName @user.FirstName</labe>
-                            </td>
+                <TemplateColumn Title="Name"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                          Autofocus=true
+                                          @bind-Value="@_filterString"
+                                          Placeholder="Name..."
+                                          @oninput="@HandleFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.FullName)
+                    </ChildContent>
+                </TemplateColumn>
 
-                            <td class="align-middle
-                                    @((_selectedUser == null ||
-                                            !_selectedUser.Id.Equals(user.Id)
-                                                            ? "" : "highlight_1"))">
-                                <label>@user.ProxyAddress</label>
-                            </td>
+                <PropertyColumn Property="@(p => p.ProxyAddress)" Sortable="true" Title="Proxy Address" Style="text-wrap: wrap;" />
+                <PropertyColumn Property="@(p => p.Phone1)" Sortable="true" Title="Phone1"/>
+                <PropertyColumn Property="@(p => p.Phone2)" Sortable="true" Title="Phone2"/>
+                <PropertyColumn Property="@(p => p.Phone3)" Sortable="true" Title="Phone3"/>
+                <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="text-wrap: wrap;" />
 
-                            <td class="align-middle
-                                    @((_selectedUser == null ||
-                                            !_selectedUser.Id.Equals(user.Id)
-                                                            ? "" : "highlight_1"))"
-                                style="width: 150px !important;">
-                                <span class="material-symbols--edit-outline" />
-                            </td>
-
-                            <td class="align-middle
-                                    @((_selectedUser == null ||
-                                            !_selectedUser.Id.Equals(user.Id)
-                                                            ? "" : "highlight_1"))"
-                                style="width: 150px !important;">
-                                <span class="fluent--delete-28-regular" />
-                            </td>
-
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                <TemplateColumn Title="Actions" Align="@Align.End">
+                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                </TemplateColumn>
+                
+            </FluentDataGrid>
         </div>
-        <!-- Paginator -->
-        <div style="text-align: right;">
-            <Paginator @ref=_paginator Renderer="@_getUsers" />
+        <div style="min-width: 50%;">
+            <FluentPaginator State="@pagination">
+                <SummaryTemplate>
+                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                </SummaryTemplate>
+                <PaginationTextTemplate>
+                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                </PaginationTextTemplate>
+            </FluentPaginator>
         </div>
     </div>
 </div>

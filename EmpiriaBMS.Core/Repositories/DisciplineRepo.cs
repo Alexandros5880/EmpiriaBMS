@@ -1,12 +1,6 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
-using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
@@ -26,6 +20,9 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         {
             var disclipline = await _context
                              .Set<Discipline>()
+                             .Where(r => !r.IsDeleted)
+                             .Include(d => d.Type)
+                             .Include(d => d.Project)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<DisciplineDto>(disclipline);
@@ -40,15 +37,21 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 ds = await _context.Set<Discipline>()
-                                     .ToListAsync();
+                                   .Where(r => !r.IsDeleted)
+                                   .Include(d => d.Type)
+                                   .Include(d => d.Project)
+                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
             }
 
             ds = await _context.Set<Discipline>()
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+                               .Where(r => !r.IsDeleted)
+                               .Include(d => d.Type)
+                               .Include(d => d.Project)
+                               .Skip((pageIndex - 1) * pageSize)
+                               .Take(pageSize)
+                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
         }
@@ -64,14 +67,18 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             List<Discipline> ds;
             if (pageSize == 0 || pageIndex == 0)
             {
-                ds = await _context.Set<Discipline>()
-                                     .Where(expresion)
-                                     .ToListAsync();
+                ds = await _context.Set<Discipline>().Where(r => !r.IsDeleted)
+                                   .Include(d => d.Type)
+                                   .Include(d => d.Project)
+                                   .Where(expresion)
+                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Discipline>, List<DisciplineDto>>(ds);
             }
 
-            ds = await _context.Set<Discipline>()
+            ds = await _context.Set<Discipline>().Where(r => !r.IsDeleted)
+                               .Include(d => d.Type)
+                               .Include(d => d.Project)
                                .Where(expresion)
                                .Skip((pageIndex - 1) * pageSize)
                                .Take(pageSize)
@@ -90,6 +97,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         {
             var draws = await _context
                              .Set<Drawing>()
+                             .Where(r => !r.IsDeleted)
                              .Where(d => d.DisciplineId == id)
                              .Include(d => d.Type)
                              .ToListAsync();
@@ -108,12 +116,15 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             List<Drawing> drawings;
             var disciplineDrawingsIds = await _context
                                          .Set<Drawing>()
+                                         .Where(r => !r.IsDeleted)
                                          .Where(d => d.DisciplineId == id)
                                          .Select(d => d.Id)
                                          .ToListAsync();
             if (all)
             {
                 drawings = await _context.Set<Drawing>()
+
+                    .Where(r => !r.IsDeleted)
                                          .Where(d => disciplineDrawingsIds.Contains(d.Id))
                                          .Include(d => d.Type)
                                          .ToListAsync();
@@ -121,12 +132,14 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             else
             {
                 var drawingIds = await _context.Set<DrawingEmployee>()
-                                                    .Where(de => disciplineDrawingsIds.Contains(de.DrawingId))
-                                                    .Where(de => de.EmployeeId == userId)
-                                                    .Select(de => de.DrawingId)
-                                                    .ToListAsync();
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(de => disciplineDrawingsIds.Contains(de.DrawingId))
+                                               .Where(de => de.EmployeeId == userId)
+                                               .Select(de => de.DrawingId)
+                                               .ToListAsync();
 
                 drawings = await _context.Set<Drawing>()
+                                          .Where(r => !r.IsDeleted)
                                          .Where(d => drawingIds.Contains(d.Id))
                                          .Include(d => d.Type)
                                          .ToListAsync();
@@ -145,6 +158,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         {
             var others = await _context
                              .Set<Other>()
+                             .Where(r => !r.IsDeleted)
                              .Where(d => d.DisciplineId == id)
                              .Include(d => d.Type)
                              .ToListAsync();
@@ -163,12 +177,14 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             List<Other> others;
             var disciplineOthersIds = await _context
                                          .Set<Other>()
+                                         .Where(r => !r.IsDeleted)
                                          .Where(d => d.DisciplineId == id)
                                          .Select(d => d.Id)
                                          .ToListAsync();
             if (all)
             {
                 others = await _context.Set<Other>()
+                                       .Where(r => !r.IsDeleted)
                                        .Where(o => disciplineOthersIds.Contains(o.Id))
                                        .Include(d => d.Type)
                                        .ToListAsync();
@@ -176,18 +192,22 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             else
             {
                 var otherIds = await _context.Set<OtherEmployee>()
-                                                    .Where(de => disciplineOthersIds.Contains(de.OtherId))
-                                                    .Where(de => de.EmployeeId == userId)
-                                                    .Select(de => de.OtherId)
-                                                    .ToListAsync();
+                                             .Where(r => !r.IsDeleted)
+                                             .Where(de => disciplineOthersIds.Contains(de.OtherId))
+                                             .Where(de => de.EmployeeId == userId)
+                                             .Select(de => de.OtherId)
+                                             .ToListAsync();
 
                 others = await _context.Set<Other>()
+                                       .Where(r => !r.IsDeleted)
                                        .Where(o => otherIds.Contains(o.Id))
                                        .Include(d => d.Type)
                                        .ToListAsync();
             }
 
-            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+            var result = Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+
+            return result.OrderBy(d => d.Type?.Name).ToList();
         }
     }
 
@@ -196,6 +216,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return await _context.Set<DailyTime>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(mh => mh.DisciplineId == disciplineId)
                                  .Include(mh => mh.TimeSpan)
                                  .Select(mh => mh.TimeSpan.Hours)
@@ -208,45 +229,11 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return _context.Set<DailyTime>()
+                           .Where(r => !r.IsDeleted)
                            .Where(mh => mh.DisciplineId == disciplineId)
                            .Include(mh => mh.TimeSpan)
                            .Select(mh => mh.TimeSpan.Hours)
                            .Sum();
-        }
-    }
-
-    public async Task UpdateCompleted(int projectId, int disciplineId, float completed)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            // Calculate Parent Discipline Completed
-            var discipline = await _context.Set<Discipline>()
-                                           .Include(d => d.Project)
-                                           .Include(d => d.Drawings)
-                                           .Include(d => d.Others)
-                                           .FirstOrDefaultAsync(d => d.Id == disciplineId);
-            if (discipline == null)
-                throw new NullReferenceException(nameof(discipline));
-            var allDrawings = discipline.Drawings;
-            var sumComplitionOfDrawings = allDrawings
-                                          .Select(d => d.CompletionEstimation)
-                                          .Sum();
-
-            sumComplitionOfDrawings += completed;
-
-            var drawsCounter = allDrawings.Count();
-            discipline.Completed = sumComplitionOfDrawings / drawsCounter;
-
-            // Calculate Parent Project Complition
-            var disciplines = await _context.Set<Discipline>()
-                                            .Where(d => d.ProjectId == projectId)
-                                            .ToListAsync();
-            var project = discipline.Project;
-            var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
-            var disciplinesCounter = disciplines.Count();
-            project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
-
-            await _context.SaveChangesAsync();
         }
     }
 
@@ -268,6 +255,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 
             // Get Discipline && Calculate Estimated Hours
             var discipline = await _context.Set<Discipline>()
+                                           .Where(r => !r.IsDeleted)
                                            .Include(p => p.DailyTime)
                                            .FirstOrDefaultAsync(p => p.Id == disciplineId);
             if (discipline == null)
@@ -279,6 +267,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 
             // Get Project && Calculate Estimated Hours
             var project = await _context.Set<Project>()
+                                        .Where(r => !r.IsDeleted)
                                         .Include(p => p.DailyTime)
                                         .FirstOrDefaultAsync(p => p.Id == projectId);
             if (project == null)
@@ -299,6 +288,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var users = await _context.Set<DisciplineEngineer>()
+                                      .Where(r => !r.IsDeleted)
                                       .Where(de => de.DisciplineId == disciplineId)
                                       .Include(de => de.Engineer)
                                       .Select(de => de.Engineer)
@@ -323,8 +313,8 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                 };
 
                 // Check If Exists
-                var exists = await _context.Set<DisciplineEngineer>()
-                    .AnyAsync(de => de.DisciplineId == disciplineId && de.EngineerId == e.Id);
+                var exists = await _context.Set<DisciplineEngineer>().Where(r => !r.IsDeleted)
+                                           .AnyAsync(de => de.DisciplineId == disciplineId && de.EngineerId == e.Id);
                 if (exists) continue;
 
                 await _context.Set<DisciplineEngineer>().AddAsync(de);
@@ -338,19 +328,49 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var engineers = await _context.Set<DisciplineEngineer>()
-                                              .Where(d => engineersIds.Contains(d.EngineerId)
+                                          .Where(r => !r.IsDeleted)
+                                          .Where(d => engineersIds.Contains(d.EngineerId)
                                                                 && d.DisciplineId == disciplineId)
-                                              .ToListAsync();
+                                          .ToListAsync();
 
             if (engineers == null)
                 throw new NullReferenceException(nameof(engineers));
 
             foreach (var engineer in engineers)
             {
-                _context.Set<DisciplineEngineer>().Remove(engineer);
+                await DeleteDisciplineEngineer(engineer);
+                //_context.Set<DisciplineEngineer>().Remove(engineer);
             }
 
             await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<DisciplineEngineer> DeleteDisciplineEngineer(DisciplineEngineer entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<DisciplineEngineer>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    entry.IsDeleted = true;
+                    await _context.SaveChangesAsync();
+                }
+
+                return entry;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On DisciplineRepo.DeleteDisciplineEngineer({Mapping.Mapper.Map<DisciplineEngineerDto>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
         }
     }
 }

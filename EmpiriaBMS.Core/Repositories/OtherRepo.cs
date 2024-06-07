@@ -1,16 +1,10 @@
 ﻿using EmpiriaBMS.Core.Repositories.Base;
-using EmpiriaMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using EmpiriaBMS.Models.Models;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Config;
-using System.ComponentModel.DataAnnotations;
+using EmpiriaBMS.Core.Hellpers;
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -27,6 +21,14 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         {
             var dr = await _context
                              .Set<Other>()
+                             .Where(r => !r.IsDeleted)
+                             .Include(d => d.Type)
+                             .Include(d => d.Discipline)
+                             .ThenInclude(d => d.Type)
+                             .Include(d => d.Discipline)
+                             .ThenInclude(dis => dis.Project)
+                             .Include(o => o.Discipline)
+                             .ThenInclude(d => d.Type)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<OtherDto>(dr);
@@ -42,16 +44,32 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 drs = await _context.Set<Other>()
-                                     .ToListAsync();
+                                    .Where(r => !r.IsDeleted)
+                                    .Include(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(dis => dis.Project)
+                                    .Include(o => o.Discipline)
+                                    .ThenInclude(d => d.Type)
+                                    .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
             }
 
 
             drs = await _context.Set<Other>()
-                                 .Skip((pageIndex - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+                                .Where(r => !r.IsDeleted)
+                                .Include(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(dis => dis.Project)
+                                .Include(o => o.Discipline)
+                                .ThenInclude(d => d.Type)
+                                .Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
 
             return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
         }
@@ -69,6 +87,14 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
             if (pageSize == 0 || pageIndex == 0)
             {
                 drs = await _context.Set<Other>()
+                                    .Where(r => !r.IsDeleted)
+                                    .Include(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(d => d.Type)
+                                    .Include(d => d.Discipline)
+                                    .ThenInclude(dis => dis.Project)
+                                    .Include(o => o.Discipline)
+                                    .ThenInclude(d => d.Type)
                                     .Where(expresion)
                                     .ToListAsync();
 
@@ -77,6 +103,14 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
 
             drs = await _context.Set<Other>()
+                                .Where(r => !r.IsDeleted)
+                                .Include(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(d => d.Type)
+                                .Include(d => d.Discipline)
+                                .ThenInclude(dis => dis.Project)
+                                .Include(o => o.Discipline)
+                                .ThenInclude(d => d.Type)
                                 .Where(expresion)
                                 .Skip((pageIndex - 1) * pageSize)
                                 .Take(pageSize)
@@ -91,6 +125,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return await _context.Set<DailyTime>()
+                                 .Where(r => !r.IsDeleted)
                                  .Where(mh => mh.OtherId == otherId)
                                  .Include(mh => mh.TimeSpan)
                                  .Select(mh => mh.TimeSpan.Hours)
@@ -103,6 +138,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             return _context.Set<DailyTime>()
+                           .Where(r => !r.IsDeleted)
                            .Where(mh => mh.OtherId == otherId)
                            .Include(mh => mh.TimeSpan)
                            .Select(mh => mh.TimeSpan.Hours)
@@ -116,32 +152,35 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         {
             // Update Current Other
             var other = await _context.Set<Other>()
-                                        .FirstOrDefaultAsync(d => d.Id == otherId);
+                                      .Where(r => !r.IsDeleted)
+                                      .FirstOrDefaultAsync(d => d.Id == otherId);
             if (other == null)
                 throw new NullReferenceException(nameof(other));
             other.CompletionEstimation += completed;
 
             // Calculate Parent Discipline Completed
             var discipline = await _context.Set<Discipline>()
+                                           .Where(r => !r.IsDeleted)
                                            .Include(d => d.Others)
                                            .FirstOrDefaultAsync(d => d.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
             var allOthers = discipline.Others;
-            var sumComplitionOfOthers = allOthers
-                                          .Select(d => d.CompletionEstimation)
-                                          .Sum();
-            var othersCounter = allOthers.Count();
-            discipline.Completed = sumComplitionOfOthers / othersCounter;
+            var sumComplitionOfOthers = allOthers.Where(r => !r.IsDeleted)
+                                                 .Select(d => d.CompletionEstimation)
+                                                 .Sum();
+            var othersCounter = allOthers.Where(r => !r.IsDeleted).Count();
+            discipline.DeclaredCompleted = sumComplitionOfOthers / othersCounter;
 
             // Calculate Parent Project Complition
             var disciplines = await _context.Set<Discipline>()
+                                            .Where(r => !r.IsDeleted)
                                             .Where(d => d.ProjectId == projectId)
                                             .ToListAsync();
             var project = discipline.Project;
-            var sumCompplitionOfDisciplines = disciplines.Select(d => d.Completed).Sum();
+            var sumCompplitionOfDisciplines = disciplines.Select(d => d.DeclaredCompleted).Sum();
             var disciplinesCounter = disciplines.Count();
-            project.Completed = sumCompplitionOfDisciplines / disciplinesCounter;
+            project.DeclaredCompleted = sumCompplitionOfDisciplines / disciplinesCounter;
 
             await _context.SaveChangesAsync();
         }
@@ -151,29 +190,39 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            DailyTime time = new DailyTime()
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
             {
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Date = DateTime.Now,
-                DailyUserId = userId,
-                ProjectId = projectId,
-                DisciplineId = disciplineId,
-                OtherId = otherId,
-                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds)
-            };
-            await _context.Set<DailyTime>().AddAsync(time);
+                DailyTime time = new DailyTime()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now.AddDays(-i),
+                    DailyUserId = userId,
+                    ProjectId = projectId,
+                    DisciplineId = disciplineId,
+                    OtherId = otherId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds)
+                };
+                await _context.Set<DailyTime>().AddAsync(time);
+            }
 
             // Save Changes
             await _context.SaveChangesAsync();
 
             // Get Discipline && Calculate Estimated Hours
             var discipline = await _context.Set<Discipline>()
+                                           .Where(r => !r.IsDeleted)
                                            .Include(p => p.DailyTime)
                                            .FirstOrDefaultAsync(p => p.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
             var disciplineMenHours = await _context.Set<DailyTime>()
+                                          .Where(r => !r.IsDeleted)
                                           .Where(d => d.DisciplineId == disciplineId)
                                           .Select(d => d.TimeSpan.Hours)
                                           .SumAsync();
@@ -182,12 +231,14 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
 
             // Get Project && Calculate Estimated Hours
             var project = await _context.Set<Project>()
+                                        .Where(r => !r.IsDeleted)
                                         .Include(p => p.DailyTime)
                                         .FirstOrDefaultAsync(p => p.Id == projectId);
             if (project == null)
                 throw new NullReferenceException(nameof(project));
-            var projectsTimes = project.DailyTime.Select(dt => dt.TimeSpan).ToList();
+            var projectsTimes = project.DailyTime.Where(r => !r.IsDeleted).Select(dt => dt.TimeSpan).ToList();
             var projectMenHours = await _context.Set<DailyTime>()
+                                          .Where(r => !r.IsDeleted)
                                           .Where(d => d.ProjectId == projectId)
                                           .Select(d => d.TimeSpan.Hours)
                                           .SumAsync();
