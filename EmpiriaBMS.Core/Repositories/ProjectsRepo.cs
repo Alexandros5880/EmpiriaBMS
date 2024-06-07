@@ -993,4 +993,37 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return dtos;
         }
     }
+
+    public async Task AddTime(int userId, int projectId, TimeSpan timespan)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            DailyTime time = new DailyTime()
+            {
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                DailyUserId = userId,
+                ProjectId = projectId,
+                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds)
+            };
+            await _context.Set<DailyTime>().AddAsync(time);
+
+            // Get Project && Calculate Estimated Hours
+            var project = await _context.Set<Project>()
+                                        .Where(r => !r.IsDeleted)
+                                        .Include(p => p.DailyTime)
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+            if (project == null)
+                throw new NullReferenceException(nameof(project));
+            var projectsTimes = project.DailyTime.Select(dt => dt.TimeSpan).ToList();
+            var projectMenHours = projectsTimes.Select(t => t.Hours).Sum();
+
+            decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
+            project.EstimatedCompleted = (float)divitionProResult * 100;
+
+            // Save Changes
+            await _context.SaveChangesAsync();
+        }
+    }
 }

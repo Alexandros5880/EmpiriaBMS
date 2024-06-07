@@ -23,4 +23,6 @@ public class LedDto : EntityDto
     public DateTime? ExpectedDurationDate { get; set; }
 
     public LedResult Result { get; set; }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
 }
