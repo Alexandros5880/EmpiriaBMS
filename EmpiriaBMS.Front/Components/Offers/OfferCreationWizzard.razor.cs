@@ -120,6 +120,7 @@ public partial class OfferCreationWizzard
 
             var ledDto = await _dataProvider.Leds.Get(led.Id);
             Led = _mapper.Map<LedVM>(ledDto);
+            Offer.LedId = led.Id;
         }
 
         _loading = false;
