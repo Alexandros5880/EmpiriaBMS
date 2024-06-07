@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 
@@ -34,4 +34,10 @@ public class DailyTime : Entity
 
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
+
+    public int? LedId { get; set; }
+    public Led? Led { get; set; }
+
+    public int? OfferId { get; set; }
+    public Offer? Offer { get; set; }
 }

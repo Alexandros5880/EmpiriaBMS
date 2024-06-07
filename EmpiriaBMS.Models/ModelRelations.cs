@@ -275,6 +275,20 @@ public static class ModelRelations
                .HasForeignKey(d => d.CorporateUserId)
                .OnDelete(DeleteBehavior.Cascade);
 
+        // Led DailyTime
+        builder.Entity<Led>()
+               .HasMany(p => p.DailyTime)
+               .WithOne(c => c.Led)
+               .HasForeignKey(c => c.LedId)
+               .OnDelete(DeleteBehavior.ClientCascade);
+
+        // Offer DailyTime
+        builder.Entity<Offer>()
+               .HasMany(p => p.DailyTime)
+               .WithOne(c => c.Offer)
+               .HasForeignKey(c => c.OfferId)
+               .OnDelete(DeleteBehavior.ClientCascade);
+
         // Project DailyTime
         builder.Entity<Project>()
                .HasMany(p => p.DailyTime)

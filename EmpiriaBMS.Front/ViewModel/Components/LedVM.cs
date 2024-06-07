@@ -6,6 +6,20 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class LedVM : BaseVM
 {
+    // Not Mapped
+    private TimeSpan _time = TimeSpan.Zero;
+    public TimeSpan Time
+    {
+        get => _time;
+        set
+        {
+            if (value == _time)
+                return;
+            _time = value;
+            NotifyPropertyChanged(nameof(Time));
+        }
+    }
+
     private string _name;
     public string Name
     {
@@ -109,4 +123,6 @@ public class LedVM : BaseVM
             NotifyPropertyChanged(nameof(Result));
         }
     }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
 }

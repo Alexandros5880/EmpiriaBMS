@@ -21,4 +21,6 @@ public class Led : Entity
     public DateTime? ExpectedDurationDate { get; set; }
 
     public LedResult Result { get; set; }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
 }

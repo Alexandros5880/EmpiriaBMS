@@ -6,6 +6,20 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class OfferVM : BaseVM
 {
+    // Not Mapped
+    private TimeSpan _time = TimeSpan.Zero;
+    public TimeSpan Time
+    {
+        get => _time;
+        set
+        {
+            if (value == _time)
+                return;
+            _time = value;
+            NotifyPropertyChanged(nameof(Time));
+        }
+    }
+
     // Type
     private int _typeId;
     public int TypeId
@@ -261,4 +275,6 @@ public class OfferVM : BaseVM
     }
 
     public ICollection<Project>? Projects { get; set; }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
 }

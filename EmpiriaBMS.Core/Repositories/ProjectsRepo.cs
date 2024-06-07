@@ -341,7 +341,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<ProjectDto>> GetAll(Expression<Func<Project, bool>> expresion, int userId)
+    public new async Task<ICollection<ProjectDto>> GetLastMonthProjects(int userId, int offerId = 0, bool? active = null)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -365,7 +365,9 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Where(r => !r.IsDeleted)
-                                                .Where(expresion)
+                                                .Where(r => active == null || r.Active == active)
+                                                .Where(p => (offerId == 0 || p.OfferId == offerId))
+                                                .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Stage)
                                                 .Include(p => p.Offer)
@@ -416,22 +418,24 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var projects = await _context.Set<Project>()
                                          .Where(r => !r.IsDeleted)
+                                         .Where(r => active == null || r.Active == active)
+                                         .Where(p => (offerId == 0 || p.OfferId == offerId))
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
-                                         .Where(expresion)
+                                         .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
                                          .Include(r => r.Invoices)
-                                      .Include(p => p.Stage)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Category)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.SubCategory)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Led)
-                                      .ThenInclude(l => l.Address)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Led)
-                                      .ThenInclude(l => l.Client)
-                                      .Include(p => p.ProjectManager)
-                                      .Include(p => p.ProjectsSubConstructors)
+                                         .Include(p => p.Stage)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Category)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.SubCategory)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(l => l.Address)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(l => l.Client)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();
@@ -989,6 +993,39 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var dtos = Mapping.Mapper.Map<List<InvoiceDto>>(invoices);
             return dtos;
+        }
+    }
+
+    public async Task AddTime(int userId, int projectId, TimeSpan timespan)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            DailyTime time = new DailyTime()
+            {
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                DailyUserId = userId,
+                ProjectId = projectId,
+                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds)
+            };
+            await _context.Set<DailyTime>().AddAsync(time);
+
+            // Get Project && Calculate Estimated Hours
+            var project = await _context.Set<Project>()
+                                        .Where(r => !r.IsDeleted)
+                                        .Include(p => p.DailyTime)
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+            if (project == null)
+                throw new NullReferenceException(nameof(project));
+            var projectsTimes = project.DailyTime.Select(dt => dt.TimeSpan).ToList();
+            var projectMenHours = projectsTimes.Select(t => t.Hours).Sum();
+
+            decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
+            project.EstimatedCompleted = (float)divitionProResult * 100;
+
+            // Save Changes
+            await _context.SaveChangesAsync();
         }
     }
 }
