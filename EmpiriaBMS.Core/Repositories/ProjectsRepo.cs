@@ -10,6 +10,64 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 {
     public ProjectsRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<ProjectDto> Add(ProjectDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var result = await _context.Set<Project>().AddAsync(Mapping.Mapper.Map<Project>(entity));
+                await _context.SaveChangesAsync();
+
+                var project = result.Entity as Project;
+                var dto = await Get(project.Id);
+
+                return dto;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On ProjectsRepo.Add(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
+    public async Task<ProjectDto> Update(ProjectDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var project = await _context.Set<Project>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (project != null)
+                {
+                    _context.Entry(project).CurrentValues.SetValues(Mapping.Mapper.Map<Project>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                var dto = await Get(project.Id);
+
+                return dto;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On ProjectsRepo.Update(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
     public new async Task<ProjectDto?> Get(int id)
     {
         if (id == 0)
