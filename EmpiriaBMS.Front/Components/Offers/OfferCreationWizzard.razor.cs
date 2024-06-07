@@ -78,11 +78,11 @@ public partial class OfferCreationWizzard
         _loading = true;
 
         var valid = _ledCompoment.Validate();
-        Led = _ledCompoment.GetLed();
+        var led = _ledCompoment.GetLed();
 
         if (valid)
         {
-            var dto = _mapper.Map<LedDto>(Led);
+            var dto = _mapper.Map<LedDto>(led);
 
             // Save Address
             // If Addres Then Save Address
@@ -106,14 +106,17 @@ public partial class OfferCreationWizzard
             {
                 var updated = await _dataProvider.Leds.Update(dto);
                 if (updated != null)
-                    Led = _mapper.Map<LedVM>(updated);
+                    led = _mapper.Map<LedVM>(updated);
             }
             else
             {
                 var updated = await _dataProvider.Leds.Add(dto);
                 if (updated != null)
-                    Led = _mapper.Map<LedVM>(updated);
+                    led = _mapper.Map<LedVM>(updated);
             }
+
+            var ledDto = await _dataProvider.Leds.Get(led.Id);
+            Led = _mapper.Map<LedVM>(ledDto);
         }
 
         _loading = false;

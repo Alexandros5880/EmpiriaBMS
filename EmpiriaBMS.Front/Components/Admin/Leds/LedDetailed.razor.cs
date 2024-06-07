@@ -13,11 +13,18 @@ namespace EmpiriaBMS.Front.Components.Admin.Leds;
 
 public partial class LedDetailed
 {
+    private FluentCombobox<ClientVM> _clientCombo;
+    private FluentCombobox<(string Value, string Text)> _resultCombo;
+
     [Parameter]
     public bool DisplayActions { get; set; } = true;
 
     [Parameter]
-    public LedVM Content { get; set; }
+    public LedVM Content { get; set; } = new LedVM()
+    {
+        ExpectedDurationDate = DateTime.Now.AddMonths(1),
+        Result = LedResult.UNSUCCESSFUL
+    };
 
     [Parameter]
     public EventCallback<LedVM> OnSave { get; set; }
@@ -26,6 +33,16 @@ public partial class LedDetailed
     public EventCallback<(string Value, string Text)> OnResultChanged { get; set; }
 
     private bool _displayClientForm = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await Prepair();
+        }
+    }
 
     private void _toogleClientForm(bool? display = null)
     {
@@ -48,24 +65,11 @@ public partial class LedDetailed
 
     public async Task Prepair(LedVM record = null, bool full = true)
     {
-        if (record == null || record.Id == 0)
-        {
-            Content = new LedVM()
-            {
-                ExpectedDurationDate = DateTime.Now.AddMonths(1),
-                Result = LedResult.UNSUCCESSFUL
-            };
-
-        }
-        else
-        {
+        if (record != null)
             Content = record;
-        }
 
         if (full)
             await _getRecords();
-
-        StateHasChanged();
 
         if (Content.Client != null)
         {
@@ -208,7 +212,6 @@ public partial class LedDetailed
 
     #region Get Related Records
     // Client Selection
-    private FluentCombobox<ClientVM> _clientCombo;
     ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
 
     private ClientVM _client = new ClientVM();
@@ -223,7 +226,6 @@ public partial class LedDetailed
     }
 
     // Result Selection
-    private FluentCombobox<(string Value, string Text)> _resultCombo;
     private List<(string Value, string Text)> _results = Enum.GetValues(typeof(LedResult))
                                                              .Cast<LedResult>()
                                                              .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
