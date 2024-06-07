@@ -725,6 +725,48 @@
 
             <div class="mt-2 row gx-3">
 
+                @if(WorkOnLeds)
+                {
+                    <!-- Select Led -->
+                    <div class="col">
+                        <div class="text-center">
+                            <h5>Select Led</h5>
+                        </div>
+                        <select class="form-select form-select-lg"
+                                aria-label="Select Led"
+                                @onchange="@(async (ChangeEventArgs e) => await OnSelectLed(Convert.ToInt32(e.Value)))">
+                            <option value="0" selected>Select Led</option>
+                            @foreach (var led in _leds)
+                            {
+                                <option value="@led.Id">
+                                    @led.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                @if (WorkOnOffers)
+                {
+                    <!-- Select Offer -->
+                    <div class="col">
+                        <div class="text-center">
+                            <h5>Select Offer</h5>
+                        </div>
+                        <select class="form-select form-select-lg"
+                                aria-label="Select Offer"
+                                @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
+                            <option value="0" selected>Select Offer</option>
+                            @foreach (var offer in _offers)
+                            {
+                                <option value="@offer.Id">
+                                    @offer.Code
+                                </option>
+                            }
+                        </select>
+                    </div>
+                }
+
                 <!-- Select Project -->
                 <div class="col">
                     <div class="text-center">
@@ -853,12 +895,37 @@
             </div>
 
             <!-- Set User Extra Time -->
-            <div class="mt-1">
-                <SetUserTime LogedUserTimes="@_editLogedUserTimes"
-                             RemainingTime="@remainingTime"
-                             OnPersonalTimeChanged="@_onPersonalTimeChanged"
-                             OnTrainingTimeChanged="@_onTrainingTimeChanged"
-                             OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+            <div class="mt-1 row">
+
+                @if (WorkOnLeds)
+                {
+                    <div class="col-4">
+
+                    </div>
+                }
+
+                @if (WorkOnOffers)
+                {
+                    <div class="col-4">
+
+                    </div>
+                }
+
+                @if (WorkOnProject)
+                {
+                    <div class="col-4">
+
+                    </div>
+                }
+
+                <div class="col-12">
+                    <SetUserTime LogedUserTimes="@_editLogedUserTimes"
+                                 RemainingTime="@remainingTime"
+                                 OnPersonalTimeChanged="@_onPersonalTimeChanged"
+                                 OnTrainingTimeChanged="@_onTrainingTimeChanged"
+                                 OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+                </div>
+                
             </div>
 
         </div>

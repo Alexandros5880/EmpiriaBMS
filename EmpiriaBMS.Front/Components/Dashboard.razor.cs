@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Components.Invoices;
 using EmpiriaBMS.Front.Services;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
@@ -35,6 +33,9 @@ public partial class Dashboard : IDisposable
     bool seeTeamsRequestedUsers => _sharedAuthData.Permissions.Any(p => p.Ord == 28);
     bool seeInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 29);
     bool seeExpenses => _sharedAuthData.Permissions.Any(p => p.Ord == 30);
+    bool WorkOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
+    bool WorkOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
+    bool WorkOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
     #endregion
 
     // General Fields
@@ -71,6 +72,8 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Lists
+    private ObservableCollection<LedVM> _leds = new ObservableCollection<LedVM>();
+    private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DrawingVM> _draws = new ObservableCollection<DrawingVM>();
@@ -85,6 +88,8 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Selected Models
+    private LedVM _selectedLed = new LedVM();
+    private OfferVM _selectedOffer = new OfferVM();
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DrawingVM _selectedDraw = new DrawingVM();
@@ -242,6 +247,59 @@ public partial class Dashboard : IDisposable
         _userTotalHoursThisMonth = await _dataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
     }
 
+    public async Task _getLeds()
+    {
+        _selectedLed = null;
+        _selectedOffer = null;
+        _selectedProject = null;
+        _selectedDiscipline = null;
+        _selectedDraw = null;
+        _selectedOther = null;
+        _disciplines.Clear();
+        _draws.Clear();
+        _others.Clear();
+
+        try
+        {
+            var dtos = await _dataProvider.Leds.GetAll();
+            var vms = Mapper.Map<List<LedVM>>(dtos);
+            _leds.Clear();
+            vms.ForEach(_leds.Add);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+        _startLoading = false;
+    }
+
+    public async Task _getOffers()
+    {
+        _selectedOffer = null;
+        _selectedProject = null;
+        _selectedDiscipline = null;
+        _selectedDraw = null;
+        _selectedOther = null;
+        _disciplines.Clear();
+        _draws.Clear();
+        _others.Clear();
+
+        try
+        {
+            var dtos = await _dataProvider.Offers.GetAllByLed(_selectedLed?.Id ?? 0);
+            var vms = Mapper.Map<List<OfferVM>>(dtos);
+            _offers.Clear();
+            vms.ForEach(_offers.Add);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+        }
+        _startLoading = false;
+    }
+
     public async Task _getProjects()
     {
         _selectedProject = null;
@@ -254,22 +312,14 @@ public partial class Dashboard : IDisposable
 
         try
         {
-            // Todo: Find a way to add this in to PaginatorVM
-            //_paginator.SetRecordsLength(await _dataProvider.Projects.Count());
-
-            // TODO: Get My Project And Down
-            //List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetAll(LogedUser.Id, _paginator.PageSize, _paginator.PageIndex))
-            //                                                           .ToList<ProjectDto>();
-
-            // Get Projects of last month.
-            Expression<Func<EmpiriaBMS.Models.Models.Project, bool>> expression = p => p.CreatedDate >= DateTime.Now.AddMonths(-1);
-            List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetAll(expression, _sharedAuthData.LogedUser.Id)).ToList<ProjectDto>();
+            // Get Projects of last month
+            List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetLastMonthProjects(_sharedAuthData.LogedUser.Id, offerId: _selectedOffer?.Id ?? 0)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
 
             _projects.Clear();
-            foreach(var p in projectsVm)
+            foreach (var p in projectsVm)
             {
                 var pm = await _dataProvider.Projects.GetProjectManager(p.Id);
                 p.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
@@ -406,6 +456,48 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region When Row Selected Update Data
+    private async Task OnSelectLed(int ledId)
+    {
+        if (ledId == 0 || ledId == _selectedLed?.Id) return;
+
+        var led = _leds.FirstOrDefault(p => p.Id == ledId);
+        _offers.Clear();
+        _projects.Clear();
+        _draws.Clear();
+        _others.Clear();
+        _disciplines.Clear();
+        _selectedLed = led;
+        _selectedOffer = null;
+        _selectedProject = null;
+        _selectedDiscipline = null;
+        _selectedDraw = null;
+        _selectedOther = null;
+
+        await _getOffers();
+
+        StateHasChanged();
+    }
+
+    private async Task OnSelectOffer(int offerId)
+    {
+        if (offerId == 0 || offerId == _selectedOffer?.Id) return;
+
+        var offer = _offers.FirstOrDefault(p => p.Id == offerId);
+        _projects.Clear();
+        _draws.Clear();
+        _others.Clear();
+        _disciplines.Clear();
+        _selectedOffer = offer;
+        _selectedProject = null;
+        _selectedDiscipline = null;
+        _selectedDraw = null;
+        _selectedOther = null;
+
+        await _getProjects();
+
+        StateHasChanged();
+    }
+
     private async Task OnSelectProject(int projectId)
     {
         if (projectId == 0 || projectId == _selectedProject?.Id) return;
@@ -524,15 +616,27 @@ public partial class Dashboard : IDisposable
             CorporateEventTime = TimeSpan.Zero,
         };
 
+        _leds.Clear();
+        _offers.Clear();
         _projects.Clear();
         _others.Clear();
         _draws.Clear();
         _disciplines.Clear();
+        _selectedLed = null;
+        _selectedOffer = null;
         _selectedOther = null;
         _selectedDraw = null;
         _selectedDiscipline = null;
         _selectedProject = null;
-        await _getProjects();
+
+        if (WorkOnLeds)
+            await _getLeds();
+
+        if (WorkOnOffers)
+            await _getOffers();
+
+        if (!WorkOnLeds && !WorkOnOffers)
+            await _getProjects();
 
         StateHasChanged();
 
@@ -696,7 +800,7 @@ public partial class Dashboard : IDisposable
 
             StateHasChanged();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             // TODO Exception Log
             Console.WriteLine($"\n\nException: {ex.Message}");
@@ -1182,8 +1286,8 @@ public partial class Dashboard : IDisposable
             await _invoiceDetailedRef.Prepair();
             await _invoicePaymentsRef.Prepair(_selectedInvoice.Id);
         }
-            
-    } 
+
+    }
     #endregion
 
     private async Task ShowInformationAsync(string msg)

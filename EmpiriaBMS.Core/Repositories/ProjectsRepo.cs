@@ -341,7 +341,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<ProjectDto>> GetAll(Expression<Func<Project, bool>> expresion, int userId)
+    public new async Task<ICollection<ProjectDto>> GetLastMonthProjects(int userId, int offerId = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -365,7 +365,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Where(r => !r.IsDeleted)
-                                                .Where(expresion)
+                                                .Where(p => (offerId == 0 || p.OfferId == offerId))
+                                                .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Stage)
                                                 .Include(p => p.Offer)
@@ -416,22 +417,23 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var projects = await _context.Set<Project>()
                                          .Where(r => !r.IsDeleted)
+                                         .Where(p => (offerId == 0 || p.OfferId == offerId))
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
-                                         .Where(expresion)
+                                         .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
                                          .Include(r => r.Invoices)
-                                      .Include(p => p.Stage)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Category)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.SubCategory)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Led)
-                                      .ThenInclude(l => l.Address)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Led)
-                                      .ThenInclude(l => l.Client)
-                                      .Include(p => p.ProjectManager)
-                                      .Include(p => p.ProjectsSubConstructors)
+                                         .Include(p => p.Stage)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Category)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.SubCategory)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(l => l.Address)
+                                         .Include(p => p.Offer)
+                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(l => l.Client)
+                                         .Include(p => p.ProjectManager)
+                                         .Include(p => p.ProjectsSubConstructors)
                                          .OrderBy(e => !e.Active)
                                          .ThenByDescending(e => e.DeadLine)
                                          .ToListAsync();

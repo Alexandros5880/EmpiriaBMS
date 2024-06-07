@@ -105,7 +105,7 @@ public partial class Offers
 
     private async Task _getOffers(int projectId, int stateId = 0, int typeId = 0, OfferResult? result = null, bool refresh = false)
     {
-        var dtos = await _dataProvider.Offers.GetAll(projectId, stateId, typeId, result);
+        var dtos = await _dataProvider.Offers.GetAll(projectId: projectId, stateId: stateId, typeId: typeId, result: result);
         var vms = Mapper.Map<List<OfferVM>>(dtos);
         _offers.Clear();
         vms.ForEach(_offers.Add);

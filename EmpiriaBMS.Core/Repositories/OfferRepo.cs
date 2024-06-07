@@ -130,4 +130,25 @@ public class OfferRepo : Repository<OfferDto, Offer>
             return Mapping.Mapper.Map<List<Offer>, List<OfferDto>>(offers);
         }
     }
+
+    public async Task<ICollection<OfferDto>> GetAllByLed(int ledId = 0)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var offers = await _context.Set<Offer>()
+                                       .Where(o => !o.IsDeleted && (ledId == 0 || o.LedId == ledId))
+                                       .Include(o => o.Led)
+                                       .Include(o => o.State)
+                                       .Include(o => o.Type)
+                                       .Include(o => o.Led)
+                                       .ThenInclude(p => p.Client)
+                                       .Include(o => o.Led)
+                                       .ThenInclude(l => l.Address)
+                                       .Include(o => o.SubCategory)
+                                       .Include(o => o.Category)
+                                       .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Offer>, List<OfferDto>>(offers);
+        }
+    }
 }
