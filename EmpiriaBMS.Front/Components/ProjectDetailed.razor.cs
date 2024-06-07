@@ -77,9 +77,8 @@ public partial class ProjectDetailed : ComponentBase
 
         try
         {
-            Content.Offer.SubCategory = null;
             Content.Stage = null;
-            Content.Offer.Category = null;
+            Content.Offer = null;
 
             // Save Project
             ProjectDto saveProject;
@@ -95,6 +94,13 @@ public partial class ProjectDetailed : ComponentBase
             var projectVm = Mapper.Map<ProjectVM>(saveProject);
 
             return projectVm;
+        }
+        catch (NullReferenceException ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            // TODO: Log Error
+
+            return null;
         }
         catch (Exception ex)
         {
