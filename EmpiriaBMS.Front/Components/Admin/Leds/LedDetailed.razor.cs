@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Config;
+﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
@@ -16,49 +13,98 @@ namespace EmpiriaBMS.Front.Components.Admin.Leds;
 
 public partial class LedDetailed
 {
+    private FluentCombobox<ClientVM> _clientCombo;
+    private FluentCombobox<(string Value, string Text)> _resultCombo;
+
     [Parameter]
     public bool DisplayActions { get; set; } = true;
 
-    public LedVM Content { get; set; }
-
-    public async Task Prepair(LedVM record = null)
+    [Parameter]
+    public LedVM Content { get; set; } = new LedVM()
     {
-        if (record == null || record.Id == 0)
-        {
-            Content = new LedVM()
-            {
-                ExpectedDurationDate = DateTime.Now.AddMonths(1),
-                Result = LedResult.UNSUCCESSFUL
-            };
+        ExpectedDurationDate = DateTime.Now.AddMonths(1),
+        Result = LedResult.UNSUCCESSFUL
+    };
 
+    [Parameter]
+    public EventCallback<LedVM> OnSave { get; set; }
+
+    [Parameter]
+    public EventCallback<(string Value, string Text)> OnResultChanged { get; set; }
+
+    private bool _displayClientForm = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await Prepair();
         }
+    }
+
+    private void _toogleClientForm(bool? display = null)
+    {
+        if (display == null)
+            _displayClientForm = !_displayClientForm;
         else
+            _displayClientForm = (bool)display;
+        StateHasChanged();
+    }
+
+    private void _onNewClientSave(ClientVM client)
+    {
+        if (client != null)
         {
+            _clients.Add(client);
+            Client = client;
+            _toogleClientForm(false);
+        }
+    }
+
+    public async Task Prepair(LedVM record = null, bool full = true)
+    {
+        if (record != null)
             Content = record;
-        }
 
-        await _getRecords();
-
-        if (Content.Offer != null)
-        {
-            var offerDto = Mapping.Mapper.Map<OfferDto>(Content.Offer);
-            Offer = _mapper.Map<OfferVM>(offerDto);
-        }
+        if (full)
+            await _getRecords();
 
         if (Content.Client != null)
         {
             var clientDto = Mapping.Mapper.Map<ClientDto>(Content.Client);
             Client = _mapper.Map<ClientVM>(clientDto);
         }
+        else if (Content.ClientId != 0)
+        {
+            Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
+        }
 
-        if (Content.Result == null)
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
-        else
+        if (Content.Result != null)
+        {
             SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
-
-        StateHasChanged();
+            if (_resultCombo != null)
+            {
+                var value = SelectedResult.Value;
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
+        }
+        else
+        {
+            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
+            if (_resultCombo != null)
+            {
+                var value = SelectedResult.Value;
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
+        }
 
         await RefreshMap();
+
+        StateHasChanged();
     }
 
     public async Task<LedVM> SaveAsync()
@@ -69,6 +115,8 @@ public partial class LedDetailed
 
         if (valid)
         {
+            Content.ClientId = Client.Id;
+
             var dto = _mapper.Map<LedDto>(Content);
 
             // Save Address
@@ -85,10 +133,9 @@ public partial class LedDetailed
                 dto.AddressId = address.Id;
             }
 
-            dto.Offer = null;
             dto.Client = null;
             dto.Address = null;
-            
+
             // Save Led
             if (await _dataProvider.Leds.Any(p => p.Id == Content.Id))
             {
@@ -101,36 +148,48 @@ public partial class LedDetailed
                 Content = _mapper.Map<LedVM>(updated);
             }
 
+            await OnSave.InvokeAsync(Content);
             return Content;
-        } else
+        }
+        else
         {
+            await OnSave.InvokeAsync(null);
             return null;
         }
+    }
+
+    private async Task _onResultChanged((string Value, string Text) resultOption)
+    {
+        SelectedResult = resultOption;
+        await OnResultChanged.InvokeAsync(resultOption);
+    }
+
+    public LedVM GetLed()
+    {
+        Content.ClientId = Client.Id;
+        return Content;
     }
 
     #region Validation
     private bool validName = true;
     private bool validClient = true;
     private bool validPotencialFee = true;
-    private bool validOffer = true;
 
     public bool Validate(string fieldname = null)
     {
         if (fieldname == null)
         {
             validName = Content.Name != null && Content.Name.Length > 0;
-            validClient = !string.IsNullOrEmpty(Content?.Client?.FullName) || Content.ClientId != 0;
+            validClient = !string.IsNullOrEmpty(Client?.FullName) || Client?.Id != 0;
             validPotencialFee = Content?.PotencialFee > 0;
-            validOffer = !string.IsNullOrEmpty(Content?.Offer?.Code) || (Content.OfferId != 0 && Content.OfferId != null);
 
-            return validName && validClient && validPotencialFee && validOffer;
+            return validName && validClient && validPotencialFee;
         }
         else
         {
             validName = true;
             validClient = true;
             validPotencialFee = true;
-            validOffer = true;
 
             switch (fieldname)
             {
@@ -138,14 +197,11 @@ public partial class LedDetailed
                     validName = Content.Name != null && Content.Name.Length > 0;
                     return validName;
                 case "Client":
-                    validClient = !string.IsNullOrEmpty(Content?.Client?.FullName) || Content.ClientId != 0;
+                    validClient = !string.IsNullOrEmpty(Client?.FullName) || Client?.Id != 0;
                     return validClient;
                 case "validPotencialFee":
                     validClient = validPotencialFee = Content?.PotencialFee > 0; ;
                     return validPotencialFee;
-                case "Offer":
-                    validOffer = !string.IsNullOrEmpty(Content?.Offer?.Code) || Content.OfferId != 0;
-                    return validOffer;
                 default:
                     return true;
             }
@@ -166,31 +222,10 @@ public partial class LedDetailed
         {
             if (_client == value || value == null) return;
             _client = value;
-            Content.ClientId = _client.Id;
-            var dto = _mapper.Map<ClientDto>(_client);
-            Content.Client = Mapping.Mapper.Map<Client>(dto);
-        }
-    }
-
-    // Offer Selection
-    ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
-
-    private OfferVM _offer = new OfferVM();
-    public OfferVM Offer
-    {
-        get => _offer;
-        set
-        {
-            if (_offer == value || value == null) return;
-            _offer = value;
-            Content.OfferId = _offer.Id;
-            var dto = _mapper.Map<OfferDto>(_offer);
-            Content.Offer = Mapping.Mapper.Map<Offer>(dto);
         }
     }
 
     // Result Selection
-    private FluentCombobox<(string Value, string Text)> _resultCombo;
     private List<(string Value, string Text)> _results = Enum.GetValues(typeof(LedResult))
                                                              .Cast<LedResult>()
                                                              .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
@@ -215,7 +250,6 @@ public partial class LedDetailed
     private async Task _getRecords()
     {
         await _getClients();
-        await _getOffers();
     }
 
     private async Task _getClients()
@@ -227,16 +261,6 @@ public partial class LedDetailed
 
         Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId) ?? null;
     }
-
-    private async Task _getOffers()
-    {
-        var dtos = await _dataProvider.Offers.GetAll();
-        var vms = _mapper.Map<List<OfferVM>>(dtos);
-        _offers.Clear();
-        vms.ForEach(_offers.Add);
-
-        Offer = _offers.FirstOrDefault(c => c.Id == Content.OfferId) ?? null;
-    }
     #endregion
 
     #region Map Address
@@ -244,11 +268,12 @@ public partial class LedDetailed
 
     public async Task RefreshMap()
     {
-        if (Content.Id != 0 && Content.Address != null)
+        if (Content.Address != null && _map != null)
         {
             await _map.SetAddress(Content.Address);
         }
     }
+
     private void _onSearchAddressChange()
     {
         var address = _map.GetAddress();

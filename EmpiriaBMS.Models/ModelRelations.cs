@@ -93,16 +93,10 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.Cascade);
 
         // Led Offer (OneToOne)
-        builder.Entity<Led>()
-               .HasOne(a => a.Offer)
-               .WithOne(b => b.Led)
-               .HasForeignKey<Offer>(b => b.LedId)
-               .IsRequired(false)
-               .OnDelete(DeleteBehavior.Cascade);
         builder.Entity<Offer>()
                .HasOne(b => b.Led)
-               .WithOne(a => a.Offer)
-               .HasForeignKey<Led>(a => a.OfferId)
+               .WithOne()
+               .HasForeignKey<Offer>(o => o.LedId)
                .IsRequired(false)
                .OnDelete(DeleteBehavior.Cascade);
 

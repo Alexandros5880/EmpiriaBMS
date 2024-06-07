@@ -36,6 +36,7 @@ public class AppDbContext : DbContext
     public DbSet<Document>? Documents { get; set; }
     public DbSet<Address>? Address { get; set; }
     public DbSet<Client>? Clients { get; set; }
+    public DbSet<Led>? Leds { get; set; }
     public DbSet<Offer>? Offers { get; set; }
     public DbSet<OfferState>? OffesStates { get; set; }
     public DbSet<OfferType>? OffersTypes { get; set; }

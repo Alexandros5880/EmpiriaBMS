@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using EmpiriaBMS.Models.Enum;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EmpiriaBMS.Models.Enum;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 
@@ -14,10 +9,7 @@ public class Led : Entity
     public string Name { get; set; }
 
     public int ClientId { get; set; }
-    public Client? Client { get; set; }
-
-    public int? OfferId { get; set; }
-    public Offer? Offer { get; set; }
+    public Client Client { get; set; }
 
     public int? AddressId { get; set; }
     public Address? Address { get; set; }

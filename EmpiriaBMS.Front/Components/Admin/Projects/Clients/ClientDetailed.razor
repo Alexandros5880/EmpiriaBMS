@@ -8,7 +8,7 @@
 
 <div class="row" style="margin: 0 auto;">
     
-    @if (Autonomuse)
+    @if (DisplayTitle)
     {
         @* Header *@
         <div class="col-12">
@@ -272,11 +272,6 @@
             <div class="col-12">
                 <h4>Clients Address</h4>
             </div>
-            <div class="col-12">
-                <FluentSwitch @bind-Value="@IsMapVisible">
-                    Display Map
-                </FluentSwitch>
-            </div>
             <!-- Search Address / (Map) -->
             <div class="col-12 row">
                 <div class="row mt-3 mb-3">
@@ -285,7 +280,7 @@
                              Id="adminClientMap"
                              AutoCompeteId="autocompeteAdminClientMap"
                              OnFindAddress="@(() => _onSearchAddressChange())"
-                             IsMapVisible="@IsMapVisible" />
+                             IsMapVisible="false" />
                     </div>
                 </div>
             </div>
@@ -293,7 +288,7 @@
 
     </div>
 
-    @if (Autonomuse)
+    @if (DisplayActions)
     {
         @* Footer *@
         <div class="col-12 row" style="margin: 0 auto;">

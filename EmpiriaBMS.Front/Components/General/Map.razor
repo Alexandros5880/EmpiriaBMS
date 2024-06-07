@@ -27,6 +27,16 @@
         }
     </div>
     <div class="col-12">
+        @if (hasAddress)
+        {
+            <div class="ms-3 mt-1 mb-1">
+                <FluentSwitch @bind-Value="@IsMapVisible">
+                    Display Map
+                </FluentSwitch>
+            </div>
+        }
+    </div>
+    <div class="col-12">
         @if (Id != null)
         {
             <!-- Map -->

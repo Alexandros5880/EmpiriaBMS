@@ -36,7 +36,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Add({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On Repository.Add({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -45,9 +45,9 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
-        
+
         var entity = await Get(id);
-        
+
         if (entity == null)
             throw new ArgumentNullException(nameof(entity));
 
@@ -86,7 +86,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -114,7 +114,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
             List<U> items;
             if (pageSize == 0 || pageIndex == 0)
             {
-                items =  await _context.Set<U>()
+                items = await _context.Set<U>()
                                        .Where(r => !r.IsDeleted)
                                        .ToListAsync();
                 return Mapping.Mapper.Map<List<T>>(items);
@@ -134,7 +134,8 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         Expression<Func<U, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<U> items;

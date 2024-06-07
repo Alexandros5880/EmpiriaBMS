@@ -3,19 +3,31 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
 public class LedRepo : Repository<LedDto, Led>, IDisposable
 {
-    public LedRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    private readonly OfferRepo _offerRepo;
+    private readonly ProjectsRepo _projectRep;
+    private readonly InvoiceRepo _invoiceRepo;
+    private readonly ContractRepo _contractRepo;
 
-    public async Task<LedDto> Add(LedDto entity, bool update = false)
+    public LedRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        OfferRepo offerRepo,
+        ProjectsRepo projectRepo,
+        InvoiceRepo invoiceRepo,
+        ContractRepo contractRepo
+    ) : base(DbFactory)
+    {
+        _offerRepo = offerRepo;
+        _projectRep = projectRepo;
+        _invoiceRepo = invoiceRepo;
+        _contractRepo = contractRepo;
+    }
+
+    public new async Task<LedDto> Add(LedDto entity, bool update = false)
     {
         try
         {
@@ -35,12 +47,12 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Add({Mapping.Mapper.Map<Led>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On LedRepo.Add(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
 
-    public async Task<LedDto> Update(LedDto entity)
+    public new async Task<LedDto> Update(LedDto entity)
     {
         try
         {
@@ -63,12 +75,94 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Update({Mapping.Mapper.Map<Led>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On LedRepo.Update(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
 
-    public async Task<LedDto?> Get(int id)
+    public async Task<LedDto> Delete(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        var ledDto = await Get(id);
+
+        if (ledDto == null)
+            throw new ArgumentNullException(nameof(ledDto));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Delete Offer
+            var offer = await _context.Set<Offer>().FirstOrDefaultAsync(o => !o.IsDeleted && o.LedId == ledDto.Id);
+            if (offer != null)
+            {
+                await _offerRepo.Delete(offer.Id);
+
+                // Delete Projects
+                var projects = await _context.Set<Project>().Where(p => !p.IsDeleted && p.OfferId == offer.Id).ToListAsync();
+                if (projects.Count > 0)
+                {
+                    foreach (var project in projects)
+                    {
+                        await _projectRep.Delete(project.Id);
+
+                        // Delete Invoices
+                        var invoices = await _context.Set<Invoice>().Where(p => !p.IsDeleted && p.ProjectId == project.Id).Include(i => i.Contract).ToListAsync();
+                        if (invoices.Count > 0)
+                        {
+                            foreach (var invoice in invoices)
+                            {
+                                await _invoiceRepo.Delete(invoice.Id);
+
+                                // Delete Contract
+                                if (invoice != null && invoice.ContractId != null && invoice.ContractId != 0)
+                                {
+                                    await _contractRepo.Delete((int)invoice.ContractId);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            // Delete Invoice
+            ledDto.IsDeleted = true;
+            await Update(ledDto);
+
+            //_context.Set<U>().Remove(Mapping.Mapper.Map<U>(entity));
+            //await _context.SaveChangesAsync();
+        }
+
+        return ledDto;
+    }
+
+    public new async Task<OfferDto?> GetOffer(int id)
+    {
+        if (id == 0)
+            throw new ArgumentNullException(nameof(id));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var i = await _context
+                                .Set<Offer>()
+                                .Where(r => !r.IsDeleted)
+                                .Include(o => o.Led)
+                                .Include(o => o.State)
+                                .Include(o => o.Type)
+                                .Include(o => o.Led)
+                                .ThenInclude(p => p.Client)
+                                .Include(o => o.Led)
+                                .ThenInclude(l => l.Address)
+                                .Include(o => o.SubCategory)
+                                .Include(o => o.Category)
+                             .FirstOrDefaultAsync(r => r.LedId == id);
+
+            return Mapping.Mapper.Map<OfferDto>(i);
+        }
+    }
+
+    public new async Task<LedDto?> Get(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -80,7 +174,6 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
                              .Where(r => !r.IsDeleted)
                              .Include(l => l.Address)
                              .Include(l => l.Client)
-                             .Include(l => l.Offer)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<LedDto>(i);
@@ -98,7 +191,6 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
                                        .Where(r => !r.IsDeleted)
                                        .Include(l => l.Address)
                                        .Include(l => l.Client)
-                                       .Include(l => l.Offer)
                                        .ToListAsync();
                 return Mapping.Mapper.Map<List<LedDto>>(items);
             }
@@ -109,11 +201,9 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
                                   .Take(pageSize)
                                   .Include(l => l.Address)
                                   .Include(l => l.Client)
-                                  .Include(l => l.Offer)
                                   .ToListAsync();
 
             return Mapping.Mapper.Map<List<LedDto>>(items);
         }
     }
-
 }

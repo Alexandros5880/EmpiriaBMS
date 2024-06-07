@@ -1,11 +1,9 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
-using System;
+using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
@@ -14,6 +12,10 @@ namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class OfferDetailed
 {
+    private FluentCombobox<(string Value, string Text)> _resultCombo;
+    private FluentCombobox<ProjectCategoryVM> _catCombo;
+    private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
+
     [Parameter]
     public OfferVM Content { get; set; }
 
@@ -25,6 +27,9 @@ public partial class OfferDetailed
 
     [Parameter]
     public bool DisplayActions { get; set; } = true;
+
+    [Parameter]
+    public EventCallback<(string Value, string Text)> OnResultChanged { get; set; }
 
     private bool _isNew => Content.Id == 0;
 
@@ -38,34 +43,86 @@ public partial class OfferDetailed
         }
     }
 
-    public async Task Prepair()
+    public async Task Prepair(OfferVM offer = null, bool full = true)
     {
-        await _getRecords();
+        if (offer != null)
+            Content = offer;
 
-        if (Content?.State != null)
+        if (full)
+            await _getRecords();
+
+        if (Content.Type != null)
         {
-            State = _states.FirstOrDefault(s => s.Id == Content.StateId);
+            var typeDto = Mapping.Mapper.Map<OfferTypeDto>(Content.Type);
+            Type = _mapper.Map<OfferTypeVM>(typeDto);
+        }
+        else if (Content.TypeId != 0)
+        {
+            Type = _types.FirstOrDefault(c => c.Id == Content.TypeId);
         }
 
-        if (Content?.Type != null)
+        if (Content.State != null)
         {
-            Type = _types.FirstOrDefault(s => s.Id == Content.TypeId);
+            var stateDto = Mapping.Mapper.Map<OfferStateDto>(Content.State);
+            State = _mapper.Map<OfferStateVM>(stateDto);
+        }
+        else if (Content.StateId != 0)
+        {
+            State = _states.FirstOrDefault(c => c.Id == Content.StateId);
         }
 
         if (Content.Result != null)
         {
             SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+            if (_resultCombo != null)
+            {
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
+        }
+        else
+        {
+            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
+            if (_resultCombo != null)
+            {
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
+        }
+
+        // Category
+        ProjectCategoryVM category = null;
+        if (Content.Category != null)
+        {
+            category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
+            Category = category;
+            _catCombo.Value = Category.Name;
+            _catCombo.SelectedOption = Category;
+            await _getSubCategories();
+        }
+        else if (Content.CategoryId != 0)
+        {
+            category = _categories.FirstOrDefault(s => s.Id == Content.CategoryId);
+            Category = category;
+            _catCombo.Value = Category.Name;
+            _catCombo.SelectedOption = Category;
+            await _getSubCategories();
         }
 
         StateHasChanged();
     }
 
-    public async Task Save()
+    public async Task SaveAsync()
     {
         var valid = Validate();
         if (!valid) return;
 
-        var dto = Mapper.Map<OfferDto>(Content);
+        Content.TypeId = Type.Id;
+        Content.StateId = State.Id;
+        Content.CategoryId = Category.Id;
+        Content.SubCategoryId = SubCategory.Id;
+
+        var dto = _mapper.Map<OfferDto>(Content);
         OfferDto updated;
 
         if (_isNew)
@@ -77,6 +134,22 @@ public partial class OfferDetailed
         await OnSave.InvokeAsync();
     }
 
+    private async Task _onResultChanged((string Value, string Text) resultOption)
+    {
+        SelectedResult = resultOption;
+        await OnResultChanged.InvokeAsync(resultOption);
+    }
+
+    public OfferVM GetOffer()
+    {
+        Content.TypeId = Type.Id;
+        Content.StateId = State.Id;
+        Content.CategoryId = Category.Id;
+        Content.SubCategoryId = SubCategory.Id;
+
+        return Content;
+    }
+
     #region Validation
     private bool validCode = true;
     private bool validType = true;
@@ -84,19 +157,23 @@ public partial class OfferDetailed
     private bool validDate = true;
     private bool validPudgetPrice = true;
     private bool validOfferPrice = true;
+    private bool validCategory = true;
+    private bool validSubCategory = true;
 
     public bool Validate(string fieldname = null)
     {
         if (fieldname == null)
         {
             validCode = !string.IsNullOrEmpty(Content.Code);
-            validType = Content.TypeId != 0;
-            validState = Content.StateId != 0;
-            validDate = Content.Date != null;
+            validType = Type != null && Type.Id != 0;
+            validState = State != null && State.Id != 0;
+            validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
             validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
             validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
+            validCategory = Category != null && Category.Id != 0;
+            validSubCategory = SubCategory != null && SubCategory.Id != 0;
 
-            return validCode && validType && validState && validDate && validPudgetPrice && validOfferPrice;
+            return validCode && validType && validState && validDate && validPudgetPrice && validOfferPrice && validCategory && validSubCategory;
         }
         else
         {
@@ -106,6 +183,7 @@ public partial class OfferDetailed
             validDate = true;
             validPudgetPrice = true;
             validOfferPrice = true;
+            validCategory = true;
 
             switch (fieldname)
             {
@@ -113,13 +191,13 @@ public partial class OfferDetailed
                     validCode = !string.IsNullOrEmpty(Content.Code);
                     return validCode;
                 case "Type":
-                    validType = Content.TypeId != 0;
+                    validType = Type != null && Type.Id != 0;
                     return validType;
                 case "State":
-                    validState = Content.StateId != 0;
+                    validState = State != null && State.Id != 0;
                     return validState;
                 case "Date":
-                    validDate = Content.Date != null;
+                    validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
                     return validDate;
                 case "PudgetPrice":
                     validPudgetPrice = Content.PudgetPrice != 0 && Content.PudgetPrice != null;
@@ -127,48 +205,32 @@ public partial class OfferDetailed
                 case "OfferPrice":
                     validOfferPrice = Content.OfferPrice != 0 && Content.OfferPrice != null;
                     return validOfferPrice;
+                case "Category":
+                    validCategory = Category != null && Category.Id != 0;
+                    return validCategory;
+                case "SubCategory":
+                    validSubCategory = SubCategory != null && SubCategory.Id != 0;
+                    return validSubCategory;
                 default:
                     return true;
             }
 
         }
     }
-
-    public void ResetValidation()
-    {
-        validCode = true;
-        validType = true;
-        validState = true;
-        validDate = true;
-        validPudgetPrice = true;
-        validOfferPrice = true;
-    }
     #endregion
 
     #region Get Related Records
-    ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
     ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
+    ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
+    ObservableCollection<ProjectCategoryVM> _categories = new ObservableCollection<ProjectCategoryVM>();
+    ObservableCollection<ProjectSubCategoryVM> _subCategories = new ObservableCollection<ProjectSubCategoryVM>();
     private List<(string Value, string Text)> _results = Enum.GetValues(typeof(OfferResult))
-                                                         .Cast<OfferResult>()
-                                                         .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
-                                                            .First()
-                                                            .GetCustomAttribute<DisplayAttribute>()?
-                                                            .GetName() ?? e.ToString()))
-                                                         .ToList();
-
-    private OfferStateVM _state = new OfferStateVM();
-    public OfferStateVM State
-    {
-        get => _state;
-        set
-        {
-            if (_state == value || value == null) return;
-            _state = value;
-            Content.StateId = _state.Id;
-            var dto = Mapper.Map<OfferStateDto>(_state);
-            Content.State = Mapping.Mapper.Map<OfferState>(dto);
-        }
-    }
+                                                             .Cast<OfferResult>()
+                                                             .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
+                                                                .First()
+                                                                .GetCustomAttribute<DisplayAttribute>()?
+                                                                .GetName() ?? e.ToString()))
+                                                             .ToList();
 
     private OfferTypeVM _type = new OfferTypeVM();
     public OfferTypeVM Type
@@ -178,34 +240,121 @@ public partial class OfferDetailed
         {
             if (_type == value || value == null) return;
             _type = value;
-            Content.TypeId = _type.Id;
-            var dto = Mapper.Map<OfferTypeDto>(_type);
-            Content.Type = Mapping.Mapper.Map<OfferType>(dto);
         }
     }
 
-    private (string Value, string Text) SelectedResult;
+    private OfferStateVM _state = new OfferStateVM();
+    public OfferStateVM State
+    {
+        get => _state;
+        set
+        {
+            if (_state == value || value == null) return;
+            _state = value;
+
+        }
+    }
+
+    public ProjectCategoryVM _category = new ProjectCategoryVM();
+    public ProjectCategoryVM Category
+    {
+        get => _category;
+        set
+        {
+            if (_category == value || value == null) return;
+            _category = value;
+        }
+    }
+
+    private ProjectSubCategoryVM _subCategory = new ProjectSubCategoryVM();
+    public ProjectSubCategoryVM SubCategory
+    {
+        get => _subCategory;
+        set
+        {
+            if (_subCategory == value || value == null) return;
+            _subCategory = value;
+        }
+    }
+
+    private (string Value, string Text) _selectedResult;
+    public (string Value, string Text) SelectedResult
+    {
+        get => _selectedResult;
+        set
+        {
+            _selectedResult = value;
+            OfferResult result = (OfferResult)Enum.Parse(typeof(OfferResult), value.Value);
+            Content.Result = result;
+        }
+    }
+
+    private async Task _onCategoryChanged(ProjectCategoryVM category)
+    {
+        Category = category;
+        await _getSubCategories();
+    }
 
     private async Task _getRecords()
     {
-        await _getStates();
         await _getTypes();
-    }
-
-    private async Task _getStates()
-    {
-        var dtos = await _dataProvider.OfferStates.GetAll();
-        var vms = Mapper.Map<List<OfferStateVM>>(dtos);
-        _states.Clear();
-        vms.ForEach(_states.Add);
+        await _getStates();
+        await _getCategories();
     }
 
     private async Task _getTypes()
     {
         var dtos = await _dataProvider.OfferTypes.GetAll();
-        var vms = Mapper.Map<List<OfferTypeVM>>(dtos);
+        var vms = _mapper.Map<List<OfferTypeVM>>(dtos);
         _types.Clear();
         vms.ForEach(_types.Add);
+    }
+
+    private async Task _getStates()
+    {
+        var dtos = await _dataProvider.OfferStates.GetAll();
+        var vms = _mapper.Map<List<OfferStateVM>>(dtos);
+        _states.Clear();
+        vms.ForEach(_states.Add);
+    }
+
+    private async Task _getCategories()
+    {
+        var dtos = await _dataProvider.ProjectsCategories.GetAll();
+        var vms = _mapper.Map<List<ProjectCategoryVM>>(dtos);
+        _categories.Clear();
+        vms.ForEach(_categories.Add);
+
+        Category = null;
+        SubCategory = null;
+    }
+
+    private async Task _getSubCategories()
+    {
+        if (_category == null) return;
+        var dtos = await _dataProvider.ProjectsSubCategories.GetAll(_category.Id);
+        var vms = _mapper.Map<List<ProjectSubCategoryVM>>(dtos);
+        _subCategories.Clear();
+        vms.ForEach(_subCategories.Add);
+
+        StateHasChanged();
+
+        // SubCategory
+        if (Content.SubCategory != null)
+        {
+            var subCategoryDto = Mapping.Mapper.Map<ProjectSubCategoryDto>(Content.SubCategory);
+            SubCategory = _mapper.Map<ProjectSubCategoryVM>(subCategoryDto);
+            _subCatCombo.Value = SubCategory.Name;
+            _subCatCombo.SelectedOption = SubCategory;
+        }
+        else if (Content.SubCategoryId != 0)
+        {
+            SubCategory = _subCategories.FirstOrDefault(s => s.Id == Content.SubCategoryId);
+            _subCatCombo.Value = SubCategory.Name;
+            _subCatCombo.SelectedOption = SubCategory;
+        }
+
+        StateHasChanged();
     }
     #endregion
 }

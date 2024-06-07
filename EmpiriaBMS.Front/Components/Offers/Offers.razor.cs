@@ -1,23 +1,11 @@
-﻿using BlazorBootstrap;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Dtos.KPIS;
-using EmpiriaBMS.Front.Components.Admin.Projects.Clients;
-using EmpiriaBMS.Front.Interop.TeamsSDK;
-using EmpiriaBMS.Front.Services;
+﻿using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
-using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Fast.Components.FluentUI;
-using Microsoft.Fast.Components.FluentUI.Utilities;
 using System.Collections.ObjectModel;
-using System.Linq.Expressions;
-using EmpiriaBMS.Models.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
@@ -180,7 +168,10 @@ public partial class Offers
     {
         _selectedOffer = new OfferVM()
         {
-            Date = DateTime.Now
+            Led = new Led()
+            {
+                Result = LedResult.UNSUCCESSFUL
+            }
         };
 
         DialogParameters parameters = new()
@@ -195,7 +186,7 @@ public partial class Offers
             PreventScroll = true,
             Width = "min(80%, 1000px);"
         };
-        
+
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);
         DialogResult? result = await dialog.Result;
 

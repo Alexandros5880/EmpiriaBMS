@@ -10,6 +10,64 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 {
     public ProjectsRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<ProjectDto> Add(ProjectDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var result = await _context.Set<Project>().AddAsync(Mapping.Mapper.Map<Project>(entity));
+                await _context.SaveChangesAsync();
+
+                var project = result.Entity as Project;
+                var dto = await Get(project.Id);
+
+                return dto;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On ProjectsRepo.Add(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
+    public async Task<ProjectDto> Update(ProjectDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var project = await _context.Set<Project>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (project != null)
+                {
+                    _context.Entry(project).CurrentValues.SetValues(Mapping.Mapper.Map<Project>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                var dto = await Get(project.Id);
+
+                return dto;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On ProjectsRepo.Update(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
     public new async Task<ProjectDto?> Get(int id)
     {
         if (id == 0)
@@ -663,6 +721,39 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .Where(expresion)
                                      .Skip((pageIndex - 1) * pageSize)
                                      .Take(pageSize)
+                                     .Include(r => r.Invoices)
+                                      .Include(p => p.Stage)
+                                      .Include(p => p.Offer)
+                                      .ThenInclude(o => o.Category)
+                                      .Include(p => p.Offer)
+                                      .ThenInclude(o => o.SubCategory)
+                                      .Include(p => p.Offer)
+                                      .ThenInclude(o => o.Led)
+                                      .ThenInclude(l => l.Address)
+                                      .Include(p => p.Offer)
+                                      .ThenInclude(o => o.Led)
+                                      .ThenInclude(l => l.Client)
+                                      .Include(p => p.ProjectManager)
+                                      .Include(p => p.ProjectsSubConstructors)
+                                     .OrderBy(e => !e.Active)
+                                     .ThenByDescending(e => e.DeadLine)
+                                     .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+        }
+    }
+
+    public async Task<ICollection<ProjectDto>> GetOffersProjects(int? offerId)
+    {
+        if (offerId == null || offerId == 0)
+            return new List<ProjectDto>();
+
+        List<Project> projects;
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            projects = await _context.Set<Project>()
+                                     .Where(r => !r.IsDeleted)
+                                     .Where(r => r.OfferId == offerId)
                                      .Include(r => r.Invoices)
                                       .Include(p => p.Stage)
                                       .Include(p => p.Offer)

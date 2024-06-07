@@ -19,7 +19,7 @@
                             Pagination="@pagination"
                             TGridItem="LedVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 70vh; overflow:auto;">
 
                 <!-- Name -->
@@ -48,16 +48,6 @@
                                 IsDefaultSortColumn=true>
                     <ChildContent>
                         @(context.Client?.FullName)
-                    </ChildContent>
-                </TemplateColumn>
-
-                <!-- Offer -->
-                <TemplateColumn Title="Offer"
-                                Sortable="true"
-                                InitialSortDirection=SortDirection.Descending
-                                IsDefaultSortColumn=true>
-                    <ChildContent>
-                        @(context.Offer?.Code)
                     </ChildContent>
                 </TemplateColumn>
 
