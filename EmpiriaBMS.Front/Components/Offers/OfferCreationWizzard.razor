@@ -148,7 +148,7 @@
                             {
                                 <div class="col-12 m-2">
                                     <!-- Projects -->
-                                    <Projects Source="@_projects" SelectedRecord="@_project" OnSelect="@_onProjectSelect" />
+                                    <Projects DisplayActions="false" GetRecords="false" Source="@_projects" SelectedRecord="@_project" OnSelect="@_onProjectSelect" />
                                 </div>
                             }
 
@@ -178,9 +178,9 @@
                                 Previous
                             </FluentButton>
 
-                            <FluentButton Class="float-end ms-2" OnClick="@(async () => await _saveProjects())" Loading="@_loading">
+                            <FluentButton Class="float-end ms-2" OnClick="@(async () => await _close())" Loading="@_loading">
                                 <FluentIcon Value="@(new MyIcons.Size32.Save())" Color="Microsoft.Fast.Components.FluentUI.Color.Accent" Slot="start" />
-                                Save
+                                OK
                             </FluentButton>
 
                         </div>

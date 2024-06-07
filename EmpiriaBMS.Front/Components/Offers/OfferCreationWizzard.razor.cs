@@ -64,6 +64,9 @@ public partial class OfferCreationWizzard
         await TabMenuClick(0);
     }
 
+    private async Task _close() =>
+        await OnSave.InvokeAsync();
+
     #region Led Tab
     private LedDetailed _ledCompoment;
 
@@ -200,48 +203,6 @@ public partial class OfferCreationWizzard
     {
         _project = project;
         //await _projectCompoment.Prepair(project, true);
-    }
-
-    private async Task _saveProjects()
-    {
-        _loading = true;
-
-        var valid = _projects.Count > 0;
-
-        if (valid)
-        {
-            _projects.ForEach(p =>
-            {
-                p.Stage = null;
-                p.ProjectManager = null;
-                p.Offer = null;
-            });
-            var dtos = _mapper.Map<List<ProjectDto>>(_projects);
-
-            // Save Projects
-            List<ProjectVM> projects = new List<ProjectVM>();
-            foreach (var dto in dtos)
-            {
-                ProjectVM project;
-                if (await _dataProvider.Projects.Any(p => p.Id == dto.Id))
-                {
-                    var updated = await _dataProvider.Projects.Update(dto);
-                    project = _mapper.Map<ProjectVM>(updated);
-                }
-                else
-                {
-                    var updated = await _dataProvider.Projects.Add(dto);
-                    project = _mapper.Map<ProjectVM>(updated);
-                }
-                projects.Add(project);
-            }
-
-            _projects.Clear();
-            _projects.AddRange(projects);
-            _project = _getNewProject();
-        }
-
-        _loading = false;
     }
 
     private async Task _getProjects()

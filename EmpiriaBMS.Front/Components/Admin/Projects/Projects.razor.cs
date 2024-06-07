@@ -7,10 +7,18 @@ namespace EmpiriaBMS.Front.Components.Admin.Projects;
 
 public partial class Projects
 {
+    [Parameter]
+    public bool DisplayActions { get; set; } = true;
+
+    [Parameter]
+    public bool GetRecords { get; set; } = true;
+
     #region Data Grid
-    private List<ProjectVM> _records = new List<ProjectVM>();
+    [Parameter]
+    public List<ProjectVM> Source { get; set; } = new List<ProjectVM>();
+
     private string _filterString = string.Empty;
-    IQueryable<ProjectVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ProjectVM>? FilteredItems => Source?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     [Parameter]
@@ -40,7 +48,7 @@ public partial class Projects
     private async Task _getRecords()
     {
         var dtos = await DataProvider.Projects.GetAll();
-        _records = Mapper.Map<List<ProjectVM>>(dtos);
+        Source = Mapper.Map<List<ProjectVM>>(dtos);
     }
 
     private async Task _add()
@@ -126,7 +134,8 @@ public partial class Projects
 
         if (firstRender)
         {
-            await _getRecords();
+            if (GetRecords)
+                await _getRecords();
 
             StateHasChanged();
         }
