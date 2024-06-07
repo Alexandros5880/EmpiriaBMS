@@ -316,7 +316,7 @@ public partial class Dashboard : IDisposable
         try
         {
             // Get Projects of last month
-            List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetLastMonthProjects(_sharedAuthData.LogedUser.Id, offerId: _selectedOffer?.Id ?? 0), active).ToList<ProjectDto>();
+            List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetLastMonthProjects(_sharedAuthData.LogedUser.Id, offerId: _selectedOffer?.Id ?? 0, active: active)).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
