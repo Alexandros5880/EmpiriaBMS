@@ -341,7 +341,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public new async Task<ICollection<ProjectDto>> GetLastMonthProjects(int userId, int offerId = 0)
+    public new async Task<ICollection<ProjectDto>> GetLastMonthProjects(int userId, int offerId = 0, bool? active = null)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -365,6 +365,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Where(r => !r.IsDeleted)
+                                                .Where(r => active == null || r.Active == active)
                                                 .Where(p => (offerId == 0 || p.OfferId == offerId))
                                                 .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
                                                 .Include(r => r.Invoices)
@@ -417,6 +418,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             var projects = await _context.Set<Project>()
                                          .Where(r => !r.IsDeleted)
+                                         .Where(r => active == null || r.Active == active)
                                          .Where(p => (offerId == 0 || p.OfferId == offerId))
                                          .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                                          .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))

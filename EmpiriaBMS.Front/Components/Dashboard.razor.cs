@@ -78,6 +78,9 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DrawingVM> _draws = new ObservableCollection<DrawingVM>();
     private ObservableCollection<OtherVM> _others = new ObservableCollection<OtherVM>();
+    private List<LedVM> _ledsChanged = new List<LedVM>();
+    private List<OfferVM> _offersChanged = new List<OfferVM>();
+    private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
     private List<DrawingVM> _drawsChanged = new List<DrawingVM>();
     private List<OtherVM> _othersChanged = new List<OtherVM>();
     private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
@@ -300,7 +303,7 @@ public partial class Dashboard : IDisposable
         _startLoading = false;
     }
 
-    public async Task _getProjects()
+    public async Task _getProjects(bool? active = null)
     {
         _selectedProject = null;
         _selectedDiscipline = null;
@@ -313,7 +316,7 @@ public partial class Dashboard : IDisposable
         try
         {
             // Get Projects of last month
-            List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetLastMonthProjects(_sharedAuthData.LogedUser.Id, offerId: _selectedOffer?.Id ?? 0)).ToList<ProjectDto>();
+            List<ProjectDto> projectsDto = (await _dataProvider.Projects.GetLastMonthProjects(_sharedAuthData.LogedUser.Id, offerId: _selectedOffer?.Id ?? 0), active).ToList<ProjectDto>();
 
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
@@ -493,7 +496,7 @@ public partial class Dashboard : IDisposable
         _selectedDraw = null;
         _selectedOther = null;
 
-        await _getProjects();
+        await _getProjects(active: true);
 
         StateHasChanged();
     }
@@ -624,6 +627,7 @@ public partial class Dashboard : IDisposable
         _disciplines.Clear();
         _selectedLed = null;
         _selectedOffer = null;
+        _selectedProject = null;
         _selectedOther = null;
         _selectedDraw = null;
         _selectedDiscipline = null;
@@ -642,6 +646,69 @@ public partial class Dashboard : IDisposable
 
         _endWorkDialog.Show();
         _isEndWorkDialogOdepened = true;
+    }
+
+    private void _onLedTimeChanged(LedVM led, TimeSpan newTimeSpan)
+    {
+        // previusTime, updatedTime, remainingTime
+
+        var previusTime = led.Time;
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
+
+        led.Time = newTimeSpan;
+
+        if (_ledsChanged.Any(d => d.Id == led.Id))
+        {
+            var d = _ledsChanged.FirstOrDefault(d => d.Id == led.Id);
+            d.Time = led.Time;
+        }
+        else
+            _ledsChanged.Add(led);
+
+        StateHasChanged();
+    }
+
+    private void _onOfferTimeChanged(OfferVM offer, TimeSpan newTimeSpan)
+    {
+        // previusTime, updatedTime, remainingTime
+
+        var previusTime = offer.Time;
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
+
+        offer.Time = newTimeSpan;
+
+        if (_offersChanged.Any(d => d.Id == offer.Id))
+        {
+            var d = _offersChanged.FirstOrDefault(d => d.Id == offer.Id);
+            d.Time = offer.Time;
+        }
+        else
+            _offersChanged.Add(offer);
+
+        StateHasChanged();
+    }
+
+    private void _onProjectTimeChanged(ProjectVM project, TimeSpan newTimeSpan)
+    {
+        // previusTime, updatedTime, remainingTime
+
+        var previusTime = project.Time;
+        var updatedTime = newTimeSpan - previusTime;
+        remainingTime += (-updatedTime);
+
+        project.Time = newTimeSpan;
+
+        if (_projectsChanged.Any(d => d.Id == project.Id))
+        {
+            var d = _projectsChanged.FirstOrDefault(d => d.Id == project.Id);
+            d.Time = project.Time;
+        }
+        else
+            _projectsChanged.Add(project);
+
+        StateHasChanged();
     }
 
     private void _onDrawTimeChanged(DrawingVM draw, TimeSpan newTimeSpan)
@@ -758,6 +825,31 @@ public partial class Dashboard : IDisposable
             // Update Db
             _startLoading = true;
 
+
+            // Update Leds
+            foreach (var led in _ledsChanged)
+            {
+                await _dataProvider.Leds.AddTime(_sharedAuthData.LogedUser.Id, led.Id, led.Time);
+            }
+            _ledsChanged.Clear();
+            _selectedLed = null;
+
+            // Update Offers
+            foreach (var offer in _offersChanged)
+            {
+                await _dataProvider.Offers.AddTime(_sharedAuthData.LogedUser.Id, offer.Id, offer.Time);
+            }
+            _offersChanged.Clear();
+            _selectedOffer = null;
+
+            // Update Projects
+            foreach (var project in _projectsChanged)
+            {
+                await _dataProvider.Projects.AddTime(_sharedAuthData.LogedUser.Id, project.Id, project.Time);
+            }
+            _projectsChanged.Clear();
+            //_selectedProject = null;
+
             // Update Draws
             foreach (var draw in _drawsChanged)
             {
@@ -812,8 +904,19 @@ public partial class Dashboard : IDisposable
 
     public void _endWorkDialogCansel()
     {
+        _ledsChanged.Clear();
+        _offersChanged.Clear();
+        _projectsChanged.Clear();
         _drawsChanged.Clear();
         _othersChanged.Clear();
+
+        _selectedLed = null;
+        _selectedOffer = null;
+        //_selectedProject = null;
+        //_selectedDiscipline = null;
+        //_selectedDraw = null;
+        //_selectedOther = null;
+
         StartWorkClick();
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;

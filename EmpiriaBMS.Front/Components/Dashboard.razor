@@ -776,7 +776,7 @@
                             aria-label="Select Project"
                             @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
                         <option value="0" selected>Select Project</option>
-                        @foreach (var project in _projects.Where(p => p.Active).ToList())
+                        @foreach (var project in _projects)
                         {
                             <option value="@project.Id">
                                 @project.Name
@@ -897,24 +897,36 @@
             <!-- Set User Extra Time -->
             <div class="mt-1 row">
 
-                @if (WorkOnLeds)
+                @if (WorkOnLeds && _selectedLed != null)
                 {
-                    <div class="col-4">
-
+                    <div class="col-4 text-center">
+                        <span class="mb-2 fs-5">Led</span>
+                        <TimeInput MinTime="TimeSpan.Zero"
+                                   MaxTime="@remainingTime"
+                                   Time="_selectedLed.Time"
+                                   OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedLed, time)) />
                     </div>
                 }
 
-                @if (WorkOnOffers)
+                @if (WorkOnOffers && _selectedOffer != null)
                 {
-                    <div class="col-4">
-
+                    <div class="col-4 text-center">
+                        <span class="mb-2 fs-5">Offer</span>
+                        <TimeInput MinTime="TimeSpan.Zero"
+                                   MaxTime="@remainingTime"
+                                   Time="_selectedOffer.Time"
+                                   OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
                     </div>
                 }
 
-                @if (WorkOnProject)
+                @if (WorkOnProject && _selectedProject != null)
                 {
-                    <div class="col-4">
-
+                    <div class="col-4 text-center">
+                        <span class="mb-2 fs-5">Project</span>
+                        <TimeInput MinTime="TimeSpan.Zero"
+                                   MaxTime="@remainingTime"
+                                   Time="_selectedProject.Time"
+                                   OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
                     </div>
                 }
 
