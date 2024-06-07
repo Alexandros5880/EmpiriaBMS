@@ -109,4 +109,6 @@ public class LedVM : BaseVM
             NotifyPropertyChanged(nameof(Result));
         }
     }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
 }

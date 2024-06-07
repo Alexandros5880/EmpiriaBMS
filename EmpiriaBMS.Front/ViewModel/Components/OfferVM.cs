@@ -261,4 +261,6 @@ public class OfferVM : BaseVM
     }
 
     public ICollection<Project>? Projects { get; set; }
+
+    public ICollection<DailyTime> DailyTime { get; set; }
 }
