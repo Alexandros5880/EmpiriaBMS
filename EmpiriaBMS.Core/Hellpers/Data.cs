@@ -75,8 +75,6 @@ public static class Data
             return csvBuilder.ToString();
         }
 
-
-
         public static void SaveCsvToFile(string csvContent, string filePath)
         {
             File.WriteAllText(filePath, csvContent);

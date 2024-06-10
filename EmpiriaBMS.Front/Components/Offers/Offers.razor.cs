@@ -249,10 +249,11 @@ public partial class Offers
     }
     #endregion
 
-    #region Hellper Functions
+    #region Export Functions
     private async Task ExportToCSV()
     {
-        var fileName = $"Offers.csv";
+        var date = DateTime.Today;
+        var fileName = $"Offers-{date.ToEuropeFormat()}.csv";
         var offers = FilteredItems.ToList();
         if (offers.Count > 0)
         {
