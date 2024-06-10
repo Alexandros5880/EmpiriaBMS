@@ -195,35 +195,35 @@
                                                                   Placeholder="Search Project" 
                                                                   Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;"/>
                                                 </div>
-                                                @if (isWorkingMode && editProject)
-                                                {
-                                                    <div class="col-6">
-                                                        <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                                                <div class="col-6">
+                                                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                                                        @if (isWorkingMode && editProject)
+                                                        {
                                                             @if (_selectedProject != null)
                                                             {
                                                                 <span class="navigate-outline my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
-                                                                        style="display: @((_selectedProject?.Offer?.Led?.Address != null ? "block" : "none" ));"
-                                                                        @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Led?.Address))" />
+                                                                style="display: @((_selectedProject?.Offer?.Led?.Address != null ? "block" : "none" ));"
+                                                                @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Led?.Address))" />
 
                                                                 @* <span class="fluent--delete-28-regular"
-                                                                            @onclick="@(() => DeleteProject())" /> *@
+                                                                        @onclick="@(() => DeleteProject())" /> *@
 
                                                                 <span class="material-symbols--edit-outline"
-                                                                        @onclick="@(async () => await EditProject())" />
+                                                                @onclick="@(async () => await EditProject())" />
                                                             }
                                                             @* <span class="grommet-icons--add"
-                                                                    @onclick="@(() => AddProject())" /> *@
+                                                                @onclick="@(() => AddProject())" /> *@
+                                                        }
 
-                                                            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                                                          Appearance="Appearance.Outline"
-                                                                          OnClick="@(async (e) => await ExportProjectsToCSV())"
-                                                                          Disabled="@(_projects.Count() == 0)">
-                                                                Export
-                                                            </FluentButton>
+                                                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                                                        Appearance="Appearance.Outline"
+                                                                        OnClick="@(async (e) => await ExportProjectsToCSV())"
+                                                                        Disabled="@(_projects.Count() == 0)">
+                                                            Export
+                                                        </FluentButton>
 
-                                                        </FluentStack>
-                                                    </div>
-                                                }
+                                                    </FluentStack>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="table-responsive p-1 table-container"
@@ -390,14 +390,14 @@
                                                                 <span class="grommet-icons--add"
                                                                       @onclick="@(async () => await AddDiscipline())" />
                                                             }
-
-                                                            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                                                          Appearance="Appearance.Outline"
-                                                                          OnClick="@(async (e) => await ExportDisciplinesToCSV())"
-                                                                          Disabled="@(_disciplines.Count() == 0)">
-                                                                Export
-                                                            </FluentButton>
                                                         }
+
+                                                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                                                      Appearance="Appearance.Outline"
+                                                                      OnClick="@(async (e) => await ExportDisciplinesToCSV())"
+                                                                      Disabled="@(_disciplines.Count() == 0)">
+                                                            Export
+                                                        </FluentButton>
                                                     </FluentStack>
                                                 </div>
                                             </div>
@@ -490,14 +490,14 @@
                                                                     <span class="grommet-icons--add"
                                                                           @onclick="@(() => AddDeliverable())" />
                                                                 }
-
-                                                                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                                                              Appearance="Appearance.Outline"
-                                                                              OnClick="@(async (e) => await ExportDeliverablesToCSV())"
-                                                                              Disabled="@(_draws.Count() == 0)">
-                                                                    Export
-                                                                </FluentButton>
                                                             }
+
+                                                            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                                                          Appearance="Appearance.Outline"
+                                                                          OnClick="@(async (e) => await ExportDeliverablesToCSV())"
+                                                                          Disabled="@(_draws.Count() == 0)">
+                                                                Export
+                                                            </FluentButton>
                                                         </FluentStack>
                                                     </div>
                                                 </div>
@@ -592,14 +592,14 @@
                                                                     <span class="grommet-icons--add col-1"
                                                                           @onclick="@(() => AddOther())" />
                                                                 }
-
-                                                                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                                                              Appearance="Appearance.Outline"
-                                                                              OnClick="@(async (e) => await ExportSupportiveWorksToCSV())"
-                                                                              Disabled="@(_others.Count() == 0)">
-                                                                    Export
-                                                                </FluentButton>
                                                             }
+
+                                                            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                                                          Appearance="Appearance.Outline"
+                                                                          OnClick="@(async (e) => await ExportSupportiveWorksToCSV())"
+                                                                          Disabled="@(_others.Count() == 0)">
+                                                                Export
+                                                            </FluentButton>
                                                         </FluentStack>
                                                     </div>
                                                 </div>
