@@ -1,18 +1,13 @@
-﻿using CsvHelper.Configuration;
-using CsvHelper;
-using System;
-using System.Collections.Generic;
-using System.Formats.Asn1;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Hellpers;
 
 public static class Data
 {
-
+    public static string GetCsvContent<T>(IList<T> data) => SCV.GenerateCsvContent(data);
     public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
     {
         switch (fileType)
@@ -21,7 +16,7 @@ public static class Data
                 var csvContent = SCV.GenerateCsvContent(data);
                 SCV.SaveCsvToFile(csvContent, filePath);
                 break;
-            
+
             default:
                 break;
         }
@@ -77,7 +72,6 @@ public static class Data
             return records;
         }
     }
-
 }
 
 public enum FileType

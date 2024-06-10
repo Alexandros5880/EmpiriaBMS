@@ -22,6 +22,10 @@
         <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@(async (e) => await _add(e))">
             Add Offer
         </FluentButton>
+
+        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())" Appearance="Appearance.Accent" OnClick="@(async (e) => await ExportToCSV())">
+            Export
+        </FluentButton>
     </FluentStack>
 </div>
 

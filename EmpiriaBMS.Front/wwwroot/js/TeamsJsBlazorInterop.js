@@ -245,20 +245,32 @@ export function downloadFile(fileName, contentType, base64Content) {
 // Pick Folder Path
 async function pickFolder() {
     try {
-        // Check if the browser supports the File System Access API
-        if (!window.showDirectoryPicker) {
-            alert("Your browser does not support the File System Access API.");
-            return null;
-        }
+        // Create an empty CSV Blob
+        const emptyCsvBlob = new Blob([""], { type: 'text/csv' });
 
-        // Show the folder picker
-        const directoryHandle = await window.showDirectoryPicker();
+        // Create an input element
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv';
 
-        // Get the directory path
-        const directoryPath = directoryHandle.name;
+        // Preselect the empty CSV file
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(new File([emptyCsvBlob], "output.csv", { type: 'text/csv' }));
+        input.files = dataTransfer.files;
 
-        // Return the directory path
-        return directoryPath;
+        return new Promise((resolve, reject) => {
+            input.onchange = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    resolve(file.name); // Resolve with the file name
+                } else {
+                    reject(new Error('No file selected'));
+                }
+            };
+
+            // Simulate a click to open the file picker dialog
+            input.click();
+        });
     } catch (err) {
         console.error(err);
         return null;
@@ -269,3 +281,19 @@ export async function pickFolderPath() {
     return await pickFolder();
 }
 // - Pick Folder Path
+
+// Download CSV
+export function downloadCsvFile(filename, content) {
+    var blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement("a");
+    if (link.download !== undefined) {
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+// - Download CSV

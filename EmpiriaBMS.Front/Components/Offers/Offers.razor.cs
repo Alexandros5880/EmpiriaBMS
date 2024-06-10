@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.Interop.TeamsSDK;
+﻿using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
@@ -245,6 +246,15 @@ public partial class Offers
         }
 
         await dialog.CloseAsync();
+    }
+    #endregion
+
+    #region Hellper Functions
+    private async Task ExportToCSV()
+    {
+        var fileName = $"Offers.csv";
+        string csvContent = Data.GetCsvContent(_offers);
+        await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
     }
     #endregion
 }
