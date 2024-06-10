@@ -8,6 +8,7 @@ namespace EmpiriaBMS.Core.Hellpers;
 public static class Data
 {
     public static string GetCsvContent<T>(IList<T> data) => SCV.GenerateCsvContent(data);
+
     public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
     {
         switch (fileType)
