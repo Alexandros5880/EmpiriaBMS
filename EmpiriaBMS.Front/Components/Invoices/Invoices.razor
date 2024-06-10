@@ -4,12 +4,20 @@
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 @inject IDialogService DialogService
+@inject MicrosoftTeams MicrosoftTeams
 
 <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow" style="height: 620px; cursor: pointer;">
         <div>
             <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
                 <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+
+                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                              Appearance="Appearance.Outline"
+                              OnClick="@(async (e) => await _exportToCSV())"
+                              Disabled="@((FilteredItems?.Count() ?? 0) == 0)">
+                    Export
+                </FluentButton>
             </FluentStack>
         </div>
         <div>

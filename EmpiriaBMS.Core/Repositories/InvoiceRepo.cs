@@ -1,14 +1,17 @@
-﻿using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class InvoiceRepo : Repository<InvoiceDto, Invoice>
 {
-    public InvoiceRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public InvoiceRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory)
+    {
+
+    }
 
     public async Task<InvoiceDto> Add(InvoiceDto entity, bool update = false)
     {
@@ -97,6 +100,9 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var contracts = await _context.Set<Contract>().ToListAsync();
+            var projects = await _context.Set<Project>().Include(p => p.ProjectManager).ToListAsync();
+
             List<Invoice> i;
 
             if (pageSize == 0 || pageIndex == 0)
@@ -104,10 +110,13 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                 i = await _context.Set<Invoice>()
                                   .Where(r => !r.IsDeleted)
                                   .Include(i => i.Payments)
-                                         .Include(i => i.Type)
-                                         .Include(i => i.Contract)
-                                         .Include(i => i.Project)
+                                  .Include(i => i.Type)
+                                  .Select(i => _includeProject(i, projects))
+                                  .Select(i => _includeContract(i, contracts))
                                   .ToListAsync();
+
+                contracts = null;
+                projects = null;
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
             }
@@ -117,14 +126,31 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .Skip((pageIndex - 1) * pageSize)
                               .Take(pageSize)
                               .Include(i => i.Payments)
-                                         .Include(i => i.Type)
-                                         .Include(i => i.Contract)
-                                         .Include(i => i.Project)
+                              .Include(i => i.Type)
+                              .Select(i => _includeProject(i, projects))
+                              .Select(i => _includeContract(i, contracts))
                               .ToListAsync();
+
+            contracts = null;
+            projects = null;
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
         }
     }
+
+    #region Private Hellper Methods
+    private static Invoice _includeProject(Invoice i, List<Project> projects)
+    {
+        i.Project = projects.FirstOrDefault(p => p.Id == i.ProjectId);
+        return i;
+    }
+
+    private static Invoice _includeContract(Invoice i, List<Contract> contracts)
+    {
+        i.Contract = contracts.FirstOrDefault(p => p.Id == i.ContractId);
+        return i;
+    }
+    #endregion
 
     public async Task<ICollection<InvoiceDto>> GetAllByProject(int projectId = 0)
     {
@@ -140,14 +166,15 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
-        } 
+        }
     }
 
     public new async Task<ICollection<InvoiceDto>> GetAll(
         Expression<Func<Invoice, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<Invoice> i;

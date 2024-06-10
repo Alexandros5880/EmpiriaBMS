@@ -70,7 +70,8 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         Expression<Func<Payment, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<Payment> i;
@@ -114,6 +115,27 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
             List<Payment> i = await _context.Set<Payment>()
                               .Where(r => !r.IsDeleted)
                               .Where(r => r.InvoiceId == invoiceId)
+                              .Include(r => r.Invoice)
+                              .ThenInclude(i => i.Type)
+                              .Include(r => r.Invoice)
+                              .ThenInclude(i => i.Project)
+                              .Include(r => r.Type)
+                              .ToListAsync();
+
+            return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
+        }
+    }
+
+    public new async Task<ICollection<PaymentDto>> GetAllByInvoices(int[] invoiceIds)
+    {
+        if (invoiceIds.Length == 0)
+            throw new ArgumentException(nameof(invoiceIds));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Payment> i = await _context.Set<Payment>()
+                              .Where(r => !r.IsDeleted)
+                              .Where(r => invoiceIds.Contains(r.InvoiceId))
                               .Include(r => r.Invoice)
                               .ThenInclude(i => i.Type)
                               .Include(r => r.Invoice)
