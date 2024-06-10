@@ -5,6 +5,7 @@ using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
@@ -253,7 +254,7 @@ public partial class Offers
     private async Task ExportToCSV()
     {
         var fileName = $"Offers.csv";
-        string csvContent = Data.GetCsvContent(_offers);
+        string csvContent = Data.GetCsvContent(await FilteredItems.ToListAsync());
         await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
     }
     #endregion

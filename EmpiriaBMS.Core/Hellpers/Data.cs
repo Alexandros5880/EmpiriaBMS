@@ -7,7 +7,12 @@ namespace EmpiriaBMS.Core.Hellpers;
 
 public static class Data
 {
-    public static string GetCsvContent<T>(IList<T> data) => SCV.GenerateCsvContent(data);
+    public static string GetCsvContent<T>(IList<T> data)
+    {
+        var content = SCV.GenerateCsvContent(data);
+
+        return content;
+    }
 
     public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
     {
@@ -42,16 +47,35 @@ public static class Data
             var properties = typeof(T).GetProperties();
             var csvBuilder = new StringBuilder();
 
-            csvBuilder.AppendLine(string.Join(",", properties.Select(p => p.Name)));
 
+            // Add Columns
+            var columnValues = new List<string>();
+            foreach (var prop in properties)
+                if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string))
+                    columnValues.Add(prop.Name);
+            csvBuilder.AppendLine(string.Join(",", columnValues));
+
+
+            // Add Values
             foreach (var item in data)
             {
-                var line = string.Join(",", properties.Select(p => p.GetValue(item, null)));
-                csvBuilder.AppendLine(line);
+                var lineValues = new List<string>();
+
+                foreach (var prop in properties)
+                {
+                    var propValue = prop.GetValue(item);
+
+                    if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string))
+                        lineValues.Add(propValue?.ToString() ?? "");
+                }
+
+                csvBuilder.AppendLine(string.Join(",", lineValues));
             }
 
             return csvBuilder.ToString();
         }
+
+
 
         public static void SaveCsvToFile(string csvContent, string filePath)
         {
