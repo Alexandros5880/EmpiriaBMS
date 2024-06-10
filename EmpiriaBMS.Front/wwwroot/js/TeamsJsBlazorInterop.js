@@ -240,3 +240,32 @@ export function downloadFile(fileName, contentType, base64Content) {
     URL.revokeObjectURL(url);
 };
 // Download Document
+
+
+// Pick Folder Path
+async function pickFolder() {
+    try {
+        // Check if the browser supports the File System Access API
+        if (!window.showDirectoryPicker) {
+            alert("Your browser does not support the File System Access API.");
+            return null;
+        }
+
+        // Show the folder picker
+        const directoryHandle = await window.showDirectoryPicker();
+
+        // Get the directory path
+        const directoryPath = directoryHandle.name;
+
+        // Return the directory path
+        return directoryPath;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
+export async function pickFolderPath() {
+    return await pickFolder();
+}
+// - Pick Folder Path

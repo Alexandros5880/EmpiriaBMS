@@ -1,9 +1,7 @@
 ﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
 namespace EmpiriaBMS.Front.Interop.TeamsSDK;
@@ -107,6 +105,13 @@ public class MicrosoftTeams : InteropModuleBase
     public async Task DownloadFile(DocumentDto doc)
     {
         await InvokeVoidAsync("downloadFile", doc.FileName, doc.ContentType, Convert.ToBase64String(doc.Content));
+    }
+    #endregion
+
+    #region Pick Folder Path
+    public async Task<string> PickFolderPath()
+    {
+        return await InvokeAsync<string>("pickFolderPath");
     }
     #endregion
 }
