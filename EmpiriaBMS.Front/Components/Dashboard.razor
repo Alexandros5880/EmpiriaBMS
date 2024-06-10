@@ -187,30 +187,35 @@
                                         <div style="height: 74px;">
                                             <div class="text-center row me-2">
                                                 <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
-                                                @if (isWorkingMode && editProject)
-                                                {
-                                                    @if (_selectedProject != null)
-                                                    {
-
-                                                        @* <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
-                                                              style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
-                                                              @onclick="@(async () => await NavigateOnMap(_selectedProject.Address))" /> *@
-
-                                                        @* <span class="fluent--delete-28-regular col-1"
-                                                                 @onclick="@(() => DeleteProject())" /> *@
-
-                                                        @* <span class="material-symbols--edit-outline col-1"
-                                                              @onclick="@(() => EditProject())" /> *@
-                                                    }
-                                                    @* <span class="grommet-icons--add col-1"
-                                                          @onclick="@(() => AddProject())" /> *@
-                                                }
                                             </div>
                                             <div class="text-center row me-2">
-                                                <FluentSearch @bind-Value="@_projectNameFilter"
-                                                              @oninput="@HandleProjectFilter"
-                                                              Placeholder="Search Project" 
-                                                              Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;"/>
+                                                <div class="col-6">
+                                                    <FluentSearch @bind-Value="@_projectNameFilter"
+                                                                  @oninput="@HandleProjectFilter"
+                                                                  Placeholder="Search Project" 
+                                                                  Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;"/>
+                                                </div>
+                                                @if (isWorkingMode && editProject)
+                                                {
+                                                    <div class="col-6">
+                                                        <FluentStack>
+                                                            @if (_selectedProject != null)
+                                                            {
+                                                                <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
+                                                                        style="display: @((_selectedProject?.Offer?.Led?.Address != null ? "block" : "none" ));"
+                                                                        @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Led?.Address))" />
+
+                                                                @* <span class="fluent--delete-28-regular col-1"
+                                                                            @onclick="@(() => DeleteProject())" /> *@
+
+                                                                <span class="material-symbols--edit-outline col-1"
+                                                                        @onclick="@(() => EditProject())" />
+                                                            }
+                                                            @* <span class="grommet-icons--add col-1"
+                                                                    @onclick="@(() => AddProject())" /> *@
+                                                        </FluentStack>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                         <div class="table-responsive p-1 table-container"
