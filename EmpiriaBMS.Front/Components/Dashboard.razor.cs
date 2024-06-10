@@ -1149,10 +1149,11 @@ public partial class Dashboard : IDisposable
         _isAddEditProjectDialogOdepened = true;
     }
 
-    private void EditProject()
+    private async Task EditProject()
     {
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
+        await projectCompoment.Prepair();
     }
 
     private void CloseAddProjectClick()

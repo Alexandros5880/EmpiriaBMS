@@ -1,11 +1,16 @@
-﻿using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase
 {
+    FluentCombobox<ProjectStageVM> _stageCombo;
+    FluentCombobox<UserVM> _pmCombo;
+
     private ProjectVM _project;
     [Parameter]
     public ProjectVM Content
@@ -65,6 +70,28 @@ public partial class ProjectDetailed : ComponentBase
             Content = project;
 
         await _getRecords();
+
+        if (Content.Stage != null)
+        {
+            var stageDto = Mapping.Mapper.Map<ProjectStageDto>(Content.Stage);
+            Stage = Mapper.Map<ProjectStageVM>(stageDto);
+        }
+        else if (Content.StageId != 0)
+        {
+            Stage = _stages.FirstOrDefault(c => c.Id == Content.StageId);
+        }
+        _stageCombo.Value = Stage.Name;
+
+        if (Content.ProjectManager != null)
+        {
+            var pmDto = Mapping.Mapper.Map<UserDto>(Content.ProjectManager);
+            Pm = Mapper.Map<UserVM>(pmDto);
+        }
+        else if (Content.ProjectManagerId != 0)
+        {
+            Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId);
+        }
+        _pmCombo.Value = Pm.FullName;
 
         StateHasChanged();
     }
@@ -185,8 +212,6 @@ public partial class ProjectDetailed : ComponentBase
         var vms = Mapper.Map<List<ProjectStageVM>>(dtos);
         _stages.Clear();
         vms.ForEach(_stages.Add);
-
-        Stage = _stages.FirstOrDefault(c => c.Id == Content.StageId) ?? null;
     }
 
     private async Task _getProjectManagers()
@@ -195,8 +220,6 @@ public partial class ProjectDetailed : ComponentBase
         var vms = Mapper.Map<List<UserVM>>(dtos);
         _pms.Clear();
         vms.ForEach(_pms.Add);
-
-        Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId) ?? null;
     }
     #endregion
 }

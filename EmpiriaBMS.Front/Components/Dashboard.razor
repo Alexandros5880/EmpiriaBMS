@@ -209,7 +209,7 @@
                                                                             @onclick="@(() => DeleteProject())" /> *@
 
                                                                 <span class="material-symbols--edit-outline col-1"
-                                                                        @onclick="@(() => EditProject())" />
+                                                                        @onclick="@(async () => await EditProject())" />
                                                             }
                                                             @* <span class="grommet-icons--add col-1"
                                                                     @onclick="@(() => AddProject())" /> *@
