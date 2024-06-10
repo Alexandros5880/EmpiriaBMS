@@ -23,7 +23,10 @@
             Add Offer
         </FluentButton>
 
-        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())" Appearance="Appearance.Accent" OnClick="@(async (e) => await ExportToCSV())">
+        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                      Appearance="Appearance.Accent"
+                      OnClick="@(async (e) => await ExportToCSV())"
+                      Disabled="@(FilteredItems.Count() == 0)">
             Export
         </FluentButton>
     </FluentStack>
