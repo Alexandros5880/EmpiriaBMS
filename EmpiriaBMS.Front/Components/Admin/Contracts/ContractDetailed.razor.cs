@@ -42,6 +42,12 @@ public partial class ContractDetailed
 
         if (Content.InvoiceId != 0)
         {
+            if (Content.Invoice == null)
+            {
+                var dto = await _dataProvider.Invoices.Get(Content.InvoiceId);
+                Content.Invoice = _mapper.Map<InvoiceVM>(dto);
+            }
+
             Content.Invoice.Contract = null;
             var invoiceDto = _mapper.Map<InvoiceDto>(Content.Invoice);
             Invoice = Invoices.FirstOrDefault(i => i.Id == Content.InvoiceId);

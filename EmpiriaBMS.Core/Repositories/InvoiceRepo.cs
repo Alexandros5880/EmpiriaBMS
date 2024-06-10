@@ -4,6 +4,7 @@ using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Contract = EmpiriaBMS.Models.Models.Contract;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class InvoiceRepo : Repository<InvoiceDto, Invoice>
@@ -101,9 +102,12 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var contracts = await _context.Set<Contract>().ToListAsync();
+            var invoicesIds = contracts.Select(c => c.InvoiceId).ToList();
             var projects = await _context.Set<Project>().Include(p => p.ProjectManager).ToListAsync();
 
             List<Invoice> i;
+
+            // TODO: Import related Project And Contract efficient
 
             if (pageSize == 0 || pageIndex == 0)
             {
@@ -112,7 +116,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                                   .Include(i => i.Payments)
                                   .Include(i => i.Type)
                                   .Select(i => _includeProject(i, projects))
-                                  .Select(i => _includeContract(i, contracts))
+                                  .Select(i => _includeContract(i, contracts, invoicesIds))
                                   .ToListAsync();
 
                 contracts = null;
@@ -128,7 +132,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .Include(i => i.Payments)
                               .Include(i => i.Type)
                               .Select(i => _includeProject(i, projects))
-                              .Select(i => _includeContract(i, contracts))
+                              .Select(i => _includeContract(i, contracts, invoicesIds))
                               .ToListAsync();
 
             contracts = null;
@@ -141,13 +145,18 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
     #region Private Hellper Methods
     private static Invoice _includeProject(Invoice i, List<Project> projects)
     {
-        i.Project = projects.FirstOrDefault(p => p.Id == i.ProjectId);
+        if (i.ProjectId != 0)
+            i.Project = projects.FirstOrDefault(p => p.Id == i.ProjectId);
+
         return i;
     }
 
-    private static Invoice _includeContract(Invoice i, List<Contract> contracts)
+    private static Invoice _includeContract(Invoice i, List<Contract> contracts, List<int> contractInvoicesIds)
     {
-        i.Contract = contracts.FirstOrDefault(p => p.Id == i.ContractId);
+
+        if (contractInvoicesIds.Contains(i.Id))
+            i.Contract = contracts.FirstOrDefault(c => c.InvoiceId == i.Id);
+
         return i;
     }
     #endregion

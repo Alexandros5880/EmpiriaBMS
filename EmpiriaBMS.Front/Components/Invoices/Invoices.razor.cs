@@ -144,6 +144,8 @@ public partial class Invoices : ComponentBase
     {
         var date = DateTime.Today;
 
+        var invoice = FilteredItems.FirstOrDefault(i => i.Contract != null);
+
         // Export Invoices
         var invoicesFileName = $"Invoices-{date.ToEuropeFormat()}.csv";
         var invoices = FilteredItems.Select(_getInvExport).ToList();
@@ -157,7 +159,7 @@ public partial class Invoices : ComponentBase
         var paymentsFileName = $"Payments-{date.ToEuropeFormat()}.csv";
         var invoicesIds = FilteredItems.Select(i => i.Id).ToArray();
         var payments = await DataProvider.Payments.GetAllByInvoices(invoicesIds);
-        var paymentsExp = payments.Select(_getPasyExport).ToList();
+        var paymentsExp = payments.Select(_getPayExport).ToList();
         if (paymentsExp.Count > 0)
         {
             string csvContent = Data.GetCsvContent(paymentsExp);
@@ -171,7 +173,7 @@ public partial class Invoices : ComponentBase
         return exp;
     }
 
-    private PaymentExport _getPasyExport(PaymentDto pay)
+    private PaymentExport _getPayExport(PaymentDto pay)
     {
         var vm = Mapper.Map<PaymentVM>(pay);
         var exp = new PaymentExport(vm);
