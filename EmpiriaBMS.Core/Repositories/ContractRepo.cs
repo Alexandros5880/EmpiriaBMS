@@ -3,11 +3,6 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -85,11 +80,14 @@ public class ContractRepo : Repository<ContractDto, Contract>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var invoices = await _context.Set<Invoice>().Include(i => i.Project).ToListAsync();
+
             var i = await _context
                              .Set<Contract>()
                              .Where(r => !r.IsDeleted)
                              .Include(c => c.Invoice)
                              .ThenInclude(i => i.Project)
+                             .Select((c) => _fillInvoice(c, invoices))
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<ContractDto>(i);
@@ -100,6 +98,8 @@ public class ContractRepo : Repository<ContractDto, Contract>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var invoices = await _context.Set<Invoice>().Include(i => i.Project).ToListAsync();
+
             List<Contract> items;
             if (pageSize == 0 || pageIndex == 0)
             {
@@ -107,19 +107,29 @@ public class ContractRepo : Repository<ContractDto, Contract>
                                       .Where(r => !r.IsDeleted)
                                       .Include(c => c.Invoice)
                                       .ThenInclude(i => i.Project)
+                                      .Select((c) => _fillInvoice(c, invoices))
                                       .ToListAsync();
-                return Mapping.Mapper.Map <List<Contract> , List<ContractDto>>(items);
+
+                return Mapping.Mapper.Map<List<Contract>, List<ContractDto>>(items);
             }
 
             items = await _context.Set<Contract>()
                                   .Where(r => !r.IsDeleted)
                                   .Include(c => c.Invoice)
                                   .ThenInclude(i => i.Project)
+                                  .Select((c) => _fillInvoice(c, invoices))
                                   .Skip((pageIndex - 1) * pageSize)
                                   .Take(pageSize)
                                   .ToListAsync();
 
             return Mapping.Mapper.Map<List<Contract>, List<ContractDto>>(items);
         }
+    }
+
+    private static Contract _fillInvoice(Contract c, List<Invoice> invoices)
+    {
+        if (c.Invoice == null)
+            c.Invoice = invoices.FirstOrDefault(i => i.Id == c.InvoiceId);
+        return c;
     }
 }
