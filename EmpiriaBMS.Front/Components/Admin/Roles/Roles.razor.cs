@@ -1,16 +1,9 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
-using EmpiriaBMS.Front.Components.Admin.General;
-using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Models.Models;
+using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Bot.Builder;
 using Microsoft.Fast.Components.FluentUI;
-using System.Collections.ObjectModel;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EmpiriaBMS.Front.Components.Admin.Roles;
 
@@ -105,7 +98,7 @@ public partial class Roles
         if (result.Data is not null)
         {
             RoleVM vm = result.Data as RoleVM;
-            
+
             var permissionsIds = vm.RolesPermissions.Select(rp => rp.PermissionId).ToList();
             vm.RolesPermissions = null;
 
@@ -155,4 +148,18 @@ public partial class Roles
             StateHasChanged();
         }
     }
+
+    #region Export Data
+    private async Task ExportToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"Roles-{date.ToEuropeFormat()}.csv";
+        var data = FilteredItems.Select(c => new RoleExport(c)).ToList();
+        if (data.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(data);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
+    }
+    #endregion
 }
