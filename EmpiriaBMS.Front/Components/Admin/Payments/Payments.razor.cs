@@ -1,5 +1,7 @@
 ﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -131,4 +133,18 @@ public partial class Payments
             StateHasChanged();
         }
     }
+
+    #region Export Data
+    private async Task ExportToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"Payments-{date.ToEuropeFormat()}.csv";
+        var data = FilteredItems.Select(c => new PaymentExport(c)).ToList();
+        if (data.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(data);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
+    }
+    #endregion
 }
