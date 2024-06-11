@@ -2,16 +2,23 @@
 
 @using EmpiriaBMS.Front.Services
 @inject IDataProvider DataProvider
+@inject MicrosoftTeams MicrosoftTeams
 @inject IMapper Mapper
 @inject IDialogService DialogService
 
 <div class="row" style="overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow">
-@*         <div>
+        <div>
             <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
-                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+                @* <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton> *@
+                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                              Appearance="Appearance.Outline"
+                              OnClick="@(async (e) => await ExportToCSV())"
+                              Disabled="@(FilteredItems?.Count() == 0)">
+                    Export
+                </FluentButton>
             </FluentStack>
-        </div> *@
+        </div>
         <div>
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
