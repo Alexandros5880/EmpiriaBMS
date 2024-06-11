@@ -1,17 +1,11 @@
-﻿using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Config;
+﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.General;
-using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
-using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Front.ViewModel.DefaultComponents;
-using EmpiriaBMS.Models.Models;
+using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Fast.Components.FluentUI;
-using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Admin.Users;
 
@@ -22,7 +16,7 @@ public partial class Users
     private string _filterString = string.Empty;
     IQueryable<UserVM>? FilteredItems => _records?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
-    
+
     private UserVM _selectedRecord = new UserVM();
 
     private void HandleFilter(ChangeEventArgs args)
@@ -124,11 +118,11 @@ public partial class Users
     }
 
     private async Task _delete(UserVM record)
-    {        
+    {
         var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the user {record.FullName}?", "Yes", "No", "Deleting record...");
 
         DialogResult result = await dialog.Result;
- 
+
         if (!result.Cancelled)
         {
             await DataProvider.Users.Delete(record.Id);
@@ -150,4 +144,18 @@ public partial class Users
             StateHasChanged();
         }
     }
+
+    #region Export Data
+    private async Task ExportToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"Users-{date.ToEuropeFormat()}.csv";
+        var data = FilteredItems.Select(c => new UserExport(c)).ToList();
+        if (data.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(data);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
+    }
+    #endregion
 }
