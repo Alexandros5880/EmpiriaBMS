@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.General;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -118,4 +119,18 @@ public partial class ProjectCategories
             StateHasChanged();
         }
     }
+
+    #region Export Data
+    private async Task ExportToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"ProjectCategories-{date.ToEuropeFormat()}.csv";
+        var data = FilteredItems.Select(c => new ProjectCategoryExport(c)).ToList();
+        if (data.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(data);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
+    }
+    #endregion
 }
