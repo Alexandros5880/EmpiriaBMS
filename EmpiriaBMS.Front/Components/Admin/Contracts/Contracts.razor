@@ -14,7 +14,7 @@
                 <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
                               Appearance="Appearance.Outline"
                               OnClick="@(async (e) => await ExportToCSV())"
-                              Disabled="@(FilteredItems.Count() == 0)">
+                              Disabled="@(FilteredItems?.Count() == 0)">
                     Export
                 </FluentButton>
             </FluentStack>
