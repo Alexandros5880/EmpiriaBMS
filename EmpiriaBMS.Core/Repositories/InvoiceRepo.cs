@@ -101,13 +101,8 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var contracts = await _context.Set<Contract>().ToListAsync();
-            var invoicesIds = contracts.Select(c => c.InvoiceId).ToList();
-            var projects = await _context.Set<Project>().Include(p => p.ProjectManager).ToListAsync();
-
             List<Invoice> i;
-
-            // TODO: Import related Project And Contract efficient
+            var contracts = await _context.Set<Contract>().Where(c => !c.IsDeleted).ToListAsync();
 
             if (pageSize == 0 || pageIndex == 0)
             {
@@ -117,11 +112,8 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                                   .Include(i => i.Type)
                                   .Include(i => i.Project)
                                   .ThenInclude(p => p.ProjectManager)
-                                  .Include(i => i.Contract)
+                                  .Select(i => _includeContract(i, ref contracts))
                                   .ToListAsync();
-
-                contracts = null;
-                projects = null;
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
             }
@@ -134,11 +126,8 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .Include(i => i.Type)
                               .Include(i => i.Project)
                               .ThenInclude(p => p.ProjectManager)
-                              .Include(i => i.Contract)
+                              .Select(i => _includeContract(i, ref contracts))
                               .ToListAsync();
-
-            contracts = null;
-            projects = null;
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
         }
@@ -148,17 +137,27 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var contracts = await _context.Set<Contract>().Where(c => !c.IsDeleted).ToListAsync();
+
             List<Invoice> i = await _context.Set<Invoice>()
-                              .Where(r => !r.IsDeleted)
-                              .Where(r => projectId == 0 || r.ProjectId == projectId)
-                              .Include(i => i.Payments)
-                                         .Include(i => i.Type)
-                                         .Include(i => i.Contract)
-                                         .Include(i => i.Project)
-                              .ToListAsync();
+                                 .Where(r => !r.IsDeleted)
+                                 .Where(r => projectId == 0 || r.ProjectId == projectId)
+                                 .Include(i => i.Payments)
+                                 .Include(i => i.Type)
+                                 .Include(i => i.Project)
+                                 .ThenInclude(p => p.ProjectManager)
+                                 .Select(i => _includeContract(i, ref contracts))
+                                 .ToListAsync();
+
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
         }
+    }
+
+    private static Invoice _includeContract(Invoice invoice, ref List<Contract> contracts)
+    {
+        invoice.Contract = contracts.FirstOrDefault(c => c.InvoiceId == invoice.Id);
+        return invoice;
     }
 
     public new async Task<ICollection<InvoiceDto>> GetAll(
@@ -170,6 +169,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<Invoice> i;
+            var contracts = await _context.Set<Contract>().Where(c => !c.IsDeleted).ToListAsync();
 
             if (pageSize == 0 || pageIndex == 0)
             {
@@ -178,8 +178,9 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                                   .Where(expresion)
                                   .Include(i => i.Payments)
                                   .Include(i => i.Type)
-                                  .Include(i => i.Contract)
                                   .Include(i => i.Project)
+                                  .ThenInclude(p => p.ProjectManager)
+                                  .Select(i => _includeContract(i, ref contracts))
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -192,8 +193,9 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .Take(pageSize)
                               .Include(i => i.Payments)
                               .Include(i => i.Type)
-                              .Include(i => i.Contract)
                               .Include(i => i.Project)
+                              .ThenInclude(p => p.ProjectManager)
+                              .Select(i => _includeContract(i, ref contracts))
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
