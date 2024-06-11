@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 public class User : Entity
@@ -28,13 +29,13 @@ public class User : Entity
     public string? Description { get; set; }
 
     public ICollection<Email> Emails { get; set; }
-    
+
     public ICollection<Project> PMProjects { get; set; }
 
     public ICollection<Discipline> Disciplines { get; set; }
 
     public ICollection<UserRole> UserRoles { get; set; }
-    
+
     public ICollection<DrawingEmployee> DrawingsEmployees { get; set; }
 
     public ICollection<OtherEmployee> OthersEmployees { get; set; }
@@ -52,4 +53,7 @@ public class User : Entity
     public ICollection<Issue> MyIssues { get; set; }
 
     public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+
+    [NotMapped]
+    public string FullName => $"{LastName} {MidName} {FirstName}";
 }

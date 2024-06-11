@@ -1,5 +1,8 @@
 ﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -40,7 +43,7 @@ public partial class Contracts
 
         _invoices.Clear();
         var invoicesIds = dtos.Select(c => c.InvoiceId).ToHashSet();
-        foreach(var invoiceId in invoicesIds)
+        foreach (var invoiceId in invoicesIds)
         {
             var invDto = await DataProvider.Invoices.Get(invoiceId);
             var invVm = Mapper.Map<InvoiceVM>(invDto);
@@ -134,4 +137,18 @@ public partial class Contracts
 
     private InvoiceVM _getInvoice(int invoiceId) =>
         _invoices.FirstOrDefault(i => i.Id == invoiceId);
+
+    #region Export Data
+    private async Task ExportToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"Contracts-{date.ToEuropeFormat()}.csv";
+        var data = FilteredItems.Select(c => new ContractExport(c)).ToList();
+        if (data.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(data);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
+    }
+    #endregion
 }

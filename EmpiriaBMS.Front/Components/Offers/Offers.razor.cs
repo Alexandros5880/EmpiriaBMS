@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.Interop.TeamsSDK;
+﻿using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
@@ -245,6 +246,20 @@ public partial class Offers
         }
 
         await dialog.CloseAsync();
+    }
+    #endregion
+
+    #region Export Functions
+    private async Task ExportToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"Offers-{date.ToEuropeFormat()}.csv";
+        var offers = FilteredItems.ToList();
+        if (offers.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(offers);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
     }
     #endregion
 }

@@ -88,7 +88,8 @@
                 Stage<span class="text-danger">*</span>
             </div>
             <div class="col-12">
-                <FluentCombobox Placeholder="Select Stage..."
+                <FluentCombobox @ref="@_stageCombo"
+                                Placeholder="Select Stage..."
                                 Items="@_stages"
                                 Height="200px"
                                 Width="100%"
@@ -128,7 +129,8 @@
                 Project Manager<span class="text-danger">*</span>
             </div>
             <div class="col-12">
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                <FluentCombobox @ref="@_pmCombo"
+                                Autocomplete="ComboboxAutocomplete.Both"
                                 Placeholder="Select PM..."
                                 Items="@_pms"
                                 Height="200px"

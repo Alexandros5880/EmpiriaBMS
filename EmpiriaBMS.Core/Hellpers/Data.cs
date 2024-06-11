@@ -1,17 +1,18 @@
-﻿using CsvHelper.Configuration;
-using CsvHelper;
-using System;
-using System.Collections.Generic;
-using System.Formats.Asn1;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Hellpers;
 
 public static class Data
 {
+    public static string GetCsvContent<T>(IList<T> data)
+    {
+        var content = SCV.GenerateCsvContent(data);
+
+        return content;
+    }
 
     public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
     {
@@ -21,7 +22,7 @@ public static class Data
                 var csvContent = SCV.GenerateCsvContent(data);
                 SCV.SaveCsvToFile(csvContent, filePath);
                 break;
-            
+
             default:
                 break;
         }
@@ -46,12 +47,29 @@ public static class Data
             var properties = typeof(T).GetProperties();
             var csvBuilder = new StringBuilder();
 
-            csvBuilder.AppendLine(string.Join(",", properties.Select(p => p.Name)));
 
+            // Add Columns
+            var columnValues = new List<string>();
+            foreach (var prop in properties)
+                if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string))
+                    columnValues.Add(prop.Name);
+            csvBuilder.AppendLine(string.Join(",", columnValues));
+
+
+            // Add Values
             foreach (var item in data)
             {
-                var line = string.Join(",", properties.Select(p => p.GetValue(item, null)));
-                csvBuilder.AppendLine(line);
+                var lineValues = new List<string>();
+
+                foreach (var prop in properties)
+                {
+                    var propValue = prop.GetValue(item);
+
+                    if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string))
+                        lineValues.Add(propValue?.ToString() ?? "");
+                }
+
+                csvBuilder.AppendLine(string.Join(",", lineValues));
             }
 
             return csvBuilder.ToString();
@@ -77,7 +95,6 @@ public static class Data
             return records;
         }
     }
-
 }
 
 public enum FileType

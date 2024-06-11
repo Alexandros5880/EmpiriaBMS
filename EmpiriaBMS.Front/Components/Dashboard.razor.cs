@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Components.Invoices;
 using EmpiriaBMS.Front.Services;
@@ -1149,10 +1150,11 @@ public partial class Dashboard : IDisposable
         _isAddEditProjectDialogOdepened = true;
     }
 
-    private void EditProject()
+    private async Task EditProject()
     {
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
+        await projectCompoment.Prepair();
     }
 
     private void CloseAddProjectClick()
@@ -1390,6 +1392,56 @@ public partial class Dashboard : IDisposable
             await _invoicePaymentsRef.Prepair(_selectedInvoice.Id);
         }
 
+    }
+    #endregion
+
+    #region Export Data
+    private async Task ExportProjectsToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"Projects-{date.ToEuropeFormat()}.csv";
+        var data = _projects.ToList();
+        if (_projects.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(_projects);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
+    }
+
+    private async Task ExportDisciplinesToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"Disciplines-{date.ToEuropeFormat()}.csv";
+        var data = _disciplines.ToList();
+        if (_disciplines.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(_disciplines);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
+    }
+
+    private async Task ExportDeliverablesToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"Deliverables-{date.ToEuropeFormat()}.csv";
+        var data = _draws.ToList();
+        if (_draws.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(_draws);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
+    }
+
+    private async Task ExportSupportiveWorksToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"SupportiveWorks-{date.ToEuropeFormat()}.csv";
+        var data = _others.ToList();
+        if (_others.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(_others);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
     }
     #endregion
 
