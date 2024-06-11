@@ -1,4 +1,8 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
+using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
@@ -134,4 +138,46 @@ public partial class Invoices : ComponentBase
             StateHasChanged();
         }
     }
+
+    #region Export Data
+    private async Task _exportToCSV()
+    {
+        var date = DateTime.Today;
+
+        var invoice = FilteredItems.FirstOrDefault(i => i.Contract != null);
+
+        // Export Invoices
+        var invoicesFileName = $"Invoices-{date.ToEuropeFormat()}.csv";
+        var invoices = FilteredItems.Select(_getInvExport).ToList();
+        if (invoices.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(invoices);
+            await MicrosoftTeams.DownloadCsvFile(invoicesFileName, csvContent);
+        }
+
+        // Export Payments
+        var paymentsFileName = $"Payments-{date.ToEuropeFormat()}.csv";
+        var invoicesIds = FilteredItems.Select(i => i.Id).ToArray();
+        var payments = await DataProvider.Payments.GetAllByInvoices(invoicesIds);
+        var paymentsExp = payments.Select(_getPayExport).ToList();
+        if (paymentsExp.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(paymentsExp);
+            await MicrosoftTeams.DownloadCsvFile(paymentsFileName, csvContent);
+        }
+    }
+
+    private InvoiceExport _getInvExport(InvoiceVM inv)
+    {
+        var exp = new InvoiceExport(inv);
+        return exp;
+    }
+
+    private PaymentExport _getPayExport(PaymentDto pay)
+    {
+        var vm = Mapper.Map<PaymentVM>(pay);
+        var exp = new PaymentExport(vm);
+        return exp;
+    }
+    #endregion
 }

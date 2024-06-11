@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -74,4 +76,18 @@ public partial class Permissions
             StateHasChanged();
         }
     }
+
+    #region Export Data
+    private async Task ExportToCSV()
+    {
+        var date = DateTime.Today;
+        var fileName = $"Permissions-{date.ToEuropeFormat()}.csv";
+        var data = FilteredItems.Select(c => new PermissionExport(c)).ToList();
+        if (data.Count > 0)
+        {
+            string csvContent = Data.GetCsvContent(data);
+            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
+        }
+    }
+    #endregion
 }

@@ -195,27 +195,35 @@
                                                                   Placeholder="Search Project" 
                                                                   Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;"/>
                                                 </div>
-                                                @if (isWorkingMode && editProject)
-                                                {
-                                                    <div class="col-6">
-                                                        <FluentStack>
+                                                <div class="col-6">
+                                                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                                                        @if (isWorkingMode && editProject)
+                                                        {
                                                             @if (_selectedProject != null)
                                                             {
-                                                                <span class="navigate-outline col-1 my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
-                                                                        style="display: @((_selectedProject?.Offer?.Led?.Address != null ? "block" : "none" ));"
-                                                                        @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Led?.Address))" />
+                                                                <span class="navigate-outline my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
+                                                                style="display: @((_selectedProject?.Offer?.Led?.Address != null ? "block" : "none" ));"
+                                                                @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Led?.Address))" />
 
-                                                                @* <span class="fluent--delete-28-regular col-1"
-                                                                            @onclick="@(() => DeleteProject())" /> *@
+                                                                @* <span class="fluent--delete-28-regular"
+                                                                        @onclick="@(() => DeleteProject())" /> *@
 
-                                                                <span class="material-symbols--edit-outline col-1"
-                                                                        @onclick="@(async () => await EditProject())" />
+                                                                <span class="material-symbols--edit-outline"
+                                                                @onclick="@(async () => await EditProject())" />
                                                             }
-                                                            @* <span class="grommet-icons--add col-1"
-                                                                    @onclick="@(() => AddProject())" /> *@
-                                                        </FluentStack>
-                                                    </div>
-                                                }
+                                                            @* <span class="grommet-icons--add"
+                                                                @onclick="@(() => AddProject())" /> *@
+                                                        }
+
+                                                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                                                        Appearance="Appearance.Outline"
+                                                                        OnClick="@(async (e) => await ExportProjectsToCSV())"
+                                                                        Disabled="@(_projects.Count() == 0)">
+                                                            Export
+                                                        </FluentButton>
+
+                                                    </FluentStack>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="table-responsive p-1 table-container"
@@ -361,21 +369,37 @@
                                         <div style="height: 74px;">
                                             <div class="text-center row me-2">
                                                 <h3 class="@((isWorkingMode ? "col-8" : "col-11"))">Disciplines</h3>
-                                                @if (isWorkingMode && editDiscipline)
-                                                {
-                                                    @if (_selectedDiscipline != null)
-                                                    {
-                                                        <span class="fluent--delete-28-regular col-1"
-                                                              @onclick="@(() => DeleteDiscipline())" />
-                                                        <span class="material-symbols--edit-outline col-1"
-                                                              @onclick="@(async () => await EditDiscipline())" />
-                                                    }
-                                                    @if (_hasDisciplinesSelections)
-                                                    {
-                                                        <span class="grommet-icons--add col-1"
-                                                              @onclick="@(async () => await AddDiscipline())" />
-                                                    }
-                                                }
+                                            </div>
+                                            <div class="text-center row me-2">
+                                                <div class="col-6">
+
+                                                </div>
+                                                <div class="col-6">
+                                                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                                                        @if (isWorkingMode && editDiscipline)
+                                                        {
+                                                            @if (_selectedDiscipline != null)
+                                                            {
+                                                                <span class="fluent--delete-28-regular"
+                                                                      @onclick="@(() => DeleteDiscipline())" />
+                                                                <span class="material-symbols--edit-outline"
+                                                                      @onclick="@(async () => await EditDiscipline())" />
+                                                            }
+                                                            @if (_hasDisciplinesSelections)
+                                                            {
+                                                                <span class="grommet-icons--add"
+                                                                      @onclick="@(async () => await AddDiscipline())" />
+                                                            }
+                                                        }
+
+                                                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                                                      Appearance="Appearance.Outline"
+                                                                      OnClick="@(async (e) => await ExportDisciplinesToCSV())"
+                                                                      Disabled="@(_disciplines.Count() == 0)">
+                                                            Export
+                                                        </FluentButton>
+                                                    </FluentStack>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="table-responsive p-1 table-container">
@@ -443,24 +467,39 @@
                                             <div style="height: 74px;">
                                                 <div class="text-center row me-2">
                                                     <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Deliverables</h3>
-                                                    @if (isWorkingMode && editDeliverable)
-                                                    {
-                                                        @if (_selectedDraw != null)
-                                                        {
-                                                            <span class="fluent--delete-28-regular col-1"
-                                                                  @onclick="@(() => DeleteDeliverable())" />
-                                                            @if (_hasDrawingsSelections)
+                                                </div>
+                                                <div class="text-center row me-2">
+                                                    <div class="col-6">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                                                            @if (isWorkingMode && editDeliverable)
                                                             {
-                                                                <span class="material-symbols--edit-outline col-1"
-                                                                      @onclick="@(() => EditDeliverable())" />
+                                                                @if (_selectedDraw != null)
+                                                                {
+                                                                    <span class="fluent--delete-28-regular"
+                                                                          @onclick="@(() => DeleteDeliverable())" />
+                                                                    @if (_hasDrawingsSelections)
+                                                                    {
+                                                                        <span class="material-symbols--edit-outline"
+                                                                              @onclick="@(() => EditDeliverable())" />
+                                                                    }
+                                                                }
+                                                                @if (_hasDrawingsSelections)
+                                                                {
+                                                                    <span class="grommet-icons--add"
+                                                                          @onclick="@(() => AddDeliverable())" />
+                                                                }
                                                             }
-                                                        }
-                                                        @if (_hasDrawingsSelections)
-                                                        {
-                                                            <span class="grommet-icons--add col-1"
-                                                                  @onclick="@(() => AddDeliverable())" />
-                                                        }
-                                                    }
+
+                                                            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                                                          Appearance="Appearance.Outline"
+                                                                          OnClick="@(async (e) => await ExportDeliverablesToCSV())"
+                                                                          Disabled="@(_draws.Count() == 0)">
+                                                                Export
+                                                            </FluentButton>
+                                                        </FluentStack>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="table-responsive p-1 table-container">
@@ -530,24 +569,39 @@
                                             <div style="height: 74px;">
                                                 <div class="text-center row me-2">
                                                     <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Supportive Works</h3>
-                                                    @if (isWorkingMode && editOther)
-                                                    {
-                                                        @if (_selectedOther != null)
-                                                        {
-                                                            <span class="fluent--delete-28-regular col-1"
-                                                                  @onclick="@(() => DeleteOther())" />
-                                                            @if (_hasOthersSelections)
+                                                </div>
+                                                <div class="text-center row me-2">
+                                                    <div class="col-6">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                                                            @if (isWorkingMode && editOther)
                                                             {
-                                                                <span class="material-symbols--edit-outline col-1"
-                                                                      @onclick="@(() => EditOther())" />
+                                                                @if (_selectedOther != null)
+                                                                {
+                                                                    <span class="fluent--delete-28-regular col-1"
+                                                                          @onclick="@(() => DeleteOther())" />
+                                                                    @if (_hasOthersSelections)
+                                                                    {
+                                                                        <span class="material-symbols--edit-outline col-1"
+                                                                              @onclick="@(() => EditOther())" />
+                                                                    }
+                                                                }
+                                                                @if (_hasOthersSelections)
+                                                                {
+                                                                    <span class="grommet-icons--add col-1"
+                                                                          @onclick="@(() => AddOther())" />
+                                                                }
                                                             }
-                                                        }
-                                                        @if (_hasOthersSelections)
-                                                        {
-                                                            <span class="grommet-icons--add col-1"
-                                                                  @onclick="@(() => AddOther())" />
-                                                        }
-                                                    }
+
+                                                            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                                                          Appearance="Appearance.Outline"
+                                                                          OnClick="@(async (e) => await ExportSupportiveWorksToCSV())"
+                                                                          Disabled="@(_others.Count() == 0)">
+                                                                Export
+                                                            </FluentButton>
+                                                        </FluentStack>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="table-responsive p-1 table-container">

@@ -42,7 +42,6 @@ public partial class ContractDetailed
 
         if (Content.InvoiceId != 0)
         {
-            Content.Invoice.Contract = null;
             var invoiceDto = _mapper.Map<InvoiceDto>(Content.Invoice);
             Invoice = Invoices.FirstOrDefault(i => i.Id == Content.InvoiceId);
         }
