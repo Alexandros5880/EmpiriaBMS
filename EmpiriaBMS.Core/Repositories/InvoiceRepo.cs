@@ -115,8 +115,9 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                                   .Where(r => !r.IsDeleted)
                                   .Include(i => i.Payments)
                                   .Include(i => i.Type)
-                                  .Select(i => _includeProject(i, projects))
-                                  .Select(i => _includeContract(i, contracts, invoicesIds))
+                                  .Include(i => i.Project)
+                                  .ThenInclude(p => p.ProjectManager)
+                                  .Include(i => i.Contract)
                                   .ToListAsync();
 
                 contracts = null;
@@ -131,8 +132,9 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .Take(pageSize)
                               .Include(i => i.Payments)
                               .Include(i => i.Type)
-                              .Select(i => _includeProject(i, projects))
-                              .Select(i => _includeContract(i, contracts, invoicesIds))
+                              .Include(i => i.Project)
+                              .ThenInclude(p => p.ProjectManager)
+                              .Include(i => i.Contract)
                               .ToListAsync();
 
             contracts = null;
@@ -141,25 +143,6 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
         }
     }
-
-    #region Private Hellper Methods
-    private static Invoice _includeProject(Invoice i, List<Project> projects)
-    {
-        if (i.ProjectId != 0)
-            i.Project = projects.FirstOrDefault(p => p.Id == i.ProjectId);
-
-        return i;
-    }
-
-    private static Invoice _includeContract(Invoice i, List<Contract> contracts, List<int> contractInvoicesIds)
-    {
-
-        if (contractInvoicesIds.Contains(i.Id))
-            i.Contract = contracts.FirstOrDefault(c => c.InvoiceId == i.Id);
-
-        return i;
-    }
-    #endregion
 
     public async Task<ICollection<InvoiceDto>> GetAllByProject(int projectId = 0)
     {
