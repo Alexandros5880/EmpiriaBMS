@@ -121,4 +121,12 @@ public class MicrosoftTeams : InteropModuleBase
         await InvokeVoidAsync("downloadCsvFile", filenName, content);
     }
     #endregion
+
+    #region Element Click
+    public async Task TriggerFileInputClick(ElementReference? element)
+    {
+        if (element != null)
+            await InvokeVoidAsync("triggerFileInputClick", element);
+    }
+    #endregion
 }

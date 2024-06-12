@@ -297,3 +297,10 @@ export function downloadCsvFile(filename, content) {
     }
 }
 // - Download CSV
+
+
+// Element Click
+export function triggerFileInputClick(element) {
+    element.click();
+};
+// - Element Click

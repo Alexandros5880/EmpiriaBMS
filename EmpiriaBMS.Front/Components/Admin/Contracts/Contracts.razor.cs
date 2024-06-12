@@ -4,6 +4,7 @@ using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin.Contracts;
@@ -138,7 +139,7 @@ public partial class Contracts
     private InvoiceVM _getInvoice(int invoiceId) =>
         _invoices.FirstOrDefault(i => i.Id == invoiceId);
 
-    #region Export Data
+    #region Import/Export Data
     private async Task ExportToCSV()
     {
         var date = DateTime.Today;
@@ -149,6 +150,19 @@ public partial class Contracts
             string csvContent = Data.GetCsvContent(data);
             await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
         }
+    }
+
+    private InputFile fileInput;
+    private async Task ImportFromCSV(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        var filePath = file.Name;
+        Console.WriteLine($"Upload csv: {filePath}");
+    }
+    private async Task TriggerFileInput()
+    {
+        var element = fileInput.Element;
+        await MicrosoftTeams.TriggerFileInputClick(element);
     }
     #endregion
 }
