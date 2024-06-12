@@ -16,4 +16,9 @@ public class RoleExport
         IsEmployee = model.IsEmployee;
         IsEditable = model.IsEditable;
     }
+
+    public RoleExport()
+    {
+
+    }
 }

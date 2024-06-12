@@ -37,4 +37,9 @@ public class UserExport
         Phone3 = model.Phone3 ?? "";
         Description = model.Description ?? "";
     }
+
+    public UserExport()
+    {
+
+    }
 }

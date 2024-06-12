@@ -13,4 +13,9 @@ public class DisciplineTypeExport
         Name = model.Name;
         Description = model.Description ?? "";
     }
+
+    public DisciplineTypeExport()
+    {
+
+    }
 }

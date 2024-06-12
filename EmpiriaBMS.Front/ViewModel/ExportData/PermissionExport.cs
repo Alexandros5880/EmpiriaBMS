@@ -13,4 +13,9 @@ public class PermissionExport
         Name = model.Name;
         Ord = model.Ord;
     }
+
+    public PermissionExport()
+    {
+
+    }
 }

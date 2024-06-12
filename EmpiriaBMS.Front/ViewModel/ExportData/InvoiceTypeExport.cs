@@ -13,4 +13,9 @@ public class InvoiceTypeExport
         Name = model.Name ?? "";
         Description = model.Description ?? "";
     }
+
+    public InvoiceTypeExport()
+    {
+
+    }
 }

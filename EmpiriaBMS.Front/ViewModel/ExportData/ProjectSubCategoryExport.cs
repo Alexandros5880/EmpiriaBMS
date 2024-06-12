@@ -16,4 +16,8 @@ public class ProjectSubCategoryExport
         Description = model.Description ?? "";
         CanAssignePM = model.CanAssignePM;
     }
+    public ProjectSubCategoryExport()
+    {
+
+    }
 }

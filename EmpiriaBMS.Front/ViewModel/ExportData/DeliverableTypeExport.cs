@@ -13,4 +13,9 @@ public class DeliverableTypeExport
         Name = model.Name;
         Description = model.Description ?? "";
     }
+
+    public DeliverableTypeExport()
+    {
+
+    }
 }

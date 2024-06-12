@@ -13,4 +13,9 @@ public class OfferStateExport
         Name = model.Name;
         Description = model.Description ?? "";
     }
+
+    public OfferStateExport()
+    {
+
+    }
 }

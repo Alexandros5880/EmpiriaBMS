@@ -25,4 +25,9 @@ public class ContractExport
         Date = model.Date?.ToEuropeFormat() ?? "";
         Description = model.Description ?? "";
     }
+
+    public ContractExport()
+    {
+
+    }
 }

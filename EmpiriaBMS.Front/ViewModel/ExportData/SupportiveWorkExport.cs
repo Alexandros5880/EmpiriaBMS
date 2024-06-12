@@ -22,4 +22,9 @@ public class SupportiveWorkExport
         DisciplineType = model.Discipline?.Type.Name ?? "";
         CompletionEstimation = model.CompletionEstimation;
     }
+
+    public SupportiveWorkExport()
+    {
+
+    }
 }

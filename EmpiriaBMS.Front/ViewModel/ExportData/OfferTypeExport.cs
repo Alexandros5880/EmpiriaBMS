@@ -13,4 +13,9 @@ public class OfferTypeExport
         Name = model.Name;
         Description = model.Description ?? "";
     }
+
+    public OfferTypeExport()
+    {
+
+    }
 }

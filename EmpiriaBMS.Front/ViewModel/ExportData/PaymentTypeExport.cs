@@ -13,4 +13,9 @@ public class PaymentTypeExport
         Name = model.Name;
         Description = model.Description ?? "";
     }
+
+    public PaymentTypeExport()
+    {
+
+    }
 }

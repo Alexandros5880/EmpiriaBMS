@@ -68,4 +68,9 @@ public class ProjectExport
         OfferCategory = model.Offer?.Category?.Name ?? "";
         OfferSubCategory = model.Offer?.SubCategory?.Name ?? "";
     }
+
+    public ProjectExport()
+    {
+
+    }
 }

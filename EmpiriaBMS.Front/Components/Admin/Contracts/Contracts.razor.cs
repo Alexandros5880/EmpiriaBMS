@@ -157,7 +157,20 @@ public partial class Contracts
     {
         var file = e.File;
         var filePath = file.Name;
-        Console.WriteLine($"Upload csv: {filePath}");
+        var fileType = file.ContentType;
+        if (fileType?.Equals("text/csv") ?? false)
+        {
+            try
+            {
+                Stream stream = file.OpenReadStream();
+                await Data.ImportData<ContractExport>(stream);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Contracts import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                // TODO: log error
+            }
+        }
     }
     private async Task TriggerFileInput()
     {

@@ -1,6 +1,4 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using System.Globalization;
+﻿using System.Reflection;
 using System.Text;
 
 namespace EmpiriaBMS.Core.Hellpers;
@@ -28,12 +26,12 @@ public static class Data
         }
     }
 
-    public static List<T>? ImportData<T>(string filePath, FileType fileType = FileType.CSV)
+    public static async Task<List<T>> ImportData<T>(Stream stream, FileType fileType = FileType.CSV)
     {
         switch (fileType)
         {
             case FileType.CSV:
-                return SCV.ImportFromCsv<T>(filePath);
+                return await SCV.ImportFromCsv<T>(stream);
 
             default:
                 return null;
@@ -80,19 +78,59 @@ public static class Data
             File.WriteAllText(filePath, csvContent);
         }
 
-        public static List<T>? ImportFromCsv<T>(string filePath)
+        public static async Task<List<T>> ImportFromCsv<T>(Stream stream)
         {
-            if (!File.Exists(filePath))
-                return null;
-
-            using var reader = new StreamReader(filePath);
-            using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+            using (StreamReader reader = new StreamReader(stream))
             {
-                HasHeaderRecord = true,
-            });
 
-            var records = csv.GetRecords<T>().ToList();
-            return records;
+                List<string> columns = new List<string>();
+                List<List<string>> rows = new List<List<string>>();
+
+                string line;
+                int count = 0;
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    if (count == 0)
+                    {
+                        columns = new List<string>(line.Split(','));
+                    }
+                    else
+                    {
+                        var row = new List<string>(line.Split(','));
+                        rows.Add(row);
+                    }
+                    count++;
+                }
+
+                // Create Instance
+                PropertyInfo[] properties = typeof(T).GetProperties();
+                List<T> data = new List<T>();
+
+                foreach (var row in rows)
+                {
+                    var column = 0;
+                    T instance = Activator.CreateInstance<T>();
+                    foreach (var val in row)
+                    {
+                        _setProperty(instance, columns[column], val);
+                        column++;
+                    }
+                    data.Add(instance);
+                }
+
+                return data;
+            }
+        }
+    }
+
+    private static void _setProperty<T>(T instance, string propertyName, string propertyValue)
+    {
+        PropertyInfo property = typeof(T).GetProperty(propertyName);
+        if (property != null && property.CanWrite)
+        {
+            Type propertyType = property.PropertyType;
+            object value = Convert.ChangeType(propertyValue, propertyType);
+            property.SetValue(instance, value);
         }
     }
 }

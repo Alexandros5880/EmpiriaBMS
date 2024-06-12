@@ -13,4 +13,9 @@ public class ProjectStageExport
         Name = model.Name ?? "";
         Description = model.Description ?? "";
     }
+
+    public ProjectStageExport()
+    {
+
+    }
 }

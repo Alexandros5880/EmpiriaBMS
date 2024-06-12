@@ -23,30 +23,26 @@ public class InvoiceExport
 
     public InvoiceExport(InvoiceVM model)
     {
-        try
-        {
-            TypeId = model.TypeId;
-            TypeName = model.Type?.Name ?? "";
-            Total = model.Total ?? 0;
-            Vat = Convert.ToInt32(model.Vat);
-            Fee = model.Fee ?? 0;
-            EstimatedDate = model.EstimatedDate?.ToEuropeFormat() ?? "";
-            Number = model.Number ?? 0;
-            Mark = model.Mark ?? "";
-            ContractId = model.ContractId ?? 0;
-            ContractContractualFee = model.Contract?.ContractualFee ?? 0;
-            ContractDate = model.Contract?.Date?.ToEuropeFormat() ?? "";
-            ContractDescription = model.Contract?.Description ?? "";
-            ProjectId = model.ProjectId;
-            ProjectCode = model.Project?.Code ?? "";
-            ProjectName = model.Project?.Name ?? "";
-            ProjectPM = model.Project?.ProjectManager?.FirstName ?? "";
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception in InvoiceExport(): {ex.Message} \n InnerException: {ex.InnerException} \n\n");
-            // TODO: Log Error
-        }
+        TypeId = model.TypeId;
+        TypeName = model.Type?.Name ?? "";
+        Total = model.Total ?? 0;
+        Vat = Convert.ToInt32(model.Vat);
+        Fee = model.Fee ?? 0;
+        EstimatedDate = model.EstimatedDate?.ToEuropeFormat() ?? "";
+        Number = model.Number ?? 0;
+        Mark = model.Mark ?? "";
+        ContractId = model.ContractId ?? 0;
+        ContractContractualFee = model.Contract?.ContractualFee ?? 0;
+        ContractDate = model.Contract?.Date?.ToEuropeFormat() ?? "";
+        ContractDescription = model.Contract?.Description ?? "";
+        ProjectId = model.ProjectId;
+        ProjectCode = model.Project?.Code ?? "";
+        ProjectName = model.Project?.Name ?? "";
+        ProjectPM = model.Project?.ProjectManager?.FirstName ?? "";
     }
 
+    public InvoiceExport()
+    {
+
+    }
 }

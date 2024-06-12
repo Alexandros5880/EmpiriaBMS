@@ -31,4 +31,9 @@ public class DeliverableExport
         CompletionEstimation = model.CompletionEstimation;
         CompletionDate = model.CompletionDate?.ToEuropeFormat() ?? "";
     }
+
+    public DeliverableExport()
+    {
+
+    }
 }

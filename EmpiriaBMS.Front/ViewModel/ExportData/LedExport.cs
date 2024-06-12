@@ -27,4 +27,9 @@ public class LedExport
         ExpectedDurationDate = model.ExpectedDurationDate?.ToEuropeFormat() ?? "";
         Result = Convert.ToString(model.Result);
     }
+
+    public LedExport()
+    {
+
+    }
 }

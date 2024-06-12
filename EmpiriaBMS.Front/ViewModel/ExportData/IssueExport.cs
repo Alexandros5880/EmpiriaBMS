@@ -52,4 +52,9 @@ public class IssueExport
         VerificationDate = model.VerificationDate?.ToEuropeFormat() ?? "";
         IsClose = model.IsClose;
     }
+
+    public IssueExport()
+    {
+
+    }
 }

@@ -242,7 +242,7 @@ export function downloadFile(fileName, contentType, base64Content) {
 // Download Document
 
 
-// Pick Folder Path
+// Pick Folder/File Path
 async function pickFolder() {
     try {
         // Create an empty CSV Blob
@@ -280,7 +280,31 @@ async function pickFolder() {
 export async function pickFolderPath() {
     return await pickFolder();
 }
-// - Pick Folder Path
+
+export function pickFilePath() {
+    try {
+        // Create an input element
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv';
+
+        return new Promise((resolve, reject) => {
+            input.onchange = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    resolve(file.name);
+                } else {
+                    reject(new Error('No file selected'));
+                }
+            };
+            input.click();
+        });
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+// - Pick Folder/File Path
 
 // Download CSV
 export function downloadCsvFile(filename, content) {

@@ -46,4 +46,9 @@ public class ClientExport
         Phone3 = model.Phone3 ?? "";
         Description = model.Description ?? "";
     }
+
+    public ClientExport()
+    {
+
+    }
 }

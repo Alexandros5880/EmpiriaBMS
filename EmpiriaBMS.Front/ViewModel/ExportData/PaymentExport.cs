@@ -46,4 +46,9 @@ public class PaymentExport
             // TODO: Log Error
         }
     }
+
+    public PaymentExport()
+    {
+
+    }
 }

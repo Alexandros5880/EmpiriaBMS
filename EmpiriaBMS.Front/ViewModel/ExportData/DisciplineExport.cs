@@ -31,4 +31,9 @@ public class DisciplineExport
         TypeId = model.TypeId;
         TypeName = model.Type?.Name ?? "";
     }
+
+    public DisciplineExport()
+    {
+
+    }
 }

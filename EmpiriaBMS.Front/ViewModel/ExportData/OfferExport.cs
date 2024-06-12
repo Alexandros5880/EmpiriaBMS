@@ -64,4 +64,9 @@ public class OfferExport
         TeamText = model.TeamText ?? "";
         Comments = model.Comments ?? "";
     }
+
+    public OfferExport()
+    {
+
+    }
 }

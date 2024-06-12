@@ -113,6 +113,11 @@ public class MicrosoftTeams : InteropModuleBase
     {
         return await InvokeAsync<string>("pickFolderPath");
     }
+
+    public async Task<string> PickFilePath()
+    {
+        return await InvokeAsync<string>("pickFilePath");
+    }
     #endregion
 
     #region Download CSV File
