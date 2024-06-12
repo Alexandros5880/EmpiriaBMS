@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class ClientExport
+public class ClientExport : IInport<ClientVM>
 {
     public string CompanyName { get; set; }
 
@@ -51,4 +52,10 @@ public class ClientExport
     {
 
     }
+
+    public ClientVM Get() => new ClientVM()
+    {
+        CompanyName = CompanyName,
+        AddressId = AddressId,
+    };
 }

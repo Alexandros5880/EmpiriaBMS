@@ -1,6 +1,6 @@
-﻿namespace EmpiriaBMS.Front.ViewModel.ExportData.Interfaces
+﻿namespace EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
+
+public interface IInport<T>
 {
-    public interface IInport
-    {
-    }
+    T Get();
 }

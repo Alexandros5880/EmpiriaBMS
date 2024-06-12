@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class ContractExport
+public class ContractExport : IInport<ContractVM>
 {
     public int Id { get; set; }
 
@@ -30,4 +31,12 @@ public class ContractExport
     {
 
     }
+
+    public ContractVM Get() => new ContractVM()
+    {
+        InvoiceId = InvoiceId,
+        ContractualFee = ContractualFee,
+        Date = Convert.ToDateTime(Date),
+        Description = Description,
+    };
 }
