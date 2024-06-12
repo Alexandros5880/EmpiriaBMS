@@ -1,8 +1,10 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
+using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class OfferExport
+public class OfferExport : IInport<OfferVM>
 {
     public int TypeId { get; set; }
 
@@ -69,4 +71,22 @@ public class OfferExport
     {
 
     }
+
+    public OfferVM Get() => new OfferVM()
+    {
+        TypeId = TypeId,
+        StateId = StateId,
+        CategoryId = CategoryId,
+        SubCategoryId = SubCategoryId,
+        LedId = LedId,
+        Result = Result.GetValueFromDisplayName<OfferResult>(),
+        Code = Code,
+        Date = Convert.ToDateTime(Date),
+        PudgetPrice = PudgetPrice,
+        OfferPrice = OfferPrice,
+        Description = Description,
+        Observations = Observations,
+        TeamText = TeamText,
+        Comments = Comments,
+    };
 }

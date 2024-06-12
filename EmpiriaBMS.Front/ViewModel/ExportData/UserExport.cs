@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class UserExport
+public class UserExport : IInport<UserVM>
 {
     public string ProxyAddress { get; set; }
 
@@ -42,4 +43,18 @@ public class UserExport
     {
 
     }
+
+    public UserVM Get() => new UserVM()
+    {
+        ProxyAddress = ProxyAddress,
+        PasswordHash = PasswordHash,
+        LastName = LastName,
+        MidName = MidName,
+        FirstName = FirstName,
+        TeamsObjectId = TeamsObjectId,
+        Phone1 = Phone1,
+        Phone2 = Phone2,
+        Phone3 = Phone3,
+        Description = Description
+    };
 }

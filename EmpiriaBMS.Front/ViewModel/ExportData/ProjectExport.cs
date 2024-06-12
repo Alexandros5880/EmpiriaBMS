@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class ProjectExport
+public class ProjectExport : IInport<ProjectVM>
 {
     public string Name { get; set; }
 
@@ -73,4 +74,21 @@ public class ProjectExport
     {
 
     }
+
+    public ProjectVM Get() => new ProjectVM()
+    {
+        Name = Name,
+        Description = Description,
+        Code = Code,
+        EstimatedMandays = EstimatedMandays,
+        EstimatedHours = EstimatedHours,
+        StageId = StageId,
+        Active = Active,
+        StartDate = Convert.ToDateTime(StartDate),
+        DeadLine = Convert.ToDateTime(DeadLine),
+        EstimatedCompleted = EstimatedCompleted,
+        DeclaredCompleted = DeclaredCompleted,
+        ProjectManagerId = ProjectManagerId,
+        OfferId = OfferId
+    };
 }

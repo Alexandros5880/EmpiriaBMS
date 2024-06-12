@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class SupportiveWorkExport
+public class SupportiveWorkExport : IInport<OtherVM>
 {
     public int TypeId { get; set; }
 
@@ -27,4 +28,11 @@ public class SupportiveWorkExport
     {
 
     }
+
+    public OtherVM Get() => new OtherVM()
+    {
+        TypeId = TypeId,
+        DisciplineId = DisciplineId,
+        CompletionEstimation = CompletionEstimation,
+    };
 }

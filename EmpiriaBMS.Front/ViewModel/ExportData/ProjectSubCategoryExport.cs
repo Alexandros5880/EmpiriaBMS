@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class ProjectSubCategoryExport
+public class ProjectSubCategoryExport : IInport<ProjectSubCategoryVM>
 {
     public string Name { get; set; }
 
@@ -20,4 +21,11 @@ public class ProjectSubCategoryExport
     {
 
     }
+
+    public ProjectSubCategoryVM Get() => new ProjectSubCategoryVM()
+    {
+        Name = Name,
+        Description = Description,
+        CanAssignePM = CanAssignePM,
+    };
 }

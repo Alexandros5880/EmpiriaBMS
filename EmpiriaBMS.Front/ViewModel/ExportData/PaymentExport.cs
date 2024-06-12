@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class PaymentExport
+public class PaymentExport : IInport<PaymentVM>
 {
     public string PaymentDate { get; set; }
     public string Bank { get; set; }
@@ -51,4 +52,14 @@ public class PaymentExport
     {
 
     }
+
+    public PaymentVM Get() => new PaymentVM()
+    {
+        PaymentDate = Convert.ToDateTime(PaymentDate),
+        Bank = Bank,
+        Fee = Fee,
+        Description = Description,
+        TypeId = TypeId,
+        InvoiceId = InvoiceId
+    };
 }
