@@ -163,7 +163,7 @@ public partial class Contracts
             try
             {
                 Stream stream = file.OpenReadStream();
-                await Data.ImportData<ContractExport>(stream);
+                List<ContractExport> data = await Data.ImportData<ContractExport>(stream);
             }
             catch (Exception ex)
             {
