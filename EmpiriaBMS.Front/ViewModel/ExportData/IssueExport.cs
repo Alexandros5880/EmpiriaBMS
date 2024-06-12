@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class IssueExport
+public class IssueExport : IInport<IssueVM>
 {
     public string ComplaintDate { get; set; }
 
@@ -57,4 +58,19 @@ public class IssueExport
     {
 
     }
+
+    public IssueVM Get() => new IssueVM()
+    {
+        ComplaintDate = Convert.ToDateTime(ComplaintDate),
+        ProjectId = ProjectId,
+        DisplayedRoleId = DisplayedRoleId,
+        CreatorId = CreatorId,
+        Description = Description,
+        Solution = Solution,
+        SolutionDate = Convert.ToDateTime(SolutionDate),
+        Evaluation = Evaluation,
+        Verification = Verification,
+        VerificationDate = Convert.ToDateTime(VerificationDate),
+        IsClose = IsClose
+    };
 }

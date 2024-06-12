@@ -1,8 +1,10 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
+using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class InvoiceExport
+public class InvoiceExport : IInport<InvoiceVM>
 {
     public int TypeId { get; set; }
     public string TypeName { get; set; }
@@ -45,4 +47,17 @@ public class InvoiceExport
     {
 
     }
+
+    public InvoiceVM Get() => new InvoiceVM()
+    {
+        TypeId = TypeId,
+        Total = Total,
+        Vat = (Vat)Vat,
+        Fee = Fee,
+        EstimatedDate = Convert.ToDateTime(EstimatedDate),
+        Number = Number,
+        Mark = Mark,
+        ContractId = ContractId,
+        ProjectId = ProjectId,
+    };
 }

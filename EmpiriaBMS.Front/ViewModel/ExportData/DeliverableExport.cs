@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class DeliverableExport
+public class DeliverableExport : IInport<DrawingVM>
 {
     public int TypeId { get; set; }
 
@@ -36,4 +37,12 @@ public class DeliverableExport
     {
 
     }
+
+    public DrawingVM Get() => new DrawingVM()
+    {
+        TypeId = TypeId,
+        DisciplineId = DisciplineId,
+        CompletionEstimation = CompletionEstimation,
+        CompletionDate = Convert.ToDateTime(CompletionDate),
+    };
 }
