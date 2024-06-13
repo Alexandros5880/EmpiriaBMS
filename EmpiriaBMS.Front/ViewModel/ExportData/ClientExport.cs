@@ -57,5 +57,15 @@ public class ClientExport : IInport<ClientVM>
     {
         CompanyName = CompanyName,
         AddressId = AddressId,
+        ProxyAddress = ProxyAddress,
+        PasswordHash = PasswordHash,
+        LastName = LastName,
+        MidName = MidName,
+        FirstName = FirstName,
+        TeamsObjectId = TeamsObjectId,
+        Phone1 = Phone1,
+        Phone2 = Phone2,
+        Phone3 = Phone3,
+        Description = Description,
     };
 }
