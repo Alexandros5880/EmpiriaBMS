@@ -97,7 +97,8 @@ public static class Data
                     else
                     {
                         var row = new List<string>(line.Split(','));
-                        rows.Add(row);
+                        if (row.Count > 1)
+                            rows.Add(row);
                     }
                     count++;
                 }
