@@ -112,6 +112,8 @@ public static class Data
                     T instance = Activator.CreateInstance<T>();
                     foreach (var val in row)
                     {
+                        if (string.IsNullOrEmpty(val))
+                            continue;
                         _setProperty(instance, columns[column], val);
                         column++;
                     }
