@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
@@ -53,13 +54,28 @@ public class PaymentExport : IInport<PaymentVM>
 
     }
 
-    public PaymentVM Get() => new PaymentVM()
+    public PaymentVM Get()
     {
-        PaymentDate = Convert.ToDateTime(PaymentDate),
-        Bank = Bank,
-        Fee = Fee,
-        Description = Description,
-        TypeId = TypeId,
-        InvoiceId = InvoiceId
-    };
+        DateTime? date;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            date = DateTime.ParseExact(PaymentDate, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{PaymentDate}' is not in the correct format.");
+            date = null;
+        }
+
+        return new PaymentVM()
+        {
+            PaymentDate = date,
+            Bank = Bank,
+            Fee = Fee,
+            Description = Description,
+            TypeId = TypeId,
+            InvoiceId = InvoiceId
+        };
+    }
 }

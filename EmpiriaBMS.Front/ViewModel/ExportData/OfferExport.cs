@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 using EmpiriaBMS.Models.Enum;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
@@ -72,21 +73,35 @@ public class OfferExport : IInport<OfferVM>
 
     }
 
-    public OfferVM Get() => new OfferVM()
+    public OfferVM Get()
     {
-        TypeId = TypeId,
-        StateId = StateId,
-        CategoryId = CategoryId,
-        SubCategoryId = SubCategoryId,
-        LedId = LedId,
-        Result = Result.GetValueFromDisplayName<OfferResult>(),
-        Code = Code,
-        Date = Convert.ToDateTime(Date),
-        PudgetPrice = PudgetPrice,
-        OfferPrice = OfferPrice,
-        Description = Description,
-        Observations = Observations,
-        TeamText = TeamText,
-        Comments = Comments,
-    };
+        DateTime? date;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            date = DateTime.ParseExact(Date, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{Date}' is not in the correct format.");
+            date = null;
+        }
+        return new OfferVM()
+        {
+            TypeId = TypeId,
+            StateId = StateId,
+            CategoryId = CategoryId,
+            SubCategoryId = SubCategoryId,
+            LedId = LedId,
+            Result = Result.GetValueFromDisplayName<OfferResult>(),
+            Code = Code,
+            Date = date,
+            PudgetPrice = PudgetPrice,
+            OfferPrice = OfferPrice,
+            Description = Description,
+            Observations = Observations,
+            TeamText = TeamText,
+            Comments = Comments,
+        };
+    }
 }

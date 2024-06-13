@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
@@ -75,20 +76,49 @@ public class ProjectExport : IInport<ProjectVM>
 
     }
 
-    public ProjectVM Get() => new ProjectVM()
+    public ProjectVM Get()
     {
-        Name = Name,
-        Description = Description,
-        Code = Code,
-        EstimatedMandays = EstimatedMandays,
-        EstimatedHours = EstimatedHours,
-        StageId = StageId,
-        Active = Active,
-        StartDate = Convert.ToDateTime(StartDate),
-        DeadLine = Convert.ToDateTime(DeadLine),
-        EstimatedCompleted = EstimatedCompleted,
-        DeclaredCompleted = DeclaredCompleted,
-        ProjectManagerId = ProjectManagerId,
-        OfferId = OfferId
-    };
+        // StartDate
+        DateTime? startDate;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            startDate = DateTime.ParseExact(StartDate, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{StartDate}' is not in the correct format.");
+            startDate = null;
+        }
+
+        // DeadLine
+        DateTime? deadLine;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            deadLine = DateTime.ParseExact(DeadLine, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{DeadLine}' is not in the correct format.");
+            deadLine = null;
+        }
+
+        return new ProjectVM()
+        {
+            Name = Name,
+            Description = Description,
+            Code = Code,
+            EstimatedMandays = EstimatedMandays,
+            EstimatedHours = EstimatedHours,
+            StageId = StageId,
+            Active = Active,
+            StartDate = startDate,
+            DeadLine = deadLine,
+            EstimatedCompleted = EstimatedCompleted,
+            DeclaredCompleted = DeclaredCompleted,
+            ProjectManagerId = ProjectManagerId,
+            OfferId = OfferId
+        };
+    }
 }

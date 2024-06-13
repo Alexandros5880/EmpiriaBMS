@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 using EmpiriaBMS.Models.Enum;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
@@ -39,13 +40,28 @@ public class LedExport : IInport<LedVM>
 
     }
 
-    public LedVM Get() => new LedVM()
+    public LedVM Get()
     {
-        Name = Name,
-        ClientId = ClientId,
-        AddressId = AddressId,
-        PotencialFee = PotencialFee,
-        ExpectedDurationDate = Convert.ToDateTime(ExpectedDurationDate),
-        Result = Result.GetValueFromDisplayName<LedResult>()
-    };
+        DateTime? date;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            date = DateTime.ParseExact(ExpectedDurationDate, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{ExpectedDurationDate}' is not in the correct format.");
+            date = null;
+        }
+
+        return new LedVM()
+        {
+            Name = Name,
+            ClientId = ClientId,
+            AddressId = AddressId,
+            PotencialFee = PotencialFee,
+            ExpectedDurationDate = date,
+            Result = Result.GetValueFromDisplayName<LedResult>()
+        };
+    }
 }

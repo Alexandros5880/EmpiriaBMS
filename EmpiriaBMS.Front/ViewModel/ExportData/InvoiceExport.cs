@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 using EmpiriaBMS.Models.Enum;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
@@ -48,16 +49,31 @@ public class InvoiceExport : IInport<InvoiceVM>
 
     }
 
-    public InvoiceVM Get() => new InvoiceVM()
+    public InvoiceVM Get()
     {
-        TypeId = TypeId,
-        Total = Total,
-        Vat = (Vat)Vat,
-        Fee = Fee,
-        EstimatedDate = Convert.ToDateTime(EstimatedDate),
-        Number = Number,
-        Mark = Mark,
-        ContractId = ContractId,
-        ProjectId = ProjectId,
-    };
+        DateTime? date;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            date = DateTime.ParseExact(EstimatedDate, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{EstimatedDate}' is not in the correct format.");
+            date = null;
+        }
+
+        return new InvoiceVM()
+        {
+            TypeId = TypeId,
+            Total = Total,
+            Vat = (Vat)Vat,
+            Fee = Fee,
+            EstimatedDate = date,
+            Number = Number,
+            Mark = Mark,
+            ContractId = ContractId,
+            ProjectId = ProjectId,
+        };
+    }
 }
