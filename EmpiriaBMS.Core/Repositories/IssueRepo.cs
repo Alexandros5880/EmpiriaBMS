@@ -2,14 +2,8 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
-using Document = EmpiriaBMS.Models.Models.Document;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+using Document = EmpiriaBMS.Models.Models.Document;
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -98,6 +92,41 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
     }
 
+    public async Task<IssueDto> Add(IssueDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = Mapping.Mapper.Map<Issue>(entity);
+                entry.Project = null;
+                entry.DisplayedRole = null;
+                entry.Creator = null;
+                var result = await _context.Set<Issue>().AddAsync(entry);
+                await _context.SaveChangesAsync();
+
+                var id = result.Entity?.Id;
+                if (id == null)
+                    throw new NullReferenceException(nameof(id));
+
+                var endry = await Get((int)id);
+
+                return Mapping.Mapper.Map<IssueDto>(endry);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On Repository.Add(Issue): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
     public async Task UpdateAll(List<IssueDto> entities)
     {
         if (entities == null)
@@ -108,7 +137,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            foreach(var i in entities)
+            foreach (var i in entities)
             {
                 var entry = await _context.Set<Issue>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(x => x.Id == i.Id);
                 if (entry != null)

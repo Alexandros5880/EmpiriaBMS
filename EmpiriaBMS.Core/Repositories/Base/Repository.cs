@@ -28,7 +28,8 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var result = await _context.Set<U>().AddAsync(Mapping.Mapper.Map<U>(entity));
+                var entry = Mapping.Mapper.Map<U>(entity);
+                var result = await _context.Set<U>().AddAsync(entry);
                 await _context.SaveChangesAsync();
 
                 return Mapping.Mapper.Map<T>(result.Entity);
