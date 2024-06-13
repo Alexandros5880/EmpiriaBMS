@@ -1,7 +1,9 @@
-﻿using EmpiriaBMS.Core.Hellpers;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin.Permissions;
@@ -77,7 +79,7 @@ public partial class Permissions
         }
     }
 
-    #region Export Data
+    #region Import/Export Data
     private async Task ExportToCSV()
     {
         var date = DateTime.Today;
@@ -88,6 +90,43 @@ public partial class Permissions
             string csvContent = Data.GetCsvContent(data);
             await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
         }
+    }
+
+    private InputFile fileInput;
+    private async Task ImportFromCSV(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        var filePath = file.Name;
+        var fileType = file.ContentType;
+        if (fileType?.Equals("text/csv") ?? false)
+        {
+            try
+            {
+                Stream stream = file.OpenReadStream();
+                List<PermissionExport> data = await Data.ImportData<PermissionExport>(stream);
+                if (data != null && data.Count > 0)
+                {
+                    foreach (var item in data)
+                    {
+                        var vm = item.Get();
+                        var dto = Mapper.Map<PermissionDto>(vm);
+                        var added = await DataProvider.Permissions.Add(dto);
+                        var addedDto = Mapper.Map<PermissionVM>(added);
+                        _records.Add(addedDto);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Permissions import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                // TODO: log error
+            }
+        }
+    }
+    private async Task TriggerFileInput()
+    {
+        var element = fileInput.Element;
+        await MicrosoftTeams.TriggerFileInputClick(element);
     }
     #endregion
 }
