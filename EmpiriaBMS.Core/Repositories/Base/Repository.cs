@@ -32,7 +32,13 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
                 var result = await _context.Set<U>().AddAsync(entry);
                 await _context.SaveChangesAsync();
 
-                return Mapping.Mapper.Map<T>(result.Entity);
+                var id = result.Entity?.Id;
+                if (id == null)
+                    throw new NullReferenceException(nameof(id));
+
+                var endry = await Get((int)id);
+
+                return Mapping.Mapper.Map<T>(endry);
             }
         }
         catch (Exception ex)
