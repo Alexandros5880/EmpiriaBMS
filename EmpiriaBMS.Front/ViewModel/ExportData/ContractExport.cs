@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
@@ -32,11 +33,26 @@ public class ContractExport : IInport<ContractVM>
 
     }
 
-    public ContractVM Get() => new ContractVM()
+    public ContractVM Get()
     {
-        InvoiceId = InvoiceId,
-        ContractualFee = ContractualFee,
-        Date = Convert.ToDateTime(Date),
-        Description = Description,
-    };
+        DateTime? date;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            date = DateTime.ParseExact(Date, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{Date}' is not in the correct format.");
+            date = null;
+        }
+
+        return new ContractVM()
+        {
+            InvoiceId = InvoiceId,
+            ContractualFee = ContractualFee,
+            Date = date,
+            Description = Description,
+        };
+    }
 }

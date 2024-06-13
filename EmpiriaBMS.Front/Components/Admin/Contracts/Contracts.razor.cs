@@ -164,6 +164,17 @@ public partial class Contracts
             {
                 Stream stream = file.OpenReadStream();
                 List<ContractExport> data = await Data.ImportData<ContractExport>(stream);
+                if (data != null && data.Count > 0)
+                {
+                    foreach (var item in data)
+                    {
+                        var vm = item.Get();
+                        var dto = Mapper.Map<ContractDto>(vm);
+                        var added = await DataProvider.Contracts.Add(dto);
+                        var addedDto = Mapper.Map<ContractVM>(added);
+                        _records.Add(addedDto);
+                    }
+                }
             }
             catch (Exception ex)
             {
