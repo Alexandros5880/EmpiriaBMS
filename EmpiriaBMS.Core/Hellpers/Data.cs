@@ -108,12 +108,12 @@ public static class Data
 
                 foreach (var row in rows)
                 {
+                    if (row == null || row.Count == 0)
+                        continue;
                     var column = 0;
                     T instance = Activator.CreateInstance<T>();
                     foreach (var val in row)
                     {
-                        if (string.IsNullOrEmpty(val))
-                            continue;
                         _setProperty(instance, columns[column], val);
                         column++;
                     }
