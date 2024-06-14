@@ -1,17 +1,10 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
-using EmpiriaBMS.Core.Config;
-using System.Linq.Expressions;
-using System.Security.Cryptography;
-using System.Reflection.Metadata.Ecma335;
 
 namespace EmpiriaBMS.Front.Components;
 
-public partial class DrawingDetailed : ComponentBase, IDisposable
+public partial class DeliverableDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
     private bool isNew = false;
@@ -19,12 +12,12 @@ public partial class DrawingDetailed : ComponentBase, IDisposable
     [Parameter]
     public int DisciplineId { get; set; }
 
-    List<DrawingTypeDto> _drawingTypes = new List<DrawingTypeDto>();
-    private DrawingVM _drawing = new DrawingVM();
+    List<DeliverableTypeDto> _drawingTypes = new List<DeliverableTypeDto>();
+    private DeliverableVM _drawing = new DeliverableVM();
 
     private async Task _getDrawingTypes()
     {
-        var types = await DataProvider.DrawingsTypes.GetDrawingTypesSelections(DisciplineId);
+        var types = await DataProvider.DeliverablesTypes.GetDrawingTypesSelections(DisciplineId);
         _drawingTypes = types.ToList();
     }
 
@@ -33,13 +26,13 @@ public partial class DrawingDetailed : ComponentBase, IDisposable
         isNew = true;
         _drawingTypes.Clear();
         await _getDrawingTypes();
-        _drawing = new DrawingVM();
+        _drawing = new DeliverableVM();
         _drawing.DisciplineId = DisciplineId;
         _drawing.TypeId = _drawingTypes.FirstOrDefault().Id;
         StateHasChanged();
     }
 
-    public async void PrepairForEdit(DrawingVM drawing)
+    public async void PrepairForEdit(DeliverableVM drawing)
     {
         isNew = false;
         _drawingTypes.Clear();
@@ -60,14 +53,14 @@ public partial class DrawingDetailed : ComponentBase, IDisposable
 
     public async Task HandleValidSubmit()
     {
-        DrawingDto myDrawing = Mapper.Map<DrawingDto>(_drawing);
+        DeliverableDto myDrawing = Mapper.Map<DeliverableDto>(_drawing);
         // Save Drawing
-        DrawingDto saveDrawing;
-        var exists = await DataProvider.Drawings.Any(p => p.Id == _drawing.Id);
+        DeliverableDto saveDrawing;
+        var exists = await DataProvider.Deliverables.Any(p => p.Id == _drawing.Id);
         if (exists)
-            saveDrawing = await DataProvider.Drawings.Update(myDrawing);
+            saveDrawing = await DataProvider.Deliverables.Update(myDrawing);
         else
-            saveDrawing = await DataProvider.Drawings.Add(myDrawing);
+            saveDrawing = await DataProvider.Deliverables.Add(myDrawing);
     }
 
     protected virtual void Dispose(bool disposing)

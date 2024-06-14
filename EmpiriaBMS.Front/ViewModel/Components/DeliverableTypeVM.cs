@@ -4,7 +4,7 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DrawingTypeVM : BaseVM, ITypeVM
+public class DeliverableTypeVM : BaseVM, ITypeVM
 {
     private string _name;
     public string Name
@@ -32,5 +32,5 @@ public class DrawingTypeVM : BaseVM, ITypeVM
         }
     }
 
-    public ICollection<Discipline> Disciplines { get; set; }
+    public ICollection<Deliverable> Deliverables { get; set; }
 }

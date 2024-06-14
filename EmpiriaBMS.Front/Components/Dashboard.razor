@@ -475,17 +475,17 @@
                                                         <FluentStack HorizontalAlignment="HorizontalAlignment.End">
                                                             @if (isWorkingMode && editDeliverable)
                                                             {
-                                                                @if (_selectedDraw != null)
+                                                                @if (__selectedDeliverable != null)
                                                                 {
                                                                     <span class="fluent--delete-28-regular"
                                                                           @onclick="@(() => DeleteDeliverable())" />
-                                                                    @if (_hasDrawingsSelections)
+                                                                    @if (_hasDeliverablessSelections)
                                                                     {
                                                                         <span class="material-symbols--edit-outline"
                                                                               @onclick="@(() => EditDeliverable())" />
                                                                     }
                                                                 }
-                                                                @if (_hasDrawingsSelections)
+                                                                @if (_hasDeliverablessSelections)
                                                                 {
                                                                     <span class="grommet-icons--add"
                                                                           @onclick="@(() => AddDeliverable())" />
@@ -495,7 +495,7 @@
                                                             <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
                                                                           Appearance="Appearance.Outline"
                                                                           OnClick="@(async (e) => await ExportDeliverablesToCSV())"
-                                                                          Disabled="@(_draws.Count() == 0)">
+                                                                          Disabled="@(_deliverables.Count() == 0)">
                                                                 Export
                                                             </FluentButton>
                                                         </FluentStack>
@@ -506,7 +506,7 @@
                                                 <table class="table table-hover table-primary text-center">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col" class="sticky-header">Drawing</th>
+                                                            <th scope="col" class="sticky-header">Deliverable</th>
                                                             <th scope="col" class="sticky-header">Total Hours</th>
                                                             <th scope="col" class="sticky-header">Declared Completion</th>
                                                             @if (isWorkingMode && AssignDesigner)
@@ -516,40 +516,40 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var draw in _draws)
+                                                        @foreach (var deliverable in _deliverables)
                                                         {
                                                             <tr class="align-middle"
-                                                                @onclick="@(() => OnSelectDraw(draw))">
+                                                                @onclick="@(() => OnSelectDraw(deliverable))">
 
                                                                 <td class="align-middle
-                                                            @(((_selectedDraw == null ||
-                                                                    !_selectedDraw.Id.Equals(draw.Id))
+                                                            @(((__selectedDeliverable == null ||
+                                                                    !__selectedDeliverable.Id.Equals(deliverable.Id))
                                                                         ? "" : "selected_table_deliverables_row"))">
-                                                                    <div class="align-middle h-100"><labe>@draw.Type.Name</labe></div>
+                                                                    <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
                                                                 </td>
 
                                                                 <td class="align-middle
-                                                            @(((_selectedDraw == null ||
-                                                                    !_selectedDraw.Id.Equals(draw.Id))
+                                                            @(((__selectedDeliverable == null ||
+                                                                    !__selectedDeliverable.Id.Equals(deliverable.Id))
                                                                         ? "" : "selected_table_deliverables_row"))">
-                                                                    <label>@GetDrawingMenHours(draw.Id) h</label>
+                                                                    <label>@GetDrawingMenHours(deliverable.Id) h</label>
                                                                 </td>
 
                                                                 <td class="align-middle
-                                                            @(((_selectedDraw == null ||
-                                                                !_selectedDraw.Id.Equals(draw.Id))
+                                                            @(((__selectedDeliverable == null ||
+                                                                !__selectedDeliverable.Id.Equals(deliverable.Id))
                                                                     ? "" : "selected_table_deliverables_row"))">
-                                                                    <label>@draw.CompletionEstimation %</label>
+                                                                    <label>@deliverable.CompletionEstimation %</label>
                                                                 </td>
 
                                                                 @if (isWorkingMode && AssignDesigner)
                                                                 {
                                                                     <td class="align-middle
-                                                                @((_selectedDraw == null ||
-                                                                        !_selectedDraw.Id.Equals(draw?.Id)
+                                                                @((__selectedDeliverable == null ||
+                                                                        !__selectedDeliverable.Id.Equals(deliverable?.Id)
                                                                                         ? "" : "selected_table_deliverables_row"))">
                                                                         <span class="clarity--assign-user-line"
-                                                                              @onclick="@(async (x) => await OnDrawingAssignClick(draw))">
+                                                                              @onclick="@(async (x) => await OnDrawingAssignClick(deliverable))">
                                                                         </span>
                                                                     </td>
                                                                 }
@@ -866,7 +866,7 @@
 
             <div class="mt-1 row gx-3">
 
-                <!-- Drawings -->
+                <!-- Deliverables -->
                 <div class="col">
                     <div class="text-center">
                         <h5>Deliverables</h5>
@@ -876,23 +876,23 @@
                         <table class="table table-hover table-borderless">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="sticky-header">Drawing</th>
+                                    <th scope="col" class="sticky-header">Deliverable</th>
                                     <th scope="col" class="sticky-header">Time</th>
                                     <th scope="col" class="sticky-header">Declared Completion</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var _draw in _draws)
+                                @foreach (var _deliverable in _deliverables)
                                 {
                                     <tr class="align-middle">
                                         <td class="align-middle">
-                                            <div class="align-middle h-100"><labe>@_draw.Type.Name</labe></div>
+                                            <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
                                             <TimeInput MinTime="TimeSpan.Zero"
                                                        MaxTime="@remainingTime"
-                                                       Time="_draw.Time"
-                                                       OnPropertyChanged=@((time) => _onDrawTimeChanged(_draw, time)) />
+                                                       Time="_deliverable.Time"
+                                                       OnPropertyChanged=@((time) => _onDrawTimeChanged(_deliverable, time)) />
                                         </td>
                                         <td class="align-middle">
                                             <div class="input-group" style="width: 110px;">
@@ -904,7 +904,7 @@
                                                        style="min-width: 52px !important; max-width: 52px !important;"
                                                        onkeyup="if(value<0) value=0; if(value>100) value=100;"
                                                        onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
-                                                       @onchange=@((e) => _onDrawCompletedChanged(_draw, e.Value))>
+                                                       @onchange=@((e) => _onDrawCompletedChanged(_deliverable, e.Value))>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">%</span>
                                                 </div>
@@ -1347,7 +1347,7 @@
             <div class="col-12 justify-content-center">
                 @if(_selectedDiscipline != null)
                 {
-                    <DrawingDetailed @ref="@drawingCompoment" DisciplineId="@_selectedDiscipline.Id" />
+                    <DeliverableDetailed @ref="@deliverableCompoment" DisciplineId="@_selectedDiscipline.Id" />
                 } 
                 else
                 {

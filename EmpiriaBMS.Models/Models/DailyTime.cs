@@ -24,7 +24,7 @@ public class DailyTime : Entity
     public User? CorporateUser { get; set; }
 
     public int? DrawingId { get; set; }
-    public Drawing? Drawing { get; set; }
+    public Deliverable? Drawing { get; set; }
 
     public int? OtherId { get; set; }
     public Other? Other { get; set; }

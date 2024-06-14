@@ -290,13 +290,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             // Filter Projects
-            var myDrawingIds = await _context.Set<DrawingEmployee>()
+            var myDrawingIds = await _context.Set<DeliverableEmployee>()
                                              .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
-                                             .Select(e => e.DrawingId)
+                                             .Select(e => e.DeliverableId)
                                              .ToListAsync();
 
-            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+            var drawingsDisciplinesIds = await _context.Set<Deliverable>()
                                                  .Where(r => !r.IsDeleted)
                                                  .Where(dd => myDrawingIds.Contains(dd.Id))
                                                  .Select(e => e.DisciplineId)
@@ -390,13 +390,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             // Filter Projects
-            var myDrawingIds = await _context.Set<DrawingEmployee>()
+            var myDrawingIds = await _context.Set<DeliverableEmployee>()
                                              .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
-                                             .Select(e => e.DrawingId)
+                                             .Select(e => e.DeliverableId)
                                              .ToListAsync();
 
-            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+            var drawingsDisciplinesIds = await _context.Set<Deliverable>()
                                                  .Where(r => !r.IsDeleted)
                                                  .Where(dd => myDrawingIds.Contains(dd.Id))
                                                  .Select(e => e.DisciplineId)
@@ -505,13 +505,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
 
             // Filter Projects
-            var myDrawingIds = await _context.Set<DrawingEmployee>()
+            var myDrawingIds = await _context.Set<DeliverableEmployee>()
                                              .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
-                                             .Select(e => e.DrawingId)
+                                             .Select(e => e.DeliverableId)
                                              .ToListAsync();
 
-            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+            var drawingsDisciplinesIds = await _context.Set<Deliverable>()
                                                  .Where(r => !r.IsDeleted)
                                                  .Where(d => myDrawingIds.Contains(d.Id))
                                                  .Select(e => e.DisciplineId)
@@ -666,13 +666,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
 
             // Filter Projects
-            var myDrawingIds = await _context.Set<DrawingEmployee>()
+            var myDrawingIds = await _context.Set<DeliverableEmployee>()
                                              .Where(r => !r.IsDeleted)
                                              .Where(de => de.EmployeeId == userId)
-                                             .Select(e => e.DrawingId)
+                                             .Select(e => e.DeliverableId)
                                              .ToListAsync();
 
-            var drawingsDisciplinesIds = await _context.Set<Drawing>()
+            var drawingsDisciplinesIds = await _context.Set<Deliverable>()
                                                  .Where(r => !r.IsDeleted)
                                                  .Where(d => myDrawingIds.Contains(d.Id))
                                                  .Select(e => e.DisciplineId)
@@ -825,13 +825,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             }
             else
             {
-                var myDrawingsIds = await _context.Set<DrawingEmployee>()
+                var myDrawingsIds = await _context.Set<DeliverableEmployee>()
                                                   .Where(r => !r.IsDeleted)
                                                   .Where(de => de.EmployeeId == userId)
-                                                  .Select(de => de.DrawingId)
+                                                  .Select(de => de.DeliverableId)
                                                   .ToListAsync();
 
-                var myDisciplinesIds = await _context.Set<Drawing>()
+                var myDisciplinesIds = await _context.Set<Deliverable>()
                                                      .Where(r => !r.IsDeleted)
                                                      .Where(d => myDrawingsIds.Contains(d.Id))
                                                      .Select(dd => dd.DisciplineId)

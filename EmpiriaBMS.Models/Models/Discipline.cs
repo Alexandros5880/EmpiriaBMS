@@ -20,7 +20,7 @@ public class Discipline : Entity
     public int TypeId { get; set; }
     public DisciplineType Type { get; set; }
 
-    public ICollection<Drawing> Drawings { get; set; }
+    public ICollection<Deliverable> Deliverables { get; set; }
 
     public ICollection<Other> Others { get; set; }
 

@@ -42,16 +42,16 @@ public static class ModelRelations
                .WithMany(p => p.ProjectsSubConstructors)
                .HasForeignKey(ps => ps.ProjectId);
 
-        // Drawings Employees
-        builder.Entity<DrawingEmployee>()
-               .HasKey(de => new { de.DrawingId, de.EmployeeId });
-        builder.Entity<DrawingEmployee>()
-               .HasOne(de => de.Drawing)
-               .WithMany(de => de.DrawingsEmployees)
-               .HasForeignKey(de => de.DrawingId);
-        builder.Entity<DrawingEmployee>()
+        // Deliverable Employees
+        builder.Entity<DeliverableEmployee>()
+               .HasKey(de => new { de.DeliverableId, de.EmployeeId });
+        builder.Entity<DeliverableEmployee>()
+               .HasOne(de => de.Deliverable)
+               .WithMany(de => de.DeliverablesEmployees)
+               .HasForeignKey(de => de.DeliverableId);
+        builder.Entity<DeliverableEmployee>()
                .HasOne(de => de.Employee)
-               .WithMany(de => de.DrawingsEmployees)
+               .WithMany(de => de.DeliverablesEmployees)
                .HasForeignKey(de => de.EmployeeId);
 
         // Others Employees
@@ -221,14 +221,14 @@ public static class ModelRelations
 
         // Discipline Draws
         builder.Entity<Discipline>()
-               .HasMany(p => p.Drawings)
+               .HasMany(p => p.Deliverables)
                .WithOne(c => c.Discipline)
                .HasForeignKey(c => c.DisciplineId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // DrawingType Drawings
-        builder.Entity<DrawingType>()
-               .HasMany(p => p.Drawings)
+        // DrawingType Deliverables
+        builder.Entity<DeliverableType>()
+               .HasMany(p => p.Deliverables)
                .WithOne(c => c.Type)
                .HasForeignKey(c => c.TypeId)
                .OnDelete(DeleteBehavior.Cascade);
@@ -311,7 +311,7 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // Drawing DailyTime
-        builder.Entity<Drawing>()
+        builder.Entity<Deliverable>()
                .HasMany(p => p.DailyTime)
                .WithOne(c => c.Drawing)
                .HasForeignKey(c => c.DrawingId)

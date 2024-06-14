@@ -1,19 +1,19 @@
-﻿using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using EmpiriaBMS.Models.Models;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Hellpers;
 
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class DrawingRepo : Repository<DrawingDto, Drawing>
+public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
 {
-    public DrawingRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public DeliverableRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public new async Task<DrawingDto?> Get(int id)
+    public new async Task<DeliverableDto?> Get(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -21,7 +21,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var dr = await _context
-                             .Set<Drawing>()
+                             .Set<Deliverable>()
                              .Where(r => !r.IsDeleted)
                              .Include(d => d.Type)
                              .Include(d => d.Discipline)
@@ -32,19 +32,19 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                              .ThenInclude(d => d.Type)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
-            return Mapping.Mapper.Map<DrawingDto>(dr);
+            return Mapping.Mapper.Map<DeliverableDto>(dr);
         }
     }
 
-    public new async Task<ICollection<DrawingDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public new async Task<ICollection<DeliverableDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Drawing> drs;
+            List<Deliverable> drs;
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                drs = await _context.Set<Drawing>()
+                drs = await _context.Set<Deliverable>()
                                     .Where(r => !r.IsDeleted)
                                     .Include(d => d.Type)
                                     .Include(d => d.Discipline)
@@ -55,11 +55,11 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                     .ThenInclude(d => d.Type)
                                     .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
+                return Mapping.Mapper.Map<List<Deliverable>, List<DeliverableDto>>(drs);
             }
 
 
-            drs = await _context.Set<Drawing>()
+            drs = await _context.Set<Deliverable>()
                                 .Where(r => !r.IsDeleted)
                                 .Include(d => d.Type)
                                 .Include(d => d.Discipline)
@@ -70,22 +70,23 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                 .Take(pageSize)
                                 .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
+            return Mapping.Mapper.Map<List<Deliverable>, List<DeliverableDto>>(drs);
         }
     }
 
-    public new async Task<ICollection<DrawingDto>> GetAll(
-        Expression<Func<Drawing, bool>> expresion,
+    public new async Task<ICollection<DeliverableDto>> GetAll(
+        Expression<Func<Deliverable, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Drawing> drs;
+            List<Deliverable> drs;
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                drs = await _context.Set<Drawing>()
+                drs = await _context.Set<Deliverable>()
                                     .Where(r => !r.IsDeleted)
                                     .Include(d => d.Type)
                                     .Include(d => d.Discipline)
@@ -95,11 +96,11 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                     .Where(expresion)
                                     .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
+                return Mapping.Mapper.Map<List<Deliverable>, List<DeliverableDto>>(drs);
             }
 
 
-            drs = await _context.Set<Drawing>()
+            drs = await _context.Set<Deliverable>()
                                 .Where(r => !r.IsDeleted)
                                 .Include(d => d.Type)
                                 .Include(d => d.Discipline)
@@ -111,7 +112,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                 .Take(pageSize)
                                 .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drs);
+            return Mapping.Mapper.Map<List<Deliverable>, List<DeliverableDto>>(drs);
         }
     }
 
@@ -146,7 +147,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             // Update Current Drawing
-            var drawing = await _context.Set<Drawing>()
+            var drawing = await _context.Set<Deliverable>()
                                         .Where(r => !r.IsDeleted)
                                         .FirstOrDefaultAsync(d => d.Id == drawId);
             if (drawing == null)
@@ -156,11 +157,11 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
             // Calculate Parent Discipline Completed
             var discipline = await _context.Set<Discipline>()
                                            .Where(r => !r.IsDeleted)
-                                           .Include(d => d.Drawings)
+                                           .Include(d => d.Deliverables)
                                            .FirstOrDefaultAsync(d => d.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var allDrawings = discipline.Drawings;
+            var allDrawings = discipline.Deliverables;
             var sumComplitionOfDrawings = allDrawings
                                           .Where(r => !r.IsDeleted)
                                           .Select(d => d.CompletionEstimation)
@@ -188,7 +189,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-            for (int i = timeSpans.Count()-1; i >= 0; i--)
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
             {
                 DailyTime time = new DailyTime()
                 {
@@ -223,7 +224,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                                    .Where(d => d.DisciplineId == disciplineId)
                                                    .Select(d => d.TimeSpan.Hours)
                                                    .SumAsync();
-            decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) 
+            decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours)
                                                     / Convert.ToDecimal(discipline.EstimatedHours);
             discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
 
@@ -240,10 +241,10 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
                                                 .Where(d => d.ProjectId == projectId)
                                                 .Select(d => d.TimeSpan.Hours)
                                                 .SumAsync();
-            decimal divitionProResult = Convert.ToDecimal(projectMenHours) 
+            decimal divitionProResult = Convert.ToDecimal(projectMenHours)
                                                     / Convert.ToDecimal(project.EstimatedHours);
             project.EstimatedCompleted = (float)divitionProResult * 100;
-            
+
             // Save Changes
             await _context.SaveChangesAsync();
         }
@@ -253,9 +254,9 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var users = await _context.Set<DrawingEmployee>()
+            var users = await _context.Set<DeliverableEmployee>()
                                       .Where(r => !r.IsDeleted)
-                                      .Where(de => de.DrawingId == drwaingId)
+                                      .Where(de => de.DeliverableId == drwaingId)
                                       .Include(de => de.Employee)
                                       .Select(de => de.Employee)
                                       .ToListAsync();
@@ -268,23 +269,23 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            foreach(var d in designers)
+            foreach (var d in designers)
             {
-                DrawingEmployee de = new DrawingEmployee()
+                DeliverableEmployee de = new DeliverableEmployee()
                 {
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    DrawingId = drawingId,
+                    DeliverableId = drawingId,
                     EmployeeId = d.Id
                 };
 
                 // Check If Exists
-                var exists = await _context.Set<DrawingEmployee>()
+                var exists = await _context.Set<DeliverableEmployee>()
                     .Where(r => !r.IsDeleted)
-                    .AnyAsync(de => de.DrawingId == drawingId && de.EmployeeId == d.Id);
+                    .AnyAsync(de => de.DeliverableId == drawingId && de.EmployeeId == d.Id);
                 if (exists) continue;
 
-                await _context.Set<DrawingEmployee>().AddAsync(de);
+                await _context.Set<DeliverableEmployee>().AddAsync(de);
                 await _context.SaveChangesAsync();
             }
         }
@@ -294,10 +295,10 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var designers = await _context.Set<DrawingEmployee>()
+            var designers = await _context.Set<DeliverableEmployee>()
                                           .Where(r => !r.IsDeleted)
-                                          .Where(d => designersIds.Contains(d.EmployeeId) 
-                                                                        && d.DrawingId == drawingId)
+                                          .Where(d => designersIds.Contains(d.EmployeeId)
+                                                                        && d.DeliverableId == drawingId)
                                           .ToListAsync();
 
             if (designers == null)
@@ -314,7 +315,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
         }
     }
 
-    public async Task<DrawingEmployee> DeleteDrawingEmployee(DrawingEmployee entity)
+    public async Task<DeliverableEmployee> DeleteDrawingEmployee(DeliverableEmployee entity)
     {
         try
         {
@@ -325,7 +326,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var entry = await _context.Set<DrawingEmployee>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                var entry = await _context.Set<DeliverableEmployee>().FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (entry != null)
                 {
                     entry.IsDeleted = true;
@@ -337,7 +338,7 @@ public class DrawingRepo : Repository<DrawingDto, Drawing>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On DrawingRepo.DeleteDrawingEmployee({Mapping.Mapper.Map<DrawingEmployee>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On DrawingRepo.DeleteDrawingEmployee({Mapping.Mapper.Map<DeliverableEmployee>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

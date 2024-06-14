@@ -12,12 +12,12 @@ namespace EmpiriaBMS.Front.Components.Admin.Deliverables;
 public partial class Deliverables
 {
     #region Data Grid
-    private List<DrawingVM> _records = new List<DrawingVM>();
+    private List<DeliverableVM> _records = new List<DeliverableVM>();
     private string _filterString = string.Empty;
-    IQueryable<DrawingVM>? FilteredItems => _records?.AsQueryable().Where(x => x.TypeName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<DeliverableVM>? FilteredItems => _records?.AsQueryable().Where(x => x.TypeName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private DrawingVM _selectedRecord = new DrawingVM();
+    private DeliverableVM _selectedRecord = new DeliverableVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -31,15 +31,15 @@ public partial class Deliverables
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<DrawingVM> row)
+    private void HandleRowFocus(FluentDataGridRow<DeliverableVM> row)
     {
-        _selectedRecord = row.Item as DrawingVM;
+        _selectedRecord = row.Item as DeliverableVM;
     }
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.Drawings.GetAll();
-        _records = Mapper.Map<List<DrawingVM>>(dtos);
+        var dtos = await DataProvider.Deliverables.GetAll();
+        _records = Mapper.Map<List<DeliverableVM>>(dtos);
     }
 
     private async Task _add()
@@ -57,19 +57,19 @@ public partial class Deliverables
             Width = "min(70%, 500px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<DeliverableDetailedDialog>(new DrawingVM(), parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<DeliverableDetailedDialog>(new DeliverableVM(), parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            DrawingVM vm = result.Data as DrawingVM;
-            var dto = Mapper.Map<DrawingDto>(vm);
-            await DataProvider.Drawings.Add(dto);
+            DeliverableVM vm = result.Data as DeliverableVM;
+            var dto = Mapper.Map<DeliverableDto>(vm);
+            await DataProvider.Deliverables.Add(dto);
             await _getRecords();
         }
     }
 
-    private async Task _edit(DrawingVM record)
+    private async Task _edit(DeliverableVM record)
     {
         DialogParameters parameters = new()
         {
@@ -89,14 +89,14 @@ public partial class Deliverables
 
         if (result.Data is not null)
         {
-            DrawingVM vm = result.Data as DrawingVM;
-            var dto = Mapper.Map<DrawingDto>(vm);
-            await DataProvider.Drawings.Update(dto);
+            DeliverableVM vm = result.Data as DeliverableVM;
+            var dto = Mapper.Map<DeliverableDto>(vm);
+            await DataProvider.Deliverables.Update(dto);
             await _getRecords();
         }
     }
 
-    private async Task _delete(DrawingVM record)
+    private async Task _delete(DeliverableVM record)
     {
         var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the deliverable of project {record.ProjectName} . dicipline type {record.DisciplineTypeName} of type of {record.TypeName}?", "Yes", "No", "Deleting record...");
 
@@ -104,7 +104,7 @@ public partial class Deliverables
 
         if (!result.Cancelled)
         {
-            await DataProvider.Drawings.Delete(record.Id);
+            await DataProvider.Deliverables.Delete(record.Id);
         }
 
         await dialog.CloseAsync();
@@ -154,18 +154,18 @@ public partial class Deliverables
                     foreach (var item in data)
                     {
                         var vm = item.Get();
-                        var dto = Mapper.Map<DrawingDto>(vm);
-                        var added = await DataProvider.Drawings.Add(dto);
+                        var dto = Mapper.Map<DeliverableDto>(vm);
+                        var added = await DataProvider.Deliverables.Add(dto);
                         if (added == null)
                             continue;
-                        var addedVM = Mapper.Map<DrawingVM>(added);
+                        var addedVM = Mapper.Map<DeliverableVM>(added);
                         _records.Add(addedVM);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Drawings import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                Console.WriteLine($"Exception Deliverables import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 // TODO: log error
             }
         }
