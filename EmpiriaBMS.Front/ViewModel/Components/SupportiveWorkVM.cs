@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class OtherVM : BaseVM
+public class SupportiveWorkVM : BaseVM
 {
     private int? _typeId;
     public int? TypeId
@@ -19,8 +19,8 @@ public class OtherVM : BaseVM
         }
     }
 
-    private OtherType _type;
-    public OtherType Type
+    private SupportiveWorkType _type;
+    public SupportiveWorkType Type
     {
         get => _type;
         set

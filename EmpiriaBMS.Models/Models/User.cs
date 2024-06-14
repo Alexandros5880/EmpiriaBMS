@@ -36,9 +36,9 @@ public class User : Entity
 
     public ICollection<UserRole> UserRoles { get; set; }
 
-    public ICollection<DrawingEmployee> DrawingsEmployees { get; set; }
+    public ICollection<DeliverableEmployee> DeliverablesEmployees { get; set; }
 
-    public ICollection<OtherEmployee> OthersEmployees { get; set; }
+    public ICollection<SupportiveWorkEmployee> SupportiveWorksEmployees { get; set; }
 
     public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 

@@ -3,13 +3,13 @@ using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class SupportiveWorkTypeExport : IInport<OtherTypeVM>
+public class SupportiveWorkTypeExport : IInport<SupportiveWorkTypeVM>
 {
     public string Name { get; set; }
 
     public string Description { get; set; }
 
-    public SupportiveWorkTypeExport(OtherTypeVM model)
+    public SupportiveWorkTypeExport(SupportiveWorkTypeVM model)
     {
         Name = model.Name ?? "";
         Description = model.Description ?? "";
@@ -20,7 +20,7 @@ public class SupportiveWorkTypeExport : IInport<OtherTypeVM>
 
     }
 
-    public OtherTypeVM Get() => new OtherTypeVM()
+    public SupportiveWorkTypeVM Get() => new SupportiveWorkTypeVM()
     {
         Name = Name,
         Description = Description,

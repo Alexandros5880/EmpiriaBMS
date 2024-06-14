@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class Drawing : Entity
+public class Deliverable : Entity
 {
     [Required]
     public int TypeId { get; set; }
-    public DrawingType Type { get; set; }
+    public DeliverableType Type { get; set; }
 
     [Required]
     public int DisciplineId { get; set; }
@@ -21,5 +21,5 @@ public class Drawing : Entity
 
     public ICollection<DailyTime> DailyTime { get; set; }
 
-    public ICollection<DrawingEmployee> DrawingsEmployees { get; set; }
+    public ICollection<DeliverableEmployee> DeliverablesEmployees { get; set; }
 }

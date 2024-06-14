@@ -4,10 +4,10 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DrawingTypeVM : BaseVM, ITypeVM
+public class SupportiveWorkTypeVM : BaseVM, ITypeVM
 {
-    private string _name;
-    public string Name
+    private string? _name;
+    public string? Name
     {
         get => _name;
         set
@@ -32,5 +32,5 @@ public class DrawingTypeVM : BaseVM, ITypeVM
         }
     }
 
-    public ICollection<Discipline> Disciplines { get; set; }
+    public List<Project> Projects { get; set; }
 }

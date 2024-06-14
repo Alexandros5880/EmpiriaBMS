@@ -20,10 +20,10 @@ public class AppDbContext : DbContext
     public DbSet<ProjectStage>? ProjectsStages { get; set; }
     public DbSet<Discipline>? Disciplines { get; set; }
     public DbSet<DisciplineType>? DisciplineTypes { get; set; }
-    public DbSet<Drawing>? Drawings { get; set; }
-    public DbSet<DrawingType>? DrawingTypes { get; set; }
-    public DbSet<Other>? Others { get; set; }
-    public DbSet<OtherType>? OtherTypes { get; set; }
+    public DbSet<Deliverable>? Deliverables { get; set; }
+    public DbSet<DeliverableType>? DrawingTypes { get; set; }
+    public DbSet<SupportiveWork>? SupportiveWorks { get; set; }
+    public DbSet<SupportiveWorkType>? SupportiveWorkTypes { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
     public DbSet<InvoiceType>? InvoicesTypes { get; set; }
     public DbSet<Contract>? Contracts { get; set; }
@@ -45,8 +45,8 @@ public class AppDbContext : DbContext
     public DbSet<Permission>? Permissions { get; set; }
     public DbSet<UserRole>? UsersRoles { get; set; }
     public DbSet<RolePermission>? RolesPermissions { get; set; }
-    public DbSet<DrawingEmployee>? DrawingsEmployees { get; set; }
-    public DbSet<OtherEmployee>? OthersEmployees { get; set; }
+    public DbSet<DeliverableEmployee>? DeliverablesEmployees { get; set; }
+    public DbSet<SupportiveWorkEmployee>? OthersEmployees { get; set; }
     public DbSet<ProjectSubConstructor>? ProjectsSubConstructors { get; set; }
     public DbSet<TeamsRequestedUser>? TeamsRequestedUser { get; set; }
     public DbSet<DisciplineEngineer>? DisciplinesEngineers { get; set; }
@@ -183,14 +183,14 @@ public class AppDbContext : DbContext
         };
         builder.Entity<Permission>().HasData(per_9);
 
-        // Dashboard See All Drawings
+        // Dashboard See All Deliverables
         var per_10_id = random.Next(123456789, 999999999);
         Permission per_10 = new Permission()
         {
             Id = per_10_id,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
-            Name = "See All Drawings",
+            Name = "See All Deliverables",
             Ord = 10
         };
         builder.Entity<Permission>().HasData(per_10);
@@ -715,7 +715,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_35);
 
-        // Engineer || See All Drawings
+        // Engineer || See All Deliverables
         RolePermission rp_41 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -783,7 +783,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_36);
 
-        // Project Manager || See All Drawings
+        // Project Manager || See All Deliverables
         RolePermission rp_43 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -906,7 +906,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_37);
 
-        // COO || See All Drawings
+        // COO || See All Deliverables
         RolePermission rp_42 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -1051,7 +1051,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_38);
 
-        // CTO || See All Drawings
+        // CTO || See All Deliverables
         RolePermission rp_45 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -1372,7 +1372,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_39);
 
-        // CEO || See All Drawings
+        // CEO || See All Deliverable
         RolePermission rp_44 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -1642,7 +1642,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_40);
 
-        // Admin || See All Drawings
+        // Admin || See All Deliverables
         RolePermission rp_46 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -1721,7 +1721,7 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_57);
 
-        // Secretariat || See All Drawings
+        // Secretariat || See All Deliverables
         RolePermission rp_58 = new RolePermission()
         {
             Id = random.Next(123456789, 999999999) * 9,
@@ -3240,52 +3240,52 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Create Drawing Types
-        List<DrawingType> drawingTypes = new List<DrawingType>();
+        List<DeliverableType> deliverableTypes = new List<DeliverableType>();
         string[] drawTypeNames = {
             "Documents",
             "Calculations",
-            "Drawings"
+            "Deliverables"
         };
         for (var i = 0; i < drawTypeNames.Length; i++)
         {
             var drawing_type_Id = random.Next(123456789, 999999999);
-            DrawingType drt = new DrawingType()
+            DeliverableType drt = new DeliverableType()
             {
                 Id = drawing_type_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = drawTypeNames[i],
             };
-            builder.Entity<DrawingType>().HasData(drt);
-            drawingTypes.Add(drt);
+            builder.Entity<DeliverableType>().HasData(drt);
+            deliverableTypes.Add(drt);
         }
         #endregion
 
-        #region Create Drawings
-        List<Drawing> drawings = new List<Drawing>();
+        #region Create Deliverables
+        List<Deliverable> deliverables = new List<Deliverable>();
         for (var i = 0; i < disciplines.Count; i++)
         {
-            for (int j = 0; j < drawingTypes.Count; j++)
+            for (int j = 0; j < deliverableTypes.Count; j++)
             {
                 var drawing_Id = random.Next(123456789, 999999999);
-                Drawing drawing = new Drawing()
+                Deliverable drawing = new Deliverable()
                 {
                     Id = drawing_Id,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    TypeId = drawingTypes[j].Id,
+                    TypeId = deliverableTypes[j].Id,
                     DisciplineId = disciplines[i].Id,
                     CompletionEstimation = 0,
                     CompletionDate = DateTime.Now.AddDays(11)
                 };
-                builder.Entity<Drawing>().HasData(drawing);
-                drawings.Add(drawing);
+                builder.Entity<Deliverable>().HasData(drawing);
+                deliverables.Add(drawing);
             }
         }
         #endregion
 
         #region Create Other Types
-        List<OtherType> otherTypes = new List<OtherType>();
+        List<SupportiveWorkType> otherTypes = new List<SupportiveWorkType>();
         string[] otherTypeNames = {
             "Communications",
             "Printing",
@@ -3298,26 +3298,26 @@ public class AppDbContext : DbContext
         for (var i = 0; i < otherTypeNames.Length; i++)
         {
             var other_type_Id = random.Next(123456789, 999999999);
-            OtherType ort = new OtherType()
+            SupportiveWorkType ort = new SupportiveWorkType()
             {
                 Id = other_type_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = otherTypeNames[i],
             };
-            builder.Entity<OtherType>().HasData(ort);
+            builder.Entity<SupportiveWorkType>().HasData(ort);
             otherTypes.Add(ort);
         }
         #endregion
 
         #region Create Others
-        List<Other> others = new List<Other>();
+        List<SupportiveWork> others = new List<SupportiveWork>();
         for (var i = 0; i < disciplines.Count; i++)
         {
             for (int j = 0; j < otherTypes.Count; j++)
             {
                 var other_Id = random.Next(123456789, 999999999);
-                Other other = new Other()
+                SupportiveWork other = new SupportiveWork()
                 {
                     Id = other_Id,
                     CreatedDate = DateTime.Now,
@@ -3326,7 +3326,7 @@ public class AppDbContext : DbContext
                     DisciplineId = disciplines[i].Id,
                     CompletionEstimation = 0
                 };
-                builder.Entity<Other>().HasData(other);
+                builder.Entity<SupportiveWork>().HasData(other);
             }
         }
         #endregion
@@ -3354,21 +3354,21 @@ public class AppDbContext : DbContext
         {
             for (var d = 0; d < draftsmen.Count; d++)
             {
-                OtherEmployee de_1 = new OtherEmployee()
+                SupportiveWorkEmployee de_1 = new SupportiveWorkEmployee()
                 {
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     EmployeeId = draftsmen[d].Id,
-                    OtherId = others[o].Id
+                    SupportiveWorkId = others[o].Id
                 };
-                builder.Entity<OtherEmployee>().HasData(de_1);
+                builder.Entity<SupportiveWorkEmployee>().HasData(de_1);
             }
         }
         #endregion
 
         #region Connect Every Draftman With Every Drawing
-        //for (var o = 0; o < drawings.Count; o++)
+        //for (var o = 0; o < deliverables.Count; o++)
         //{
         //    for (var d = 0; d < draftsmen.Count; d++)
         //    {
@@ -3378,7 +3378,7 @@ public class AppDbContext : DbContext
         //            CreatedDate = DateTime.Now,
         //            LastUpdatedDate = DateTime.Now,
         //            EmployeeId = draftsmen[d].Id,
-        //            DrawingId = drawings[o].Id
+        //            DrawingId = deliverables[o].Id
         //        };
         //        builder.Entity<DrawingEmployee>().HasData(de_1);
         //    }
