@@ -157,7 +157,33 @@ public partial class Contracts
     {
         var file = e.File;
         var filePath = file.Name;
-        Console.WriteLine($"Upload csv: {filePath}");
+        var fileType = file.ContentType;
+        if (fileType?.Equals("text/csv") ?? false)
+        {
+            try
+            {
+                Stream stream = file.OpenReadStream();
+                List<ContractExport> data = await Data.ImportData<ContractExport>(stream);
+                if (data != null && data.Count > 0)
+                {
+                    foreach (var item in data)
+                    {
+                        var vm = item.Get();
+                        var dto = Mapper.Map<ContractDto>(vm);
+                        var added = await DataProvider.Contracts.Add(dto);
+                        if (added == null)
+                            continue;
+                        var addedDto = Mapper.Map<ContractVM>(added);
+                        _records.Add(addedDto);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Contracts import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                // TODO: log error
+            }
+        }
     }
     private async Task TriggerFileInput()
     {

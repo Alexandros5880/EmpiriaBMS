@@ -13,6 +13,12 @@
             <div>
                 <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
                     <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+                    <InputFile @ref="@fileInput" OnChange="ImportFromCSV" style="display: none;" />
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
+                                  Appearance="Appearance.Outline"
+                                  OnClick="@(async () => await TriggerFileInput())">
+                        Import
+                    </FluentButton>
                     <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
                                   Appearance="Appearance.Outline"
                                   OnClick="@(async (e) => await ExportToCSV())"

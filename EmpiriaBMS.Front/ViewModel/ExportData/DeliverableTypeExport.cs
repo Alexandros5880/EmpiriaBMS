@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class DeliverableTypeExport
+public class DeliverableTypeExport : IInport<DrawingTypeVM>
 {
     public string Name { get; set; }
 
@@ -13,4 +14,15 @@ public class DeliverableTypeExport
         Name = model.Name;
         Description = model.Description ?? "";
     }
+
+    public DeliverableTypeExport()
+    {
+
+    }
+
+    public DrawingTypeVM Get() => new DrawingTypeVM()
+    {
+        Name = Name,
+        Description = Description,
+    };
 }

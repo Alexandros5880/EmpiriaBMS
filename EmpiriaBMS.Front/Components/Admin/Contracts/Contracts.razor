@@ -53,7 +53,7 @@
                 </TemplateColumn>
 
                 <PropertyColumn Property="@(p => _getInvoice(p.InvoiceId).Mark)" Sortable="true" Title="Invoice Mark" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Date)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.Date)" Format="dd-MM-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.ContractualFee)" Sortable="true" Title="Contractual Fee" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">

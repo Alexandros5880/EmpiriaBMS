@@ -1,8 +1,10 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class DeliverableExport
+public class DeliverableExport : IInport<DrawingVM>
 {
     public int TypeId { get; set; }
 
@@ -30,5 +32,33 @@ public class DeliverableExport
         ProjectName = model.Discipline?.Project?.Name ?? "";
         CompletionEstimation = model.CompletionEstimation;
         CompletionDate = model.CompletionDate?.ToEuropeFormat() ?? "";
+    }
+
+    public DeliverableExport()
+    {
+
+    }
+
+    public DrawingVM Get()
+    {
+        DateTime? date;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            date = DateTime.ParseExact(CompletionDate, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{CompletionDate}' is not in the correct format.");
+            date = null;
+        }
+
+        return new DrawingVM()
+        {
+            TypeId = TypeId,
+            DisciplineId = DisciplineId,
+            CompletionEstimation = CompletionEstimation,
+            CompletionDate = date,
+        };
     }
 }

@@ -3,7 +3,6 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects.Issues;
@@ -99,6 +98,7 @@ public partial class IssuesDetailed
     private bool validProject = true;
     private bool validRole = true;
     private bool validCreator = true;
+    private bool validDescription = true;
 
     private bool Validate(string fieldname = null)
     {
@@ -107,14 +107,16 @@ public partial class IssuesDetailed
             validProject = Content.ProjectId != 0;
             validRole = Content.DisplayedRoleId != 0;
             validCreator = Content.CreatorId != 0;
+            validDescription = !string.IsNullOrEmpty(Content.Description);
 
-            return validProject && validRole && validCreator;
+            return validProject && validRole && validCreator && validDescription;
         }
         else
         {
             validProject = true;
             validRole = true;
             validCreator = true;
+            validDescription = true;
 
             switch (fieldname)
             {
@@ -127,6 +129,9 @@ public partial class IssuesDetailed
                 case "Creator":
                     validCreator = Content.CreatorId != 0;
                     return validCreator;
+                case "Description":
+                    validDescription = !string.IsNullOrEmpty(Content.Description);
+                    return validDescription;
                 default:
                     return true;
             }

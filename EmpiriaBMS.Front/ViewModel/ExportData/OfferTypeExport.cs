@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class OfferTypeExport
+public class OfferTypeExport : IInport<OfferTypeVM>
 {
     public string Name { get; set; }
 
@@ -13,4 +14,15 @@ public class OfferTypeExport
         Name = model.Name;
         Description = model.Description ?? "";
     }
+
+    public OfferTypeExport()
+    {
+
+    }
+
+    public OfferTypeVM Get() => new OfferTypeVM()
+    {
+        Name = Name,
+        Description = Description,
+    };
 }
