@@ -452,7 +452,7 @@ public partial class Dashboard : IDisposable
     private long GetDisciplineMenHours(int disciplineId) =>
         _dataProvider.Disciplines.GetMenHours(disciplineId);
 
-    private long GetDrawingMenHours(int drawingId) =>
+    private long GetDeliverableMenHours(int drawingId) =>
         _dataProvider.Deliverables.GetMenHours(drawingId);
 
     private long GetOtherMenHours(int otherId) =>
@@ -548,7 +548,7 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
-    private void OnSelectDraw(DeliverableVM draw)
+    private void OnSelectDeliverable(DeliverableVM draw)
     {
         if (draw == null || draw.Id == __selectedDeliverable?.Id) return;
         __selectedDeliverable = draw;
@@ -712,7 +712,7 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
-    private void _onDrawTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
+    private void _onDeliverableTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, remainingTime
 
@@ -733,7 +733,7 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
-    private void _onDrawCompletedChanged(DeliverableVM draw, object val)
+    private void _onDeliverableCompletedChanged(DeliverableVM draw, object val)
     {
         draw.CompletionEstimation += Convert.ToInt32(val);
 
@@ -925,7 +925,7 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Drawings Assign Actions (Deliverable Assign)
-    private async Task OnDrawingAssignClick(DeliverableVM draw)
+    private async Task OnDeliverableAssignClick(DeliverableVM draw)
     {
         if (!isWorkingMode) return;
         try
