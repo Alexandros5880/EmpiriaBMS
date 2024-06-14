@@ -22,8 +22,8 @@ public class AppDbContext : DbContext
     public DbSet<DisciplineType>? DisciplineTypes { get; set; }
     public DbSet<Deliverable>? Deliverables { get; set; }
     public DbSet<DeliverableType>? DrawingTypes { get; set; }
-    public DbSet<Other>? Others { get; set; }
-    public DbSet<OtherType>? OtherTypes { get; set; }
+    public DbSet<SupportiveWork>? SupportiveWorks { get; set; }
+    public DbSet<SupportiveWorkType>? SupportiveWorkTypes { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
     public DbSet<InvoiceType>? InvoicesTypes { get; set; }
     public DbSet<Contract>? Contracts { get; set; }
@@ -46,7 +46,7 @@ public class AppDbContext : DbContext
     public DbSet<UserRole>? UsersRoles { get; set; }
     public DbSet<RolePermission>? RolesPermissions { get; set; }
     public DbSet<DeliverableEmployee>? DeliverablesEmployees { get; set; }
-    public DbSet<OtherEmployee>? OthersEmployees { get; set; }
+    public DbSet<SupportiveWorkEmployee>? OthersEmployees { get; set; }
     public DbSet<ProjectSubConstructor>? ProjectsSubConstructors { get; set; }
     public DbSet<TeamsRequestedUser>? TeamsRequestedUser { get; set; }
     public DbSet<DisciplineEngineer>? DisciplinesEngineers { get; set; }
@@ -3285,7 +3285,7 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Create Other Types
-        List<OtherType> otherTypes = new List<OtherType>();
+        List<SupportiveWorkType> otherTypes = new List<SupportiveWorkType>();
         string[] otherTypeNames = {
             "Communications",
             "Printing",
@@ -3298,26 +3298,26 @@ public class AppDbContext : DbContext
         for (var i = 0; i < otherTypeNames.Length; i++)
         {
             var other_type_Id = random.Next(123456789, 999999999);
-            OtherType ort = new OtherType()
+            SupportiveWorkType ort = new SupportiveWorkType()
             {
                 Id = other_type_Id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = otherTypeNames[i],
             };
-            builder.Entity<OtherType>().HasData(ort);
+            builder.Entity<SupportiveWorkType>().HasData(ort);
             otherTypes.Add(ort);
         }
         #endregion
 
         #region Create Others
-        List<Other> others = new List<Other>();
+        List<SupportiveWork> others = new List<SupportiveWork>();
         for (var i = 0; i < disciplines.Count; i++)
         {
             for (int j = 0; j < otherTypes.Count; j++)
             {
                 var other_Id = random.Next(123456789, 999999999);
-                Other other = new Other()
+                SupportiveWork other = new SupportiveWork()
                 {
                     Id = other_Id,
                     CreatedDate = DateTime.Now,
@@ -3326,7 +3326,7 @@ public class AppDbContext : DbContext
                     DisciplineId = disciplines[i].Id,
                     CompletionEstimation = 0
                 };
-                builder.Entity<Other>().HasData(other);
+                builder.Entity<SupportiveWork>().HasData(other);
             }
         }
         #endregion
@@ -3354,15 +3354,15 @@ public class AppDbContext : DbContext
         {
             for (var d = 0; d < draftsmen.Count; d++)
             {
-                OtherEmployee de_1 = new OtherEmployee()
+                SupportiveWorkEmployee de_1 = new SupportiveWorkEmployee()
                 {
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     EmployeeId = draftsmen[d].Id,
-                    OtherId = others[o].Id
+                    SupportiveWorkId = others[o].Id
                 };
-                builder.Entity<OtherEmployee>().HasData(de_1);
+                builder.Entity<SupportiveWorkEmployee>().HasData(de_1);
             }
         }
         #endregion

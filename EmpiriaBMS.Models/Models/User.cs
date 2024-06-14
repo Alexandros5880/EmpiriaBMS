@@ -38,7 +38,7 @@ public class User : Entity
 
     public ICollection<DeliverableEmployee> DeliverablesEmployees { get; set; }
 
-    public ICollection<OtherEmployee> OthersEmployees { get; set; }
+    public ICollection<SupportiveWorkEmployee> SupportiveWorksEmployees { get; set; }
 
     public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 

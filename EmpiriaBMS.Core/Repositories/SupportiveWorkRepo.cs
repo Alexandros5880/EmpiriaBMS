@@ -1,18 +1,18 @@
-﻿using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using EmpiriaBMS.Models.Models;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Hellpers;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class OtherRepo : Repository<OtherDto, Other>, IDisposable
+public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>, IDisposable
 {
-    public OtherRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public SupportiveWorkRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public new async Task<OtherDto?> Get(int id)
+    public new async Task<SupportiveWorkDto?> Get(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -20,7 +20,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var dr = await _context
-                             .Set<Other>()
+                             .Set<SupportiveWork>()
                              .Where(r => !r.IsDeleted)
                              .Include(d => d.Type)
                              .Include(d => d.Discipline)
@@ -31,19 +31,19 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                              .ThenInclude(d => d.Type)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
-            return Mapping.Mapper.Map<OtherDto>(dr);
+            return Mapping.Mapper.Map<SupportiveWorkDto>(dr);
         }
     }
 
-    public new async Task<ICollection<OtherDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public new async Task<ICollection<SupportiveWorkDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Other> drs;
+            List<SupportiveWork> drs;
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                drs = await _context.Set<Other>()
+                drs = await _context.Set<SupportiveWork>()
                                     .Where(r => !r.IsDeleted)
                                     .Include(d => d.Type)
                                     .Include(d => d.Discipline)
@@ -54,11 +54,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                     .ThenInclude(d => d.Type)
                                     .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+                return Mapping.Mapper.Map<List<SupportiveWork>, List<SupportiveWorkDto>>(drs);
             }
 
 
-            drs = await _context.Set<Other>()
+            drs = await _context.Set<SupportiveWork>()
                                 .Where(r => !r.IsDeleted)
                                 .Include(d => d.Type)
                                 .Include(d => d.Discipline)
@@ -71,22 +71,23 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                 .Take(pageSize)
                                 .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+            return Mapping.Mapper.Map<List<SupportiveWork>, List<SupportiveWorkDto>>(drs);
         }
     }
 
-    public new async Task<ICollection<OtherDto>> GetAll(
-        Expression<Func<Other, bool>> expresion,
+    public new async Task<ICollection<SupportiveWorkDto>> GetAll(
+        Expression<Func<SupportiveWork, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Other> drs;
+            List<SupportiveWork> drs;
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                drs = await _context.Set<Other>()
+                drs = await _context.Set<SupportiveWork>()
                                     .Where(r => !r.IsDeleted)
                                     .Include(d => d.Type)
                                     .Include(d => d.Discipline)
@@ -98,11 +99,11 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                     .Where(expresion)
                                     .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+                return Mapping.Mapper.Map<List<SupportiveWork>, List<SupportiveWorkDto>>(drs);
             }
 
 
-            drs = await _context.Set<Other>()
+            drs = await _context.Set<SupportiveWork>()
                                 .Where(r => !r.IsDeleted)
                                 .Include(d => d.Type)
                                 .Include(d => d.Discipline)
@@ -116,7 +117,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
                                 .Take(pageSize)
                                 .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(drs);
+            return Mapping.Mapper.Map<List<SupportiveWork>, List<SupportiveWorkDto>>(drs);
         }
     }
 
@@ -151,7 +152,7 @@ public class OtherRepo : Repository<OtherDto, Other>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             // Update Current Other
-            var other = await _context.Set<Other>()
+            var other = await _context.Set<SupportiveWork>()
                                       .Where(r => !r.IsDeleted)
                                       .FirstOrDefaultAsync(d => d.Id == otherId);
             if (other == null)

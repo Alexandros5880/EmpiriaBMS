@@ -3,7 +3,7 @@ using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class SupportiveWorkExport : IInport<OtherVM>
+public class SupportiveWorkExport : IInport<SupportiveWorkVM>
 {
     public int TypeId { get; set; }
 
@@ -15,7 +15,7 @@ public class SupportiveWorkExport : IInport<OtherVM>
 
     public float CompletionEstimation { get; set; }
 
-    public SupportiveWorkExport(OtherVM model)
+    public SupportiveWorkExport(SupportiveWorkVM model)
     {
         TypeId = model.TypeId ?? 0;
         Type = model.Type?.Name ?? "";
@@ -29,7 +29,7 @@ public class SupportiveWorkExport : IInport<OtherVM>
 
     }
 
-    public OtherVM Get() => new OtherVM()
+    public SupportiveWorkVM Get() => new SupportiveWorkVM()
     {
         TypeId = TypeId,
         DisciplineId = DisciplineId,

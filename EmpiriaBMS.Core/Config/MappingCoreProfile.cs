@@ -9,7 +9,7 @@ public class MappingCoreProfile : Profile
 {
     public MappingCoreProfile()
     {
-        CreateMap<OtherDto, Other>().ReverseMap();
+        CreateMap<SupportiveWorkDto, SupportiveWork>().ReverseMap();
         CreateMap<DeliverableDto, Deliverable>().ReverseMap();
         CreateMap<InvoiceDto, Invoice>().ReverseMap();
         CreateMap<PermissionDto, Permission>().ReverseMap();
@@ -18,7 +18,7 @@ public class MappingCoreProfile : Profile
         CreateMap<DisciplineDto, Discipline>().ReverseMap();
         CreateMap<ProjectDto, Project>().ReverseMap();
         CreateMap<ProjectCategoryDto, ProjectCategory>().ReverseMap();
-        CreateMap<OtherTypeDto, OtherType>().ReverseMap();
+        CreateMap<SupportiveWorkTypeDto, SupportiveWorkType>().ReverseMap();
         CreateMap<DeliverableTypeDto, DeliverableType>().ReverseMap();
         CreateMap<DisciplineTypeDto, DisciplineType>().ReverseMap();
         CreateMap<PermissionDto, Permission>().ReverseMap();

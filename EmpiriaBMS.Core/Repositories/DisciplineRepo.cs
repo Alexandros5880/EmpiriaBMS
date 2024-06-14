@@ -150,7 +150,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<List<OtherDto>> GetOthers(int id)
+    public async Task<List<SupportiveWorkDto>> GetOthers(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -158,33 +158,33 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var others = await _context
-                             .Set<Other>()
+                             .Set<SupportiveWork>()
                              .Where(r => !r.IsDeleted)
                              .Where(d => d.DisciplineId == id)
                              .Include(d => d.Type)
                              .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+            return Mapping.Mapper.Map<List<SupportiveWork>, List<SupportiveWorkDto>>(others);
         }
     }
 
-    public async Task<List<OtherDto>> GetOthers(int id, int userId, bool all)
+    public async Task<List<SupportiveWorkDto>> GetOthers(int id, int userId, bool all)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Other> others;
+            List<SupportiveWork> others;
             var disciplineOthersIds = await _context
-                                         .Set<Other>()
+                                         .Set<SupportiveWork>()
                                          .Where(r => !r.IsDeleted)
                                          .Where(d => d.DisciplineId == id)
                                          .Select(d => d.Id)
                                          .ToListAsync();
             if (all)
             {
-                others = await _context.Set<Other>()
+                others = await _context.Set<SupportiveWork>()
                                        .Where(r => !r.IsDeleted)
                                        .Where(o => disciplineOthersIds.Contains(o.Id))
                                        .Include(d => d.Type)
@@ -192,21 +192,21 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             }
             else
             {
-                var otherIds = await _context.Set<OtherEmployee>()
+                var otherIds = await _context.Set<SupportiveWorkEmployee>()
                                              .Where(r => !r.IsDeleted)
-                                             .Where(de => disciplineOthersIds.Contains(de.OtherId))
+                                             .Where(de => disciplineOthersIds.Contains(de.SupportiveWorkId))
                                              .Where(de => de.EmployeeId == userId)
-                                             .Select(de => de.OtherId)
+                                             .Select(de => de.SupportiveWorkId)
                                              .ToListAsync();
 
-                others = await _context.Set<Other>()
+                others = await _context.Set<SupportiveWork>()
                                        .Where(r => !r.IsDeleted)
                                        .Where(o => otherIds.Contains(o.Id))
                                        .Include(d => d.Type)
                                        .ToListAsync();
             }
 
-            var result = Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+            var result = Mapping.Mapper.Map<List<SupportiveWork>, List<SupportiveWorkDto>>(others);
 
             return result.OrderBy(d => d.Type?.Name).ToList();
         }

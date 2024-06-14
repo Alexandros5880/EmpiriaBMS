@@ -13,11 +13,11 @@ public class MappingProfile : Profile
         CreateMap<InvoiceDto, InvoiceVM>().ReverseMap();
         CreateMap<RoleDto, RoleVM>().ReverseMap();
         CreateMap<UserDto, UserVM>().ReverseMap();
-        CreateMap<OtherDto, OtherVM>().ReverseMap();
+        CreateMap<SupportiveWorkDto, SupportiveWorkVM>().ReverseMap();
         CreateMap<DisciplineDto, DisciplineVM>().ReverseMap();
         CreateMap<ProjectDto, ProjectVM>().ReverseMap();
         CreateMap<ProjectCategoryDto, ProjectCategoryVM>().ReverseMap();
-        CreateMap<OtherTypeDto, OtherTypeVM>().ReverseMap();
+        CreateMap<SupportiveWorkTypeDto, SupportiveWorkTypeVM>().ReverseMap();
         CreateMap<DeliverableTypeDto, DeliverableTypeVM>().ReverseMap();
         CreateMap<DisciplineTypeDto, DisciplineTypeVM>().ReverseMap();
         CreateMap<PermissionDto, PermissionVM>().ReverseMap();

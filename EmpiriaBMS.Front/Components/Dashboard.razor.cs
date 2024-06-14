@@ -78,12 +78,12 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DeliverableVM> _deliverables = new ObservableCollection<DeliverableVM>();
-    private ObservableCollection<OtherVM> _others = new ObservableCollection<OtherVM>();
+    private ObservableCollection<SupportiveWorkVM> _others = new ObservableCollection<SupportiveWorkVM>();
     private List<LedVM> _ledsChanged = new List<LedVM>();
     private List<OfferVM> _offersChanged = new List<OfferVM>();
     private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
     private List<DeliverableVM> _deliverablesChanged = new List<DeliverableVM>();
-    private List<OtherVM> _othersChanged = new List<OtherVM>();
+    private List<SupportiveWorkVM> _othersChanged = new List<SupportiveWorkVM>();
     private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
@@ -97,7 +97,7 @@ public partial class Dashboard : IDisposable
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DeliverableVM __selectedDeliverable = new DeliverableVM();
-    private OtherVM _selectedOther = new OtherVM();
+    private SupportiveWorkVM _selectedOther = new SupportiveWorkVM();
     private int _selectedPmId;
     private InvoiceVM _selectedInvoice = new InvoiceVM();
     #endregion
@@ -242,7 +242,7 @@ public partial class Dashboard : IDisposable
         if (_selectedDiscipline != null)
         {
             _hasDeliverablessSelections = await _dataProvider.DeliverablesTypes.HasDeliverableTypesSelections(_selectedDiscipline.Id);
-            _hasOthersSelections = await _dataProvider.OthersTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
+            _hasOthersSelections = await _dataProvider.SupportiveWorksTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
         }
     }
 
@@ -456,7 +456,7 @@ public partial class Dashboard : IDisposable
         _dataProvider.Deliverables.GetMenHours(drawingId);
 
     private long GetOtherMenHours(int otherId) =>
-        _dataProvider.Others.GetMenHours(otherId);
+        _dataProvider.SupportiveWorks.GetMenHours(otherId);
     #endregion
 
     #region When Row Selected Update Data
@@ -541,7 +541,7 @@ public partial class Dashboard : IDisposable
 
         _others.Clear();
         foreach (var di in others)
-            _others.Add(Mapper.Map<OtherVM>(di));
+            _others.Add(Mapper.Map<SupportiveWorkVM>(di));
 
         await _checkIfHasAnySelections();
 
@@ -555,7 +555,7 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
-    private void OnSelectDoc(OtherVM doc)
+    private void OnSelectDoc(SupportiveWorkVM doc)
     {
         if (doc == null || doc.Id == _selectedOther?.Id) return;
         _selectedOther = doc;
@@ -748,7 +748,7 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
-    private void _onOtherTimeChanged(OtherVM other, TimeSpan newTimeSpan)
+    private void _onOtherTimeChanged(SupportiveWorkVM other, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, remainingTime
 
@@ -870,7 +870,7 @@ public partial class Dashboard : IDisposable
             foreach (var other in _othersChanged)
             {
                 //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-                await _dataProvider.Others.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+                await _dataProvider.SupportiveWorks.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
             }
 
             // Update User Hours
@@ -1333,7 +1333,7 @@ public partial class Dashboard : IDisposable
                     await _dataProvider.Deliverables.Delete(__selectedDeliverable.Id);
                     break;
                 case nameof(_selectedOther):
-                    await _dataProvider.Others.Delete(_selectedOther.Id);
+                    await _dataProvider.SupportiveWorks.Delete(_selectedOther.Id);
                     break;
             }
 

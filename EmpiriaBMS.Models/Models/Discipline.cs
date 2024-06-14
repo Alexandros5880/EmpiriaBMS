@@ -22,7 +22,7 @@ public class Discipline : Entity
 
     public ICollection<Deliverable> Deliverables { get; set; }
 
-    public ICollection<Other> Others { get; set; }
+    public ICollection<SupportiveWork> Others { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
 

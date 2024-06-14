@@ -12,12 +12,12 @@ public partial class OtherDetailed : ComponentBase, IDisposable
     [Parameter]
     public int DisciplineId { get; set; }
 
-    List<OtherTypeDto> _otherTypes = new List<OtherTypeDto>();
-    private OtherVM _other = new OtherVM();
+    List<SupportiveWorkTypeDto> _otherTypes = new List<SupportiveWorkTypeDto>();
+    private SupportiveWorkVM _other = new SupportiveWorkVM();
 
     private async Task _getOtherTypes()
     {
-        var types = await DataProvider.OthersTypes.GetOtherTypesSelections(DisciplineId);
+        var types = await DataProvider.SupportiveWorksTypes.GetOtherTypesSelections(DisciplineId);
         _otherTypes = types.ToList();
     }
 
@@ -26,13 +26,13 @@ public partial class OtherDetailed : ComponentBase, IDisposable
         isNew = true;
         _otherTypes.Clear();
         await _getOtherTypes();
-        _other = new OtherVM();
+        _other = new SupportiveWorkVM();
         _other.DisciplineId = DisciplineId;
         _other.TypeId = _otherTypes.FirstOrDefault().Id;
         StateHasChanged();
     }
 
-    public async void PrepairForEdit(OtherVM other)
+    public async void PrepairForEdit(SupportiveWorkVM other)
     {
         isNew = false;
         _otherTypes.Clear();
@@ -53,14 +53,14 @@ public partial class OtherDetailed : ComponentBase, IDisposable
 
     public async Task HandleValidSubmit()
     {
-        OtherDto myOther = Mapper.Map<OtherDto>(_other);
+        SupportiveWorkDto myOther = Mapper.Map<SupportiveWorkDto>(_other);
         // Save Other
-        OtherDto saveOther;
-        var exists = await DataProvider.Others.Any(p => p.Id == _other.Id);
+        SupportiveWorkDto saveOther;
+        var exists = await DataProvider.SupportiveWorks.Any(p => p.Id == _other.Id);
         if (exists)
-            saveOther = await DataProvider.Others.Update(myOther);
+            saveOther = await DataProvider.SupportiveWorks.Update(myOther);
         else
-            saveOther = await DataProvider.Others.Add(myOther);
+            saveOther = await DataProvider.SupportiveWorks.Add(myOther);
     }
 
     protected virtual void Dispose(bool disposing)

@@ -12,10 +12,10 @@ public class DataProvider : IDataProvider, IDisposable
     public ProjectsRepo Projects { get; set; }
     public DisciplineRepo Disciplines { get; set; }
     public DeliverableRepo Deliverables { get; set; }
-    public OtherRepo Others { get; set; }
+    public SupportiveWorkRepo SupportiveWorks { get; set; }
     public InvoiceRepo Invoices { get; set; }
     public ProjectCategoryRepo ProjectsCategories { get; set; }
-    public OtherTypeRepo OthersTypes { get; set; }
+    public SupportiveWorkTypeRepo SupportiveWorksTypes { get; set; }
     public DeliverableTypeRepo DeliverablesTypes { get; set; }
     public DisciplineTypeRepo DisciplinesTypes { get; set; }
     public PermissionRepo Permissions { get; set; }
@@ -43,10 +43,10 @@ public class DataProvider : IDataProvider, IDisposable
         Projects = new ProjectsRepo(dbFactory);
         Disciplines = new DisciplineRepo(dbFactory);
         Deliverables = new DeliverableRepo(dbFactory);
-        Others = new OtherRepo(dbFactory);
+        SupportiveWorks = new SupportiveWorkRepo(dbFactory);
         Invoices = new InvoiceRepo(dbFactory);
         ProjectsCategories = new ProjectCategoryRepo(dbFactory);
-        OthersTypes = new OtherTypeRepo(dbFactory);
+        SupportiveWorksTypes = new SupportiveWorkTypeRepo(dbFactory);
         DeliverablesTypes = new DeliverableTypeRepo(dbFactory);
         DisciplinesTypes = new DisciplineTypeRepo(dbFactory);
         Permissions = new PermissionRepo(dbFactory);
@@ -79,10 +79,10 @@ public class DataProvider : IDataProvider, IDisposable
                 Projects.Dispose();
                 Disciplines.Dispose();
                 Deliverables.Dispose();
-                Others.Dispose();
+                SupportiveWorks.Dispose();
                 Invoices.Dispose();
                 ProjectsCategories.Dispose();
-                OthersTypes.Dispose();
+                SupportiveWorksTypes.Dispose();
                 DeliverablesTypes.Dispose();
                 DisciplinesTypes.Dispose();
                 Permissions.Dispose();

@@ -55,15 +55,15 @@ public static class ModelRelations
                .HasForeignKey(de => de.EmployeeId);
 
         // Others Employees
-        builder.Entity<OtherEmployee>()
-               .HasKey(de => new { de.OtherId, de.EmployeeId });
-        builder.Entity<OtherEmployee>()
-               .HasOne(de => de.Other)
-               .WithMany(de => de.OthersEmployees)
-               .HasForeignKey(de => de.OtherId);
-        builder.Entity<OtherEmployee>()
+        builder.Entity<SupportiveWorkEmployee>()
+               .HasKey(de => new { de.SupportiveWorkId, de.EmployeeId });
+        builder.Entity<SupportiveWorkEmployee>()
+               .HasOne(de => de.SupportiveWork)
+               .WithMany(de => de.SupportiveWorksEmployees)
+               .HasForeignKey(de => de.SupportiveWorkId);
+        builder.Entity<SupportiveWorkEmployee>()
                .HasOne(de => de.Employee)
-               .WithMany(de => de.OthersEmployees)
+               .WithMany(de => de.SupportiveWorksEmployees)
                .HasForeignKey(de => de.EmployeeId);
 
         // Engineers Disciplines
@@ -241,8 +241,8 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.Cascade);
 
         // OtherType Others
-        builder.Entity<OtherType>()
-               .HasMany(p => p.Others)
+        builder.Entity<SupportiveWorkType>()
+               .HasMany(p => p.SupportiveWorks)
                .WithOne(c => c.Type)
                .HasForeignKey(c => c.TypeId)
                .OnDelete(DeleteBehavior.Cascade);
@@ -304,7 +304,7 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // Other DailyTime
-        builder.Entity<Other>()
+        builder.Entity<SupportiveWork>()
                .HasMany(p => p.DailyTime)
                .WithOne(c => c.Other)
                .HasForeignKey(c => c.OtherId)

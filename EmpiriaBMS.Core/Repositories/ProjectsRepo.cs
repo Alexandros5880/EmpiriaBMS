@@ -870,7 +870,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             if (project == null)
                 throw new ArgumentNullException(nameof(project));
 
-            var otherTypes = await _context.Set<OtherType>().Where(r => !r.IsDeleted).ToListAsync();
+            var otherTypes = await _context.Set<SupportiveWorkType>().Where(r => !r.IsDeleted).ToListAsync();
 
             // Calculate Disciplines Estimated Hours, Disciplines Estimated ManDays, Disciplines EstimatedCompleted
             foreach (var d in disciplines)
@@ -909,12 +909,12 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                     // Create Supportive Works For Every Discipline
                     foreach (var t in otherTypes)
                     {
-                        Other other = new Other()
+                        SupportiveWork other = new SupportiveWork()
                         {
                             TypeId = t.Id,
                             DisciplineId = savedDisciplineId
                         };
-                        await _context.Set<Other>().AddAsync(other);
+                        await _context.Set<SupportiveWork>().AddAsync(other);
                     }
                 }
             }

@@ -11,12 +11,12 @@ namespace EmpiriaBMS.Front.Components.Admin.SupportiveWorks;
 public partial class SupportiveWorks
 {
     #region Data Grid
-    private List<OtherVM> _records = new List<OtherVM>();
+    private List<SupportiveWorkVM> _records = new List<SupportiveWorkVM>();
     private string _filterString = string.Empty;
-    IQueryable<OtherVM>? FilteredItems => _records?.AsQueryable().Where(x => x.TypeName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<SupportiveWorkVM>? FilteredItems => _records?.AsQueryable().Where(x => x.TypeName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private OtherVM _selectedRecord = new OtherVM();
+    private SupportiveWorkVM _selectedRecord = new SupportiveWorkVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -30,15 +30,15 @@ public partial class SupportiveWorks
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<OtherVM> row)
+    private void HandleRowFocus(FluentDataGridRow<SupportiveWorkVM> row)
     {
-        _selectedRecord = row.Item as OtherVM;
+        _selectedRecord = row.Item as SupportiveWorkVM;
     }
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.Others.GetAll();
-        _records = Mapper.Map<List<OtherVM>>(dtos);
+        var dtos = await DataProvider.SupportiveWorks.GetAll();
+        _records = Mapper.Map<List<SupportiveWorkVM>>(dtos);
     }
 
     private async Task _add()
@@ -56,19 +56,19 @@ public partial class SupportiveWorks
             Width = "min(70%, 500px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<SupportiveWorkDetailedDialog>(new OtherVM(), parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<SupportiveWorkDetailedDialog>(new SupportiveWorkVM(), parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            OtherVM vm = result.Data as OtherVM;
-            var dto = Mapper.Map<OtherDto>(vm);
-            await DataProvider.Others.Add(dto);
+            SupportiveWorkVM vm = result.Data as SupportiveWorkVM;
+            var dto = Mapper.Map<SupportiveWorkDto>(vm);
+            await DataProvider.SupportiveWorks.Add(dto);
             await _getRecords();
         }
     }
 
-    private async Task _edit(OtherVM record)
+    private async Task _edit(SupportiveWorkVM record)
     {
         DialogParameters parameters = new()
         {
@@ -88,14 +88,14 @@ public partial class SupportiveWorks
 
         if (result.Data is not null)
         {
-            OtherVM vm = result.Data as OtherVM;
-            var dto = Mapper.Map<OtherDto>(vm);
-            await DataProvider.Others.Update(dto);
+            SupportiveWorkVM vm = result.Data as SupportiveWorkVM;
+            var dto = Mapper.Map<SupportiveWorkDto>(vm);
+            await DataProvider.SupportiveWorks.Update(dto);
             await _getRecords();
         }
     }
 
-    private async Task _delete(OtherVM record)
+    private async Task _delete(SupportiveWorkVM record)
     {
         var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the supportive work of type {record.TypeName} of discipline {record.DisciplineTypeName} of project {record.ProjectName}?", "Yes", "No", "Deleting record...");
 
@@ -103,7 +103,7 @@ public partial class SupportiveWorks
 
         if (!result.Cancelled)
         {
-            await DataProvider.Others.Delete(record.Id);
+            await DataProvider.SupportiveWorks.Delete(record.Id);
         }
 
         await dialog.CloseAsync();
@@ -153,11 +153,11 @@ public partial class SupportiveWorks
                     foreach (var item in data)
                     {
                         var vm = item.Get();
-                        var dto = Mapper.Map<OtherDto>(vm);
-                        var added = await DataProvider.Others.Add(dto);
+                        var dto = Mapper.Map<SupportiveWorkDto>(vm);
+                        var added = await DataProvider.SupportiveWorks.Add(dto);
                         if (added == null)
                             continue;
-                        var addedVm = Mapper.Map<OtherVM>(added);
+                        var addedVm = Mapper.Map<SupportiveWorkVM>(added);
                         _records.Add(addedVm);
                     }
                 }
