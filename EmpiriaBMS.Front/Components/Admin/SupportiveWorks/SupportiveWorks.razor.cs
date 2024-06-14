@@ -164,7 +164,7 @@ public partial class SupportiveWorks
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Others import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                Console.WriteLine($"Exception SupportiveWorks import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 // TODO: log error
             }
         }
