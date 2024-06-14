@@ -11,11 +11,14 @@ public class RoleExport : IInport<RoleVM>
 
     public bool IsEditable { get; set; }
 
+    public int ParentRoleId { get; set; }
+
     public RoleExport(RoleVM model)
     {
         Name = model.Name ?? "";
         IsEmployee = model.IsEmployee;
         IsEditable = model.IsEditable;
+        ParentRoleId = model.ParentRoleId ?? 0;
     }
 
     public RoleExport()
@@ -27,6 +30,7 @@ public class RoleExport : IInport<RoleVM>
     {
         Name = Name,
         IsEmployee = IsEmployee,
-        IsEditable = IsEditable
+        IsEditable = IsEditable,
+        ParentRoleId = ParentRoleId
     };
 }
