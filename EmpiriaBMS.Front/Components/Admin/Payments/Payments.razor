@@ -11,6 +11,12 @@
         <div>
             <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
                 <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+                <InputFile @ref="@fileInput" OnChange="ImportFromCSV" style="display: none;" />
+                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
+                              Appearance="Appearance.Outline"
+                              OnClick="@(async () => await TriggerFileInput())">
+                    Import
+                </FluentButton>
                 <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
                               Appearance="Appearance.Outline"
                               OnClick="@(async (e) => await ExportToCSV())"
@@ -25,7 +31,7 @@
                             Pagination="@pagination"
                             TGridItem="PaymentVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 70vh; overflow:auto;">
 
                 <TemplateColumn Title="Name"
@@ -48,7 +54,6 @@
 
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.InvoiceTypeName)" Sortable="true" Title="Invoice Type" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Bank)" Sortable="true" Title="Bank" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Fee)" Sortable="true" Title="Fee" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Payment Date" Align="@Align.Start" />

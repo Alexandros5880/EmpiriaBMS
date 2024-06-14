@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class DisciplineExport
+public class DisciplineExport : IInport<DisciplineVM>
 {
     public long EstimatedMandays { get; set; }
 
@@ -31,4 +32,19 @@ public class DisciplineExport
         TypeId = model.TypeId;
         TypeName = model.Type?.Name ?? "";
     }
+
+    public DisciplineExport()
+    {
+
+    }
+
+    public DisciplineVM Get() => new DisciplineVM()
+    {
+        EstimatedMandays = EstimatedMandays,
+        EstimatedHours = EstimatedHours,
+        EstimatedCompleted = EstimatedCompleted,
+        DeclaredCompleted = DeclaredCompleted,
+        ProjectId = ProjectId,
+        TypeId = TypeId,
+    };
 }

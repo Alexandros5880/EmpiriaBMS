@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class RoleVM : BaseVM
@@ -57,5 +56,38 @@ public class RoleVM : BaseVM
         }
     }
 
+    private int? _parentRoleId;
+    public int? ParentRoleId
+    {
+        get => _parentRoleId;
+        set
+        {
+            if (value == _parentRoleId)
+                return;
+            _parentRoleId = value;
+            NotifyPropertyChanged(nameof(ParentRoleId));
+        }
+    }
+
+    private Role? _parentRole;
+    public Role? ParentRole
+    {
+        get => _parentRole;
+        set
+        {
+            if (value == _parentRole)
+                return;
+            _parentRole = value;
+            NotifyPropertyChanged(nameof(ParentRole));
+        }
+    }
+
+    // Child Roles
+    public ICollection<Role> ChildRoles { get; set; }
+
+    public ICollection<UserRole> UserRoles { get; set; }
+
     public ICollection<RolePermission> RolesPermissions { get; set; }
+
+    public ICollection<Issue> Issues { get; set; }
 }

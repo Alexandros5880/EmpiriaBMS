@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class ClientExport
+public class ClientExport : IInport<ClientVM>
 {
     public string CompanyName { get; set; }
 
@@ -46,4 +47,25 @@ public class ClientExport
         Phone3 = model.Phone3 ?? "";
         Description = model.Description ?? "";
     }
+
+    public ClientExport()
+    {
+
+    }
+
+    public ClientVM Get() => new ClientVM()
+    {
+        CompanyName = CompanyName,
+        AddressId = AddressId,
+        ProxyAddress = ProxyAddress,
+        PasswordHash = PasswordHash,
+        LastName = LastName,
+        MidName = MidName,
+        FirstName = FirstName,
+        TeamsObjectId = TeamsObjectId,
+        Phone1 = Phone1,
+        Phone2 = Phone2,
+        Phone3 = Phone3,
+        Description = Description,
+    };
 }

@@ -1,10 +1,10 @@
-﻿using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Config;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class RolesRepo : Repository<RoleDto, Role>
@@ -30,7 +30,13 @@ public class RolesRepo : Repository<RoleDto, Role>
                 var result = await _context.Set<Role>().AddAsync(Mapping.Mapper.Map<Role>(entity));
                 await _context.SaveChangesAsync();
 
-                return Mapping.Mapper.Map<RoleDto>(result.Entity);
+                var id = result.Entity?.Id;
+                if (id == null)
+                    throw new NullReferenceException(nameof(id));
+
+                var endry = await Get((int)id);
+
+                return Mapping.Mapper.Map<RoleDto>(endry);
             }
         }
         catch (Exception ex)
@@ -120,14 +126,15 @@ public class RolesRepo : Repository<RoleDto, Role>
         Expression<Func<Role, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<Role> roles;
 
             if (pageSize == 0 || pageIndex == 0)
             {
-                
+
 
                 roles = await _context.Set<Role>()
                                       .Where(r => !r.IsDeleted)
@@ -164,7 +171,7 @@ public class RolesRepo : Repository<RoleDto, Role>
                                         .Where(r => r.RoleId == roleId)
                                         .Select(r => r.UserId)
                                         .ToListAsync();
-            
+
             var users = await _context.Users.Where(r => !r.IsDeleted)
                                             .Where(u => userIds.Contains(u.Id))
                                             .ToListAsync();
@@ -230,7 +237,7 @@ public class RolesRepo : Repository<RoleDto, Role>
                 return Mapping.Mapper.Map<RoleDto>(parentRoles.FirstOrDefault(r => r.ParentRoleId == null));
 
             // TODO: RolesRepo.GetParentRole -> Get The Most Paowerfull Role!
-                                    ///
+            ///
 
             // Returns the parrent roles with the most permissions
             var rolesPermissions = await _context.Set<RolePermission>()
@@ -256,7 +263,7 @@ public class RolesRepo : Repository<RoleDto, Role>
                     permisionsCount = permissions.Count;
                     parentRole = role;
                 }
-                
+
             }
 
             return Mapping.Mapper.Map<RoleDto>(parentRole);
@@ -323,7 +330,7 @@ public class RolesRepo : Repository<RoleDto, Role>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var roles =  await _context.Set<Role>()
+            var roles = await _context.Set<Role>()
                                  .Where(r => !r.IsDeleted)
                                  .Where(r => r.IsEmployee)
                                  .Where(r => r.UserRoles.Select(ur => ur.UserId).Contains(userId))
@@ -337,7 +344,7 @@ public class RolesRepo : Repository<RoleDto, Role>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var roles =  await _context.Set<Role>()
+            var roles = await _context.Set<Role>()
                                  .Where(r => !r.IsDeleted)
                                  .Where(r => !r.IsEmployee)
                                  .Where(r => r.UserRoles.Select(ur => ur.UserId).Contains(userId))
@@ -408,7 +415,7 @@ public class RolesRepo : Repository<RoleDto, Role>
             }
 
             List<RolePermission> rps = new List<RolePermission>();
-            foreach(var id in permissionsIds)
+            foreach (var id in permissionsIds)
             {
                 rps.Add(new RolePermission()
                 {

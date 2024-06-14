@@ -25,6 +25,9 @@ public class ContractRepo : Repository<ContractDto, Contract>
                 var result = await _context.Set<Contract>().AddAsync(Mapping.Mapper.Map<Contract>(entity));
                 await _context.SaveChangesAsync();
 
+                if (result.Entity?.Id == null || result.Entity.Id == 0)
+                    throw new NullReferenceException(nameof(result.Entity));
+
                 var Contract = await Get(result.Entity.Id);
 
                 if (Contract == null)
@@ -75,22 +78,30 @@ public class ContractRepo : Repository<ContractDto, Contract>
 
     public async Task<ContractDto?> Get(int id)
     {
-        if (id == 0)
-            throw new ArgumentNullException(nameof(id));
-
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            var invoices = await _context.Set<Invoice>().Include(i => i.Project).ToListAsync();
+            if (id == 0)
+                throw new ArgumentNullException(nameof(id));
 
-            var i = await _context
-                             .Set<Contract>()
-                             .Where(r => !r.IsDeleted)
-                             .Include(c => c.Invoice)
-                             .ThenInclude(i => i.Project)
-                             .Select((c) => _fillInvoice(c, invoices))
-                             .FirstOrDefaultAsync(r => r.Id == id);
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var invoices = await _context.Set<Invoice>().Include(i => i.Project).ToListAsync();
 
-            return Mapping.Mapper.Map<ContractDto>(i);
+                var i = await _context
+                                 .Set<Contract>()
+                                 .Where(r => !r.IsDeleted)
+                                 .Include(c => c.Invoice)
+                                 .ThenInclude(i => i.Project)
+                                 //.Select((c) => _fillInvoice(c, invoices))
+                                 .FirstOrDefaultAsync(r => r.Id == id);
+
+                return Mapping.Mapper.Map<ContractDto>(i);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On Repository.Get({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
         }
     }
 

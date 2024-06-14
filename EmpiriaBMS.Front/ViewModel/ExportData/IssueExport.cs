@@ -1,8 +1,10 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class IssueExport
+public class IssueExport : IInport<IssueVM>
 {
     public string ComplaintDate { get; set; }
 
@@ -51,5 +53,67 @@ public class IssueExport
         Verification = model.Verification ?? "";
         VerificationDate = model.VerificationDate?.ToEuropeFormat() ?? "";
         IsClose = model.IsClose;
+    }
+
+    public IssueExport()
+    {
+
+    }
+
+    public IssueVM Get()
+    {
+        // ComplaintDate
+        DateTime? complaintDate;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            complaintDate = DateTime.ParseExact(ComplaintDate, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{ComplaintDate}' is not in the correct format.");
+            complaintDate = null;
+        }
+
+        // SolutionDate
+        DateTime? solutionDate;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            solutionDate = DateTime.ParseExact(SolutionDate, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{SolutionDate}' is not in the correct format.");
+            solutionDate = null;
+        }
+
+        // VerificationDate
+        DateTime? verificationDate;
+        try
+        {
+            string format = "dd-MM-yyyy"; //  MM-dd-yyyy hh:mm:ss tt
+            verificationDate = DateTime.ParseExact(VerificationDate, format, CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"'{VerificationDate}' is not in the correct format.");
+            verificationDate = null;
+        }
+
+        return new IssueVM()
+        {
+            ComplaintDate = complaintDate,
+            ProjectId = ProjectId,
+            DisplayedRoleId = DisplayedRoleId,
+            CreatorId = CreatorId,
+            Description = Description,
+            Solution = Solution,
+            SolutionDate = solutionDate,
+            Evaluation = Evaluation,
+            Verification = Verification,
+            VerificationDate = verificationDate,
+            IsClose = IsClose
+        };
     }
 }

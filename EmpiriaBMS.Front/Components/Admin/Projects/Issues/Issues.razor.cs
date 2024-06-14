@@ -4,6 +4,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects.Issues;
@@ -128,7 +129,7 @@ public partial class Issues
         }
     }
 
-    #region Export Data
+    #region Import/Export Data
     private async Task ExportToCSV()
     {
         var date = DateTime.Today;
@@ -139,6 +140,45 @@ public partial class Issues
             string csvContent = Data.GetCsvContent(data);
             await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
         }
+    }
+
+    private InputFile fileInput;
+    private async Task ImportFromCSV(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        var filePath = file.Name;
+        var fileType = file.ContentType;
+        if (fileType?.Equals("text/csv") ?? false)
+        {
+            try
+            {
+                Stream stream = file.OpenReadStream();
+                List<IssueExport> data = await Data.ImportData<IssueExport>(stream);
+                if (data != null && data.Count > 0)
+                {
+                    foreach (var item in data)
+                    {
+                        var vm = item.Get();
+                        var dto = Mapper.Map<IssueDto>(vm);
+                        var added = await DataProvider.Issues.Add(dto);
+                        if (added == null)
+                            continue;
+                        var addedDto = Mapper.Map<IssueVM>(added);
+                        _records.Add(addedDto);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Issues import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                // TODO: log error
+            }
+        }
+    }
+    private async Task TriggerFileInput()
+    {
+        var element = fileInput.Element;
+        await MicrosoftTeams.TriggerFileInputClick(element);
     }
     #endregion
 }

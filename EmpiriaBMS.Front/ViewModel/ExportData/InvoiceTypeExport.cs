@@ -1,8 +1,9 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData.Interfaces;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class InvoiceTypeExport
+public class InvoiceTypeExport : IInport<InvoiceTypeVM>
 {
     public string Name { get; set; }
 
@@ -13,4 +14,15 @@ public class InvoiceTypeExport
         Name = model.Name ?? "";
         Description = model.Description ?? "";
     }
+
+    public InvoiceTypeExport()
+    {
+
+    }
+
+    public InvoiceTypeVM Get() => new InvoiceTypeVM()
+    {
+        Name = Name,
+        Description = Description,
+    };
 }

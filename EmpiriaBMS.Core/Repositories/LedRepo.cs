@@ -42,7 +42,13 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
                 var result = await _context.Set<Led>().AddAsync(Mapping.Mapper.Map<Led>(entity));
                 await _context.SaveChangesAsync();
 
-                return Mapping.Mapper.Map<LedDto>(result.Entity);
+                var id = result.Entity?.Id;
+                if (id == null)
+                    throw new NullReferenceException(nameof(id));
+
+                var endry = await Get((int)id);
+
+                return Mapping.Mapper.Map<LedDto>(endry);
             }
         }
         catch (Exception ex)

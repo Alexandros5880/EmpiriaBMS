@@ -11,6 +11,38 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
 {
     public PaymentRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
+    public async Task<PaymentDto> Add(PaymentDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = Mapping.Mapper.Map<Payment>(entity);
+                var result = await _context.Set<Payment>().AddAsync(entry);
+                await _context.SaveChangesAsync();
+
+                var id = result.Entity?.Id;
+                if (id == null)
+                    throw new NullReferenceException(nameof(id));
+
+                var endry = await Get((int)id);
+
+                return Mapping.Mapper.Map<PaymentDto>(endry);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On PaymentRepo.Add(Payment): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
     public new async Task<PaymentDto?> Get(int id)
     {
         if (id == 0)
@@ -25,6 +57,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
                              .ThenInclude(i => i.Type)
                              .Include(r => r.Invoice)
                              .ThenInclude(i => i.Project)
+                             .Include(r => r.Type)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<PaymentDto>(i);
@@ -85,6 +118,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
                                   .ThenInclude(i => i.Type)
                                   .Include(r => r.Invoice)
                                   .ThenInclude(i => i.Project)
+                                  .Include(r => r.Type)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
@@ -99,6 +133,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
                               .ThenInclude(i => i.Type)
                               .Include(r => r.Invoice)
                               .ThenInclude(i => i.Project)
+                              .Include(r => r.Type)
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Payment>, List<PaymentDto>>(i);
