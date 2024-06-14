@@ -27,7 +27,7 @@ public partial class Dashboard : IDisposable
     bool editProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
     bool editDiscipline => _sharedAuthData.Permissions.Any(p => p.Ord == 14);
     bool editDeliverable => _sharedAuthData.Permissions.Any(p => p.Ord == 15);
-    bool editOther => _sharedAuthData.Permissions.Any(p => p.Ord == 16);
+    bool editSupportiveWork => _sharedAuthData.Permissions.Any(p => p.Ord == 16);
     bool seeKpis => _sharedAuthData.Permissions.Any(p => p.Ord == 17);
     bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
     bool seeOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 24);
@@ -78,12 +78,12 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DeliverableVM> _deliverables = new ObservableCollection<DeliverableVM>();
-    private ObservableCollection<SupportiveWorkVM> _others = new ObservableCollection<SupportiveWorkVM>();
+    private ObservableCollection<SupportiveWorkVM> _supportiveWork = new ObservableCollection<SupportiveWorkVM>();
     private List<LedVM> _ledsChanged = new List<LedVM>();
     private List<OfferVM> _offersChanged = new List<OfferVM>();
     private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
     private List<DeliverableVM> _deliverablesChanged = new List<DeliverableVM>();
-    private List<SupportiveWorkVM> _othersChanged = new List<SupportiveWorkVM>();
+    private List<SupportiveWorkVM> _supportiveWorkChanged = new List<SupportiveWorkVM>();
     private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
@@ -97,7 +97,7 @@ public partial class Dashboard : IDisposable
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DeliverableVM __selectedDeliverable = new DeliverableVM();
-    private SupportiveWorkVM _selectedOther = new SupportiveWorkVM();
+    private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
     private int _selectedPmId;
     private InvoiceVM _selectedInvoice = new InvoiceVM();
     #endregion
@@ -151,10 +151,10 @@ public partial class Dashboard : IDisposable
     private bool _hasDeliverablessSelections = true;
 
     // On Add/Edit Other Dialog
-    private FluentDialog _addEditOtherDialog;
-    private bool _isAddEditOtherDialogOdepened = false;
-    private OtherDetailed otherCompoment;
-    private bool _hasOthersSelections = true;
+    private FluentDialog _addEditSupportiveWorkDialog;
+    private bool _isAddEditSupportiveWorkDialogOdepened = false;
+    private OtherDetailed supportiveWorkrCompoment;
+    private bool __hasSapportiveWorksSelections = true;
 
     // On Delete Dialog
     private FluentDialog _deleteDialog;
@@ -242,7 +242,7 @@ public partial class Dashboard : IDisposable
         if (_selectedDiscipline != null)
         {
             _hasDeliverablessSelections = await _dataProvider.DeliverablesTypes.HasDeliverableTypesSelections(_selectedDiscipline.Id);
-            _hasOthersSelections = await _dataProvider.SupportiveWorksTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
+            __hasSapportiveWorksSelections = await _dataProvider.SupportiveWorksTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
         }
     }
 
@@ -258,10 +258,10 @@ public partial class Dashboard : IDisposable
         _selectedProject = null;
         _selectedDiscipline = null;
         __selectedDeliverable = null;
-        _selectedOther = null;
+        _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
-        _others.Clear();
+        _supportiveWork.Clear();
 
         try
         {
@@ -284,10 +284,10 @@ public partial class Dashboard : IDisposable
         _selectedProject = null;
         _selectedDiscipline = null;
         __selectedDeliverable = null;
-        _selectedOther = null;
+        _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
-        _others.Clear();
+        _supportiveWork.Clear();
 
         try
         {
@@ -309,10 +309,10 @@ public partial class Dashboard : IDisposable
         _selectedProject = null;
         _selectedDiscipline = null;
         __selectedDeliverable = null;
-        _selectedOther = null;
+        _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
-        _others.Clear();
+        _supportiveWork.Clear();
 
         try
         {
@@ -468,14 +468,14 @@ public partial class Dashboard : IDisposable
         _offers.Clear();
         _projects.Clear();
         _deliverables.Clear();
-        _others.Clear();
+        _supportiveWork.Clear();
         _disciplines.Clear();
         _selectedLed = led;
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
         __selectedDeliverable = null;
-        _selectedOther = null;
+        _selectedSupportiveWork = null;
 
         await _getOffers();
 
@@ -489,13 +489,13 @@ public partial class Dashboard : IDisposable
         var offer = _offers.FirstOrDefault(p => p.Id == offerId);
         _projects.Clear();
         _deliverables.Clear();
-        _others.Clear();
+        _supportiveWork.Clear();
         _disciplines.Clear();
         _selectedOffer = offer;
         _selectedProject = null;
         _selectedDiscipline = null;
         __selectedDeliverable = null;
-        _selectedOther = null;
+        _selectedSupportiveWork = null;
 
         await _getProjects(active: true);
 
@@ -508,12 +508,12 @@ public partial class Dashboard : IDisposable
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
         _deliverables.Clear();
-        _others.Clear();
+        _supportiveWork.Clear();
         _disciplines.Clear();
         _selectedProject = project;
         _selectedDiscipline = null;
         __selectedDeliverable = null;
-        _selectedOther = null;
+        _selectedSupportiveWork = null;
 
         var disciplines = await _dataProvider.Projects.GetDisciplines(project.Id, _sharedAuthData.LogedUser.Id, getAllDisciplines);
 
@@ -539,9 +539,9 @@ public partial class Dashboard : IDisposable
         foreach (var di in draws)
             _deliverables.Add(Mapper.Map<DeliverableVM>(di));
 
-        _others.Clear();
+        _supportiveWork.Clear();
         foreach (var di in others)
-            _others.Add(Mapper.Map<SupportiveWorkVM>(di));
+            _supportiveWork.Add(Mapper.Map<SupportiveWorkVM>(di));
 
         await _checkIfHasAnySelections();
 
@@ -557,8 +557,8 @@ public partial class Dashboard : IDisposable
 
     private void OnSelectDoc(SupportiveWorkVM doc)
     {
-        if (doc == null || doc.Id == _selectedOther?.Id) return;
-        _selectedOther = doc;
+        if (doc == null || doc.Id == _selectedSupportiveWork?.Id) return;
+        _selectedSupportiveWork = doc;
         StateHasChanged();
     }
     #endregion
@@ -623,13 +623,13 @@ public partial class Dashboard : IDisposable
         _leds.Clear();
         _offers.Clear();
         _projects.Clear();
-        _others.Clear();
+        _supportiveWork.Clear();
         _deliverables.Clear();
         _disciplines.Clear();
         _selectedLed = null;
         _selectedOffer = null;
         _selectedProject = null;
-        _selectedOther = null;
+        _selectedSupportiveWork = null;
         __selectedDeliverable = null;
         _selectedDiscipline = null;
         _selectedProject = null;
@@ -758,13 +758,13 @@ public partial class Dashboard : IDisposable
 
         other.Time = newTimeSpan;
 
-        if (_othersChanged.Any(d => d.Id == other.Id))
+        if (_supportiveWorkChanged.Any(d => d.Id == other.Id))
         {
-            var d = _othersChanged.FirstOrDefault(d => d.Id == other.Id);
+            var d = _supportiveWorkChanged.FirstOrDefault(d => d.Id == other.Id);
             d.Time = other.Time;
         }
         else
-            _othersChanged.Add(other);
+            _supportiveWorkChanged.Add(other);
 
         StateHasChanged();
     }
@@ -867,7 +867,7 @@ public partial class Dashboard : IDisposable
             }
 
             // Update Others
-            foreach (var other in _othersChanged)
+            foreach (var other in _supportiveWorkChanged)
             {
                 //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
                 await _dataProvider.SupportiveWorks.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
@@ -882,7 +882,7 @@ public partial class Dashboard : IDisposable
                 await _dataProvider.Users.AddCorporateEventTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
 
             _deliverablesChanged.Clear();
-            _othersChanged.Clear();
+            _supportiveWorkChanged.Clear();
 
             await _getProjects();
 
@@ -909,14 +909,14 @@ public partial class Dashboard : IDisposable
         _offersChanged.Clear();
         _projectsChanged.Clear();
         _deliverablesChanged.Clear();
-        _othersChanged.Clear();
+        _supportiveWorkChanged.Clear();
 
         _selectedLed = null;
         _selectedOffer = null;
         //_selectedProject = null;
         //_selectedDiscipline = null;
         //__selectedDeliverable = null;
-        //_selectedOther = null;
+        //_selectedSupportiveWork = null;
 
         StartWorkClick();
         _endWorkDialog.Hide();
@@ -1276,41 +1276,41 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Add/Edit/Delete Other Actions
-    private void AddOther()
+    private void AddSupportiveWork()
     {
-        otherCompoment.PrepairForNew();
-        _addEditOtherDialog.Show();
-        _isAddEditOtherDialogOdepened = true;
+        supportiveWorkrCompoment.PrepairForNew();
+        _addEditSupportiveWorkDialog.Show();
+        _isAddEditSupportiveWorkDialogOdepened = true;
     }
 
-    private void EditOther()
+    private void EditSupportiveWork()
     {
-        otherCompoment.PrepairForEdit(_selectedOther);
-        _addEditOtherDialog.Show();
-        _isAddEditOtherDialogOdepened = true;
+        supportiveWorkrCompoment.PrepairForEdit(_selectedSupportiveWork);
+        _addEditSupportiveWorkDialog.Show();
+        _isAddEditSupportiveWorkDialogOdepened = true;
     }
 
-    private void CloseAddOtherClick()
+    private void CloseAddSupportiveWorkClick()
     {
-        if (_isAddEditOtherDialogOdepened)
+        if (_isAddEditSupportiveWorkDialogOdepened)
         {
-            _addEditOtherDialog.Hide();
-            _isAddEditOtherDialogOdepened = false;
+            _addEditSupportiveWorkDialog.Hide();
+            _isAddEditSupportiveWorkDialogOdepened = false;
         }
     }
 
-    public async Task _addEditOtherDialogAccept()
+    public async Task _addEditSupportiveWorkDialogAccept()
     {
-        await otherCompoment.HandleValidSubmit();
-        _addEditOtherDialog.Hide();
-        _isAddEditOtherDialogOdepened = false;
+        await supportiveWorkrCompoment.HandleValidSubmit();
+        _addEditSupportiveWorkDialog.Hide();
+        _isAddEditSupportiveWorkDialogOdepened = false;
         await Refresh();
     }
 
-    private void DeleteOther()
+    private void DeleteSupportiveWork()
     {
-        _deleteDialogMsg = $"Are you sure you want delete {_selectedOther.Type.Name}";
-        _deleteObj = nameof(_selectedOther);
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedSupportiveWork.Type.Name}";
+        _deleteObj = nameof(_selectedSupportiveWork);
         _deleteDialog.Show();
         _isDeleteDialogOdepened = true;
     }
@@ -1332,8 +1332,8 @@ public partial class Dashboard : IDisposable
                 case nameof(__selectedDeliverable):
                     await _dataProvider.Deliverables.Delete(__selectedDeliverable.Id);
                     break;
-                case nameof(_selectedOther):
-                    await _dataProvider.SupportiveWorks.Delete(_selectedOther.Id);
+                case nameof(_selectedSupportiveWork):
+                    await _dataProvider.SupportiveWorks.Delete(_selectedSupportiveWork.Id);
                     break;
             }
 
@@ -1436,10 +1436,10 @@ public partial class Dashboard : IDisposable
     {
         var date = DateTime.Today;
         var fileName = $"SupportiveWorks-{date.ToEuropeFormat()}.csv";
-        var data = _others.ToList();
-        if (_others.Count > 0)
+        var data = _supportiveWork.ToList();
+        if (_supportiveWork.Count > 0)
         {
-            string csvContent = Data.GetCsvContent(_others);
+            string csvContent = Data.GetCsvContent(_supportiveWork);
             await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
         }
     }

@@ -575,29 +575,29 @@
                                                     </div>
                                                     <div class="col-6">
                                                         <FluentStack HorizontalAlignment="HorizontalAlignment.End">
-                                                            @if (isWorkingMode && editOther)
+                                                            @if (isWorkingMode && editSupportiveWork)
                                                             {
-                                                                @if (_selectedOther != null)
+                                                                @if (_selectedSupportiveWork != null)
                                                                 {
                                                                     <span class="fluent--delete-28-regular col-1"
-                                                                          @onclick="@(() => DeleteOther())" />
-                                                                    @if (_hasOthersSelections)
+                                                                          @onclick="@(() => DeleteSupportiveWork())" />
+                                                                    @if (__hasSapportiveWorksSelections)
                                                                     {
                                                                         <span class="material-symbols--edit-outline col-1"
-                                                                              @onclick="@(() => EditOther())" />
+                                                                              @onclick="@(() => EditSupportiveWork())" />
                                                                     }
                                                                 }
-                                                                @if (_hasOthersSelections)
+                                                                @if (__hasSapportiveWorksSelections)
                                                                 {
                                                                     <span class="grommet-icons--add col-1"
-                                                                          @onclick="@(() => AddOther())" />
+                                                                          @onclick="@(() => AddSupportiveWork())" />
                                                                 }
                                                             }
 
                                                             <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
                                                                           Appearance="Appearance.Outline"
                                                                           OnClick="@(async (e) => await ExportSupportiveWorksToCSV())"
-                                                                          Disabled="@(_others.Count() == 0)">
+                                                                          Disabled="@(_supportiveWork.Count() == 0)">
                                                                 Export
                                                             </FluentButton>
                                                         </FluentStack>
@@ -608,29 +608,29 @@
                                                 <table class="table table-hover table-warning text-center">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col" class="sticky-header">Other</th>
+                                                            <th scope="col" class="sticky-header">Supportive Work</th>
                                                             <th scope="col" class="sticky-header">Total Hours</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var _other in _others)
+                                                        @foreach (var _supportiveWork in _supportiveWork)
                                                         {
-                                                            <tr class="align-middle" @onclick="@(() => OnSelectDoc(_other))">
+                                                            <tr class="align-middle" @onclick="@(() => OnSelectDoc(_supportiveWork))">
 
                                                                 <td class="align-middle
-                                                        @(((_selectedOther == null ||
-                                                                !_selectedOther.Id.Equals(_other.Id))
+                                                        @(((_selectedSupportiveWork == null ||
+                                                                !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
                                                                     ? "" : "selected_table_supportiveworks_row"))"
                                                                     style="min-width: 110px;">
-                                                                    <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
+                                                                    <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
                                                                 </td>
 
                                                                 <td class="align-middle
-                                                        @(((_selectedOther == null ||
-                                                                !_selectedOther.Id.Equals(_other.Id))
+                                                        @(((_selectedSupportiveWork == null ||
+                                                                !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
                                                                     ? "" : "selected_table_supportiveworks_row"))"
                                                                     style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                                                    <label>@GetOtherMenHours(_other.Id) h</label>
+                                                                    <label>@GetOtherMenHours(_supportiveWork.Id) h</label>
                                                                 </td>
 
                                                             </tr>
@@ -932,17 +932,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var _other in _others)
+                                @foreach (var _supportiveWork in _supportiveWork)
                                 {
                                     <tr class="align-middle">
                                         <td class="align-middle">
-                                            <div class="align-middle h-100"><labe>@_other.Type.Name</labe></div>
+                                            <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
                                         </td>
                                         <td class="align-middle">
                                             <TimeInput MinTime="TimeSpan.Zero"
                                                        MaxTime="@remainingTime"
-                                                       Time="@_other.Time"
-                                                       OnPropertyChanged=@((time) => _onOtherTimeChanged(_other, time)) />
+                                                       Time="@_supportiveWork.Time"
+                                                       OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
                                         </td>
                                     </tr>
                                 }
@@ -1370,8 +1370,8 @@
     </FluentDialog>
 
     <!-- On Add/Edit Other Dialog -->
-    <FluentDialog @ref="_addEditOtherDialog"
-                  Hidden="@(!_isAddEditOtherDialogOdepened || _startLoading)"
+    <FluentDialog @ref="_addEditSupportiveWorkDialog"
+                  Hidden="@(!_isAddEditSupportiveWorkDialogOdepened || _startLoading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: auto !important;
@@ -1380,13 +1380,13 @@
         <div class="modal-body row mb-1">
 
             <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseAddOtherClick"></span>
+                <span class="carbon--close-outline float-end" @onclick="CloseAddSupportiveWorkClick"></span>
             </div>
 
             <div class="col-12 justify-content-center">
                 @if (_selectedDiscipline != null)
                 {
-                    <OtherDetailed @ref="@otherCompoment" DisciplineId="@_selectedDiscipline.Id" />
+                    <OtherDetailed @ref="@supportiveWorkrCompoment" DisciplineId="@_selectedDiscipline.Id" />
                 }
                 else
                 {
@@ -1398,10 +1398,10 @@
 
         <div class="row">
             <FluentButton class="col-6"
-                          OnClick="@(async () => await _addEditOtherDialogAccept())">
+                          OnClick="@(async () => await _addEditSupportiveWorkDialogAccept())">
                 Ok
             </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => CloseAddOtherClick())">
+            <FluentButton class="col-6" OnClick="@(() => CloseAddSupportiveWorkClick())">
                 Cancel
             </FluentButton>
         </div>
