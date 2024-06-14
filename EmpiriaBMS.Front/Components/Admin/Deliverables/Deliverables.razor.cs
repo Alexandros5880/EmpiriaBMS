@@ -156,6 +156,8 @@ public partial class Deliverables
                         var vm = item.Get();
                         var dto = Mapper.Map<DrawingDto>(vm);
                         var added = await DataProvider.Drawings.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedVM = Mapper.Map<DrawingVM>(added);
                         _records.Add(addedVM);
                     }

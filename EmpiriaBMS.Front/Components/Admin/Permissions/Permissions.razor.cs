@@ -111,6 +111,8 @@ public partial class Permissions
                         var vm = item.Get();
                         var dto = Mapper.Map<PermissionDto>(vm);
                         var added = await DataProvider.Permissions.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<PermissionVM>(added);
                         _records.Add(addedDto);
                     }

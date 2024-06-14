@@ -167,6 +167,8 @@ public partial class Payments
                         var vm = item.Get();
                         var dto = Mapper.Map<PaymentDto>(vm);
                         var added = await DataProvider.Payments.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<PaymentVM>(added);
                         _records.Add(addedDto);
                     }

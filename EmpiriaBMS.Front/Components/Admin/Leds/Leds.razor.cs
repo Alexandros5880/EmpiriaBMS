@@ -159,6 +159,8 @@ public partial class Leds
                         var vm = item.Get();
                         var dto = Mapper.Map<LedDto>(vm);
                         var added = await DataProvider.Leds.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<LedVM>(added);
                         _records.Add(addedDto);
                     }

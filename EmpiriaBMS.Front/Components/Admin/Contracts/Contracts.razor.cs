@@ -171,6 +171,8 @@ public partial class Contracts
                         var vm = item.Get();
                         var dto = Mapper.Map<ContractDto>(vm);
                         var added = await DataProvider.Contracts.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<ContractVM>(added);
                         _records.Add(addedDto);
                     }

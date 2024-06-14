@@ -153,6 +153,8 @@ public partial class ProjectCategories
                         var vm = item.Get();
                         var dto = Mapper.Map<ProjectCategoryDto>(vm);
                         var added = await DataProvider.ProjectsCategories.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<ProjectCategoryVM>(added);
                         _records.Add(addedDto);
                     }

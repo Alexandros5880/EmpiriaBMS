@@ -155,6 +155,8 @@ public partial class InvoiceTypes
                         var vm = item.Get();
                         var dto = Mapper.Map<InvoiceTypeDto>(vm);
                         var added = await DataProvider.InvoiceTypes.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<InvoiceTypeVM>(added);
                         _records.Add(addedDto);
                     }

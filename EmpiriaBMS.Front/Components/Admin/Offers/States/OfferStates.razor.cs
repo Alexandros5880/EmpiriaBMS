@@ -154,6 +154,8 @@ public partial class OfferStates
                         var vm = item.Get();
                         var dto = Mapper.Map<OfferStateDto>(vm);
                         var added = await DataProvider.OfferStates.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<OfferStateVM>(added);
                         _records.Add(addedDto);
                     }

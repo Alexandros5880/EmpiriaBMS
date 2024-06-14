@@ -154,6 +154,8 @@ public partial class DeliverableTypes
                         var vm = item.Get();
                         var dto = Mapper.Map<DrawingTypeDto>(vm);
                         var added = await DataProvider.DrawingsTypes.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<DrawingTypeVM>(added);
                         _records.Add(addedDto);
                     }

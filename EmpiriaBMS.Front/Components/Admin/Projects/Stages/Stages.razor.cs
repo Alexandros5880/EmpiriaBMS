@@ -154,6 +154,8 @@ public partial class Stages
                         var vm = item.Get();
                         var dto = Mapper.Map<ProjectStageDto>(vm);
                         var added = await DataProvider.ProjectStages.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<ProjectStageVM>(added);
                         _records.Add(addedDto);
                     }

@@ -161,6 +161,8 @@ public partial class Issues
                         var vm = item.Get();
                         var dto = Mapper.Map<IssueDto>(vm);
                         var added = await DataProvider.Issues.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<IssueVM>(added);
                         _records.Add(addedDto);
                     }

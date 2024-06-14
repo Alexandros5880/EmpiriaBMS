@@ -176,6 +176,8 @@ public partial class Projects
                         var vm = item.Get();
                         var dto = Mapper.Map<ProjectDto>(vm);
                         var added = await DataProvider.Projects.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<ProjectVM>(added);
                         Source.Add(addedDto);
                     }

@@ -153,6 +153,8 @@ public partial class Disciplines
                         var vm = item.Get();
                         var dto = Mapper.Map<DisciplineDto>(vm);
                         var added = await DataProvider.Disciplines.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<DisciplineVM>(added);
                         _records.Add(addedDto);
                     }

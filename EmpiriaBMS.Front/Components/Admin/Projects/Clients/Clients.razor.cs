@@ -201,6 +201,8 @@ public partial class Clients
                         var vm = item.Get();
                         var dto = Mapper.Map<ClientDto>(vm);
                         var added = await DataProvider.Clients.Add(dto);
+                        if (added == null)
+                            continue;
                         var addedDto = Mapper.Map<ClientVM>(added);
                         _records.Add(addedDto);
                     }
