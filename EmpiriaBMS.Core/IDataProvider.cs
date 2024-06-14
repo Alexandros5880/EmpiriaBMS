@@ -8,12 +8,12 @@ namespace EmpiriaBMS.Core
         public UsersRepo Users { get; set; }
         public ProjectsRepo Projects { get; set; }
         public DisciplineRepo Disciplines { get; set; }
-        public DrawingRepo Drawings { get; set; }
-        public OtherRepo Others { get; set; }
+        public DeliverableRepo Deliverables { get; set; }
+        public SupportiveWorkRepo SupportiveWorks { get; set; }
         public InvoiceRepo Invoices { get; set; }
         public ProjectCategoryRepo ProjectsCategories { get; set; }
-        public OtherTypeRepo OthersTypes { get; set; }
-        public DrawingTypeRepo DrawingsTypes { get; set; }
+        public SupportiveWorkTypeRepo SupportiveWorksTypes { get; set; }
+        public DeliverableTypeRepo DeliverablesTypes { get; set; }
         public DisciplineTypeRepo DisciplinesTypes { get; set; }
         public PermissionRepo Permissions { get; set; }
         public IssueRepo Issues { get; set; }

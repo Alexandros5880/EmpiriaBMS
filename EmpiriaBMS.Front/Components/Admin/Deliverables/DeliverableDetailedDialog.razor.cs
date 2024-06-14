@@ -1,17 +1,16 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Admin.Deliverables;
 
-public partial class DeliverableDetailedDialog : IDialogContentComponent<DrawingVM>
+public partial class DeliverableDetailedDialog : IDialogContentComponent<DeliverableVM>
 {
     [Parameter]
-    public DrawingVM Content { get; set; } = default!;
+    public DeliverableVM Content { get; set; } = default!;
 
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
@@ -32,8 +31,8 @@ public partial class DeliverableDetailedDialog : IDialogContentComponent<Drawing
 
             if (Content.Type != null)
             {
-                var typeDto = Mapping.Mapper.Map<DrawingTypeDto>(Content.Type);
-                Type = _mapper.Map<DrawingTypeVM>(typeDto);
+                var typeDto = Mapping.Mapper.Map<DeliverableTypeDto>(Content.Type);
+                Type = _mapper.Map<DeliverableTypeVM>(typeDto);
             }
 
             StateHasChanged();
@@ -89,7 +88,7 @@ public partial class DeliverableDetailedDialog : IDialogContentComponent<Drawing
 
     #region Get Related Records
     ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
-    ObservableCollection<DrawingTypeVM> _types = new ObservableCollection<DrawingTypeVM>();
+    ObservableCollection<DeliverableTypeVM> _types = new ObservableCollection<DeliverableTypeVM>();
 
     private DisciplineVM _discipline = new DisciplineVM();
     public DisciplineVM Discipline
@@ -103,8 +102,8 @@ public partial class DeliverableDetailedDialog : IDialogContentComponent<Drawing
         }
     }
 
-    private DrawingTypeVM _type = new DrawingTypeVM();
-    public DrawingTypeVM Type
+    private DeliverableTypeVM _type = new DeliverableTypeVM();
+    public DeliverableTypeVM Type
     {
         get => _type;
         set
@@ -131,8 +130,8 @@ public partial class DeliverableDetailedDialog : IDialogContentComponent<Drawing
 
     private async Task _getTypes()
     {
-        var dtos = await _dataProvider.DrawingsTypes.GetAll();
-        var vms = _mapper.Map<List<DrawingTypeVM>>(dtos);
+        var dtos = await _dataProvider.DeliverablesTypes.GetAll();
+        var vms = _mapper.Map<List<DeliverableTypeVM>>(dtos);
         _types.Clear();
         vms.ForEach(_types.Add);
     }

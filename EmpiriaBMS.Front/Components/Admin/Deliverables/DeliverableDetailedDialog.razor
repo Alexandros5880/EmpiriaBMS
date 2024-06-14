@@ -4,7 +4,7 @@
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
 
-@implements IDialogContentComponent<DrawingVM>
+@implements IDialogContentComponent<DeliverableVM>
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
@@ -68,7 +68,7 @@
                                 Items="@_types"
                                 Height="200px"
                                 Width="100%"
-                                TOption="DrawingTypeVM"
+                                TOption="DeliverableTypeVM"
                                 OptionText="@(p => p.Name)"
                                 OptionValue="@(c => c.Id.ToString())"
                                 @bind-SelectedOption="@Type" />

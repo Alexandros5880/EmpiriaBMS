@@ -4,10 +4,10 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class OtherTypeVM : BaseVM, ITypeVM
+public class DeliverableTypeVM : BaseVM, ITypeVM
 {
-    private string? _name;
-    public string? Name
+    private string _name;
+    public string Name
     {
         get => _name;
         set
@@ -32,5 +32,5 @@ public class OtherTypeVM : BaseVM, ITypeVM
         }
     }
 
-    public List<Project> Projects { get; set; }
+    public ICollection<Deliverable> Deliverables { get; set; }
 }

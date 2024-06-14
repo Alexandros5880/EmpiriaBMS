@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class DrawingVM : BaseVM
+public class DeliverableVM : BaseVM
 {
     // Not Mapped
     private TimeSpan _time = TimeSpan.Zero;
@@ -33,8 +33,8 @@ public class DrawingVM : BaseVM
         }
     }
 
-    private DrawingType _type;
-    public DrawingType Type
+    private DeliverableType _type;
+    public DeliverableType Type
     {
         get => _type;
         set

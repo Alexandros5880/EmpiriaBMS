@@ -7,10 +7,10 @@ using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Admin.SupportiveWorks;
 
-public partial class SupportiveWorkDetailedDialog : IDialogContentComponent<OtherVM>
+public partial class SupportiveWorkDetailedDialog : IDialogContentComponent<SupportiveWorkVM>
 {
     [Parameter]
-    public OtherVM Content { get; set; } = default!;
+    public SupportiveWorkVM Content { get; set; } = default!;
 
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
@@ -31,8 +31,8 @@ public partial class SupportiveWorkDetailedDialog : IDialogContentComponent<Othe
 
             if (Content.Type != null)
             {
-                var typeDto = Mapping.Mapper.Map<OtherTypeDto>(Content.Type);
-                Type = _mapper.Map<OtherTypeVM>(typeDto);
+                var typeDto = Mapping.Mapper.Map<SupportiveWorkTypeDto>(Content.Type);
+                Type = _mapper.Map<SupportiveWorkTypeVM>(typeDto);
             }
 
             StateHasChanged();
@@ -88,7 +88,7 @@ public partial class SupportiveWorkDetailedDialog : IDialogContentComponent<Othe
 
     #region Get Related Records
     ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
-    ObservableCollection<OtherTypeVM> _types = new ObservableCollection<OtherTypeVM>();
+    ObservableCollection<SupportiveWorkTypeVM> _types = new ObservableCollection<SupportiveWorkTypeVM>();
 
     private DisciplineVM _discipline = new DisciplineVM();
     public DisciplineVM Discipline
@@ -102,8 +102,8 @@ public partial class SupportiveWorkDetailedDialog : IDialogContentComponent<Othe
         }
     }
 
-    private OtherTypeVM _type = new OtherTypeVM();
-    public OtherTypeVM Type
+    private SupportiveWorkTypeVM _type = new SupportiveWorkTypeVM();
+    public SupportiveWorkTypeVM Type
     {
         get => _type;
         set
@@ -130,8 +130,8 @@ public partial class SupportiveWorkDetailedDialog : IDialogContentComponent<Othe
 
     private async Task _getTypes()
     {
-        var dtos = await _dataProvider.OthersTypes.GetAll();
-        var vms = _mapper.Map<List<OtherTypeVM>>(dtos);
+        var dtos = await _dataProvider.SupportiveWorksTypes.GetAll();
+        var vms = _mapper.Map<List<SupportiveWorkTypeVM>>(dtos);
         _types.Clear();
         vms.ForEach(_types.Add);
     }

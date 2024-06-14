@@ -2,11 +2,11 @@
 
 namespace EmpiriaBMS.Models.Models;
 
-public class Other : Entity
+public class SupportiveWork : Entity
 {
     [Required]
     public int TypeId { get; set; }
-    public OtherType Type { get; set; }
+    public SupportiveWorkType Type { get; set; }
 
     [Required]
     public int DisciplineId { get; set; }
@@ -16,5 +16,5 @@ public class Other : Entity
 
     public ICollection<DailyTime> DailyTime { get; set; }
 
-    public ICollection<OtherEmployee> OthersEmployees { get; set; }
+    public ICollection<SupportiveWorkEmployee> SupportiveWorksEmployees { get; set; }
 }

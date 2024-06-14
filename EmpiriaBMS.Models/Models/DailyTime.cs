@@ -24,10 +24,10 @@ public class DailyTime : Entity
     public User? CorporateUser { get; set; }
 
     public int? DrawingId { get; set; }
-    public Drawing? Drawing { get; set; }
+    public Deliverable? Drawing { get; set; }
 
     public int? OtherId { get; set; }
-    public Other? Other { get; set; }
+    public SupportiveWork? Other { get; set; }
 
     public int? DisciplineId { get; set; }
     public Discipline? Discipline { get; set; }

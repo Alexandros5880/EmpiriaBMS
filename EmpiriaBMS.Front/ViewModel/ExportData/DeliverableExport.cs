@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class DeliverableExport : IInport<DrawingVM>
+public class DeliverableExport : IInport<DeliverableVM>
 {
     public int TypeId { get; set; }
 
@@ -22,7 +22,7 @@ public class DeliverableExport : IInport<DrawingVM>
 
     public string CompletionDate { get; set; }
 
-    public DeliverableExport(DrawingVM model)
+    public DeliverableExport(DeliverableVM model)
     {
         TypeId = model.TypeId ?? 0;
         TypeName = model.Type?.Name ?? "";
@@ -39,7 +39,7 @@ public class DeliverableExport : IInport<DrawingVM>
 
     }
 
-    public DrawingVM Get()
+    public DeliverableVM Get()
     {
         DateTime? date;
         try
@@ -53,7 +53,7 @@ public class DeliverableExport : IInport<DrawingVM>
             date = null;
         }
 
-        return new DrawingVM()
+        return new DeliverableVM()
         {
             TypeId = TypeId,
             DisciplineId = DisciplineId,

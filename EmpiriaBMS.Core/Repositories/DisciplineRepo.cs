@@ -1,9 +1,9 @@
-﻿using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using EmpiriaBMS.Models.Models;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Config;
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -61,7 +61,8 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         Expression<Func<Discipline, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<Discipline> ds;
@@ -88,7 +89,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<List<DrawingDto>> GetDraws(int id)
+    public async Task<List<DeliverableDto>> GetDraws(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -96,33 +97,33 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var draws = await _context
-                             .Set<Drawing>()
+                             .Set<Deliverable>()
                              .Where(r => !r.IsDeleted)
                              .Where(d => d.DisciplineId == id)
                              .Include(d => d.Type)
                              .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(draws);
+            return Mapping.Mapper.Map<List<Deliverable>, List<DeliverableDto>>(draws);
         }
     }
 
-    public async Task<List<DrawingDto>> GetDraws(int id, int userId, bool all)
+    public async Task<List<DeliverableDto>> GetDraws(int id, int userId, bool all)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Drawing> drawings;
+            List<Deliverable> drawings;
             var disciplineDrawingsIds = await _context
-                                         .Set<Drawing>()
+                                         .Set<Deliverable>()
                                          .Where(r => !r.IsDeleted)
                                          .Where(d => d.DisciplineId == id)
                                          .Select(d => d.Id)
                                          .ToListAsync();
             if (all)
             {
-                drawings = await _context.Set<Drawing>()
+                drawings = await _context.Set<Deliverable>()
 
                     .Where(r => !r.IsDeleted)
                                          .Where(d => disciplineDrawingsIds.Contains(d.Id))
@@ -131,25 +132,25 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             }
             else
             {
-                var drawingIds = await _context.Set<DrawingEmployee>()
+                var deliverablesIds = await _context.Set<DeliverableEmployee>()
                                                .Where(r => !r.IsDeleted)
-                                               .Where(de => disciplineDrawingsIds.Contains(de.DrawingId))
+                                               .Where(de => disciplineDrawingsIds.Contains(de.DeliverableId))
                                                .Where(de => de.EmployeeId == userId)
-                                               .Select(de => de.DrawingId)
+                                               .Select(de => de.DeliverableId)
                                                .ToListAsync();
 
-                drawings = await _context.Set<Drawing>()
+                drawings = await _context.Set<Deliverable>()
                                           .Where(r => !r.IsDeleted)
-                                         .Where(d => drawingIds.Contains(d.Id))
+                                         .Where(d => deliverablesIds.Contains(d.Id))
                                          .Include(d => d.Type)
                                          .ToListAsync();
             }
 
-            return Mapping.Mapper.Map<List<Drawing>, List<DrawingDto>>(drawings);
+            return Mapping.Mapper.Map<List<Deliverable>, List<DeliverableDto>>(drawings);
         }
     }
 
-    public async Task<List<OtherDto>> GetOthers(int id)
+    public async Task<List<SupportiveWorkDto>> GetOthers(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -157,33 +158,33 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var others = await _context
-                             .Set<Other>()
+                             .Set<SupportiveWork>()
                              .Where(r => !r.IsDeleted)
                              .Where(d => d.DisciplineId == id)
                              .Include(d => d.Type)
                              .ToListAsync();
 
-            return Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+            return Mapping.Mapper.Map<List<SupportiveWork>, List<SupportiveWorkDto>>(others);
         }
     }
 
-    public async Task<List<OtherDto>> GetOthers(int id, int userId, bool all)
+    public async Task<List<SupportiveWorkDto>> GetOthers(int id, int userId, bool all)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Other> others;
+            List<SupportiveWork> others;
             var disciplineOthersIds = await _context
-                                         .Set<Other>()
+                                         .Set<SupportiveWork>()
                                          .Where(r => !r.IsDeleted)
                                          .Where(d => d.DisciplineId == id)
                                          .Select(d => d.Id)
                                          .ToListAsync();
             if (all)
             {
-                others = await _context.Set<Other>()
+                others = await _context.Set<SupportiveWork>()
                                        .Where(r => !r.IsDeleted)
                                        .Where(o => disciplineOthersIds.Contains(o.Id))
                                        .Include(d => d.Type)
@@ -191,21 +192,21 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             }
             else
             {
-                var otherIds = await _context.Set<OtherEmployee>()
+                var otherIds = await _context.Set<SupportiveWorkEmployee>()
                                              .Where(r => !r.IsDeleted)
-                                             .Where(de => disciplineOthersIds.Contains(de.OtherId))
+                                             .Where(de => disciplineOthersIds.Contains(de.SupportiveWorkId))
                                              .Where(de => de.EmployeeId == userId)
-                                             .Select(de => de.OtherId)
+                                             .Select(de => de.SupportiveWorkId)
                                              .ToListAsync();
 
-                others = await _context.Set<Other>()
+                others = await _context.Set<SupportiveWork>()
                                        .Where(r => !r.IsDeleted)
                                        .Where(o => otherIds.Contains(o.Id))
                                        .Include(d => d.Type)
                                        .ToListAsync();
             }
 
-            var result = Mapping.Mapper.Map<List<Other>, List<OtherDto>>(others);
+            var result = Mapping.Mapper.Map<List<SupportiveWork>, List<SupportiveWorkDto>>(others);
 
             return result.OrderBy(d => d.Type?.Name).ToList();
         }

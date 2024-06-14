@@ -12,12 +12,12 @@ namespace EmpiriaBMS.Front.Components.Admin.SupportiveWorks.Types;
 public partial class SupportiveWorkTypes
 {
     #region Data Grid
-    private List<OtherTypeVM> _records = new List<OtherTypeVM>();
+    private List<SupportiveWorkTypeVM> _records = new List<SupportiveWorkTypeVM>();
     private string _filterString = string.Empty;
-    IQueryable<OtherTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<SupportiveWorkTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private OtherTypeVM _selectedRecord = new OtherTypeVM();
+    private SupportiveWorkTypeVM _selectedRecord = new SupportiveWorkTypeVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -31,15 +31,15 @@ public partial class SupportiveWorkTypes
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<OtherTypeVM> row)
+    private void HandleRowFocus(FluentDataGridRow<SupportiveWorkTypeVM> row)
     {
-        _selectedRecord = row.Item as OtherTypeVM;
+        _selectedRecord = row.Item as SupportiveWorkTypeVM;
     }
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.OthersTypes.GetAll();
-        _records = Mapper.Map<List<OtherTypeVM>>(dtos);
+        var dtos = await DataProvider.SupportiveWorksTypes.GetAll();
+        _records = Mapper.Map<List<SupportiveWorkTypeVM>>(dtos);
     }
 
     private async Task _add()
@@ -56,19 +56,19 @@ public partial class SupportiveWorkTypes
             PreventScroll = true
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new OtherTypeVM(), parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new SupportiveWorkTypeVM(), parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            OtherTypeVM vm = result.Data as OtherTypeVM;
-            var dto = Mapper.Map<OtherTypeDto>(vm);
-            await DataProvider.OthersTypes.Add(dto);
+            SupportiveWorkTypeVM vm = result.Data as SupportiveWorkTypeVM;
+            var dto = Mapper.Map<SupportiveWorkTypeDto>(vm);
+            await DataProvider.SupportiveWorksTypes.Add(dto);
             await _getRecords();
         }
     }
 
-    private async Task _edit(OtherTypeVM record)
+    private async Task _edit(SupportiveWorkTypeVM record)
     {
         DialogParameters parameters = new()
         {
@@ -87,14 +87,14 @@ public partial class SupportiveWorkTypes
 
         if (result.Data is not null)
         {
-            OtherTypeVM vm = result.Data as OtherTypeVM;
-            var dto = Mapper.Map<OtherTypeDto>(vm);
-            await DataProvider.OthersTypes.Update(dto);
+            SupportiveWorkTypeVM vm = result.Data as SupportiveWorkTypeVM;
+            var dto = Mapper.Map<SupportiveWorkTypeDto>(vm);
+            await DataProvider.SupportiveWorksTypes.Update(dto);
             await _getRecords();
         }
     }
 
-    private async Task _delete(OtherTypeVM record)
+    private async Task _delete(SupportiveWorkTypeVM record)
     {
         var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the supportive work type {record.Name}?", "Yes", "No", "Deleting record...");
 
@@ -102,7 +102,7 @@ public partial class SupportiveWorkTypes
 
         if (!result.Cancelled)
         {
-            await DataProvider.OthersTypes.Delete(record.Id);
+            await DataProvider.SupportiveWorksTypes.Delete(record.Id);
         }
 
         await dialog.CloseAsync();
@@ -152,11 +152,11 @@ public partial class SupportiveWorkTypes
                     foreach (var item in data)
                     {
                         var vm = item.Get();
-                        var dto = Mapper.Map<OtherTypeDto>(vm);
-                        var added = await DataProvider.OthersTypes.Add(dto);
+                        var dto = Mapper.Map<SupportiveWorkTypeDto>(vm);
+                        var added = await DataProvider.SupportiveWorksTypes.Add(dto);
                         if (added == null)
                             continue;
-                        var addedDto = Mapper.Map<OtherTypeVM>(added);
+                        var addedDto = Mapper.Map<SupportiveWorkTypeVM>(added);
                         _records.Add(addedDto);
                     }
                 }

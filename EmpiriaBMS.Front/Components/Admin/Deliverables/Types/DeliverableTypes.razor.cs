@@ -13,12 +13,12 @@ namespace EmpiriaBMS.Front.Components.Admin.Deliverables.Types;
 public partial class DeliverableTypes
 {
     #region Data Grid
-    private List<DrawingTypeVM> _records = new List<DrawingTypeVM>();
+    private List<DeliverableTypeVM> _records = new List<DeliverableTypeVM>();
     private string _filterString = string.Empty;
-    IQueryable<DrawingTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<DeliverableTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private DrawingTypeVM _selectedRecord = new DrawingTypeVM();
+    private DeliverableTypeVM _selectedRecord = new DeliverableTypeVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -32,15 +32,15 @@ public partial class DeliverableTypes
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<DrawingTypeVM> row)
+    private void HandleRowFocus(FluentDataGridRow<DeliverableTypeVM> row)
     {
-        _selectedRecord = row.Item as DrawingTypeVM;
+        _selectedRecord = row.Item as DeliverableTypeVM;
     }
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.DrawingsTypes.GetAll();
-        _records = Mapper.Map<List<DrawingTypeVM>>(dtos);
+        var dtos = await DataProvider.DeliverablesTypes.GetAll();
+        _records = Mapper.Map<List<DeliverableTypeVM>>(dtos);
     }
 
     private async Task _add()
@@ -57,19 +57,19 @@ public partial class DeliverableTypes
             PreventScroll = true
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new DrawingTypeVM(), parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new DeliverableTypeVM(), parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            DrawingTypeVM vm = result.Data as DrawingTypeVM;
-            var dto = Mapper.Map<DrawingTypeDto>(vm);
-            await DataProvider.DrawingsTypes.Add(dto);
+            DeliverableTypeVM vm = result.Data as DeliverableTypeVM;
+            var dto = Mapper.Map<DeliverableTypeDto>(vm);
+            await DataProvider.DeliverablesTypes.Add(dto);
             await _getRecords();
         }
     }
 
-    private async Task _edit(DrawingTypeVM record)
+    private async Task _edit(DeliverableTypeVM record)
     {
         DialogParameters parameters = new()
         {
@@ -88,14 +88,14 @@ public partial class DeliverableTypes
 
         if (result.Data is not null)
         {
-            DrawingTypeVM vm = result.Data as DrawingTypeVM;
-            var dto = Mapper.Map<DrawingTypeDto>(vm);
-            await DataProvider.DrawingsTypes.Update(dto);
+            DeliverableTypeVM vm = result.Data as DeliverableTypeVM;
+            var dto = Mapper.Map<DeliverableTypeDto>(vm);
+            await DataProvider.DeliverablesTypes.Update(dto);
             await _getRecords();
         }
     }
 
-    private async Task _delete(DrawingTypeVM record)
+    private async Task _delete(DeliverableTypeVM record)
     {
         var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the deliverable type  {record.Name}?", "Yes", "No", "Deleting record...");
 
@@ -103,7 +103,7 @@ public partial class DeliverableTypes
 
         if (!result.Cancelled)
         {
-            await DataProvider.DrawingsTypes.Delete(record.Id);
+            await DataProvider.DeliverablesTypes.Delete(record.Id);
         }
 
         await dialog.CloseAsync();
@@ -152,11 +152,11 @@ public partial class DeliverableTypes
                     foreach (var item in data)
                     {
                         var vm = item.Get();
-                        var dto = Mapper.Map<DrawingTypeDto>(vm);
-                        var added = await DataProvider.DrawingsTypes.Add(dto);
+                        var dto = Mapper.Map<DeliverableTypeDto>(vm);
+                        var added = await DataProvider.DeliverablesTypes.Add(dto);
                         if (added == null)
                             continue;
-                        var addedDto = Mapper.Map<DrawingTypeVM>(added);
+                        var addedDto = Mapper.Map<DeliverableTypeVM>(added);
                         _records.Add(addedDto);
                     }
                 }

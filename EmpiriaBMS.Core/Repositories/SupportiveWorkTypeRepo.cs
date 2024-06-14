@@ -3,33 +3,28 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class OtherTypeRepo : Repository<OtherTypeDto, OtherType>, IDisposable
+public class SupportiveWorkTypeRepo : Repository<SupportiveWorkTypeDto, SupportiveWorkType>, IDisposable
 {
-    public OtherTypeRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public SupportiveWorkTypeRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
 
-    public async Task<List<OtherTypeDto>> GetOtherTypesSelections(int disciplineId)
+    public async Task<List<SupportiveWorkTypeDto>> GetOtherTypesSelections(int disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             if (disciplineId == 0)
             {
-                var noOtherTypes = await _context.Set<OtherType>()
+                var noOtherTypes = await _context.Set<SupportiveWorkType>()
                                                  .Where(r => !r.IsDeleted)
                                                  .ToListAsync();
 
-                return Mapping.Mapper.Map<List<OtherTypeDto>>(noOtherTypes);
+                return Mapping.Mapper.Map<List<SupportiveWorkTypeDto>>(noOtherTypes);
             }
             else
             {
-                var noOtherTypesIds = await _context.Set<Other>()
+                var noOtherTypesIds = await _context.Set<SupportiveWork>()
                                                     .Where(r => !r.IsDeleted)
                                                     .Where(d => d.DisciplineId == disciplineId)
                                                     .Select(d => d.TypeId)
@@ -40,19 +35,19 @@ public class OtherTypeRepo : Repository<OtherTypeDto, OtherType>, IDisposable
 
                 if (noOtherTypesIds.Count() == 0)
                 {
-                    var allOtherTypes = await _context.Set<OtherType>()
+                    var allOtherTypes = await _context.Set<SupportiveWorkType>()
                                                       .Where(r => !r.IsDeleted)
                                                       .ToListAsync();
 
-                    return Mapping.Mapper.Map<List<OtherTypeDto>>(allOtherTypes);
+                    return Mapping.Mapper.Map<List<SupportiveWorkTypeDto>>(allOtherTypes);
                 }
 
-                var noOtherTypes = await _context.Set<OtherType>()
+                var noOtherTypes = await _context.Set<SupportiveWorkType>()
                                                  .Where(r => !r.IsDeleted)
                                                  .Where(t => !noOtherTypesIds.Contains(t.Id))
                                                  .ToListAsync();
 
-                return Mapping.Mapper.Map<List<OtherTypeDto>>(noOtherTypes);
+                return Mapping.Mapper.Map<List<SupportiveWorkTypeDto>>(noOtherTypes);
             }
         }
     }
@@ -64,7 +59,7 @@ public class OtherTypeRepo : Repository<OtherTypeDto, OtherType>, IDisposable
             if (disciplineId == 0)
                 throw new ArgumentNullException(nameof(disciplineId));
 
-            var noOtherTypesIds = await _context.Set<Other>()
+            var noOtherTypesIds = await _context.Set<SupportiveWork>()
                                                 .Where(r => !r.IsDeleted)
                                                 .Where(d => d.DisciplineId == disciplineId)
                                                 .Select(d => d.TypeId)
@@ -73,7 +68,7 @@ public class OtherTypeRepo : Repository<OtherTypeDto, OtherType>, IDisposable
             if (noOtherTypesIds == null)
                 throw new NullReferenceException(nameof(noOtherTypesIds));
 
-            var result = await _context.Set<OtherType>()
+            var result = await _context.Set<SupportiveWorkType>()
                                        .Where(r => !r.IsDeleted)
                                        .AnyAsync(t => !noOtherTypesIds.Contains(t.Id));
 

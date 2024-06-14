@@ -2,12 +2,12 @@
 
 namespace EmpiriaBMS.Models.Models;
 
-public class OtherType : Entity
+public class SupportiveWorkType : Entity
 {
     [Required]
     public string Name { get; set; }
 
     public string? Description { get; set; }
 
-    public ICollection<Other> Others { get; set; }
+    public ICollection<SupportiveWork> SupportiveWorks { get; set; }
 }

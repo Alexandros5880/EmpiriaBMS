@@ -2,13 +2,13 @@
 
 namespace EmpiriaBMS.Models.Models;
 
-public class DrawingType : Entity
+public class DeliverableType : Entity
 {
     [Required]
     public string Name { get; set; }
 
     public string? Description { get; set; }
 
-    public ICollection<Drawing> Drawings { get; set; }
+    public ICollection<Deliverable> Deliverables { get; set; }
 }
 

@@ -11,12 +11,12 @@ public class DataProvider : IDataProvider, IDisposable
     public UsersRepo Users { get; set; }
     public ProjectsRepo Projects { get; set; }
     public DisciplineRepo Disciplines { get; set; }
-    public DrawingRepo Drawings { get; set; }
-    public OtherRepo Others { get; set; }
+    public DeliverableRepo Deliverables { get; set; }
+    public SupportiveWorkRepo SupportiveWorks { get; set; }
     public InvoiceRepo Invoices { get; set; }
     public ProjectCategoryRepo ProjectsCategories { get; set; }
-    public OtherTypeRepo OthersTypes { get; set; }
-    public DrawingTypeRepo DrawingsTypes { get; set; }
+    public SupportiveWorkTypeRepo SupportiveWorksTypes { get; set; }
+    public DeliverableTypeRepo DeliverablesTypes { get; set; }
     public DisciplineTypeRepo DisciplinesTypes { get; set; }
     public PermissionRepo Permissions { get; set; }
     public IssueRepo Issues { get; set; }
@@ -42,12 +42,12 @@ public class DataProvider : IDataProvider, IDisposable
         Users = new UsersRepo(dbFactory);
         Projects = new ProjectsRepo(dbFactory);
         Disciplines = new DisciplineRepo(dbFactory);
-        Drawings = new DrawingRepo(dbFactory);
-        Others = new OtherRepo(dbFactory);
+        Deliverables = new DeliverableRepo(dbFactory);
+        SupportiveWorks = new SupportiveWorkRepo(dbFactory);
         Invoices = new InvoiceRepo(dbFactory);
         ProjectsCategories = new ProjectCategoryRepo(dbFactory);
-        OthersTypes = new OtherTypeRepo(dbFactory);
-        DrawingsTypes = new DrawingTypeRepo(dbFactory);
+        SupportiveWorksTypes = new SupportiveWorkTypeRepo(dbFactory);
+        DeliverablesTypes = new DeliverableTypeRepo(dbFactory);
         DisciplinesTypes = new DisciplineTypeRepo(dbFactory);
         Permissions = new PermissionRepo(dbFactory);
         Issues = new IssueRepo(dbFactory);
@@ -78,12 +78,12 @@ public class DataProvider : IDataProvider, IDisposable
                 Users.Dispose();
                 Projects.Dispose();
                 Disciplines.Dispose();
-                Drawings.Dispose();
-                Others.Dispose();
+                Deliverables.Dispose();
+                SupportiveWorks.Dispose();
                 Invoices.Dispose();
                 ProjectsCategories.Dispose();
-                OthersTypes.Dispose();
-                DrawingsTypes.Dispose();
+                SupportiveWorksTypes.Dispose();
+                DeliverablesTypes.Dispose();
                 DisciplinesTypes.Dispose();
                 Permissions.Dispose();
                 Issues.Dispose();

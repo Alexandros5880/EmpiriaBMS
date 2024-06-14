@@ -9,16 +9,16 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<DrawingDto, DrawingVM>().ReverseMap();
+        CreateMap<DeliverableDto, DeliverableVM>().ReverseMap();
         CreateMap<InvoiceDto, InvoiceVM>().ReverseMap();
         CreateMap<RoleDto, RoleVM>().ReverseMap();
         CreateMap<UserDto, UserVM>().ReverseMap();
-        CreateMap<OtherDto, OtherVM>().ReverseMap();
+        CreateMap<SupportiveWorkDto, SupportiveWorkVM>().ReverseMap();
         CreateMap<DisciplineDto, DisciplineVM>().ReverseMap();
         CreateMap<ProjectDto, ProjectVM>().ReverseMap();
         CreateMap<ProjectCategoryDto, ProjectCategoryVM>().ReverseMap();
-        CreateMap<OtherTypeDto, OtherTypeVM>().ReverseMap();
-        CreateMap<DrawingTypeDto, DrawingTypeVM>().ReverseMap();
+        CreateMap<SupportiveWorkTypeDto, SupportiveWorkTypeVM>().ReverseMap();
+        CreateMap<DeliverableTypeDto, DeliverableTypeVM>().ReverseMap();
         CreateMap<DisciplineTypeDto, DisciplineTypeVM>().ReverseMap();
         CreateMap<PermissionDto, PermissionVM>().ReverseMap();
         CreateMap<IssueDto, IssueVM>().ReverseMap();

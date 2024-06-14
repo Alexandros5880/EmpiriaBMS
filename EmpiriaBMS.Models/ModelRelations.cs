@@ -42,28 +42,28 @@ public static class ModelRelations
                .WithMany(p => p.ProjectsSubConstructors)
                .HasForeignKey(ps => ps.ProjectId);
 
-        // Drawings Employees
-        builder.Entity<DrawingEmployee>()
-               .HasKey(de => new { de.DrawingId, de.EmployeeId });
-        builder.Entity<DrawingEmployee>()
-               .HasOne(de => de.Drawing)
-               .WithMany(de => de.DrawingsEmployees)
-               .HasForeignKey(de => de.DrawingId);
-        builder.Entity<DrawingEmployee>()
+        // Deliverable Employees
+        builder.Entity<DeliverableEmployee>()
+               .HasKey(de => new { de.DeliverableId, de.EmployeeId });
+        builder.Entity<DeliverableEmployee>()
+               .HasOne(de => de.Deliverable)
+               .WithMany(de => de.DeliverablesEmployees)
+               .HasForeignKey(de => de.DeliverableId);
+        builder.Entity<DeliverableEmployee>()
                .HasOne(de => de.Employee)
-               .WithMany(de => de.DrawingsEmployees)
+               .WithMany(de => de.DeliverablesEmployees)
                .HasForeignKey(de => de.EmployeeId);
 
         // Others Employees
-        builder.Entity<OtherEmployee>()
-               .HasKey(de => new { de.OtherId, de.EmployeeId });
-        builder.Entity<OtherEmployee>()
-               .HasOne(de => de.Other)
-               .WithMany(de => de.OthersEmployees)
-               .HasForeignKey(de => de.OtherId);
-        builder.Entity<OtherEmployee>()
+        builder.Entity<SupportiveWorkEmployee>()
+               .HasKey(de => new { de.SupportiveWorkId, de.EmployeeId });
+        builder.Entity<SupportiveWorkEmployee>()
+               .HasOne(de => de.SupportiveWork)
+               .WithMany(de => de.SupportiveWorksEmployees)
+               .HasForeignKey(de => de.SupportiveWorkId);
+        builder.Entity<SupportiveWorkEmployee>()
                .HasOne(de => de.Employee)
-               .WithMany(de => de.OthersEmployees)
+               .WithMany(de => de.SupportiveWorksEmployees)
                .HasForeignKey(de => de.EmployeeId);
 
         // Engineers Disciplines
@@ -221,14 +221,14 @@ public static class ModelRelations
 
         // Discipline Draws
         builder.Entity<Discipline>()
-               .HasMany(p => p.Drawings)
+               .HasMany(p => p.Deliverables)
                .WithOne(c => c.Discipline)
                .HasForeignKey(c => c.DisciplineId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // DrawingType Drawings
-        builder.Entity<DrawingType>()
-               .HasMany(p => p.Drawings)
+        // DrawingType Deliverables
+        builder.Entity<DeliverableType>()
+               .HasMany(p => p.Deliverables)
                .WithOne(c => c.Type)
                .HasForeignKey(c => c.TypeId)
                .OnDelete(DeleteBehavior.Cascade);
@@ -241,8 +241,8 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.Cascade);
 
         // OtherType Others
-        builder.Entity<OtherType>()
-               .HasMany(p => p.Others)
+        builder.Entity<SupportiveWorkType>()
+               .HasMany(p => p.SupportiveWorks)
                .WithOne(c => c.Type)
                .HasForeignKey(c => c.TypeId)
                .OnDelete(DeleteBehavior.Cascade);
@@ -304,14 +304,14 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // Other DailyTime
-        builder.Entity<Other>()
+        builder.Entity<SupportiveWork>()
                .HasMany(p => p.DailyTime)
                .WithOne(c => c.Other)
                .HasForeignKey(c => c.OtherId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // Drawing DailyTime
-        builder.Entity<Drawing>()
+        builder.Entity<Deliverable>()
                .HasMany(p => p.DailyTime)
                .WithOne(c => c.Drawing)
                .HasForeignKey(c => c.DrawingId)
