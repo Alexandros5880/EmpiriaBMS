@@ -3,11 +3,6 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
@@ -57,7 +52,7 @@ public class DeliverableTypeRepo : Repository<DeliverableTypeDto, DeliverableTyp
         }
     }
 
-    public async Task<bool> HasDrawingTypesSelections(int disciplineId)
+    public async Task<bool> HasDeliverableTypesSelections(int disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {

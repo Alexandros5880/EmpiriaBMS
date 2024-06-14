@@ -23,7 +23,7 @@ public partial class Dashboard : IDisposable
     public bool EditMyHours => _sharedAuthData.PermissionOrds.Contains(2);
     public bool SeeMyHours => _sharedAuthData.PermissionOrds.Contains(8);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
-    bool getAllDrawings => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
+    bool getAllDeliverables => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
     bool editProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
     bool editDiscipline => _sharedAuthData.Permissions.Any(p => p.Ord == 14);
     bool editDeliverable => _sharedAuthData.Permissions.Any(p => p.Ord == 15);
@@ -241,7 +241,7 @@ public partial class Dashboard : IDisposable
             _hasDisciplinesSelections = await _dataProvider.DisciplinesTypes.HasDisciplineTypesSelections(_selectedProject.Id);
         if (_selectedDiscipline != null)
         {
-            _hasDeliverablessSelections = await _dataProvider.DeliverablesTypes.HasDrawingTypesSelections(_selectedDiscipline.Id);
+            _hasDeliverablessSelections = await _dataProvider.DeliverablesTypes.HasDeliverableTypesSelections(_selectedDiscipline.Id);
             _hasOthersSelections = await _dataProvider.OthersTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
         }
     }
@@ -532,7 +532,7 @@ public partial class Dashboard : IDisposable
 
         _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
-        var draws = await _dataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, getAllDrawings);
+        var draws = await _dataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, getAllDeliverables);
         var others = await _dataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, _sharedAuthData.LogedUser.Id, true);
 
         _deliverables.Clear();
