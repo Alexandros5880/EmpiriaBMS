@@ -9,7 +9,15 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class OfferRepo : Repository<OfferDto, Offer>
 {
-    public OfferRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    private ProjectsRepo _projectRepo;
+
+    public OfferRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        ProjectsRepo projectRepo
+    ) : base(DbFactory)
+    {
+        _projectRepo = projectRepo;
+    }
 
     public new async Task<OfferDto?> Add(OfferDto entity, bool update = false)
     {
@@ -169,6 +177,118 @@ public class OfferRepo : Repository<OfferDto, Offer>
 
             // Save Changes
             await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<double> GetSumOfPayedFee(int offerId)
+    {
+        try
+        {
+            if (offerId == 0)
+                throw new ArgumentNullException(nameof(offerId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return 0;
+
+            double sum = 0;
+
+            foreach (var projectId in projectIds)
+            {
+                sum += await _projectRepo.GetSumOfPayedFee(projectId);
+            }
+
+            return sum;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On OfferRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<double> GetSumOfPotencialFee(int offerId)
+    {
+        try
+        {
+            if (offerId == 0)
+                throw new ArgumentNullException(nameof(offerId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return 0;
+
+            double sum = 0;
+
+            foreach (var projectId in projectIds)
+            {
+                sum += await _projectRepo.GetSumOfPotencialFee(projectId);
+            }
+
+            return sum;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On OfferRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<bool> IsClosed(int offerId)
+    {
+        try
+        {
+            if (offerId == 0)
+                throw new ArgumentNullException(nameof(offerId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return false;
+
+            List<bool> isClosed = new List<bool>();
+
+            foreach (var projectId in projectIds)
+            {
+                var closed = await _projectRepo.IsClosed(projectId);
+                isClosed.Add(closed);
+            }
+
+            return isClosed.Count == 0 || isClosed.Any(c => c == false);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On OfferRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return false;
         }
     }
 }

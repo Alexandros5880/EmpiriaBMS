@@ -1,0 +1,16 @@
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using ChartJs.Blazor;
+
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+
+@if (_pendingPaymentsPerProject != null && _pendingPaymentsPerProjectBarConfig != null)
+{
+    <Chart Config="_pendingPaymentsPerProjectBarConfig"></Chart>
+}
+else
+{
+    <span class="text-warning ms-5">No Data!</span>
+}

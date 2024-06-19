@@ -1,6 +1,7 @@
-﻿@using EmpiriaBMS.Front.Services
-@using EmpiriaBMS.Front.Horizontal
+﻿@using EmpiriaBMS.Front.Services;
+@using EmpiriaBMS.Front.Horizontal;
 @using ChartJs.Blazor;
+@using EmpiriaBMS.Front.Components.KPIS;
 
 @inject IDataProvider _dataProvider
 @inject SharedAuthDataService _sharedAuthData
@@ -51,7 +52,7 @@
                 @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
                 {
                     <FluentNavLink OnClick="@((e) => TabMenuClick(e, 5))"
-                                   Class="@((tabs[5] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
+                                   Class="@((tabs[5] ? "active-nav-link" : ""))">Pending Peyments</FluentNavLink>
                 }
                 
                 @if (SeeEmployeeTurnoverKPI)
@@ -63,7 +64,13 @@
                 @if (SeePendingsPaymentsKPI)
                 {
                     <FluentNavLink OnClick="@((e) => TabMenuClick(e, 7))"
-                                   Class="@((tabs[7] ? "active-nav-link" : ""))">Pending Peyments</FluentNavLink>
+                                   Class="@((tabs[7] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
+                }
+
+                @if (SeeNextYearIncome)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 8))"
+                                   Class="@((tabs[8] ? "active-nav-link" : ""))">Next Year Income</FluentNavLink>
                 }
                 
             </FluentNavMenu>
@@ -119,7 +126,7 @@
                     @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
                     {
                         <div style="margin-top: 50px;">
-                            <ProjectsMissedDeadlineKPI />
+                            <PandingPaymentsKPI />
                         </div>
                     }
                 }
@@ -137,7 +144,16 @@
                     @if (SeePendingsPaymentsKPI)
                     {
                         <div style="margin-top: 50px;">
-                            <PandingPaymentsKPI />
+                            <ProjectsMissedDeadlineKPI />
+                        </div>
+                    }
+                }
+                else if (tabs[8])
+                {
+                    @if (SeeNextYearIncome)
+                    {
+                        <div style="margin-top: 50px;">
+                            <NextYearNetIncomeKPI />
                         </div>
                     }
                 }

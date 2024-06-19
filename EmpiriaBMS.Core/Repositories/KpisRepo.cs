@@ -13,9 +13,26 @@ public class KpisRepo : IDisposable
 {
     private bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    protected readonly LedRepo _ledRepo;
 
-    public KpisRepo(IDbContextFactory<AppDbContext> dbFactory) =>
+    public KpisRepo(
+        IDbContextFactory<AppDbContext> dbFactory,
+        LedRepo ledRepo
+    )
+    {
         _dbContextFactory = dbFactory;
+        _ledRepo = ledRepo;
+    }
+
+    public async Task<double> GetNextYearNetIncome()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var icome = await _ledRepo.GetSumOfAllOppenLedsPotencialFee();
+
+            return icome;
+        }
+    }
 
     public async Task<decimal> GetMissedDeadLineProjects()
     {
@@ -392,6 +409,31 @@ public class KpisRepo : IDisposable
                                         DelayedPaymentsCount = g.Count(),
                                         Project = Mapping.Mapper.Map<ProjectDto>(g.Key),
                                         Payments = Mapping.Mapper.Map<List<PaymentDto>>(g.ToList())
+                                    }
+                                 );
+            return result;
+        }
+    }
+
+    public async Task<Dictionary<string, PendingPayments>> GetPendingPayments()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var payments = await _context.Set<Payment>()
+                                       .Where(r => !r.IsDeleted)
+                                       .Include(p => p.Invoice)
+                                       .ThenInclude(i => i.Project)
+                                       .ToListAsync();
+
+            var result = payments.GroupBy(p => p.Invoice.Project)
+                                 .ToDictionary(
+                                    g => g.Key.Name ?? "Uknown Project",
+                                    g => new PendingPayments()
+                                    {
+                                        Project = Mapping.Mapper.Map<ProjectDto>(g.Key as Project),
+                                        Payments = Mapping.Mapper.Map<List<PaymentDto>>(g.ToList()),
+                                        PendingPaymentsCount = g.ToList().Count(),
+                                        PendingSum = g.ToList().Sum(p => p.Fee)
                                     }
                                  );
             return result;
