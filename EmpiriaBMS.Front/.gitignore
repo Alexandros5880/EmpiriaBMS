@@ -34,3 +34,23 @@ bld/
 
 # Notification local store
 .notification.localstore.json
+
+
+bin/
+obj/
+
+EmpiriaBMS.Core/bin/
+EmpiriaBMS.Core/obj/
+
+EmpiriaBMS.EF.CLI/bin/
+EmpiriaBMS.EF.CLI/obj/
+EmpiriaBMS.EF.CLI/Migrations/
+
+EmpiriaBMS.Front/bin/
+EmpiriaBMS.Front/obj/
+
+EmpiriaBMS.Models/bin/
+EmpiriaBMS.Models/obj/
+
+.vs
+.github/
