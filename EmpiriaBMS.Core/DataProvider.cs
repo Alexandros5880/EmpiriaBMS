@@ -65,7 +65,7 @@ public class DataProvider : IDataProvider, IDisposable
         TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory);
         Contracts = new ContractRepo(dbFactory);
         Leds = new LedRepo(dbFactory, Offers, Projects, Invoices, Contracts);
-        KPIS = new KpisRepo(dbFactory);
+        KPIS = new KpisRepo(dbFactory, Leds);
     }
 
     protected virtual void Dispose(bool disposing)
