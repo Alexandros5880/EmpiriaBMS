@@ -65,6 +65,12 @@
                     <FluentNavLink OnClick="@((e) => TabMenuClick(e, 7))"
                                    Class="@((tabs[7] ? "active-nav-link" : ""))">Pending Peyments</FluentNavLink>
                 }
+
+                @if (SeeNextYearIncome)
+                {
+                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 8))"
+                                   Class="@((tabs[8] ? "active-nav-link" : ""))">Next Year Income</FluentNavLink>
+                }
                 
             </FluentNavMenu>
 
@@ -137,7 +143,16 @@
                     @if (SeePendingsPaymentsKPI)
                     {
                         <div style="margin-top: 50px;">
-                            <PandingPaymentsKPI />
+                            @* <PandingPaymentsKPI /> *@
+                        </div>
+                    }
+                }
+                else if (tabs[8])
+                {
+                    @if (SeeNextYearIncome)
+                    {
+                        <div style="margin-top: 50px;">
+                            @* <NextYearIncomeKPI /> *@
                         </div>
                     }
                 }
