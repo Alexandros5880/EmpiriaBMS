@@ -180,7 +180,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         }
     }
 
-    public async Task<double> GetSumOfInvoicesFee(int offerId)
+    public async Task<double> GetSumOfPayedFee(int offerId)
     {
         try
         {
@@ -205,14 +205,51 @@ public class OfferRepo : Repository<OfferDto, Offer>
 
             foreach (var projectId in projectIds)
             {
-                sum += await _projectRepo.GetSumOfInvoicesFee(projectId);
+                sum += await _projectRepo.GetSumOfPayedFee(projectId);
             }
 
             return sum;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On OfferRepo.GetSumOfInvoicesFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On OfferRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<double> GetSumOfPotencialFee(int offerId)
+    {
+        try
+        {
+            if (offerId == 0)
+                throw new ArgumentNullException(nameof(offerId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return 0;
+
+            double sum = 0;
+
+            foreach (var projectId in projectIds)
+            {
+                sum += await _projectRepo.GetSumOfPotencialFee(projectId);
+            }
+
+            return sum;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On OfferRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }

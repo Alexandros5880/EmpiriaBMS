@@ -1037,7 +1037,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<double> GetSumOfInvoicesFee(int projectId)
+    public async Task<double> GetSumOfPayedFee(int projectId)
     {
         try
         {
@@ -1062,14 +1062,51 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             foreach (var invoiceId in invoiceIds)
             {
-                sum += await _invoiceRepo.GetSumOfPaymentsFee(invoiceId);
+                sum += await _invoiceRepo.GetSumOfPayedFee(invoiceId);
             }
 
             return sum;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On ProjectsRepo.GetSumOfInvoicesFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On ProjectsRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<double> GetSumOfPotencialFee(int projectId)
+    {
+        try
+        {
+            if (projectId == 0)
+                throw new ArgumentNullException(nameof(projectId));
+
+            List<int> invoiceIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                invoiceIds = await _context
+                                .Set<Invoice>()
+                                .Where(i => !i.IsDeleted && i.ProjectId == projectId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (invoiceIds == null || invoiceIds.Count == 0)
+                return 0;
+
+            double sum = 0;
+
+            foreach (var invoiceId in invoiceIds)
+            {
+                sum += await _invoiceRepo.GetSumOfPotencialFee(invoiceId);
+            }
+
+            return sum;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On ProjectsRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }

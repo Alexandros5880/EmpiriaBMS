@@ -241,7 +241,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public async Task<double> GetSumOfPaymentsFee(int invoiceId)
+    public async Task<double> GetSumOfPayedFee(int invoiceId)
     {
         try
         {
@@ -260,7 +260,40 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On InvoiceRepo.GetSumOfPaymentsFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On InvoiceRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<double> GetSumOfPotencialFee(int invoiceId)
+    {
+        try
+        {
+            if (invoiceId == 0)
+                throw new ArgumentNullException(nameof(invoiceId));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var paymentSum = await _context
+                                .Set<Payment>()
+                                .Where(r => !r.IsDeleted && r.InvoiceId == invoiceId)
+                                .SumAsync(p => p.Fee);
+
+                if (paymentSum == null)
+                    throw new NullReferenceException(nameof(paymentSum));
+
+                var invoice = await _context.Set<Invoice>()
+                    .FirstOrDefaultAsync(i => i.Id == invoiceId);
+
+                if (invoice == null)
+                    throw new NullReferenceException(nameof(invoice));
+
+                return (invoice?.Fee ?? 0) - paymentSum;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On InvoiceRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
