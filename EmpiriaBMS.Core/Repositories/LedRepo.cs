@@ -232,4 +232,218 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
             await _context.SaveChangesAsync();
         }
     }
+
+    #region Next Income Functions
+    public async Task<List<LedDto>> GetAllOppenLeds()
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var allLedsIds = await _context.Set<Led>()
+                    .Where(l => !l.IsDeleted)
+                    .Select(l => l.Id)
+                    .ToListAsync();
+
+                if (allLedsIds == null || allLedsIds.Count == 0)
+                    return new List<LedDto>();
+
+                var leds = new List<LedDto>();
+
+                foreach (var id in allLedsIds)
+                {
+                    var isClosed = await IsClosed(id);
+                    if (!isClosed)
+                    {
+                        var led = await Get(id);
+                        if (led == null)
+                            continue;
+
+                        leds.Add(led);
+                    }
+                }
+
+                return leds;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On LedRepo.GetAllOppenLeds(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return new List<LedDto>();
+        }
+    }
+
+    public async Task<double> GetSumOfAllOppenLedsPotencialFee()
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var allLedsIds = await _context.Set<Led>()
+                    .Where(l => !l.IsDeleted)
+                    .Select(l => l.Id)
+                    .ToListAsync();
+
+                if (allLedsIds == null || allLedsIds.Count == 0)
+                    return 0;
+
+                double sumPontecialFee = 0;
+
+                foreach (var id in allLedsIds)
+                {
+                    var isClosed = await IsClosed(id);
+                    if (!isClosed)
+                    {
+                        var sum = await GetSumOfPotencialFee(id);
+                        sumPontecialFee += sum;
+                    }
+                }
+
+                return sumPontecialFee;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On LedRepo.GetSumOfAllOppenLedsPotencialFee(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<double> GetSumOfPayedFee(int ledId)
+    {
+        try
+        {
+            if (ledId == 0)
+                throw new ArgumentNullException(nameof(ledId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var offerId = await _context.Set<Offer>()
+                    .Where(o => !o.IsDeleted && o.LedId == ledId)
+                    .Select(l => l.Id)
+                    .FirstOrDefaultAsync();
+
+                if (offerId == 0)
+                    throw new ArgumentNullException(nameof(offerId));
+
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return 0;
+
+            double sum = 0;
+
+            foreach (var projectId in projectIds)
+            {
+                sum += await _projectRep.GetSumOfPayedFee(projectId);
+            }
+
+            return sum;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On LedRepo.GetSumOfPayedFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<double> GetSumOfPotencialFee(int ledId)
+    {
+        try
+        {
+            if (ledId == 0)
+                throw new ArgumentNullException(nameof(ledId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var offerId = await _context.Set<Offer>()
+                    .Where(o => !o.IsDeleted && o.LedId == ledId)
+                    .Select(l => l.Id)
+                    .FirstOrDefaultAsync();
+
+                if (offerId == 0)
+                    throw new ArgumentNullException(nameof(offerId));
+
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return 0;
+
+            double sum = 0;
+
+            foreach (var projectId in projectIds)
+            {
+                sum += await _projectRep.GetSumOfPotencialFee(projectId);
+            }
+
+            return sum;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On LedRepo.GetSumOfPotencialFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<bool> IsClosed(int ledId)
+    {
+        try
+        {
+            if (ledId == 0)
+                throw new ArgumentNullException(nameof(ledId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var offerId = await _context.Set<Offer>()
+                    .Where(o => !o.IsDeleted && o.LedId == ledId)
+                    .Select(l => l.Id)
+                    .FirstOrDefaultAsync();
+
+                if (offerId == 0)
+                    throw new ArgumentNullException(nameof(offerId));
+
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return false;
+
+            List<bool> isClosed = new List<bool>();
+
+            foreach (var projectId in projectIds)
+            {
+                var closed = await _projectRep.IsClosed(projectId);
+                isClosed.Add(closed);
+            }
+
+            return isClosed.Count == 0 || isClosed.Any(c => c == false);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On LedRepo.IsClosed({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return false;
+        }
+    }
+
+    #endregion
 }

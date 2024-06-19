@@ -470,6 +470,18 @@ public class AppDbContext : DbContext
             Ord = 33
         };
         builder.Entity<Permission>().HasData(per_33);
+
+        // See Next Year Income
+        var per_34_id = random.Next(123456789, 999999999);
+        Permission per_34 = new Permission()
+        {
+            Id = per_34_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "See Next Year Income",
+            Ord = 34
+        };
+        builder.Entity<Permission>().HasData(per_34);
         #endregion
 
         #region Roles
@@ -961,6 +973,17 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_106);
 
+        // COO || See Next Year Income
+        RolePermission rp_110 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_4_id,
+            PermissionId = per_34_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_110);
+
 
         // CTO
         // CTO || See Dashboard Layout
@@ -1282,6 +1305,17 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_107);
 
+        // CTO || See Next Year Income
+        RolePermission rp_111 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_5_id,
+            PermissionId = per_34_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_111);
+
 
         // CEO
         // CEO || See Dashboard Layout
@@ -1592,6 +1626,17 @@ public class AppDbContext : DbContext
         };
         builder.Entity<RolePermission>().HasData(rp_109);
 
+        // CEO || See Next Year Income
+        RolePermission rp_112 = new RolePermission()
+        {
+            Id = random.Next(123456789, 999999999) * 9,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            RoleId = role_6_id,
+            PermissionId = per_34_id
+        };
+        builder.Entity<RolePermission>().HasData(rp_112);
+
 
         // Guest
         // Guest || See Dashboard Layout
@@ -1854,15 +1899,15 @@ public class AppDbContext : DbContext
 
         #region Create Project Sub Categories
         /*
-         * projectCategories[0] = BUILDINGS
-         * projectCategories[1] = INFRASTRUCTURE
-         * projectCategories[2] = ENERGY
-         * projectCategories[3] = CONSULTING
-         * projectCategories[4] = PRODUCTION MANAGMENT
-         * projectCategories[5] = TRANSPORT
-         * projectCategories[6] = ENVIRONMENT
-         * projectCategories[7] = ENVIRONMENT CONSULTING
-         */
+            * projectCategories[0] = BUILDINGS
+            * projectCategories[1] = INFRASTRUCTURE
+            * projectCategories[2] = ENERGY
+            * projectCategories[3] = CONSULTING
+            * projectCategories[4] = PRODUCTION MANAGMENT
+            * projectCategories[5] = TRANSPORT
+            * projectCategories[6] = ENVIRONMENT
+            * projectCategories[7] = ENVIRONMENT CONSULTING
+            */
         Dictionary<string, ProjectCategory> ProjectSubCatsNameCat = new Dictionary<string, ProjectCategory>();
         ProjectSubCatsNameCat.Add("RENEWABLES - INTERCONNECTION HV", projectCategories[0]);
         ProjectSubCatsNameCat.Add("RENEWABLES - INTERCONNECTION", projectCategories[1]);
@@ -1988,12 +2033,12 @@ public class AppDbContext : DbContext
 
 
         int[] ProjectStages = {
-            project_stage_1_Id,
-            project_stage_2_Id,
-            project_stage_3_Id,
-            project_stage_4_Id,
-            project_stage_5_Id
-        };
+        project_stage_1_Id,
+        project_stage_2_Id,
+        project_stage_3_Id,
+        project_stage_4_Id,
+        project_stage_5_Id
+    };
         #endregion
 
         #region Create InvoiceTypes
@@ -2117,10 +2162,10 @@ public class AppDbContext : DbContext
 
         int[] offerTypesIds =
         {
-            offer_type_1_id,
-            offer_type_2_id,
-            offer_type_3_id
-        };
+        offer_type_1_id,
+        offer_type_2_id,
+        offer_type_3_id
+    };
         #endregion
 
         #region Create OfferState
@@ -2146,9 +2191,9 @@ public class AppDbContext : DbContext
 
         int[] offerStatesIds =
         {
-            offer_state_1_id,
-            offer_state_2_id
-        };
+        offer_state_1_id,
+        offer_state_2_id
+    };
         #endregion
 
         #region Create Secretaries
@@ -3166,26 +3211,26 @@ public class AppDbContext : DbContext
         #region Create Discipline Types
         List<DisciplineType> disciplineTypes = new List<DisciplineType>();
         string[] dicTypeNames = {
-            "HVAC",
-            "Sewage",
-            "Potable Water",
-            "Drainage",
-            "Fire Detection",
-            "Fire Suppression",
-            "Elevators",
-            "Natural Gas",
-            "Power Distribution",
-            "Structured Cabling",
-            "Burglar Alarm",
-            "CCTV",
-            "BMS",
-            "Photovoltaics",
-            "Energy Efficiency",
-            "Outsource",
-            "TenderDocument",
-            "Construction Supervision",
-            "DWG Admin/Clearing"
-        };
+        "HVAC",
+        "Sewage",
+        "Potable Water",
+        "Drainage",
+        "Fire Detection",
+        "Fire Suppression",
+        "Elevators",
+        "Natural Gas",
+        "Power Distribution",
+        "Structured Cabling",
+        "Burglar Alarm",
+        "CCTV",
+        "BMS",
+        "Photovoltaics",
+        "Energy Efficiency",
+        "Outsource",
+        "TenderDocument",
+        "Construction Supervision",
+        "DWG Admin/Clearing"
+    };
         for (var i = 0; i < dicTypeNames.Length; i++)
         {
             var discipline_type_Id = random.Next(123456789, 999999999);
@@ -3242,10 +3287,10 @@ public class AppDbContext : DbContext
         #region Create Drawing Types
         List<DeliverableType> deliverableTypes = new List<DeliverableType>();
         string[] drawTypeNames = {
-            "Documents",
-            "Calculations",
-            "Deliverables"
-        };
+        "Documents",
+        "Calculations",
+        "Deliverables"
+    };
         for (var i = 0; i < drawTypeNames.Length; i++)
         {
             var drawing_type_Id = random.Next(123456789, 999999999);
@@ -3287,14 +3332,14 @@ public class AppDbContext : DbContext
         #region Create Other Types
         List<SupportiveWorkType> otherTypes = new List<SupportiveWorkType>();
         string[] otherTypeNames = {
-            "Communications",
-            "Printing",
-            "On-Site",
-            "Meetings",
-            "Administration",
-            "Soft Copy",
-            "Hours To Be Erased"
-        };
+        "Communications",
+        "Printing",
+        "On-Site",
+        "Meetings",
+        "Administration",
+        "Soft Copy",
+        "Hours To Be Erased"
+    };
         for (var i = 0; i < otherTypeNames.Length; i++)
         {
             var other_type_Id = random.Next(123456789, 999999999);
@@ -3384,6 +3429,7 @@ public class AppDbContext : DbContext
         //    }
         //}
         #endregion
+
     }
 
     static int GetUniqueRandomNumber(Random random, List<int> selectedNumbers, int min, int max)

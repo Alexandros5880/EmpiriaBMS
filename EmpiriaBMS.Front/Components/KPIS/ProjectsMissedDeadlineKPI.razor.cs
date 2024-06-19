@@ -1,6 +1,4 @@
-﻿using EmpiriaBMS.Front.Components.General;
-
-namespace EmpiriaBMS.Front.Components.KPIS;
+﻿namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class ProjectsMissedDeadlineKPI
 {
