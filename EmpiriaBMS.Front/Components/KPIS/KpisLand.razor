@@ -1,6 +1,7 @@
-﻿@using EmpiriaBMS.Front.Services
-@using EmpiriaBMS.Front.Horizontal
+﻿@using EmpiriaBMS.Front.Services;
+@using EmpiriaBMS.Front.Horizontal;
 @using ChartJs.Blazor;
+@using EmpiriaBMS.Front.Components.KPIS;
 
 @inject IDataProvider _dataProvider
 @inject SharedAuthDataService _sharedAuthData
@@ -152,7 +153,7 @@
                     @if (SeeNextYearIncome)
                     {
                         <div style="margin-top: 50px;">
-                            @* <NextYearIncomeKPI /> *@
+                            <NextYearNetIncomeKPI />
                         </div>
                     }
                 }
