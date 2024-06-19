@@ -233,6 +233,82 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
     }
 
+    #region Next Income Functions
+    public async Task<List<LedDto>> GetAllOppenLeds()
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var allLedsIds = await _context.Set<Led>()
+                    .Where(l => !l.IsDeleted)
+                    .Select(l => l.Id)
+                    .ToListAsync();
+
+                if (allLedsIds == null || allLedsIds.Count == 0)
+                    return new List<LedDto>();
+
+                var leds = new List<LedDto>();
+
+                foreach (var id in allLedsIds)
+                {
+                    var isClosed = await IsClosed(id);
+                    if (!isClosed)
+                    {
+                        var led = await Get(id);
+                        if (led == null)
+                            continue;
+
+                        leds.Add(led);
+                    }
+                }
+
+                return leds;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On LedRepo.GetAllOppenLeds(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return new List<LedDto>();
+        }
+    }
+
+    public async Task<double> GetSumOfAllOppenLedsPotencialFee()
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var allLedsIds = await _context.Set<Led>()
+                    .Where(l => !l.IsDeleted)
+                    .Select(l => l.Id)
+                    .ToListAsync();
+
+                if (allLedsIds == null || allLedsIds.Count == 0)
+                    return 0;
+
+                double sumPontecialFee = 0;
+
+                foreach (var id in allLedsIds)
+                {
+                    var isClosed = await IsClosed(id);
+                    if (!isClosed)
+                    {
+                        var sum = await GetSumOfPotencialFee(id);
+                        sumPontecialFee += sum;
+                    }
+                }
+
+                return sumPontecialFee;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On LedRepo.GetSumOfAllOppenLedsPotencialFee(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
     public async Task<double> GetSumOfPayedFee(int ledId)
     {
         try
@@ -273,7 +349,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On LedRepo.GetSumOfPayedFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -318,7 +394,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On LedRepo.GetSumOfPotencialFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -364,8 +440,10 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            Console.WriteLine($"Exception On LedRepo.IsClosed({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return false;
         }
     }
+
+    #endregion
 }

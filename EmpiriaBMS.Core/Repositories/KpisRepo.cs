@@ -21,8 +21,6 @@ public class KpisRepo : IDisposable
     //{
     //    using (var _context = _dbContextFactory.CreateDbContext())
     //    {
-
-
     //        var leds = await _context.Set<Led>()
     //            .Where(l => l.Result == Models.Enum.LedResult.UNSUCCESSFUL)
     //            .ToListAsync();
