@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  empiriabms_front:
+    image: empiriabms_front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    restart: unless-stopped
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "-Plata123456"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    restart: unless-stopped

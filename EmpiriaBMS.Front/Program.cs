@@ -60,6 +60,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddHttpClient("WebClient", client => client.Timeout = TimeSpan.FromSeconds(600));
 builder.Services.AddHttpContextAccessor();
 
+// Add configuration
+builder.Configuration
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

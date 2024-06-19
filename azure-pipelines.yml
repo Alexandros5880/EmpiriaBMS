@@ -1,0 +1,42 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  dockerRegistryServiceConnection: 'Azure-Kubernetes-Cluster'
+  dockerComposeFile: .
+  imageName: 'EmpiriaBMS'
+  projectName: 'EmpiriaBMS'
+  containerRegistry: 'acrworkflow1710346566236'
+  kubernetesNamespace: 'namespace-workflow-1710346566236'
+  kubernetesServiceConnection: 'Azure-Kubernetes'
+
+steps:
+- task: DockerCompose@0
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryServiceConnection: '$(dockerRegistryServiceConnection)'
+    action: 'Build services'
+    dockerComposeFile: '$(dockerComposeFile)'
+    projectName: '$(projectName)'
+    additionalImageTags: '$(Build.BuildId)'
+
+- task: DockerCompose@0
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryServiceConnection: '$(dockerRegistryServiceConnection)'
+    action: 'Push services'
+    dockerComposeFile: '$(dockerComposeFile)'
+    projectName: '$(projectName)'
+    additionalImageTags: '$(Build.BuildId)'
+
+- task: KubernetesManifest@0
+  inputs:
+    action: 'deploy'
+    kubernetesServiceConnection: '$(kubernetesServiceConnection)'
+    namespace: '$(kubernetesNamespace)'
+    manifests: |
+      $(Build.SourcesDirectory)/<path-to-your-kubernetes-manifests>/deployment.yml
+      $(Build.SourcesDirectory)/<path-to-your-kubernetes-manifests>/service.yml
