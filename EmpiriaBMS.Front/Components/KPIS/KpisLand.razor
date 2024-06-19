@@ -52,7 +52,7 @@
                 @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
                 {
                     <FluentNavLink OnClick="@((e) => TabMenuClick(e, 5))"
-                                   Class="@((tabs[5] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
+                                   Class="@((tabs[5] ? "active-nav-link" : ""))">Pending Peyments</FluentNavLink>
                 }
                 
                 @if (SeeEmployeeTurnoverKPI)
@@ -64,7 +64,7 @@
                 @if (SeePendingsPaymentsKPI)
                 {
                     <FluentNavLink OnClick="@((e) => TabMenuClick(e, 7))"
-                                   Class="@((tabs[7] ? "active-nav-link" : ""))">Pending Peyments</FluentNavLink>
+                                   Class="@((tabs[7] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
                 }
 
                 @if (SeeNextYearIncome)
@@ -126,7 +126,7 @@
                     @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
                     {
                         <div style="margin-top: 50px;">
-                            <ProjectsMissedDeadlineKPI />
+                            <PandingPaymentsKPI />
                         </div>
                     }
                 }
@@ -144,7 +144,7 @@
                     @if (SeePendingsPaymentsKPI)
                     {
                         <div style="margin-top: 50px;">
-                            @* <PandingPaymentsKPI /> *@
+                            <ProjectsMissedDeadlineKPI />
                         </div>
                     }
                 }

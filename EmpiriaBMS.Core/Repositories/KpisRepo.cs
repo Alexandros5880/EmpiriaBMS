@@ -415,6 +415,31 @@ public class KpisRepo : IDisposable
         }
     }
 
+    public async Task<Dictionary<string, PendingPayments>> GetPendingPayments()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var payments = await _context.Set<Payment>()
+                                       .Where(r => !r.IsDeleted)
+                                       .Include(p => p.Invoice)
+                                       .ThenInclude(i => i.Project)
+                                       .ToListAsync();
+
+            var result = payments.GroupBy(p => p.Invoice.Project)
+                                 .ToDictionary(
+                                    g => g.Key.Name ?? "Uknown Project",
+                                    g => new PendingPayments()
+                                    {
+                                        Project = Mapping.Mapper.Map<ProjectDto>(g.Key as Project),
+                                        Payments = Mapping.Mapper.Map<List<PaymentDto>>(g.ToList()),
+                                        PendingPaymentsCount = g.ToList().Count(),
+                                        PendingSum = g.ToList().Sum(p => p.Fee)
+                                    }
+                                 );
+            return result;
+        }
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposedValue)
