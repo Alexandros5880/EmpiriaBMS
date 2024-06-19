@@ -40,7 +40,7 @@ public class DataProvider : IDataProvider, IDisposable
     {
         Roles = new RolesRepo(dbFactory);
         Users = new UsersRepo(dbFactory);
-        Projects = new ProjectsRepo(dbFactory);
+        Projects = new ProjectsRepo(dbFactory, Invoices);
         Disciplines = new DisciplineRepo(dbFactory);
         Deliverables = new DeliverableRepo(dbFactory);
         SupportiveWorks = new SupportiveWorkRepo(dbFactory);
@@ -60,7 +60,7 @@ public class DataProvider : IDataProvider, IDisposable
         Clients = new ClientRepo(dbFactory);
         OfferTypes = new OfferTypeRepo(dbFactory);
         OfferStates = new OfferStateRepo(dbFactory);
-        Offers = new OfferRepo(dbFactory);
+        Offers = new OfferRepo(dbFactory, Projects);
         Emails = new EmailRepo(dbFactory);
         TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory);
         Contracts = new ContractRepo(dbFactory);

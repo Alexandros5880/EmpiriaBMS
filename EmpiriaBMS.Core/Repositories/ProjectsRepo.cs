@@ -8,7 +8,15 @@ using System.Linq.Expressions;
 namespace EmpiriaBMS.Core.Repositories;
 public class ProjectsRepo : Repository<ProjectDto, Project>
 {
-    public ProjectsRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    private InvoiceRepo _invoiceRepo;
+
+    public ProjectsRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        InvoiceRepo invoiceRepo
+    ) : base(DbFactory)
+    {
+        _invoiceRepo = invoiceRepo;
+    }
 
     public async Task<ProjectDto> Add(ProjectDto entity, bool update = false)
     {
@@ -1026,6 +1034,81 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             // Save Changes
             await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<double> GetSumOfInvoicesFee(int projectId)
+    {
+        try
+        {
+            if (projectId == 0)
+                throw new ArgumentNullException(nameof(projectId));
+
+            List<int> invoiceIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                invoiceIds = await _context
+                                .Set<Invoice>()
+                                .Where(i => !i.IsDeleted && i.ProjectId == projectId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (invoiceIds == null || invoiceIds.Count == 0)
+                return 0;
+
+            double sum = 0;
+
+            foreach (var invoiceId in invoiceIds)
+            {
+                sum += await _invoiceRepo.GetSumOfPaymentsFee(invoiceId);
+            }
+
+            return sum;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On ProjectsRepo.GetSumOfInvoicesFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<bool> IsClosed(int projectId)
+    {
+        try
+        {
+            if (projectId == 0)
+                throw new ArgumentNullException(nameof(projectId));
+
+            List<int> invoiceIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                invoiceIds = await _context
+                                .Set<Invoice>()
+                                .Where(i => !i.IsDeleted && i.ProjectId == projectId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (invoiceIds == null || invoiceIds.Count == 0)
+                return false;
+
+            List<bool> isClosed = new List<bool>();
+
+            foreach (var invoiceId in invoiceIds)
+            {
+                var closed = await _invoiceRepo.IsClosed(invoiceId);
+                isClosed.Add(closed);
+            }
+
+            return isClosed.Count == 0 || isClosed.Any(c => c == false);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On ProjectsRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return false;
         }
     }
 }

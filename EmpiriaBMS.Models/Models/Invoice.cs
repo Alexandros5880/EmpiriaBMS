@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using EmpiriaBMS.Models.Enum;
 using System.ComponentModel.DataAnnotations;
-using EmpiriaBMS.Models.Enum;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 public class Invoice : Entity

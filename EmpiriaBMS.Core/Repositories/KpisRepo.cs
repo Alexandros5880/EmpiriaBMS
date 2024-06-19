@@ -17,6 +17,18 @@ public class KpisRepo : IDisposable
     public KpisRepo(IDbContextFactory<AppDbContext> dbFactory) =>
         _dbContextFactory = dbFactory;
 
+    //public async Task<double> GetNextYearNetIncome()
+    //{
+    //    using (var _context = _dbContextFactory.CreateDbContext())
+    //    {
+
+
+    //        var leds = await _context.Set<Led>()
+    //            .Where(l => l.Result == Models.Enum.LedResult.UNSUCCESSFUL)
+    //            .ToListAsync();
+    //    }
+    //}
+
     public async Task<decimal> GetMissedDeadLineProjects()
     {
         using (var _context = _dbContextFactory.CreateDbContext())

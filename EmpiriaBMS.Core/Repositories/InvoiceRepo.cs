@@ -240,4 +240,59 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
             return Mapping.Mapper.Map<ContractDto>(c);
         }
     }
+
+    public async Task<double> GetSumOfPaymentsFee(int invoiceId)
+    {
+        try
+        {
+            if (invoiceId == 0)
+                throw new ArgumentNullException(nameof(invoiceId));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var sum = await _context
+                                .Set<Payment>()
+                                .Where(r => !r.IsDeleted && r.InvoiceId == invoiceId)
+                                .SumAsync(p => p.Fee);
+
+                return sum;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On InvoiceRepo.GetSumOfPaymentsFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<bool> IsClosed(int invoiceId)
+    {
+        try
+        {
+            if (invoiceId == 0)
+                throw new ArgumentNullException(nameof(invoiceId));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var invoice = await _context.Set<Invoice>()
+                                            .Where(r => !r.IsDeleted)
+                                            .FirstOrDefaultAsync(i => i.Id == invoiceId);
+
+                if (invoice == null)
+                    throw new NullReferenceException(nameof(invoice));
+
+                var sum = await _context
+                                .Set<Payment>()
+                                .Where(r => !r.IsDeleted && r.InvoiceId == invoiceId)
+                                .SumAsync(p => p.Fee);
+
+                return sum >= invoice.Fee;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception On InvoiceRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return false;
+        }
+    }
 }
