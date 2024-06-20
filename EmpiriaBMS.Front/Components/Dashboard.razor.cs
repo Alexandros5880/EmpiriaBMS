@@ -6,6 +6,7 @@ using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
@@ -1453,7 +1454,8 @@ public partial class Dashboard : IDisposable
         var csv = await DatabaseBackupService.DatabaseToCSV();
         if (!string.IsNullOrEmpty(csv))
         {
-            var fileName = $"{DatabaseBackupService.DatabaseName}_{DateTime.Now:yyyyMMddHHmmss}.csv";
+            var dateTime = DateTime.Now;
+            var fileName = $"{DatabaseBackupService.DatabaseName}_{dateTime.ToEuropeFormat()}.csv";
             await MicrosoftTeams.DownloadCsvFile(fileName, csv);
         }
         else
@@ -1461,6 +1463,41 @@ public partial class Dashboard : IDisposable
             // TODO: Display a message
         }
         _backUpLoading = false;
+    }
+
+    private InputFile fileRestoreDB;
+    bool _restoreLoading = false;
+    private async Task RestoreDb(InputFileChangeEventArgs e)
+    {
+        _restoreLoading = true;
+
+        var file = e.File;
+        var filePath = file.Name;
+        var fileType = file.ContentType;
+        if (fileType?.Equals("text/csv") ?? false)
+        {
+            try
+            {
+                Stream stream = file.OpenReadStream();
+                List<List<object>> data = await Data.ImportData<List<object>>(stream);
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Contracts import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                // TODO: log error
+            }
+        }
+
+
+
+        _restoreLoading = false;
+    }
+    private async Task TriggerRestoreDbInport()
+    {
+        var element = fileRestoreDB.Element;
+        await MicrosoftTeams.TriggerFileInputClick(element);
     }
     #endregion
 

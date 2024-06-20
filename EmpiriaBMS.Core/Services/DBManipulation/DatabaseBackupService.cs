@@ -1,6 +1,5 @@
 ﻿using CsvHelper;
 using EmpiriaBMS.Models.Models;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
@@ -38,29 +37,6 @@ public class DatabaseBackupService : IDisposable
         }
     }
 
-    public void RestoreDatabase(string backupFilePath, string databaseName = null)
-    {
-        var dbName = databaseName ?? DatabaseName;
-
-        if (!string.IsNullOrEmpty(backupFilePath)
-            || !string.IsNullOrEmpty(ConnectionString)
-            || !string.IsNullOrEmpty(dbName))
-            return;
-
-        using (var connection = new SqlConnection(ConnectionString))
-        {
-            var query = $"ALTER DATABASE [{dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;" +
-                        $"RESTORE DATABASE [{dbName}] FROM DISK = '{backupFilePath}' WITH REPLACE;" +
-                        $"ALTER DATABASE [{dbName}] SET MULTI_USER;";
-
-            var command = new SqlCommand(query, connection);
-
-            connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-    }
-
     private string _getDbName()
     {
         int startIndex = ConnectionString.IndexOf("Initial Catalog=") + "Initial Catalog=".Length;
@@ -70,7 +46,7 @@ public class DatabaseBackupService : IDisposable
         return dataSource;
     }
 
-    public async Task<string> _convertDataToCsvAsync(List<List<object>> data)
+    private async Task<string> _convertDataToCsvAsync(List<List<object>> data)
     {
         using var writer = new StringWriter();
         using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
