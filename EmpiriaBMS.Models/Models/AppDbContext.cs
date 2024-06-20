@@ -3473,6 +3473,27 @@ public class AppDbContext : DbContext
         return allEntities;
     }
 
+    public List<Type> GetAllDbSetsTypes()
+    {
+        List<Type> allEntities = new List<Type>();
+
+        // Get all properties of this DbContext
+        var properties = GetType().GetProperties();
+
+        foreach (var property in properties)
+        {
+            // Check if the property is a DbSet<T>
+            if (property.PropertyType.IsGenericType &&
+                property.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
+            {
+                var entityType = property.PropertyType.GetGenericArguments()[0];
+                allEntities.Add(entityType);
+            }
+        }
+
+        return allEntities;
+    }
+
     static int GetUniqueRandomNumber(Random random, List<int> selectedNumbers, int min, int max)
     {
         int number;

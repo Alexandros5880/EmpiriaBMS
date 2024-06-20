@@ -1451,6 +1451,8 @@ public partial class Dashboard : IDisposable
     private async Task BackUpDb()
     {
         _backUpLoading = true;
+        StateHasChanged();
+
         var csv = await DatabaseBackupService.DatabaseToCSV();
         if (!string.IsNullOrEmpty(csv))
         {
@@ -1465,6 +1467,7 @@ public partial class Dashboard : IDisposable
         {
             // TODO: Display a message
         }
+
         _backUpLoading = false;
     }
 
@@ -1473,27 +1476,32 @@ public partial class Dashboard : IDisposable
     private async Task RestoreDb(InputFileChangeEventArgs e)
     {
         _restoreLoading = true;
+        StateHasChanged();
 
         var file = e.File;
         var filePath = file.Name;
         var fileType = file.ContentType;
-        if (fileType?.Equals("text/csv") ?? false)
+
+        if (!(fileType?.Contains("zip") ?? false))
         {
-            try
-            {
-                Stream stream = file.OpenReadStream();
-                List<List<object>> data = await Data.ImportData<List<object>>(stream);
-
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception Contracts import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
-            }
+            // TODO: Display Msg
+            Console.WriteLine("Uploaded file is not a ZIP archive.");
+            return;
         }
 
+        try
+        {
+            using var memoryStream = new MemoryStream();
+            await file.OpenReadStream().CopyToAsync(memoryStream);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = await DatabaseBackupService.ZipStreamToCsv(memoryStream);
 
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception Dashboard  RestoreDb: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            // TODO: log error
+        }
 
         _restoreLoading = false;
     }

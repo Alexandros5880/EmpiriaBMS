@@ -1,8 +1,10 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.IO.Compression;
+using System.Text;
 
 namespace EmpiriaBMS.Core.Services.DBManipulation;
 
@@ -13,7 +15,7 @@ public class DatabaseBackupService : IDisposable
     public readonly string ConnectionString;
     public readonly string DatabaseName;
 
-    private string _separator = "---";
+    //private string _separator = "---";
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
@@ -51,6 +53,30 @@ public class DatabaseBackupService : IDisposable
         return memoryStream.ToArray();
     }
 
+    public async Task<List<List<object>>> ZipStreamToCsv(MemoryStream stream)
+    {
+        try
+        {
+            using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
+            var csvEntry = archive.Entries.FirstOrDefault(entry => entry.Name.EndsWith(".csv", StringComparison.OrdinalIgnoreCase));
+            if (csvEntry == null)
+                throw new NullReferenceException(nameof(csvEntry));
+
+            using var csvStream = csvEntry.Open();
+
+            List<List<object>> data = await _convertCsvToDataAsync(csvStream);
+
+            return data;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception DatabaseBackupService ZipStreamToCsv: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            // TODO: log error
+
+            return null;
+        }
+    }
+
     private string _getDbName()
     {
         int startIndex = ConnectionString.IndexOf("Initial Catalog=") + "Initial Catalog=".Length;
@@ -70,13 +96,65 @@ public class DatabaseBackupService : IDisposable
         {
             // Write records for each inner list
             csv.WriteRecords(dataList);
-            await writer.WriteAsync(_separator);
-            await writer.WriteLineAsync();
+            //await writer.WriteAsync(_separator);
+            //await writer.WriteLineAsync();
         }
 
         await writer.FlushAsync();
 
         return writer.ToString();
+    }
+
+    private async Task<List<List<object>>> _convertCsvToDataAsync(Stream stream)
+    {
+        using (StreamReader sr = new StreamReader(stream, Encoding.UTF8))
+        {
+            var content = await sr.ReadToEndAsync();
+            var data = new List<List<object>>();
+
+            if (content == null)
+                return data;
+
+            using var reader = new StringReader(content);
+            using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false,
+                Delimiter = ",",
+            });
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var dbSetTypes = _context.GetAllDbSetsTypes();
+
+                foreach (var entityType in dbSetTypes)
+                {
+                    // Construct the GetRecords<T> method dynamically
+                    var getRecordsMethod = typeof(CsvReader).GetMethod("GetRecords", new Type[] { });
+                    var genericGetRecordsMethod = getRecordsMethod.MakeGenericMethod(entityType);
+
+                    // Invoke GetRecords<T> to get records of current entityType
+                    var records = (IEnumerable<object>)genericGetRecordsMethod.Invoke(csv, null);
+
+                    // Convert records to List<List<object>> format
+                    var entityData = new List<List<object>>();
+                    foreach (var record in records)
+                    {
+                        var recordProperties = record.GetType().GetProperties();
+                        var rowData = recordProperties.Select(p => p.GetValue(record)).Cast<object>().ToList();
+                        entityData.Add(rowData);
+                    }
+
+                    // Add entityData to main data list
+                    data.AddRange(entityData);
+                }
+            }
+
+            //    var users = csv.GetRecords<User>();
+            //var roles = csv.GetRecords<Role>();
+
+            return data;
+
+        }
     }
 
     protected virtual void Dispose(bool disposing)
