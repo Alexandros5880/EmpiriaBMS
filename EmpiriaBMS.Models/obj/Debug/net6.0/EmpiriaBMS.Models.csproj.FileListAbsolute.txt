@@ -1,15 +1,6 @@
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\bin\Debug\net6.0\EmpiriaBMS.Models.deps.json
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\bin\Debug\net6.0\EmpiriaBMS.Models.runtimeconfig.json
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\bin\Debug\net6.0\EmpiriaBMS.Models.dll
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\bin\Debug\net6.0\EmpiriaBMS.Models.pdb
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.csproj.AssemblyReference.cache
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.AssemblyInfoInputs.cache
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.AssemblyInfo.cs
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.csproj.CoreCompileInputs.cache
 C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.sourcelink.json
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.dll
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\refint\EmpiriaBMS.Models.dll
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.pdb
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.genruntimeconfig.cache
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\ref\EmpiriaBMS.Models.dll

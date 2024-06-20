@@ -1,5 +1,6 @@
 using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Services;
 using EmpiriaBMS.Core.Services.EmailService;
 using EmpiriaBMS.Core.Services.GooglePlaces;
 using EmpiriaBMS.Front;
@@ -30,8 +31,7 @@ builder.Configuration
 
 builder.Services.AddDbContextFactory<AppDbContext>();
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
-
-// TODO: Add Seed Data If Not Exists.
+builder.Services.AddScoped<SeedData>();
 
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddScoped<DailyEmailSender>();
@@ -63,6 +63,13 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 var app = builder.Build();
+
+// Create Seed Data
+using (var scope = app.Services.CreateScope())
+{
+    var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
+    seedData.CreateData();
+}
 
 if (app.Environment.IsDevelopment())
 {
