@@ -145,29 +145,33 @@
                                                         </div>
                                                     </div>
                                                 }
-                                                <!-- Refresh Page -->
-                                                <FluentButton OnClick="@Refresh"
-                                                              Loading="@_refreshLoading"
-                                                              IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
-                                                              Color="none"
-                                                              Appearance="Appearance.Outline"
-                                                              Style="margin-left: 12px; margin-top: 8px;">
-                                                </FluentButton>
-                                                <FluentStack Orientation="Orientation.Vertical"
-                                                              Style="margin-left: 12px; max-width: 80px;">
-                                                    <!-- Restore Database -->
-                                                    <InputFile @ref="@fileRestoreDB" OnChange="RestoreDb" style="display: none;" />
-                                                    <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
-                                                                  Appearance="Appearance.Outline"
-                                                                  OnClick="@(async () => await TriggerRestoreDbInport())">
-                                                    </FluentButton>
-                                                    <!-- BackUp Database -->
-                                                    <FluentButton OnClick="@BackUpDb"
-                                                                  Loading="@_backUpLoading"
-                                                                  IconStart="@(new Icons.Regular.Size32.Database())"
+                                                <!-- Refresh / RestoreDB / BackupDB Page -->
+                                                <FluentStack Orientation="Orientation.Horizontal"
+                                                              Style="margin-left: 12px; max-width: 120px;">
+                                                    <!-- Refresh -->
+                                                    <FluentButton OnClick="@Refresh"
+                                                                  Loading="@_refreshLoading"
+                                                                  IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
                                                                   Color="none"
-                                                                  Appearance="Appearance.Outline">
+                                                                  Appearance="Appearance.Outline"
+                                                                  Style="margin-left: 12px; margin-top: 8px;">
                                                     </FluentButton>
+                                                    <FluentStack Orientation="Orientation.Vertical"
+                                                                  Style="margin-left: 12px; max-width: 80px;">
+                                                        <!-- Restore Database -->
+                                                        <InputFile @ref="@fileRestoreDB" OnChange="RestoreDb" style="display: none;" />
+                                                        <FluentButton IconStart="@(new MyIcons.Size32.RestoreDB())"
+                                                                      Appearance="Appearance.Outline"
+                                                                      OnClick="@(async () => await TriggerRestoreDbInport())">
+                                                        </FluentButton>
+                                                        <!-- BackUp Database -->
+                                                        <FluentButton OnClick="@BackUpDb"
+                                                                      Loading="@_backUpLoading"
+                                                                      IconStart="@(new MyIcons.Size32.BackupDB())"
+                                                                      Color="none"
+                                                                      Appearance="Appearance.Outline">
+                                                        </FluentButton>
+                                                    </FluentStack>
                                                 </FluentStack>
                                             </div>
                                         </div>
