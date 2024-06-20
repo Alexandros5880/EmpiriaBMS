@@ -10,6 +10,9 @@ public class AppDbContext : DbContext
     const string azure_staging_DB = "Data Source=empiriabms-staging.database.windows.net;Initial Catalog=EmpiriaBMS-Staging;User Id=admin-user;Password=!@#$123456asdfgh";
     const string migrationsDB = localhostDB;
 
+    public string SelectedConnectionString = string.Empty;
+    public string Enviroment = string.Empty;
+
 
     public DbSet<User>? Users { get; set; }
     public DbSet<Role>? Roles { get; set; }
@@ -54,9 +57,9 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        //string enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        string connectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
-        optionsBuilder.UseSqlServer(connectionString);
+        Enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
+        optionsBuilder.UseSqlServer(SelectedConnectionString);
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.EnableDetailedErrors();
         optionsBuilder.EnableServiceProviderCaching();

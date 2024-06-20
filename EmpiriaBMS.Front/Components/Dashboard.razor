@@ -12,6 +12,7 @@
 @using EmpiriaBMS.Front.Services
 @using EmpiriaBMS.Front.Components.Admin
 @using Color = Microsoft.Fast.Components.FluentUI.Color;
+@using EmpiriaBMS.Core.Services.DBManipulation;
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -25,6 +26,7 @@
 @inject AuthorizeServices authorizeServices
 @inject SharedAuthDataService _sharedAuthData
 @inject IDialogService DialogService
+@inject DatabaseBackupService DatabaseBackupService
 
 <!-- Loading -->
 <FluentOverlay @bind-Visible="@_startLoading"

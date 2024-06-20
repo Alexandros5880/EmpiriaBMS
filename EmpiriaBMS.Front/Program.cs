@@ -1,5 +1,6 @@
 using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Services.DBManipulation;
 using EmpiriaBMS.Core.Services.EmailService;
 using EmpiriaBMS.Core.Services.GooglePlaces;
 using EmpiriaBMS.Front;
@@ -30,6 +31,7 @@ builder.Configuration
 
 builder.Services.AddDbContextFactory<AppDbContext>();
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
+builder.Services.AddScoped<DatabaseBackupService>();
 
 // TODO: Add Seed Data If Not Exists.
 

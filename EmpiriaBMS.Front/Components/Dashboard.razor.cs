@@ -1445,6 +1445,14 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
+    #region DatabaseManipulation
+    private async Task BackUpDb()
+    {
+        var folderPath = await MicrosoftTeams.PickFolderPath();
+        DatabaseBackupService.BackupDatabase(folderPath);
+    }
+    #endregion
+
     private async Task ShowInformationAsync(string msg)
     {
         var dialog = await DialogService.ShowInfoAsync(msg);
