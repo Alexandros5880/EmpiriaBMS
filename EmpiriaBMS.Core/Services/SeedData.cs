@@ -816,7 +816,7 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateEngineers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.WriteLine($"Exception On SeedData.CreateProjectManagers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
