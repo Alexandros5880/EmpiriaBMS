@@ -1454,9 +1454,12 @@ public partial class Dashboard : IDisposable
         var csv = await DatabaseBackupService.DatabaseToCSV();
         if (!string.IsNullOrEmpty(csv))
         {
+            var zipBytes = await DatabaseBackupService.CsvToZipBytes(csv);
+            var base64Zip = Convert.ToBase64String(zipBytes);
+
             var dateTime = DateTime.Now;
-            var fileName = $"{DatabaseBackupService.DatabaseName}_{dateTime.ToEuropeFormat()}.csv";
-            await MicrosoftTeams.DownloadCsvFile(fileName, csv);
+            var fileName = $"{DatabaseBackupService.DatabaseName}_{dateTime.ToEuropeFormat()}.zip";
+            await MicrosoftTeams.DownloadZipFile(fileName, base64Zip);
         }
         else
         {

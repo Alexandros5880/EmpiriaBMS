@@ -2,6 +2,7 @@
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.IO.Compression;
 
 namespace EmpiriaBMS.Core.Services.DBManipulation;
 
@@ -35,6 +36,19 @@ public class DatabaseBackupService : IDisposable
             string csv = await _convertDataToCsvAsync(data);
             return csv;
         }
+    }
+
+    public async Task<byte[]> CsvToZipBytes(string csvContent)
+    {
+        using var memoryStream = new MemoryStream();
+        using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+        {
+            var zipEntry = archive.CreateEntry("data.csv", CompressionLevel.Fastest);
+            using var zipEntryStream = zipEntry.Open();
+            using var streamWriter = new StreamWriter(zipEntryStream);
+            await streamWriter.WriteAsync(csvContent);
+        }
+        return memoryStream.ToArray();
     }
 
     private string _getDbName()

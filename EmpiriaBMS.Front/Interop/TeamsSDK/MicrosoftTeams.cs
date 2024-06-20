@@ -131,7 +131,12 @@ public class MicrosoftTeams : InteropModuleBase
         await InvokeVoidAsync("downloadCsvFile", filenName, content);
     }
 
-    public async Task downloadBakFile(string filenName, string content)
+    public async Task DownloadZipFile(string filenName, string content)
+    {
+        await InvokeVoidAsync("downloadZipFile", filenName, content);
+    }
+
+    public async Task DownloadBakFile(string filenName, string content)
     {
         await InvokeVoidAsync("downloadCsvFile", filenName, content);
     }

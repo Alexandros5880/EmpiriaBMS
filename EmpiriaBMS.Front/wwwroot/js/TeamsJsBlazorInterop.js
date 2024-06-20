@@ -344,6 +344,31 @@ export function downloadCsvFile(filename, content) {
     }
 }
 
+export function downloadZipFile(filename, base64Content) {
+    // Convert base64 string to binary data
+    const byteCharacters = atob(base64Content);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+
+    // Create a Blob from the binary data
+    const blob = new Blob([byteArray], { type: 'application/zip' });
+
+    // Create an anchor element and trigger a download
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
 export function downloadBakFile(filename, content) {
     var blob = new Blob([content], { type: 'application/octet-stream' }); // Adjust MIME type if needed
     var link = document.createElement("a");
