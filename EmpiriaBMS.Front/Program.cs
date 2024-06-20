@@ -1,7 +1,5 @@
 using AutoMapper;
 using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Repositories;
 using EmpiriaBMS.Core.Services.EmailService;
 using EmpiriaBMS.Core.Services.GooglePlaces;
 using EmpiriaBMS.Front;
@@ -9,10 +7,7 @@ using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Models.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Fast.Components.FluentUI;
-using Newtonsoft.Json.Serialization;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +30,8 @@ builder.Configuration
 
 builder.Services.AddDbContextFactory<AppDbContext>();
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
+
+// TODO: Add Seed Data If Not Exists.
 
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddScoped<DailyEmailSender>();
