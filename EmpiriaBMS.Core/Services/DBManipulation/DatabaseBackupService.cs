@@ -1,6 +1,8 @@
-﻿using EmpiriaBMS.Models.Models;
+﻿using CsvHelper;
+using EmpiriaBMS.Models.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace EmpiriaBMS.Core.Services.DBManipulation;
 
@@ -10,6 +12,8 @@ public class DatabaseBackupService : IDisposable
 
     public readonly string ConnectionString;
     public readonly string DatabaseName;
+
+    private string _separator = "---";
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
@@ -24,50 +28,13 @@ public class DatabaseBackupService : IDisposable
         }
     }
 
-    public void BackupDatabase(string backupPath, string databaseName = null)
+    public async Task<string?> DatabaseToCSV()
     {
-        var dbName = databaseName ?? DatabaseName;
-
-        if (!string.IsNullOrEmpty(backupPath)
-            || !string.IsNullOrEmpty(ConnectionString)
-            || !string.IsNullOrEmpty(dbName))
-            return;
-
-        var backupFileName = Path.Combine(backupPath, $"{dbName}_{DateTime.Now:yyyyMMddHHmmss}.bak");
-
-        using (var connection = new SqlConnection(ConnectionString))
+        using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var query = $"BACKUP DATABASE [{dbName}] TO DISK = @backupFileName";
-            var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@backupFileName", backupFileName);
-
-            connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-    }
-
-    public void BackupAllDatabases(string backupPath)
-    {
-        if (!string.IsNullOrEmpty(backupPath)
-            || !string.IsNullOrEmpty(ConnectionString))
-            return;
-
-        using (var connection = new SqlConnection(ConnectionString))
-        {
-            var query = "SELECT name FROM sys.databases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb')";
-            var command = new SqlCommand(query, connection);
-
-            connection.Open();
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    var databaseName = reader.GetString(0);
-                    BackupDatabase(backupPath, databaseName);
-                }
-            }
-            connection.Close();
+            var data = _context.GetAllDbSets();
+            string csv = await _convertDataToCsvAsync(data);
+            return csv;
         }
     }
 
@@ -101,6 +68,25 @@ public class DatabaseBackupService : IDisposable
         string dataSource = ConnectionString.Substring(startIndex, endIndex - startIndex);
 
         return dataSource;
+    }
+
+    public async Task<string> _convertDataToCsvAsync(List<List<object>> data)
+    {
+        using var writer = new StringWriter();
+        using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+        // Iterate through each list in data
+        foreach (var dataList in data)
+        {
+            // Write records for each inner list
+            csv.WriteRecords(dataList);
+            await writer.WriteAsync(_separator);
+            await writer.WriteLineAsync();
+        }
+
+        await writer.FlushAsync();
+
+        return writer.ToString();
     }
 
     protected virtual void Dispose(bool disposing)

@@ -138,21 +138,30 @@
                                                 <!-- Display Hours Passed -->
                                                 @if (SeeMyHours)
                                                 {
-                                                    <div class="primary-bg-color rounded float-end">
+                                                    <div class="primary-bg-color rounded float-end" style="min-width: 300px;">
                                                         <div class="h5 text-center m-2">
                                                             <span class="align-middle">My Total Hours This Month: </span>
                                                             <b class="align-middle">@_userTotalHoursThisMonth</b>
                                                         </div>
                                                     </div>
                                                 }
-                                                <!-- Refresh Page -->
-                                                <FluentButton Style="margin-left: 12px; margin-top: 8px;"
-                                                              OnClick="@Refresh"
-                                                              Loading="@_refreshLoading"
-                                                              IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
-                                                              Color="none"
-                                                              Appearance="Appearance.Outline">
-                                                </FluentButton>
+                                                <FluentStack Orientation="Orientation.Vertical"
+                                                              Style="margin-left: 12px; max-width: 80px;">
+                                                    <!-- Refresh Page -->
+                                                    <FluentButton OnClick="@Refresh"
+                                                                  Loading="@_refreshLoading"
+                                                                  IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
+                                                                  Color="none"
+                                                                  Appearance="Appearance.Outline">
+                                                    </FluentButton>
+                                                    <!-- BackUp Database -->
+                                                    <FluentButton OnClick="@BackUpDb"
+                                                                  Loading="@_backUpLoading"
+                                                                  IconStart="@(new Icons.Regular.Size32.Database())"
+                                                                  Color="none"
+                                                                  Appearance="Appearance.Outline">
+                                                    </FluentButton>
+                                                </FluentStack>
                                             </div>
                                         </div>
 

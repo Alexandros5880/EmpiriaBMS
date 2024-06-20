@@ -1446,10 +1446,21 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region DatabaseManipulation
+    bool _backUpLoading = false;
     private async Task BackUpDb()
     {
-        var folderPath = await MicrosoftTeams.PickFolderPath();
-        DatabaseBackupService.BackupDatabase(folderPath);
+        _backUpLoading = true;
+        var csv = await DatabaseBackupService.DatabaseToCSV();
+        if (!string.IsNullOrEmpty(csv))
+        {
+            var fileName = $"{DatabaseBackupService.DatabaseName}_{DateTime.Now:yyyyMMddHHmmss}.csv";
+            await MicrosoftTeams.DownloadCsvFile(fileName, csv);
+        }
+        else
+        {
+            // TODO: Display a message
+        }
+        _backUpLoading = false;
     }
     #endregion
 
