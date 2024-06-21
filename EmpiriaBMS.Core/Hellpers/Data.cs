@@ -5,6 +5,8 @@ namespace EmpiriaBMS.Core.Hellpers;
 
 public static class Data
 {
+    private static string _seperator = "  ,  ";
+
     public static string GetCsvContent<T>(IList<T> data)
     {
         var content = SCV.GenerateCsvContent(data);
@@ -86,7 +88,7 @@ public static class Data
             foreach (var prop in properties)
                 if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string))
                     columnValues.Add(prop.Name);
-            csvBuilder.AppendLine(string.Join(",", columnValues));
+            csvBuilder.AppendLine(string.Join(_seperator, columnValues));
 
 
             // Add Values
@@ -102,7 +104,7 @@ public static class Data
                         lineValues.Add(propValue?.ToString() ?? "");
                 }
 
-                csvBuilder.AppendLine(string.Join(",", lineValues));
+                csvBuilder.AppendLine(string.Join(_seperator, lineValues));
             }
 
             return csvBuilder.ToString();
@@ -127,11 +129,11 @@ public static class Data
                 {
                     if (count == 0)
                     {
-                        columns = new List<string>(line.Split(','));
+                        columns = new List<string>(line.Split(_seperator));
                     }
                     else
                     {
-                        var row = new List<string>(line.Split(','));
+                        var row = new List<string>(line.Split(_seperator));
                         if (row.Count > 1)
                             rows.Add(row);
                     }

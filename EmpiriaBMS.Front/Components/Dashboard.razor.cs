@@ -1497,6 +1497,8 @@ public partial class Dashboard : IDisposable
             memoryStream.Seek(0, SeekOrigin.Begin);
             var data = await DatabaseBackupService.ZipStreamToCsv(memoryStream);
 
+            var d = data;
+
         }
         catch (Exception ex)
         {

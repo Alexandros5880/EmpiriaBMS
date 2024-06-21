@@ -2,6 +2,7 @@
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.IO.Compression;
+using System.Reflection;
 using System.Text;
 
 
@@ -114,15 +115,33 @@ public class DatabaseBackupService : IDisposable
 
             foreach (var tuple in csvEntries)
             {
-                var Type = tuple.Item1;
+                var type = tuple.Item1;
                 var content = tuple.Item2;
 
                 using var csvStream = content.Open();
 
-                // TODO: Find Dynamic DataType Of CSV
-                var list = await _convertCsvToDataAsync<User>(csvStream);
+                if (csvStream == null)
+                    continue;
 
-                if (list != null && list.Count > 0)
+
+                // Constructing the method info for _convertCsvToDataAsync<T>
+                var convertMethod = typeof(DatabaseBackupService)
+                    .GetMethod("_convertCsvToDataAsync", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (convertMethod == null)
+                    continue;
+                // Constructing the generic method _convertCsvToDataAsync<T> based on 'type'
+                var genericConvertMethod = convertMethod.MakeGenericMethod(type);
+                if (genericConvertMethod == null)
+                    continue;
+                // Invoking the generic method dynamically
+                var task = (Task)genericConvertMethod.Invoke(this, new object[] { csvStream });
+                await task;
+                // Extracting the result from the task
+                var listProperty = task.GetType().GetProperty("Result");
+                var resultValue = listProperty.GetValue(task);
+                var list = (IEnumerable<object>)resultValue;
+
+                if (list != null && list.Count() > 0)
                 {
                     var objs = list.Cast<object>().ToList();
                     data.Add(objs);
