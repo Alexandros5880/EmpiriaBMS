@@ -117,48 +117,57 @@ public static class Data
 
         public static async Task<List<T>> ImportFromCsv<T>(Stream stream)
         {
-            using (StreamReader reader = new StreamReader(stream))
+            try
             {
-
-                List<string> columns = new List<string>();
-                List<List<string>> rows = new List<List<string>>();
-
-                string line;
-                int count = 0;
-                while ((line = await reader.ReadLineAsync()) != null)
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    if (count == 0)
+
+                    List<string> columns = new List<string>();
+                    List<List<string>> rows = new List<List<string>>();
+
+                    string line;
+                    int count = 0;
+                    while ((line = await reader.ReadLineAsync()) != null)
                     {
-                        columns = new List<string>(line.Split(_seperator));
+                        if (count == 0)
+                        {
+                            columns = new List<string>(line.Split(_seperator));
+                        }
+                        else
+                        {
+                            var row = new List<string>(line.Split(_seperator));
+                            if (row.Count > 1)
+                                rows.Add(row);
+                        }
+                        count++;
                     }
-                    else
+
+                    // Create Instance
+                    PropertyInfo[] properties = typeof(T).GetProperties();
+                    List<T> data = new List<T>();
+
+                    foreach (var row in rows)
                     {
-                        var row = new List<string>(line.Split(_seperator));
-                        if (row.Count > 1)
-                            rows.Add(row);
+                        if (row == null || row.Count == 0)
+                            continue;
+                        var column = 0;
+                        T instance = Activator.CreateInstance<T>();
+                        foreach (var val in row)
+                        {
+                            _setProperty(instance, columns[column], val);
+                            column++;
+                        }
+                        data.Add(instance);
                     }
-                    count++;
+
+                    return data;
                 }
-
-                // Create Instance
-                PropertyInfo[] properties = typeof(T).GetProperties();
-                List<T> data = new List<T>();
-
-                foreach (var row in rows)
-                {
-                    if (row == null || row.Count == 0)
-                        continue;
-                    var column = 0;
-                    T instance = Activator.CreateInstance<T>();
-                    foreach (var val in row)
-                    {
-                        _setProperty(instance, columns[column], val);
-                        column++;
-                    }
-                    data.Add(instance);
-                }
-
-                return data;
+            }
+            catch (Exception ex)
+            {
+                // TODO: Log Exception
+                Console.WriteLine($"Exception Data.ImportFromCsv: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                return null;
             }
         }
     }

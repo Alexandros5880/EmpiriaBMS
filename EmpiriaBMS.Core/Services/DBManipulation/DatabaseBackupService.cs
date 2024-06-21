@@ -32,61 +32,44 @@ public class DatabaseBackupService : IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            try
             {
-                //_setDbIdentityInsert(_context, true); // Enable IDENTITY_INSERT for all tables
-                try
-                {
 
-                    foreach (var items in data)
+                foreach (var items in data)
+                {
+                    if (items == null || items.Count == 0)
+                        continue;
+
+                    Type type = Data.GetListItemType(items);
+
+                    // Get the Set<T> method from DbContext
+                    MethodInfo setMethod = typeof(DbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
+
+                    // Invoke the Set<T> method to get the DbSet<T>
+                    object dbSet = setMethod.Invoke(_context, null);
+
+                    // Get the Add method from DbSet<T>
+                    MethodInfo addMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("Add", new[] { type });
+
+                    // Ensure the method exists (although it typically should)
+                    if (addMethod != null)
                     {
-                        if (items == null || items.Count == 0)
-                            continue;
-
-                        Type type = Data.GetListItemType(items);
-
-                        // Get the Set<T> method from DbContext
-                        MethodInfo setMethod = typeof(DbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
-
-                        // Invoke the Set<T> method to get the DbSet<T>
-                        object dbSet = setMethod.Invoke(_context, null);
-
-                        // Get the AddRangeAsync method from DbSet<T>
-                        MethodInfo addRangeAsyncMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("AddRangeAsync", new[] { typeof(IEnumerable<>).MakeGenericType(type) });
-
-                        if (addRangeAsyncMethod == null)
+                        foreach (var item in items)
                         {
-                            // Try another overload with params TEntity[]
-                            addRangeAsyncMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("AddRangeAsync", new[] { type.MakeArrayType() });
+                            // Invoke the Add method with each item
+                            addMethod.Invoke(dbSet, new[] { item });
+                            _context.Entry(item).State = EntityState.Modified;
                         }
 
-                        if (addRangeAsyncMethod != null)
-                        {
-                            // Invoke the generic method and get the result
-                            Array array = Array.CreateInstance(type, items.Count);
-                            for (int i = 0; i < items.Count; i++)
-                            {
-                                array.SetValue(items[i], i);
-                            }
-
-                            // Invoke the AddRangeAsync method with the items
-                            await (Task)addRangeAsyncMethod.Invoke(dbSet, new object[] { array });
-                            await _context.SaveChangesAsync();
-
-                        }
+                        // Save changes asynchronously
+                        await _context.SaveChangesAsync();
                     }
-
-                    //_setDbIdentityInsert(_context, false); // Disable IDENTITY_INSERT for all tables
-                    transaction.Commit();
                 }
-                catch (Exception ex)
-                {
-                    // TODO: Log Exception
-                    Console.WriteLine($"Exception DatabaseBackupService _convertCsvToDataAsync: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-
-                    //_setDbIdentityInsert(_context, false); // Disable IDENTITY_INSERT for all tables
-                    transaction.Rollback();
-                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: Log Exception
+                Console.WriteLine($"Exception DatabaseBackupService SaveToDB: {ex.Message}, \nInner: {ex.InnerException?.Message}");
             }
         }
     }
@@ -237,40 +220,6 @@ public class DatabaseBackupService : IDisposable
         }
     }
     #endregion
-
-    //private void _setDbIdentityInsert(AppDbContext context, bool desiredState)
-    //{
-    //    // Get all entity types
-    //    var entityTypes = context.Model.GetEntityTypes();
-
-    //    // Find all tables with identity columns
-    //    var tablesWithIdentityColumns = entityTypes
-    //        .Where(e => e.FindPrimaryKey().Properties.Any(p => p.ValueGenerated == ValueGenerated.OnAdd))
-    //        .Select(e => e.GetTableName())
-    //        .Distinct()
-    //        .ToList();
-
-    //    // Enable IDENTITY_INSERT for each table
-    //    foreach (var table in tablesWithIdentityColumns)
-    //    {
-    //        string tableName = $"empiriabms.dbo.{table}";
-
-    //        string sql = $@"
-    //            DECLARE @currentState BIT;
-    //            SELECT @currentState = ISNULL(OBJECTPROPERTY(OBJECT_ID('{tableName}'), 'TableHasIdentity'), 0);
-    //            IF (@currentState <> {(desiredState ? "1" : "0")})
-    //            BEGIN
-    //                SET IDENTITY_INSERT [{tableName}] {(desiredState ? "ON" : "OFF")};
-    //            END
-    //        ";
-
-    //        //string sql = $@"SET IDENTITY_INSERT [{tableName}] {(desiredState ? "ON" : "OFF")};";
-
-    //        Console.WriteLine($"\n\n{sql}\n\n");
-
-    //        context.Database.ExecuteSqlRaw(sql);
-    //    }
-    //}
 
     private string _getDbName()
     {
