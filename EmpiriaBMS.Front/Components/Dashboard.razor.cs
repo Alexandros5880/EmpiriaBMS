@@ -1496,9 +1496,7 @@ public partial class Dashboard : IDisposable
             await file.OpenReadStream().CopyToAsync(memoryStream);
             memoryStream.Seek(0, SeekOrigin.Begin);
             var data = await DatabaseBackupService.ZipStreamToCsv(memoryStream);
-
-            var d = data;
-
+            await DatabaseBackupService.SaveToDB(data);
         }
         catch (Exception ex)
         {
