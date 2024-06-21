@@ -1453,10 +1453,10 @@ public partial class Dashboard : IDisposable
         _backUpLoading = true;
         StateHasChanged();
 
-        var csv = await DatabaseBackupService.DatabaseToCSV();
-        if (!string.IsNullOrEmpty(csv))
+        Dictionary<string, string> csvs = DatabaseBackupService.DatabaseToCSV();
+        if (csvs != null && csvs.Count > 0)
         {
-            var zipBytes = await DatabaseBackupService.CsvToZipBytes(csv);
+            var zipBytes = await DatabaseBackupService.CsvToZipBytes(csvs);
             var base64Zip = Convert.ToBase64String(zipBytes);
 
             var dateTime = DateTime.Now;
@@ -1466,6 +1466,7 @@ public partial class Dashboard : IDisposable
         else
         {
             // TODO: Display a message
+            Console.WriteLine($"\n\ncsvs == null || csvs.Count == 0\n\n");
         }
 
         _backUpLoading = false;

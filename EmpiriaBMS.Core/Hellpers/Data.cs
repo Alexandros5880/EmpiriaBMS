@@ -12,6 +12,28 @@ public static class Data
         return content;
     }
 
+    public static string GenerateCsvContentDynamic(List<object> dataList, Type itemType)
+    {
+        MethodInfo method = typeof(Data).GetMethod("GetCsvContent", BindingFlags.Public | BindingFlags.Static);
+        if (method == null)
+            throw new InvalidOperationException("The method GetCsvContent could not be found.");
+
+        // Make the method generic with the specified item type
+        MethodInfo genericMethod = method.MakeGenericMethod(itemType);
+
+        // Invoke the generic method and get the result
+        Array array = Array.CreateInstance(itemType, dataList.Count);
+        for (int i = 0; i < dataList.Count; i++)
+        {
+            array.SetValue(dataList[i], i);
+        }
+
+        // Invoke the generic method and get the result
+        var result = genericMethod.Invoke(null, new object[] { array });
+
+        return (string)result;
+    }
+
     public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
     {
         switch (fileType)
@@ -36,6 +58,19 @@ public static class Data
             default:
                 return null;
         }
+    }
+
+    public static Type GetListItemType(List<object> dataList)
+    {
+        foreach (var item in dataList)
+        {
+            if (item != null)
+            {
+                return item.GetType();
+            }
+        }
+
+        return null;
     }
 
     private static class SCV

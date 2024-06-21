@@ -1,10 +1,12 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.IO.Compression;
 using System.Text;
+
 
 namespace EmpiriaBMS.Core.Services.DBManipulation;
 
@@ -14,8 +16,6 @@ public class DatabaseBackupService : IDisposable
 
     public readonly string ConnectionString;
     public readonly string DatabaseName;
-
-    //private string _separator = "---";
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
@@ -30,29 +30,64 @@ public class DatabaseBackupService : IDisposable
         }
     }
 
-    public async Task<string?> DatabaseToCSV()
+    #region DATA To CSV
+    public Dictionary<string, string> DatabaseToCSV()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var data = _context.GetAllDbSets();
-            string csv = await _convertDataToCsvAsync(data);
-            return csv;
+            Dictionary<string, string> csvs = _convertDataToCsvAsync(data);
+            return csvs;
         }
     }
 
-    public async Task<byte[]> CsvToZipBytes(string csvContent)
+    private Dictionary<string, string> _convertDataToCsvAsync(List<List<object>> data)
+    {
+        Dictionary<string, string> content = new Dictionary<string, string>();
+
+        // Iterate through each list in data
+        foreach (var dataList in data)
+        {
+            if (dataList == null || dataList.Count == 0)
+                continue;
+
+            // Get the type of the list
+            Type listType = Data.GetListItemType(dataList);
+
+
+            var date = DateTime.Today;
+            var fileName = $"{listType.Name}s-{date.ToEuropeFormat()}.csv";
+
+            string csvContent = Data.GenerateCsvContentDynamic(dataList, listType);
+
+            if (!string.IsNullOrEmpty(csvContent))
+                content.Add(fileName, csvContent);
+        }
+
+        return content;
+    }
+
+    public async Task<byte[]> CsvToZipBytes(Dictionary<string, string> csvFiles)
     {
         using var memoryStream = new MemoryStream();
         using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
         {
-            var zipEntry = archive.CreateEntry("data.csv", CompressionLevel.Fastest);
-            using var zipEntryStream = zipEntry.Open();
-            using var streamWriter = new StreamWriter(zipEntryStream);
-            await streamWriter.WriteAsync(csvContent);
+            foreach (var c in csvFiles)
+            {
+                var fileName = c.Key;
+                var csvContent = c.Value;
+
+                var zipEntry = archive.CreateEntry(fileName, CompressionLevel.Fastest);
+                using var zipEntryStream = zipEntry.Open();
+                using var streamWriter = new StreamWriter(zipEntryStream, Encoding.UTF8);
+                await streamWriter.WriteLineAsync(csvContent);
+            }
         }
         return memoryStream.ToArray();
     }
+    #endregion
 
+    #region CSV To DATA
     public async Task<List<List<object>>> ZipStreamToCsv(MemoryStream stream)
     {
         try
@@ -77,34 +112,6 @@ public class DatabaseBackupService : IDisposable
         }
     }
 
-    private string _getDbName()
-    {
-        int startIndex = ConnectionString.IndexOf("Initial Catalog=") + "Initial Catalog=".Length;
-        int endIndex = ConnectionString.IndexOf(';', startIndex);
-        string dataSource = ConnectionString.Substring(startIndex, endIndex - startIndex);
-
-        return dataSource;
-    }
-
-    private async Task<string> _convertDataToCsvAsync(List<List<object>> data)
-    {
-        using var writer = new StringWriter();
-        using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-
-        // Iterate through each list in data
-        foreach (var dataList in data)
-        {
-            // Write records for each inner list
-            csv.WriteRecords(dataList);
-            //await writer.WriteAsync(_separator);
-            //await writer.WriteLineAsync();
-        }
-
-        await writer.FlushAsync();
-
-        return writer.ToString();
-    }
-
     private async Task<List<List<object>>> _convertCsvToDataAsync(Stream stream)
     {
         using (StreamReader sr = new StreamReader(stream, Encoding.UTF8))
@@ -124,14 +131,19 @@ public class DatabaseBackupService : IDisposable
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
+
+                var users = csv.GetRecords<User>();
+
+
                 var dbSetTypes = _context.GetAllDbSetsTypes();
 
                 foreach (var entityType in dbSetTypes)
                 {
+
+
                     // Construct the GetRecords<T> method dynamically
                     var getRecordsMethod = typeof(CsvReader).GetMethod("GetRecords", new Type[] { });
                     var genericGetRecordsMethod = getRecordsMethod.MakeGenericMethod(entityType);
-
                     // Invoke GetRecords<T> to get records of current entityType
                     var records = (IEnumerable<object>)genericGetRecordsMethod.Invoke(csv, null);
 
@@ -155,6 +167,16 @@ public class DatabaseBackupService : IDisposable
             return data;
 
         }
+    }
+    #endregion
+
+    private string _getDbName()
+    {
+        int startIndex = ConnectionString.IndexOf("Initial Catalog=") + "Initial Catalog=".Length;
+        int endIndex = ConnectionString.IndexOf(';', startIndex);
+        string dataSource = ConnectionString.Substring(startIndex, endIndex - startIndex);
+
+        return dataSource;
     }
 
     protected virtual void Dispose(bool disposing)
