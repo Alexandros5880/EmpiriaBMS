@@ -1,9 +1,6 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using EmpiriaBMS.Core.Hellpers;
+﻿using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using System.IO.Compression;
 using System.Text;
 
@@ -56,7 +53,7 @@ public class DatabaseBackupService : IDisposable
 
 
             var date = DateTime.Today;
-            var fileName = $"{listType.Name}s-{date.ToEuropeFormat()}.csv";
+            var fileName = $"{listType.Name}-{date.ToEuropeFormat()}.csv";
 
             string csvContent = Data.GenerateCsvContentDynamic(dataList, listType);
 
@@ -88,18 +85,49 @@ public class DatabaseBackupService : IDisposable
     #endregion
 
     #region CSV To DATA
-    public async Task<List<List<object>>> ZipStreamToCsv(MemoryStream stream)
+    public async Task<List<List<object>>?> ZipStreamToCsv(MemoryStream stream)
     {
         try
         {
             using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
-            var csvEntry = archive.Entries.FirstOrDefault(entry => entry.Name.EndsWith(".csv", StringComparison.OrdinalIgnoreCase));
-            if (csvEntry == null)
-                throw new NullReferenceException(nameof(csvEntry));
 
-            using var csvStream = csvEntry.Open();
+            var assemplyName = "EmpiriaBMS.Models";
+            var nameSpace = "EmpiriaBMS.Models.Models";
 
-            List<List<object>> data = await _convertCsvToDataAsync(csvStream);
+            // Return Dictionary Entry Name and antry Content
+            List<Tuple<Type?, ZipArchiveEntry>> csvEntries = archive.Entries
+                .Where(entry => entry.Name.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+                .Select(entry =>
+                {
+                    int indexOfDash = entry.Name.IndexOf('-');
+                    var typeName = $"{nameSpace}.{entry.Name.Substring(0, indexOfDash)}, {assemplyName}";
+                    Type? type = Type.GetType(typeName);
+                    return Tuple.Create(type, entry);
+                })
+                .Where(t => t.Item1 != null)
+                .ToList();
+
+            if (csvEntries == null || csvEntries.Count == 0)
+                return null;
+
+            List<List<object>> data = new List<List<object>>();
+
+            foreach (var tuple in csvEntries)
+            {
+                var Type = tuple.Item1;
+                var content = tuple.Item2;
+
+                using var csvStream = content.Open();
+
+                // TODO: Find Dynamic DataType Of CSV
+                var list = await _convertCsvToDataAsync<User>(csvStream);
+
+                if (list != null && list.Count > 0)
+                {
+                    var objs = list.Cast<object>().ToList();
+                    data.Add(objs);
+                }
+            }
 
             return data;
         }
@@ -112,60 +140,17 @@ public class DatabaseBackupService : IDisposable
         }
     }
 
-    private async Task<List<List<object>>> _convertCsvToDataAsync(Stream stream)
+    private async Task<List<T>?> _convertCsvToDataAsync<T>(Stream stream)
     {
-        using (StreamReader sr = new StreamReader(stream, Encoding.UTF8))
+        try
         {
-            var content = await sr.ReadToEndAsync();
-            var data = new List<List<object>>();
-
-            if (content == null)
-                return data;
-
-            using var reader = new StringReader(content);
-            using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = false,
-                Delimiter = ",",
-            });
-
-            using (var _context = _dbContextFactory.CreateDbContext())
-            {
-
-                var users = csv.GetRecords<User>();
-
-
-                var dbSetTypes = _context.GetAllDbSetsTypes();
-
-                foreach (var entityType in dbSetTypes)
-                {
-
-
-                    // Construct the GetRecords<T> method dynamically
-                    var getRecordsMethod = typeof(CsvReader).GetMethod("GetRecords", new Type[] { });
-                    var genericGetRecordsMethod = getRecordsMethod.MakeGenericMethod(entityType);
-                    // Invoke GetRecords<T> to get records of current entityType
-                    var records = (IEnumerable<object>)genericGetRecordsMethod.Invoke(csv, null);
-
-                    // Convert records to List<List<object>> format
-                    var entityData = new List<List<object>>();
-                    foreach (var record in records)
-                    {
-                        var recordProperties = record.GetType().GetProperties();
-                        var rowData = recordProperties.Select(p => p.GetValue(record)).Cast<object>().ToList();
-                        entityData.Add(rowData);
-                    }
-
-                    // Add entityData to main data list
-                    data.AddRange(entityData);
-                }
-            }
-
-            //    var users = csv.GetRecords<User>();
-            //var roles = csv.GetRecords<Role>();
-
+            List<T> data = await Data.ImportData<T>(stream);
             return data;
-
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception DatabaseBackupService _convertCsvToDataAsync: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
         }
     }
     #endregion
