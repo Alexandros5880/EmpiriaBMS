@@ -33,52 +33,31 @@ public class DatabaseBackupService : IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            try
+            foreach (var items in data)
             {
-                foreach (var items in data)
+                if (items == null || items.Count == 0)
+                    continue;
+
+                Type type = Data.GetListItemType(items);
+                var tableName = GetTableName(_context, type);
+
+                await SetDbIdentityInsert(_context, tableName, true);
+
+                foreach (var item in items)
                 {
-                    if (items == null || items.Count == 0)
-                        continue;
-
-                    Type type = Data.GetListItemType(items);
-                    var tableName = GetTableName(_context, type);
-                    await SetDbIdentityInsert(_context, tableName, true);
-
-                    foreach (var item in items)
+                    try
                     {
                         await Data.AddAsync(_context, item);
                         await _context.SaveChangesAsync();
-                        //try
-                        //{
-                        //    addMethod.Invoke(dbSet, new[] { item });
-                        //    //_context.Entry(item).State = EntityState.Modified;
-                        //    await _context.SaveChangesAsync();
-                        //}
-                        //catch (Exception ex)
-                        //{
-                        //    // TODO: Log Exception
-                        //    Console.WriteLine($"Exception DatabaseBackupService SaveToDB Add Item: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                        //}
                     }
-
-                    await SetDbIdentityInsert(_context, tableName, false);
+                    catch (Exception ex)
+                    {
+                        // TODO: Log Exception
+                        Console.WriteLine($"Exception DatabaseBackupService SaveToDB Add Item: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                // TODO: Log Exception
-                Console.WriteLine($"Exception DatabaseBackupService SaveToDB: {ex.Message}, \nInner: {ex.InnerException?.Message}");
 
-                // Attempt to reset IDENTITY_INSERT to OFF in case of exception
-                foreach (var items in data)
-                {
-                    if (items == null || items.Count == 0)
-                        continue;
-
-                    Type type = Data.GetListItemType(items);
-                    var tableName = GetTableName(_context, type);
-                    await SetDbIdentityInsert(_context, tableName, false);
-                }
+                await SetDbIdentityInsert(_context, tableName, false);
             }
         }
     }
