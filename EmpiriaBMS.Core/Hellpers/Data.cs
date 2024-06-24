@@ -1,5 +1,8 @@
-﻿using System.Reflection;
+﻿using EmpiriaBMS.Models.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using System.Text;
+
 
 namespace EmpiriaBMS.Core.Hellpers;
 
@@ -73,6 +76,53 @@ public static class Data
         }
 
         return null;
+    }
+
+    public static bool Add(AppDbContext AppDbContext, object item)
+    {
+        Type type = item.GetType();
+
+        // Get the Set<T> method from DbContext
+        MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
+
+        // Invoke the Set<T> method to get the DbSet<T>
+        object dbSet = setMethod.Invoke(AppDbContext, null);
+
+        // Get the Add method from DbSet<T>
+        MethodInfo addMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("Add", new[] { type });
+
+        if (addMethod != null)
+        {
+            addMethod.Invoke(dbSet, new[] { item });
+            //_context.Entry(item).State = EntityState.Modified;
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public static async Task<bool> AddAsync(AppDbContext appDbContext, object item)
+    {
+        Type type = item.GetType();
+
+        // Get the Set<T> method from DbContext
+        MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
+
+        // Invoke the Set<T> method to get the DbSet<T>
+        object dbSet = setMethod.Invoke(appDbContext, null);
+
+        // Get the AddAsync method from DbSet<T>
+        MethodInfo addAsyncMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("AddAsync", new[] { type, typeof(CancellationToken) });
+
+        if (addAsyncMethod != null)
+        {
+            // Invoke the AddAsync method with a CancellationToken.None
+            var valueTask = (dynamic)addAsyncMethod.Invoke(dbSet, new object[] { item, CancellationToken.None });
+            await valueTask?.AsTask();
+            return true;
+        }
+        else
+            return false;
     }
 
     private static class SCV

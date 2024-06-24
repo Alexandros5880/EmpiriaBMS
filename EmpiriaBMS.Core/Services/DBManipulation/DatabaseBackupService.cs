@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.IO.Compression;
 using System.Reflection;
 using System.Text;
@@ -24,7 +25,7 @@ public class DatabaseBackupService : IDisposable
         {
             ConnectionString = Environment.GetEnvironmentVariable("ConnectionString");
             if (!string.IsNullOrEmpty(ConnectionString))
-                DatabaseName = _getDbName();
+                DatabaseName = GetDbName();
         }
     }
 
@@ -34,42 +35,50 @@ public class DatabaseBackupService : IDisposable
         {
             try
             {
-
                 foreach (var items in data)
                 {
                     if (items == null || items.Count == 0)
                         continue;
 
                     Type type = Data.GetListItemType(items);
+                    var tableName = GetTableName(_context, type);
+                    await SetDbIdentityInsert(_context, tableName, true);
 
-                    // Get the Set<T> method from DbContext
-                    MethodInfo setMethod = typeof(DbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
-
-                    // Invoke the Set<T> method to get the DbSet<T>
-                    object dbSet = setMethod.Invoke(_context, null);
-
-                    // Get the Add method from DbSet<T>
-                    MethodInfo addMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("Add", new[] { type });
-
-                    // Ensure the method exists (although it typically should)
-                    if (addMethod != null)
+                    foreach (var item in items)
                     {
-                        foreach (var item in items)
-                        {
-                            // Invoke the Add method with each item
-                            addMethod.Invoke(dbSet, new[] { item });
-                            _context.Entry(item).State = EntityState.Modified;
-                        }
-
-                        // Save changes asynchronously
+                        await Data.AddAsync(_context, item);
                         await _context.SaveChangesAsync();
+                        //try
+                        //{
+                        //    addMethod.Invoke(dbSet, new[] { item });
+                        //    //_context.Entry(item).State = EntityState.Modified;
+                        //    await _context.SaveChangesAsync();
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    // TODO: Log Exception
+                        //    Console.WriteLine($"Exception DatabaseBackupService SaveToDB Add Item: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                        //}
                     }
+
+                    await SetDbIdentityInsert(_context, tableName, false);
                 }
             }
             catch (Exception ex)
             {
                 // TODO: Log Exception
                 Console.WriteLine($"Exception DatabaseBackupService SaveToDB: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+
+                // Attempt to reset IDENTITY_INSERT to OFF in case of exception
+                foreach (var items in data)
+                {
+                    if (items == null || items.Count == 0)
+                        continue;
+
+                    Type type = Data.GetListItemType(items);
+                    var tableName = GetTableName(_context, type);
+                    await SetDbIdentityInsert(_context, tableName, false);
+                }
             }
         }
     }
@@ -221,7 +230,71 @@ public class DatabaseBackupService : IDisposable
     }
     #endregion
 
-    private string _getDbName()
+    #region DB Settings
+    public static async Task SetDbIdentityInsert(AppDbContext context, bool desiredState)
+    {
+        var tablesNames = await GetTablesNames(context);
+        foreach (var table in tablesNames)
+        {
+            await SetDbIdentityInsert(context, table, desiredState);
+        }
+    }
+
+    public static async Task SetDbIdentityInsert(AppDbContext context, string tableName, bool desiredState)
+    {
+        try
+        {
+            // SQL command to set IDENTITY_INSERT
+            string sqlSetIdentityInsert = $"SET IDENTITY_INSERT [{tableName}] {(desiredState ? "ON" : "OFF")};";
+
+            // Execute the SQL command to set IDENTITY_INSERT
+            await context.Database.ExecuteSqlRawAsync(sqlSetIdentityInsert);
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log Exception
+            Console.WriteLine($"Exception in SetDbIdentityInsert: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+    #endregion
+
+    #region Retrieve Db Information
+    public static async Task<List<string>> GetTablesNames(AppDbContext context)
+    {
+        using (var transaction = context.Database.BeginTransaction())
+        {
+            try
+            {
+                // Get all entity types
+                var entityTypes = context.Model.GetEntityTypes();
+
+                // Find all tables with identity columns
+                var tablesWithIdentityColumns = entityTypes
+                    .Where(e => e.FindPrimaryKey().Properties.Any(p => p.ValueGenerated == ValueGenerated.OnAdd))
+                    .Select(e => e.GetTableName())
+                    .Distinct()
+                    .ToList();
+
+                await transaction.CommitAsync();
+                return tablesWithIdentityColumns;
+            }
+            catch (Exception ex)
+            {
+                // TODO: Log Exception
+                Console.WriteLine($"Exception DatabaseBackupService _getDBTablesNames: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+
+                await transaction.RollbackAsync();
+                return null;
+            }
+        }
+    }
+
+    public string GetTableName(AppDbContext context, Type type)
+    {
+        return context.Model.FindEntityType(type).GetTableName();
+    }
+
+    private string GetDbName()
     {
         int startIndex = ConnectionString.IndexOf("Initial Catalog=") + "Initial Catalog=".Length;
         int endIndex = ConnectionString.IndexOf(';', startIndex);
@@ -229,6 +302,7 @@ public class DatabaseBackupService : IDisposable
 
         return dataSource;
     }
+    #endregion
 
     protected virtual void Dispose(bool disposing)
     {
