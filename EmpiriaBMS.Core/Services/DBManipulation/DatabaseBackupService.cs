@@ -33,15 +33,16 @@ public class DatabaseBackupService : IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            await SetDbIdentityInsert(_context, true);
+
             foreach (var items in data)
             {
                 if (items == null || items.Count == 0)
                     continue;
 
                 Type type = Data.GetListItemType(items);
-                var tableName = GetTableName(_context, type);
-
-                await SetDbIdentityInsert(_context, tableName, true);
+                //var tableName = GetTableName(_context, type);
+                //await SetDbIdentityInsert(_context, tableName, true);
 
                 foreach (var item in items)
                 {
@@ -57,8 +58,10 @@ public class DatabaseBackupService : IDisposable
                     }
                 }
 
-                await SetDbIdentityInsert(_context, tableName, false);
+                //await SetDbIdentityInsert(_context, tableName, false);
             }
+
+            await SetDbIdentityInsert(_context, false);
         }
     }
 
@@ -231,31 +234,41 @@ public class DatabaseBackupService : IDisposable
             throw new ArgumentException("The table name cannot be null or empty.", nameof(tableName));
         }
 
+        if (tableName.Equals("Roles"))
+        {
+            Console.WriteLine("Restore Roles");
+        }
+
         try
         {
+            Console.WriteLine("\n\n\n");
             // Check if the database connection is open
             if (context.Database.GetDbConnection().State != System.Data.ConnectionState.Open)
             {
-                Console.WriteLine("Opening database connection...");
+                Console.WriteLine("\n\nOpening database connection...");
                 await context.Database.OpenConnectionAsync();
             }
 
             // SQL command to set IDENTITY_INSERT
             string sqlSetIdentityInsert = $"SET IDENTITY_INSERT [{tableName}] {(desiredState ? "ON" : "OFF")};";
 
-            // Log the SQL command for debugging purposes
-            Console.WriteLine($"Executing SQL: {sqlSetIdentityInsert}");
-
             // Execute the SQL command to set IDENTITY_INSERT
             var result = await context.Database.ExecuteSqlRawAsync(sqlSetIdentityInsert);
 
             // Log success message
-            Console.WriteLine($"Successfully set IDENTITY_INSERT {(desiredState ? "ON" : "OFF")} for {tableName}. Result: {result}");
+            Console.WriteLine($"Successfully set IDENTITY_INSERT {(desiredState ? "ON" : "OFF")} for {tableName}. Result: {result}\n\n\n");
+
+            // Check if the database connection is open
+            if (context.Database.GetDbConnection().State != System.Data.ConnectionState.Open)
+            {
+                Console.WriteLine("\n\nClosing database connection...");
+                await context.Database.CloseConnectionAsync();
+            }
         }
         catch (Exception ex)
         {
             // Log Exception with detailed information
-            Console.WriteLine($"Exception in SetDbIdentityInsert: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.WriteLine($"\n\nException in SetDbIdentityInsert: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
     #endregion

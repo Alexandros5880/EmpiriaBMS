@@ -1449,7 +1449,7 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region DatabaseManipulation
+    #region Database Manipulation
     bool _backUpLoading = false;
     private async Task BackUpDb()
     {

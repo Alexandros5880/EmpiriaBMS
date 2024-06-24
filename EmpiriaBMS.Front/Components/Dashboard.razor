@@ -176,7 +176,7 @@
                                                     <!-- BackUp Database -->
                                                     @if (SeeBackupDatabase)
                                                     {
-                                                        <FluentButton OnClick="@BackUpDb"
+                                                        <FluentButton OnClick="@(async() => await BackUpDb())"
                                                                       Loading="@_backUpLoading"
                                                                       IconStart="@(new MyIcons.Size32.BackupDB())"
                                                                       Color="none"

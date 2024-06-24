@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Models.Enum;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
@@ -60,13 +59,12 @@ public class AppDbContext : DbContext
     {
         Enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
-        optionsBuilder.UseSqlServer(SelectedConnectionString)
-                      .LogTo(Console.WriteLine, LogLevel.Information)  // Enable detailed logging
-                      .EnableSensitiveDataLogging();
-        optionsBuilder.EnableSensitiveDataLogging();
-        optionsBuilder.EnableDetailedErrors();
-        optionsBuilder.EnableServiceProviderCaching();
-        optionsBuilder.EnableThreadSafetyChecks();
+        optionsBuilder.UseSqlServer(SelectedConnectionString);
+        //optionsBuilder.LogTo(Console.WriteLine, LogLevel.Debug);
+        //optionsBuilder.EnableSensitiveDataLogging();
+        //optionsBuilder.EnableDetailedErrors();
+        //optionsBuilder.EnableServiceProviderCaching();
+        //optionsBuilder.EnableThreadSafetyChecks();
         base.OnConfiguring(optionsBuilder);
     }
 
