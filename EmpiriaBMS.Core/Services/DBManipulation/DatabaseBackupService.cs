@@ -33,16 +33,14 @@ public class DatabaseBackupService : IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            await SetDbIdentityInsert(_context, true);
-
             foreach (var items in data)
             {
                 if (items == null || items.Count == 0)
                     continue;
 
                 Type type = Data.GetListItemType(items);
-                //var tableName = GetTableName(_context, type);
-                //await SetDbIdentityInsert(_context, tableName, true);
+                var tableName = GetTableName(_context, type);
+                await SetDbIdentityInsert(_context, tableName, true);
 
                 foreach (var item in items)
                 {
@@ -58,10 +56,8 @@ public class DatabaseBackupService : IDisposable
                     }
                 }
 
-                //await SetDbIdentityInsert(_context, tableName, false);
+                await SetDbIdentityInsert(_context, tableName, false);
             }
-
-            await SetDbIdentityInsert(_context, false);
         }
     }
 
@@ -213,15 +209,6 @@ public class DatabaseBackupService : IDisposable
     #endregion
 
     #region DB Settings
-    public static async Task SetDbIdentityInsert(AppDbContext context, bool desiredState)
-    {
-        var tablesNames = await GetTablesNames(context);
-        foreach (var table in tablesNames)
-        {
-            await SetDbIdentityInsert(context, table, desiredState);
-        }
-    }
-
     public static async Task SetDbIdentityInsert(AppDbContext context, string tableName, bool desiredState)
     {
         if (context == null)
@@ -232,11 +219,6 @@ public class DatabaseBackupService : IDisposable
         if (string.IsNullOrWhiteSpace(tableName))
         {
             throw new ArgumentException("The table name cannot be null or empty.", nameof(tableName));
-        }
-
-        if (tableName.Equals("Roles"))
-        {
-            Console.WriteLine("Restore Roles");
         }
 
         try

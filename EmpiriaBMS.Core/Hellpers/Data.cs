@@ -10,6 +10,7 @@ public static class Data
 {
     private static string _seperator = "  ,  ";
 
+    #region Get CSV String Content From Data
     public static string GetCsvContent<T>(IList<T> data)
     {
         var content = SCV.GenerateCsvContent(data);
@@ -38,6 +39,7 @@ public static class Data
 
         return (string)result;
     }
+    #endregion
 
     public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
     {
@@ -78,52 +80,177 @@ public static class Data
         return null;
     }
 
+    #region Add / Update / Delete Records
     public static bool Add(AppDbContext AppDbContext, object item)
     {
-        Type type = item.GetType();
-
-        // Get the Set<T> method from DbContext
-        MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
-
-        // Invoke the Set<T> method to get the DbSet<T>
-        object dbSet = setMethod.Invoke(AppDbContext, null);
-
-        // Get the Add method from DbSet<T>
-        MethodInfo addMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("Add", new[] { type });
-
-        if (addMethod != null)
+        try
         {
-            addMethod.Invoke(dbSet, new[] { item });
-            //_context.Entry(item).State = EntityState.Modified;
-            return true;
+            Type type = item.GetType();
+
+            // Get the Set<T> method from DbContext
+            MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
+
+            // Invoke the Set<T> method to get the DbSet<T>
+            object dbSet = setMethod.Invoke(AppDbContext, null);
+
+            // Get the Add method from DbSet<T>
+            MethodInfo addMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("Add", new[] { type });
+
+            if (addMethod != null)
+            {
+                addMethod.Invoke(dbSet, new[] { item });
+                AppDbContext.Entry(item).State = EntityState.Added;
+                return true;
+            }
+            else
+                return false;
         }
-        else
+        catch (Exception ex)
+        {
+            // TODO: Log Exception
+            Console.WriteLine($"Exception Data.Add: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+
             return false;
+        }
     }
 
     public static async Task<bool> AddAsync(AppDbContext appDbContext, object item)
     {
-        Type type = item.GetType();
-
-        // Get the Set<T> method from DbContext
-        MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
-
-        // Invoke the Set<T> method to get the DbSet<T>
-        object dbSet = setMethod.Invoke(appDbContext, null);
-
-        // Get the AddAsync method from DbSet<T>
-        MethodInfo addAsyncMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("AddAsync", new[] { type, typeof(CancellationToken) });
-
-        if (addAsyncMethod != null)
+        try
         {
-            // Invoke the AddAsync method with a CancellationToken.None
-            var valueTask = (dynamic)addAsyncMethod.Invoke(dbSet, new object[] { item, CancellationToken.None });
-            await valueTask?.AsTask();
-            return true;
+            Type type = item.GetType();
+
+            // Get the Set<T> method from DbContext
+            MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
+
+            // Invoke the Set<T> method to get the DbSet<T>
+            object dbSet = setMethod.Invoke(appDbContext, null);
+
+            // Get the AddAsync method from DbSet<T>
+            MethodInfo addAsyncMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("AddAsync", new[] { type, typeof(CancellationToken) });
+
+            if (addAsyncMethod != null)
+            {
+                // Invoke the AddAsync method with a CancellationToken.None
+                var valueTask = (dynamic)addAsyncMethod.Invoke(dbSet, new object[] { item, CancellationToken.None });
+                await valueTask?.AsTask();
+                appDbContext.Entry(item).State = EntityState.Added;
+                return true;
+            }
+            else
+                return false;
         }
-        else
+        catch (Exception ex)
+        {
+            // TODO: Log Exception
+            Console.WriteLine($"Exception Data.AddAsync: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+
             return false;
+        }
     }
+
+    public static bool Update(AppDbContext appDbContext, object item)
+    {
+        try
+        {
+            Type type = item.GetType();
+
+            // Get the Set<T> method from DbContext
+            MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
+
+            // Invoke the Set<T> method to get the DbSet<T>
+            object dbSet = setMethod.Invoke(appDbContext, null);
+
+            // Get the Find method from DbSet<T>
+            MethodInfo findMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("Find", new[] { typeof(object[]) });
+
+            // Assuming the primary key property is named "Id" and is of a common type like int, Guid, etc.
+            PropertyInfo keyProperty = type.GetProperty("Id");
+            if (keyProperty == null)
+            {
+                throw new ArgumentException($"The type {type.Name} does not have a property named 'Id'.");
+            }
+
+            object key = keyProperty.GetValue(item);
+
+            // Find the existing entity
+            object existingItem = findMethod.Invoke(dbSet, new object[] { new object[] { key } });
+
+            if (existingItem != null)
+            {
+                // Update the existing entity with new values
+                appDbContext.Entry(existingItem).CurrentValues.SetValues(item);
+                appDbContext.Entry(existingItem).State = EntityState.Modified;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log Exception
+            Console.WriteLine($"Exception Data.Update: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+
+            return false;
+        }
+    }
+
+    public static async Task<bool> UpdateAsync(AppDbContext appDbContext, object item)
+    {
+        try
+        {
+            Type type = item.GetType();
+
+            // Get the Set<T> method from DbContext
+            MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
+
+            // Invoke the Set<T> method to get the DbSet<T>
+            object dbSet = setMethod.Invoke(appDbContext, null);
+
+            // Get the FindAsync method from DbSet<T>
+            MethodInfo findAsyncMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("FindAsync", new[] { typeof(object[]) });
+
+            // Assuming the primary key property is named "Id" and is of a common type like int, Guid, etc.
+            PropertyInfo keyProperty = type.GetProperty("Id");
+            if (keyProperty == null)
+            {
+                throw new ArgumentException($"The type {type.Name} does not have a property named 'Id'.");
+            }
+
+            object key = keyProperty.GetValue(item);
+
+            // Find the existing entity asynchronously
+            var findTask = (dynamic)findAsyncMethod.Invoke(dbSet, new object[] { new object[] { key } });
+            object existingItem = await findTask;
+
+            if (existingItem != null)
+            {
+                // Update the existing entity with new values
+                appDbContext.Entry(existingItem).CurrentValues.SetValues(item);
+                appDbContext.Entry(existingItem).State = EntityState.Modified;
+
+                // Save the changes asynchronously
+                await appDbContext.SaveChangesAsync();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log Exception
+            Console.WriteLine($"Exception Data.UpdateAsync: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+
+            return false;
+        }
+    }
+    #endregion
 
     private static class SCV
     {
