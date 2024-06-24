@@ -38,6 +38,9 @@ public partial class Dashboard : IDisposable
     bool WorkOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
     bool WorkOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
     bool WorkOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
+    bool SeeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
+    bool SeeBackupDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 35);
+    bool SeeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
     #endregion
 
     // General Fields

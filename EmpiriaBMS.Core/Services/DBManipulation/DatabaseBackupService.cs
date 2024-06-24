@@ -221,17 +221,40 @@ public class DatabaseBackupService : IDisposable
 
     public static async Task SetDbIdentityInsert(AppDbContext context, string tableName, bool desiredState)
     {
+        if (context == null)
+        {
+            throw new ArgumentNullException(nameof(context), "The database context cannot be null.");
+        }
+
+        if (string.IsNullOrWhiteSpace(tableName))
+        {
+            throw new ArgumentException("The table name cannot be null or empty.", nameof(tableName));
+        }
+
         try
         {
+            // Check if the database connection is open
+            if (context.Database.GetDbConnection().State != System.Data.ConnectionState.Open)
+            {
+                Console.WriteLine("Opening database connection...");
+                await context.Database.OpenConnectionAsync();
+            }
+
             // SQL command to set IDENTITY_INSERT
             string sqlSetIdentityInsert = $"SET IDENTITY_INSERT [{tableName}] {(desiredState ? "ON" : "OFF")};";
 
+            // Log the SQL command for debugging purposes
+            Console.WriteLine($"Executing SQL: {sqlSetIdentityInsert}");
+
             // Execute the SQL command to set IDENTITY_INSERT
-            await context.Database.ExecuteSqlRawAsync(sqlSetIdentityInsert);
+            var result = await context.Database.ExecuteSqlRawAsync(sqlSetIdentityInsert);
+
+            // Log success message
+            Console.WriteLine($"Successfully set IDENTITY_INSERT {(desiredState ? "ON" : "OFF")} for {tableName}. Result: {result}");
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
+            // Log Exception with detailed information
             Console.WriteLine($"Exception in SetDbIdentityInsert: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }

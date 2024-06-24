@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Models.Enum;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
@@ -59,7 +60,9 @@ public class AppDbContext : DbContext
     {
         Enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
-        optionsBuilder.UseSqlServer(SelectedConnectionString);
+        optionsBuilder.UseSqlServer(SelectedConnectionString)
+                      .LogTo(Console.WriteLine, LogLevel.Information)  // Enable detailed logging
+                      .EnableSensitiveDataLogging();
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.EnableDetailedErrors();
         optionsBuilder.EnableServiceProviderCaching();
@@ -489,6 +492,30 @@ public class AppDbContext : DbContext
                 Ord = 34
             };
             builder.Entity<Permission>().HasData(per_34);
+
+            // Backup Database
+            var per_35_id = random.Next(123456789, 999999999);
+            Permission per_35 = new Permission()
+            {
+                Id = per_35_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Backup Database",
+                Ord = 35
+            };
+            builder.Entity<Permission>().HasData(per_35);
+
+            // Restore Database
+            var per_36_id = random.Next(123456789, 999999999);
+            Permission per_36 = new Permission()
+            {
+                Id = per_36_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Restore Database",
+                Ord = 36
+            };
+            builder.Entity<Permission>().HasData(per_36);
             #endregion
 
             #region Roles
@@ -1323,6 +1350,28 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_111);
 
+            // CTO || Backup Database
+            RolePermission rp_113 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_35_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_113);
+
+            // CTO || Restore Database
+            RolePermission rp_114 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_36_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_114);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -1644,6 +1693,28 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_112);
 
+            // CEO || Backup Database
+            RolePermission rp_115 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_35_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_115);
+
+            // CEO || Restore Database
+            RolePermission rp_116 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_36_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_116);
+
 
             // Guest
             // Guest || See Dashboard Layout
@@ -1726,6 +1797,28 @@ public class AppDbContext : DbContext
                 PermissionId = per_28_id
             };
             builder.Entity<RolePermission>().HasData(rp_100);
+
+            // Admin || Backup Database
+            RolePermission rp_117 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_35_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_117);
+
+            // Admin || Restore Database
+            RolePermission rp_118 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_36_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_118);
 
 
             // Secretariat 
@@ -3492,6 +3585,23 @@ public class AppDbContext : DbContext
         }
 
         return allEntities;
+    }
+
+    public static void TestDatabaseConnection(AppDbContext context)
+    {
+        try
+        {
+            context.Database.OpenConnection();
+            Console.WriteLine("Database connection is open.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error opening database connection: {ex.Message}");
+        }
+        finally
+        {
+            context.Database.CloseConnection();
+        }
     }
 
     static int GetUniqueRandomNumber(Random random, List<int> selectedNumbers, int min, int max)
