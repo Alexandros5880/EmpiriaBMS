@@ -243,32 +243,25 @@ export function downloadFile(fileName, contentType, base64Content) {
 
 
 // Pick Folder/File Path
-async function pickFolder() {
+export async function pickFolderPath() {
     try {
-        // Create an empty CSV Blob
-        const emptyCsvBlob = new Blob([""], { type: 'text/csv' });
-
         // Create an input element
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = '.csv';
-
-        // Preselect the empty CSV file
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(new File([emptyCsvBlob], "output.csv", { type: 'text/csv' }));
-        input.files = dataTransfer.files;
+        input.webkitdirectory = true; // Allows directory selection
+        input.multiple = false; // Allow only one directory selection
 
         return new Promise((resolve, reject) => {
             input.onchange = (event) => {
                 const file = event.target.files[0];
                 if (file) {
-                    resolve(file.name); // Resolve with the file name
+                    resolve(file.webkitRelativePath); // Resolve with the directory path
                 } else {
-                    reject(new Error('No file selected'));
+                    reject(new Error('No directory selected'));
                 }
             };
 
-            // Simulate a click to open the file picker dialog
+            // Simulate a click to open the directory picker dialog
             input.click();
         });
     } catch (err) {
@@ -277,11 +270,7 @@ async function pickFolder() {
     }
 }
 
-export async function pickFolderPath() {
-    return await pickFolder();
-}
-
-export function pickFilePath() {
+export function pickCSVFilePath() {
     try {
         // Create an input element
         const input = document.createElement('input');
@@ -304,6 +293,40 @@ export function pickFilePath() {
         throw err;
     }
 }
+
+export async function pickBakFilePath() {
+    try {
+        // Create an empty .Bak Blob (assuming .Bak is a custom extension)
+        const emptyBakBlob = new Blob([""], { type: 'application/octet-stream' });
+
+        // Create an input element
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.Bak'; // Accept only .Bak files
+
+        // Preselect the empty .Bak file
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(new File([emptyBakBlob], "output.Bak", { type: 'application/octet-stream' }));
+        input.files = dataTransfer.files;
+
+        return new Promise((resolve, reject) => {
+            input.onchange = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    resolve(file.name); // Resolve with the file name
+                } else {
+                    reject(new Error('No file selected'));
+                }
+            };
+
+            // Simulate a click to open the file picker dialog
+            input.click();
+        });
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
 // - Pick Folder/File Path
 
 // Download CSV
@@ -320,6 +343,46 @@ export function downloadCsvFile(filename, content) {
         document.body.removeChild(link);
     }
 }
+
+export function downloadZipFile(filename, base64Content) {
+    // Convert base64 string to binary data
+    const byteCharacters = atob(base64Content);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+
+    // Create a Blob from the binary data
+    const blob = new Blob([byteArray], { type: 'application/zip' });
+
+    // Create an anchor element and trigger a download
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
+export function downloadBakFile(filename, content) {
+    var blob = new Blob([content], { type: 'application/octet-stream' }); // Adjust MIME type if needed
+    var link = document.createElement("a");
+    if (link.download !== undefined) {
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename + ".Bak"); // Add .Bak extension
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
 // - Download CSV
 
 

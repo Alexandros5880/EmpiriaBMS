@@ -6,6 +6,7 @@ using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
@@ -37,6 +38,9 @@ public partial class Dashboard : IDisposable
     bool WorkOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
     bool WorkOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
     bool WorkOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
+    bool SeeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
+    bool SeeBackupDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 35);
+    bool SeeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
     #endregion
 
     // General Fields
@@ -1442,6 +1446,79 @@ public partial class Dashboard : IDisposable
             string csvContent = Data.GetCsvContent(_supportiveWork);
             await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
         }
+    }
+    #endregion
+
+    #region Database Manipulation
+    bool _backUpLoading = false;
+    private async Task BackUpDb()
+    {
+        _backUpLoading = true;
+        StateHasChanged();
+
+        Dictionary<string, string> csvs = DatabaseBackupService.DatabaseToCSV();
+        if (csvs != null && csvs.Count > 0)
+        {
+            var zipBytes = await DatabaseBackupService.CsvToZipBytes(csvs);
+            var base64Zip = Convert.ToBase64String(zipBytes);
+
+            var dateTime = DateTime.Now;
+            var fileName = $"{DatabaseBackupService.DatabaseName}_{dateTime.ToEuropeFormat()}.zip";
+            await MicrosoftTeams.DownloadZipFile(fileName, base64Zip);
+        }
+        else
+        {
+            // TODO: Display a message
+            Console.WriteLine($"\n\ncsvs == null || csvs.Count == 0\n\n");
+        }
+
+        _backUpLoading = false;
+        StateHasChanged();
+    }
+
+    private InputFile fileRestoreDB;
+    bool _restoreLoading = false;
+    private async Task RestoreDb(InputFileChangeEventArgs e)
+    {
+        _restoreLoading = true;
+        StateHasChanged();
+
+        var file = e.File;
+        var filePath = file.Name;
+        var fileType = file.ContentType;
+
+        if (!(fileType?.Contains("zip") ?? false))
+        {
+            // TODO: Display Msg
+            Console.WriteLine("Uploaded file is not a ZIP archive.");
+            return;
+        }
+
+        try
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.OpenReadStream().CopyToAsync(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                var data = await DatabaseBackupService.ZipStreamToCsv(memoryStream);
+                await DatabaseBackupService.SaveToDB(data);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception Dashboard  RestoreDb: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            // TODO: log error
+        }
+
+        _restoreLoading = false;
+        StateHasChanged();
+
+        await Refresh();
+    }
+    private async Task TriggerRestoreDbInport()
+    {
+        var element = fileRestoreDB.Element;
+        await MicrosoftTeams.TriggerFileInputClick(element);
     }
     #endregion
 

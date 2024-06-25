@@ -318,25 +318,28 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // SubCategorys Category
-        builder.Entity<ProjectCategory>()
-               .HasMany(p => p.SubCategories)
-               .WithOne(c => c.Category)
-               .HasForeignKey(c => c.CategoryId)
-               .OnDelete(DeleteBehavior.Cascade);
-
-        // Offers SubCategory
         builder.Entity<ProjectSubCategory>()
-               .HasMany(p => p.Offers)
-               .WithOne(o => o.SubCategory)
-               .HasForeignKey(c => c.SubCategoryId)
-               .OnDelete(DeleteBehavior.ClientCascade);
+               .HasOne(psc => psc.Category)
+               .WithMany()
+               .HasForeignKey(psc => psc.CategoryId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.NoAction);
 
         // Offers SubCategory
-        builder.Entity<ProjectCategory>()
-               .HasMany(p => p.Offers)
-               .WithOne(o => o.Category)
-               .HasForeignKey(c => c.CategoryId)
-               .OnDelete(DeleteBehavior.ClientCascade);
+        builder.Entity<Offer>()
+               .HasOne(psc => psc.SubCategory)
+               .WithMany()
+               .HasForeignKey(psc => psc.SubCategoryId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.NoAction);
+
+        // Offers Category
+        builder.Entity<Offer>()
+               .HasOne(psc => psc.Category)
+               .WithMany()
+               .HasForeignKey(psc => psc.CategoryId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.NoAction);
 
         // Leds Address
         builder.Entity<Address>()
