@@ -197,6 +197,21 @@ public static class Data
         }
     }
 
+    public static async Task<bool> Upsert(AppDbContext appDbContext, object item, Type type)
+    {
+        // Get the method info for the generic method definition of Upsert
+        MethodInfo method = typeof(Data).GetMethod(nameof(Upsert), new[] { typeof(AppDbContext), type.MakeGenericType() });
+
+        // Make the generic method for the specific type
+        MethodInfo genericMethod = method.MakeGenericMethod(type);
+
+        // Invoke the generic method
+        var valueTask = (Task<bool>)genericMethod.Invoke(null, new object[] { appDbContext, item });
+
+        // Await the task and return the result
+        return await valueTask;
+    }
+
     public static async Task<bool> Upsert<T>(AppDbContext appDbContext, T item)
         where T : class, IEntity
     {
@@ -212,59 +227,6 @@ public static class Data
                 appDbContext.Entry(item).CurrentValues.SetValues(Mapping.Mapper.Map<T>(item));
         }
         return result != null;
-    }
-
-    public static async Task<bool> UpdateAsync(AppDbContext appDbContext, object item)
-    {
-        try
-        {
-            Type type = item.GetType();
-
-            // Get the Set<T> method from DbContext
-            MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
-
-            // Invoke the Set<T> method to get the DbSet<T>
-            object dbSet = setMethod.Invoke(appDbContext, null);
-
-            // Get the FindAsync method from DbSet<T>
-            MethodInfo findAsyncMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("FindAsync", new[] { typeof(object[]) });
-
-            // Assuming the primary key property is named "Id" and is of a common type like int, Guid, etc.
-            PropertyInfo keyProperty = type.GetProperty("Id");
-            if (keyProperty == null)
-            {
-                throw new ArgumentException($"The type {type.Name} does not have a property named 'Id'.");
-            }
-
-            object key = keyProperty.GetValue(item);
-
-            // Find the existing entity asynchronously
-            var findTask = (dynamic)findAsyncMethod.Invoke(dbSet, new object[] { new object[] { key } });
-            object existingItem = await findTask;
-
-            if (existingItem != null)
-            {
-                // Update the existing entity with new values
-                appDbContext.Entry(existingItem).CurrentValues.SetValues(item);
-                appDbContext.Entry(existingItem).State = EntityState.Modified;
-
-                // Save the changes asynchronously
-                await appDbContext.SaveChangesAsync();
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception Data.UpdateAsync: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-
-            return false;
-        }
     }
     #endregion
 
