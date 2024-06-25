@@ -88,85 +88,87 @@ public static class Data
         {
             Type type = item.GetType();
 
-            switch (type)
-            {
-                case var t when t == typeof(Address):
-                    return await Upsert<Address>(appDbContext, item as Address);
-                case var t when t == typeof(Client):
-                    return await Upsert<Client>(appDbContext, item as Client);
-                case var t when t == typeof(Contract):
-                    return await Upsert<Contract>(appDbContext, item as Contract);
-                case var t when t == typeof(DailyTime):
-                    return await Upsert<DailyTime>(appDbContext, item as DailyTime);
-                case var t when t == typeof(Deliverable):
-                    return await Upsert<Deliverable>(appDbContext, item as Deliverable);
-                case var t when t == typeof(DeliverableEmployee):
-                    return await Upsert<DeliverableEmployee>(appDbContext, item as DeliverableEmployee);
-                case var t when t == typeof(DeliverableType):
-                    return await Upsert<DeliverableType>(appDbContext, item as DeliverableType);
-                case var t when t == typeof(Discipline):
-                    return await Upsert<Discipline>(appDbContext, item as Discipline);
-                case var t when t == typeof(DisciplineEngineer):
-                    return await Upsert<DisciplineEngineer>(appDbContext, item as DisciplineEngineer);
-                case var t when t == typeof(DisciplineType):
-                    return await Upsert<DisciplineType>(appDbContext, item as DisciplineType);
-                case var t when t == typeof(Document):
-                    return await Upsert<Document>(appDbContext, item as Document);
-                case var t when t == typeof(Email):
-                    return await Upsert<Email>(appDbContext, item as Email);
-                case var t when t == typeof(Invoice):
-                    return await Upsert<Invoice>(appDbContext, item as Invoice);
-                case var t when t == typeof(InvoiceType):
-                    return await Upsert<InvoiceType>(appDbContext, item as InvoiceType);
-                case var t when t == typeof(Issue):
-                    return await Upsert<Issue>(appDbContext, item as Issue);
-                case var t when t == typeof(Led):
-                    return await Upsert<Led>(appDbContext, item as Led);
-                case var t when t == typeof(Offer):
-                    return await Upsert<Offer>(appDbContext, item as Offer);
-                case var t when t == typeof(OfferState):
-                    return await Upsert<OfferState>(appDbContext, item as OfferState);
-                case var t when t == typeof(OfferType):
-                    return await Upsert<OfferType>(appDbContext, item as OfferType);
-                case var t when t == typeof(Payment):
-                    return await Upsert<Payment>(appDbContext, item as Payment);
-                case var t when t == typeof(PaymentType):
-                    return await Upsert<PaymentType>(appDbContext, item as PaymentType);
-                case var t when t == typeof(Permission):
-                    return await Upsert<Permission>(appDbContext, item as Permission);
-                case var t when t == typeof(Project):
-                    return await Upsert<Project>(appDbContext, item as Project);
-                case var t when t == typeof(ProjectCategory):
-                    return await Upsert<ProjectCategory>(appDbContext, item as ProjectCategory);
-                case var t when t == typeof(Projection):
-                    return await Upsert<Projection>(appDbContext, item as Projection);
-                case var t when t == typeof(ProjectStage):
-                    return await Upsert<ProjectStage>(appDbContext, item as ProjectStage);
-                case var t when t == typeof(ProjectSubCategory):
-                    return await Upsert<ProjectSubCategory>(appDbContext, item as ProjectSubCategory);
-                case var t when t == typeof(ProjectSubConstructor):
-                    return await Upsert<ProjectSubConstructor>(appDbContext, item as ProjectSubConstructor);
-                case var t when t == typeof(Role):
-                    return await Upsert<Role>(appDbContext, item as Role);
-                case var t when t == typeof(RolePermission):
-                    return await Upsert<RolePermission>(appDbContext, item as RolePermission);
-                case var t when t == typeof(SupportiveWork):
-                    return await Upsert<SupportiveWork>(appDbContext, item as SupportiveWork);
-                case var t when t == typeof(SupportiveWorkEmployee):
-                    return await Upsert<SupportiveWorkEmployee>(appDbContext, item as SupportiveWorkEmployee);
-                case var t when t == typeof(SupportiveWorkType):
-                    return await Upsert<SupportiveWorkType>(appDbContext, item as SupportiveWorkType);
-                case var t when t == typeof(TeamsRequestedUser):
-                    return await Upsert<TeamsRequestedUser>(appDbContext, item as TeamsRequestedUser);
-                case var t when t == typeof(Timespan):
-                    return await Upsert<Timespan>(appDbContext, item as Timespan);
-                case var t when t == typeof(User):
-                    return await Upsert<User>(appDbContext, item as User);
-                case var t when t == typeof(UserRole):
-                    return await Upsert<UserRole>(appDbContext, item as UserRole);
-                default:
-                    return false;
-            }
+            return await Upsert(appDbContext, item, type);
+
+            //switch (type)
+            //{
+            //    case var t when t == typeof(Address):
+            //        return await Upsert(appDbContext, item as Address);
+            //    case var t when t == typeof(Client):
+            //        return await Upsert<Client>(appDbContext, item as Client);
+            //    case var t when t == typeof(Contract):
+            //        return await Upsert<Contract>(appDbContext, item as Contract);
+            //    case var t when t == typeof(DailyTime):
+            //        return await Upsert<DailyTime>(appDbContext, item as DailyTime);
+            //    case var t when t == typeof(Deliverable):
+            //        return await Upsert<Deliverable>(appDbContext, item as Deliverable);
+            //    case var t when t == typeof(DeliverableEmployee):
+            //        return await Upsert<DeliverableEmployee>(appDbContext, item as DeliverableEmployee);
+            //    case var t when t == typeof(DeliverableType):
+            //        return await Upsert<DeliverableType>(appDbContext, item as DeliverableType);
+            //    case var t when t == typeof(Discipline):
+            //        return await Upsert<Discipline>(appDbContext, item as Discipline);
+            //    case var t when t == typeof(DisciplineEngineer):
+            //        return await Upsert<DisciplineEngineer>(appDbContext, item as DisciplineEngineer);
+            //    case var t when t == typeof(DisciplineType):
+            //        return await Upsert<DisciplineType>(appDbContext, item as DisciplineType);
+            //    case var t when t == typeof(Document):
+            //        return await Upsert<Document>(appDbContext, item as Document);
+            //    case var t when t == typeof(Email):
+            //        return await Upsert<Email>(appDbContext, item as Email);
+            //    case var t when t == typeof(Invoice):
+            //        return await Upsert<Invoice>(appDbContext, item as Invoice);
+            //    case var t when t == typeof(InvoiceType):
+            //        return await Upsert<InvoiceType>(appDbContext, item as InvoiceType);
+            //    case var t when t == typeof(Issue):
+            //        return await Upsert<Issue>(appDbContext, item as Issue);
+            //    case var t when t == typeof(Led):
+            //        return await Upsert<Led>(appDbContext, item as Led);
+            //    case var t when t == typeof(Offer):
+            //        return await Upsert<Offer>(appDbContext, item as Offer);
+            //    case var t when t == typeof(OfferState):
+            //        return await Upsert<OfferState>(appDbContext, item as OfferState);
+            //    case var t when t == typeof(OfferType):
+            //        return await Upsert<OfferType>(appDbContext, item as OfferType);
+            //    case var t when t == typeof(Payment):
+            //        return await Upsert<Payment>(appDbContext, item as Payment);
+            //    case var t when t == typeof(PaymentType):
+            //        return await Upsert<PaymentType>(appDbContext, item as PaymentType);
+            //    case var t when t == typeof(Permission):
+            //        return await Upsert<Permission>(appDbContext, item as Permission);
+            //    case var t when t == typeof(Project):
+            //        return await Upsert<Project>(appDbContext, item as Project);
+            //    case var t when t == typeof(ProjectCategory):
+            //        return await Upsert<ProjectCategory>(appDbContext, item as ProjectCategory);
+            //    case var t when t == typeof(Projection):
+            //        return await Upsert<Projection>(appDbContext, item as Projection);
+            //    case var t when t == typeof(ProjectStage):
+            //        return await Upsert<ProjectStage>(appDbContext, item as ProjectStage);
+            //    case var t when t == typeof(ProjectSubCategory):
+            //        return await Upsert<ProjectSubCategory>(appDbContext, item as ProjectSubCategory);
+            //    case var t when t == typeof(ProjectSubConstructor):
+            //        return await Upsert<ProjectSubConstructor>(appDbContext, item as ProjectSubConstructor);
+            //    case var t when t == typeof(Role):
+            //        return await Upsert<Role>(appDbContext, item as Role);
+            //    case var t when t == typeof(RolePermission):
+            //        return await Upsert<RolePermission>(appDbContext, item as RolePermission);
+            //    case var t when t == typeof(SupportiveWork):
+            //        return await Upsert<SupportiveWork>(appDbContext, item as SupportiveWork);
+            //    case var t when t == typeof(SupportiveWorkEmployee):
+            //        return await Upsert<SupportiveWorkEmployee>(appDbContext, item as SupportiveWorkEmployee);
+            //    case var t when t == typeof(SupportiveWorkType):
+            //        return await Upsert<SupportiveWorkType>(appDbContext, item as SupportiveWorkType);
+            //    case var t when t == typeof(TeamsRequestedUser):
+            //        return await Upsert<TeamsRequestedUser>(appDbContext, item as TeamsRequestedUser);
+            //    case var t when t == typeof(Timespan):
+            //        return await Upsert<Timespan>(appDbContext, item as Timespan);
+            //    case var t when t == typeof(User):
+            //        return await Upsert<User>(appDbContext, item as User);
+            //    case var t when t == typeof(UserRole):
+            //        return await Upsert<UserRole>(appDbContext, item as UserRole);
+            //    default:
+            //        return false;
+            //}
 
             //// Get the Set<T> method from DbContext
             //MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
@@ -199,8 +201,13 @@ public static class Data
 
     public static async Task<bool> Upsert(AppDbContext appDbContext, object item, Type type)
     {
-        // Get the method info for the generic method definition of Upsert
-        MethodInfo method = typeof(Data).GetMethod(nameof(Upsert), new[] { typeof(AppDbContext), type.MakeGenericType() });
+        // Get the generic method definition for Upsert<T>
+        MethodInfo method = typeof(Data).GetMethods()
+                                        .Where(m => m.Name == nameof(Upsert) && m.IsGenericMethodDefinition)
+                                        .FirstOrDefault();
+
+        if (method == null)
+            throw new InvalidOperationException("Could not find the generic method 'Upsert'.");
 
         // Make the generic method for the specific type
         MethodInfo genericMethod = method.MakeGenericMethod(type);
