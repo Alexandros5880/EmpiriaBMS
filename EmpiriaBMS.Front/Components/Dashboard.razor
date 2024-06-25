@@ -155,13 +155,14 @@
                                             <FluentStack Orientation="Orientation.Horizontal"
                                                          Style="margin-left: 12px; max-width: 120px;">
                                                 <!-- Refresh -->
-                                                <FluentButton Loading="@_refreshLoading"
-                                                              IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
+                                                <FluentButton IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
+                                                              Loading="@_refreshLoading"
                                                               Appearance="Appearance.Outline"
-                                                              OnClick="@Refresh">
+                                                              OnClick="@Refresh"
+                                                              Style="width: 40px;">
                                                 </FluentButton>
                                                 <FluentStack Orientation="Orientation.Vertical"
-                                                             Style="margin-left: 12px; max-width: 80px;">
+                                                             Style="margin-left: 4px; max-width: 80px;">
                                                     <!-- Restore Database -->
                                                     @if (SeeRestoreDatabase)
                                                     {
@@ -178,7 +179,6 @@
                                                         <FluentButton OnClick="@(async() => await BackUpDb())"
                                                                       Loading="@_backUpLoading"
                                                                       IconStart="@(new MyIcons.Size32.BackupDB())"
-                                                                      Color="none"
                                                                       Appearance="Appearance.Outline">
                                                         </FluentButton>
                                                     }

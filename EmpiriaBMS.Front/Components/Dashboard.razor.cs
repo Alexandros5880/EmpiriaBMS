@@ -1473,6 +1473,7 @@ public partial class Dashboard : IDisposable
         }
 
         _backUpLoading = false;
+        StateHasChanged();
     }
 
     private InputFile fileRestoreDB;
