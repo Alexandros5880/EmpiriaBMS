@@ -119,26 +119,191 @@ public static class Data
         try
         {
             Type type = item.GetType();
+            dynamic obj;
+            dynamic result;
 
-            // Get the Set<T> method from DbContext
-            MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
-
-            // Invoke the Set<T> method to get the DbSet<T>
-            object dbSet = setMethod.Invoke(appDbContext, null);
-
-            // Get the AddAsync method from DbSet<T>
-            MethodInfo addAsyncMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("AddAsync", new[] { type, typeof(CancellationToken) });
-
-            if (addAsyncMethod != null)
+            switch (type)
             {
-                // Invoke the AddAsync method with a CancellationToken.None
-                var valueTask = (dynamic)addAsyncMethod.Invoke(dbSet, new object[] { item, CancellationToken.None });
-                await valueTask?.AsTask();
-                appDbContext.Entry(item).State = EntityState.Added;
-                return true;
+                case var t when t == typeof(Address):
+                    obj = item as Address;
+                    result = await appDbContext.Set<Address>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Client):
+                    obj = item as Client;
+                    result = await appDbContext.Set<Client>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Contract):
+                    obj = item as Contract;
+                    result = await appDbContext.Set<Contract>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(DailyTime):
+                    obj = item as DailyTime;
+                    result = await appDbContext.Set<DailyTime>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Deliverable):
+                    obj = item as Deliverable;
+                    result = await appDbContext.Set<Deliverable>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(DeliverableEmployee):
+                    obj = item as DeliverableEmployee;
+                    result = await appDbContext.Set<DeliverableEmployee>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(DeliverableType):
+                    obj = item as DeliverableType;
+                    result = await appDbContext.Set<DeliverableType>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Discipline):
+                    obj = item as Discipline;
+                    result = await appDbContext.Set<Discipline>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(DisciplineEngineer):
+                    obj = item as DisciplineEngineer;
+                    result = await appDbContext.Set<DisciplineEngineer>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(DisciplineType):
+                    obj = item as DisciplineType;
+                    result = await appDbContext.Set<DisciplineType>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Document):
+                    obj = item as Document;
+                    result = await appDbContext.Set<Document>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Email):
+                    obj = item as Email;
+                    result = await appDbContext.Set<Email>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Invoice):
+                    obj = item as Invoice;
+                    result = await appDbContext.Set<Invoice>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(InvoiceType):
+                    obj = item as InvoiceType;
+                    result = await appDbContext.Set<InvoiceType>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Issue):
+                    obj = item as Issue;
+                    result = await appDbContext.Set<Issue>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Led):
+                    obj = item as Led;
+                    result = await appDbContext.Set<Led>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Offer):
+                    obj = item as Offer;
+                    result = await appDbContext.Set<Offer>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(OfferState):
+                    obj = item as OfferState;
+                    result = await appDbContext.Set<OfferState>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(OfferType):
+                    obj = item as OfferType;
+                    result = await appDbContext.Set<OfferType>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Payment):
+                    obj = item as Payment;
+                    result = await appDbContext.Set<Payment>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(PaymentType):
+                    obj = item as PaymentType;
+                    result = await appDbContext.Set<PaymentType>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Permission):
+                    obj = item as Permission;
+                    result = await appDbContext.Set<Permission>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Project):
+                    obj = item as Project;
+                    result = await appDbContext.Set<Project>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(ProjectCategory):
+                    obj = item as ProjectCategory;
+                    result = await appDbContext.Set<ProjectCategory>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Projection):
+                    obj = item as Projection;
+                    result = await appDbContext.Set<Projection>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(ProjectStage):
+                    obj = item as ProjectStage;
+                    result = await appDbContext.Set<ProjectStage>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(ProjectSubCategory):
+                    obj = item as ProjectSubCategory;
+                    result = await appDbContext.Set<ProjectSubCategory>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(ProjectSubConstructor):
+                    obj = item as ProjectSubConstructor;
+                    result = await appDbContext.Set<ProjectSubConstructor>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Role):
+                    obj = item as Role;
+                    result = await appDbContext.Set<Role>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(RolePermission):
+                    obj = item as RolePermission;
+                    result = await appDbContext.Set<RolePermission>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(SupportiveWork):
+                    obj = item as SupportiveWork;
+                    result = await appDbContext.Set<SupportiveWork>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(SupportiveWorkEmployee):
+                    obj = item as SupportiveWorkEmployee;
+                    result = await appDbContext.Set<SupportiveWorkEmployee>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(SupportiveWorkType):
+                    obj = item as SupportiveWorkType;
+                    result = await appDbContext.Set<SupportiveWorkType>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(TeamsRequestedUser):
+                    obj = item as TeamsRequestedUser;
+                    result = await appDbContext.Set<TeamsRequestedUser>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(Timespan):
+                    obj = item as Timespan;
+                    result = await appDbContext.Set<Timespan>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(User):
+                    obj = item as User;
+                    result = await appDbContext.Set<User>().AddAsync(obj);
+                    return result != null;
+                case var t when t == typeof(UserRole):
+                    obj = item as UserRole;
+                    result = await appDbContext.Set<UserRole>().AddAsync(obj);
+                    return result != null;
+                default:
+                    return false;
             }
-            else
-                return false;
+
+
+
+
+
+
+
+
+
+
+            //// Get the Set<T> method from DbContext
+            //MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
+
+            //// Invoke the Set<T> method to get the DbSet<T>
+            //object dbSet = setMethod.Invoke(appDbContext, null);
+
+            //// Get the AddAsync method from DbSet<T>
+            //MethodInfo addAsyncMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("AddAsync", new[] { type, typeof(CancellationToken) });
+
+            //if (addAsyncMethod != null)
+            //{
+            //    // Invoke the AddAsync method with a CancellationToken.None
+            //    var valueTask = (dynamic)addAsyncMethod.Invoke(dbSet, new object[] { item, CancellationToken.None });
+            //    await valueTask?.AsTask();
+            //    appDbContext.Entry(item).State = EntityState.Added;
+            //    return true;
+            //}
+            //else
+            //    return false;
         }
         catch (Exception ex)
         {
