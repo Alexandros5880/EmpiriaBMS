@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text;
@@ -81,209 +82,91 @@ public static class Data
     }
 
     #region Add / Update / Delete Records
-    public static bool Add(AppDbContext AppDbContext, object item)
+    public static async Task<bool> UpsertAsync(AppDbContext appDbContext, object item)
     {
         try
         {
             Type type = item.GetType();
-
-            // Get the Set<T> method from DbContext
-            MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
-
-            // Invoke the Set<T> method to get the DbSet<T>
-            object dbSet = setMethod.Invoke(AppDbContext, null);
-
-            // Get the Add method from DbSet<T>
-            MethodInfo addMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("Add", new[] { type });
-
-            if (addMethod != null)
-            {
-                addMethod.Invoke(dbSet, new[] { item });
-                AppDbContext.Entry(item).State = EntityState.Added;
-                return true;
-            }
-            else
-                return false;
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception Data.Add: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-
-            return false;
-        }
-    }
-
-    public static async Task<bool> AddAsync(AppDbContext appDbContext, object item)
-    {
-        try
-        {
-            Type type = item.GetType();
-            dynamic obj;
-            dynamic result;
 
             switch (type)
             {
                 case var t when t == typeof(Address):
-                    obj = item as Address;
-                    result = await appDbContext.Set<Address>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Address>(appDbContext, item as Address);
                 case var t when t == typeof(Client):
-                    obj = item as Client;
-                    result = await appDbContext.Set<Client>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Client>(appDbContext, item as Client);
                 case var t when t == typeof(Contract):
-                    obj = item as Contract;
-                    result = await appDbContext.Set<Contract>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Contract>(appDbContext, item as Contract);
                 case var t when t == typeof(DailyTime):
-                    obj = item as DailyTime;
-                    result = await appDbContext.Set<DailyTime>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<DailyTime>(appDbContext, item as DailyTime);
                 case var t when t == typeof(Deliverable):
-                    obj = item as Deliverable;
-                    result = await appDbContext.Set<Deliverable>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Deliverable>(appDbContext, item as Deliverable);
                 case var t when t == typeof(DeliverableEmployee):
-                    obj = item as DeliverableEmployee;
-                    result = await appDbContext.Set<DeliverableEmployee>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<DeliverableEmployee>(appDbContext, item as DeliverableEmployee);
                 case var t when t == typeof(DeliverableType):
-                    obj = item as DeliverableType;
-                    result = await appDbContext.Set<DeliverableType>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<DeliverableType>(appDbContext, item as DeliverableType);
                 case var t when t == typeof(Discipline):
-                    obj = item as Discipline;
-                    result = await appDbContext.Set<Discipline>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Discipline>(appDbContext, item as Discipline);
                 case var t when t == typeof(DisciplineEngineer):
-                    obj = item as DisciplineEngineer;
-                    result = await appDbContext.Set<DisciplineEngineer>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<DisciplineEngineer>(appDbContext, item as DisciplineEngineer);
                 case var t when t == typeof(DisciplineType):
-                    obj = item as DisciplineType;
-                    result = await appDbContext.Set<DisciplineType>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<DisciplineType>(appDbContext, item as DisciplineType);
                 case var t when t == typeof(Document):
-                    obj = item as Document;
-                    result = await appDbContext.Set<Document>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Document>(appDbContext, item as Document);
                 case var t when t == typeof(Email):
-                    obj = item as Email;
-                    result = await appDbContext.Set<Email>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Email>(appDbContext, item as Email);
                 case var t when t == typeof(Invoice):
-                    obj = item as Invoice;
-                    result = await appDbContext.Set<Invoice>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Invoice>(appDbContext, item as Invoice);
                 case var t when t == typeof(InvoiceType):
-                    obj = item as InvoiceType;
-                    result = await appDbContext.Set<InvoiceType>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<InvoiceType>(appDbContext, item as InvoiceType);
                 case var t when t == typeof(Issue):
-                    obj = item as Issue;
-                    result = await appDbContext.Set<Issue>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Issue>(appDbContext, item as Issue);
                 case var t when t == typeof(Led):
-                    obj = item as Led;
-                    result = await appDbContext.Set<Led>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Led>(appDbContext, item as Led);
                 case var t when t == typeof(Offer):
-                    obj = item as Offer;
-                    result = await appDbContext.Set<Offer>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Offer>(appDbContext, item as Offer);
                 case var t when t == typeof(OfferState):
-                    obj = item as OfferState;
-                    result = await appDbContext.Set<OfferState>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<OfferState>(appDbContext, item as OfferState);
                 case var t when t == typeof(OfferType):
-                    obj = item as OfferType;
-                    result = await appDbContext.Set<OfferType>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<OfferType>(appDbContext, item as OfferType);
                 case var t when t == typeof(Payment):
-                    obj = item as Payment;
-                    result = await appDbContext.Set<Payment>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Payment>(appDbContext, item as Payment);
                 case var t when t == typeof(PaymentType):
-                    obj = item as PaymentType;
-                    result = await appDbContext.Set<PaymentType>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<PaymentType>(appDbContext, item as PaymentType);
                 case var t when t == typeof(Permission):
-                    obj = item as Permission;
-                    result = await appDbContext.Set<Permission>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Permission>(appDbContext, item as Permission);
                 case var t when t == typeof(Project):
-                    obj = item as Project;
-                    result = await appDbContext.Set<Project>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Project>(appDbContext, item as Project);
                 case var t when t == typeof(ProjectCategory):
-                    obj = item as ProjectCategory;
-                    result = await appDbContext.Set<ProjectCategory>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<ProjectCategory>(appDbContext, item as ProjectCategory);
                 case var t when t == typeof(Projection):
-                    obj = item as Projection;
-                    result = await appDbContext.Set<Projection>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Projection>(appDbContext, item as Projection);
                 case var t when t == typeof(ProjectStage):
-                    obj = item as ProjectStage;
-                    result = await appDbContext.Set<ProjectStage>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<ProjectStage>(appDbContext, item as ProjectStage);
                 case var t when t == typeof(ProjectSubCategory):
-                    obj = item as ProjectSubCategory;
-                    result = await appDbContext.Set<ProjectSubCategory>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<ProjectSubCategory>(appDbContext, item as ProjectSubCategory);
                 case var t when t == typeof(ProjectSubConstructor):
-                    obj = item as ProjectSubConstructor;
-                    result = await appDbContext.Set<ProjectSubConstructor>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<ProjectSubConstructor>(appDbContext, item as ProjectSubConstructor);
                 case var t when t == typeof(Role):
-                    obj = item as Role;
-                    result = await appDbContext.Set<Role>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Role>(appDbContext, item as Role);
                 case var t when t == typeof(RolePermission):
-                    obj = item as RolePermission;
-                    result = await appDbContext.Set<RolePermission>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<RolePermission>(appDbContext, item as RolePermission);
                 case var t when t == typeof(SupportiveWork):
-                    obj = item as SupportiveWork;
-                    result = await appDbContext.Set<SupportiveWork>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<SupportiveWork>(appDbContext, item as SupportiveWork);
                 case var t when t == typeof(SupportiveWorkEmployee):
-                    obj = item as SupportiveWorkEmployee;
-                    result = await appDbContext.Set<SupportiveWorkEmployee>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<SupportiveWorkEmployee>(appDbContext, item as SupportiveWorkEmployee);
                 case var t when t == typeof(SupportiveWorkType):
-                    obj = item as SupportiveWorkType;
-                    result = await appDbContext.Set<SupportiveWorkType>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<SupportiveWorkType>(appDbContext, item as SupportiveWorkType);
                 case var t when t == typeof(TeamsRequestedUser):
-                    obj = item as TeamsRequestedUser;
-                    result = await appDbContext.Set<TeamsRequestedUser>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<TeamsRequestedUser>(appDbContext, item as TeamsRequestedUser);
                 case var t when t == typeof(Timespan):
-                    obj = item as Timespan;
-                    result = await appDbContext.Set<Timespan>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<Timespan>(appDbContext, item as Timespan);
                 case var t when t == typeof(User):
-                    obj = item as User;
-                    result = await appDbContext.Set<User>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<User>(appDbContext, item as User);
                 case var t when t == typeof(UserRole):
-                    obj = item as UserRole;
-                    result = await appDbContext.Set<UserRole>().AddAsync(obj);
-                    return result != null;
+                    return await Upsert<UserRole>(appDbContext, item as UserRole);
                 default:
                     return false;
             }
-
-
-
-
-
-
-
-
-
 
             //// Get the Set<T> method from DbContext
             //MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
@@ -314,53 +197,21 @@ public static class Data
         }
     }
 
-    public static bool Update(AppDbContext appDbContext, object item)
+    public static async Task<bool> Upsert<T>(AppDbContext appDbContext, T item)
+        where T : class, IEntity
     {
-        try
+        T result;
+        if (item != null && !appDbContext.Set<T>().Any(o => o.Id == item.Id))
         {
-            Type type = item.GetType();
-
-            // Get the Set<T> method from DbContext
-            MethodInfo setMethod = typeof(AppDbContext).GetMethod("Set", Type.EmptyTypes).MakeGenericMethod(type);
-
-            // Invoke the Set<T> method to get the DbSet<T>
-            object dbSet = setMethod.Invoke(appDbContext, null);
-
-            // Get the Find method from DbSet<T>
-            MethodInfo findMethod = typeof(DbSet<>).MakeGenericType(type).GetMethod("Find", new[] { typeof(object[]) });
-
-            // Assuming the primary key property is named "Id" and is of a common type like int, Guid, etc.
-            PropertyInfo keyProperty = type.GetProperty("Id");
-            if (keyProperty == null)
-            {
-                throw new ArgumentException($"The type {type.Name} does not have a property named 'Id'.");
-            }
-
-            object key = keyProperty.GetValue(item);
-
-            // Find the existing entity
-            object existingItem = findMethod.Invoke(dbSet, new object[] { new object[] { key } });
-
-            if (existingItem != null)
-            {
-                // Update the existing entity with new values
-                appDbContext.Entry(existingItem).CurrentValues.SetValues(item);
-                appDbContext.Entry(existingItem).State = EntityState.Modified;
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            result = (await appDbContext.Set<T>().AddAsync(item))?.Entity;
         }
-        catch (Exception ex)
+        else
         {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception Data.Update: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-
-            return false;
+            result = await appDbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == item.Id);
+            if (result != null)
+                appDbContext.Entry(item).CurrentValues.SetValues(Mapping.Mapper.Map<T>(item));
         }
+        return result != null;
     }
 
     public static async Task<bool> UpdateAsync(AppDbContext appDbContext, object item)

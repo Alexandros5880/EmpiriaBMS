@@ -46,7 +46,7 @@ public class DatabaseBackupService : IDisposable
                 {
                     try
                     {
-                        await Data.AddAsync(_context, item);
+                        await Data.UpsertAsync(_context, item);
                         await _context.SaveChangesAsync();
                     }
                     catch (Exception ex)
