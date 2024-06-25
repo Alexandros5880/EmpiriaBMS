@@ -222,18 +222,28 @@ public static class Data
     public static async Task<bool> Upsert<T>(AppDbContext appDbContext, T item)
         where T : class, IEntity
     {
-        T result;
-        if (item != null && !appDbContext.Set<T>().Any(o => o.Id == item.Id))
+        try
         {
-            result = (await appDbContext.Set<T>().AddAsync(item))?.Entity;
+            T result;
+            if (item != null && !appDbContext.Set<T>().Any(o => o.Id == item.Id))
+            {
+                result = (await appDbContext.Set<T>().AddAsync(item))?.Entity;
+            }
+            else
+            {
+                result = await appDbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == item.Id);
+                if (result != null)
+                    appDbContext.Entry(item).CurrentValues.SetValues(Mapping.Mapper.Map<T>(item));
+            }
+            return result != null;
         }
-        else
+        catch (Exception ex)
         {
-            result = await appDbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == item.Id);
-            if (result != null)
-                appDbContext.Entry(item).CurrentValues.SetValues(Mapping.Mapper.Map<T>(item));
+            // TODO: Log Exception
+            Console.WriteLine($"Exception Data.Upsert<{nameof(T)}>: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+
+            return false;
         }
-        return result != null;
     }
     #endregion
 

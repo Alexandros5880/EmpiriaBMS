@@ -209,7 +209,7 @@ public class DatabaseBackupService : IDisposable
     #endregion
 
     #region DB Settings
-    public static async Task SetDbIdentityInsert(AppDbContext context, string tableName, bool desiredState)
+    public static async Task<bool> SetDbIdentityInsert(AppDbContext context, string tableName, bool desiredState)
     {
         if (context == null)
         {
@@ -226,10 +226,7 @@ public class DatabaseBackupService : IDisposable
             Console.WriteLine("\n\n\n");
             // Check if the database connection is open
             if (context.Database.GetDbConnection().State != System.Data.ConnectionState.Open)
-            {
-                Console.WriteLine("\n\nOpening database connection...");
                 await context.Database.OpenConnectionAsync();
-            }
 
             // SQL command to set IDENTITY_INSERT
             string sqlSetIdentityInsert = $"SET IDENTITY_INSERT [{tableName}] {(desiredState ? "ON" : "OFF")};";
@@ -237,20 +234,18 @@ public class DatabaseBackupService : IDisposable
             // Execute the SQL command to set IDENTITY_INSERT
             var result = await context.Database.ExecuteSqlRawAsync(sqlSetIdentityInsert);
 
-            // Log success message
-            Console.WriteLine($"Successfully set IDENTITY_INSERT {(desiredState ? "ON" : "OFF")} for {tableName}. Result: {result}\n\n\n");
-
             // Check if the database connection is open
             if (context.Database.GetDbConnection().State != System.Data.ConnectionState.Open)
-            {
-                Console.WriteLine("\n\nClosing database connection...");
                 await context.Database.CloseConnectionAsync();
-            }
+
+            return true;
         }
         catch (Exception ex)
         {
             // Log Exception with detailed information
             Console.WriteLine($"\n\nException in SetDbIdentityInsert: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+
+            return false;
         }
     }
     #endregion
