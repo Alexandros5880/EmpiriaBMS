@@ -1495,11 +1495,13 @@ public partial class Dashboard : IDisposable
 
         try
         {
-            using var memoryStream = new MemoryStream();
-            await file.OpenReadStream().CopyToAsync(memoryStream);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var data = await DatabaseBackupService.ZipStreamToCsv(memoryStream);
-            await DatabaseBackupService.SaveToDB(data);
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.OpenReadStream().CopyToAsync(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                var data = await DatabaseBackupService.ZipStreamToCsv(memoryStream);
+                await DatabaseBackupService.SaveToDB(data);
+            }
         }
         catch (Exception ex)
         {
@@ -1508,6 +1510,9 @@ public partial class Dashboard : IDisposable
         }
 
         _restoreLoading = false;
+        StateHasChanged();
+
+        await Refresh();
     }
     private async Task TriggerRestoreDbInport()
     {

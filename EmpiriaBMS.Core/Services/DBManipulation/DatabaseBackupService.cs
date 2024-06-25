@@ -31,6 +31,7 @@ public class DatabaseBackupService : IDisposable
 
     public async Task SaveToDB(List<List<object>> data)
     {
+
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             foreach (var items in data)
@@ -41,7 +42,6 @@ public class DatabaseBackupService : IDisposable
                 Type type = Data.GetListItemType(items);
                 var tableName = GetTableName(_context, type);
                 await SetDbIdentityInsert(_context, tableName, true);
-
                 foreach (var item in items)
                 {
                     try
@@ -59,6 +59,7 @@ public class DatabaseBackupService : IDisposable
                 await SetDbIdentityInsert(_context, tableName, false);
             }
         }
+
     }
 
     #region DATA To CSV
@@ -223,7 +224,6 @@ public class DatabaseBackupService : IDisposable
 
         try
         {
-            Console.WriteLine("\n\n\n");
             // Check if the database connection is open
             if (context.Database.GetDbConnection().State != System.Data.ConnectionState.Open)
                 await context.Database.OpenConnectionAsync();
