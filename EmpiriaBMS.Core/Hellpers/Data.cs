@@ -258,8 +258,19 @@ public static class Data
             // Add Columns
             var columnValues = new List<string>();
             foreach (var prop in properties)
-                if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string))
+            {
+                bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
+                bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
+                bool isCollection = prop.PropertyType.IsGenericType &&
+                                    (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
+                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
+                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
+                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
+
+                if (isNotIEntity && !isCollection)
                     columnValues.Add(prop.Name);
+
+            }
             csvBuilder.AppendLine(string.Join(_seperator, columnValues));
 
 
@@ -270,10 +281,20 @@ public static class Data
 
                 foreach (var prop in properties)
                 {
-                    var propValue = prop.GetValue(item);
+                    bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
+                    bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
+                    bool isCollection = prop.PropertyType.IsGenericType &&
+                                    (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
+                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
+                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
+                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
 
-                    if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string))
+                    if (isNotIEntity && !isCollection)
+                    {
+                        var propValue = prop.GetValue(item);
                         lineValues.Add(propValue?.ToString() ?? "");
+                    }
+
                 }
 
                 csvBuilder.AppendLine(string.Join(_seperator, lineValues));
@@ -346,14 +367,77 @@ public static class Data
 
     private static void _setProperty<T>(T instance, string propertyName, string propertyValue)
     {
-        PropertyInfo property = typeof(T).GetProperty(propertyName);
-        if (property != null && property.CanWrite)
+        if (string.IsNullOrEmpty(propertyValue) || string.IsNullOrEmpty(propertyName))
+            return;
+
+        try
         {
-            Type propertyType = property.PropertyType;
-            object value = Convert.ChangeType(propertyValue, propertyType);
-            property.SetValue(instance, value);
+            PropertyInfo property = typeof(T).GetProperty(propertyName);
+
+            if (property != null && property.CanWrite)
+            {
+                Type propertyType = property.PropertyType;
+
+                // DateTime
+                bool isDateTime = _isDateTimeOrNullableDateTime(propertyType);
+                if (isDateTime)
+                {
+                    DateTime dateTime;
+                    if (DateTime.TryParse(propertyValue, out dateTime))
+                        property.SetValue(instance, dateTime);
+                }
+                else
+                {
+                    // Int
+                    if (propertyType == typeof(int?) && int.TryParse(propertyValue, out int intValue))
+                    {
+                        property.SetValue(instance, intValue);
+                    }
+
+                    // Double
+                    else if (propertyType == typeof(double?) && double.TryParse(propertyValue, out double doubleValue))
+                    {
+                        property.SetValue(instance, doubleValue);
+                    }
+
+                    // Enum
+                    else if (propertyType.IsEnum)
+                    {
+                        try
+                        {
+                            object enumValue = null;
+                            enumValue = Enum.Parse(propertyType, propertyValue);
+                            property.SetValue(instance, enumValue);
+                        }
+                        catch (ArgumentException aex)
+                        {
+                            // TODO: Log Exception
+                            Console.WriteLine($"\n\nException Data._setProperty.Try_Parse_Enum: {aex.Message}, \nInner: {aex.InnerException?.Message}");
+                        }
+                    }
+
+                    // Other
+                    else
+                    {
+                        object value = Convert.ChangeType(propertyValue, propertyType);
+                        property.SetValue(instance, value);
+                    }
+
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log Exception
+            Console.WriteLine($"\n\nException Data._setProperty: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.WriteLine($"Type: {instance?.GetType()?.Name}, PropertyName.Length: {propertyName.Length}, PropertyName: {propertyName}, PropertyValue.Length: {propertyValue.Length}, PropertyValue: {propertyValue}");
         }
     }
+
+    private static bool _isDateTimeOrNullableDateTime(Type propertyType) =>
+    propertyType == typeof(DateTime) ||
+           (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+            propertyType.GetGenericArguments()[0] == typeof(DateTime));
 }
 
 public enum FileType
