@@ -299,39 +299,6 @@ public static class Data
             return csvBuilder.ToString();
         }
 
-        //public static string GenerateCsvContent<T>(IList<T> data)
-        //{
-        //    var properties = typeof(T).GetProperties();
-        //    var csvBuilder = new StringBuilder();
-
-
-        //    // Add Columns
-        //    var columnValues = new List<string>();
-        //    foreach (var prop in properties)
-        //        if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string))
-        //            columnValues.Add(prop.Name);
-        //    csvBuilder.AppendLine(string.Join(_seperator, columnValues));
-
-
-        //    // Add Values
-        //    foreach (var item in data)
-        //    {
-        //        var lineValues = new List<string>();
-
-        //        foreach (var prop in properties)
-        //        {
-        //            var propValue = prop.GetValue(item);
-
-        //            if (prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string))
-        //                lineValues.Add(propValue?.ToString() ?? "");
-        //        }
-
-        //        csvBuilder.AppendLine(string.Join(_seperator, lineValues));
-        //    }
-
-        //    return csvBuilder.ToString();
-        //}
-
         public static void SaveCsvToFile(string csvContent, string filePath)
         {
             File.WriteAllText(filePath, csvContent);
