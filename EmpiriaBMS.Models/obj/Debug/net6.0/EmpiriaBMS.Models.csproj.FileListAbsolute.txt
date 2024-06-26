@@ -1,6 +1,0 @@
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.csproj.AssemblyReference.cache
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.AssemblyInfoInputs.cache
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.AssemblyInfo.cs
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.csproj.CoreCompileInputs.cache
-C:\Users\Alexp\Desktop\MicrosoftTeams-Empireia\EmpiriaBMS\EmpiriaBMS.Models\obj\Debug\net6.0\EmpiriaBMS.Models.sourcelink.json
