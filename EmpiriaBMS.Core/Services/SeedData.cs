@@ -7,16 +7,19 @@ public class SeedData
 {
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
-    public SeedData(IDbContextFactory<AppDbContext> dbFactory) =>
-        _dbContextFactory = dbFactory;
-
-    public void CreateData()
+    public SeedData(IDbContextFactory<AppDbContext> dbFactory)
     {
-        CeatePermissions();
-        CeateRoles();
+        _dbContextFactory = dbFactory;
     }
 
-    protected void CeatePermissions()
+    public async void CreateData()
+    {
+        await CeatePermissions();
+        await CeateRoles();
+        await CeateRolesPermissions();
+    }
+
+    protected async Task CeatePermissions()
     {
         try
         {
@@ -24,6 +27,7 @@ public class SeedData
 
             using (var context = _dbContextFactory.CreateDbContext())
             {
+                // See Dashboard Layout
                 var per_1_id = random.Next(123456789, 999999999);
                 Permission per_1 = new Permission()
                 {
@@ -33,7 +37,6 @@ public class SeedData
                     Name = "See Dashboard Layout",
                     Ord = 1
                 };
-                SeedIfNotExists<Permission>(context, per_1);
 
                 // Dashboard Edit My Hours
                 var per_2_id = random.Next(123456789, 999999999);
@@ -45,7 +48,6 @@ public class SeedData
                     Name = "Dashboard Edit My Hours",
                     Ord = 2
                 };
-                SeedIfNotExists<Permission>(context, per_2);
 
                 // Dashboard Assign Designer
                 var per_3_id = random.Next(123456789, 999999999);
@@ -57,7 +59,6 @@ public class SeedData
                     Name = "Dashboard Assign Designer",
                     Ord = 3
                 };
-                SeedIfNotExists<Permission>(context, per_3);
 
                 // Dashboard Assign Engineer
                 var per_4_id = random.Next(123456789, 999999999);
@@ -69,7 +70,6 @@ public class SeedData
                     Name = "Dashboard Assign Engineer",
                     Ord = 4
                 };
-                SeedIfNotExists<Permission>(context, per_4);
 
                 // Dashboard Assign Project Manager
                 var per_5_id = random.Next(123456789, 999999999);
@@ -81,7 +81,6 @@ public class SeedData
                     Name = "Dashboard Assign Project Manager",
                     Ord = 5
                 };
-                SeedIfNotExists<Permission>(context, per_5);
 
                 // Dashboard Add Project
                 var per_6_id = random.Next(123456789, 999999999);
@@ -93,7 +92,6 @@ public class SeedData
                     Name = "Dashboard Add Project",
                     Ord = 6
                 };
-                SeedIfNotExists<Permission>(context, per_6);
 
                 // See Admin Layout
                 var per_7_id = random.Next(123456789, 999999999);
@@ -105,7 +103,6 @@ public class SeedData
                     Name = "See Admin Layout",
                     Ord = 7
                 };
-                SeedIfNotExists<Permission>(context, per_7);
 
                 // Dashboard See My Hours
                 var per_8_id = random.Next(123456789, 999999999);
@@ -117,7 +114,6 @@ public class SeedData
                     Name = "Dashboard See My Hours",
                     Ord = 8
                 };
-                SeedIfNotExists<Permission>(context, per_8);
 
                 // Dashboard See All Disciplines
                 var per_9_id = random.Next(123456789, 999999999);
@@ -129,7 +125,6 @@ public class SeedData
                     Name = "See All Disciplines",
                     Ord = 9
                 };
-                SeedIfNotExists<Permission>(context, per_9);
 
                 // Dashboard See All Deliverables
                 var per_10_id = random.Next(123456789, 999999999);
@@ -141,7 +136,6 @@ public class SeedData
                     Name = "See All Deliverables",
                     Ord = 10
                 };
-                SeedIfNotExists<Permission>(context, per_10);
 
                 // Dashboard See All Projects
                 var per_11_id = random.Next(123456789, 999999999);
@@ -153,7 +147,6 @@ public class SeedData
                     Name = "See All Projects",
                     Ord = 11
                 };
-                SeedIfNotExists<Permission>(context, per_11);
 
                 // Dashboard Edit Project
                 var per_12_id = random.Next(123456789, 999999999);
@@ -165,7 +158,6 @@ public class SeedData
                     Name = "Edit Project On Dashboard",
                     Ord = 12
                 };
-                SeedIfNotExists<Permission>(context, per_12);
 
                 // Display Projects Code
                 var per_13_id = random.Next(123456789, 999999999);
@@ -177,7 +169,6 @@ public class SeedData
                     Name = "Display Projects Code",
                     Ord = 13
                 };
-                SeedIfNotExists<Permission>(context, per_13);
 
                 // Dashboard Edit Discipline
                 var per_14_id = random.Next(123456789, 999999999);
@@ -189,7 +180,6 @@ public class SeedData
                     Name = "Dashboard Edit Discipline",
                     Ord = 14
                 };
-                SeedIfNotExists<Permission>(context, per_14);
 
                 // Dashboard Edit Deliverable
                 var per_15_id = random.Next(123456789, 999999999);
@@ -201,7 +191,6 @@ public class SeedData
                     Name = "Dashboard Edit Deliverable",
                     Ord = 15
                 };
-                SeedIfNotExists<Permission>(context, per_15);
 
                 // Dashboard Edit Other
                 var per_16_id = random.Next(123456789, 999999999);
@@ -213,7 +202,6 @@ public class SeedData
                     Name = "Dashboard Edit Other",
                     Ord = 16
                 };
-                SeedIfNotExists<Permission>(context, per_16);
 
                 // Dashboard See KPIS
                 var per_17_id = random.Next(123456789, 999999999);
@@ -225,7 +213,6 @@ public class SeedData
                     Name = "Dashboard See KPIS",
                     Ord = 17
                 };
-                SeedIfNotExists<Permission>(context, per_17);
 
                 // See Hours Per Role KPI
                 var per_18_id = random.Next(123456789, 999999999);
@@ -237,7 +224,6 @@ public class SeedData
                     Name = "See Hours Per Role KPI",
                     Ord = 18
                 };
-                SeedIfNotExists<Permission>(context, per_18);
 
                 // See Active Delayed Projects KPI
                 var per_19_id = random.Next(123456789, 999999999);
@@ -249,7 +235,6 @@ public class SeedData
                     Name = "See Active Delayed Projects KPI",
                     Ord = 19
                 };
-                SeedIfNotExists<Permission>(context, per_19);
 
                 // See All Projects Missed DeadLine KPI
                 var per_20_id = random.Next(123456789, 999999999);
@@ -261,7 +246,6 @@ public class SeedData
                     Name = "See All Projects Missed DeadLine KPI",
                     Ord = 20
                 };
-                SeedIfNotExists<Permission>(context, per_20);
 
                 // See Employee Turnover KPI
                 var per_21_id = random.Next(123456789, 999999999);
@@ -273,7 +257,6 @@ public class SeedData
                     Name = "See Employee Turnover KPI",
                     Ord = 21
                 };
-                SeedIfNotExists<Permission>(context, per_21);
 
                 // See My Projects Missed DeadLine KPI
                 var per_22_id = random.Next(123456789, 999999999);
@@ -285,7 +268,6 @@ public class SeedData
                     Name = "See My Projects Missed DeadLine KPI",
                     Ord = 22
                 };
-                SeedIfNotExists<Permission>(context, per_22);
 
                 // See Active Delayed Project Types Counter KPI
                 var per_23_id = random.Next(123456789, 999999999);
@@ -297,7 +279,6 @@ public class SeedData
                     Name = "See Active Delayed Project Types Counter KPI",
                     Ord = 23
                 };
-                SeedIfNotExists<Permission>(context, per_23);
 
                 // Dashboard See Offers
                 var per_24_id = random.Next(123456789, 999999999);
@@ -309,7 +290,6 @@ public class SeedData
                     Name = "See Offers",
                     Ord = 24
                 };
-                SeedIfNotExists<Permission>(context, per_24);
 
                 // See Tender Table KPI
                 var per_25_id = random.Next(123456789, 999999999);
@@ -321,7 +301,6 @@ public class SeedData
                     Name = "See Tender Table KPI",
                     Ord = 25
                 };
-                SeedIfNotExists<Permission>(context, per_25);
 
                 // See Delayed Payments KPI
                 var per_26_id = random.Next(123456789, 999999999);
@@ -333,7 +312,6 @@ public class SeedData
                     Name = "See Delayed Payments KPI",
                     Ord = 26
                 };
-                SeedIfNotExists<Permission>(context, per_26);
 
                 // See Pendings Payments KPI
                 var per_27_id = random.Next(123456789, 999999999);
@@ -345,7 +323,6 @@ public class SeedData
                     Name = "See Pendings Payments KPI",
                     Ord = 27
                 };
-                SeedIfNotExists<Permission>(context, per_27);
 
                 // See Teams Requested Users
                 var per_28_id = random.Next(123456789, 999999999);
@@ -357,7 +334,6 @@ public class SeedData
                     Name = "See Teams Requested Users",
                     Ord = 28
                 };
-                SeedIfNotExists<Permission>(context, per_28);
 
                 // See Invoices
                 var per_29_id = random.Next(123456789, 999999999);
@@ -369,7 +345,6 @@ public class SeedData
                     Name = "See Invoices",
                     Ord = 29
                 };
-                SeedIfNotExists<Permission>(context, per_29);
 
                 // See Excpences
                 var per_30_id = random.Next(123456789, 999999999);
@@ -381,7 +356,6 @@ public class SeedData
                     Name = "See Excpences",
                     Ord = 30
                 };
-                SeedIfNotExists<Permission>(context, per_30);
 
                 // Work on Project
                 var per_31_id = random.Next(123456789, 999999999);
@@ -393,7 +367,6 @@ public class SeedData
                     Name = "Work on Project",
                     Ord = 31
                 };
-                SeedIfNotExists<Permission>(context, per_31);
 
                 // Work on Offers
                 var per_32_id = random.Next(123456789, 999999999);
@@ -405,7 +378,6 @@ public class SeedData
                     Name = "Work on Offers",
                     Ord = 32
                 };
-                SeedIfNotExists<Permission>(context, per_32);
 
                 // Work on Leds
                 var per_33_id = random.Next(123456789, 999999999);
@@ -417,7 +389,6 @@ public class SeedData
                     Name = "Work on Leds",
                     Ord = 33
                 };
-                SeedIfNotExists<Permission>(context, per_33);
 
                 // See Next Year Income
                 var per_34_id = random.Next(123456789, 999999999);
@@ -429,7 +400,65 @@ public class SeedData
                     Name = "See Next Year Income",
                     Ord = 34
                 };
-                SeedIfNotExists<Permission>(context, per_34);
+
+                // Backup Database
+                var per_35_id = random.Next(123456789, 999999999);
+                Permission per_35 = new Permission()
+                {
+                    Id = per_35_id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = "Backup Database",
+                    Ord = 35
+                };
+
+                // Restore Database
+                var per_36_id = random.Next(123456789, 999999999);
+                Permission per_36 = new Permission()
+                {
+                    Id = per_36_id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = "Restore Database",
+                    Ord = 36
+                };
+
+                await SeedIfNotExists<Permission>(context, per_1);
+                await SeedIfNotExists<Permission>(context, per_2);
+                await SeedIfNotExists<Permission>(context, per_3);
+                await SeedIfNotExists<Permission>(context, per_4);
+                await SeedIfNotExists<Permission>(context, per_5);
+                await SeedIfNotExists<Permission>(context, per_6);
+                await SeedIfNotExists<Permission>(context, per_7);
+                await SeedIfNotExists<Permission>(context, per_8);
+                await SeedIfNotExists<Permission>(context, per_9);
+                await SeedIfNotExists<Permission>(context, per_10);
+                await SeedIfNotExists<Permission>(context, per_11);
+                await SeedIfNotExists<Permission>(context, per_12);
+                await SeedIfNotExists<Permission>(context, per_13);
+                await SeedIfNotExists<Permission>(context, per_14);
+                await SeedIfNotExists<Permission>(context, per_15);
+                await SeedIfNotExists<Permission>(context, per_16);
+                await SeedIfNotExists<Permission>(context, per_17);
+                await SeedIfNotExists<Permission>(context, per_18);
+                await SeedIfNotExists<Permission>(context, per_19);
+                await SeedIfNotExists<Permission>(context, per_20);
+                await SeedIfNotExists<Permission>(context, per_21);
+                await SeedIfNotExists<Permission>(context, per_22);
+                await SeedIfNotExists<Permission>(context, per_23);
+                await SeedIfNotExists<Permission>(context, per_24);
+                await SeedIfNotExists<Permission>(context, per_25);
+                await SeedIfNotExists<Permission>(context, per_26);
+                await SeedIfNotExists<Permission>(context, per_27);
+                await SeedIfNotExists<Permission>(context, per_28);
+                await SeedIfNotExists<Permission>(context, per_29);
+                await SeedIfNotExists<Permission>(context, per_30);
+                await SeedIfNotExists<Permission>(context, per_31);
+                await SeedIfNotExists<Permission>(context, per_32);
+                await SeedIfNotExists<Permission>(context, per_33);
+                await SeedIfNotExists<Permission>(context, per_34);
+                await SeedIfNotExists<Permission>(context, per_35);
+                await SeedIfNotExists<Permission>(context, per_36);
             }
         }
         catch (Exception ex)
@@ -439,7 +468,7 @@ public class SeedData
         }
     }
 
-    protected void CeateRoles()
+    protected async Task CeateRoles()
     {
         try
         {
@@ -458,7 +487,7 @@ public class SeedData
                     IsEmployee = true,
                     IsEditable = false
                 };
-                SeedIfNotExists<Role>(context, role_6);
+                await SeedIfNotExists<Role>(context, role_6);
 
                 // COO
                 var role_4_id = random.Next(123456789, 999999999);
@@ -472,7 +501,7 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_6_id
                 };
-                SeedIfNotExists<Role>(context, role_4);
+                await SeedIfNotExists<Role>(context, role_4);
 
                 // CTO
                 var role_5_id = random.Next(123456789, 999999999);
@@ -486,7 +515,7 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_4_id
                 };
-                SeedIfNotExists<Role>(context, role_5);
+                await SeedIfNotExists<Role>(context, role_5);
 
                 // Secretariat
                 var role_10_id = random.Next(123456789, 999999999);
@@ -500,7 +529,7 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_5_id
                 };
-                SeedIfNotExists<Role>(context, role_10);
+                await SeedIfNotExists<Role>(context, role_10);
 
                 // Project Manager
                 var role_3_id = random.Next(123456789, 999999999);
@@ -514,7 +543,7 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_5_id
                 };
-                SeedIfNotExists<Role>(context, role_3);
+                await SeedIfNotExists<Role>(context, role_3);
 
                 // Engineer
                 var role_2_id = random.Next(123456789, 999999999);
@@ -528,7 +557,7 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_3_id
                 };
-                SeedIfNotExists<Role>(context, role_2);
+                await SeedIfNotExists<Role>(context, role_2);
 
                 // Designer
                 var role_1_id = random.Next(123456789, 999999999);
@@ -542,7 +571,7 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_2_id
                 };
-                SeedIfNotExists<Role>(context, role_1);
+                await SeedIfNotExists<Role>(context, role_1);
 
                 // Guest
                 var role_7_id = random.Next(123456789, 999999999);
@@ -555,7 +584,7 @@ public class SeedData
                     IsEmployee = false,
                     IsEditable = false
                 };
-                SeedIfNotExists<Role>(context, role_7);
+                await SeedIfNotExists<Role>(context, role_7);
 
                 // Customer
                 var role_8_id = random.Next(123456789, 999999999);
@@ -568,7 +597,7 @@ public class SeedData
                     IsEmployee = false,
                     IsEditable = false
                 };
-                SeedIfNotExists<Role>(context, role_8);
+                await SeedIfNotExists<Role>(context, role_8);
 
                 // Admin
                 var role_9_id = random.Next(123456789, 999999999);
@@ -581,7 +610,7 @@ public class SeedData
                     IsEmployee = false,
                     IsEditable = false
                 };
-                SeedIfNotExists<Role>(context, role_9);
+                await SeedIfNotExists<Role>(context, role_9);
 
                 // Engineer SUB
                 var role_11_id = random.Next(123456789, 999999999);
@@ -594,7 +623,7 @@ public class SeedData
                     IsEmployee = false,
                     IsEditable = false
                 };
-                SeedIfNotExists<Role>(context, role_11);
+                await SeedIfNotExists<Role>(context, role_11);
             }
         }
         catch (Exception ex)
@@ -604,7 +633,7 @@ public class SeedData
         }
     }
 
-    protected void CeateRolesPermissions()
+    protected async Task CeateRolesPermissions()
     {
         try
         {
@@ -612,7 +641,1205 @@ public class SeedData
 
             using (var context = _dbContextFactory.CreateDbContext())
             {
+                // Designer
+                // Designer || See Dashboard Layout
+                RolePermission rp_1 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_1_id,
+                    PermissionId = per_1_id
+                };
 
+                // Designer || Dashboard Edit My Hours
+                RolePermission rp_2 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_1_id,
+                    PermissionId = per_2_id
+                };
+
+                // Designer || Dashboard See My Hours
+                RolePermission rp_30 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_1_id,
+                    PermissionId = per_8_id
+                };
+
+
+                // Engineer
+                // Engineer || See Dashboard Layout
+                RolePermission rp_3 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_2_id,
+                    PermissionId = per_1_id
+                };
+
+                // Engineer || Dashboard Edit My Hours
+                RolePermission rp_4 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_2_id,
+                    PermissionId = per_2_id
+                };
+
+                // Engineer || Dashboard Assign Designer
+                RolePermission rp_5 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_2_id,
+                    PermissionId = per_3_id
+                };
+
+                // Engineer || Dashboard See My Hours
+                RolePermission rp_31 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_2_id,
+                    PermissionId = per_8_id
+                };
+
+                // Engineer || See All Disciplines
+                RolePermission rp_35 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_2_id,
+                    PermissionId = per_9_id
+                };
+
+                // Engineer || See All Deliverables
+                RolePermission rp_41 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_2_id,
+                    PermissionId = per_10_id
+                };
+
+
+                // Project Manager
+                // Project Manager || See Dashboard Layout
+                RolePermission rp_6 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_3_id,
+                    PermissionId = per_1_id
+                };
+
+                // Project Manager || Dashboard Edit My Hours
+                RolePermission rp_7 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_3_id,
+                    PermissionId = per_2_id
+                };
+
+                // Project Manager || Dashboard Assign Engineer
+                RolePermission rp_8 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_3_id,
+                    PermissionId = per_4_id
+                };
+
+                // Project Manager || Dashboard See My Hours
+                RolePermission rp_32 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_3_id,
+                    PermissionId = per_8_id
+                };
+
+                // Project Manager || See All Disciplines
+                RolePermission rp_36 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_3_id,
+                    PermissionId = per_9_id
+                };
+
+                // Project Manager || See All Deliverables
+                RolePermission rp_43 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_3_id,
+                    PermissionId = per_10_id
+                };
+
+                // Project Manager || Dashboard See KPIS
+                RolePermission rp_68 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_3_id,
+                    PermissionId = per_17_id
+                };
+
+                // Project Manager || See My Projects Missed DeadLine KPI
+                RolePermission rp_69 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_3_id,
+                    PermissionId = per_22_id
+                };
+
+                // Project Manager || See Active Delayed Project Types Counter KPI
+                RolePermission rp_77 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_3_id,
+                    PermissionId = per_23_id
+                };
+
+
+                // COO
+                // COO || See Dashboard Layout
+                RolePermission rp_9 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_1_id
+                };
+
+                // COO || Dashboard Edit My Hours
+                RolePermission rp_10 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_2_id
+                };
+
+                // COO || Dashboard Assign Designer
+                RolePermission rp_11 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_3_id
+                };
+
+                // COO || Dashboard Assign Engineer
+                RolePermission rp_12 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_4_id
+                };
+
+                // COO || Dashboard Assign Project Manager
+                RolePermission rp_13 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_5_id
+                };
+
+                // COO || Dashboard See My Hours
+                RolePermission rp_33 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_8_id
+                };
+
+                // COO || See All Disciplines
+                RolePermission rp_37 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_9_id
+                };
+
+                // COO || See All Deliverables
+                RolePermission rp_42 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_10_id
+                };
+
+                // COO || See All Projects
+                RolePermission rp_49 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_11_id
+                };
+
+                // COO || Work on Project
+                RolePermission rp_102 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_31_id
+                };
+
+                // COO || Work on Offers
+                RolePermission rp_103 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_32_id
+                };
+
+                // COO || Work on Leds
+                RolePermission rp_106 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_33_id
+                };
+
+                // COO || See Next Year Income
+                RolePermission rp_110 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_4_id,
+                    PermissionId = per_34_id
+                };
+
+
+                // CTO
+                // CTO || See Dashboard Layout
+                RolePermission rp_14 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_1_id
+                };
+
+                // CTO || Dashboard Edit My Hours
+                RolePermission rp_15 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_2_id
+                };
+
+                // CTO || Dashboard Assign Project Manager
+                RolePermission rp_18 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_5_id
+                };
+
+                // CTO || Dashboard Add Project
+                RolePermission rp_19 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_6_id
+                };
+
+                // CTO || Dashboard See My Hours
+                RolePermission rp_34 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_8_id
+                };
+
+                // CTO || See All Disciplines
+                RolePermission rp_38 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_9_id
+                };
+
+                // CTO || See All Deliverables
+                RolePermission rp_45 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_10_id
+                };
+
+                // CTO || See All Projects
+                RolePermission rp_48 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_11_id
+                };
+
+                // CTO || Dashboard Edit Project
+                RolePermission rp_60 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_12_id
+                };
+
+                // CTO || Dashboard Edit Discipline
+                RolePermission rp_63 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_14_id
+                };
+
+                // CTO || Dashboard Edit Deliverable
+                RolePermission rp_64 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_15_id
+                };
+
+                // CTO || Dashboard Edit Other
+                RolePermission rp_65 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_16_id
+                };
+
+                // CTO || Dashboard See KPIS
+                RolePermission rp_66 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_17_id
+                };
+
+                // CTO || See Hours Per Role KPI
+                RolePermission rp_70 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_18_id
+                };
+
+                // CTO || See Active Delayed Projects KPI
+                RolePermission rp_71 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_19_id
+                };
+
+                // CTO || See All Projects Missed DeadLine KPI
+                RolePermission rp_72 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_20_id
+                };
+
+                // CTO || See Active Delayed Project Types Counter KPI
+                RolePermission rp_78 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_23_id
+                };
+
+                // CTO || Display Projects Code
+                RolePermission rp_80 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_13_id
+                };
+
+                // CTO || See Offers
+                RolePermission rp_81 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_24_id
+                };
+
+                // CTO || See Tender Table KPI
+                RolePermission rp_83 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_25_id
+                };
+
+                // CTO || See Delayed Payments KPI
+                RolePermission rp_85 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_26_id
+                };
+
+                // CTO || See Pendings Payments KPI
+                RolePermission rp_87 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_27_id
+                };
+
+                // CTO || See Invoices
+                RolePermission rp_91 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_29_id
+                };
+
+                // CTO || See Excpences
+                RolePermission rp_92 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_30_id
+                };
+
+                // CTO || Work on Project
+                RolePermission rp_101 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_31_id
+                };
+
+                // CTO || Work on Offers
+                RolePermission rp_104 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_32_id
+                };
+
+                // CTO || Work on Leds
+                RolePermission rp_107 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_33_id
+                };
+
+                // CTO || See Next Year Income
+                RolePermission rp_111 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_34_id
+                };
+
+                // CTO || Backup Database
+                RolePermission rp_113 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_35_id
+                };
+
+                // CTO || Restore Database
+                RolePermission rp_114 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_5_id,
+                    PermissionId = per_36_id
+                };
+
+
+                // CEO
+                // CEO || See Dashboard Layout
+                RolePermission rp_20 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_1_id
+                };
+
+                // CEO || Dashboard Edit My Hours
+                RolePermission rp_21 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_2_id
+                };
+
+                // CEO || Dashboard Assign Designer
+                RolePermission rp_22 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_3_id
+                };
+
+                // CEO || Dashboard Assign Engineer
+                RolePermission rp_23 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_4_id
+                };
+
+                // CEO || Dashboard Assign Project Manager
+                RolePermission rp_24 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_5_id
+                };
+
+                // CEO || Dashboard Add Project
+                RolePermission rp_25 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_6_id
+                };
+
+                // CEO || See All Disciplines
+                RolePermission rp_39 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_9_id
+                };
+
+                // CEO || See All Deliverable
+                RolePermission rp_44 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_10_id
+                };
+
+                // CEO || See All Projects
+                RolePermission rp_47 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_11_id
+                };
+
+                // CEO || Display Projects Code
+                RolePermission rp_61 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_13_id
+                };
+
+                // CEO || Dashboard Add Project
+                RolePermission rp_62 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_12_id
+                };
+
+                // CEO || Dashboard See KPIS
+                RolePermission rp_67 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_17_id
+                };
+
+                // CEO || See Hours Per Role KPI
+                RolePermission rp_73 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_18_id
+                };
+
+                // CEO || See Active Delayed Projects KPI
+                RolePermission rp_74 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_19_id
+                };
+
+                // CEO || See All Projects Missed DeadLine KPI
+                RolePermission rp_75 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_20_id
+                };
+
+                // CEO || See Employee Turnover KPI
+                RolePermission rp_76 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_21_id
+                };
+
+                // CEO || See Active Delayed Project Types Counter KPI
+                RolePermission rp_79 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_23_id
+                };
+
+                // CEO || See Offers
+                RolePermission rp_82 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_24_id
+                };
+
+                // CEO || See Tender Table KPI
+                RolePermission rp_84 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_25_id
+                };
+
+                // CEO || See Delayed Payments KPI
+                RolePermission rp_86 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_26_id
+                };
+
+                // CEO || See Pendings Payments KPI
+                RolePermission rp_88 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_27_id
+                };
+
+                // CEO || See Teams Requested Users
+                RolePermission rp_90 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_28_id
+                };
+
+                // CEO || See Invoices
+                RolePermission rp_93 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_29_id
+                };
+
+                // CEO || See Excpences
+                RolePermission rp_94 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_30_id
+                };
+
+                // CEO || Work on Project
+                RolePermission rp_105 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_31_id
+                };
+
+                // CEO || Work on Offers
+                RolePermission rp_108 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_32_id
+                };
+
+                // CEO || Work on Leds
+                RolePermission rp_109 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_33_id
+                };
+
+                // CEO || See Next Year Income
+                RolePermission rp_112 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_34_id
+                };
+
+                // CEO || Backup Database
+                RolePermission rp_115 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_35_id
+                };
+
+                // CEO || Restore Database
+                RolePermission rp_116 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_6_id,
+                    PermissionId = per_36_id
+                };
+
+
+                // Guest
+                // Guest || See Dashboard Layout
+                RolePermission rp_27 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_7_id,
+                    PermissionId = per_1_id
+                };
+
+
+                // Customer
+                // Customer || See Dashboard Layout
+                RolePermission rp_28 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_8_id,
+                    PermissionId = per_1_id
+                };
+
+
+                // Admin
+                // Admin || See Dashboard Layout
+                RolePermission rp_29 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_9_id,
+                    PermissionId = per_7_id
+                };
+
+                // Admin || See All Disciplines
+                RolePermission rp_40 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_9_id,
+                    PermissionId = per_9_id
+                };
+
+                // Admin || See All Deliverables
+                RolePermission rp_46 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_9_id,
+                    PermissionId = per_10_id
+                };
+
+                // Admin || See All Projects
+                RolePermission rp_50 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_9_id,
+                    PermissionId = per_11_id
+                };
+
+                // Admin || See Teams Requested Users
+                RolePermission rp_100 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_9_id,
+                    PermissionId = per_28_id
+                };
+
+                // Admin || Backup Database
+                RolePermission rp_117 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_9_id,
+                    PermissionId = per_35_id
+                };
+
+                // Admin || Restore Database
+                RolePermission rp_118 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_9_id,
+                    PermissionId = per_36_id
+                };
+
+
+                // Secretariat 
+                // Secretariat || See Dashboard Layout
+                RolePermission rp_51 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_10_id,
+                    PermissionId = per_1_id
+                };
+
+                // Secretariat || Dashboard Edit My Hours
+                RolePermission rp_52 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_10_id,
+                    PermissionId = per_2_id
+                };
+
+                // Secretariat || Dashboard See My Hours
+                RolePermission rp_56 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_10_id,
+                    PermissionId = per_8_id
+                };
+
+                // Secretariat || See All Disciplines
+                RolePermission rp_57 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_10_id,
+                    PermissionId = per_9_id
+                };
+
+                // Secretariat || See All Deliverables
+                RolePermission rp_58 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_10_id,
+                    PermissionId = per_10_id
+                };
+
+                // Secretariat || See All Projects
+                RolePermission rp_59 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = role_10_id,
+                    PermissionId = per_11_id
+                };
+
+                await SeedIfNotExists<RolePermission>(context, rp_1);
+                await SeedIfNotExists<RolePermission>(context, rp_2);
+                await SeedIfNotExists<RolePermission>(context, rp_3);
+                await SeedIfNotExists<RolePermission>(context, rp_4);
+                await SeedIfNotExists<RolePermission>(context, rp_5);
+                await SeedIfNotExists<RolePermission>(context, rp_6);
+                await SeedIfNotExists<RolePermission>(context, rp_7);
+                await SeedIfNotExists<RolePermission>(context, rp_8);
+                await SeedIfNotExists<RolePermission>(context, rp_9);
+                await SeedIfNotExists<RolePermission>(context, rp_10);
+                await SeedIfNotExists<RolePermission>(context, rp_11);
+                await SeedIfNotExists<RolePermission>(context, rp_12);
+                await SeedIfNotExists<RolePermission>(context, rp_13);
+                await SeedIfNotExists<RolePermission>(context, rp_14);
+                await SeedIfNotExists<RolePermission>(context, rp_15);
+                await SeedIfNotExists<RolePermission>(context, rp_16);
+                await SeedIfNotExists<RolePermission>(context, rp_17);
+                await SeedIfNotExists<RolePermission>(context, rp_18);
+                await SeedIfNotExists<RolePermission>(context, rp_19);
+                await SeedIfNotExists<RolePermission>(context, rp_20);
+                await SeedIfNotExists<RolePermission>(context, rp_21);
+                await SeedIfNotExists<RolePermission>(context, rp_22);
+                await SeedIfNotExists<RolePermission>(context, rp_23);
+                await SeedIfNotExists<RolePermission>(context, rp_24);
+                await SeedIfNotExists<RolePermission>(context, rp_25);
+                await SeedIfNotExists<RolePermission>(context, rp_26);
+                await SeedIfNotExists<RolePermission>(context, rp_27);
+                await SeedIfNotExists<RolePermission>(context, rp_28);
+                await SeedIfNotExists<RolePermission>(context, rp_29);
+                await SeedIfNotExists<RolePermission>(context, rp_30);
+                await SeedIfNotExists<RolePermission>(context, rp_31);
+                await SeedIfNotExists<RolePermission>(context, rp_32);
+                await SeedIfNotExists<RolePermission>(context, rp_33);
+                await SeedIfNotExists<RolePermission>(context, rp_34);
+                await SeedIfNotExists<RolePermission>(context, rp_35);
+                await SeedIfNotExists<RolePermission>(context, rp_36);
+                await SeedIfNotExists<RolePermission>(context, rp_37);
+                await SeedIfNotExists<RolePermission>(context, rp_38);
+                await SeedIfNotExists<RolePermission>(context, rp_39);
+                await SeedIfNotExists<RolePermission>(context, rp_40);
+                await SeedIfNotExists<RolePermission>(context, rp_41);
+                await SeedIfNotExists<RolePermission>(context, rp_42);
+                await SeedIfNotExists<RolePermission>(context, rp_43);
+                await SeedIfNotExists<RolePermission>(context, rp_44);
+                await SeedIfNotExists<RolePermission>(context, rp_45);
+                await SeedIfNotExists<RolePermission>(context, rp_46);
+                await SeedIfNotExists<RolePermission>(context, rp_47);
+                await SeedIfNotExists<RolePermission>(context, rp_48);
+                await SeedIfNotExists<RolePermission>(context, rp_49);
+                await SeedIfNotExists<RolePermission>(context, rp_50);
+                await SeedIfNotExists<RolePermission>(context, rp_51);
+                await SeedIfNotExists<RolePermission>(context, rp_52);
+                await SeedIfNotExists<RolePermission>(context, rp_53);
+                await SeedIfNotExists<RolePermission>(context, rp_54);
+                await SeedIfNotExists<RolePermission>(context, rp_55);
+                await SeedIfNotExists<RolePermission>(context, rp_56);
+                await SeedIfNotExists<RolePermission>(context, rp_57);
+                await SeedIfNotExists<RolePermission>(context, rp_58);
+                await SeedIfNotExists<RolePermission>(context, rp_59);
+                await SeedIfNotExists<RolePermission>(context, rp_60);
+                await SeedIfNotExists<RolePermission>(context, rp_61);
+                await SeedIfNotExists<RolePermission>(context, rp_62);
+                await SeedIfNotExists<RolePermission>(context, rp_63);
+                await SeedIfNotExists<RolePermission>(context, rp_64);
+                await SeedIfNotExists<RolePermission>(context, rp_65);
+                await SeedIfNotExists<RolePermission>(context, rp_66);
+                await SeedIfNotExists<RolePermission>(context, rp_67);
+                await SeedIfNotExists<RolePermission>(context, rp_68);
+                await SeedIfNotExists<RolePermission>(context, rp_69);
+                await SeedIfNotExists<RolePermission>(context, rp_70);
+                await SeedIfNotExists<RolePermission>(context, rp_71);
+                await SeedIfNotExists<RolePermission>(context, rp_72);
+                await SeedIfNotExists<RolePermission>(context, rp_73);
+                await SeedIfNotExists<RolePermission>(context, rp_74);
+                await SeedIfNotExists<RolePermission>(context, rp_75);
+                await SeedIfNotExists<RolePermission>(context, rp_76);
+                await SeedIfNotExists<RolePermission>(context, rp_77);
+                await SeedIfNotExists<RolePermission>(context, rp_78);
+                await SeedIfNotExists<RolePermission>(context, rp_79);
+                await SeedIfNotExists<RolePermission>(context, rp_80);
+                await SeedIfNotExists<RolePermission>(context, rp_81);
+                await SeedIfNotExists<RolePermission>(context, rp_82);
+                await SeedIfNotExists<RolePermission>(context, rp_83);
+                await SeedIfNotExists<RolePermission>(context, rp_84);
+                await SeedIfNotExists<RolePermission>(context, rp_85);
+                await SeedIfNotExists<RolePermission>(context, rp_86);
+                await SeedIfNotExists<RolePermission>(context, rp_87);
+                await SeedIfNotExists<RolePermission>(context, rp_88);
+                await SeedIfNotExists<RolePermission>(context, rp_89);
+                await SeedIfNotExists<RolePermission>(context, rp_90);
+                await SeedIfNotExists<RolePermission>(context, rp_91);
+                await SeedIfNotExists<RolePermission>(context, rp_92);
+                await SeedIfNotExists<RolePermission>(context, rp_93);
+                await SeedIfNotExists<RolePermission>(context, rp_94);
+                await SeedIfNotExists<RolePermission>(context, rp_95);
+                await SeedIfNotExists<RolePermission>(context, rp_96);
+                await SeedIfNotExists<RolePermission>(context, rp_97);
+                await SeedIfNotExists<RolePermission>(context, rp_98);
+                await SeedIfNotExists<RolePermission>(context, rp_99);
+                await SeedIfNotExists<RolePermission>(context, rp_100);
+                await SeedIfNotExists<RolePermission>(context, rp_101);
+                await SeedIfNotExists<RolePermission>(context, rp_102);
+                await SeedIfNotExists<RolePermission>(context, rp_103);
+                await SeedIfNotExists<RolePermission>(context, rp_104);
+                await SeedIfNotExists<RolePermission>(context, rp_105);
+                await SeedIfNotExists<RolePermission>(context, rp_106);
+                await SeedIfNotExists<RolePermission>(context, rp_107);
+                await SeedIfNotExists<RolePermission>(context, rp_108);
+                await SeedIfNotExists<RolePermission>(context, rp_109);
+                await SeedIfNotExists<RolePermission>(context, rp_110);
+                await SeedIfNotExists<RolePermission>(context, rp_111);
+                await SeedIfNotExists<RolePermission>(context, rp_112);
+                await SeedIfNotExists<RolePermission>(context, rp_113);
+                await SeedIfNotExists<RolePermission>(context, rp_114);
+                await SeedIfNotExists<RolePermission>(context, rp_115);
+                await SeedIfNotExists<RolePermission>(context, rp_116);
+                await SeedIfNotExists<RolePermission>(context, rp_117);
+                await SeedIfNotExists<RolePermission>(context, rp_118);
+                await SeedIfNotExists<RolePermission>(context, rp_119);
+                await SeedIfNotExists<RolePermission>(context, rp_120);
             }
         }
         catch (Exception ex)
@@ -622,7 +1849,7 @@ public class SeedData
         }
     }
 
-    protected void CeateProjectCategories()
+    protected async Task CeateProjectCategories()
     {
         try
         {
@@ -640,7 +1867,7 @@ public class SeedData
         }
     }
 
-    protected void CreateProjectSubCategories()
+    protected async Task CreateProjectSubCategories()
     {
         try
         {
@@ -658,7 +1885,7 @@ public class SeedData
         }
     }
 
-    protected void CreateProjectStages()
+    protected async Task CreateProjectStages()
     {
         try
         {
@@ -676,7 +1903,7 @@ public class SeedData
         }
     }
 
-    protected void CreateInvoiceTypes()
+    protected async Task CreateInvoiceTypes()
     {
         try
         {
@@ -694,7 +1921,7 @@ public class SeedData
         }
     }
 
-    protected void CreatePaymentTypes()
+    protected async Task CreatePaymentTypes()
     {
         try
         {
@@ -712,7 +1939,7 @@ public class SeedData
         }
     }
 
-    protected void CreateOfferTypes()
+    protected async Task CreateOfferTypes()
     {
         try
         {
@@ -730,7 +1957,7 @@ public class SeedData
         }
     }
 
-    protected void CreateOfferState()
+    protected async Task CreateOfferState()
     {
         try
         {
@@ -748,7 +1975,7 @@ public class SeedData
         }
     }
 
-    protected void CreateSecretaries()
+    protected async Task CreateSecretaries()
     {
         try
         {
@@ -766,7 +1993,7 @@ public class SeedData
         }
     }
 
-    protected void CreateDraftmen()
+    protected async Task CreateDraftmen()
     {
         try
         {
@@ -784,7 +2011,7 @@ public class SeedData
         }
     }
 
-    protected void CreateEngineers()
+    protected async Task CreateEngineers()
     {
         try
         {
@@ -802,7 +2029,7 @@ public class SeedData
         }
     }
 
-    protected void CreateProjectManagers()
+    protected async Task CreateProjectManagers()
     {
         try
         {
@@ -820,14 +2047,14 @@ public class SeedData
         }
     }
 
-    private static void SeedIfNotExists<T>(DbContext context, T entity) where T : class
+    private static async Task SeedIfNotExists<T>(DbContext context, T entity) where T : class
     {
         var primaryKey = context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.First().Name;
         var primaryKeyValue = entity.GetType().GetProperty(primaryKey).GetValue(entity);
         bool exists = context.Set<T>().Any(e => EF.Property<object>(e, primaryKey).Equals(primaryKeyValue));
         if (!exists)
         {
-            var result = context.Set<T>().Add(entity);
+            var result = await context.Set<T>().AddAsync(entity);
             context.SaveChanges();
         }
     }
