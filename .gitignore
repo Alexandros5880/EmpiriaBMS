@@ -9,6 +9,15 @@ EmpiriaBMS.Front/obj
 EmpiriaBMS.Models/bin
 EmpiriaBMS.Models/obj
 
+EmpiriaBMS.Core/bin/
+EmpiriaBMS.Core/obj/
+EmpiriaBMS.EF.CLI/bin/
+EmpiriaBMS.EF.CLI/obj/
+EmpiriaBMS.Front/bin/
+EmpiriaBMS.Front/obj/
+EmpiriaBMS.Models/bin/
+EmpiriaBMS.Models/obj/
+
 # TeamsFx files
 build
 appPackage/build

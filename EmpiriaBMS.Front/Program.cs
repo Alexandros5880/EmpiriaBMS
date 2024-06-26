@@ -1,6 +1,7 @@
 using AutoMapper;
 using EmpiriaBMS.Core;
 using EmpiriaBMS.Core.Services;
+using EmpiriaBMS.Core.Services.DBManipulation;
 using EmpiriaBMS.Core.Services.EmailService;
 using EmpiriaBMS.Core.Services.GooglePlaces;
 using EmpiriaBMS.Front;
@@ -8,6 +9,7 @@ using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Models.Models;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Fast.Components.FluentUI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +33,7 @@ builder.Configuration
 
 builder.Services.AddDbContextFactory<AppDbContext>();
 builder.Services.AddScoped<IDataProvider, DataProvider>(); // Data Providing Dependency Injection
+builder.Services.AddScoped<DatabaseBackupService>();
 builder.Services.AddScoped<SeedData>();
 
 builder.Services.AddSingleton<IEmailService, EmailService>();
@@ -61,6 +64,12 @@ builder.Services.AddHttpContextAccessor();
 builder.Configuration
     .AddJsonFile("appsettings.json")
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
+
+// Increase the file upload limit
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 15 * 1024 * 1024; // 15 MB
+});
 
 var app = builder.Build();
 
