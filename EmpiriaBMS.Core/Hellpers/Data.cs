@@ -285,7 +285,9 @@ public static class Data
                     bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
                     bool isCollection = prop.PropertyType.IsGenericType &&
                                     (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>));
+                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
+                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
+                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
 
                     if (isNotIEntity && !isCollection)
                     {
