@@ -4242,7 +4242,8 @@ public class SeedData
     where T : class, IEntity
     {
         var id = entity.Id;
-        bool exists = context.Set<T>().Any(e => e.Id == id);
+        var data = await context.Set<T>().ToListAsync();
+        bool exists = data.Any(e => e.AreEqualExcludeId(entity));
         if (!exists)
         {
             var result = await context.Set<T>().AddAsync(entity);
@@ -4252,6 +4253,7 @@ public class SeedData
         {
             Console.WriteLine($"\n\nEntity of type: {entity.GetType().Name} with Id: {id} Exists\n\n");
         }
+        data.Clear();
     }
 
     private static T GetRecordAtIndex<T>(List<T> list, int index)
