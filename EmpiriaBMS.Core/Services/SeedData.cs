@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Services.DBManipulation;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ public class SeedData
     private List<User> draftsmen = new List<User>();
     private List<User> engineers = new List<User>();
     private List<User> projectManagers = new List<User>();
+    private List<Project> projects = new List<Project>();
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
@@ -50,6 +52,8 @@ public class SeedData
         await CreateDraftmen();
         await CreateEngineers();
         await CreateProjectManagers();
+
+        await CreateProjects();
     }
 
     protected async Task CeatePermissions()
@@ -3590,6 +3594,215 @@ public class SeedData
             // TODO: Log Exception
             Console.WriteLine($"Exception On SeedData.CreateProjectManagers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
+    }
+
+    protected async Task CreateProjects()
+    {
+        Random random = new Random();
+
+        projects.Clear();
+
+        List<Client> clients = new List<Client>();
+        List<Led> leds = new List<Led>();
+        List<Offer> offers = new List<Offer>();
+        List<Invoice> invoices = new List<Invoice>();
+
+        var categoriesLength = projectCategories.Count();
+        var stagesLength = projectStages.Count();
+        var projectManagersLength = projectManagers.Count();
+
+        var categoriesIndex = 0;
+        var stagesIndex = 0;
+        var projectManagersIndex = 0;
+
+        for (var i = 1; i <= projectSubCategories.Count(); i++)
+        {
+            // Led
+            var clientId = random.Next(123456789, 999999999) + i * 3;
+            Client client = new Client()
+            {
+                Id = clientId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                FirstName = $"Client-Led-{i}",
+                LastName = "LastName",
+                ProxyAddress = "alexandrosplatanios15@gmail.com",
+                Phone1 = "6949277783"
+            };
+            clients.Add(client);
+
+            // Led
+            var ledId = random.Next(123456789, 999999999) + i * 3;
+            Led led = new Led()
+            {
+                Id = ledId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Led-{i}",
+                ClientId = clientId,
+                PotencialFee = random.Next(i, i * 3),
+                Result = LedResult.SUCCESSFUL
+            };
+            leds.Add(led);
+
+            // Offers
+            var offerId = random.Next(123456789, 999999999) + i * 3;
+            Offer offer = new Offer()
+            {
+                Id = offerId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Code = $"Code CO-{i}",
+                TypeId = offerTypes[random.Next(0, 2)].Id,
+                StateId = offerStates[random.Next(0, 1)].Id,
+                Result = OfferResult.SUCCESSFUL,
+                PudgetPrice = 1000 * i * 3,
+                OfferPrice = 1000 * i * 2,
+                CategoryId = projectCategories[categoriesIndex].Id,
+                SubCategoryId = projectSubCategories[i - 1].Id,
+                LedId = ledId,
+            };
+            offers.Add(offer);
+
+            // Projects 
+            var projectId = random.Next(123456789, 999999999) + i * 2;
+            Project project = new Project()
+            {
+                Id = projectId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Code = "D-22-16" + Convert.ToString(i),
+                Name = "Project_" + Convert.ToString(i),
+                Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
+                StartDate = DateTime.Now,
+                DeadLine = DateTime.Now.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
+                EstimatedMandays = 100 / 8,
+                EstimatedHours = 1500,
+                DeclaredCompleted = 0,
+                EstimatedCompleted = 0,
+                StageId = projectStages[stagesIndex].Id,
+                Active = i % 2 == 0 ? true : false,
+                ProjectManagerId = projectManagers[projectManagersIndex].Id,
+                OfferId = offerId
+            };
+            projects.Add(project);
+
+            projectManagersIndex++;
+            if (projectManagersIndex >= projectManagersLength - 1)
+                projectManagersIndex = 0;
+
+            categoriesIndex++;
+            if (categoriesIndex >= categoriesLength)
+                categoriesIndex = 0;
+
+            stagesIndex++;
+            if (stagesIndex >= stagesLength - 1)
+                stagesIndex = 0;
+
+            // Invoices
+            var invoiceId = random.Next(123456789, 999999999) + i * 3;
+            Invoice invoice = new Invoice()
+            {
+                Id = invoiceId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Total = i * Math.Pow(1, 3),
+                Vat = i % 2 == 0 ? Vat.TwentyFour : Vat.Seventeen,
+                Fee = 1000 * i,
+                Number = random.Next(10000, 90000),
+                Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
+                ProjectId = projectId,
+                TypeId = invoiceTypes[0].Id
+            };
+            invoices.Add(invoice);
+        }
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            // Clients
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
+            foreach (var item in clients)
+            {
+                try
+                {
+                    await SeedIfNotExists<Client>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
+
+            // Leds
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", true);
+            foreach (var item in leds)
+            {
+                try
+                {
+                    await SeedIfNotExists<Led>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", false);
+
+            // Offers
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", true);
+            foreach (var item in offers)
+            {
+                try
+                {
+                    await SeedIfNotExists<Offer>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", false);
+
+            // Projects
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", true);
+            foreach (var item in projects)
+            {
+                try
+                {
+                    await SeedIfNotExists<Project>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", false);
+
+            // Invoices
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", true);
+            foreach (var item in invoices)
+            {
+                try
+                {
+                    await SeedIfNotExists<Invoice>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", false);
+        }
+
+
     }
 
     #region Private Helper Methods
