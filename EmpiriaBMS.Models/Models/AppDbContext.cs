@@ -76,7 +76,7 @@ public class AppDbContext : DbContext
         // Relations
         ModelRelations.CreateRelations(builder);
 
-        bool runSeedData = true;
+        bool runSeedData = false;
 
         if (runSeedData)
         {
@@ -1888,6 +1888,42 @@ public class AppDbContext : DbContext
             builder.Entity<RolePermission>().HasData(rp_59);
             #endregion
 
+            #region Create Admins
+            // Alexandros Platanios
+            var admin_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+            User admin_1 = new User()
+            {
+                Id = admin_1_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                LastName = "Platanios",
+                FirstName = "Alexandros",
+                Phone1 = "694927778",
+                Description = "Admin",
+                ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com"
+            };
+            builder.Entity<User>().HasData(admin_1);
+            Email email_admin_1 = new Email()
+            {
+                Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Address = "empiriasoft@empiriasoftplat.onmicrosoft.com",
+                UserId = admin_1_Id
+            };
+            builder.Entity<Email>().HasData(email_admin_1);
+            // Admin
+            UserRole admin_role_1 = new UserRole()
+            {
+                Id = random.Next(123456789, 999999999) / 3,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                UserId = admin_1_Id,
+                RoleId = role_9_id
+            };
+            builder.Entity<UserRole>().HasData(admin_role_1);
+            #endregion
+
             #region Create 4 Project Categories
             List<ProjectCategory> projectCategories = new List<ProjectCategory>();
 
@@ -2295,6 +2331,106 @@ public class AppDbContext : DbContext
     };
             #endregion
 
+            #region Create Discipline Types
+            List<DisciplineType> disciplineTypes = new List<DisciplineType>();
+            string[] dicTypeNames = {
+                "HVAC",
+                "Sewage",
+                "Potable Water",
+                "Drainage",
+                "Fire Detection",
+                "Fire Suppression",
+                "Elevators",
+                "Natural Gas",
+                "Power Distribution",
+                "Structured Cabling",
+                "Burglar Alarm",
+                "CCTV",
+                "BMS",
+                "Photovoltaics",
+                "Energy Efficiency",
+                "Outsource",
+                "TenderDocument",
+                "Construction Supervision",
+                "DWG Admin/Clearing"
+            };
+            for (var i = 0; i < dicTypeNames.Length; i++)
+            {
+                var discipline_type_Id = random.Next(123456789, 999999999);
+                DisciplineType dt = new DisciplineType()
+                {
+                    Id = discipline_type_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = dicTypeNames[i],
+                };
+                builder.Entity<DisciplineType>().HasData(dt);
+                disciplineTypes.Add(dt);
+            }
+
+            // Add Discipline Type Project Manager Hours.
+            var discipline_pm_hours_type_Id = random.Next(123456789, 999999999);
+            DisciplineType dt_pm_hours = new DisciplineType()
+            {
+                Id = discipline_pm_hours_type_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Project Manager Hours",
+            };
+            builder.Entity<DisciplineType>().HasData(dt_pm_hours);
+            #endregion
+
+            #region Create Deliverable Types
+            List<DeliverableType> deliverableTypes = new List<DeliverableType>();
+            string[] drawTypeNames = {
+                "Documents",
+                "Calculations",
+                "Deliverables"
+            };
+            for (var i = 0; i < drawTypeNames.Length; i++)
+            {
+                var drawing_type_Id = random.Next(123456789, 999999999);
+                DeliverableType drt = new DeliverableType()
+                {
+                    Id = drawing_type_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = drawTypeNames[i],
+                };
+                builder.Entity<DeliverableType>().HasData(drt);
+                deliverableTypes.Add(drt);
+            }
+            #endregion
+
+            #region Create SupportiveWork Types
+            List<SupportiveWorkType> otherTypes = new List<SupportiveWorkType>();
+            string[] otherTypeNames = {
+                "Communications",
+                "Printing",
+                "On-Site",
+                "Meetings",
+                "Administration",
+                "Soft Copy",
+                "Hours To Be Erased"
+            };
+            for (var i = 0; i < otherTypeNames.Length; i++)
+            {
+                var other_type_Id = random.Next(123456789, 999999999);
+                SupportiveWorkType ort = new SupportiveWorkType()
+                {
+                    Id = other_type_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = otherTypeNames[i],
+                };
+                builder.Entity<SupportiveWorkType>().HasData(ort);
+                otherTypes.Add(ort);
+            }
+            #endregion
+
+
+
+
             #region Create Secretaries
             List<User> secretaries = new List<User>();
 
@@ -2692,6 +2828,16 @@ public class AppDbContext : DbContext
                 RoleId = role_5_id
             };
             builder.Entity<UserRole>().HasData(engineerRole_17_em_coo);
+            // Admin
+            UserRole admin_2 = new UserRole()
+            {
+                Id = random.Next(123456789, 999999999) / 3,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                UserId = engineer_6_Id,
+                RoleId = role_9_id
+            };
+            builder.Entity<UserRole>().HasData(admin_2);
 
             // ΤΖΑΝΗΣ ΒΑΣΙΛΕΙΟΣ
             var engineer_7_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 16;
@@ -3084,53 +3230,6 @@ public class AppDbContext : DbContext
             projectManagers.Add(engineer_10);
             #endregion
 
-            #region Create 2 Admins
-            // Alexandros Platanios
-            var admin_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
-            User admin_1 = new User()
-            {
-                Id = admin_1_Id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                LastName = "Platanios",
-                FirstName = "Alexandros",
-                Phone1 = "694927778",
-                Description = "Admin",
-                ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com"
-            };
-            builder.Entity<User>().HasData(admin_1);
-            Email email_admin_1 = new Email()
-            {
-                Id = random.Next(123456789, 999999999) + random.Next(0, 33),
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Address = "empiriasoft@empiriasoftplat.onmicrosoft.com",
-                UserId = admin_1_Id
-            };
-            builder.Entity<Email>().HasData(email_admin_1);
-            // Admin
-            UserRole admin_role_1 = new UserRole()
-            {
-                Id = random.Next(123456789, 999999999) / 3,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = admin_1_Id,
-                RoleId = role_9_id
-            };
-            builder.Entity<UserRole>().HasData(admin_role_1);
-
-            // ΚΟΤΣΩΝΗ ΚΑΤΕΡΙΝΑ
-            UserRole admin_2 = new UserRole()
-            {
-                Id = random.Next(123456789, 999999999) / 3,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = engineer_6.Id,
-                RoleId = role_9_id
-            };
-            builder.Entity<UserRole>().HasData(admin_2);
-            #endregion
-
             var projectManagersLength = projectManagers.Count();
             var projectManagersIndex = 0;
             var stagesLength = ProjectStages.Count();
@@ -3307,55 +3406,6 @@ public class AppDbContext : DbContext
             }
             #endregion
 
-            #region Create Discipline Types
-            List<DisciplineType> disciplineTypes = new List<DisciplineType>();
-            string[] dicTypeNames = {
-        "HVAC",
-        "Sewage",
-        "Potable Water",
-        "Drainage",
-        "Fire Detection",
-        "Fire Suppression",
-        "Elevators",
-        "Natural Gas",
-        "Power Distribution",
-        "Structured Cabling",
-        "Burglar Alarm",
-        "CCTV",
-        "BMS",
-        "Photovoltaics",
-        "Energy Efficiency",
-        "Outsource",
-        "TenderDocument",
-        "Construction Supervision",
-        "DWG Admin/Clearing"
-    };
-            for (var i = 0; i < dicTypeNames.Length; i++)
-            {
-                var discipline_type_Id = random.Next(123456789, 999999999);
-                DisciplineType dt = new DisciplineType()
-                {
-                    Id = discipline_type_Id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = dicTypeNames[i],
-                };
-                builder.Entity<DisciplineType>().HasData(dt);
-                disciplineTypes.Add(dt);
-            }
-
-            // Add Discipline Type Project Manager Hours.
-            var discipline_pm_hours_type_Id = random.Next(123456789, 999999999);
-            DisciplineType dt_pm_hours = new DisciplineType()
-            {
-                Id = discipline_pm_hours_type_Id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = "Project Manager Hours",
-            };
-            builder.Entity<DisciplineType>().HasData(dt_pm_hours);
-            #endregion
-
             #region Create 3 Random Disciplines
             List<Discipline> disciplines = new List<Discipline>();
             for (var i = 0; i < projects.Count; i++)
@@ -3383,28 +3433,6 @@ public class AppDbContext : DbContext
             }
             #endregion
 
-            #region Create Drawing Types
-            List<DeliverableType> deliverableTypes = new List<DeliverableType>();
-            string[] drawTypeNames = {
-        "Documents",
-        "Calculations",
-        "Deliverables"
-    };
-            for (var i = 0; i < drawTypeNames.Length; i++)
-            {
-                var drawing_type_Id = random.Next(123456789, 999999999);
-                DeliverableType drt = new DeliverableType()
-                {
-                    Id = drawing_type_Id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = drawTypeNames[i],
-                };
-                builder.Entity<DeliverableType>().HasData(drt);
-                deliverableTypes.Add(drt);
-            }
-            #endregion
-
             #region Create Deliverables
             List<Deliverable> deliverables = new List<Deliverable>();
             for (var i = 0; i < disciplines.Count; i++)
@@ -3425,32 +3453,6 @@ public class AppDbContext : DbContext
                     builder.Entity<Deliverable>().HasData(drawing);
                     deliverables.Add(drawing);
                 }
-            }
-            #endregion
-
-            #region Create Other Types
-            List<SupportiveWorkType> otherTypes = new List<SupportiveWorkType>();
-            string[] otherTypeNames = {
-        "Communications",
-        "Printing",
-        "On-Site",
-        "Meetings",
-        "Administration",
-        "Soft Copy",
-        "Hours To Be Erased"
-    };
-            for (var i = 0; i < otherTypeNames.Length; i++)
-            {
-                var other_type_Id = random.Next(123456789, 999999999);
-                SupportiveWorkType ort = new SupportiveWorkType()
-                {
-                    Id = other_type_Id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = otherTypeNames[i],
-                };
-                builder.Entity<SupportiveWorkType>().HasData(ort);
-                otherTypes.Add(ort);
             }
             #endregion
 

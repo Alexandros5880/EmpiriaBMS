@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Core.Services.DBManipulation;
+using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Core.Services;
@@ -21,6 +22,7 @@ public class SeedData
         await CeatePermissions();
         await CeateRoles();
         await CeateRolesPermissions();
+        await CeateDefaultAdmins();
     }
 
     protected async Task CeatePermissions()
@@ -427,6 +429,8 @@ public class SeedData
                     Ord = 36
                 };
 
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Permissions", true);
+
                 await SeedIfNotExists<Permission>(context, per_1);
                 await SeedIfNotExists<Permission>(context, per_2);
                 await SeedIfNotExists<Permission>(context, per_3);
@@ -463,6 +467,8 @@ public class SeedData
                 await SeedIfNotExists<Permission>(context, per_34);
                 await SeedIfNotExists<Permission>(context, per_35);
                 await SeedIfNotExists<Permission>(context, per_36);
+
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Permissions", false);
 
                 permissionsIds.Clear();
                 permissionsIds.Add(per_1.Id);
@@ -512,181 +518,191 @@ public class SeedData
 
     protected async Task CeateRoles()
     {
-        try
-        {
-            Random random = new Random();
 
-            using (var context = _dbContextFactory.CreateDbContext())
+        Random random = new Random();
+
+        // CEO
+        var role_6_id = random.Next(123456789, 999999999);
+        Role role_6 = new()
+        {
+            Id = role_6_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "CEO",
+            IsEmployee = true,
+            IsEditable = false
+        };
+
+        // COO
+        var role_4_id = random.Next(123456789, 999999999);
+        Role role_4 = new()
+        {
+            Id = role_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "COO",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_6_id
+        };
+
+        // CTO
+        var role_5_id = random.Next(123456789, 999999999);
+        Role role_5 = new()
+        {
+            Id = role_5_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "CTO",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_4_id
+        };
+
+        // Secretariat
+        var role_10_id = random.Next(123456789, 999999999);
+        Role role_10 = new()
+        {
+            Id = role_10_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Secretariat",
+            IsEmployee = false,
+            IsEditable = false,
+            ParentRoleId = role_5_id
+        };
+
+        // Project Manager
+        var role_3_id = random.Next(123456789, 999999999);
+        Role role_3 = new()
+        {
+            Id = role_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Project Manager",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_5_id
+        };
+
+        // Engineer
+        var role_2_id = random.Next(123456789, 999999999);
+        Role role_2 = new()
+        {
+            Id = role_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Engineer",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_3_id
+        };
+
+        // Designer
+        var role_1_id = random.Next(123456789, 999999999);
+        Role role_1 = new()
+        {
+            Id = role_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Designer",
+            IsEmployee = true,
+            IsEditable = false,
+            ParentRoleId = role_2_id
+        };
+
+        // Guest
+        var role_7_id = random.Next(123456789, 999999999);
+        Role role_7 = new()
+        {
+            Id = role_7_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Guest",
+            IsEmployee = false,
+            IsEditable = false
+        };
+
+        // Customer
+        var role_8_id = random.Next(123456789, 999999999);
+        Role role_8 = new()
+        {
+            Id = role_8_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Customer",
+            IsEmployee = false,
+            IsEditable = false
+        };
+
+        // Admin
+        var role_9_id = random.Next(123456789, 999999999);
+        Role role_9 = new()
+        {
+            Id = role_9_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Admin",
+            IsEmployee = false,
+            IsEditable = false
+        };
+
+        // Engineer SUB
+        var role_11_id = random.Next(123456789, 999999999);
+        Role role_11 = new()
+        {
+            Id = role_11_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Engineer SUB",
+            IsEmployee = false,
+            IsEditable = false
+        };
+
+        rolesIds.Add(role_1_id);
+        rolesIds.Add(role_2_id);
+        rolesIds.Add(role_3_id);
+        rolesIds.Add(role_4_id);
+        rolesIds.Add(role_5_id);
+        rolesIds.Add(role_6_id);
+        rolesIds.Add(role_7_id);
+        rolesIds.Add(role_8_id);
+        rolesIds.Add(role_9_id);
+        rolesIds.Add(role_10_id);
+        rolesIds.Add(role_11_id);
+
+        List<Role> roles = new List<Role>();
+        roles.Add(role_1);
+        roles.Add(role_2);
+        roles.Add(role_3);
+        roles.Add(role_4);
+        roles.Add(role_5);
+        roles.Add(role_6);
+        roles.Add(role_7);
+        roles.Add(role_8);
+        roles.Add(role_9);
+        roles.Add(role_10);
+        roles.Add(role_11);
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Roles", true);
+            foreach (var role in roles)
             {
-                // CEO
-                var role_6_id = random.Next(123456789, 999999999);
-                Role role_6 = new()
+                try
                 {
-                    Id = role_6_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "CEO",
-                    IsEmployee = true,
-                    IsEditable = false
-                };
-
-                // COO
-                var role_4_id = random.Next(123456789, 999999999);
-                Role role_4 = new()
+                    await SeedIfNotExists<Role>(context, role);
+                }
+                catch (Exception ex)
                 {
-                    Id = role_4_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "COO",
-                    IsEmployee = true,
-                    IsEditable = false,
-                    ParentRoleId = role_6_id
-                };
-
-                // CTO
-                var role_5_id = random.Next(123456789, 999999999);
-                Role role_5 = new()
-                {
-                    Id = role_5_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "CTO",
-                    IsEmployee = true,
-                    IsEditable = false,
-                    ParentRoleId = role_4_id
-                };
-
-                // Secretariat
-                var role_10_id = random.Next(123456789, 999999999);
-                Role role_10 = new()
-                {
-                    Id = role_10_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "Secretariat",
-                    IsEmployee = false,
-                    IsEditable = false,
-                    ParentRoleId = role_5_id
-                };
-
-                // Project Manager
-                var role_3_id = random.Next(123456789, 999999999);
-                Role role_3 = new()
-                {
-                    Id = role_3_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "Project Manager",
-                    IsEmployee = true,
-                    IsEditable = false,
-                    ParentRoleId = role_5_id
-                };
-
-                // Engineer
-                var role_2_id = random.Next(123456789, 999999999);
-                Role role_2 = new()
-                {
-                    Id = role_2_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "Engineer",
-                    IsEmployee = true,
-                    IsEditable = false,
-                    ParentRoleId = role_3_id
-                };
-
-                // Designer
-                var role_1_id = random.Next(123456789, 999999999);
-                Role role_1 = new()
-                {
-                    Id = role_1_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "Designer",
-                    IsEmployee = true,
-                    IsEditable = false,
-                    ParentRoleId = role_2_id
-                };
-
-                // Guest
-                var role_7_id = random.Next(123456789, 999999999);
-                Role role_7 = new()
-                {
-                    Id = role_7_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "Guest",
-                    IsEmployee = false,
-                    IsEditable = false
-                };
-
-                // Customer
-                var role_8_id = random.Next(123456789, 999999999);
-                Role role_8 = new()
-                {
-                    Id = role_8_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "Customer",
-                    IsEmployee = false,
-                    IsEditable = false
-                };
-
-                // Admin
-                var role_9_id = random.Next(123456789, 999999999);
-                Role role_9 = new()
-                {
-                    Id = role_9_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "Admin",
-                    IsEmployee = false,
-                    IsEditable = false
-                };
-
-                // Engineer SUB
-                var role_11_id = random.Next(123456789, 999999999);
-                Role role_11 = new()
-                {
-                    Id = role_11_id,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = "Engineer SUB",
-                    IsEmployee = false,
-                    IsEditable = false
-                };
-
-
-                await SeedIfNotExists<Role>(context, role_1);
-                await SeedIfNotExists<Role>(context, role_2);
-                await SeedIfNotExists<Role>(context, role_3);
-                await SeedIfNotExists<Role>(context, role_4);
-                await SeedIfNotExists<Role>(context, role_5);
-                await SeedIfNotExists<Role>(context, role_6);
-                await SeedIfNotExists<Role>(context, role_7);
-                await SeedIfNotExists<Role>(context, role_8);
-                await SeedIfNotExists<Role>(context, role_9);
-                await SeedIfNotExists<Role>(context, role_10);
-                await SeedIfNotExists<Role>(context, role_11);
-
-                rolesIds.Add(role_1_id);
-                rolesIds.Add(role_2_id);
-                rolesIds.Add(role_3_id);
-                rolesIds.Add(role_4_id);
-                rolesIds.Add(role_5_id);
-                rolesIds.Add(role_6_id);
-                rolesIds.Add(role_7_id);
-                rolesIds.Add(role_8_id);
-                rolesIds.Add(role_9_id);
-                rolesIds.Add(role_10_id);
-                rolesIds.Add(role_11_id);
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CeateRoles(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
             }
+
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Roles", false);
         }
-        catch (Exception ex)
-        {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CeateRoles(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-        }
+
     }
 
     protected async Task CeateRolesPermissions()
@@ -1776,6 +1792,8 @@ public class SeedData
                     PermissionId = GetRecordAtIndex(permissionsIds, 10)
                 };
 
+                await DatabaseBackupService.SetDbIdentityInsert(context, "RolesPermissions", true);
+
                 await SeedIfNotExists<RolePermission>(context, rp_1);
                 await SeedIfNotExists<RolePermission>(context, rp_2);
                 await SeedIfNotExists<RolePermission>(context, rp_3);
@@ -1896,12 +1914,76 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, rp_118);
                 //await SeedIfNotExists<RolePermission>(context, rp_119);
                 //await SeedIfNotExists<RolePermission>(context, rp_120);
+
+                await DatabaseBackupService.SetDbIdentityInsert(context, "RolesPermissions", false);
             }
         }
         catch (Exception ex)
         {
             // TODO: Log Exception
             Console.WriteLine($"Exception On SeedData.CeateRolesPermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    protected async Task CeateDefaultAdmins()
+    {
+        try
+        {
+            Random random = new Random();
+
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                // Alexandros Platanios
+                var admin_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+                User admin_1 = new User()
+                {
+                    Id = admin_1_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    LastName = "Platanios",
+                    FirstName = "Alexandros",
+                    Phone1 = "694927778",
+                    Description = "Admin",
+                    ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com"
+                };
+
+                // Email
+                Email email_admin_1 = new Email()
+                {
+                    Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Address = "empiriasoft@empiriasoftplat.onmicrosoft.com",
+                    UserId = admin_1_Id
+                };
+
+                // Admin
+                UserRole admin_role_1 = new UserRole()
+                {
+                    Id = random.Next(123456789, 999999999) / 3,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    UserId = admin_1_Id,
+                    RoleId = GetRecordAtIndex(rolesIds, 8)
+                };
+
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
+                await SeedIfNotExists<User>(context, admin_1);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
+
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", true);
+                await SeedIfNotExists<Email>(context, email_admin_1);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", false);
+
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, admin_role_1);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
+            }
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log Exception
+            Console.WriteLine($"Exception On SeedData.CeateDefaultAdmins(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
