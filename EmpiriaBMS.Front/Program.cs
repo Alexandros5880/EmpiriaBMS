@@ -77,7 +77,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
-    seedData.CreateData();
+    await seedData.CreateData();
 }
 
 if (app.Environment.IsDevelopment())

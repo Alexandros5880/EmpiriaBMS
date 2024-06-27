@@ -35,38 +35,51 @@ public class SeedData
         _dbContextFactory = dbFactory;
     }
 
-    public async void CreateData()
+    public async Task CreateData()
     {
-        Console.WriteLine("\n\n Starting add Seed Data to DB.");
-        await CeatePermissions();
-        await CeateRoles();
-        await CeateRolesPermissions();
-        await CeateDefaultAdmins();
-        await CeateProjectCategories();
-        await CreateProjectSubCategories();
-        await CreateProjectStages();
-        await CreateInvoiceTypes();
-        await CreatePaymentTypes();
-        await CreateOfferTypes();
-        await CreateOfferState();
-        await CreateDisciplineTypes();
-        await CreateDeliverableTypes();
-        await CreateSupportiveWorkTypes();
+        var tasks = new List<Func<Task>>()
+        {
+            CeatePermissions,
+            CeateRoles,
+            CeateRolesPermissions,
+            CeateDefaultAdmins,
+            CeateProjectCategories,
+            CreateProjectSubCategories,
+            CreateProjectStages,
+            CreateInvoiceTypes,
+            CreatePaymentTypes,
+            CreateOfferTypes,
+            CreateOfferState,
+            CreateDisciplineTypes,
+            CreateDeliverableTypes,
+            CreateSupportiveWorkTypes,
+            CreateSecretaries,
+            CreateDraftmen,
+            CreateEngineers,
+            CreateProjectManagers,
+            CreateProjects,
+            CreateMissedDeadLineProjects,
+            CreateDisciplines,
+            CreateDeliverables,
+            CreateSupportiveWorks,
+            ConnectAllEngineersWithEveryDisclipline,
+            ConnectEveryDraftmanWithEverySupportiveWork
+        };
 
-        await CreateSecretaries();
-        await CreateDraftmen();
-        await CreateEngineers();
-        await CreateProjectManagers();
-
-        await CreateProjects();
-        await CreateMissedDeadLineProjects();
-        await CreateDisciplines();
-        await CreateDeliverables();
-        await CreateSupportiveWorks();
-        await ConnectAllEngineersWithEveryDisclipline();
-        await ConnectEveryDraftmanWithEverySupportiveWork();
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("\n\nStarting add Seed Data to DB.");
+        for (int i = 0; i < tasks.Count; i++)
+        {
+            await tasks[i]();
+            UpdateProgress(i + 1, tasks.Count);
+        }
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Seed Data added.\n\n");
+        Console.ForegroundColor = ConsoleColor.White;
     }
+
+
+
 
     protected async Task CeatePermissions()
     {
@@ -555,7 +568,7 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CeatePermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            //Console.WriteLine($"Exception On SeedData.CeatePermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -739,7 +752,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CeateRoles(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CeateRoles(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
 
@@ -1964,7 +1977,7 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CeateRolesPermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            //Console.WriteLine($"Exception On SeedData.CeateRolesPermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -2026,7 +2039,7 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CeateDefaultAdmins(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            //Console.WriteLine($"Exception On SeedData.CeateDefaultAdmins(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -2144,7 +2157,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CeateProjectCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CeateProjectCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsCategories", false);
@@ -2248,7 +2261,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CeateProjectSubCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CeateProjectSubCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsSubCategories", false);
@@ -2323,7 +2336,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateProjectStages(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateProjectStages(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsStages", false);
@@ -2378,7 +2391,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateInvoiceTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateInvoiceTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "InvoicesTypes", false);
@@ -2447,7 +2460,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreatePaymentTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreatePaymentTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "PaymentsTypes", false);
@@ -2512,7 +2525,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateOfferTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateOfferTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "OffersTypes", false);
@@ -2557,7 +2570,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateOfferState(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateOfferState(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "OffesStates", false);
@@ -2627,7 +2640,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateDisciplineTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateDisciplineTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplineTypes", false);
@@ -2670,7 +2683,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateDeliverableTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateDeliverableTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "DeliverableTypes", false);
@@ -2717,7 +2730,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorkTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateSupportiveWorkTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkTypes", false);
@@ -2791,7 +2804,7 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateSecretaries(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            //Console.WriteLine($"Exception On SeedData.CreateSecretaries(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -2920,7 +2933,7 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateDraftmen(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            //Console.WriteLine($"Exception On SeedData.CreateDraftmen(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -3546,7 +3559,7 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateEngineers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            //Console.WriteLine($"Exception On SeedData.CreateEngineers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -3604,7 +3617,7 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateProjectManagers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            //Console.WriteLine($"Exception On SeedData.CreateProjectManagers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -3744,7 +3757,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
@@ -3760,7 +3773,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", false);
@@ -3776,7 +3789,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", false);
@@ -3792,7 +3805,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", false);
@@ -3808,7 +3821,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", false);
@@ -3951,7 +3964,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
@@ -3967,7 +3980,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", false);
@@ -3983,7 +3996,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", false);
@@ -3999,7 +4012,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", false);
@@ -4015,7 +4028,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", false);
@@ -4063,7 +4076,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateDisciplines(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateDisciplines(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Disciplines", false);
@@ -4107,7 +4120,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateDeliverables(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateDeliverables(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Deliverables", false);
@@ -4150,7 +4163,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorks(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.CreateSupportiveWorks(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorks", false);
@@ -4191,7 +4204,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplinesEngineers", false);
@@ -4232,7 +4245,7 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    //Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkEmployees", false);
@@ -4253,7 +4266,7 @@ public class SeedData
         }
         else
         {
-            Console.WriteLine($"\n\nEntity of type: {entity.GetType().Name} with Id: {id} Exists\n\n");
+            //Console.WriteLine($"\n\nEntity of type: {entity.GetType().Name} with Id: {id} Exists\n\n");
         }
         data.Clear();
     }
@@ -4277,6 +4290,13 @@ public class SeedData
         // Add the selected number to the list
         selectedNumbers.Add(number);
         return number;
+    }
+
+    private void UpdateProgress(int completed, int total)
+    {
+        int percentage = (completed * 100) / total;
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine($"Progress: {percentage}%");
     }
     #endregion
 }
