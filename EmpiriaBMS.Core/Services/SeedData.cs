@@ -3510,6 +3510,7 @@ public class SeedData
                 await SeedIfNotExists<UserRole>(context, engineerRole_4_em);
                 await SeedIfNotExists<UserRole>(context, engineerRole_5_em);
                 await SeedIfNotExists<UserRole>(context, engineerRole_5_em_3);
+                await SeedIfNotExists<UserRole>(context, engineerRole_6_em);
                 await SeedIfNotExists<UserRole>(context, engineerRole_6_em_coo);
                 await SeedIfNotExists<UserRole>(context, engineerRole_17_em_coo);
                 await SeedIfNotExists<UserRole>(context, admin_2);
@@ -3594,13 +3595,21 @@ public class SeedData
     #region Private Helper Methods
     private static async Task SeedIfNotExists<T>(DbContext context, T entity) where T : class
     {
-        var primaryKey = context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.First().Name;
+        var primaryKey = "Id";
+
+        if (primaryKey == null)
+            throw new InvalidOperationException("The primary key with the name 'Id' was not found.");
+
         var primaryKeyValue = entity.GetType().GetProperty(primaryKey).GetValue(entity);
         bool exists = context.Set<T>().Any(e => EF.Property<object>(e, primaryKey).Equals(primaryKeyValue));
         if (!exists)
         {
             var result = await context.Set<T>().AddAsync(entity);
             context.SaveChanges();
+        }
+        else
+        {
+            Console.WriteLine($"\n\nEntity of type: {entity.GetType().Name} with {primaryKey}: {primaryKeyValue} Exists\n\n");
         }
     }
 
