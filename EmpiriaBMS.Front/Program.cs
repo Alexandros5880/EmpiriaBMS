@@ -74,11 +74,11 @@ builder.Services.Configure<FormOptions>(options =>
 var app = builder.Build();
 
 // Create Seed Data
-using (var scope = app.Services.CreateScope())
-{
-    var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
-    await seedData.CreateData();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
+//    await seedData.CreateData();
+//}
 
 if (app.Environment.IsDevelopment())
 {
