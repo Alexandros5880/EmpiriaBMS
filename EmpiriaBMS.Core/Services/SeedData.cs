@@ -8,10 +8,18 @@ public class SeedData
 {
     private List<int> permissionsIds = new List<int>();
     private List<int> rolesIds = new List<int>();
-    List<ProjectCategory> projectCategories = new List<ProjectCategory>();
-    List<ProjectSubCategory> projectSubCategories = new List<ProjectSubCategory>();
-    List<ProjectStage> projectStages = new List<ProjectStage>();
-
+    private List<ProjectCategory> projectCategories = new List<ProjectCategory>();
+    private List<ProjectSubCategory> projectSubCategories = new List<ProjectSubCategory>();
+    private List<ProjectStage> projectStages = new List<ProjectStage>();
+    private List<InvoiceType> invoiceTypes = new List<InvoiceType>();
+    private List<PaymentType> paymentTypes = new List<PaymentType>();
+    private List<OfferType> offerTypes = new List<OfferType>();
+    private List<OfferState> offerStates = new List<OfferState>();
+    private List<DisciplineType> disciplineTypes = new List<DisciplineType>();
+    private List<DeliverableType> deliverableTypes = new List<DeliverableType>();
+    private List<SupportiveWorkType> otherTypes = new List<SupportiveWorkType>();
+    private List<User> draftsmen = new List<User>();
+    private List<User> engineers = new List<User>();
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
@@ -33,6 +41,9 @@ public class SeedData
         await CreatePaymentTypes();
         await CreateOfferTypes();
         await CreateOfferState();
+        await CreateDisciplineTypes();
+        await CreateDeliverableTypes();
+        await CreateSupportiveWorkTypes();
 
         await CreateSecretaries();
         await CreateDraftmen();
@@ -2304,85 +2315,460 @@ public class SeedData
 
     protected async Task CreateInvoiceTypes()
     {
-        try
-        {
-            Random random = new Random();
+        Random random = new Random();
 
-            using (var context = _dbContextFactory.CreateDbContext())
+        invoiceTypes.Clear();
+
+        var it_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        InvoiceType it_1 = new InvoiceType()
+        {
+            Id = it_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PUBLIC"
+        };
+        invoiceTypes.Add(it_1);
+
+        var it_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        InvoiceType it_2 = new InvoiceType()
+        {
+            Id = it_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PRIVATE"
+        };
+        invoiceTypes.Add(it_2);
+
+        var it_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        InvoiceType it_3 = new InvoiceType()
+        {
+            Id = it_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "INTERNATIONAL"
+        };
+        invoiceTypes.Add(it_3);
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "InvoicesTypes", true);
+            foreach (var item in invoiceTypes)
             {
-
+                try
+                {
+                    await SeedIfNotExists<InvoiceType>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateInvoiceTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateInvoiceTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            await DatabaseBackupService.SetDbIdentityInsert(context, "InvoicesTypes", false);
         }
     }
 
     protected async Task CreatePaymentTypes()
     {
-        try
-        {
-            Random random = new Random();
+        Random random = new Random();
 
-            using (var context = _dbContextFactory.CreateDbContext())
+        paymentTypes.Clear();
+
+        // BANK
+        var pmt_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_1 = new PaymentType()
+        {
+            Id = pmt_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"BANK"
+        };
+        paymentTypes.Add(pmt_1);
+
+        // TRANSFER
+        var pmt_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_2 = new PaymentType()
+        {
+            Id = pmt_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"TRANSFER"
+        };
+        paymentTypes.Add(pmt_2);
+
+        // CASH
+        var pmt_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_3 = new PaymentType()
+        {
+            Id = pmt_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"CASH"
+        };
+        paymentTypes.Add(pmt_3);
+
+        // CHECK
+        var pmt_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        PaymentType pmt_4 = new PaymentType()
+        {
+            Id = pmt_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = $"CHECK"
+        };
+        paymentTypes.Add(pmt_4);
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "PaymentsTypes", true);
+            foreach (var item in paymentTypes)
             {
-
+                try
+                {
+                    await SeedIfNotExists<PaymentType>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreatePaymentTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreatePaymentTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            await DatabaseBackupService.SetDbIdentityInsert(context, "PaymentsTypes", false);
         }
     }
 
     protected async Task CreateOfferTypes()
     {
-        try
-        {
-            Random random = new Random();
+        Random random = new Random();
 
-            using (var context = _dbContextFactory.CreateDbContext())
+        offerTypes.Clear();
+
+        var offer_type_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_1 = new OfferType()
+        {
+            Id = offer_type_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PUBLIC"
+        };
+        offerTypes.Add(offer_type_1);
+
+        var offer_type_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_2 = new OfferType()
+        {
+            Id = offer_type_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PRIVATE"
+        };
+        offerTypes.Add(offer_type_2);
+
+        var offer_type_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_3 = new OfferType()
+        {
+            Id = offer_type_3_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "INTERNATIONAL"
+        };
+        offerTypes.Add(offer_type_3);
+
+        var offer_type_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferType offer_type_4 = new OfferType()
+        {
+            Id = offer_type_4_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "HEDNO"
+        };
+        offerTypes.Add(offer_type_4);
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "OffersTypes", true);
+            foreach (var item in offerTypes)
             {
-
+                try
+                {
+                    await SeedIfNotExists<OfferType>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateOfferTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateOfferTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            await DatabaseBackupService.SetDbIdentityInsert(context, "OffersTypes", false);
         }
     }
 
     protected async Task CreateOfferState()
     {
-        try
-        {
-            Random random = new Random();
+        Random random = new Random();
 
-            using (var context = _dbContextFactory.CreateDbContext())
+        offerStates.Clear();
+
+        var offer_state_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferState offer_state_1 = new OfferState()
+        {
+            Id = offer_state_1_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "SUBMITTED"
+        };
+        offerStates.Add(offer_state_1);
+
+        var offer_state_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        OfferState offer_state_2 = new OfferState()
+        {
+            Id = offer_state_2_id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PREPARATION"
+        };
+        offerStates.Add(offer_state_2);
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "OffesStates", true);
+            foreach (var item in offerStates)
             {
-
+                try
+                {
+                    await SeedIfNotExists<OfferState>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateOfferState(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateOfferState(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            await DatabaseBackupService.SetDbIdentityInsert(context, "OffesStates", false);
         }
     }
 
+    protected async Task CreateDisciplineTypes()
+    {
+        Random random = new Random();
+
+        disciplineTypes.Clear();
+
+        string[] dicTypeNames = {
+                "HVAC",
+                "Sewage",
+                "Potable Water",
+                "Drainage",
+                "Fire Detection",
+                "Fire Suppression",
+                "Elevators",
+                "Natural Gas",
+                "Power Distribution",
+                "Structured Cabling",
+                "Burglar Alarm",
+                "CCTV",
+                "BMS",
+                "Photovoltaics",
+                "Energy Efficiency",
+                "Outsource",
+                "TenderDocument",
+                "Construction Supervision",
+                "DWG Admin/Clearing"
+            };
+        for (var i = 0; i < dicTypeNames.Length; i++)
+        {
+            var discipline_type_Id = random.Next(123456789, 999999999);
+            DisciplineType dt = new DisciplineType()
+            {
+                Id = discipline_type_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = dicTypeNames[i],
+            };
+            disciplineTypes.Add(dt);
+        }
+
+        // Add Discipline Type Project Manager Hours.
+        var discipline_pm_hours_type_Id = random.Next(123456789, 999999999);
+        DisciplineType dt_pm_hours = new DisciplineType()
+        {
+            Id = discipline_pm_hours_type_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Project Manager Hours",
+        };
+        disciplineTypes.Add(dt_pm_hours);
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplineTypes", true);
+            foreach (var item in disciplineTypes)
+            {
+                try
+                {
+                    await SeedIfNotExists<DisciplineType>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateDisciplineTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplineTypes", false);
+        }
+    }
+
+    protected async Task CreateDeliverableTypes()
+    {
+        Random random = new Random();
+
+        deliverableTypes.Clear();
+
+        string[] drawTypeNames = {
+                "Documents",
+                "Calculations",
+                "Deliverables"
+            };
+        for (var i = 0; i < drawTypeNames.Length; i++)
+        {
+            var drawing_type_Id = random.Next(123456789, 999999999);
+            DeliverableType drt = new DeliverableType()
+            {
+                Id = drawing_type_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = drawTypeNames[i],
+            };
+            deliverableTypes.Add(drt);
+        }
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "DeliverableTypes", true);
+            foreach (var item in deliverableTypes)
+            {
+                try
+                {
+                    await SeedIfNotExists<DeliverableType>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateDeliverableTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "DeliverableTypes", false);
+        }
+    }
+
+    protected async Task CreateSupportiveWorkTypes()
+    {
+        Random random = new Random();
+
+        otherTypes.Clear();
+
+        string[] otherTypeNames = {
+                "Communications",
+                "Printing",
+                "On-Site",
+                "Meetings",
+                "Administration",
+                "Soft Copy",
+                "Hours To Be Erased"
+            };
+        for (var i = 0; i < otherTypeNames.Length; i++)
+        {
+            var other_type_Id = random.Next(123456789, 999999999);
+            SupportiveWorkType ort = new SupportiveWorkType()
+            {
+                Id = other_type_Id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = otherTypeNames[i],
+            };
+            otherTypes.Add(ort);
+        }
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkTypes", true);
+            foreach (var item in otherTypes)
+            {
+                try
+                {
+                    await SeedIfNotExists<SupportiveWorkType>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorkTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkTypes", false);
+        }
+    }
+
+
     protected async Task CreateSecretaries()
     {
+        Random random = new Random();
+
+        // ΑΘΗΝΑ ΚΩΝΣΤΑΝΤΙΝΙΔΟΥ
+        var secretarie_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 26;
+        User secretarie_1 = new User()
+        {
+            Id = secretarie_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΚΩΝΣΤΑΝΤΙΝΙΔΟΥ",
+            FirstName = "ΑΘΗΝΑ",
+            Phone1 = "694927778",
+            Description = "ΓΡΑΜΜΑΤΕΙΑ",
+            ProxyAddress = "embiria@embiria.onmicrosoft.com"
+        };
+
+        Email email_6 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "embiria@embiria.gr",
+            UserId = secretarie_1_Id
+        };
+
+        Email email_7 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "akonstantinidou@embiria.gr",
+            UserId = secretarie_1_Id
+        };
+
+        UserRole secretarieRole_1_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 11,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = secretarie_1_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 9)
+        };
+
         try
         {
-            Random random = new Random();
-
             using (var context = _dbContextFactory.CreateDbContext())
             {
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
+                await SeedIfNotExists<User>(context, secretarie_1);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
 
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", true);
+                await SeedIfNotExists<Email>(context, email_6);
+                await SeedIfNotExists<Email>(context, email_7);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", false);
+
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, secretarieRole_1_em);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
             }
         }
         catch (Exception ex)
@@ -2394,13 +2780,124 @@ public class SeedData
 
     protected async Task CreateDraftmen()
     {
+        Random random = new Random();
+        draftsmen.Clear();
+
+        // Draftsmen ΔΟΥΓΑΛΕΡΗΣ ΓΡΗΓΟΡΗΣ
+        var draftsman_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 7;
+        User draftman_1 = new User()
+        {
+            Id = draftsman_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΔΟΥΓΑΛΕΡΗΣ",
+            FirstName = "ΓΡΗΓΟΡΗΣ",
+            Phone1 = "694927778",
+            Description = "ΕΦΚΑ - ΣΧΕΔΙΑΣΤΗΣ",
+            ProxyAddress = "dtsa@embiria.onmicrosoft.com"
+        };
+        draftsmen.Add(draftman_1);
+        Email email_8 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "gdoug@embiria.gr",
+            UserId = draftsman_1_Id
+        };
+        UserRole DraftsmanRole_1_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 11,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = draftsman_1_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 0)
+        };
+
+        // Draftsmen ΤΣΑΛΑΜΑΓΚΑΚΗΣ ΔΗΜΗΤΡΗΣ
+        var draftsman_2_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 8;
+        User draftman_2 = new User()
+        {
+            Id = draftsman_2_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΤΣΑΛΑΜΑΓΚΑΚΗΣ",
+            FirstName = "ΔΗΜΗΤΡΗΣ",
+            Phone1 = "694927778",
+            Description = "ΕΦΚΑ - ΣΧΕΔΙΑΣΤΗΣ",
+            ProxyAddress = "dtsa@embiria.onmicrosoft.com"
+        };
+        draftsmen.Add(draftman_2);
+        Email email_9 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "dtsa@embiria.gr",
+            UserId = draftsman_2_Id
+        };
+        UserRole DraftsmanRole_2_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 11,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = draftsman_2_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 0)
+        };
+
+
+        // Draftsmen ΧΑΤΖΑΚΗΣ ΜΑΝΩΛΗΣ
+        var draftsman_3_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 9;
+        User draftman_3 = new User()
+        {
+            Id = draftsman_3_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΧΑΤΖΑΚΗΣ",
+            FirstName = "ΜΑΝΩΛΗΣ",
+            Phone1 = "694927778",
+            Description = "ΕΦΚΑ - ΣΧΕΔΙΑΣΤΗΣ",
+            ProxyAddress = "mhatzakis@embiria.onmicrosoft.com"
+        };
+        draftsmen.Add(draftman_3);
+        Email email_10 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "dtsa@embiria.gr",
+            UserId = draftsman_3_Id
+        };
+        UserRole DraftsmanRole_3_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 11,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = draftsman_3_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 0)
+        };
+
         try
         {
-            Random random = new Random();
-
             using (var context = _dbContextFactory.CreateDbContext())
             {
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
+                await SeedIfNotExists<User>(context, draftman_1);
+                await SeedIfNotExists<User>(context, draftman_2);
+                await SeedIfNotExists<User>(context, draftman_3);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
 
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", true);
+                await SeedIfNotExists<Email>(context, email_8);
+                await SeedIfNotExists<Email>(context, email_9);
+                await SeedIfNotExists<Email>(context, email_10);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", false);
+
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, DraftsmanRole_1_em);
+                await SeedIfNotExists<UserRole>(context, DraftsmanRole_2_em);
+                await SeedIfNotExists<UserRole>(context, DraftsmanRole_3_em);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
             }
         }
         catch (Exception ex)
@@ -2412,13 +2909,620 @@ public class SeedData
 
     protected async Task CreateEngineers()
     {
+        Random random = new Random();
+        engineers.Clear();
+
+        // ΠΑΞΙΝΟΣ ΕΥΑΓΓΕΛΟΣ
+        var engineer_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        User engineer_1 = new User()
+        {
+            Id = engineer_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΠΑΞΙΝΟΣ",
+            FirstName = "ΕΥΑΓΓΕΛΟΣ",
+            Phone1 = "694927778",
+            Description = "ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Y.",
+            ProxyAddress = "vpax@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_1);
+        Email email_11 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "vpax@embiria.gr",
+            UserId = engineer_1_Id
+        };
+        // Engineer
+        UserRole engineerRole_1_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_1_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΜΑΝΑΡΩΛΗΣ ΞΕΝΟΦΩΝ
+        var engineer_2_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 11;
+        User engineer_2 = new User()
+        {
+            Id = engineer_2_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΜΑΝΑΡΩΛΗΣ",
+            FirstName = "ΞΕΝΟΦΩΝ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "xmanarolis@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_2);
+        Email email_12 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "xmanarolis@embiria.gr",
+            UserId = engineer_2_Id
+        };
+        // Engineer
+        UserRole engineerRole_2_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_2_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΠΑΡΙΣΗΣ ΣΤΕΦΑΝΟΣ
+        var engineer_3_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 12;
+        User engineer_3 = new User()
+        {
+            Id = engineer_3_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΠΑΡΙΣΗΣ",
+            FirstName = "ΣΤΕΦΑΝΟΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
+            ProxyAddress = "sparisis@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_3);
+        Email email_13 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "sparisis@embiria.gr",
+            UserId = engineer_3_Id
+        };
+        // Engineer
+        UserRole engineerRole_3_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_3_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΚΟΒΡΑΣ ΜΠΑΜΠΗΣ
+        var engineer_4_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 13;
+        User engineer_4 = new User()
+        {
+            Id = engineer_4_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΚΟΒΡΑΣ",
+            FirstName = "ΜΠΑΜΠΗΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "chkovras@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_4);
+        Email email_14 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "chkovras@embiria.gr",
+            UserId = engineer_4_Id
+        };
+        // Engineer
+        UserRole engineerRole_4_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_4_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΓΑΛΑΝΗΣ ΝΙΚΗΦΟΡΟΣ
+        var engineer_5_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 14;
+        User engineer_5 = new User()
+        {
+            Id = engineer_5_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΓΑΛΑΝΗΣ",
+            FirstName = "ΝΙΚΗΦΟΡΟΣ",
+            Phone1 = "694927778",
+            Description = "ΔΙΑΧΕΙΡΙΣΤΗΣ - ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "ngal@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_5);
+        Email email_15 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "ngal@embiria.gr",
+            UserId = engineer_5_Id
+        };
+        // Engineer
+        UserRole engineerRole_5_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_5_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+        // CEO
+        UserRole engineerRole_5_em_3 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_5_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 5)
+        };
+
+        // ΚΟΤΣΩΝΗ ΚΑΤΕΡΙΝΑ
+        var engineer_6_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 15;
+        User engineer_6 = new User()
+        {
+            Id = engineer_6_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΚΟΤΣΩΝΗ",
+            FirstName = "ΚΑΤΕΡΙΝΑ",
+            Phone1 = "694927778",
+            Description = "ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "kkotsoni@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_6);
+        Email email_16 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "kkotsoni@embiria.gr",
+            UserId = engineer_6_Id
+        };
+        // Engineer
+        UserRole engineerRole_6_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+        // COO
+        UserRole engineerRole_6_em_coo = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 3)
+        };
+        // CTO
+        UserRole engineerRole_17_em_coo = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 4)
+        };
+        // Admin
+        UserRole admin_2 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) / 3,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_6_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 8)
+        };
+
+        // ΤΖΑΝΗΣ ΒΑΣΙΛΕΙΟΣ
+        var engineer_7_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 16;
+        User engineer_7 = new User()
+        {
+            Id = engineer_7_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΤΖΑΝΗΣ",
+            FirstName = "ΒΑΣΙΛΕΙΟΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "vtza@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_7);
+        Email email_17 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "vtza@embiria.gr",
+            UserId = engineer_7_Id
+        };
+        // Engineer
+        UserRole engineerRole_7_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_7_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΓΡΕΤΟΣ ΑΝΔΡΕΑΣ
+        var engineer_8_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 17;
+        User engineer_8 = new User()
+        {
+            Id = engineer_8_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΓΡΕΤΟΣ",
+            FirstName = "ΑΝΔΡΕΑΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "agretos@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_8);
+        Email email_18 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "agretos@embiria.gr",
+            UserId = engineer_8_Id
+        };
+        // Engineer
+        UserRole engineerRole_8_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_8_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΜΑΡΓΕΤΗ ΚΑΤΕΡΙΝΑ
+        var engineer_9_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 18;
+        User engineer_9 = new User()
+        {
+            Id = engineer_9_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΜΑΡΓΕΤΗ",
+            FirstName = "ΚΑΤΕΡΙΝΑ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
+            ProxyAddress = "kmargeti@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_9);
+        Email email_19 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "kmargeti@embiria.gr",
+            UserId = engineer_9_Id
+        };
+        // Engineer
+        UserRole engineerRole_9_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_9_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΠΛΑΤΑΝΙΟΣ ΧΑΡΗΣ
+        var engineer_10_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 19;
+        User engineer_10 = new User()
+        {
+            Id = engineer_10_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΠΛΑΤΑΝΙΟΣ",
+            FirstName = "ΧΑΡΗΣ",
+            Phone1 = "694927778",
+            Description = "ΕΤΑΙΡΟΣ - ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "haris@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_10);
+        Email email_20 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "haris@embiria.gr",
+            UserId = engineer_10_Id
+        };
+        // Engineer
+        UserRole engineerRole_10_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_10_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΦΩΚΙΑΝΟΥ ΠΕΓΚΥ
+        var engineer_11_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 20;
+        User engineer_11 = new User()
+        {
+            Id = engineer_11_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΦΩΚΙΑΝΟΥ",
+            FirstName = "ΠΕΓΚΥ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "pfokianou@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_11);
+        Email email_21 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "pfokianou@embiria.gr",
+            UserId = engineer_11_Id
+        };
+        // Engineer
+        UserRole engineerRole_11_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_11_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΓΙΑΝΝΟΓΛΟΥ ΟΛΓΑ
+        var engineer_12_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 21;
+        User engineer_12 = new User()
+        {
+            Id = engineer_12_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΓΙΑΝΝΟΓΛΟΥ",
+            FirstName = "ΟΛΓΑ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
+            ProxyAddress = "ogiannoglou@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_12);
+        Email email_22 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "ogiannoglou@embiria.gr",
+            UserId = engineer_12_Id
+        };
+        // Engineer
+        UserRole engineerRole_12_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_12_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΛΕΚΟΥ ΒΑΡΒΑΡΑ
+        var engineer_13_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 22;
+        User engineer_13 = new User()
+        {
+            Id = engineer_13_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΛΕΚΟΥ",
+            FirstName = "ΒΑΡΒΑΡΑ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "blekou@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_13);
+        Email email_23 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "blekou@embiria.gr",
+            UserId = engineer_13_Id
+        };
+        // Engineer
+        UserRole engineerRole_13_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_13_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΧΟΝΤΟΣ ΒΑΣΙΛΕΙΟΣ
+        var engineer_14_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 23;
+        User engineer_14 = new User()
+        {
+            Id = engineer_14_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΧΟΝΤΟΣ",
+            FirstName = "ΒΑΣΙΛΕΙΟΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - ΕΦΚΑ",
+            ProxyAddress = "vchontos@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_14);
+        Email email_24 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "vchontos@embiria.gr",
+            UserId = engineer_14_Id
+        };
+        // Engineer
+        UserRole engineerRole_14_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_14_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΠΕΡΙΒΟΛΛΑΡΗ ΠΑΝΑΓΙΩΤΑ
+        var engineer_15_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 24;
+        User engineer_15 = new User()
+        {
+            Id = engineer_15_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΠΕΡΙΒΟΛΛΑΡΗ",
+            FirstName = "ΠΑΝΑΓΙΩΤΑ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ ΤΕΙ - ΕΦΚΑ",
+            ProxyAddress = "panperivollari@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_15);
+        Email email_25 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "panperivollari@embiria.gr",
+            UserId = engineer_15_Id
+        };
+        // Engineer
+        UserRole engineerRole_15_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_15_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
+        // ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΝΙΚΟΛΑΟΣ
+        var engineer_16_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 25;
+        User engineer_16 = new User()
+        {
+            Id = engineer_16_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            LastName = "ΤΡΙΑΝΤΑΦΥΛΛΟΥ",
+            FirstName = "ΝΙΚΟΛΑΟΣ",
+            Phone1 = "694927778",
+            Description = "ΜΗΧΑΝΙΚΟΣ - Τ.Π.Υ.",
+            ProxyAddress = "ntriantafyllou@embiria.onmicrosoft.com"
+        };
+        engineers.Add(engineer_16);
+        Email email_26 = new Email()
+        {
+            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Address = "ntriantafyllou@embiria.gr",
+            UserId = engineer_16_Id
+        };
+        // Engineer
+        UserRole engineerRole_16_em = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) + 12,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = engineer_16_Id,
+            RoleId = GetRecordAtIndex(rolesIds, 1)
+        };
+
         try
         {
-            Random random = new Random();
-
             using (var context = _dbContextFactory.CreateDbContext())
             {
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
+                await SeedIfNotExists<User>(context, engineer_1);
+                await SeedIfNotExists<User>(context, engineer_2);
+                await SeedIfNotExists<User>(context, engineer_3);
+                await SeedIfNotExists<User>(context, engineer_4);
+                await SeedIfNotExists<User>(context, engineer_5);
+                await SeedIfNotExists<User>(context, engineer_6);
+                await SeedIfNotExists<User>(context, engineer_7);
+                await SeedIfNotExists<User>(context, engineer_8);
+                await SeedIfNotExists<User>(context, engineer_9);
+                await SeedIfNotExists<User>(context, engineer_10);
+                await SeedIfNotExists<User>(context, engineer_11);
+                await SeedIfNotExists<User>(context, engineer_12);
+                await SeedIfNotExists<User>(context, engineer_13);
+                await SeedIfNotExists<User>(context, engineer_14);
+                await SeedIfNotExists<User>(context, engineer_15);
+                await SeedIfNotExists<User>(context, engineer_16);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
 
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", true);
+                await SeedIfNotExists<Email>(context, email_11);
+                await SeedIfNotExists<Email>(context, email_12);
+                await SeedIfNotExists<Email>(context, email_13);
+                await SeedIfNotExists<Email>(context, email_14);
+                await SeedIfNotExists<Email>(context, email_15);
+                await SeedIfNotExists<Email>(context, email_16);
+                await SeedIfNotExists<Email>(context, email_17);
+                await SeedIfNotExists<Email>(context, email_18);
+                await SeedIfNotExists<Email>(context, email_19);
+                await SeedIfNotExists<Email>(context, email_20);
+                await SeedIfNotExists<Email>(context, email_21);
+                await SeedIfNotExists<Email>(context, email_22);
+                await SeedIfNotExists<Email>(context, email_23);
+                await SeedIfNotExists<Email>(context, email_24);
+                await SeedIfNotExists<Email>(context, email_25);
+                await SeedIfNotExists<Email>(context, email_26);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", false);
+
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, engineerRole_1_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_2_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_3_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_4_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_5_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_5_em_3);
+                await SeedIfNotExists<UserRole>(context, engineerRole_6_em_coo);
+                await SeedIfNotExists<UserRole>(context, engineerRole_17_em_coo);
+                await SeedIfNotExists<UserRole>(context, admin_2);
+                await SeedIfNotExists<UserRole>(context, engineerRole_7_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_8_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_9_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_10_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_11_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_12_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_13_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_14_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_15_em);
+                await SeedIfNotExists<UserRole>(context, engineerRole_16_em);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
             }
         }
         catch (Exception ex)

@@ -25,7 +25,7 @@ public class AppDbContext : DbContext
     public DbSet<Discipline>? Disciplines { get; set; }
     public DbSet<DisciplineType>? DisciplineTypes { get; set; }
     public DbSet<Deliverable>? Deliverables { get; set; }
-    public DbSet<DeliverableType>? DrawingTypes { get; set; }
+    public DbSet<DeliverableType>? DeliverableTypes { get; set; }
     public DbSet<SupportiveWork>? SupportiveWorks { get; set; }
     public DbSet<SupportiveWorkType>? SupportiveWorkTypes { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
@@ -2297,10 +2297,10 @@ public class AppDbContext : DbContext
 
             int[] offerTypesIds =
             {
-        offer_type_1_id,
-        offer_type_2_id,
-        offer_type_3_id
-    };
+                offer_type_1_id,
+                offer_type_2_id,
+                offer_type_3_id
+            };
             #endregion
 
             #region Create OfferState
@@ -2326,9 +2326,9 @@ public class AppDbContext : DbContext
 
             int[] offerStatesIds =
             {
-        offer_state_1_id,
-        offer_state_2_id
-    };
+                offer_state_1_id,
+                offer_state_2_id
+            };
             #endregion
 
             #region Create Discipline Types
