@@ -868,8 +868,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_3_id,
-                    PermissionId = per_22_id
+                    RoleId = GetRecordAtIndex(rolesIds, 2),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 21)
                 };
 
                 // Project Manager || See Active Delayed Project Types Counter KPI
@@ -878,8 +878,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_3_id,
-                    PermissionId = per_23_id
+                    RoleId = GetRecordAtIndex(rolesIds, 2),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 22)
                 };
 
 
@@ -890,8 +890,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_1_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 0)
                 };
 
                 // COO || Dashboard Edit My Hours
@@ -900,8 +900,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_2_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 1)
                 };
 
                 // COO || Dashboard Assign Designer
@@ -910,8 +910,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_3_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 2)
                 };
 
                 // COO || Dashboard Assign Engineer
@@ -920,8 +920,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_4_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 3)
                 };
 
                 // COO || Dashboard Assign Project Manager
@@ -930,8 +930,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_5_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 4)
                 };
 
                 // COO || Dashboard See My Hours
@@ -940,8 +940,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_8_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 7)
                 };
 
                 // COO || See All Disciplines
@@ -950,8 +950,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_9_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 8)
                 };
 
                 // COO || See All Deliverables
@@ -960,8 +960,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_10_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 9)
                 };
 
                 // COO || See All Projects
@@ -970,8 +970,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_11_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 10)
                 };
 
                 // COO || Work on Project
@@ -980,8 +980,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_31_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 30)
                 };
 
                 // COO || Work on Offers
@@ -990,8 +990,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_32_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 31)
                 };
 
                 // COO || Work on Leds
@@ -1000,8 +1000,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_33_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 32)
                 };
 
                 // COO || See Next Year Income
@@ -1010,8 +1010,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_4_id,
-                    PermissionId = per_34_id
+                    RoleId = GetRecordAtIndex(rolesIds, 3),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 33)
                 };
 
 
@@ -1022,7 +1022,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_1_id
                 };
 
@@ -1032,7 +1032,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_2_id
                 };
 
@@ -1042,7 +1042,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_5_id
                 };
 
@@ -1052,7 +1052,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_6_id
                 };
 
@@ -1062,7 +1062,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_8_id
                 };
 
@@ -1072,7 +1072,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_9_id
                 };
 
@@ -1082,7 +1082,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_10_id
                 };
 
@@ -1092,7 +1092,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_11_id
                 };
 
@@ -1102,7 +1102,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_12_id
                 };
 
@@ -1112,7 +1112,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_14_id
                 };
 
@@ -1122,7 +1122,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_15_id
                 };
 
@@ -1132,7 +1132,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_16_id
                 };
 
@@ -1142,7 +1142,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_17_id
                 };
 
@@ -1152,7 +1152,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_18_id
                 };
 
@@ -1162,7 +1162,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_19_id
                 };
 
@@ -1172,7 +1172,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_20_id
                 };
 
@@ -1182,7 +1182,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_23_id
                 };
 
@@ -1192,7 +1192,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_13_id
                 };
 
@@ -1202,7 +1202,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_24_id
                 };
 
@@ -1212,7 +1212,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_25_id
                 };
 
@@ -1222,7 +1222,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_26_id
                 };
 
@@ -1232,7 +1232,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_27_id
                 };
 
@@ -1242,7 +1242,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_29_id
                 };
 
@@ -1252,7 +1252,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_30_id
                 };
 
@@ -1262,7 +1262,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_31_id
                 };
 
@@ -1272,7 +1272,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_32_id
                 };
 
@@ -1282,7 +1282,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_33_id
                 };
 
@@ -1292,7 +1292,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_34_id
                 };
 
@@ -1302,7 +1302,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_35_id
                 };
 
@@ -1312,7 +1312,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_5_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
                     PermissionId = per_36_id
                 };
 
@@ -1324,7 +1324,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_1_id
                 };
 
@@ -1334,7 +1334,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_2_id
                 };
 
@@ -1344,7 +1344,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_3_id
                 };
 
@@ -1354,7 +1354,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_4_id
                 };
 
@@ -1364,7 +1364,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_5_id
                 };
 
@@ -1374,7 +1374,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_6_id
                 };
 
@@ -1384,7 +1384,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_9_id
                 };
 
@@ -1394,7 +1394,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_10_id
                 };
 
@@ -1404,7 +1404,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_11_id
                 };
 
@@ -1414,7 +1414,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_13_id
                 };
 
@@ -1424,7 +1424,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_12_id
                 };
 
@@ -1434,7 +1434,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_17_id
                 };
 
@@ -1444,7 +1444,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_18_id
                 };
 
@@ -1454,7 +1454,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_19_id
                 };
 
@@ -1464,7 +1464,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_20_id
                 };
 
@@ -1474,7 +1474,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_21_id
                 };
 
@@ -1484,7 +1484,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_23_id
                 };
 
@@ -1494,7 +1494,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_24_id
                 };
 
@@ -1504,7 +1504,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_25_id
                 };
 
@@ -1514,7 +1514,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_26_id
                 };
 
@@ -1524,7 +1524,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_27_id
                 };
 
@@ -1534,7 +1534,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_28_id
                 };
 
@@ -1544,7 +1544,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_29_id
                 };
 
@@ -1554,7 +1554,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_30_id
                 };
 
@@ -1564,7 +1564,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_31_id
                 };
 
@@ -1574,7 +1574,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_32_id
                 };
 
@@ -1584,7 +1584,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_33_id
                 };
 
@@ -1594,7 +1594,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_34_id
                 };
 
@@ -1604,7 +1604,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_35_id
                 };
 
@@ -1614,7 +1614,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_6_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
                     PermissionId = per_36_id
                 };
 
@@ -1626,7 +1626,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_7_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 6),
                     PermissionId = per_1_id
                 };
 
@@ -1638,7 +1638,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_8_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 7),
                     PermissionId = per_1_id
                 };
 
@@ -1650,7 +1650,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_9_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 8),
                     PermissionId = per_7_id
                 };
 
@@ -1660,7 +1660,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_9_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 8),
                     PermissionId = per_9_id
                 };
 
@@ -1670,7 +1670,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_9_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 8),
                     PermissionId = per_10_id
                 };
 
@@ -1680,7 +1680,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_9_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 8),
                     PermissionId = per_11_id
                 };
 
@@ -1690,7 +1690,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_9_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 8),
                     PermissionId = per_28_id
                 };
 
@@ -1700,7 +1700,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_9_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 8),
                     PermissionId = per_35_id
                 };
 
@@ -1710,7 +1710,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_9_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 8),
                     PermissionId = per_36_id
                 };
 
@@ -1722,7 +1722,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_10_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 9),
                     PermissionId = per_1_id
                 };
 
@@ -1732,7 +1732,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_10_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 9),
                     PermissionId = per_2_id
                 };
 
@@ -1742,7 +1742,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_10_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 9),
                     PermissionId = per_8_id
                 };
 
@@ -1752,7 +1752,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_10_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 9),
                     PermissionId = per_9_id
                 };
 
@@ -1762,7 +1762,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_10_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 9),
                     PermissionId = per_10_id
                 };
 
@@ -1772,7 +1772,7 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_10_id,
+                    RoleId = GetRecordAtIndex(rolesIds, 9),
                     PermissionId = per_11_id
                 };
 
