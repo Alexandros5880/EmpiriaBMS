@@ -20,6 +20,7 @@ public class SeedData
     private List<SupportiveWorkType> otherTypes = new List<SupportiveWorkType>();
     private List<User> draftsmen = new List<User>();
     private List<User> engineers = new List<User>();
+    private List<User> projectManagers = new List<User>();
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
@@ -3534,13 +3535,53 @@ public class SeedData
 
     protected async Task CreateProjectManagers()
     {
+        Random random = new Random();
+
+        // ΠΑΞΙΝΟΣ ΕΥΑΓΓΕΛΟΣ
+        var eng_1 = GetRecordAtIndex(engineers, 0);
+        UserRole pmRole_1 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) / 3,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = eng_1.Id,
+            RoleId = GetRecordAtIndex(rolesIds, 2)
+        };
+        projectManagers.Add(eng_1);
+
+        // ΚΟΤΣΩΝΗ ΚΑΤΕΡΙΝΑ
+        var eng_5 = GetRecordAtIndex(engineers, 5);
+        UserRole pmRole_2 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) / 3,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = eng_5.Id,
+            RoleId = GetRecordAtIndex(rolesIds, 2)
+        };
+        projectManagers.Add(eng_5);
+
+        // ΠΛΑΤΑΝΙΟΣ ΧΑΡΗΣ
+        var eng_10 = GetRecordAtIndex(engineers, 9);
+        UserRole pmRole_3 = new UserRole()
+        {
+            Id = random.Next(123456789, 999999999) / 3,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            UserId = eng_10.Id,
+            RoleId = GetRecordAtIndex(rolesIds, 2)
+        };
+        projectManagers.Add(eng_10);
+
         try
         {
-            Random random = new Random();
-
             using (var context = _dbContextFactory.CreateDbContext())
             {
-
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, pmRole_1);
+                await SeedIfNotExists<UserRole>(context, pmRole_2);
+                await SeedIfNotExists<UserRole>(context, pmRole_3);
+                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
             }
         }
         catch (Exception ex)
