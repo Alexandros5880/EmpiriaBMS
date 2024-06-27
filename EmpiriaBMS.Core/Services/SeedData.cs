@@ -8,6 +8,9 @@ public class SeedData
 {
     private List<int> permissionsIds = new List<int>();
     private List<int> rolesIds = new List<int>();
+    List<ProjectCategory> projectCategories = new List<ProjectCategory>();
+    List<ProjectSubCategory> projectSubCategories = new List<ProjectSubCategory>();
+    List<ProjectStage> projectStages = new List<ProjectStage>();
 
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
@@ -23,6 +26,18 @@ public class SeedData
         await CeateRoles();
         await CeateRolesPermissions();
         await CeateDefaultAdmins();
+        await CeateProjectCategories();
+        await CreateProjectSubCategories();
+        await CreateProjectStages();
+        await CreateInvoiceTypes();
+        await CreatePaymentTypes();
+        await CreateOfferTypes();
+        await CreateOfferState();
+
+        await CreateSecretaries();
+        await CreateDraftmen();
+        await CreateEngineers();
+        await CreateProjectManagers();
     }
 
     protected async Task CeatePermissions()
@@ -1989,55 +2004,301 @@ public class SeedData
 
     protected async Task CeateProjectCategories()
     {
-        try
-        {
-            Random random = new Random();
+        Random random = new Random();
 
-            using (var context = _dbContextFactory.CreateDbContext())
+        projectCategories.Clear();
+
+        var project_category_1_Id = random.Next(123456789, 999999999) + 33;
+        ProjectCategory project_category_1 = new ProjectCategory()
+        {
+            Id = project_category_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "BUILDINGS",
+            Description = "Buildings Description",
+            CanAssignePM = true
+        };
+        projectCategories.Add(project_category_1);
+
+        var project_category_2_Id = random.Next(123456789, 999999999) + 33;
+        ProjectCategory project_category_2 = new ProjectCategory()
+        {
+            Id = project_category_2_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "INFRASTRUCTURE",
+            Description = "Infrastructure Description",
+            CanAssignePM = true
+        };
+        projectCategories.Add(project_category_2);
+
+        var project_category_3_Id = random.Next(123456789, 999999999) + 33;
+        ProjectCategory project_category_3 = new ProjectCategory()
+        {
+            Id = project_category_3_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "ENERGY",
+            Description = "Energy Description",
+            CanAssignePM = true
+        };
+        projectCategories.Add(project_category_3);
+
+        var project_category_4_Id = random.Next(123456789, 999999999) + 33;
+        ProjectCategory project_category_4 = new ProjectCategory()
+        {
+            Id = project_category_4_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "CONSULTING",
+            Description = "Consulting Description",
+            CanAssignePM = true
+        };
+        projectCategories.Add(project_category_4);
+
+        var project_category_5_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_5 = new ProjectCategory()
+        {
+            Id = project_category_5_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "PRODUCTION MANAGMENT",
+            Description = "Production Management Description",
+            CanAssignePM = false
+        };
+        projectCategories.Add(project_category_5);
+
+        var project_category_6_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_6 = new ProjectCategory()
+        {
+            Id = project_category_6_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "TRANSPORT",
+            Description = "Transport Description",
+            CanAssignePM = false
+        };
+        projectCategories.Add(project_category_6);
+
+        var project_category_7_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_7 = new ProjectCategory()
+        {
+            Id = project_category_7_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "ENVIRONMENT",
+            Description = "Environment Description",
+            CanAssignePM = false
+        };
+        projectCategories.Add(project_category_7);
+
+        var project_category_8_Id = random.Next(123456789, 999999999) + 34;
+        ProjectCategory project_category_8 = new ProjectCategory()
+        {
+            Id = project_category_8_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "ENVIRONMENT CONSULTING",
+            Description = "Environment Consulting Description",
+            CanAssignePM = false
+        };
+        projectCategories.Add(project_category_8);
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsCategories", true);
+            foreach (var pc in projectCategories)
             {
-
+                try
+                {
+                    await SeedIfNotExists<ProjectCategory>(context, pc);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CeateProjectCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CeateProjectCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsCategories", false);
         }
     }
 
     protected async Task CreateProjectSubCategories()
     {
-        try
-        {
-            Random random = new Random();
+        Random random = new Random();
 
-            using (var context = _dbContextFactory.CreateDbContext())
+        /*
+        * projectCategories[0] = BUILDINGS
+        * projectCategories[1] = INFRASTRUCTURE
+        * projectCategories[2] = ENERGY
+        * projectCategories[3] = CONSULTING
+        * projectCategories[4] = PRODUCTION MANAGMENT
+        * projectCategories[5] = TRANSPORT
+        * projectCategories[6] = ENVIRONMENT
+        * projectCategories[7] = ENVIRONMENT CONSULTING
+        */
+        Dictionary<string, ProjectCategory> ProjectSubCatsNameCat = new Dictionary<string, ProjectCategory>();
+        ProjectSubCatsNameCat.Add("RENEWABLES - INTERCONNECTION HV", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - INTERCONNECTION", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - PV", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - PV - TDD", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - PV - CONSTRUCTION SUPERVISION", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - WIND", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("RENEWABLES - HYDRO", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("POWER PLANTS - PIPELINES", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("DISTRIBUTION NETWORKS", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("NATURAL GAS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("ENERGY AUDITS & CONSULTING", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("FIRE SAFETY", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("OFFICE BUILDINGS", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("BANKS", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("MALLS, SHOPPING CENTRES, BARS etc", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("INDUSTRIAL", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("RESIDENTIAL", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("HOTELS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("ENERGY CERTIFICATES", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("CAR STATIONS", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("SCHOOLS & UNIVERSITIES", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("SPORT CENTRES", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("HOSPITALS & WELFARE", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("PUBLIC BUILDINGS", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("RESTORATIONS - SQUARES", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("MUSEUMS & CULTURAL BUILDINGS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("DATA CENTERS", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("BUILDINGS GENERAL", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("ROAD NETWORKS", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("TOLL STATIONS & BUILDINGS", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("TRAIN STATIONS", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("TUNNELS", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("BUS STATIONS", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("PORTS, MARINAS & PORT TERMINALS", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("AIRPORTS & TERMINALS", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("SUBWAYS & STATIONS", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("TRASPORT GENERAL", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("WASTE WATER TREATMENT", projectCategories[5]);
+        ProjectSubCatsNameCat.Add("RECYCLING & LANDFILL PLANTS", projectCategories[6]);
+        ProjectSubCatsNameCat.Add("DAMS", projectCategories[7]);
+        ProjectSubCatsNameCat.Add("SEWAGE AND DRAINAGE NETWORKS", projectCategories[0]);
+        ProjectSubCatsNameCat.Add("ENVIRONMENTAL STUDIES", projectCategories[1]);
+        ProjectSubCatsNameCat.Add("LEGALIZATION PROCEDURES", projectCategories[2]);
+        ProjectSubCatsNameCat.Add("PROPERTY EVALUATIONS", projectCategories[3]);
+        ProjectSubCatsNameCat.Add("EU PROJECTS", projectCategories[4]);
+        ProjectSubCatsNameCat.Add("ENGINEERING CONSULTING - GENERAL", projectCategories[5]);
+
+        projectSubCategories.Clear();
+
+        foreach (var item in ProjectSubCatsNameCat)
+        {
+            string subCatName = item.Key;
+            int catId = item.Value.Id;
+            var canAssignePM = item.Value.CanAssignePM;
+
+            var project_sub_category_id = random.Next(123456789, 999999999) + 33;
+            ProjectSubCategory project_sub_category = new ProjectSubCategory()
             {
-
-            }
+                Id = project_sub_category_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = subCatName,
+                CategoryId = catId,
+                CanAssignePM = canAssignePM
+            };
+            projectSubCategories.Add(project_sub_category);
         }
-        catch (Exception ex)
+
+
+
+        using (var context = _dbContextFactory.CreateDbContext())
         {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateProjectSubCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsSubCategories", true);
+            foreach (var pc in projectSubCategories)
+            {
+                try
+                {
+                    await SeedIfNotExists<ProjectSubCategory>(context, pc);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CeateProjectSubCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsSubCategories", false);
         }
     }
 
     protected async Task CreateProjectStages()
     {
-        try
-        {
-            Random random = new Random();
+        Random random = new Random();
 
-            using (var context = _dbContextFactory.CreateDbContext())
+        projectStages.Clear();
+
+        var project_stage_1_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_1 = new ProjectStage()
+        {
+            Id = project_stage_1_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Buildings",
+        };
+        projectStages.Add(project_stage_1);
+
+        var project_stage_2_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_2 = new ProjectStage()
+        {
+            Id = project_stage_2_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Final Design",
+        };
+        projectStages.Add(project_stage_2);
+
+        var project_stage_3_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_3 = new ProjectStage()
+        {
+            Id = project_stage_3_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Detailed Design",
+        };
+        projectStages.Add(project_stage_3);
+
+        var project_stage_4_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_4 = new ProjectStage()
+        {
+            Id = project_stage_4_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Construction Supervision",
+        };
+        projectStages.Add(project_stage_4);
+
+        var project_stage_5_Id = random.Next(123456789, 999999999) + 33;
+        ProjectStage project_stage_5 = new ProjectStage()
+        {
+            Id = project_stage_5_Id,
+            CreatedDate = DateTime.Now,
+            LastUpdatedDate = DateTime.Now,
+            Name = "Us Build Joins",
+        };
+        projectStages.Add(project_stage_5);
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsStages", true);
+            foreach (var pstage in projectStages)
             {
-
+                try
+                {
+                    await SeedIfNotExists<ProjectStage>(context, pstage);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateProjectStages(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception On SeedData.CreateProjectStages(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsStages", false);
         }
     }
 

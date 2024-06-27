@@ -2168,12 +2168,12 @@ public class AppDbContext : DbContext
 
 
             int[] ProjectStages = {
-        project_stage_1_Id,
-        project_stage_2_Id,
-        project_stage_3_Id,
-        project_stage_4_Id,
-        project_stage_5_Id
-    };
+                project_stage_1_Id,
+                project_stage_2_Id,
+                project_stage_3_Id,
+                project_stage_4_Id,
+                project_stage_5_Id
+            };
             #endregion
 
             #region Create InvoiceTypes
