@@ -1023,7 +1023,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_1_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 0)
                 };
 
                 // CTO || Dashboard Edit My Hours
@@ -1033,7 +1033,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_2_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 1)
                 };
 
                 // CTO || Dashboard Assign Project Manager
@@ -1043,7 +1043,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_5_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 4)
                 };
 
                 // CTO || Dashboard Add Project
@@ -1053,7 +1053,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_6_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 5)
                 };
 
                 // CTO || Dashboard See My Hours
@@ -1063,7 +1063,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_8_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 7)
                 };
 
                 // CTO || See All Disciplines
@@ -1073,7 +1073,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_9_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 8)
                 };
 
                 // CTO || See All Deliverables
@@ -1083,7 +1083,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_10_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 9)
                 };
 
                 // CTO || See All Projects
@@ -1093,7 +1093,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_11_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 10)
                 };
 
                 // CTO || Dashboard Edit Project
@@ -1103,7 +1103,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_12_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 11)
                 };
 
                 // CTO || Dashboard Edit Discipline
@@ -1113,7 +1113,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_14_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 13)
                 };
 
                 // CTO || Dashboard Edit Deliverable
@@ -1123,7 +1123,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_15_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 14)
                 };
 
                 // CTO || Dashboard Edit Other
@@ -1133,7 +1133,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_16_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 15)
                 };
 
                 // CTO || Dashboard See KPIS
@@ -1143,7 +1143,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_17_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 16)
                 };
 
                 // CTO || See Hours Per Role KPI
@@ -1153,7 +1153,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_18_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 17)
                 };
 
                 // CTO || See Active Delayed Projects KPI
@@ -1163,7 +1163,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_19_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 18)
                 };
 
                 // CTO || See All Projects Missed DeadLine KPI
@@ -1173,7 +1173,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_20_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 19)
                 };
 
                 // CTO || See Active Delayed Project Types Counter KPI
@@ -1183,7 +1183,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_23_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 22)
                 };
 
                 // CTO || Display Projects Code
@@ -1193,7 +1193,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_13_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 12)
                 };
 
                 // CTO || See Offers
@@ -1203,7 +1203,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_24_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 23)
                 };
 
                 // CTO || See Tender Table KPI
@@ -1213,7 +1213,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_25_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 24)
                 };
 
                 // CTO || See Delayed Payments KPI
@@ -1223,7 +1223,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_26_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 25)
                 };
 
                 // CTO || See Pendings Payments KPI
@@ -1233,7 +1233,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_27_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 26)
                 };
 
                 // CTO || See Invoices
@@ -1243,7 +1243,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_29_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 28)
                 };
 
                 // CTO || See Excpences
@@ -1253,7 +1253,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_30_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 29)
                 };
 
                 // CTO || Work on Project
@@ -1263,7 +1263,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_31_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 30)
                 };
 
                 // CTO || Work on Offers
@@ -1273,7 +1273,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_32_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 31)
                 };
 
                 // CTO || Work on Leds
@@ -1283,7 +1283,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_33_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 32)
                 };
 
                 // CTO || See Next Year Income
@@ -1293,7 +1293,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_34_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 33)
                 };
 
                 // CTO || Backup Database
@@ -1303,7 +1303,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_35_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 34)
                 };
 
                 // CTO || Restore Database
@@ -1313,7 +1313,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     RoleId = GetRecordAtIndex(rolesIds, 4),
-                    PermissionId = per_36_id
+                    PermissionId = GetRecordAtIndex(permissionsIds, 35)
                 };
 
 
