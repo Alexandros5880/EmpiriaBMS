@@ -14,7 +14,9 @@ public static class ObjectComparer
         var type = typeof(T);
 
         var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                     .Where(prop => prop.Name != "Id" || prop.PropertyType != typeof(DateTime));
+                     .Where(prop => prop.Name != "Id"
+                         && prop.PropertyType != typeof(DateTime)
+                         && !_isExcludedCollectionType(prop.PropertyType));
 
         foreach (var property in properties)
         {
@@ -38,5 +40,19 @@ public static class ObjectComparer
         }
 
         return true;
+    }
+
+    private static bool _isExcludedCollectionType(Type type)
+    {
+        if (type.IsGenericType)
+        {
+            var genericTypeDefinition = type.GetGenericTypeDefinition();
+            return genericTypeDefinition == typeof(IList<>) ||
+                   genericTypeDefinition == typeof(IEnumerable<>) ||
+                   genericTypeDefinition == typeof(ICollection<>) ||
+                   genericTypeDefinition == typeof(List<>);
+        }
+
+        return false;
     }
 }

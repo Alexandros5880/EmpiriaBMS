@@ -37,6 +37,7 @@ public class SeedData
 
     public async void CreateData()
     {
+        Console.WriteLine("\n\n Starting add Seed Data to DB.");
         await CeatePermissions();
         await CeateRoles();
         await CeateRolesPermissions();
@@ -64,6 +65,7 @@ public class SeedData
         await CreateSupportiveWorks();
         await ConnectAllEngineersWithEveryDisclipline();
         await ConnectEveryDraftmanWithEverySupportiveWork();
+        Console.WriteLine("Seed Data added.\n\n");
     }
 
     protected async Task CeatePermissions()
@@ -3835,13 +3837,13 @@ public class SeedData
         for (var i = 1; i <= projectSubCategories.Count(); i++)
         {
             // Led
-            var clientId = random.Next(123456789, 999999999) + i * 3;
+            var clientId = random.Next(123456789, 999999999) + i * 3 + 2345;
             Client client = new Client()
             {
                 Id = clientId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                FirstName = $"Client-Led-{i}",
+                FirstName = $"Client-Led-M-{i}",
                 LastName = "LastName",
                 ProxyAddress = "alexandrosplatanios15@gmail.com",
                 Phone1 = "6949277783"
@@ -3849,13 +3851,13 @@ public class SeedData
             clients.Add(client);
 
             // Led
-            var ledId = random.Next(123456789, 999999999) + i * 3;
+            var ledId = random.Next(123456789, 999999999) + i * 3 + 13245;
             Led led = new Led()
             {
                 Id = ledId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = $"Led-{i}",
+                Name = $"Led-M-{i}",
                 ClientId = clientId,
                 PotencialFee = random.Next(i, i * 3),
                 Result = LedResult.SUCCESSFUL
@@ -3863,14 +3865,14 @@ public class SeedData
             leds.Add(led);
 
             // Offers
-            var offerId = random.Next(123456789, 999999999) + i * 3;
+            var offerId = random.Next(123456789, 999999999) + i * 3 + 3246;
             Offer offer = new Offer()
             {
                 Id = offerId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Date = DateTime.Now,
-                Code = $"Code CO-{i}",
+                Code = $"Code M CO-{i}",
                 TypeId = offerTypes[random.Next(0, 2)].Id,
                 StateId = offerStates[random.Next(0, 1)].Id,
                 Result = OfferResult.SUCCESSFUL,
@@ -3883,13 +3885,13 @@ public class SeedData
             offers.Add(offer);
 
             // Projects 
-            var projectId = random.Next(123456789, 999999999) + i * 2;
+            var projectId = random.Next(123456789, 999999999) + i * 3 + 3466;
             Project project = new Project()
             {
                 Id = projectId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Code = "D-22-16" + Convert.ToString(i),
+                Code = "D-M-22-16" + Convert.ToString(i),
                 Name = "Project_Missed_DeadLine_" + Convert.ToString(i),
                 Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
                 StartDate = DateTime.Now,
@@ -3929,7 +3931,7 @@ public class SeedData
                 Vat = i % 2 == 0 ? Vat.TwentyFour : Vat.Seventeen,
                 Fee = 1000 * i,
                 Number = random.Next(10000, 90000),
-                Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
+                Mark = "Signature M 14234" + Convert.ToString(i * random.Next(1, 7)),
                 ProjectId = projectId,
                 TypeId = invoiceTypes[0].Id
             };
