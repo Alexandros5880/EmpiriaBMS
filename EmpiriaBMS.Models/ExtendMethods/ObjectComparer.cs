@@ -14,7 +14,7 @@ public static class ObjectComparer
         var type = typeof(T);
 
         var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                     .Where(prop => prop.Name == "Id" || prop.PropertyType == typeof(DateTime));
+                     .Where(prop => prop.Name != "Id" || prop.PropertyType != typeof(DateTime));
 
         foreach (var property in properties)
         {
