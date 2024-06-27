@@ -148,6 +148,6 @@ else
     {
         var users = await DataProvider.Users.GetAllWithRoles();
         _allUsers.Clear();
-        users.ToList().ForEach(_allUsers.Add);
+        users.Where(u => u.Roles.Count > 0).ToList().ForEach(_allUsers.Add);
     }
 }
