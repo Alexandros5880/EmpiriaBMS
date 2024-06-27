@@ -28,6 +28,7 @@ public class AppDbContext : DbContext
     public DbSet<DeliverableType>? DeliverableTypes { get; set; }
     public DbSet<SupportiveWork>? SupportiveWorks { get; set; }
     public DbSet<SupportiveWorkType>? SupportiveWorkTypes { get; set; }
+    public DbSet<SupportiveWorkEmployee>? SupportiveWorkEmployees { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
     public DbSet<InvoiceType>? InvoicesTypes { get; set; }
     public DbSet<Contract>? Contracts { get; set; }
@@ -50,7 +51,6 @@ public class AppDbContext : DbContext
     public DbSet<UserRole>? UsersRoles { get; set; }
     public DbSet<RolePermission>? RolesPermissions { get; set; }
     public DbSet<DeliverableEmployee>? DeliverablesEmployees { get; set; }
-    public DbSet<SupportiveWorkEmployee>? OthersEmployees { get; set; }
     public DbSet<ProjectSubConstructor>? ProjectsSubConstructors { get; set; }
     public DbSet<TeamsRequestedUser>? TeamsRequestedUser { get; set; }
     public DbSet<DisciplineEngineer>? DisciplinesEngineers { get; set; }
@@ -3456,7 +3456,7 @@ public class AppDbContext : DbContext
             }
             #endregion
 
-            #region Create Others
+            #region Create SupportiveWorks
             List<SupportiveWork> others = new List<SupportiveWork>();
             for (var i = 0; i < disciplines.Count; i++)
             {

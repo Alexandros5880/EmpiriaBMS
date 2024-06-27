@@ -23,6 +23,10 @@ public class SeedData
     private List<User> engineers = new List<User>();
     private List<User> projectManagers = new List<User>();
     private List<Project> projects = new List<Project>();
+    private List<Project> msprojects = new List<Project>();
+    private List<Discipline> disciplines = new List<Discipline>();
+    private List<Deliverable> deliverables = new List<Deliverable>();
+    private List<SupportiveWork> supportiveWorks = new List<SupportiveWork>();
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
@@ -54,6 +58,12 @@ public class SeedData
         await CreateProjectManagers();
 
         await CreateProjects();
+        await CreateMissedDeadLineProjects();
+        await CreateDisciplines();
+        await CreateDeliverables();
+        await CreateSupportiveWorks();
+        await ConnectAllEngineersWithEveryDisclipline();
+        await ConnectEveryDraftmanWithEverySupportiveWork();
     }
 
     protected async Task CeatePermissions()
@@ -3801,20 +3811,438 @@ public class SeedData
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", false);
         }
+    }
 
+    protected async Task CreateMissedDeadLineProjects()
+    {
+        Random random = new Random();
 
+        msprojects.Clear();
+
+        List<Client> clients = new List<Client>();
+        List<Led> leds = new List<Led>();
+        List<Offer> offers = new List<Offer>();
+        List<Invoice> invoices = new List<Invoice>();
+
+        var categoriesLength = projectCategories.Count();
+        var stagesLength = projectStages.Count();
+        var projectManagersLength = projectManagers.Count();
+
+        var categoriesIndex = 0;
+        var stagesIndex = 0;
+        var projectManagersIndex = 0;
+
+        for (var i = 1; i <= projectSubCategories.Count(); i++)
+        {
+            // Led
+            var clientId = random.Next(123456789, 999999999) + i * 3;
+            Client client = new Client()
+            {
+                Id = clientId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                FirstName = $"Client-Led-{i}",
+                LastName = "LastName",
+                ProxyAddress = "alexandrosplatanios15@gmail.com",
+                Phone1 = "6949277783"
+            };
+            clients.Add(client);
+
+            // Led
+            var ledId = random.Next(123456789, 999999999) + i * 3;
+            Led led = new Led()
+            {
+                Id = ledId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Led-{i}",
+                ClientId = clientId,
+                PotencialFee = random.Next(i, i * 3),
+                Result = LedResult.SUCCESSFUL
+            };
+            leds.Add(led);
+
+            // Offers
+            var offerId = random.Next(123456789, 999999999) + i * 3;
+            Offer offer = new Offer()
+            {
+                Id = offerId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Code = $"Code CO-{i}",
+                TypeId = offerTypes[random.Next(0, 2)].Id,
+                StateId = offerStates[random.Next(0, 1)].Id,
+                Result = OfferResult.SUCCESSFUL,
+                PudgetPrice = 1000 * i * 3,
+                OfferPrice = 1000 * i * 2,
+                CategoryId = projectCategories[categoriesIndex].Id,
+                SubCategoryId = projectSubCategories[i - 1].Id,
+                LedId = ledId,
+            };
+            offers.Add(offer);
+
+            // Projects 
+            var projectId = random.Next(123456789, 999999999) + i * 2;
+            Project project = new Project()
+            {
+                Id = projectId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Code = "D-22-16" + Convert.ToString(i),
+                Name = "Project_Missed_DeadLine_" + Convert.ToString(i),
+                Description = "Test Description Project_" + Convert.ToString(i * random.Next(1, 7)),
+                StartDate = DateTime.Now,
+                DeadLine = DateTime.Now.AddMonths(-i),
+                EstimatedMandays = 100 / 8,
+                EstimatedHours = 1500,
+                DeclaredCompleted = 0,
+                EstimatedCompleted = 0,
+                StageId = projectStages[stagesIndex].Id,
+                Active = i % 2 == 0 ? true : false,
+                ProjectManagerId = projectManagers[projectManagersIndex].Id,
+                OfferId = offerId
+            };
+            msprojects.Add(project);
+
+            projectManagersIndex++;
+            if (projectManagersIndex >= projectManagersLength - 1)
+                projectManagersIndex = 0;
+
+            categoriesIndex++;
+            if (categoriesIndex >= categoriesLength)
+                categoriesIndex = 0;
+
+            stagesIndex++;
+            if (stagesIndex >= stagesLength - 1)
+                stagesIndex = 0;
+
+            // Invoices
+            var invoiceId = random.Next(123456789, 999999999) + i * 3;
+            Invoice invoice = new Invoice()
+            {
+                Id = invoiceId,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Date = DateTime.Now,
+                Total = i * Math.Pow(1, 3),
+                Vat = i % 2 == 0 ? Vat.TwentyFour : Vat.Seventeen,
+                Fee = 1000 * i,
+                Number = random.Next(10000, 90000),
+                Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
+                ProjectId = projectId,
+                TypeId = invoiceTypes[0].Id
+            };
+            invoices.Add(invoice);
+        }
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            // Clients
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
+            foreach (var item in clients)
+            {
+                try
+                {
+                    await SeedIfNotExists<Client>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
+
+            // Leds
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", true);
+            foreach (var item in leds)
+            {
+                try
+                {
+                    await SeedIfNotExists<Led>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", false);
+
+            // Offers
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", true);
+            foreach (var item in offers)
+            {
+                try
+                {
+                    await SeedIfNotExists<Offer>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", false);
+
+            // Projects
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", true);
+            foreach (var item in msprojects)
+            {
+                try
+                {
+                    await SeedIfNotExists<Project>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", false);
+
+            // Invoices
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", true);
+            foreach (var item in invoices)
+            {
+                try
+                {
+                    await SeedIfNotExists<Invoice>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", false);
+        }
+    }
+
+    protected async Task CreateDisciplines()
+    {
+        Random random = new Random();
+
+        disciplines.Clear();
+
+        for (var i = 0; i < projects.Count; i++)
+        {
+            // Create 3 Disciplines With Random Type
+            List<int> randomTypeIndexes = new List<int>();
+            for (int j = 0; j < 3; j++)
+            {
+                int typeIndex = GetUniqueRandomNumber(random, randomTypeIndexes, 0, disciplineTypes.Count - 1);
+                var discipline_Id = random.Next(123456789, 999999999) * 8;
+                Discipline discipline = new Discipline()
+                {
+                    Id = discipline_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    TypeId = disciplineTypes[typeIndex].Id,
+                    EstimatedMandays = 50 + j,
+                    EstimatedHours = (50 + j) * 8,
+                    ProjectId = projects[i].Id,
+                    DeclaredCompleted = 0
+                };
+                disciplines.Add(discipline);
+            }
+        }
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Disciplines", true);
+            foreach (var item in disciplines)
+            {
+                try
+                {
+                    await SeedIfNotExists<Discipline>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateDisciplines(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Disciplines", false);
+        }
+    }
+
+    protected async Task CreateDeliverables()
+    {
+        Random random = new Random();
+
+        deliverables.Clear();
+
+        for (var i = 0; i < disciplines.Count; i++)
+        {
+            for (int j = 0; j < deliverableTypes.Count; j++)
+            {
+                var drawing_Id = random.Next(123456789, 999999999);
+                Deliverable drawing = new Deliverable()
+                {
+                    Id = drawing_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    TypeId = deliverableTypes[j].Id,
+                    DisciplineId = disciplines[i].Id,
+                    CompletionEstimation = 0,
+                    CompletionDate = DateTime.Now.AddDays(11)
+                };
+                deliverables.Add(drawing);
+            }
+        }
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Deliverables", true);
+            foreach (var item in deliverables)
+            {
+                try
+                {
+                    await SeedIfNotExists<Deliverable>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateDeliverables(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "Deliverables", false);
+        }
+    }
+
+    protected async Task CreateSupportiveWorks()
+    {
+        Random random = new Random();
+
+        supportiveWorks.Clear();
+
+        for (var i = 0; i < disciplines.Count; i++)
+        {
+            for (int j = 0; j < otherTypes.Count; j++)
+            {
+                var other_Id = random.Next(123456789, 999999999);
+                SupportiveWork other = new SupportiveWork()
+                {
+                    Id = other_Id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    TypeId = otherTypes[j].Id,
+                    DisciplineId = disciplines[i].Id,
+                    CompletionEstimation = 0
+                };
+                supportiveWorks.Add(other);
+            }
+        }
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorks", true);
+            foreach (var item in supportiveWorks)
+            {
+                try
+                {
+                    await SeedIfNotExists<SupportiveWork>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorks(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorks", false);
+        }
+    }
+
+    protected async Task ConnectAllEngineersWithEveryDisclipline()
+    {
+        Random random = new Random();
+
+        List<DisciplineEngineer> data = new List<DisciplineEngineer>();
+
+        for (var d = 0; d < disciplines.Count; d++)
+        {
+            for (var e = 0; e < engineers.Count; e++)
+            {
+                DisciplineEngineer de = new DisciplineEngineer()
+                {
+                    Id = random.Next(123456789, 999999999) + d + e,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    DisciplineId = disciplines[d].Id,
+                    EngineerId = engineers[e].Id
+                };
+                data.Add(de);
+            }
+        }
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplinesEngineers", true);
+            foreach (var item in data)
+            {
+                try
+                {
+                    await SeedIfNotExists<DisciplineEngineer>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplinesEngineers", false);
+        }
+    }
+
+    protected async Task ConnectEveryDraftmanWithEverySupportiveWork()
+    {
+        Random random = new Random();
+
+        List<SupportiveWorkEmployee> data = new List<SupportiveWorkEmployee>();
+
+        for (var o = 0; o < supportiveWorks.Count; o++)
+        {
+            for (var d = 0; d < draftsmen.Count; d++)
+            {
+                SupportiveWorkEmployee de_1 = new SupportiveWorkEmployee()
+                {
+                    Id = random.Next(123456789, 999999999) * 9,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    EmployeeId = draftsmen[d].Id,
+                    SupportiveWorkId = supportiveWorks[o].Id
+                };
+                data.Add(de_1);
+            }
+        }
+
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkEmployees", true);
+            foreach (var item in data)
+            {
+                try
+                {
+                    await SeedIfNotExists<SupportiveWorkEmployee>(context, item);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log Exception
+                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                }
+            }
+            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkEmployees", false);
+        }
     }
 
     #region Private Helper Methods
-    private static async Task SeedIfNotExists<T>(DbContext context, T entity) where T : class
+    private static async Task SeedIfNotExists<T>(DbContext context, T entity)
+    where T : class, IEntity
     {
-        var primaryKey = "Id";
-
-        if (primaryKey == null)
-            throw new InvalidOperationException("The primary key with the name 'Id' was not found.");
-
-        var primaryKeyValue = entity.GetType().GetProperty(primaryKey).GetValue(entity);
-        bool exists = context.Set<T>().Any(e => EF.Property<object>(e, primaryKey).Equals(primaryKeyValue));
+        var id = entity.Id;
+        bool exists = context.Set<T>().Any(e => e.Id == id);
         if (!exists)
         {
             var result = await context.Set<T>().AddAsync(entity);
@@ -3822,7 +4250,7 @@ public class SeedData
         }
         else
         {
-            Console.WriteLine($"\n\nEntity of type: {entity.GetType().Name} with {primaryKey}: {primaryKeyValue} Exists\n\n");
+            Console.WriteLine($"\n\nEntity of type: {entity.GetType().Name} with Id: {id} Exists\n\n");
         }
     }
 
@@ -3832,6 +4260,19 @@ public class SeedData
             throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
 
         return list[index];
+    }
+
+    private static int GetUniqueRandomNumber(Random random, List<int> selectedNumbers, int min, int max)
+    {
+        int number;
+        do
+        {
+            number = random.Next(min, max);
+        } while (selectedNumbers.Contains(number));
+
+        // Add the selected number to the list
+        selectedNumbers.Add(number);
+        return number;
     }
     #endregion
 }
