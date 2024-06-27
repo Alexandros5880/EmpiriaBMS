@@ -529,7 +529,6 @@ public class SeedData
                     IsEmployee = true,
                     IsEditable = false
                 };
-                await SeedIfNotExists<Role>(context, role_6);
 
                 // COO
                 var role_4_id = random.Next(123456789, 999999999);
@@ -543,7 +542,6 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_6_id
                 };
-                await SeedIfNotExists<Role>(context, role_4);
 
                 // CTO
                 var role_5_id = random.Next(123456789, 999999999);
@@ -557,7 +555,6 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_4_id
                 };
-                await SeedIfNotExists<Role>(context, role_5);
 
                 // Secretariat
                 var role_10_id = random.Next(123456789, 999999999);
@@ -571,7 +568,6 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_5_id
                 };
-                await SeedIfNotExists<Role>(context, role_10);
 
                 // Project Manager
                 var role_3_id = random.Next(123456789, 999999999);
@@ -585,7 +581,6 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_5_id
                 };
-                await SeedIfNotExists<Role>(context, role_3);
 
                 // Engineer
                 var role_2_id = random.Next(123456789, 999999999);
@@ -599,7 +594,6 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_3_id
                 };
-                await SeedIfNotExists<Role>(context, role_2);
 
                 // Designer
                 var role_1_id = random.Next(123456789, 999999999);
@@ -613,7 +607,6 @@ public class SeedData
                     IsEditable = false,
                     ParentRoleId = role_2_id
                 };
-                await SeedIfNotExists<Role>(context, role_1);
 
                 // Guest
                 var role_7_id = random.Next(123456789, 999999999);
@@ -626,7 +619,6 @@ public class SeedData
                     IsEmployee = false,
                     IsEditable = false
                 };
-                await SeedIfNotExists<Role>(context, role_7);
 
                 // Customer
                 var role_8_id = random.Next(123456789, 999999999);
@@ -639,7 +631,6 @@ public class SeedData
                     IsEmployee = false,
                     IsEditable = false
                 };
-                await SeedIfNotExists<Role>(context, role_8);
 
                 // Admin
                 var role_9_id = random.Next(123456789, 999999999);
@@ -652,7 +643,6 @@ public class SeedData
                     IsEmployee = false,
                     IsEditable = false
                 };
-                await SeedIfNotExists<Role>(context, role_9);
 
                 // Engineer SUB
                 var role_11_id = random.Next(123456789, 999999999);
@@ -665,7 +655,31 @@ public class SeedData
                     IsEmployee = false,
                     IsEditable = false
                 };
+
+
+                await SeedIfNotExists<Role>(context, role_1);
+                await SeedIfNotExists<Role>(context, role_2);
+                await SeedIfNotExists<Role>(context, role_3);
+                await SeedIfNotExists<Role>(context, role_4);
+                await SeedIfNotExists<Role>(context, role_5);
+                await SeedIfNotExists<Role>(context, role_6);
+                await SeedIfNotExists<Role>(context, role_7);
+                await SeedIfNotExists<Role>(context, role_8);
+                await SeedIfNotExists<Role>(context, role_9);
+                await SeedIfNotExists<Role>(context, role_10);
                 await SeedIfNotExists<Role>(context, role_11);
+
+                rolesIds.Add(role_1_id);
+                rolesIds.Add(role_2_id);
+                rolesIds.Add(role_3_id);
+                rolesIds.Add(role_4_id);
+                rolesIds.Add(role_5_id);
+                rolesIds.Add(role_6_id);
+                rolesIds.Add(role_7_id);
+                rolesIds.Add(role_8_id);
+                rolesIds.Add(role_9_id);
+                rolesIds.Add(role_10_id);
+                rolesIds.Add(role_11_id);
             }
         }
         catch (Exception ex)
@@ -690,8 +704,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_1_id,
-                    PermissionId = per_1_id
+                    RoleId = GetRecordAtIndex(rolesIds, 0),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 0)
                 };
 
                 // Designer || Dashboard Edit My Hours
@@ -700,8 +714,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_1_id,
-                    PermissionId = per_2_id
+                    RoleId = GetRecordAtIndex(rolesIds, 0),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 1)
                 };
 
                 // Designer || Dashboard See My Hours
@@ -710,8 +724,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_1_id,
-                    PermissionId = per_8_id
+                    RoleId = GetRecordAtIndex(rolesIds, 0),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 7)
                 };
 
 
@@ -722,8 +736,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_2_id,
-                    PermissionId = per_1_id
+                    RoleId = GetRecordAtIndex(rolesIds, 1),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 0)
                 };
 
                 // Engineer || Dashboard Edit My Hours
@@ -732,8 +746,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_2_id,
-                    PermissionId = per_2_id
+                    RoleId = GetRecordAtIndex(rolesIds, 1),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 1)
                 };
 
                 // Engineer || Dashboard Assign Designer
@@ -742,8 +756,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_2_id,
-                    PermissionId = per_3_id
+                    RoleId = GetRecordAtIndex(rolesIds, 1),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 2)
                 };
 
                 // Engineer || Dashboard See My Hours
@@ -752,8 +766,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_2_id,
-                    PermissionId = per_8_id
+                    RoleId = GetRecordAtIndex(rolesIds, 1),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 7)
                 };
 
                 // Engineer || See All Disciplines
@@ -762,8 +776,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_2_id,
-                    PermissionId = per_9_id
+                    RoleId = GetRecordAtIndex(rolesIds, 1),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 8)
                 };
 
                 // Engineer || See All Deliverables
@@ -772,8 +786,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_2_id,
-                    PermissionId = per_10_id
+                    RoleId = GetRecordAtIndex(rolesIds, 1),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 9)
                 };
 
 
@@ -784,8 +798,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_3_id,
-                    PermissionId = per_1_id
+                    RoleId = GetRecordAtIndex(rolesIds, 2),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 0)
                 };
 
                 // Project Manager || Dashboard Edit My Hours
@@ -794,8 +808,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_3_id,
-                    PermissionId = per_2_id
+                    RoleId = GetRecordAtIndex(rolesIds, 2),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 1)
                 };
 
                 // Project Manager || Dashboard Assign Engineer
@@ -804,8 +818,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_3_id,
-                    PermissionId = per_4_id
+                    RoleId = GetRecordAtIndex(rolesIds, 2),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 3)
                 };
 
                 // Project Manager || Dashboard See My Hours
@@ -814,8 +828,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_3_id,
-                    PermissionId = per_8_id
+                    RoleId = GetRecordAtIndex(rolesIds, 2),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 7)
                 };
 
                 // Project Manager || See All Disciplines
@@ -824,8 +838,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_3_id,
-                    PermissionId = per_9_id
+                    RoleId = GetRecordAtIndex(rolesIds, 2),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 8)
                 };
 
                 // Project Manager || See All Deliverables
@@ -834,8 +848,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_3_id,
-                    PermissionId = per_10_id
+                    RoleId = GetRecordAtIndex(rolesIds, 2),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 9)
                 };
 
                 // Project Manager || Dashboard See KPIS
@@ -844,8 +858,8 @@ public class SeedData
                     Id = random.Next(123456789, 999999999) * 9,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    RoleId = role_3_id,
-                    PermissionId = per_17_id
+                    RoleId = GetRecordAtIndex(rolesIds, 2),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 16)
                 };
 
                 // Project Manager || See My Projects Missed DeadLine KPI
@@ -1777,8 +1791,8 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, rp_13);
                 await SeedIfNotExists<RolePermission>(context, rp_14);
                 await SeedIfNotExists<RolePermission>(context, rp_15);
-                await SeedIfNotExists<RolePermission>(context, rp_16);
-                await SeedIfNotExists<RolePermission>(context, rp_17);
+                //await SeedIfNotExists<RolePermission>(context, rp_16);
+                //await SeedIfNotExists<RolePermission>(context, rp_17);
                 await SeedIfNotExists<RolePermission>(context, rp_18);
                 await SeedIfNotExists<RolePermission>(context, rp_19);
                 await SeedIfNotExists<RolePermission>(context, rp_20);
@@ -1787,7 +1801,7 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, rp_23);
                 await SeedIfNotExists<RolePermission>(context, rp_24);
                 await SeedIfNotExists<RolePermission>(context, rp_25);
-                await SeedIfNotExists<RolePermission>(context, rp_26);
+                //await SeedIfNotExists<RolePermission>(context, rp_26);
                 await SeedIfNotExists<RolePermission>(context, rp_27);
                 await SeedIfNotExists<RolePermission>(context, rp_28);
                 await SeedIfNotExists<RolePermission>(context, rp_29);
@@ -1814,9 +1828,9 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, rp_50);
                 await SeedIfNotExists<RolePermission>(context, rp_51);
                 await SeedIfNotExists<RolePermission>(context, rp_52);
-                await SeedIfNotExists<RolePermission>(context, rp_53);
-                await SeedIfNotExists<RolePermission>(context, rp_54);
-                await SeedIfNotExists<RolePermission>(context, rp_55);
+                //await SeedIfNotExists<RolePermission>(context, rp_53);
+                //await SeedIfNotExists<RolePermission>(context, rp_54);
+                //await SeedIfNotExists<RolePermission>(context, rp_55);
                 await SeedIfNotExists<RolePermission>(context, rp_56);
                 await SeedIfNotExists<RolePermission>(context, rp_57);
                 await SeedIfNotExists<RolePermission>(context, rp_58);
@@ -1850,17 +1864,17 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, rp_86);
                 await SeedIfNotExists<RolePermission>(context, rp_87);
                 await SeedIfNotExists<RolePermission>(context, rp_88);
-                await SeedIfNotExists<RolePermission>(context, rp_89);
+                //await SeedIfNotExists<RolePermission>(context, rp_89);
                 await SeedIfNotExists<RolePermission>(context, rp_90);
                 await SeedIfNotExists<RolePermission>(context, rp_91);
                 await SeedIfNotExists<RolePermission>(context, rp_92);
                 await SeedIfNotExists<RolePermission>(context, rp_93);
                 await SeedIfNotExists<RolePermission>(context, rp_94);
-                await SeedIfNotExists<RolePermission>(context, rp_95);
-                await SeedIfNotExists<RolePermission>(context, rp_96);
-                await SeedIfNotExists<RolePermission>(context, rp_97);
-                await SeedIfNotExists<RolePermission>(context, rp_98);
-                await SeedIfNotExists<RolePermission>(context, rp_99);
+                //await SeedIfNotExists<RolePermission>(context, rp_95);
+                //await SeedIfNotExists<RolePermission>(context, rp_96);
+                //await SeedIfNotExists<RolePermission>(context, rp_97);
+                //await SeedIfNotExists<RolePermission>(context, rp_98);
+                //await SeedIfNotExists<RolePermission>(context, rp_99);
                 await SeedIfNotExists<RolePermission>(context, rp_100);
                 await SeedIfNotExists<RolePermission>(context, rp_101);
                 await SeedIfNotExists<RolePermission>(context, rp_102);
@@ -1880,8 +1894,8 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, rp_116);
                 await SeedIfNotExists<RolePermission>(context, rp_117);
                 await SeedIfNotExists<RolePermission>(context, rp_118);
-                await SeedIfNotExists<RolePermission>(context, rp_119);
-                await SeedIfNotExists<RolePermission>(context, rp_120);
+                //await SeedIfNotExists<RolePermission>(context, rp_119);
+                //await SeedIfNotExists<RolePermission>(context, rp_120);
             }
         }
         catch (Exception ex)
@@ -2089,6 +2103,7 @@ public class SeedData
         }
     }
 
+    #region Private Helper Methods
     private static async Task SeedIfNotExists<T>(DbContext context, T entity) where T : class
     {
         var primaryKey = context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.First().Name;
@@ -2100,4 +2115,13 @@ public class SeedData
             context.SaveChanges();
         }
     }
+
+    private static T GetRecordAtIndex<T>(List<T> list, int index)
+    {
+        if (index < 0 || index >= list.Count)
+            throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
+
+        return list[index];
+    }
+    #endregion
 }
