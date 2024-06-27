@@ -5,6 +5,10 @@ namespace EmpiriaBMS.Core.Services;
 
 public class SeedData
 {
+    private List<int> permissionsIds = new List<int>();
+    private List<int> rolesIds = new List<int>();
+
+
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
     public SeedData(IDbContextFactory<AppDbContext> dbFactory)
@@ -459,6 +463,44 @@ public class SeedData
                 await SeedIfNotExists<Permission>(context, per_34);
                 await SeedIfNotExists<Permission>(context, per_35);
                 await SeedIfNotExists<Permission>(context, per_36);
+
+                permissionsIds.Clear();
+                permissionsIds.Add(per_1.Id);
+                permissionsIds.Add(per_2.Id);
+                permissionsIds.Add(per_3.Id);
+                permissionsIds.Add(per_4.Id);
+                permissionsIds.Add(per_5.Id);
+                permissionsIds.Add(per_6.Id);
+                permissionsIds.Add(per_7.Id);
+                permissionsIds.Add(per_8.Id);
+                permissionsIds.Add(per_9.Id);
+                permissionsIds.Add(per_10.Id);
+                permissionsIds.Add(per_11.Id);
+                permissionsIds.Add(per_12.Id);
+                permissionsIds.Add(per_13.Id);
+                permissionsIds.Add(per_14.Id);
+                permissionsIds.Add(per_15.Id);
+                permissionsIds.Add(per_16.Id);
+                permissionsIds.Add(per_17.Id);
+                permissionsIds.Add(per_18.Id);
+                permissionsIds.Add(per_19.Id);
+                permissionsIds.Add(per_20.Id);
+                permissionsIds.Add(per_21.Id);
+                permissionsIds.Add(per_22.Id);
+                permissionsIds.Add(per_23.Id);
+                permissionsIds.Add(per_24.Id);
+                permissionsIds.Add(per_25.Id);
+                permissionsIds.Add(per_26.Id);
+                permissionsIds.Add(per_27.Id);
+                permissionsIds.Add(per_28.Id);
+                permissionsIds.Add(per_29.Id);
+                permissionsIds.Add(per_30.Id);
+                permissionsIds.Add(per_31.Id);
+                permissionsIds.Add(per_32.Id);
+                permissionsIds.Add(per_33.Id);
+                permissionsIds.Add(per_34.Id);
+                permissionsIds.Add(per_35.Id);
+                permissionsIds.Add(per_36.Id);
             }
         }
         catch (Exception ex)
