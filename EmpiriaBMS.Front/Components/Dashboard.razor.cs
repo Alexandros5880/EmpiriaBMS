@@ -159,7 +159,7 @@ public partial class Dashboard : IDisposable
     private FluentDialog _addEditSupportiveWorkDialog;
     private bool _isAddEditSupportiveWorkDialogOdepened = false;
     private OtherDetailed supportiveWorkrCompoment;
-    private bool __hasSapportiveWorksSelections = true;
+    private bool _hasSapportiveWorksSelections = true;
 
     // On Delete Dialog
     private FluentDialog _deleteDialog;
@@ -247,7 +247,7 @@ public partial class Dashboard : IDisposable
         if (_selectedDiscipline != null)
         {
             _hasDeliverablessSelections = await _dataProvider.DeliverablesTypes.HasDeliverableTypesSelections(_selectedDiscipline.Id);
-            __hasSapportiveWorksSelections = await _dataProvider.SupportiveWorksTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
+            _hasSapportiveWorksSelections = await _dataProvider.SupportiveWorksTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
         }
     }
 
