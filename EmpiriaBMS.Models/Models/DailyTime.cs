@@ -11,6 +11,8 @@ public class DailyTime : Entity
 
     public Timespan TimeSpan { get; set; }
 
+    public bool IsEditByAdmin { get; set; }
+
     public int? DailyUserId { get; set; }
     public User? DailyUser { get; set; }
 

@@ -1015,7 +1015,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 Date = DateTime.Now,
                 DailyUserId = userId,
                 ProjectId = projectId,
-                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds)
+                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds),
+                IsEditByAdmin = false
             };
             await _context.Set<DailyTime>().AddAsync(time);
 

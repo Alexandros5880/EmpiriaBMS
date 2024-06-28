@@ -204,7 +204,9 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
                         timeSpans[i].Days,
                         timeSpans[i].Hours,
                         timeSpans[i].Minutes,
-                        timeSpans[i].Seconds)
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = false
                 };
                 await _context.Set<DailyTime>().AddAsync(time);
             }

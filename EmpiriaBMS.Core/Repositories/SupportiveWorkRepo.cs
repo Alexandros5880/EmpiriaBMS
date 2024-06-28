@@ -207,7 +207,9 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
                         timeSpans[i].Days,
                         timeSpans[i].Hours,
                         timeSpans[i].Minutes,
-                        timeSpans[i].Seconds)
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = false
                 };
                 await _context.Set<DailyTime>().AddAsync(time);
             }
