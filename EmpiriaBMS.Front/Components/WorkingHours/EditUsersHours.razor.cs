@@ -12,7 +12,7 @@ public partial class EditUsersHours
     public bool IsFromDashboard { get; set; } = false;
 
     [Parameter]
-    public TimeSpan RemainingTime { get; set; } = TimeSpan.Zero;
+    public TimeSpan RemainingTime { get; set; }
 
     [Parameter]
     public EventCallback? OnEnd { get; set; } = null;
@@ -78,6 +78,8 @@ public partial class EditUsersHours
 
         if (firstRender)
         {
+            RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
+
             _users.Clear();
             _leds.Clear();
             _offers.Clear();
