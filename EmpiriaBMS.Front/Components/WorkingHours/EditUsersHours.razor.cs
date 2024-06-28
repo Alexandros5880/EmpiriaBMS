@@ -36,6 +36,8 @@ public partial class EditUsersHours
         CorporateEventTime = TimeSpan.Zero,
     };
 
+    private bool _hasChanged = false;
+
     #region Selections Lists
     private ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
     private ObservableCollection<LedVM> _leds = new ObservableCollection<LedVM>();
@@ -252,6 +254,8 @@ public partial class EditUsersHours
         else
             _ledsChanged.Add(led);
 
+        _hasChanged = true;
+
         StateHasChanged();
     }
 
@@ -272,6 +276,8 @@ public partial class EditUsersHours
         }
         else
             _offersChanged.Add(offer);
+
+        _hasChanged = true;
 
         StateHasChanged();
     }
@@ -294,6 +300,8 @@ public partial class EditUsersHours
         else
             _projectsChanged.Add(project);
 
+        _hasChanged = true;
+
         StateHasChanged();
     }
 
@@ -315,6 +323,8 @@ public partial class EditUsersHours
         else
             _deliverablesChanged.Add(draw);
 
+        _hasChanged = true;
+
         StateHasChanged();
     }
 
@@ -329,6 +339,8 @@ public partial class EditUsersHours
         }
         else
             _deliverablesChanged.Add(draw);
+
+        _hasChanged = true;
 
         StateHasChanged();
     }
@@ -351,6 +363,8 @@ public partial class EditUsersHours
         else
             _supportiveWorkChanged.Add(other);
 
+        _hasChanged = true;
+
         StateHasChanged();
     }
 
@@ -363,6 +377,8 @@ public partial class EditUsersHours
         RemainingTime += (-updatedTime);
 
         _editLogedUserTimes.PersonalTime = newTimeSpan;
+
+        _hasChanged = true;
 
         StateHasChanged();
     }
@@ -377,6 +393,8 @@ public partial class EditUsersHours
 
         _editLogedUserTimes.TrainingTime = newTimeSpan;
 
+        _hasChanged = true;
+
         StateHasChanged();
     }
 
@@ -389,6 +407,8 @@ public partial class EditUsersHours
         RemainingTime += (-updatedTime);
 
         _editLogedUserTimes.CorporateEventTime = newTimeSpan;
+
+        _hasChanged = true;
 
         StateHasChanged();
     }
@@ -524,6 +544,9 @@ public partial class EditUsersHours
 
     public async Task Save()
     {
+        if (!_hasChanged)
+            return;
+
         try
         {
             // Validate
@@ -532,7 +555,6 @@ public partial class EditUsersHours
                 // TODO: Display a message to update his hours.
                 return;
             }
-
 
             // Update Db
             _startLoading = true;
@@ -597,7 +619,8 @@ public partial class EditUsersHours
 
             await _getProjects();
 
-            await OnEnd?.InvokeAsync();
+            if (OnEnd != null)
+                await OnEnd?.InvokeAsync();
 
             StateHasChanged();
         }
