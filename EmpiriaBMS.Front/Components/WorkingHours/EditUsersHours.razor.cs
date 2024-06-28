@@ -54,7 +54,7 @@ public partial class EditUsersHours
     private OfferVM _selectedOffer = new OfferVM();
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
-    private DeliverableVM __selectedDeliverable = new DeliverableVM();
+    private DeliverableVM _selectedDeliverable = new DeliverableVM();
     private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
     #endregion
 
@@ -79,37 +79,44 @@ public partial class EditUsersHours
         if (firstRender)
         {
             RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
-
-            _users.Clear();
-            _leds.Clear();
-            _offers.Clear();
-            _projects.Clear();
-            _supportiveWork.Clear();
-            _deliverables.Clear();
-            _disciplines.Clear();
-            _selectedUser = null;
-            _selectedLed = null;
-            _selectedOffer = null;
-            _selectedProject = null;
-            _selectedSupportiveWork = null;
-            __selectedDeliverable = null;
-            _selectedDiscipline = null;
-            _selectedProject = null;
-
-            if (!IsFromDashboard)
-                await _getUsers();
-
-            if (workOnLeds || seeAdmin)
-                await _getLeds();
-
-            if (workOnOffers || seeAdmin)
-                await _getOffers();
-
-            if (!workOnLeds && !workOnOffers)
-                await _getProjects();
-
-            StateHasChanged();
+            await _refresh();
         }
+    }
+
+    private async Task _refresh(TimeSpan? timespan = null)
+    {
+        if (timespan != null)
+            RemainingTime = (TimeSpan)timespan;
+
+        _users.Clear();
+        _leds.Clear();
+        _offers.Clear();
+        _projects.Clear();
+        _supportiveWork.Clear();
+        _deliverables.Clear();
+        _disciplines.Clear();
+        _selectedUser = null;
+        _selectedLed = null;
+        _selectedOffer = null;
+        _selectedProject = null;
+        _selectedSupportiveWork = null;
+        _selectedDeliverable = null;
+        _selectedDiscipline = null;
+        _selectedProject = null;
+
+        if (!IsFromDashboard)
+            await _getUsers();
+
+        if (workOnLeds || seeAdmin)
+            await _getLeds();
+
+        if (workOnOffers || seeAdmin)
+            await _getOffers();
+
+        if (!workOnLeds && !workOnOffers)
+            await _getProjects();
+
+        StateHasChanged();
     }
 
     #region Get Records
@@ -120,7 +127,7 @@ public partial class EditUsersHours
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
         _leds.Clear();
         _disciplines.Clear();
@@ -147,7 +154,7 @@ public partial class EditUsersHours
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
@@ -172,7 +179,7 @@ public partial class EditUsersHours
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
@@ -196,7 +203,7 @@ public partial class EditUsersHours
     {
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
@@ -436,7 +443,7 @@ public partial class EditUsersHours
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
 
         await _getLeds();
@@ -458,7 +465,7 @@ public partial class EditUsersHours
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
 
         await _getOffers();
@@ -478,7 +485,7 @@ public partial class EditUsersHours
         _selectedOffer = offer;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
 
         await _getProjects(active: true);
@@ -496,7 +503,7 @@ public partial class EditUsersHours
         _disciplines.Clear();
         _selectedProject = project;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
 
         var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
@@ -538,8 +545,8 @@ public partial class EditUsersHours
 
     private void OnSelectDeliverable(DeliverableVM draw)
     {
-        if (draw == null || draw.Id == __selectedDeliverable?.Id) return;
-        __selectedDeliverable = draw;
+        if (draw == null || draw.Id == _selectedDeliverable?.Id) return;
+        _selectedDeliverable = draw;
         StateHasChanged();
     }
 
@@ -626,15 +633,11 @@ public partial class EditUsersHours
             if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
                 await _dataProvider.Users.AddCorporateEventTime(userId, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
 
-            _deliverablesChanged.Clear();
-            _supportiveWorkChanged.Clear();
-
-            await _getProjects();
-
             if (OnEnd != null)
                 await OnEnd?.InvokeAsync();
 
-            StateHasChanged();
+            TimeSpan? timespan = IsFromDashboard ? null : new TimeSpan(300, 0, 0);
+            await _refresh(timespan);
         }
         catch (Exception ex)
         {
