@@ -75,7 +75,7 @@ public class AppDbContext : DbContext
         // Relations
         ModelRelations.CreateRelations(builder);
 
-        bool runSeedData = false;
+        bool runSeedData = true;
 
         if (runSeedData)
         {
@@ -514,6 +514,18 @@ public class AppDbContext : DbContext
                 Ord = 36
             };
             builder.Entity<Permission>().HasData(per_36);
+
+            // Can Change Everybody Hours
+            var per_37_id = random.Next(123456789, 999999999);
+            Permission per_37 = new Permission()
+            {
+                Id = per_37_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Can Change Everybody Hours",
+                Ord = 37
+            };
+            builder.Entity<Permission>().HasData(per_37);
             #endregion
 
             #region Roles
@@ -1370,6 +1382,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_114);
 
+            // CTO || Can Change Everybody Hours
+            RolePermission rp_119 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_37_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_119);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -1713,6 +1736,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_116);
 
+            // CEO || Can Change Everybody Hours
+            RolePermission rp_120 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_37_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_120);
+
 
             // Guest
             // Guest || See Dashboard Layout
@@ -1817,6 +1851,17 @@ public class AppDbContext : DbContext
                 PermissionId = per_36_id
             };
             builder.Entity<RolePermission>().HasData(rp_118);
+
+            // Admin || Can Change Everybody Hours
+            RolePermission rp_121 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_37_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_121);
 
 
             // Secretariat 
