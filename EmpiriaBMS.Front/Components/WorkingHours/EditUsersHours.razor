@@ -150,7 +150,7 @@
                                         <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
                                     </td>
                                     <td class="align-middle">
-                                        <TimeInput MinTime="TimeSpan.Zero"
+                                        <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
                                                    MaxTime="@RemainingTime"
                                                    Time="_deliverable.Time"
                                                    OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
@@ -203,7 +203,7 @@
                                         <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
                                     </td>
                                     <td class="align-middle">
-                                        <TimeInput MinTime="TimeSpan.Zero"
+                                        <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
                                                    MaxTime="@RemainingTime"
                                                    Time="@_supportiveWork.Time"
                                                    OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
@@ -230,7 +230,7 @@
                     {
                         <div class="col-4 text-center">
                             <span class="mb-2 fs-5">Led</span>
-                            <TimeInput MinTime="TimeSpan.Zero"
+                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
                                        MaxTime="@RemainingTime"
                                        Time="_selectedLed.Time"
                                        OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedLed, time)) />
@@ -241,7 +241,7 @@
                     {
                         <div class="col-4 text-center">
                             <span class="mb-2 fs-5">Offer</span>
-                            <TimeInput MinTime="TimeSpan.Zero"
+                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
                                        MaxTime="@RemainingTime"
                                        Time="_selectedOffer.Time"
                                        OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
@@ -252,7 +252,7 @@
                     {
                         <div class="col-4 text-center">
                             <span class="mb-2 fs-5">Project</span>
-                            <TimeInput MinTime="TimeSpan.Zero"
+                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
                                        MaxTime="@RemainingTime"
                                        Time="_selectedProject.Time"
                                        OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
@@ -269,6 +269,7 @@
             <div class="col-12 border rounded mb-1">
                 <SetUserTime LogedUserTimes="@_editLogedUserTimes"
                              RemainingTime="@RemainingTime"
+                             MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
                              OnPersonalTimeChanged="@_onPersonalTimeChanged"
                              OnTrainingTimeChanged="@_onTrainingTimeChanged"
                              OnCorporateTimeChanged="@_onCorporateTimeChanged" />
