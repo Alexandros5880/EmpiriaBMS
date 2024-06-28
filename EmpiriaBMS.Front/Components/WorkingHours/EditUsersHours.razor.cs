@@ -15,7 +15,10 @@ public partial class EditUsersHours
     public TimeSpan RemainingTime { get; set; }
 
     [Parameter]
-    public EventCallback? OnEnd { get; set; } = null;
+    public EventCallback OnEnd { get; set; }
+
+    [Parameter]
+    public EventCallback<TimeSpan> OnTimeChanged { get; set; }
 
     #region Authorization Properties
     bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
@@ -248,7 +251,7 @@ public partial class EditUsersHours
     #endregion
 
     #region On Time Changed
-    private void _onLedTimeChanged(LedVM led, TimeSpan newTimeSpan)
+    private async Task _onLedTimeChanged(LedVM led, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -268,10 +271,12 @@ public partial class EditUsersHours
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onOfferTimeChanged(OfferVM offer, TimeSpan newTimeSpan)
+    private async Task _onOfferTimeChanged(OfferVM offer, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -291,10 +296,12 @@ public partial class EditUsersHours
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onProjectTimeChanged(ProjectVM project, TimeSpan newTimeSpan)
+    private async Task _onProjectTimeChanged(ProjectVM project, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -314,10 +321,12 @@ public partial class EditUsersHours
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onDeliverableTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
+    private async Task _onDeliverableTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -337,10 +346,12 @@ public partial class EditUsersHours
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onDeliverableCompletedChanged(DeliverableVM draw, object val)
+    private async Task _onDeliverableCompletedChanged(DeliverableVM draw, object val)
     {
         draw.CompletionEstimation += Convert.ToInt32(val);
 
@@ -354,10 +365,12 @@ public partial class EditUsersHours
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onOtherTimeChanged(SupportiveWorkVM other, TimeSpan newTimeSpan)
+    private async Task _onOtherTimeChanged(SupportiveWorkVM other, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -377,10 +390,12 @@ public partial class EditUsersHours
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onPersonalTimeChanged(TimeSpan newTimeSpan)
+    private async Task _onPersonalTimeChanged(TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -392,10 +407,12 @@ public partial class EditUsersHours
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onTrainingTimeChanged(TimeSpan newTimeSpan)
+    private async Task _onTrainingTimeChanged(TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -407,10 +424,12 @@ public partial class EditUsersHours
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onCorporateTimeChanged(TimeSpan newTimeSpan)
+    private async Task _onCorporateTimeChanged(TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -421,6 +440,8 @@ public partial class EditUsersHours
         _editLogedUserTimes.CorporateEventTime = newTimeSpan;
 
         _hasChanged = true;
+
+        await OnTimeChanged.InvokeAsync(RemainingTime);
 
         StateHasChanged();
     }
@@ -638,8 +659,7 @@ public partial class EditUsersHours
             if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
                 await _dataProvider.Users.AddCorporateEventTime(userId, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
 
-            if (OnEnd != null)
-                await OnEnd?.InvokeAsync();
+            await OnEnd.InvokeAsync();
 
             TimeSpan? timespan = IsFromDashboard ? null : new TimeSpan(300, 0, 0);
             await _refresh(timespan);

@@ -20,23 +20,26 @@
     <div class="mt-2 row gx-3">
 
         <!-- Select User -->
-        <div class="col selections">
-            <div class="text-center">
-                <h5>Select User</h5>
+        @if (!IsFromDashboard)
+        {
+            <div class="col selections">
+                <div class="text-center">
+                    <h5>Select User</h5>
+                </div>
+                <select class="form-select form-select-lg"
+                        aria-label="Select User"
+                        value="@_selectedUser?.Id"
+                        @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
+                    <option value="0" selected>Select User</option>
+                    @foreach (var user in _users)
+                    {
+                        <option value="@user.Id">
+                            <span>@user.LastName</span> &ensp; <span>@user.FirstName</span>
+                        </option>
+                    }
+                </select>
             </div>
-            <select class="form-select form-select-lg"
-                    aria-label="Select User"
-                    value="@_selectedUser?.Id"
-                    @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
-                <option value="0" selected>Select User</option>
-                @foreach (var user in _users)
-                {
-                    <option value="@user.Id">
-                        <span>@user.LastName</span> &ensp; <span>@user.FirstName</span>
-                    </option>
-                }
-            </select>
-        </div>
+        }
 
         <!-- Select Led -->
         @if (workOnLeds || seeAdmin && (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0)))

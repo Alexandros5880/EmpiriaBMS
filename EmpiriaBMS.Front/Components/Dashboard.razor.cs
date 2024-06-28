@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Components.Invoices;
+using EmpiriaBMS.Front.Components.WorkingHours;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
@@ -56,6 +57,7 @@ public partial class Dashboard : IDisposable
     TimeSpan elapsedTime = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
     TimeSpan remainingTime = TimeSpan.Zero;
+    private EditUsersHours _editHoursCompoment;
     #endregion
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
@@ -813,6 +815,12 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
+    private void _onTimeTimeChanged(TimeSpan timeSpan)
+    {
+        remainingTime = timeSpan;
+        StateHasChanged();
+    }
+
     public async Task _endWorkDialogAccept()
     {
         try
@@ -827,64 +835,9 @@ public partial class Dashboard : IDisposable
                 return;
             }
 
-
-            // Update Db
             _startLoading = true;
 
-
-            // Update Leds
-            foreach (var led in _ledsChanged)
-            {
-                await _dataProvider.Leds.AddTime(_sharedAuthData.LogedUser.Id, led.Id, led.Time);
-            }
-            _ledsChanged.Clear();
-            _selectedLed = null;
-
-            // Update Offers
-            foreach (var offer in _offersChanged)
-            {
-                await _dataProvider.Offers.AddTime(_sharedAuthData.LogedUser.Id, offer.Id, offer.Time);
-            }
-            _offersChanged.Clear();
-            _selectedOffer = null;
-
-            // Update Projects
-            foreach (var project in _projectsChanged)
-            {
-                await _dataProvider.Projects.AddTime(_sharedAuthData.LogedUser.Id, project.Id, project.Time);
-            }
-            _projectsChanged.Clear();
-            //_selectedProject = null;
-
-            // Update Draws
-            foreach (var draw in _deliverablesChanged)
-            {
-                var old = _deliverables.FirstOrDefault(d => d.Id == draw.Id);
-                if (old.CompletionEstimation > draw.CompletionEstimation)
-                {
-                    //TODO: Display Msg
-
-                    return;
-                }
-                else
-                    await _dataProvider.Deliverables.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-                await _dataProvider.Deliverables.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
-            }
-
-            // Update Others
-            foreach (var other in _supportiveWorkChanged)
-            {
-                //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-                await _dataProvider.SupportiveWorks.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
-            }
-
-            // Update User Hours
-            if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-                await _dataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
-            if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-                await _dataProvider.Users.AddTraningTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
-            if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-                await _dataProvider.Users.AddCorporateEventTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+            await _editHoursCompoment.Save();
 
             _deliverablesChanged.Clear();
             _supportiveWorkChanged.Clear();
