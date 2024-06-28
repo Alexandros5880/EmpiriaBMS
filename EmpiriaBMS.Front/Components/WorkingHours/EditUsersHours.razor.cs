@@ -95,14 +95,6 @@ public partial class EditUsersHours
         _supportiveWork.Clear();
         _deliverables.Clear();
         _disciplines.Clear();
-        _selectedUser = null;
-        _selectedLed = null;
-        _selectedOffer = null;
-        _selectedProject = null;
-        _selectedSupportiveWork = null;
-        _selectedDeliverable = null;
-        _selectedDiscipline = null;
-        _selectedProject = null;
 
         if (!IsFromDashboard)
             await _getUsers();
@@ -115,6 +107,14 @@ public partial class EditUsersHours
 
         if (!workOnLeds && !workOnOffers)
             await _getProjects();
+
+        _selectedUser = new UserVM() { Id = 0 };
+        _selectedLed = new LedVM() { Id = 0 };
+        _selectedOffer = new OfferVM() { Id = 0 };
+        _selectedProject = new ProjectVM() { Id = 0 };
+        _selectedDiscipline = new DisciplineVM() { Id = 0 };
+        _selectedDeliverable = new DeliverableVM() { Id = 0 };
+        _selectedSupportiveWork = new SupportiveWorkVM() { Id = 0 };
 
         StateHasChanged();
     }
@@ -432,21 +432,23 @@ public partial class EditUsersHours
         if (userId == 0 || userId == _selectedUser?.Id) return;
 
         var user = _users.FirstOrDefault(p => p.Id == userId);
+
         _leds.Clear();
         _offers.Clear();
         _projects.Clear();
-        _deliverables.Clear();
         _supportiveWork.Clear();
+        _deliverables.Clear();
         _disciplines.Clear();
         _selectedUser = user;
-        _selectedLed = null;
-        _selectedOffer = null;
-        _selectedProject = null;
-        _selectedDiscipline = null;
-        _selectedDeliverable = null;
-        _selectedSupportiveWork = null;
 
         await _getLeds();
+
+        _selectedLed = new LedVM() { Id = 0 };
+        _selectedOffer = new OfferVM() { Id = 0 };
+        _selectedProject = new ProjectVM() { Id = 0 };
+        _selectedDiscipline = new DisciplineVM() { Id = 0 };
+        _selectedDeliverable = new DeliverableVM() { Id = 0 };
+        _selectedSupportiveWork = new SupportiveWorkVM() { Id = 0 };
 
         StateHasChanged();
     }
@@ -461,14 +463,16 @@ public partial class EditUsersHours
         _deliverables.Clear();
         _supportiveWork.Clear();
         _disciplines.Clear();
-        _selectedLed = led;
-        _selectedOffer = null;
+
+        _selectedLed = led ?? new LedVM { Id = 0 };
+
+        await _getOffers();
+
+        _selectedOffer = new OfferVM() { Id = 0 };
         _selectedProject = null;
         _selectedDiscipline = null;
         _selectedDeliverable = null;
         _selectedSupportiveWork = null;
-
-        await _getOffers();
 
         StateHasChanged();
     }
@@ -483,12 +487,13 @@ public partial class EditUsersHours
         _supportiveWork.Clear();
         _disciplines.Clear();
         _selectedOffer = offer;
+
+        await _getProjects(active: true);
+
         _selectedProject = null;
         _selectedDiscipline = null;
         _selectedDeliverable = null;
         _selectedSupportiveWork = null;
-
-        await _getProjects(active: true);
 
         StateHasChanged();
     }

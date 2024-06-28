@@ -26,6 +26,7 @@
             </div>
             <select class="form-select form-select-lg"
                     aria-label="Select User"
+                    value="@_selectedUser?.Id"
                     @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
                 <option value="0" selected>Select User</option>
                 @foreach (var user in _users)
@@ -38,7 +39,7 @@
         </div>
 
         <!-- Select Led -->
-        @if (workOnLeds || seeAdmin && (IsFromDashboard || _selectedUser != null))
+        @if (workOnLeds || seeAdmin && (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0)))
         {
             <div class="col selections">
                 <div class="text-center">
@@ -46,6 +47,7 @@
                 </div>
                 <select class="form-select form-select-lg"
                         aria-label="Select Led"
+                        value="@_selectedLed?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectLed(Convert.ToInt32(e.Value)))">
                     <option value="0" selected>Select Led</option>
                     @foreach (var led in _leds)
@@ -59,7 +61,7 @@
         }
 
         <!-- Select Offer -->
-        @if (workOnOffers || seeAdmin && (IsFromDashboard || _selectedLed != null))
+        @if (workOnOffers || seeAdmin && (IsFromDashboard || (_selectedLed != null && _selectedLed.Id != 0)))
         {
             <div class="col selections">
                 <div class="text-center">
@@ -67,6 +69,7 @@
                 </div>
                 <select class="form-select form-select-lg"
                         aria-label="Select Offer"
+                        value="@_selectedOffer?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
                     <option value="0" selected>Select Offer</option>
                     @foreach (var offer in _offers)
@@ -80,7 +83,7 @@
         }
 
         <!-- Select Project -->
-        @if (IsFromDashboard || _selectedOffer != null)
+        @if (IsFromDashboard || (_selectedOffer != null && _selectedOffer.Id != 0))
         {
             <div class="col selections">
                 <div class="text-center">
@@ -88,6 +91,7 @@
                 </div>
                 <select class="form-select form-select-lg"
                         aria-label="Select Project"
+                        value="@_selectedProject?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
                     <option value="0" selected>Select Project</option>
                     @foreach (var project in _projects)
@@ -101,7 +105,7 @@
         }
 
         <!-- Discipline -->
-        @if (IsFromDashboard || _selectedProject != null)
+        @if (IsFromDashboard || (_selectedProject != null && _selectedProject.Id != 0))
         {
             <div class="col selections">
                 <div class="text-center">
@@ -109,6 +113,7 @@
                 </div>
                 <select class="form-select form-select-lg"
                         aria-label="Select Discipline"
+                        value="@_selectedDiscipline?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
                     <option value="0" selected>Select Discipline</option>
                     @foreach (var discipline in _disciplines)
@@ -126,7 +131,7 @@
     <div class="mt-1 row gx-3">
 
         <!-- Deliverables -->
-        @if (IsFromDashboard || _selectedDiscipline != null)
+        @if (IsFromDashboard || (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
         {
             <div class="col">
                 <div class="text-center">
@@ -180,7 +185,7 @@
         }
 
         <!-- Others -->
-        @if (IsFromDashboard || _selectedDiscipline != null)
+        @if (IsFromDashboard || (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
         {
             <div class="col">
                 <div class="text-center">
@@ -222,11 +227,11 @@
     <div class="mt-1 row">
 
         <!-- Set User With High Roles Time -->
-        @if (IsFromDashboard || _selectedUser != null)
+        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
         {
             <div class="col-12 border rounded mb-1">
                 <div class="row gx-3 m-2">
-                    @if ((workOnLeds || seeAdmin) && _selectedLed != null)
+                    @if ((workOnLeds || seeAdmin) && (_selectedLed != null && _selectedLed.Id != 0))
                     {
                         <div class="col-4 text-center">
                             <span class="mb-2 fs-5">Led</span>
@@ -237,7 +242,7 @@
                         </div>
                     }
 
-                    @if ((workOnOffers || seeAdmin) && _selectedOffer != null)
+                    @if ((workOnOffers || seeAdmin) && (_selectedOffer != null && _selectedOffer.Id != 0))
                     {
                         <div class="col-4 text-center">
                             <span class="mb-2 fs-5">Offer</span>
@@ -248,7 +253,7 @@
                         </div>
                     }
 
-                    @if ((workOnProject || seeAdmin) && _selectedProject != null)
+                    @if ((workOnProject || seeAdmin) && (_selectedProject != null && _selectedProject.Id != 0))
                     {
                         <div class="col-4 text-center">
                             <span class="mb-2 fs-5">Project</span>
@@ -264,7 +269,7 @@
         }
         
         <!-- Set User Extra Time -->
-        @if (IsFromDashboard || _selectedUser != null)
+        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
         {
             <div class="col-12 border rounded mb-1">
                 <SetUserTime LogedUserTimes="@_editLogedUserTimes"
