@@ -18,11 +18,11 @@ public partial class Dashboard : IDisposable
     private UserTimes _editLogedUserTimes;
 
     #region Authorization Properties
-    public bool AssignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
-    public bool AssignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
-    public bool AssignPm => _sharedAuthData.PermissionOrds.Contains(5);
-    public bool EditMyHours => _sharedAuthData.PermissionOrds.Contains(2);
-    public bool SeeMyHours => _sharedAuthData.PermissionOrds.Contains(8);
+    public bool assignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
+    public bool assignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
+    public bool assignPm => _sharedAuthData.PermissionOrds.Contains(5);
+    public bool editMyHours => _sharedAuthData.PermissionOrds.Contains(2);
+    public bool seeMyHours => _sharedAuthData.PermissionOrds.Contains(8);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
     bool getAllDeliverables => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
     bool editProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
@@ -35,12 +35,13 @@ public partial class Dashboard : IDisposable
     bool seeTeamsRequestedUsers => _sharedAuthData.Permissions.Any(p => p.Ord == 28);
     bool seeInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 29);
     bool seeExpenses => _sharedAuthData.Permissions.Any(p => p.Ord == 30);
-    bool WorkOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
-    bool WorkOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
-    bool WorkOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
-    bool SeeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
-    bool SeeBackupDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 35);
-    bool SeeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
+    bool workOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
+    bool workOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
+    bool workOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
+    bool seeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
+    bool seeBackupDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 35);
+    bool seeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
+    bool canChangeEverybodyHours => _sharedAuthData.Permissions.Any(p => p.Ord == 37);
     #endregion
 
     // General Fields
@@ -608,7 +609,7 @@ public partial class Dashboard : IDisposable
 
     private async Task StopWorkClick()
     {
-        if (!EditMyHours)
+        if (!editMyHours)
         {
             return;
         }
@@ -638,13 +639,13 @@ public partial class Dashboard : IDisposable
         _selectedDiscipline = null;
         _selectedProject = null;
 
-        if (WorkOnLeds)
+        if (workOnLeds)
             await _getLeds();
 
-        if (WorkOnOffers)
+        if (workOnOffers)
             await _getOffers();
 
-        if (!WorkOnLeds && !WorkOnOffers)
+        if (!workOnLeds && !workOnOffers)
             await _getProjects();
 
         StateHasChanged();
