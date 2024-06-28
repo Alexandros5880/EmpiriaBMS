@@ -7,7 +7,8 @@
 
 <!-- Headder -->
 <div class="d-flex justify-content-between">
-    <h3>Work update</h3>
+    <h3>Work Hours Update</h3>
+
     @if (IsFromDashboard)
     {
         <h3>My Time Since Start: <b class="text-warning">@RemainingTime.ToString(@"hh\:mm")</b></h3>
@@ -16,12 +17,32 @@
 
 <div class="modal-body">
 
+    <!-- Select User -->
+    <div class="row mt-1 mb-1 ">
+        <div class="col selections">
+            <div class="text-center">
+                <h5>Select User</h5>
+            </div>
+            <select class="form-select form-select-lg"
+                    aria-label="Select User"
+                    @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
+                <option value="0" selected>Select User</option>
+                @foreach (var user in _users)
+                {
+                    <option value="@user.Id">
+                        <span>@user.LastName</span> &ensp; <span>@user.FirstName</span>
+                    </option>
+                }
+            </select>
+        </div>
+    </div>
+
     <div class="mt-2 row gx-3">
 
-        @if (workOnLeds || seeAdmin)
+        <!-- Select Led -->
+        @if (workOnLeds || seeAdmin && (IsFromDashboard || _selectedUser != null))
         {
-            <!-- Select Led -->
-            <div class="col">
+            <div class="col selections">
                 <div class="text-center">
                     <h5>Select Led</h5>
                 </div>
@@ -39,10 +60,10 @@
             </div>
         }
 
-        @if (workOnOffers || seeAdmin)
+        <!-- Select Offer -->
+        @if (workOnOffers || seeAdmin && (IsFromDashboard || _selectedLed != null))
         {
-            <!-- Select Offer -->
-            <div class="col">
+            <div class="col selections">
                 <div class="text-center">
                     <h5>Select Offer</h5>
                 </div>
@@ -61,129 +82,141 @@
         }
 
         <!-- Select Project -->
-        <div class="col">
-            <div class="text-center">
-                <h5>Select Project</h5>
+        @if (IsFromDashboard || _selectedOffer != null)
+        {
+            <div class="col selections">
+                <div class="text-center">
+                    <h5>Select Project</h5>
+                </div>
+                <select class="form-select form-select-lg"
+                        aria-label="Select Project"
+                        @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
+                    <option value="0" selected>Select Project</option>
+                    @foreach (var project in _projects)
+                    {
+                        <option value="@project.Id">
+                            @project.Name
+                        </option>
+                    }
+                </select>
             </div>
-            <select class="form-select form-select-lg"
-                    aria-label="Select Project"
-                    @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
-                <option value="0" selected>Select Project</option>
-                @foreach (var project in _projects)
-                {
-                    <option value="@project.Id">
-                        @project.Name
-                    </option>
-                }
-            </select>
-        </div>
+        }
 
         <!-- Discipline -->
-        <div class="col">
-            <div class="text-center">
-                <h5>Select Discipline</h5>
+        @if (IsFromDashboard || _selectedProject != null)
+        {
+            <div class="col selections">
+                <div class="text-center">
+                    <h5>Select Discipline</h5>
+                </div>
+                <select class="form-select form-select-lg"
+                        aria-label="Select Discipline"
+                        @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
+                    <option value="0" selected>Select Discipline</option>
+                    @foreach (var discipline in _disciplines)
+                    {
+                        <option value="@discipline.Id">
+                            @discipline.Type.Name
+                        </option>
+                    }
+                </select>
             </div>
-            <select class="form-select form-select-lg"
-                    aria-label="Select Discipline"
-                    @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
-                <option value="0" selected>Select Discipline</option>
-                @foreach (var discipline in _disciplines)
-                {
-                    <option value="@discipline.Id">
-                        @discipline.Type.Name
-                    </option>
-                }
-            </select>
-        </div>
+        }
 
     </div>
 
     <div class="mt-1 row gx-3">
 
         <!-- Deliverables -->
-        <div class="col">
-            <div class="text-center">
-                <h5>Deliverables</h5>
-            </div>
-            <div class="table-responsive"
-                 style="height: 300px;">
-                <table class="table table-hover table-borderless">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="sticky-header">Deliverable</th>
-                            <th scope="col" class="sticky-header">Time</th>
-                            <th scope="col" class="sticky-header">Declared Completion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var _deliverable in _deliverables)
-                        {
-                            <tr class="align-middle">
-                                <td class="align-middle">
-                                    <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
-                                </td>
-                                <td class="align-middle">
-                                    <TimeInput MinTime="TimeSpan.Zero"
-                                               MaxTime="@RemainingTime"
-                                               Time="_deliverable.Time"
-                                               OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
-                                </td>
-                                <td class="align-middle">
-                                    <div class="input-group" style="width: 110px;">
-                                        <input type="number"
-                                               class="form-control"
-                                               EnableMinMax="true"
-                                               min="0"
-                                               max="100"
-                                               style="min-width: 52px !important; max-width: 52px !important;"
-                                               onkeyup="if(value<0) value=0; if(value>100) value=100;"
-                                               onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
-                                               @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">%</span>
-                                        </div>
-                                    </div>
-                                </td>
+        @if (IsFromDashboard || _selectedDiscipline != null)
+        {
+            <div class="col">
+                <div class="text-center">
+                    <h5>Deliverables</h5>
+                </div>
+                <div class="table-responsive"
+                     style="height: 300px;">
+                    <table class="table table-hover table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="sticky-header">Deliverable</th>
+                                <th scope="col" class="sticky-header">Time</th>
+                                <th scope="col" class="sticky-header">Declared Completion</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var _deliverable in _deliverables)
+                            {
+                                <tr class="align-middle">
+                                    <td class="align-middle">
+                                        <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <TimeInput MinTime="TimeSpan.Zero"
+                                                   MaxTime="@RemainingTime"
+                                                   Time="_deliverable.Time"
+                                                   OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group" style="width: 110px;">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   EnableMinMax="true"
+                                                   min="0"
+                                                   max="100"
+                                                   style="min-width: 52px !important; max-width: 52px !important;"
+                                                   onkeyup="if(value<0) value=0; if(value>100) value=100;"
+                                                   onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+                                                   @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        }
 
         <!-- Others -->
-        <div class="col">
-            <div class="text-center">
-                <h5>Supportive Works</h5>
-            </div>
-            <div class="table-responsive"
-                 style="height: 300px;">
-                <table class="table table-hover table-borderless">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="sticky-header">Other</th>
-                            <th scope="col" class="sticky-header">Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var _supportiveWork in _supportiveWork)
-                        {
-                            <tr class="align-middle">
-                                <td class="align-middle">
-                                    <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
-                                </td>
-                                <td class="align-middle">
-                                    <TimeInput MinTime="TimeSpan.Zero"
-                                               MaxTime="@RemainingTime"
-                                               Time="@_supportiveWork.Time"
-                                               OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
-                                </td>
+        @if (IsFromDashboard || _selectedDiscipline != null)
+        {
+            <div class="col">
+                <div class="text-center">
+                    <h5>Supportive Works</h5>
+                </div>
+                <div class="table-responsive"
+                     style="height: 300px;">
+                    <table class="table table-hover table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="sticky-header">Other</th>
+                                <th scope="col" class="sticky-header">Time</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var _supportiveWork in _supportiveWork)
+                            {
+                                <tr class="align-middle">
+                                    <td class="align-middle">
+                                        <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <TimeInput MinTime="TimeSpan.Zero"
+                                                   MaxTime="@RemainingTime"
+                                                   Time="@_supportiveWork.Time"
+                                                   OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        }
 
     </div>
 
@@ -191,61 +224,70 @@
     <div class="mt-1 row">
 
         <!-- Set User With High Roles Time -->
-        <div class="col-12 border rounded mb-1">
-            <div class="row gx-3 m-2">
-                @if ((workOnLeds || seeAdmin) && _selectedLed != null)
-                {
-                    <div class="col-4 text-center">
-                        <span class="mb-2 fs-5">Led</span>
-                        <TimeInput MinTime="TimeSpan.Zero"
-                                   MaxTime="@RemainingTime"
-                                   Time="_selectedLed.Time"
-                                   OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedLed, time)) />
-                    </div>
-                }
+        @if (IsFromDashboard || _selectedUser != null)
+        {
+            <div class="col-12 border rounded mb-1">
+                <div class="row gx-3 m-2">
+                    @if ((workOnLeds || seeAdmin) && _selectedLed != null)
+                    {
+                        <div class="col-4 text-center">
+                            <span class="mb-2 fs-5">Led</span>
+                            <TimeInput MinTime="TimeSpan.Zero"
+                                       MaxTime="@RemainingTime"
+                                       Time="_selectedLed.Time"
+                                       OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedLed, time)) />
+                        </div>
+                    }
 
-                @if ((workOnOffers || seeAdmin) && _selectedOffer != null)
-                {
-                    <div class="col-4 text-center">
-                        <span class="mb-2 fs-5">Offer</span>
-                        <TimeInput MinTime="TimeSpan.Zero"
-                                   MaxTime="@RemainingTime"
-                                   Time="_selectedOffer.Time"
-                                   OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
-                    </div>
-                }
+                    @if ((workOnOffers || seeAdmin) && _selectedOffer != null)
+                    {
+                        <div class="col-4 text-center">
+                            <span class="mb-2 fs-5">Offer</span>
+                            <TimeInput MinTime="TimeSpan.Zero"
+                                       MaxTime="@RemainingTime"
+                                       Time="_selectedOffer.Time"
+                                       OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
+                        </div>
+                    }
 
-                @if ((workOnProject || seeAdmin) && _selectedProject != null)
-                {
-                    <div class="col-4 text-center">
-                        <span class="mb-2 fs-5">Project</span>
-                        <TimeInput MinTime="TimeSpan.Zero"
-                                   MaxTime="@RemainingTime"
-                                   Time="_selectedProject.Time"
-                                   OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
-                    </div>
-                }
+                    @if ((workOnProject || seeAdmin) && _selectedProject != null)
+                    {
+                        <div class="col-4 text-center">
+                            <span class="mb-2 fs-5">Project</span>
+                            <TimeInput MinTime="TimeSpan.Zero"
+                                       MaxTime="@RemainingTime"
+                                       Time="_selectedProject.Time"
+                                       OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
 
+        }
+        
         <!-- Set User Extra Time -->
-        <div class="col-12 border rounded mb-1">
-            <SetUserTime LogedUserTimes="@_editLogedUserTimes"
-                         RemainingTime="@RemainingTime"
-                         OnPersonalTimeChanged="@_onPersonalTimeChanged"
-                         OnTrainingTimeChanged="@_onTrainingTimeChanged"
-                         OnCorporateTimeChanged="@_onCorporateTimeChanged" />
-        </div>
+        @if (IsFromDashboard || _selectedUser != null)
+        {
+            <div class="col-12 border rounded mb-1">
+                <SetUserTime LogedUserTimes="@_editLogedUserTimes"
+                             RemainingTime="@RemainingTime"
+                             OnPersonalTimeChanged="@_onPersonalTimeChanged"
+                             OnTrainingTimeChanged="@_onTrainingTimeChanged"
+                             OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+            </div>
+        }
 
     </div>
 
 </div>
 
-@if (!IsFromDashboard)
+@if (!IsFromDashboard && _selectedUser != null)
 {
-    <FluentStack Orientation="Orientation.Horizontal" Class="d-flex justify-content-end">
-        <FluentButton OnClick="@(async () => await Save())">
-            Save
-        </FluentButton>
-    </FluentStack>
+    <div class="mt-3">
+        <FluentStack Orientation="Orientation.Horizontal" Class="d-flex justify-content-end">
+            <FluentButton OnClick="@(async () => await Save())">
+                Save
+            </FluentButton>
+        </FluentStack>
+    </div>
 }

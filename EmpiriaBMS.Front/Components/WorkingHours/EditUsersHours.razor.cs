@@ -126,6 +126,7 @@ public partial class EditUsersHours
         try
         {
             var dtos = await _dataProvider.Users.GetAll();
+            var employeesDtos = dtos.Where(u => u.Roles != null && u.Roles.Count > 0).ToList();
             var vms = Mapper.Map<List<UserVM>>(dtos);
             _users.Clear();
             vms.ForEach(_users.Add);
@@ -395,6 +396,30 @@ public partial class EditUsersHours
     #endregion
 
     #region When Records Selected
+    private async Task OnSelectUser(int userId)
+    {
+        if (userId == 0 || userId == _selectedUser?.Id) return;
+
+        var user = _users.FirstOrDefault(p => p.Id == userId);
+        _leds.Clear();
+        _offers.Clear();
+        _projects.Clear();
+        _deliverables.Clear();
+        _supportiveWork.Clear();
+        _disciplines.Clear();
+        _selectedUser = user;
+        _selectedLed = null;
+        _selectedOffer = null;
+        _selectedProject = null;
+        _selectedDiscipline = null;
+        __selectedDeliverable = null;
+        _selectedSupportiveWork = null;
+
+        await _getLeds();
+
+        StateHasChanged();
+    }
+
     private async Task OnSelectLed(int ledId)
     {
         if (ledId == 0 || ledId == _selectedLed?.Id) return;
