@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EmpiriaBMS.EF.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "seed"
+    }
+  }
+}

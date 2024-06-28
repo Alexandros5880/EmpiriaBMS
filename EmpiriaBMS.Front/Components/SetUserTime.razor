@@ -36,6 +36,18 @@
     [Parameter]
     public TimeSpan RemainingTime { get; set; }
 
+    private TimeSpan _minTime = new TimeSpan(0, 0, 0, 0);
+    [Parameter]
+    public TimeSpan MinTime
+    {
+        get => _minTime;
+        set
+        {
+            if (value == _minTime) return;
+            _minTime = value;
+        }
+    }
+
     [Parameter]
     public EventCallback<TimeSpan> OnPersonalTimeChanged { get; set; }
 

@@ -1,12 +1,11 @@
-﻿using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.ReturnModels;
-using EmpiriaBMS.Core.Hellpers;
-using System;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>
@@ -83,8 +82,8 @@ public class UsersRepo : Repository<UserDto, User>
                              .Where(r => !r.IsDeleted)
                              .Include(r => r.Disciplines)
                              .Include(r => r.UserRoles)
-                             .FirstOrDefaultAsync(r => r.ProxyAddress.Equals(email) 
-                                                        && r.PasswordHash != null 
+                             .FirstOrDefaultAsync(r => r.ProxyAddress.Equals(email)
+                                                        && r.PasswordHash != null
                                                         && r.PasswordHash.Equals(hash));
 
             return Mapping.Mapper.Map<UserDto>(u);
@@ -93,6 +92,8 @@ public class UsersRepo : Repository<UserDto, User>
 
     public async Task<ICollection<UserDto>> GetAllWithRoles()
     {
+        var users = await GetEmployees();
+
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var usersroles = await _context.Set<UserRole>()
@@ -100,16 +101,16 @@ public class UsersRepo : Repository<UserDto, User>
                                            .Include(ur => ur.Role)
                                            .ToListAsync();
 
-            var users = await _context.Set<User>()
-                                      .Where(r => !r.IsDeleted)
-                                      .ToListAsync();
+            //var users = await _context.Set<User>()
+            //                          .Where(r => !r.IsDeleted)
+            //                          .ToListAsync();
 
             var userDto = Mapping.Mapper.Map<List<UserDto>>(users);
 
-            foreach(var u in userDto)
+            foreach (var u in userDto)
             {
                 u.Roles = u.Roles ?? new List<RoleDto>();
-                foreach(var ur in usersroles)
+                foreach (var ur in usersroles)
                 {
                     if (u.Id.Equals(ur.UserId))
                         u.Roles.Add(Mapping.Mapper.Map<RoleDto>(ur.Role));
@@ -152,7 +153,8 @@ public class UsersRepo : Repository<UserDto, User>
         Expression<Func<User, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<User> us;
@@ -283,12 +285,12 @@ public class UsersRepo : Repository<UserDto, User>
         {
             var emplyeeRolesIds = await _context.Set<Role>()
                                                 .Where(r => !r.IsDeleted)
-                                                .Where(r => r.IsEmployee)
+                                                .Where(r => r.IsEmployee || r.Name.Contains("Admin") || r.Name.Contains("admin"))
                                                 .Select(r => r.Id)
                                                 .ToListAsync();
 
             var employeeIds = await _context.UsersRoles.Where(r => !r.IsDeleted)
-                                                       .Where(ur => emplyeeRolesIds.Contains(ur.Id))
+                                                       .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
                                                       .Select(ur => ur.UserId)
                                                       .ToListAsync();
 
@@ -297,92 +299,6 @@ public class UsersRepo : Repository<UserDto, User>
                                             .Include(r => r.Disciplines)
                                             .Include(r => r.UserRoles)
                                             .ToListAsync();
-
-            return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
-        }
-    }
-
-    public async Task<ICollection<UserDto>> GetEmployees(int pageSize = 0, int pageIndex = 0)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var emplyeeRolesIds = await _context.Set<Role>()
-                                                .Where(r => !r.IsDeleted)
-                                                .Where(r => r.IsEmployee)
-                                                .Select(r => r.Id)
-                                                .ToListAsync();
-
-            var employeeIds = await _context.UsersRoles
-                                                      .Where(r => !r.IsDeleted)
-                                                      .Where(ur => emplyeeRolesIds.Contains(ur.Id))
-                                                      .Select(ur => ur.UserId)
-                                                      .ToListAsync();
-
-            List<User> users;
-
-            if (pageSize == 0 || pageIndex == 0)
-            {
-                users = await _context.Users.Where(r => !r.IsDeleted)
-                                            .Where(u => employeeIds.Contains(u.Id))
-                                            .ToListAsync();
-
-                return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
-            }
-
-
-
-            users = await _context.Users.Where(r => !r.IsDeleted)
-                                        .Where(u => employeeIds.Contains(u.Id))
-                                        .Include(r => r.Disciplines)
-                                        .Include(r => r.UserRoles)
-                                        .Skip((pageIndex - 1) * pageSize)
-                                        .Take(pageSize)
-                                        .ToListAsync();
-
-            return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
-        }
-    }
-
-    public async Task<ICollection<UserDto>> GetEmployees(
-        Expression<Func<User, bool>> expresion,
-        int pageSize = 0,
-        int pageIndex = 0
-    ) {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var emplyeeRolesIds = await _context.Set<Role>()
-                                                .Where(r => !r.IsDeleted)
-                                                .Where(r => r.IsEmployee)
-                                                .Select(r => r.Id)
-                                                .ToListAsync();
-
-            var employeeIds = await _context.UsersRoles.Where(r => !r.IsDeleted)
-                                                       .Where(ur => emplyeeRolesIds.Contains(ur.Id))
-                                                       .Select(ur => ur.UserId)
-                                                       .ToListAsync();
-
-            List<User> users;
-
-            if (pageSize == 0 || pageIndex == 0)
-            {
-                users = await _context.Users.Where(u => employeeIds.Contains(u.Id))
-                                            .Where(r => !r.IsDeleted)
-                                            .Where(expresion)
-                                            .ToListAsync();
-
-                return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
-            }
-
-
-
-            users = await _context.Users.Where(r => !r.IsDeleted)
-                                        .Where(u => employeeIds.Contains(u.Id))
-                                        .Include(r => r.Disciplines)
-                                        .Include(r => r.UserRoles)
-                                        .Where(expresion)
-                                        .Skip((pageIndex - 1) * pageSize)
-                                        .Take(pageSize)
-                                        .ToListAsync();
 
             return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
         }
@@ -413,87 +329,6 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<ICollection<UserDto>> GetCustomers(int pageSize = 0, int pageIndex = 0)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var customersRolesIds = await _context.Set<Role>()
-                                                  .Where(r => !r.IsDeleted)
-                                                  .Where(r => !r.IsEmployee)
-                                                  .Select(r => r.Id)
-                                                  .ToListAsync();
-
-            var customerIds = await _context.UsersRoles.Where(r => !r.IsDeleted)
-                                                       .Where(ur => customersRolesIds.Contains(ur.RoleId))
-                                                       .Select(ur => ur.UserId)
-                                                       .ToListAsync();
-
-            List<User> users;
-
-            if (pageSize == 0 || pageIndex == 0)
-            {
-                users = await _context.Users.Where(r => !r.IsDeleted)
-                                            .Where(u => customerIds.Contains(u.Id))
-                                            .ToListAsync();
-
-                return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
-            }
-
-            users = await _context.Users.Where(r => !r.IsDeleted)
-                                        .Where(u => customerIds.Contains(u.Id))
-                                        .Include(r => r.Disciplines)
-                                        .Include(r => r.UserRoles)
-                                        .Skip((pageIndex - 1) * pageSize)
-                                        .Take(pageSize)
-                                        .ToListAsync();
-
-            return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
-        }
-    }
-
-    public async Task<ICollection<UserDto>> GetCustomers(
-        Expression<Func<User, bool>> expresion,
-        int pageSize = 0,
-        int pageIndex = 0
-    ) {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var customersRolesIds = await _context.Set<Role>()
-                                                  .Where(r => !r.IsDeleted)
-                                                  .Where(r => !r.IsEmployee)
-                                                  .Select(r => r.Id)
-                                                  .ToListAsync();
-
-            var customerIds = await _context.UsersRoles.Where(r => !r.IsDeleted)
-                                                       .Where(ur => customersRolesIds.Contains(ur.RoleId))
-                                                       .Select(ur => ur.UserId)
-                                                       .ToListAsync();
-
-            List<User> users;
-
-            if (pageSize == 0 || pageIndex == 0)
-            {
-                users = await _context.Users.Where(r => !r.IsDeleted)
-                                            .Where(u => customerIds.Contains(u.Id))
-                                            .Where(expresion)
-                                            .ToListAsync();
-
-                return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
-            }
-
-            users = await _context.Users.Where(r => !r.IsDeleted)
-                                        .Where(u => customerIds.Contains(u.Id))
-                                        .Include(r => r.Disciplines)
-                                        .Include(r => r.UserRoles)
-                                        .Where(expresion)
-                                        .Skip((pageIndex - 1) * pageSize)
-                                        .Take(pageSize)
-                                        .ToListAsync();
-
-            return Mapping.Mapper.Map<List<User>, List<UserDto>>(users);
-        }
-    }
-
     public async Task<double> GetUserTotalHoursThisMonth(int userId)
     {
         if (userId == 0)
@@ -507,17 +342,19 @@ public class UsersRepo : Repository<UserDto, User>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var sumHours = await _context.Set<DailyTime>()
+            var timeSpans = await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
-                                 .Where(u => u.DailyUserId == userId 
-                                        || u.PersonalUserId == userId 
-                                        || u.TrainingUserId == userId 
+                                 .Where(u => u.DailyUserId == userId
+                                        || u.PersonalUserId == userId
+                                        || u.TrainingUserId == userId
                                         || u.CorporateUserId == userId)
                                  .Where(u => u.Date.CompareTo(dateOneMonthLater) > 0)
-                                 .Select(u => u.TimeSpan.Hours)
-                                 .SumAsync();
+                                 .Select(u => u.TimeSpan.ToTimeSpan())
+                                 .ToListAsync();
 
-            return sumHours;
+            var totalTimeSpan = timeSpans.Aggregate(TimeSpan.Zero, (sum, next) => sum.Add(next));
+
+            return totalTimeSpan.TotalHours;
         }
     }
 
@@ -596,7 +433,8 @@ public class UsersRepo : Repository<UserDto, User>
             {
                 var result = await _context.Set<DailyTime>()
                                            .AddAsync(
-                    new DailyTime {
+                    new DailyTime
+                    {
                         DailyUserId = userId,
                         Date = date,
                         TimeSpan = new Timespan(
@@ -802,7 +640,7 @@ public class UsersRepo : Repository<UserDto, User>
             // DailyTime
             var dailyTimeSpans = await _context.Set<DailyTime>()
                                           .Where(r => !r.IsDeleted)
-                                          .Where(dt => 
+                                          .Where(dt =>
                                                 dt.DailyUserId == userId
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)

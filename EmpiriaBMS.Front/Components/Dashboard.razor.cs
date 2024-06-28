@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Components.Invoices;
+using EmpiriaBMS.Front.Components.WorkingHours;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
@@ -18,11 +19,11 @@ public partial class Dashboard : IDisposable
     private UserTimes _editLogedUserTimes;
 
     #region Authorization Properties
-    public bool AssignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
-    public bool AssignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
-    public bool AssignPm => _sharedAuthData.PermissionOrds.Contains(5);
-    public bool EditMyHours => _sharedAuthData.PermissionOrds.Contains(2);
-    public bool SeeMyHours => _sharedAuthData.PermissionOrds.Contains(8);
+    public bool assignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
+    public bool assignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
+    public bool assignPm => _sharedAuthData.PermissionOrds.Contains(5);
+    public bool editMyHours => _sharedAuthData.PermissionOrds.Contains(2);
+    public bool seeMyHours => _sharedAuthData.PermissionOrds.Contains(8);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
     bool getAllDeliverables => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
     bool editProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
@@ -35,12 +36,13 @@ public partial class Dashboard : IDisposable
     bool seeTeamsRequestedUsers => _sharedAuthData.Permissions.Any(p => p.Ord == 28);
     bool seeInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 29);
     bool seeExpenses => _sharedAuthData.Permissions.Any(p => p.Ord == 30);
-    bool WorkOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
-    bool WorkOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
-    bool WorkOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
-    bool SeeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
-    bool SeeBackupDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 35);
-    bool SeeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
+    bool workOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
+    bool workOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
+    bool workOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
+    bool seeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
+    bool seeBackupDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 35);
+    bool seeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
+    bool canChangeEverybodyHours => _sharedAuthData.Permissions.Any(p => p.Ord == 37);
     #endregion
 
     // General Fields
@@ -55,6 +57,7 @@ public partial class Dashboard : IDisposable
     TimeSpan elapsedTime = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
     TimeSpan remainingTime = TimeSpan.Zero;
+    private EditUsersHours _editHoursCompoment;
     #endregion
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
@@ -158,7 +161,7 @@ public partial class Dashboard : IDisposable
     private FluentDialog _addEditSupportiveWorkDialog;
     private bool _isAddEditSupportiveWorkDialogOdepened = false;
     private OtherDetailed supportiveWorkrCompoment;
-    private bool __hasSapportiveWorksSelections = true;
+    private bool _hasSapportiveWorksSelections = true;
 
     // On Delete Dialog
     private FluentDialog _deleteDialog;
@@ -246,7 +249,7 @@ public partial class Dashboard : IDisposable
         if (_selectedDiscipline != null)
         {
             _hasDeliverablessSelections = await _dataProvider.DeliverablesTypes.HasDeliverableTypesSelections(_selectedDiscipline.Id);
-            __hasSapportiveWorksSelections = await _dataProvider.SupportiveWorksTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
+            _hasSapportiveWorksSelections = await _dataProvider.SupportiveWorksTypes.HasOtherTypesSelections(_selectedDiscipline.Id);
         }
     }
 
@@ -608,7 +611,7 @@ public partial class Dashboard : IDisposable
 
     private async Task StopWorkClick()
     {
-        if (!EditMyHours)
+        if (!editMyHours)
         {
             return;
         }
@@ -638,13 +641,13 @@ public partial class Dashboard : IDisposable
         _selectedDiscipline = null;
         _selectedProject = null;
 
-        if (WorkOnLeds)
+        if (workOnLeds)
             await _getLeds();
 
-        if (WorkOnOffers)
+        if (workOnOffers)
             await _getOffers();
 
-        if (!WorkOnLeds && !WorkOnOffers)
+        if (!workOnLeds && !workOnOffers)
             await _getProjects();
 
         StateHasChanged();
@@ -653,162 +656,9 @@ public partial class Dashboard : IDisposable
         _isEndWorkDialogOdepened = true;
     }
 
-    private void _onLedTimeChanged(LedVM led, TimeSpan newTimeSpan)
+    private void _onTimeTimeChanged(TimeSpan timeSpan)
     {
-        // previusTime, updatedTime, remainingTime
-
-        var previusTime = led.Time;
-        var updatedTime = newTimeSpan - previusTime;
-        remainingTime += (-updatedTime);
-
-        led.Time = newTimeSpan;
-
-        if (_ledsChanged.Any(d => d.Id == led.Id))
-        {
-            var d = _ledsChanged.FirstOrDefault(d => d.Id == led.Id);
-            d.Time = led.Time;
-        }
-        else
-            _ledsChanged.Add(led);
-
-        StateHasChanged();
-    }
-
-    private void _onOfferTimeChanged(OfferVM offer, TimeSpan newTimeSpan)
-    {
-        // previusTime, updatedTime, remainingTime
-
-        var previusTime = offer.Time;
-        var updatedTime = newTimeSpan - previusTime;
-        remainingTime += (-updatedTime);
-
-        offer.Time = newTimeSpan;
-
-        if (_offersChanged.Any(d => d.Id == offer.Id))
-        {
-            var d = _offersChanged.FirstOrDefault(d => d.Id == offer.Id);
-            d.Time = offer.Time;
-        }
-        else
-            _offersChanged.Add(offer);
-
-        StateHasChanged();
-    }
-
-    private void _onProjectTimeChanged(ProjectVM project, TimeSpan newTimeSpan)
-    {
-        // previusTime, updatedTime, remainingTime
-
-        var previusTime = project.Time;
-        var updatedTime = newTimeSpan - previusTime;
-        remainingTime += (-updatedTime);
-
-        project.Time = newTimeSpan;
-
-        if (_projectsChanged.Any(d => d.Id == project.Id))
-        {
-            var d = _projectsChanged.FirstOrDefault(d => d.Id == project.Id);
-            d.Time = project.Time;
-        }
-        else
-            _projectsChanged.Add(project);
-
-        StateHasChanged();
-    }
-
-    private void _onDeliverableTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
-    {
-        // previusTime, updatedTime, remainingTime
-
-        var previusTime = draw.Time;
-        var updatedTime = newTimeSpan - previusTime;
-        remainingTime += (-updatedTime);
-
-        draw.Time = newTimeSpan;
-
-        if (_deliverablesChanged.Any(d => d.Id == draw.Id))
-        {
-            var d = _deliverablesChanged.FirstOrDefault(d => d.Id == draw.Id);
-            d.Time = draw.Time;
-        }
-        else
-            _deliverablesChanged.Add(draw);
-
-        StateHasChanged();
-    }
-
-    private void _onDeliverableCompletedChanged(DeliverableVM draw, object val)
-    {
-        draw.CompletionEstimation += Convert.ToInt32(val);
-
-        if (_deliverablesChanged.Any(d => d.Id == draw.Id))
-        {
-            var d = _deliverablesChanged.FirstOrDefault(d => d.Id == draw.Id);
-            d.CompletionEstimation = draw.CompletionEstimation;
-        }
-        else
-            _deliverablesChanged.Add(draw);
-
-        StateHasChanged();
-    }
-
-    private void _onOtherTimeChanged(SupportiveWorkVM other, TimeSpan newTimeSpan)
-    {
-        // previusTime, updatedTime, remainingTime
-
-        var previusTime = other.Time;
-        var updatedTime = newTimeSpan - previusTime;
-        remainingTime += (-updatedTime);
-
-        other.Time = newTimeSpan;
-
-        if (_supportiveWorkChanged.Any(d => d.Id == other.Id))
-        {
-            var d = _supportiveWorkChanged.FirstOrDefault(d => d.Id == other.Id);
-            d.Time = other.Time;
-        }
-        else
-            _supportiveWorkChanged.Add(other);
-
-        StateHasChanged();
-    }
-
-    private void _onPersonalTimeChanged(TimeSpan newTimeSpan)
-    {
-        // previusTime, updatedTime, remainingTime
-
-        var previusTime = _editLogedUserTimes.PersonalTime;
-        var updatedTime = newTimeSpan - previusTime;
-        remainingTime += (-updatedTime);
-
-        _editLogedUserTimes.PersonalTime = newTimeSpan;
-
-        StateHasChanged();
-    }
-
-    private void _onTrainingTimeChanged(TimeSpan newTimeSpan)
-    {
-        // previusTime, updatedTime, remainingTime
-
-        var previusTime = _editLogedUserTimes.TrainingTime;
-        var updatedTime = newTimeSpan - previusTime;
-        remainingTime += (-updatedTime);
-
-        _editLogedUserTimes.TrainingTime = newTimeSpan;
-
-        StateHasChanged();
-    }
-
-    private void _onCorporateTimeChanged(TimeSpan newTimeSpan)
-    {
-        // previusTime, updatedTime, remainingTime
-
-        var previusTime = _editLogedUserTimes.CorporateEventTime;
-        var updatedTime = newTimeSpan - previusTime;
-        remainingTime += (-updatedTime);
-
-        _editLogedUserTimes.CorporateEventTime = newTimeSpan;
-
+        remainingTime = timeSpan;
         StateHasChanged();
     }
 
@@ -826,64 +676,9 @@ public partial class Dashboard : IDisposable
                 return;
             }
 
-
-            // Update Db
             _startLoading = true;
 
-
-            // Update Leds
-            foreach (var led in _ledsChanged)
-            {
-                await _dataProvider.Leds.AddTime(_sharedAuthData.LogedUser.Id, led.Id, led.Time);
-            }
-            _ledsChanged.Clear();
-            _selectedLed = null;
-
-            // Update Offers
-            foreach (var offer in _offersChanged)
-            {
-                await _dataProvider.Offers.AddTime(_sharedAuthData.LogedUser.Id, offer.Id, offer.Time);
-            }
-            _offersChanged.Clear();
-            _selectedOffer = null;
-
-            // Update Projects
-            foreach (var project in _projectsChanged)
-            {
-                await _dataProvider.Projects.AddTime(_sharedAuthData.LogedUser.Id, project.Id, project.Time);
-            }
-            _projectsChanged.Clear();
-            //_selectedProject = null;
-
-            // Update Draws
-            foreach (var draw in _deliverablesChanged)
-            {
-                var old = _deliverables.FirstOrDefault(d => d.Id == draw.Id);
-                if (old.CompletionEstimation > draw.CompletionEstimation)
-                {
-                    //TODO: Display Msg
-
-                    return;
-                }
-                else
-                    await _dataProvider.Deliverables.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-                await _dataProvider.Deliverables.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
-            }
-
-            // Update Others
-            foreach (var other in _supportiveWorkChanged)
-            {
-                //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-                await _dataProvider.SupportiveWorks.AddTime(_sharedAuthData.LogedUser.Id, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
-            }
-
-            // Update User Hours
-            if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-                await _dataProvider.Users.AddPersonalTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.PersonalTime);
-            if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-                await _dataProvider.Users.AddTraningTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.TrainingTime);
-            if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-                await _dataProvider.Users.AddCorporateEventTime(_sharedAuthData.LogedUser.Id, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+            await _editHoursCompoment.Save();
 
             _deliverablesChanged.Clear();
             _supportiveWorkChanged.Clear();

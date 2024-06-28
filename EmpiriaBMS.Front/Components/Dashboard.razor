@@ -13,6 +13,7 @@
 @using EmpiriaBMS.Front.Components.Admin
 @using Color = Microsoft.Fast.Components.FluentUI.Color;
 @using EmpiriaBMS.Core.Services.DBManipulation;
+@using EmpiriaBMS.Front.Components.WorkingHours;
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -81,7 +82,7 @@
 
                                         <!-- Start / Stop Buttons -->
                                         <div class="d-grid">
-                                            @if (EditMyHours && !_isEndWorkDialogOdepened)
+                                            @if (editMyHours && !_isEndWorkDialogOdepened)
                                             {
                                                 @if (isWorkingMode)
                                                 {
@@ -141,7 +142,7 @@
                                             </div>
 
                                             <!-- Display Hours Passed -->
-                                            @if (SeeMyHours)
+                                            @if (seeMyHours)
                                             {
                                                 <div class="primary-bg-color rounded float-end" style="min-width: 300px;">
                                                     <div class="h5 text-center m-2">
@@ -164,7 +165,7 @@
                                                 <FluentStack Orientation="Orientation.Vertical"
                                                              Style="margin-left: 4px; max-width: 80px;">
                                                     <!-- Restore Database -->
-                                                    @if (SeeRestoreDatabase)
+                                                    @if (seeRestoreDatabase)
                                                     {
                                                         <InputFile @ref="@fileRestoreDB" OnChange="RestoreDb" style="display: none;" />
                                                         <FluentButton IconStart="@(new MyIcons.Size32.RestoreDB())"
@@ -174,7 +175,7 @@
                                                         </FluentButton>
                                                     }
                                                     <!-- BackUp Database -->
-                                                    @if (SeeBackupDatabase)
+                                                    @if (seeBackupDatabase)
                                                     {
                                                         <FluentButton OnClick="@(async() => await BackUpDb())"
                                                                       Loading="@_backUpLoading"
@@ -272,7 +273,7 @@
                                                         {
                                                             <th scope="col" class="sticky-header">Issue</th>
                                                         }
-                                                        @if (isWorkingMode && AssignPm)
+                                                        @if (isWorkingMode && assignPm)
                                                         {
                                                             <th scope="col" class="sticky-header">PM</th>
                                                         }
@@ -360,7 +361,7 @@
                                                                 </td>
                                                             }
 
-                                                            @if (isWorkingMode && AssignPm)
+                                                            @if (isWorkingMode && assignPm)
                                                             {
                                                                 <td class="align-middle
                                                                 @((_selectedProject == null ||
@@ -440,7 +441,7 @@
                                                     <tr>
                                                         <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Discipline</th>
                                                         <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Estimated Discipline Hours</th>
-                                                        @if (isWorkingMode && AssignEngineer)
+                                                        @if (isWorkingMode && assignEngineer)
                                                         {
                                                             <th scope="col"></th>
                                                         }
@@ -469,7 +470,7 @@
                                                                 <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
                                                             </td>
 
-                                                            @if (isWorkingMode && AssignEngineer)
+                                                            @if (isWorkingMode && assignEngineer)
                                                             {
                                                                 <td class="align-middle
                                                                 @((_selectedDiscipline == null ||
@@ -541,7 +542,7 @@
                                                             <th scope="col" class="sticky-header">Deliverable</th>
                                                             <th scope="col" class="sticky-header">Total Hours</th>
                                                             <th scope="col" class="sticky-header">Declared Completion</th>
-                                                            @if (isWorkingMode && AssignDesigner)
+                                                            @if (isWorkingMode && assignDesigner)
                                                             {
                                                                 <th scope="col"></th>
                                                             }
@@ -574,7 +575,7 @@
                                                                     <label>@deliverable.CompletionEstimation %</label>
                                                                 </td>
 
-                                                                @if (isWorkingMode && AssignDesigner)
+                                                                @if (isWorkingMode && assignDesigner)
                                                                 {
                                                                     <td class="align-middle
                                                                 @((__selectedDeliverable == null ||
@@ -613,13 +614,13 @@
                                                                 {
                                                                     <span class="fluent--delete-28-regular col-1"
                                                                           @onclick="@(() => DeleteSupportiveWork())" />
-                                                                    @if (__hasSapportiveWorksSelections)
+                                                                    @if (_hasSapportiveWorksSelections)
                                                                     {
                                                                         <span class="material-symbols--edit-outline col-1"
                                                                               @onclick="@(() => EditSupportiveWork())" />
                                                                     }
                                                                 }
-                                                                @if (__hasSapportiveWorksSelections)
+                                                                @if (_hasSapportiveWorksSelections)
                                                                 {
                                                                     <span class="grommet-icons--add col-1"
                                                                           @onclick="@(() => AddSupportiveWork())" />
@@ -767,6 +768,29 @@
             </FluentTab>
         }
 
+        <!-- Change Everybody Hours -->
+        @if (canChangeEverybodyHours)
+        {
+            <FluentTab Class="my-fluent-tab"
+                       LabelClass="my-fluent-tab-label"
+                       Label="Hours"
+                       Icon="@(new Icons.Regular.Size48.Clock())"
+                       Id="tab-employee-hours">
+
+                <div class="row justify-content-center mt-1 mb-1">
+                    <div class="col-auto" style="width: 100%; height: 100%;">
+                        <div class="m-1 row justify-content-center">
+                            <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                                <EditUsersHours />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </FluentTab>
+        }
+
         <!-- Admin -->
         @if (seeAdmin)
         {
@@ -805,240 +829,10 @@
                   style="--dialog-width: auto !important;
                         --dialog-height: auto !important;">
 
-        <!-- Headder -->
-        <div class="d-flex justify-content-between">
-            <h3>Work update</h3>
-            <h3>My Time Since Start: <b class="text-warning">@remainingTime.ToString(@"hh\:mm")</b></h3>
-        </div>
-        
-
-        <div class="modal-body">
-
-            <div class="mt-2 row gx-3">
-
-                @if(WorkOnLeds)
-                {
-                    <!-- Select Led -->
-                    <div class="col">
-                        <div class="text-center">
-                            <h5>Select Led</h5>
-                        </div>
-                        <select class="form-select form-select-lg"
-                                aria-label="Select Led"
-                                @onchange="@(async (ChangeEventArgs e) => await OnSelectLed(Convert.ToInt32(e.Value)))">
-                            <option value="0" selected>Select Led</option>
-                            @foreach (var led in _leds)
-                            {
-                                <option value="@led.Id">
-                                    @led.Name
-                                </option>
-                            }
-                        </select>
-                    </div>
-                }
-
-                @if (WorkOnOffers)
-                {
-                    <!-- Select Offer -->
-                    <div class="col">
-                        <div class="text-center">
-                            <h5>Select Offer</h5>
-                        </div>
-                        <select class="form-select form-select-lg"
-                                aria-label="Select Offer"
-                                @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
-                            <option value="0" selected>Select Offer</option>
-                            @foreach (var offer in _offers)
-                            {
-                                <option value="@offer.Id">
-                                    @offer.Code
-                                </option>
-                            }
-                        </select>
-                    </div>
-                }
-
-                <!-- Select Project -->
-                <div class="col">
-                    <div class="text-center">
-                        <h5>Select Project</h5>
-                    </div>
-                    <select class="form-select form-select-lg"
-                            aria-label="Select Project"
-                            @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
-                        <option value="0" selected>Select Project</option>
-                        @foreach (var project in _projects)
-                        {
-                            <option value="@project.Id">
-                                @project.Name
-                            </option>
-                        }
-                    </select>
-                </div>
-
-                <!-- Discipline -->
-                <div class="col">
-                    <div class="text-center">
-                        <h5>Select Discipline</h5>
-                    </div>
-                    <select class="form-select form-select-lg"
-                            aria-label="Select Discipline"
-                            @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
-                        <option value="0" selected>Select Discipline</option>
-                        @foreach (var discipline in _disciplines)
-                        {
-                            <option value="@discipline.Id">
-                                @discipline.Type.Name
-                            </option>
-                        }
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="mt-1 row gx-3">
-
-                <!-- Deliverables -->
-                <div class="col">
-                    <div class="text-center">
-                        <h5>Deliverables</h5>
-                    </div>
-                    <div class="table-responsive"
-                         style="height: 300px;">
-                        <table class="table table-hover table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="sticky-header">Deliverable</th>
-                                    <th scope="col" class="sticky-header">Time</th>
-                                    <th scope="col" class="sticky-header">Declared Completion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var _deliverable in _deliverables)
-                                {
-                                    <tr class="align-middle">
-                                        <td class="align-middle">
-                                            <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
-                                        </td>
-                                        <td class="align-middle">
-                                            <TimeInput MinTime="TimeSpan.Zero"
-                                                       MaxTime="@remainingTime"
-                                                       Time="_deliverable.Time"
-                                                       OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
-                                        </td>
-                                        <td class="align-middle">
-                                            <div class="input-group" style="width: 110px;">
-                                                <input type="number"
-                                                       class="form-control"
-                                                       EnableMinMax="true"
-                                                       min="0"
-                                                       max="100"
-                                                       style="min-width: 52px !important; max-width: 52px !important;"
-                                                       onkeyup="if(value<0) value=0; if(value>100) value=100;"
-                                                       onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
-                                                       @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">%</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Others -->
-                <div class="col">
-                    <div class="text-center">
-                        <h5>Supportive Works</h5>
-                    </div>
-                    <div class="table-responsive"
-                         style="height: 300px;">
-                        <table class="table table-hover table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="sticky-header">Other</th>
-                                    <th scope="col" class="sticky-header">Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var _supportiveWork in _supportiveWork)
-                                {
-                                    <tr class="align-middle">
-                                        <td class="align-middle">
-                                            <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
-                                        </td>
-                                        <td class="align-middle">
-                                            <TimeInput MinTime="TimeSpan.Zero"
-                                                       MaxTime="@remainingTime"
-                                                       Time="@_supportiveWork.Time"
-                                                       OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-
-            
-            <div class="mt-1 row">
-
-                <!-- Set User With High Roles Time -->
-                <div class="col-12 border rounded mb-1">
-                    <div class="row gx-3 m-2" >
-                        @if (WorkOnLeds && _selectedLed != null)
-                        {
-                            <div class="col-4 text-center">
-                                <span class="mb-2 fs-5">Led</span>
-                                <TimeInput MinTime="TimeSpan.Zero"
-                                           MaxTime="@remainingTime"
-                                           Time="_selectedLed.Time"
-                                           OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedLed, time)) />
-                            </div>
-                        }
-
-                        @if (WorkOnOffers && _selectedOffer != null)
-                        {
-                            <div class="col-4 text-center">
-                                <span class="mb-2 fs-5">Offer</span>
-                                <TimeInput MinTime="TimeSpan.Zero"
-                                           MaxTime="@remainingTime"
-                                           Time="_selectedOffer.Time"
-                                           OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
-                            </div>
-                        }
-
-                        @if (WorkOnProject && _selectedProject != null)
-                        {
-                            <div class="col-4 text-center">
-                                <span class="mb-2 fs-5">Project</span>
-                                <TimeInput MinTime="TimeSpan.Zero"
-                                           MaxTime="@remainingTime"
-                                           Time="_selectedProject.Time"
-                                           OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                <!-- Set User Extra Time -->
-                <div class="col-12 border rounded mb-1">
-                    <SetUserTime LogedUserTimes="@_editLogedUserTimes"
-                                 RemainingTime="@remainingTime"
-                                 OnPersonalTimeChanged="@_onPersonalTimeChanged"
-                                 OnTrainingTimeChanged="@_onTrainingTimeChanged"
-                                 OnCorporateTimeChanged="@_onCorporateTimeChanged" />
-                </div>
-                
-            </div>
-
-        </div>
-
+        <EditUsersHours @ref="@_editHoursCompoment"
+                        RemainingTime="@remainingTime"
+                        IsFromDashboard="true"
+                        OnTimeChanged="@_onTimeTimeChanged" />
 
         <div class="row">
             <FluentButton Disabled="@_isEndWorkAcceptDialogDisabled"

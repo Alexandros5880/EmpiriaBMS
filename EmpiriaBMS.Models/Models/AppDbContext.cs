@@ -61,7 +61,7 @@ public class AppDbContext : DbContext
         SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
         optionsBuilder.UseSqlServer(SelectedConnectionString);
         //optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
-        //optionsBuilder.EnableSensitiveDataLogging();
+        optionsBuilder.EnableSensitiveDataLogging();
         //optionsBuilder.EnableDetailedErrors();
         //optionsBuilder.EnableServiceProviderCaching();
         //optionsBuilder.EnableThreadSafetyChecks();
@@ -75,7 +75,7 @@ public class AppDbContext : DbContext
         // Relations
         ModelRelations.CreateRelations(builder);
 
-        bool runSeedData = false;
+        bool runSeedData = true;
 
         if (runSeedData)
         {
@@ -514,6 +514,18 @@ public class AppDbContext : DbContext
                 Ord = 36
             };
             builder.Entity<Permission>().HasData(per_36);
+
+            // Can Change Everybody Hours
+            var per_37_id = random.Next(123456789, 999999999);
+            Permission per_37 = new Permission()
+            {
+                Id = per_37_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Can Change Everybody Hours",
+                Ord = 37
+            };
+            builder.Entity<Permission>().HasData(per_37);
             #endregion
 
             #region Roles
@@ -1370,6 +1382,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_114);
 
+            // CTO || Can Change Everybody Hours
+            RolePermission rp_119 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_37_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_119);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -1713,6 +1736,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_116);
 
+            // CEO || Can Change Everybody Hours
+            RolePermission rp_120 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_37_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_120);
+
 
             // Guest
             // Guest || See Dashboard Layout
@@ -1817,6 +1851,17 @@ public class AppDbContext : DbContext
                 PermissionId = per_36_id
             };
             builder.Entity<RolePermission>().HasData(rp_118);
+
+            // Admin || Can Change Everybody Hours
+            RolePermission rp_121 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_37_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_121);
 
 
             // Secretariat 
@@ -3241,6 +3286,35 @@ public class AppDbContext : DbContext
             List<Project> projects = new List<Project>();
             for (var i = 1; i <= projectSubCategories.Count(); i++)
             {
+                // Client
+                var clientId = random.Next(123456789, 999999999) + i * 3;
+                Client client = new Client()
+                {
+                    Id = clientId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    FirstName = $"Client-Led-{i}",
+                    LastName = "LastName",
+                    ProxyAddress = "alexandrosplatanios15@gmail.com",
+                    Phone1 = "6949277783",
+                    CompanyName = "Embiria BMS",
+                };
+                builder.Entity<Client>().HasData(client);
+
+                // Led
+                var ledId = random.Next(123456789, 999999999) + i * 3;
+                Led led = new Led()
+                {
+                    Id = ledId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = $"Led-{i}",
+                    ClientId = clientId,
+                    PotencialFee = random.Next(i, i * 3),
+                    Result = LedResult.SUCCESSFUL
+                };
+                builder.Entity<Led>().HasData(led);
+
                 // Offers
                 var offerId = random.Next(123456789, 999999999) + i * 3;
                 Offer offer = new Offer()
@@ -3257,6 +3331,7 @@ public class AppDbContext : DbContext
                     OfferPrice = 1000 * i * 2,
                     CategoryId = projectCategories[categoriesIndex].Id,
                     SubCategoryId = projectSubCategories[i - 1].Id,
+                    LedId = ledId,
                 };
                 builder.Entity<Offer>().HasData(offer);
 
@@ -3326,6 +3401,35 @@ public class AppDbContext : DbContext
 
             for (var i = 1; i <= 7; i++)
             {
+                // Client
+                var clientId = random.Next(123456789, 999999999) + i * 3 + 2345;
+                Client client = new Client()
+                {
+                    Id = clientId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    FirstName = $"Client-Led-M-{i}",
+                    LastName = "LastName",
+                    ProxyAddress = "alexandrosplatanios15@gmail.com",
+                    Phone1 = "6949277783",
+                    CompanyName = "Embiria BMS"
+                };
+                builder.Entity<Client>().HasData(client);
+
+                // Led
+                var ledId = random.Next(123456789, 999999999) + i * 3 + 13245;
+                Led led = new Led()
+                {
+                    Id = ledId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = $"Led-M-{i}",
+                    ClientId = clientId,
+                    PotencialFee = random.Next(i, i * 3),
+                    Result = LedResult.SUCCESSFUL
+                };
+                builder.Entity<Led>().HasData(led);
+
                 // Offers
                 var offerId = random.Next(123456789, 999999999) + i * 3;
                 Offer offer = new Offer()
@@ -3342,6 +3446,7 @@ public class AppDbContext : DbContext
                     OfferPrice = 1000 * i * 3,
                     CategoryId = projectCategories[categoriesIndex].Id,
                     SubCategoryId = projectSubCategories[subCategoriesIndex].Id,
+                    LedId = ledId,
                 };
                 builder.Entity<Offer>().HasData(offer);
 

@@ -9,7 +9,7 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        if (args[0] == "seed")
+        if (args.Length > 0 && args[0] == "seed")
         {
             // Set up the service collection
             var serviceCollection = new ServiceCollection();

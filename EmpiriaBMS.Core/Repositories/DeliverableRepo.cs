@@ -184,7 +184,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
     }
 
-    public async Task AddTime(int userId, int projectId, int disciplineId, int drawId, TimeSpan timespan)
+    public async Task AddTime(int userId, int projectId, int disciplineId, int drawId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -204,7 +204,9 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
                         timeSpans[i].Days,
                         timeSpans[i].Hours,
                         timeSpans[i].Minutes,
-                        timeSpans[i].Seconds)
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = isEditByAdmin
                 };
                 await _context.Set<DailyTime>().AddAsync(time);
             }

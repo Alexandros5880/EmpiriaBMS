@@ -40,39 +40,42 @@ public class SeedData
         var tasks = new List<Func<Task>>()
         {
             CeatePermissions,
-            //CeateRoles,
-            //CeateRolesPermissions,
-            //CeateDefaultAdmins,
-            //CeateProjectCategories,
-            //CreateProjectSubCategories,
-            //CreateProjectStages,
-            //CreateInvoiceTypes,
-            //CreatePaymentTypes,
-            //CreateOfferTypes,
-            //CreateOfferState,
-            //CreateDisciplineTypes,
-            //CreateDeliverableTypes,
-            //CreateSupportiveWorkTypes,
-            //CreateSecretaries,
-            //CreateDraftmen,
-            //CreateEngineers,
-            //CreateProjectManagers,
-            //CreateProjects,
-            //CreateMissedDeadLineProjects,
-            //CreateDisciplines,
-            //CreateDeliverables,
-            //CreateSupportiveWorks,
-            //ConnectAllEngineersWithEveryDisclipline,
-            //ConnectEveryDraftmanWithEverySupportiveWork
+            CeateRoles,
+            CeateRolesPermissions,
+            CeateDefaultAdmins,
+            CeateProjectCategories,
+            CreateProjectSubCategories,
+            CreateProjectStages,
+            CreateInvoiceTypes,
+            CreatePaymentTypes,
+            CreateOfferTypes,
+            CreateOfferState,
+            CreateDisciplineTypes,
+            CreateDeliverableTypes,
+            CreateSupportiveWorkTypes,
+            CreateSecretaries,
+            CreateDraftmen,
+            CreateEngineers,
+            CreateProjectManagers,
+            CreateProjects,
+            CreateMissedDeadLineProjects,
+            CreateDisciplines,
+            CreateDeliverables,
+            CreateSupportiveWorks,
+            ConnectAllEngineersWithEveryDisclipline,
+            ConnectEveryDraftmanWithEverySupportiveWork
         };
 
-        Console.ForegroundColor = ConsoleColor.Red;
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("\n\nStarting add Seed Data to DB.");
+        Console.ForegroundColor = ConsoleColor.White;
+
         for (int i = 0; i < tasks.Count; i++)
         {
             await tasks[i]();
             UpdateProgress(i + 1, tasks.Count);
         }
+
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Seed Data added.\n\n");
         Console.ForegroundColor = ConsoleColor.White;
@@ -85,12 +88,10 @@ public class SeedData
     {
         try
         {
-            Random random = new Random();
-
             using (var context = _dbContextFactory.CreateDbContext())
             {
                 // See Dashboard Layout
-                var per_1_id = random.Next(123456789, 999999999);
+                var per_1_id = 1;
                 Permission per_1 = new Permission()
                 {
                     Id = per_1_id,
@@ -101,7 +102,7 @@ public class SeedData
                 };
 
                 // Dashboard Edit My Hours
-                var per_2_id = random.Next(123456789, 999999999);
+                var per_2_id = 2;
                 Permission per_2 = new Permission()
                 {
                     Id = per_2_id,
@@ -112,7 +113,7 @@ public class SeedData
                 };
 
                 // Dashboard Assign Designer
-                var per_3_id = random.Next(123456789, 999999999);
+                var per_3_id = 3;
                 Permission per_3 = new Permission()
                 {
                     Id = per_3_id,
@@ -123,7 +124,7 @@ public class SeedData
                 };
 
                 // Dashboard Assign Engineer
-                var per_4_id = random.Next(123456789, 999999999);
+                var per_4_id = 4;
                 Permission per_4 = new Permission()
                 {
                     Id = per_4_id,
@@ -134,7 +135,7 @@ public class SeedData
                 };
 
                 // Dashboard Assign Project Manager
-                var per_5_id = random.Next(123456789, 999999999);
+                var per_5_id = 5;
                 Permission per_5 = new Permission()
                 {
                     Id = per_5_id,
@@ -145,7 +146,7 @@ public class SeedData
                 };
 
                 // Dashboard Add Project
-                var per_6_id = random.Next(123456789, 999999999);
+                var per_6_id = 6;
                 Permission per_6 = new Permission()
                 {
                     Id = per_6_id,
@@ -156,7 +157,7 @@ public class SeedData
                 };
 
                 // See Admin Layout
-                var per_7_id = random.Next(123456789, 999999999);
+                var per_7_id = 7;
                 Permission per_7 = new Permission()
                 {
                     Id = per_7_id,
@@ -167,7 +168,7 @@ public class SeedData
                 };
 
                 // Dashboard See My Hours
-                var per_8_id = random.Next(123456789, 999999999);
+                var per_8_id = 8;
                 Permission per_8 = new Permission()
                 {
                     Id = per_8_id,
@@ -178,7 +179,7 @@ public class SeedData
                 };
 
                 // Dashboard See All Disciplines
-                var per_9_id = random.Next(123456789, 999999999);
+                var per_9_id = 9;
                 Permission per_9 = new Permission()
                 {
                     Id = per_9_id,
@@ -189,7 +190,7 @@ public class SeedData
                 };
 
                 // Dashboard See All Deliverables
-                var per_10_id = random.Next(123456789, 999999999);
+                var per_10_id = 10;
                 Permission per_10 = new Permission()
                 {
                     Id = per_10_id,
@@ -200,7 +201,7 @@ public class SeedData
                 };
 
                 // Dashboard See All Projects
-                var per_11_id = random.Next(123456789, 999999999);
+                var per_11_id = 11;
                 Permission per_11 = new Permission()
                 {
                     Id = per_11_id,
@@ -211,7 +212,7 @@ public class SeedData
                 };
 
                 // Dashboard Edit Project
-                var per_12_id = random.Next(123456789, 999999999);
+                var per_12_id = 12;
                 Permission per_12 = new Permission()
                 {
                     Id = per_12_id,
@@ -222,7 +223,7 @@ public class SeedData
                 };
 
                 // Display Projects Code
-                var per_13_id = random.Next(123456789, 999999999);
+                var per_13_id = 13;
                 Permission per_13 = new Permission()
                 {
                     Id = per_13_id,
@@ -233,7 +234,7 @@ public class SeedData
                 };
 
                 // Dashboard Edit Discipline
-                var per_14_id = random.Next(123456789, 999999999);
+                var per_14_id = 14;
                 Permission per_14 = new Permission()
                 {
                     Id = per_14_id,
@@ -244,7 +245,7 @@ public class SeedData
                 };
 
                 // Dashboard Edit Deliverable
-                var per_15_id = random.Next(123456789, 999999999);
+                var per_15_id = 15;
                 Permission per_15 = new Permission()
                 {
                     Id = per_15_id,
@@ -255,7 +256,7 @@ public class SeedData
                 };
 
                 // Dashboard Edit Other
-                var per_16_id = random.Next(123456789, 999999999);
+                var per_16_id = 16;
                 Permission per_16 = new Permission()
                 {
                     Id = per_16_id,
@@ -266,7 +267,7 @@ public class SeedData
                 };
 
                 // Dashboard See KPIS
-                var per_17_id = random.Next(123456789, 999999999);
+                var per_17_id = 17;
                 Permission per_17 = new Permission()
                 {
                     Id = per_17_id,
@@ -277,7 +278,7 @@ public class SeedData
                 };
 
                 // See Hours Per Role KPI
-                var per_18_id = random.Next(123456789, 999999999);
+                var per_18_id = 18;
                 Permission per_18 = new Permission()
                 {
                     Id = per_18_id,
@@ -288,7 +289,7 @@ public class SeedData
                 };
 
                 // See Active Delayed Projects KPI
-                var per_19_id = random.Next(123456789, 999999999);
+                var per_19_id = 19;
                 Permission per_19 = new Permission()
                 {
                     Id = per_19_id,
@@ -299,7 +300,7 @@ public class SeedData
                 };
 
                 // See All Projects Missed DeadLine KPI
-                var per_20_id = random.Next(123456789, 999999999);
+                var per_20_id = 20;
                 Permission per_20 = new Permission()
                 {
                     Id = per_20_id,
@@ -310,7 +311,7 @@ public class SeedData
                 };
 
                 // See Employee Turnover KPI
-                var per_21_id = random.Next(123456789, 999999999);
+                var per_21_id = 21;
                 Permission per_21 = new Permission()
                 {
                     Id = per_21_id,
@@ -321,7 +322,7 @@ public class SeedData
                 };
 
                 // See My Projects Missed DeadLine KPI
-                var per_22_id = random.Next(123456789, 999999999);
+                var per_22_id = 22;
                 Permission per_22 = new Permission()
                 {
                     Id = per_22_id,
@@ -332,7 +333,7 @@ public class SeedData
                 };
 
                 // See Active Delayed Project Types Counter KPI
-                var per_23_id = random.Next(123456789, 999999999);
+                var per_23_id = 23;
                 Permission per_23 = new Permission()
                 {
                     Id = per_23_id,
@@ -343,7 +344,7 @@ public class SeedData
                 };
 
                 // Dashboard See Offers
-                var per_24_id = random.Next(123456789, 999999999);
+                var per_24_id = 24;
                 Permission per_24 = new Permission()
                 {
                     Id = per_24_id,
@@ -354,7 +355,7 @@ public class SeedData
                 };
 
                 // See Tender Table KPI
-                var per_25_id = random.Next(123456789, 999999999);
+                var per_25_id = 25;
                 Permission per_25 = new Permission()
                 {
                     Id = per_25_id,
@@ -365,7 +366,7 @@ public class SeedData
                 };
 
                 // See Delayed Payments KPI
-                var per_26_id = random.Next(123456789, 999999999);
+                var per_26_id = 26;
                 Permission per_26 = new Permission()
                 {
                     Id = per_26_id,
@@ -376,7 +377,7 @@ public class SeedData
                 };
 
                 // See Pendings Payments KPI
-                var per_27_id = random.Next(123456789, 999999999);
+                var per_27_id = 27;
                 Permission per_27 = new Permission()
                 {
                     Id = per_27_id,
@@ -387,7 +388,7 @@ public class SeedData
                 };
 
                 // See Teams Requested Users
-                var per_28_id = random.Next(123456789, 999999999);
+                var per_28_id = 28;
                 Permission per_28 = new Permission()
                 {
                     Id = per_28_id,
@@ -398,7 +399,7 @@ public class SeedData
                 };
 
                 // See Invoices
-                var per_29_id = random.Next(123456789, 999999999);
+                var per_29_id = 29;
                 Permission per_29 = new Permission()
                 {
                     Id = per_29_id,
@@ -409,7 +410,7 @@ public class SeedData
                 };
 
                 // See Excpences
-                var per_30_id = random.Next(123456789, 999999999);
+                var per_30_id = 30;
                 Permission per_30 = new Permission()
                 {
                     Id = per_30_id,
@@ -420,7 +421,7 @@ public class SeedData
                 };
 
                 // Work on Project
-                var per_31_id = random.Next(123456789, 999999999);
+                var per_31_id = 31;
                 Permission per_31 = new Permission()
                 {
                     Id = per_31_id,
@@ -431,7 +432,7 @@ public class SeedData
                 };
 
                 // Work on Offers
-                var per_32_id = random.Next(123456789, 999999999);
+                var per_32_id = 32;
                 Permission per_32 = new Permission()
                 {
                     Id = per_32_id,
@@ -442,7 +443,7 @@ public class SeedData
                 };
 
                 // Work on Leds
-                var per_33_id = random.Next(123456789, 999999999);
+                var per_33_id = 33;
                 Permission per_33 = new Permission()
                 {
                     Id = per_33_id,
@@ -453,7 +454,7 @@ public class SeedData
                 };
 
                 // See Next Year Income
-                var per_34_id = random.Next(123456789, 999999999);
+                var per_34_id = 44;
                 Permission per_34 = new Permission()
                 {
                     Id = per_34_id,
@@ -464,7 +465,7 @@ public class SeedData
                 };
 
                 // Backup Database
-                var per_35_id = random.Next(123456789, 999999999);
+                var per_35_id = 35;
                 Permission per_35 = new Permission()
                 {
                     Id = per_35_id,
@@ -475,7 +476,7 @@ public class SeedData
                 };
 
                 // Restore Database
-                var per_36_id = random.Next(123456789, 999999999);
+                var per_36_id = 36;
                 Permission per_36 = new Permission()
                 {
                     Id = per_36_id,
@@ -483,6 +484,17 @@ public class SeedData
                     LastUpdatedDate = DateTime.Now,
                     Name = "Restore Database",
                     Ord = 36
+                };
+
+                // Restore Database
+                var per_37_id = 37;
+                Permission per_37 = new Permission()
+                {
+                    Id = per_37_id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = "Can Change Everybody Hours",
+                    Ord = 37
                 };
 
                 await DatabaseBackupService.SetDbIdentityInsert(context, "Permissions", true);
@@ -523,6 +535,7 @@ public class SeedData
                 await SeedIfNotExists<Permission>(context, per_34);
                 await SeedIfNotExists<Permission>(context, per_35);
                 await SeedIfNotExists<Permission>(context, per_36);
+                await SeedIfNotExists<Permission>(context, per_37);
 
                 await DatabaseBackupService.SetDbIdentityInsert(context, "Permissions", false);
 
@@ -563,22 +576,22 @@ public class SeedData
                 permissionsIds.Add(per_34.Id);
                 permissionsIds.Add(per_35.Id);
                 permissionsIds.Add(per_36.Id);
+                permissionsIds.Add(per_37.Id);
             }
         }
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CeatePermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CeatePermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
     protected async Task CeateRoles()
     {
-
-        Random random = new Random();
-
         // CEO
-        var role_6_id = random.Next(123456789, 999999999);
+        var role_6_id = 38;
         Role role_6 = new()
         {
             Id = role_6_id,
@@ -590,7 +603,7 @@ public class SeedData
         };
 
         // COO
-        var role_4_id = random.Next(123456789, 999999999);
+        var role_4_id = 39;
         Role role_4 = new()
         {
             Id = role_4_id,
@@ -603,7 +616,7 @@ public class SeedData
         };
 
         // CTO
-        var role_5_id = random.Next(123456789, 999999999);
+        var role_5_id = 40;
         Role role_5 = new()
         {
             Id = role_5_id,
@@ -616,7 +629,7 @@ public class SeedData
         };
 
         // Secretariat
-        var role_10_id = random.Next(123456789, 999999999);
+        var role_10_id = 41;
         Role role_10 = new()
         {
             Id = role_10_id,
@@ -629,7 +642,7 @@ public class SeedData
         };
 
         // Project Manager
-        var role_3_id = random.Next(123456789, 999999999);
+        var role_3_id = 42;
         Role role_3 = new()
         {
             Id = role_3_id,
@@ -642,7 +655,7 @@ public class SeedData
         };
 
         // Engineer
-        var role_2_id = random.Next(123456789, 999999999);
+        var role_2_id = 43;
         Role role_2 = new()
         {
             Id = role_2_id,
@@ -655,7 +668,7 @@ public class SeedData
         };
 
         // Designer
-        var role_1_id = random.Next(123456789, 999999999);
+        var role_1_id = 44;
         Role role_1 = new()
         {
             Id = role_1_id,
@@ -668,7 +681,7 @@ public class SeedData
         };
 
         // Guest
-        var role_7_id = random.Next(123456789, 999999999);
+        var role_7_id = 45;
         Role role_7 = new()
         {
             Id = role_7_id,
@@ -680,7 +693,7 @@ public class SeedData
         };
 
         // Customer
-        var role_8_id = random.Next(123456789, 999999999);
+        var role_8_id = 46;
         Role role_8 = new()
         {
             Id = role_8_id,
@@ -692,7 +705,7 @@ public class SeedData
         };
 
         // Admin
-        var role_9_id = random.Next(123456789, 999999999);
+        var role_9_id = 47;
         Role role_9 = new()
         {
             Id = role_9_id,
@@ -704,7 +717,7 @@ public class SeedData
         };
 
         // Engineer SUB
-        var role_11_id = random.Next(123456789, 999999999);
+        var role_11_id = 48;
         Role role_11 = new()
         {
             Id = role_11_id,
@@ -752,7 +765,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CeateRoles(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CeateRoles(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
 
@@ -1388,6 +1403,16 @@ public class SeedData
                     PermissionId = GetRecordAtIndex(permissionsIds, 35)
                 };
 
+                // CTO || Can Change Everybody Hours 
+                RolePermission rp_16 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9 + 3245,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 36)
+                };
+
 
                 // CEO
                 // CEO || See Dashboard Layout
@@ -1690,6 +1715,16 @@ public class SeedData
                     PermissionId = GetRecordAtIndex(permissionsIds, 35)
                 };
 
+                // CEO || Can Change Everybody Hours 
+                RolePermission rp_17 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9 + 215,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 36)
+                };
+
 
                 // Guest
                 // Guest || See Dashboard Layout
@@ -1786,6 +1821,16 @@ public class SeedData
                     PermissionId = GetRecordAtIndex(permissionsIds, 35)
                 };
 
+                // Admin || Can Change Everybody Hours 
+                RolePermission rp_26 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9 + 2135,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = GetRecordAtIndex(rolesIds, 8),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 36)
+                };
+
 
                 // Secretariat 
                 // Secretariat || See Dashboard Layout
@@ -1865,8 +1910,8 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, rp_13);
                 await SeedIfNotExists<RolePermission>(context, rp_14);
                 await SeedIfNotExists<RolePermission>(context, rp_15);
-                //await SeedIfNotExists<RolePermission>(context, rp_16);
-                //await SeedIfNotExists<RolePermission>(context, rp_17);
+                await SeedIfNotExists<RolePermission>(context, rp_16);
+                await SeedIfNotExists<RolePermission>(context, rp_17);
                 await SeedIfNotExists<RolePermission>(context, rp_18);
                 await SeedIfNotExists<RolePermission>(context, rp_19);
                 await SeedIfNotExists<RolePermission>(context, rp_20);
@@ -1875,7 +1920,7 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, rp_23);
                 await SeedIfNotExists<RolePermission>(context, rp_24);
                 await SeedIfNotExists<RolePermission>(context, rp_25);
-                //await SeedIfNotExists<RolePermission>(context, rp_26);
+                await SeedIfNotExists<RolePermission>(context, rp_26);
                 await SeedIfNotExists<RolePermission>(context, rp_27);
                 await SeedIfNotExists<RolePermission>(context, rp_28);
                 await SeedIfNotExists<RolePermission>(context, rp_29);
@@ -1977,7 +2022,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CeateRolesPermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CeateRolesPermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -1990,7 +2037,7 @@ public class SeedData
             using (var context = _dbContextFactory.CreateDbContext())
             {
                 // Alexandros Platanios
-                var admin_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+                var admin_1_Id = 49;
                 User admin_1 = new User()
                 {
                     Id = admin_1_Id,
@@ -2039,17 +2086,17 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CeateDefaultAdmins(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CeateDefaultAdmins(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
     protected async Task CeateProjectCategories()
     {
-        Random random = new Random();
-
         projectCategories.Clear();
 
-        var project_category_1_Id = random.Next(123456789, 999999999) + 33;
+        var project_category_1_Id = 50;
         ProjectCategory project_category_1 = new ProjectCategory()
         {
             Id = project_category_1_Id,
@@ -2061,7 +2108,7 @@ public class SeedData
         };
         projectCategories.Add(project_category_1);
 
-        var project_category_2_Id = random.Next(123456789, 999999999) + 33;
+        var project_category_2_Id = 51;
         ProjectCategory project_category_2 = new ProjectCategory()
         {
             Id = project_category_2_Id,
@@ -2073,7 +2120,7 @@ public class SeedData
         };
         projectCategories.Add(project_category_2);
 
-        var project_category_3_Id = random.Next(123456789, 999999999) + 33;
+        var project_category_3_Id = 52;
         ProjectCategory project_category_3 = new ProjectCategory()
         {
             Id = project_category_3_Id,
@@ -2085,7 +2132,7 @@ public class SeedData
         };
         projectCategories.Add(project_category_3);
 
-        var project_category_4_Id = random.Next(123456789, 999999999) + 33;
+        var project_category_4_Id = 53;
         ProjectCategory project_category_4 = new ProjectCategory()
         {
             Id = project_category_4_Id,
@@ -2097,7 +2144,7 @@ public class SeedData
         };
         projectCategories.Add(project_category_4);
 
-        var project_category_5_Id = random.Next(123456789, 999999999) + 34;
+        var project_category_5_Id = 54;
         ProjectCategory project_category_5 = new ProjectCategory()
         {
             Id = project_category_5_Id,
@@ -2109,7 +2156,7 @@ public class SeedData
         };
         projectCategories.Add(project_category_5);
 
-        var project_category_6_Id = random.Next(123456789, 999999999) + 34;
+        var project_category_6_Id = 55;
         ProjectCategory project_category_6 = new ProjectCategory()
         {
             Id = project_category_6_Id,
@@ -2121,7 +2168,7 @@ public class SeedData
         };
         projectCategories.Add(project_category_6);
 
-        var project_category_7_Id = random.Next(123456789, 999999999) + 34;
+        var project_category_7_Id = 56;
         ProjectCategory project_category_7 = new ProjectCategory()
         {
             Id = project_category_7_Id,
@@ -2133,7 +2180,7 @@ public class SeedData
         };
         projectCategories.Add(project_category_7);
 
-        var project_category_8_Id = random.Next(123456789, 999999999) + 34;
+        var project_category_8_Id = 57;
         ProjectCategory project_category_8 = new ProjectCategory()
         {
             Id = project_category_8_Id,
@@ -2157,7 +2204,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CeateProjectCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CeateProjectCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsCategories", false);
@@ -2166,8 +2215,6 @@ public class SeedData
 
     protected async Task CreateProjectSubCategories()
     {
-        Random random = new Random();
-
         /*
         * projectCategories[0] = BUILDINGS
         * projectCategories[1] = INFRASTRUCTURE
@@ -2228,13 +2275,14 @@ public class SeedData
 
         projectSubCategories.Clear();
 
+        int counter = 0;
         foreach (var item in ProjectSubCatsNameCat)
         {
             string subCatName = item.Key;
             int catId = item.Value.Id;
             var canAssignePM = item.Value.CanAssignePM;
 
-            var project_sub_category_id = random.Next(123456789, 999999999) + 33;
+            var project_sub_category_id = 57 + counter;
             ProjectSubCategory project_sub_category = new ProjectSubCategory()
             {
                 Id = project_sub_category_id,
@@ -2245,6 +2293,8 @@ public class SeedData
                 CanAssignePM = canAssignePM
             };
             projectSubCategories.Add(project_sub_category);
+
+            counter++;
         }
 
 
@@ -2261,7 +2311,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CeateProjectSubCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CeateProjectSubCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsSubCategories", false);
@@ -2270,11 +2322,9 @@ public class SeedData
 
     protected async Task CreateProjectStages()
     {
-        Random random = new Random();
-
         projectStages.Clear();
 
-        var project_stage_1_Id = random.Next(123456789, 999999999) + 33;
+        var project_stage_1_Id = 100;
         ProjectStage project_stage_1 = new ProjectStage()
         {
             Id = project_stage_1_Id,
@@ -2284,7 +2334,7 @@ public class SeedData
         };
         projectStages.Add(project_stage_1);
 
-        var project_stage_2_Id = random.Next(123456789, 999999999) + 33;
+        var project_stage_2_Id = 101;
         ProjectStage project_stage_2 = new ProjectStage()
         {
             Id = project_stage_2_Id,
@@ -2294,7 +2344,7 @@ public class SeedData
         };
         projectStages.Add(project_stage_2);
 
-        var project_stage_3_Id = random.Next(123456789, 999999999) + 33;
+        var project_stage_3_Id = 102;
         ProjectStage project_stage_3 = new ProjectStage()
         {
             Id = project_stage_3_Id,
@@ -2304,7 +2354,7 @@ public class SeedData
         };
         projectStages.Add(project_stage_3);
 
-        var project_stage_4_Id = random.Next(123456789, 999999999) + 33;
+        var project_stage_4_Id = 103;
         ProjectStage project_stage_4 = new ProjectStage()
         {
             Id = project_stage_4_Id,
@@ -2314,7 +2364,7 @@ public class SeedData
         };
         projectStages.Add(project_stage_4);
 
-        var project_stage_5_Id = random.Next(123456789, 999999999) + 33;
+        var project_stage_5_Id = 104;
         ProjectStage project_stage_5 = new ProjectStage()
         {
             Id = project_stage_5_Id,
@@ -2336,7 +2386,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateProjectStages(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateProjectStages(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsStages", false);
@@ -2345,11 +2397,9 @@ public class SeedData
 
     protected async Task CreateInvoiceTypes()
     {
-        Random random = new Random();
-
         invoiceTypes.Clear();
 
-        var it_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var it_1_id = 105;
         InvoiceType it_1 = new InvoiceType()
         {
             Id = it_1_id,
@@ -2359,7 +2409,7 @@ public class SeedData
         };
         invoiceTypes.Add(it_1);
 
-        var it_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var it_2_id = 106;
         InvoiceType it_2 = new InvoiceType()
         {
             Id = it_2_id,
@@ -2369,7 +2419,7 @@ public class SeedData
         };
         invoiceTypes.Add(it_2);
 
-        var it_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var it_3_id = 107;
         InvoiceType it_3 = new InvoiceType()
         {
             Id = it_3_id,
@@ -2391,7 +2441,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateInvoiceTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateInvoiceTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "InvoicesTypes", false);
@@ -2400,12 +2452,10 @@ public class SeedData
 
     protected async Task CreatePaymentTypes()
     {
-        Random random = new Random();
-
         paymentTypes.Clear();
 
         // BANK
-        var pmt_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        var pmt_1_id = 108;
         PaymentType pmt_1 = new PaymentType()
         {
             Id = pmt_1_id,
@@ -2416,7 +2466,7 @@ public class SeedData
         paymentTypes.Add(pmt_1);
 
         // TRANSFER
-        var pmt_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        var pmt_2_id = 109;
         PaymentType pmt_2 = new PaymentType()
         {
             Id = pmt_2_id,
@@ -2427,7 +2477,7 @@ public class SeedData
         paymentTypes.Add(pmt_2);
 
         // CASH
-        var pmt_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        var pmt_3_id = 110;
         PaymentType pmt_3 = new PaymentType()
         {
             Id = pmt_3_id,
@@ -2438,7 +2488,7 @@ public class SeedData
         paymentTypes.Add(pmt_3);
 
         // CHECK
-        var pmt_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+        var pmt_4_id = 111;
         PaymentType pmt_4 = new PaymentType()
         {
             Id = pmt_4_id,
@@ -2460,7 +2510,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreatePaymentTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreatePaymentTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "PaymentsTypes", false);
@@ -2469,11 +2521,9 @@ public class SeedData
 
     protected async Task CreateOfferTypes()
     {
-        Random random = new Random();
-
         offerTypes.Clear();
 
-        var offer_type_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var offer_type_1_id = 112;
         OfferType offer_type_1 = new OfferType()
         {
             Id = offer_type_1_id,
@@ -2483,7 +2533,7 @@ public class SeedData
         };
         offerTypes.Add(offer_type_1);
 
-        var offer_type_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var offer_type_2_id = 113;
         OfferType offer_type_2 = new OfferType()
         {
             Id = offer_type_2_id,
@@ -2493,7 +2543,7 @@ public class SeedData
         };
         offerTypes.Add(offer_type_2);
 
-        var offer_type_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var offer_type_3_id = 114;
         OfferType offer_type_3 = new OfferType()
         {
             Id = offer_type_3_id,
@@ -2503,7 +2553,7 @@ public class SeedData
         };
         offerTypes.Add(offer_type_3);
 
-        var offer_type_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var offer_type_4_id = 115;
         OfferType offer_type_4 = new OfferType()
         {
             Id = offer_type_4_id,
@@ -2525,7 +2575,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateOfferTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateOfferTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "OffersTypes", false);
@@ -2534,11 +2586,9 @@ public class SeedData
 
     protected async Task CreateOfferState()
     {
-        Random random = new Random();
-
         offerStates.Clear();
 
-        var offer_state_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var offer_state_1_id = 116;
         OfferState offer_state_1 = new OfferState()
         {
             Id = offer_state_1_id,
@@ -2548,7 +2598,7 @@ public class SeedData
         };
         offerStates.Add(offer_state_1);
 
-        var offer_state_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var offer_state_2_id = 117;
         OfferState offer_state_2 = new OfferState()
         {
             Id = offer_state_2_id,
@@ -2570,7 +2620,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateOfferState(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateOfferState(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "OffesStates", false);
@@ -2579,8 +2631,6 @@ public class SeedData
 
     protected async Task CreateDisciplineTypes()
     {
-        Random random = new Random();
-
         disciplineTypes.Clear();
 
         string[] dicTypeNames = {
@@ -2606,7 +2656,7 @@ public class SeedData
             };
         for (var i = 0; i < dicTypeNames.Length; i++)
         {
-            var discipline_type_Id = random.Next(123456789, 999999999);
+            var discipline_type_Id = 117 + i;
             DisciplineType dt = new DisciplineType()
             {
                 Id = discipline_type_Id,
@@ -2618,7 +2668,7 @@ public class SeedData
         }
 
         // Add Discipline Type Project Manager Hours.
-        var discipline_pm_hours_type_Id = random.Next(123456789, 999999999);
+        var discipline_pm_hours_type_Id = 140;
         DisciplineType dt_pm_hours = new DisciplineType()
         {
             Id = discipline_pm_hours_type_Id,
@@ -2640,7 +2690,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateDisciplineTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateDisciplineTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplineTypes", false);
@@ -2649,8 +2701,6 @@ public class SeedData
 
     protected async Task CreateDeliverableTypes()
     {
-        Random random = new Random();
-
         deliverableTypes.Clear();
 
         string[] drawTypeNames = {
@@ -2660,7 +2710,7 @@ public class SeedData
             };
         for (var i = 0; i < drawTypeNames.Length; i++)
         {
-            var drawing_type_Id = random.Next(123456789, 999999999);
+            var drawing_type_Id = 141 + i;
             DeliverableType drt = new DeliverableType()
             {
                 Id = drawing_type_Id,
@@ -2683,7 +2733,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateDeliverableTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateDeliverableTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "DeliverableTypes", false);
@@ -2692,8 +2744,6 @@ public class SeedData
 
     protected async Task CreateSupportiveWorkTypes()
     {
-        Random random = new Random();
-
         otherTypes.Clear();
 
         string[] otherTypeNames = {
@@ -2707,7 +2757,7 @@ public class SeedData
             };
         for (var i = 0; i < otherTypeNames.Length; i++)
         {
-            var other_type_Id = random.Next(123456789, 999999999);
+            var other_type_Id = 147 + i;
             SupportiveWorkType ort = new SupportiveWorkType()
             {
                 Id = other_type_Id,
@@ -2730,7 +2780,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateSupportiveWorkTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorkTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkTypes", false);
@@ -2740,10 +2792,8 @@ public class SeedData
 
     protected async Task CreateSecretaries()
     {
-        Random random = new Random();
-
         // ΑΘΗΝΑ ΚΩΝΣΤΑΝΤΙΝΙΔΟΥ
-        var secretarie_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 26;
+        var secretarie_1_Id = 155;
         User secretarie_1 = new User()
         {
             Id = secretarie_1_Id,
@@ -2758,7 +2808,7 @@ public class SeedData
 
         Email email_6 = new Email()
         {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            Id = 156,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Address = "embiria@embiria.gr",
@@ -2767,7 +2817,7 @@ public class SeedData
 
         Email email_7 = new Email()
         {
-            Id = random.Next(123456789, 999999999) + random.Next(0, 33),
+            Id = 157,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Address = "akonstantinidou@embiria.gr",
@@ -2776,7 +2826,7 @@ public class SeedData
 
         UserRole secretarieRole_1_em = new UserRole()
         {
-            Id = random.Next(123456789, 999999999) + 11,
+            Id = 158,
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             UserId = secretarie_1_Id,
@@ -2804,7 +2854,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CreateSecretaries(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CreateSecretaries(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -2814,7 +2866,7 @@ public class SeedData
         draftsmen.Clear();
 
         // Draftsmen ΔΟΥΓΑΛΕΡΗΣ ΓΡΗΓΟΡΗΣ
-        var draftsman_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 7;
+        var draftsman_1_Id = 159;
         User draftman_1 = new User()
         {
             Id = draftsman_1_Id,
@@ -2845,7 +2897,7 @@ public class SeedData
         };
 
         // Draftsmen ΤΣΑΛΑΜΑΓΚΑΚΗΣ ΔΗΜΗΤΡΗΣ
-        var draftsman_2_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 8;
+        var draftsman_2_Id = 160;
         User draftman_2 = new User()
         {
             Id = draftsman_2_Id,
@@ -2877,7 +2929,7 @@ public class SeedData
 
 
         // Draftsmen ΧΑΤΖΑΚΗΣ ΜΑΝΩΛΗΣ
-        var draftsman_3_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 9;
+        var draftsman_3_Id = 161;
         User draftman_3 = new User()
         {
             Id = draftsman_3_Id,
@@ -2933,7 +2985,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CreateDraftmen(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CreateDraftmen(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -2943,7 +2997,7 @@ public class SeedData
         engineers.Clear();
 
         // ΠΑΞΙΝΟΣ ΕΥΑΓΓΕΛΟΣ
-        var engineer_1_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 10;
+        var engineer_1_Id = 162;
         User engineer_1 = new User()
         {
             Id = engineer_1_Id,
@@ -2975,7 +3029,7 @@ public class SeedData
         };
 
         // ΜΑΝΑΡΩΛΗΣ ΞΕΝΟΦΩΝ
-        var engineer_2_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 11;
+        var engineer_2_Id = 163;
         User engineer_2 = new User()
         {
             Id = engineer_2_Id,
@@ -3007,7 +3061,7 @@ public class SeedData
         };
 
         // ΠΑΡΙΣΗΣ ΣΤΕΦΑΝΟΣ
-        var engineer_3_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 12;
+        var engineer_3_Id = 164;
         User engineer_3 = new User()
         {
             Id = engineer_3_Id,
@@ -3039,7 +3093,7 @@ public class SeedData
         };
 
         // ΚΟΒΡΑΣ ΜΠΑΜΠΗΣ
-        var engineer_4_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 13;
+        var engineer_4_Id = 165;
         User engineer_4 = new User()
         {
             Id = engineer_4_Id,
@@ -3071,7 +3125,7 @@ public class SeedData
         };
 
         // ΓΑΛΑΝΗΣ ΝΙΚΗΦΟΡΟΣ
-        var engineer_5_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 14;
+        var engineer_5_Id = 166;
         User engineer_5 = new User()
         {
             Id = engineer_5_Id,
@@ -3112,7 +3166,7 @@ public class SeedData
         };
 
         // ΚΟΤΣΩΝΗ ΚΑΤΕΡΙΝΑ
-        var engineer_6_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 15;
+        var engineer_6_Id = 167;
         User engineer_6 = new User()
         {
             Id = engineer_6_Id,
@@ -3171,7 +3225,7 @@ public class SeedData
         };
 
         // ΤΖΑΝΗΣ ΒΑΣΙΛΕΙΟΣ
-        var engineer_7_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 16;
+        var engineer_7_Id = 168;
         User engineer_7 = new User()
         {
             Id = engineer_7_Id,
@@ -3203,7 +3257,7 @@ public class SeedData
         };
 
         // ΓΡΕΤΟΣ ΑΝΔΡΕΑΣ
-        var engineer_8_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 17;
+        var engineer_8_Id = 169;
         User engineer_8 = new User()
         {
             Id = engineer_8_Id,
@@ -3235,7 +3289,7 @@ public class SeedData
         };
 
         // ΜΑΡΓΕΤΗ ΚΑΤΕΡΙΝΑ
-        var engineer_9_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 18;
+        var engineer_9_Id = 170;
         User engineer_9 = new User()
         {
             Id = engineer_9_Id,
@@ -3267,7 +3321,7 @@ public class SeedData
         };
 
         // ΠΛΑΤΑΝΙΟΣ ΧΑΡΗΣ
-        var engineer_10_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 19;
+        var engineer_10_Id = 180;
         User engineer_10 = new User()
         {
             Id = engineer_10_Id,
@@ -3299,7 +3353,7 @@ public class SeedData
         };
 
         // ΦΩΚΙΑΝΟΥ ΠΕΓΚΥ
-        var engineer_11_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 20;
+        var engineer_11_Id = 181;
         User engineer_11 = new User()
         {
             Id = engineer_11_Id,
@@ -3331,7 +3385,7 @@ public class SeedData
         };
 
         // ΓΙΑΝΝΟΓΛΟΥ ΟΛΓΑ
-        var engineer_12_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 21;
+        var engineer_12_Id = 182;
         User engineer_12 = new User()
         {
             Id = engineer_12_Id,
@@ -3363,7 +3417,7 @@ public class SeedData
         };
 
         // ΛΕΚΟΥ ΒΑΡΒΑΡΑ
-        var engineer_13_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 22;
+        var engineer_13_Id = 183;
         User engineer_13 = new User()
         {
             Id = engineer_13_Id,
@@ -3395,7 +3449,7 @@ public class SeedData
         };
 
         // ΧΟΝΤΟΣ ΒΑΣΙΛΕΙΟΣ
-        var engineer_14_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 23;
+        var engineer_14_Id = 184;
         User engineer_14 = new User()
         {
             Id = engineer_14_Id,
@@ -3427,7 +3481,7 @@ public class SeedData
         };
 
         // ΠΕΡΙΒΟΛΛΑΡΗ ΠΑΝΑΓΙΩΤΑ
-        var engineer_15_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 24;
+        var engineer_15_Id = 185;
         User engineer_15 = new User()
         {
             Id = engineer_15_Id,
@@ -3459,7 +3513,7 @@ public class SeedData
         };
 
         // ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΝΙΚΟΛΑΟΣ
-        var engineer_16_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 25;
+        var engineer_16_Id = 186;
         User engineer_16 = new User()
         {
             Id = engineer_16_Id,
@@ -3559,7 +3613,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CreateEngineers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CreateEngineers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -3617,7 +3673,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CreateProjectManagers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CreateProjectManagers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -3642,7 +3700,7 @@ public class SeedData
 
         for (var i = 1; i <= projectSubCategories.Count(); i++)
         {
-            // Led
+            // Client
             var clientId = random.Next(123456789, 999999999) + i * 3;
             Client client = new Client()
             {
@@ -3652,7 +3710,8 @@ public class SeedData
                 FirstName = $"Client-Led-{i}",
                 LastName = "LastName",
                 ProxyAddress = "alexandrosplatanios15@gmail.com",
-                Phone1 = "6949277783"
+                Phone1 = "6949277783",
+                CompanyName = "Embiria BMS"
             };
             clients.Add(client);
 
@@ -3691,7 +3750,7 @@ public class SeedData
             offers.Add(offer);
 
             // Projects 
-            var projectId = random.Next(123456789, 999999999) + i * 2;
+            var projectId = 190 + i;
             Project project = new Project()
             {
                 Id = projectId,
@@ -3757,7 +3816,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
@@ -3849,7 +3910,7 @@ public class SeedData
 
         for (var i = 1; i <= projectSubCategories.Count(); i++)
         {
-            // Led
+            // Client
             var clientId = random.Next(123456789, 999999999) + i * 3 + 2345;
             Client client = new Client()
             {
@@ -3859,7 +3920,8 @@ public class SeedData
                 FirstName = $"Client-Led-M-{i}",
                 LastName = "LastName",
                 ProxyAddress = "alexandrosplatanios15@gmail.com",
-                Phone1 = "6949277783"
+                Phone1 = "6949277783",
+                CompanyName = "Embiria BMS"
             };
             clients.Add(client);
 
@@ -3898,7 +3960,7 @@ public class SeedData
             offers.Add(offer);
 
             // Projects 
-            var projectId = random.Next(123456789, 999999999) + i * 3 + 3466;
+            var projectId = 210 + 1;
             Project project = new Project()
             {
                 Id = projectId,
@@ -3964,7 +4026,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
@@ -3980,7 +4044,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", false);
@@ -3996,7 +4062,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", false);
@@ -4012,7 +4080,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", false);
@@ -4028,7 +4098,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", false);
@@ -4048,7 +4120,7 @@ public class SeedData
             for (int j = 0; j < 3; j++)
             {
                 int typeIndex = GetUniqueRandomNumber(random, randomTypeIndexes, 0, disciplineTypes.Count - 1);
-                var discipline_Id = random.Next(123456789, 999999999) * 8;
+                var discipline_Id = 230 + i + j;
                 Discipline discipline = new Discipline()
                 {
                     Id = discipline_Id,
@@ -4076,7 +4148,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateDisciplines(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateDisciplines(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Disciplines", false);
@@ -4093,7 +4167,7 @@ public class SeedData
         {
             for (int j = 0; j < deliverableTypes.Count; j++)
             {
-                var drawing_Id = random.Next(123456789, 999999999);
+                var drawing_Id = 250 + i + j;
                 Deliverable drawing = new Deliverable()
                 {
                     Id = drawing_Id,
@@ -4120,7 +4194,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateDeliverables(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateDeliverables(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Deliverables", false);
@@ -4137,7 +4213,7 @@ public class SeedData
         {
             for (int j = 0; j < otherTypes.Count; j++)
             {
-                var other_Id = random.Next(123456789, 999999999);
+                var other_Id = 300 + i + j;
                 SupportiveWork other = new SupportiveWork()
                 {
                     Id = other_Id,
@@ -4163,7 +4239,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateSupportiveWorks(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorks(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorks", false);
@@ -4204,7 +4282,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplinesEngineers", false);
@@ -4245,7 +4325,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkEmployees", false);
@@ -4256,19 +4338,29 @@ public class SeedData
     private static async Task SeedIfNotExists<T>(DbContext context, T entity)
     where T : class, IEntity
     {
-        var id = entity.Id;
-        var data = await context.Set<T>().ToListAsync();
-        bool exists = data.Any(e => e.AreEqualExcludeId(entity));
-        if (!exists)
+        try
         {
-            var result = await context.Set<T>().AddAsync(entity);
-            context.SaveChanges();
+            var id = entity.Id;
+            var data = await context.Set<T>().ToListAsync();
+            bool exists = data.Any(e => e.AreEqualExcludeId(entity));
+            if (!exists)
+            {
+                var result = await context.Set<T>().AddAsync(entity);
+                context.SaveChanges();
+            }
+            else
+            {
+                //Console.WriteLine($"\n\nEntity of type: {entity.GetType().Name} with Id: {id} Exists\n\n");
+            }
+            data.Clear();
         }
-        else
+        catch (Exception ex)
         {
-            //Console.WriteLine($"\n\nEntity of type: {entity.GetType().Name} with Id: {id} Exists\n\n");
+            // TODO: Log Exception
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.SeedIfNotExists(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
-        data.Clear();
     }
 
     private static T GetRecordAtIndex<T>(List<T> list, int index)
@@ -4297,6 +4389,7 @@ public class SeedData
         int percentage = (completed * 100) / total;
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"Progress: {percentage}%");
+        Console.ForegroundColor = ConsoleColor.White;
     }
     #endregion
 }
