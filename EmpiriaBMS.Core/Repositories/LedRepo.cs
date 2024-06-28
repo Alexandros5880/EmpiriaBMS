@@ -14,17 +14,13 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
     private readonly ContractRepo _contractRepo;
 
     public LedRepo(
-        IDbContextFactory<AppDbContext> DbFactory,
-        OfferRepo offerRepo,
-        ProjectsRepo projectRepo,
-        InvoiceRepo invoiceRepo,
-        ContractRepo contractRepo
+        IDbContextFactory<AppDbContext> DbFactory
     ) : base(DbFactory)
     {
-        _offerRepo = offerRepo;
-        _projectRep = projectRepo;
-        _invoiceRepo = invoiceRepo;
-        _contractRepo = contractRepo;
+        _projectRep = new ProjectsRepo(DbFactory);
+        _offerRepo = new OfferRepo(DbFactory);
+        _invoiceRepo = new InvoiceRepo(DbFactory);
+        _contractRepo = new ContractRepo(DbFactory);
     }
 
     public new async Task<LedDto> Add(LedDto entity, bool update = false)

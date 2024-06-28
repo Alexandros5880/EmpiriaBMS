@@ -11,11 +11,10 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     private InvoiceRepo _invoiceRepo;
 
     public ProjectsRepo(
-        IDbContextFactory<AppDbContext> DbFactory,
-        InvoiceRepo invoiceRepo
+        IDbContextFactory<AppDbContext> DbFactory
     ) : base(DbFactory)
     {
-        _invoiceRepo = invoiceRepo;
+        _invoiceRepo = new InvoiceRepo(DbFactory);
     }
 
     public async Task<ProjectDto> Add(ProjectDto entity, bool update = false)
@@ -1137,6 +1136,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             foreach (var invoiceId in invoiceIds)
             {
+                if (_invoiceRepo == null)
+                    continue;
                 var closed = await _invoiceRepo.IsClosed(invoiceId);
                 isClosed.Add(closed);
             }
