@@ -354,7 +354,7 @@ public class UsersRepo : Repository<UserDto, User>
 
             var totalTimeSpan = timeSpans.Aggregate(TimeSpan.Zero, (sum, next) => sum.Add(next));
 
-            return totalTimeSpan.Hours;
+            return totalTimeSpan.TotalHours;
         }
     }
 
