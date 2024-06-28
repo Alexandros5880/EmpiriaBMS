@@ -285,7 +285,7 @@ public class UsersRepo : Repository<UserDto, User>
         {
             var emplyeeRolesIds = await _context.Set<Role>()
                                                 .Where(r => !r.IsDeleted)
-                                                .Where(r => r.IsEmployee)
+                                                .Where(r => r.IsEmployee || r.Name.Contains("Admin") || r.Name.Contains("admin"))
                                                 .Select(r => r.Id)
                                                 .ToListAsync();
 
@@ -342,17 +342,19 @@ public class UsersRepo : Repository<UserDto, User>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var sumHours = await _context.Set<DailyTime>()
+            var timeSpans = await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
                                  .Where(u => u.DailyUserId == userId
                                         || u.PersonalUserId == userId
                                         || u.TrainingUserId == userId
                                         || u.CorporateUserId == userId)
                                  .Where(u => u.Date.CompareTo(dateOneMonthLater) > 0)
-                                 .Select(u => u.TimeSpan.Hours)
-                                 .SumAsync();
+                                 .Select(u => u.TimeSpan.ToTimeSpan())
+                                 .ToListAsync();
 
-            return sumHours;
+            var totalTimeSpan = timeSpans.Aggregate(TimeSpan.Zero, (sum, next) => sum.Add(next));
+
+            return totalTimeSpan.Hours;
         }
     }
 

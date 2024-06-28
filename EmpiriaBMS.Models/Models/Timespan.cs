@@ -1,5 +1,4 @@
-﻿
-namespace EmpiriaBMS.Models.Models;
+﻿namespace EmpiriaBMS.Models.Models;
 
 public class Timespan : Entity
 {
@@ -13,7 +12,7 @@ public class Timespan : Entity
 
     public Timespan()
     {
-          
+
     }
 
     public Timespan(long days, long hours, long minutes, long seconds)
@@ -22,5 +21,10 @@ public class Timespan : Entity
         Hours = hours;
         Minutes = minutes;
         Seconds = seconds;
+    }
+
+    public TimeSpan ToTimeSpan()
+    {
+        return new TimeSpan((int)Days, (int)Hours, (int)Minutes, (int)Seconds);
     }
 }
