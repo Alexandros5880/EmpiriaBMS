@@ -61,7 +61,7 @@ public class AppDbContext : DbContext
         SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
         optionsBuilder.UseSqlServer(SelectedConnectionString);
         //optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
-        //optionsBuilder.EnableSensitiveDataLogging();
+        optionsBuilder.EnableSensitiveDataLogging();
         //optionsBuilder.EnableDetailedErrors();
         //optionsBuilder.EnableServiceProviderCaching();
         //optionsBuilder.EnableThreadSafetyChecks();
@@ -3286,6 +3286,35 @@ public class AppDbContext : DbContext
             List<Project> projects = new List<Project>();
             for (var i = 1; i <= projectSubCategories.Count(); i++)
             {
+                // Client
+                var clientId = random.Next(123456789, 999999999) + i * 3;
+                Client client = new Client()
+                {
+                    Id = clientId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    FirstName = $"Client-Led-{i}",
+                    LastName = "LastName",
+                    ProxyAddress = "alexandrosplatanios15@gmail.com",
+                    Phone1 = "6949277783",
+                    CompanyName = "Embiria BMS"
+                };
+                builder.Entity<Client>().HasData(client);
+
+                // Led
+                var ledId = random.Next(123456789, 999999999) + i * 3;
+                Led led = new Led()
+                {
+                    Id = ledId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = $"Led-{i}",
+                    ClientId = clientId,
+                    PotencialFee = random.Next(i, i * 3),
+                    Result = LedResult.SUCCESSFUL
+                };
+                builder.Entity<Led>().HasData(led);
+
                 // Offers
                 var offerId = random.Next(123456789, 999999999) + i * 3;
                 Offer offer = new Offer()
@@ -3302,6 +3331,7 @@ public class AppDbContext : DbContext
                     OfferPrice = 1000 * i * 2,
                     CategoryId = projectCategories[categoriesIndex].Id,
                     SubCategoryId = projectSubCategories[i - 1].Id,
+                    LedId = ledId,
                 };
                 builder.Entity<Offer>().HasData(offer);
 
@@ -3371,6 +3401,35 @@ public class AppDbContext : DbContext
 
             for (var i = 1; i <= 7; i++)
             {
+                // Client
+                var clientId = random.Next(123456789, 999999999) + i * 3 + 2345;
+                Client client = new Client()
+                {
+                    Id = clientId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    FirstName = $"Client-Led-M-{i}",
+                    LastName = "LastName",
+                    ProxyAddress = "alexandrosplatanios15@gmail.com",
+                    Phone1 = "6949277783",
+                    CompanyName = "Embiria BMS"
+                };
+                builder.Entity<Client>().HasData(client);
+
+                // Led
+                var ledId = random.Next(123456789, 999999999) + i * 3 + 13245;
+                Led led = new Led()
+                {
+                    Id = ledId,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = $"Led-M-{i}",
+                    ClientId = clientId,
+                    PotencialFee = random.Next(i, i * 3),
+                    Result = LedResult.SUCCESSFUL
+                };
+                builder.Entity<Led>().HasData(led);
+
                 // Offers
                 var offerId = random.Next(123456789, 999999999) + i * 3;
                 Offer offer = new Offer()
@@ -3387,6 +3446,7 @@ public class AppDbContext : DbContext
                     OfferPrice = 1000 * i * 3,
                     CategoryId = projectCategories[categoriesIndex].Id,
                     SubCategoryId = projectSubCategories[subCategoriesIndex].Id,
+                    LedId = ledId,
                 };
                 builder.Entity<Offer>().HasData(offer);
 

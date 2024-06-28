@@ -66,13 +66,16 @@ public class SeedData
             ConnectEveryDraftmanWithEverySupportiveWork
         };
 
-        Console.ForegroundColor = ConsoleColor.Red;
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("\n\nStarting add Seed Data to DB.");
+        Console.ForegroundColor = ConsoleColor.White;
+
         for (int i = 0; i < tasks.Count; i++)
         {
             await tasks[i]();
             UpdateProgress(i + 1, tasks.Count);
         }
+
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Seed Data added.\n\n");
         Console.ForegroundColor = ConsoleColor.White;
@@ -579,7 +582,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CeatePermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CeatePermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -760,7 +765,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CeateRoles(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CeateRoles(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
 
@@ -2015,9 +2022,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.ForegroundColor = ConsoleColor.Red;
-            //Console.WriteLine($"Exception On SeedData.CeateRolesPermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            //Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CeateRolesPermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -2079,7 +2086,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CeateDefaultAdmins(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CeateDefaultAdmins(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -2195,7 +2204,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CeateProjectCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CeateProjectCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsCategories", false);
@@ -2300,7 +2311,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CeateProjectSubCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CeateProjectSubCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsSubCategories", false);
@@ -2373,7 +2386,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateProjectStages(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateProjectStages(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsStages", false);
@@ -2426,7 +2441,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateInvoiceTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateInvoiceTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "InvoicesTypes", false);
@@ -2493,7 +2510,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreatePaymentTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreatePaymentTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "PaymentsTypes", false);
@@ -2556,7 +2575,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateOfferTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateOfferTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "OffersTypes", false);
@@ -2599,7 +2620,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateOfferState(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateOfferState(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "OffesStates", false);
@@ -2667,7 +2690,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateDisciplineTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateDisciplineTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplineTypes", false);
@@ -2708,7 +2733,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateDeliverableTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateDeliverableTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "DeliverableTypes", false);
@@ -2753,7 +2780,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateSupportiveWorkTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorkTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkTypes", false);
@@ -2825,7 +2854,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CreateSecretaries(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CreateSecretaries(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -2954,7 +2985,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CreateDraftmen(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CreateDraftmen(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -3580,7 +3613,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CreateEngineers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CreateEngineers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -3638,7 +3673,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.WriteLine($"Exception On SeedData.CreateProjectManagers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.CreateProjectManagers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -3663,7 +3700,7 @@ public class SeedData
 
         for (var i = 1; i <= projectSubCategories.Count(); i++)
         {
-            // Led
+            // Client
             var clientId = random.Next(123456789, 999999999) + i * 3;
             Client client = new Client()
             {
@@ -3673,7 +3710,8 @@ public class SeedData
                 FirstName = $"Client-Led-{i}",
                 LastName = "LastName",
                 ProxyAddress = "alexandrosplatanios15@gmail.com",
-                Phone1 = "6949277783"
+                Phone1 = "6949277783",
+                CompanyName = "Embiria BMS"
             };
             clients.Add(client);
 
@@ -3778,7 +3816,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
@@ -3870,7 +3910,7 @@ public class SeedData
 
         for (var i = 1; i <= projectSubCategories.Count(); i++)
         {
-            // Led
+            // Client
             var clientId = random.Next(123456789, 999999999) + i * 3 + 2345;
             Client client = new Client()
             {
@@ -3880,7 +3920,8 @@ public class SeedData
                 FirstName = $"Client-Led-M-{i}",
                 LastName = "LastName",
                 ProxyAddress = "alexandrosplatanios15@gmail.com",
-                Phone1 = "6949277783"
+                Phone1 = "6949277783",
+                CompanyName = "Embiria BMS"
             };
             clients.Add(client);
 
@@ -3985,7 +4026,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
@@ -4001,7 +4044,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", false);
@@ -4017,7 +4062,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", false);
@@ -4033,7 +4080,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", false);
@@ -4049,7 +4098,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", false);
@@ -4097,7 +4148,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateDisciplines(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateDisciplines(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Disciplines", false);
@@ -4141,7 +4194,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateDeliverables(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateDeliverables(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "Deliverables", false);
@@ -4184,7 +4239,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateSupportiveWorks(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorks(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorks", false);
@@ -4225,7 +4282,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplinesEngineers", false);
@@ -4266,7 +4325,9 @@ public class SeedData
                 catch (Exception ex)
                 {
                     // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkEmployees", false);
@@ -4296,9 +4357,9 @@ public class SeedData
         catch (Exception ex)
         {
             // TODO: Log Exception
-            //Console.ForegroundColor = ConsoleColor.Red;
-            //Console.WriteLine($"Exception On SeedData.SeedIfNotExists(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            //Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Exception On SeedData.SeedIfNotExists(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
@@ -4328,6 +4389,7 @@ public class SeedData
         int percentage = (completed * 100) / total;
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"Progress: {percentage}%");
+        Console.ForegroundColor = ConsoleColor.White;
     }
     #endregion
 }
