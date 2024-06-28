@@ -3297,7 +3297,7 @@ public class AppDbContext : DbContext
                     LastName = "LastName",
                     ProxyAddress = "alexandrosplatanios15@gmail.com",
                     Phone1 = "6949277783",
-                    CompanyName = "Embiria BMS"
+                    CompanyName = "Embiria BMS",
                 };
                 builder.Entity<Client>().HasData(client);
 

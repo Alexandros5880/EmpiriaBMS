@@ -1,12 +1,11 @@
-﻿using EmpiriaBMS.Core.Repositories.Base;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.ReturnModels;
-using EmpiriaBMS.Core.Hellpers;
-using System;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>
@@ -83,8 +82,8 @@ public class UsersRepo : Repository<UserDto, User>
                              .Where(r => !r.IsDeleted)
                              .Include(r => r.Disciplines)
                              .Include(r => r.UserRoles)
-                             .FirstOrDefaultAsync(r => r.ProxyAddress.Equals(email) 
-                                                        && r.PasswordHash != null 
+                             .FirstOrDefaultAsync(r => r.ProxyAddress.Equals(email)
+                                                        && r.PasswordHash != null
                                                         && r.PasswordHash.Equals(hash));
 
             return Mapping.Mapper.Map<UserDto>(u);
@@ -93,6 +92,8 @@ public class UsersRepo : Repository<UserDto, User>
 
     public async Task<ICollection<UserDto>> GetAllWithRoles()
     {
+        var users = await GetEmployees();
+
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var usersroles = await _context.Set<UserRole>()
@@ -100,16 +101,16 @@ public class UsersRepo : Repository<UserDto, User>
                                            .Include(ur => ur.Role)
                                            .ToListAsync();
 
-            var users = await _context.Set<User>()
-                                      .Where(r => !r.IsDeleted)
-                                      .ToListAsync();
+            //var users = await _context.Set<User>()
+            //                          .Where(r => !r.IsDeleted)
+            //                          .ToListAsync();
 
             var userDto = Mapping.Mapper.Map<List<UserDto>>(users);
 
-            foreach(var u in userDto)
+            foreach (var u in userDto)
             {
                 u.Roles = u.Roles ?? new List<RoleDto>();
-                foreach(var ur in usersroles)
+                foreach (var ur in usersroles)
                 {
                     if (u.Id.Equals(ur.UserId))
                         u.Roles.Add(Mapping.Mapper.Map<RoleDto>(ur.Role));
@@ -152,7 +153,8 @@ public class UsersRepo : Repository<UserDto, User>
         Expression<Func<User, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<User> us;
@@ -288,7 +290,7 @@ public class UsersRepo : Repository<UserDto, User>
                                                 .ToListAsync();
 
             var employeeIds = await _context.UsersRoles.Where(r => !r.IsDeleted)
-                                                       .Where(ur => emplyeeRolesIds.Contains(ur.Id))
+                                                       .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
                                                       .Select(ur => ur.UserId)
                                                       .ToListAsync();
 
@@ -347,7 +349,8 @@ public class UsersRepo : Repository<UserDto, User>
         Expression<Func<User, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var emplyeeRolesIds = await _context.Set<Role>()
@@ -455,7 +458,8 @@ public class UsersRepo : Repository<UserDto, User>
         Expression<Func<User, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
-    ) {
+    )
+    {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var customersRolesIds = await _context.Set<Role>()
@@ -509,9 +513,9 @@ public class UsersRepo : Repository<UserDto, User>
         {
             var sumHours = await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
-                                 .Where(u => u.DailyUserId == userId 
-                                        || u.PersonalUserId == userId 
-                                        || u.TrainingUserId == userId 
+                                 .Where(u => u.DailyUserId == userId
+                                        || u.PersonalUserId == userId
+                                        || u.TrainingUserId == userId
                                         || u.CorporateUserId == userId)
                                  .Where(u => u.Date.CompareTo(dateOneMonthLater) > 0)
                                  .Select(u => u.TimeSpan.Hours)
@@ -596,7 +600,8 @@ public class UsersRepo : Repository<UserDto, User>
             {
                 var result = await _context.Set<DailyTime>()
                                            .AddAsync(
-                    new DailyTime {
+                    new DailyTime
+                    {
                         DailyUserId = userId,
                         Date = date,
                         TimeSpan = new Timespan(
@@ -802,7 +807,7 @@ public class UsersRepo : Repository<UserDto, User>
             // DailyTime
             var dailyTimeSpans = await _context.Set<DailyTime>()
                                           .Where(r => !r.IsDeleted)
-                                          .Where(dt => 
+                                          .Where(dt =>
                                                 dt.DailyUserId == userId
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)

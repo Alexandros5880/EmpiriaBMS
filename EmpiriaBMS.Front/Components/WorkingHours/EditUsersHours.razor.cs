@@ -125,8 +125,7 @@ public partial class EditUsersHours
 
         try
         {
-            var dtos = await _dataProvider.Users.GetAll();
-            var employeesDtos = dtos.Where(u => u.Roles != null && u.Roles.Count > 0).ToList();
+            var dtos = await _dataProvider.Users.GetEmployees();
             var vms = Mapper.Map<List<UserVM>>(dtos);
             _users.Clear();
             vms.ForEach(_users.Add);
