@@ -213,7 +213,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
     }
 
-    public async Task AddTime(int userId, int ledId, TimeSpan timespan)
+    public async Task AddTime(int userId, int ledId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -225,7 +225,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
                 DailyUserId = userId,
                 LedId = ledId,
                 TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds),
-                IsEditByAdmin = false
+                IsEditByAdmin = isEditByAdmin
             };
             await _context.Set<DailyTime>().AddAsync(time);
 
