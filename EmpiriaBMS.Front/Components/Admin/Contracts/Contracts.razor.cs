@@ -144,7 +144,7 @@ public partial class Contracts
     {
         var date = DateTime.Today;
         var fileName = $"Contracts-{date.ToEuropeFormat()}.csv";
-        var data = FilteredItems.Select(c => new ContractExport(c)).ToList();
+        var data = FilteredItems.Select(c => new ContractExport(Logger, c)).ToList();
         if (data.Count > 0)
         {
             string csvContent = Data.GetCsvContent(data);

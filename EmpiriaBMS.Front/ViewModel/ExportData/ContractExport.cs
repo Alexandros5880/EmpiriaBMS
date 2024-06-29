@@ -18,7 +18,7 @@ public class ContractExport : IInport<ContractVM>
 
     public string Description { get; set; }
 
-    public ContractExport(ContractVM model)
+    public ContractExport(Logging.LoggerManager Logger, ContractVM model)
     {
         Id = model.Id;
         InvoiceId = model.InvoiceId;
@@ -28,7 +28,7 @@ public class ContractExport : IInport<ContractVM>
         Description = model.Description ?? "";
     }
 
-    public ContractExport()
+    public ContractExport(Logging.LoggerManager Logger)
     {
 
     }
