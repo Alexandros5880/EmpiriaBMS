@@ -146,7 +146,7 @@ public partial class Stages
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<ProjectStageExport> data = await Data.ImportData<ProjectStageExport>(stream);
+                List<ProjectStageExport> data = await Data.ImportDataFromCsv<ProjectStageExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -163,8 +163,7 @@ public partial class Stages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception ProjectStages import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Stages.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

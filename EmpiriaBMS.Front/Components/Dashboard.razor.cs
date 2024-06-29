@@ -221,8 +221,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard._getTeamsRequestedUsers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -237,8 +236,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard._getIssues(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -279,8 +277,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard._getLeds(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
         _startLoading = false;
     }
@@ -305,8 +302,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard._getOffers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
         _startLoading = false;
     }
@@ -339,8 +335,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard._getProjects(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
         _startLoading = false;
     }
@@ -370,8 +365,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard._getDesigners(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -400,8 +394,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard._getEngineers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -433,8 +426,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard._getProjectManagers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -447,8 +439,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            // TODO: Log Error
-            Console.WriteLine($"Exception: {ex.Message}");
+            Logger.LogError($"Exception Dashboard.GetRoleId(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             return 0;
         }
     }
@@ -672,7 +663,7 @@ public partial class Dashboard : IDisposable
             // Validate
             if (remainingTime.Hours > 0)
             {
-                // TODO: Display a message to update his hours.
+                await ShowInformationAsync("You need to update your working today's hours!");
                 return;
             }
 
@@ -694,9 +685,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            // TODO Exception Log
-            Console.WriteLine($"\n\nException: {ex.Message}");
-            Console.WriteLine($"\nException Inner: {ex.InnerException.Message}");
+            Logger.LogError($"Exception Dashboard._endWorkDialogAccept(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
 
         _startLoading = false;
@@ -737,8 +726,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard.OnDeliverableAssignClick(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -782,8 +770,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard.OnDesciplineAssignClick(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -832,8 +819,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception Dashboard.OnProjectAssignClick(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -1251,20 +1237,28 @@ public partial class Dashboard : IDisposable
         _backUpLoading = true;
         StateHasChanged();
 
-        Dictionary<string, string> csvs = DatabaseBackupService.DatabaseToCSV();
-        if (csvs != null && csvs.Count > 0)
+        try
         {
-            var zipBytes = await DatabaseBackupService.CsvToZipBytes(csvs);
-            var base64Zip = Convert.ToBase64String(zipBytes);
+            Dictionary<string, string> csvs = await DatabaseBackupService.DatabaseToCSV();
 
-            var dateTime = DateTime.Now;
-            var fileName = $"{DatabaseBackupService.DatabaseName}_{dateTime.ToEuropeFormat()}.zip";
-            await MicrosoftTeams.DownloadZipFile(fileName, base64Zip);
+
+            if (csvs != null && csvs.Count > 0)
+            {
+                var zipBytes = await DatabaseBackupService.CsvToZipBytes(csvs);
+                var base64Zip = Convert.ToBase64String(zipBytes);
+
+                var dateTime = DateTime.Now;
+                var fileName = $"{DatabaseBackupService.DatabaseName}_{dateTime.ToEuropeFormat()}.zip";
+                await MicrosoftTeams.DownloadZipFile(fileName, base64Zip);
+            }
+            else
+            {
+                await ShowInformationAsync($"\n\ncsvs == null || csvs.Count == 0\n\n");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            // TODO: Display a message
-            Console.WriteLine($"\n\ncsvs == null || csvs.Count == 0\n\n");
+            Logger.LogError($"Exception Dashboard.BackUpDb(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
 
         _backUpLoading = false;
@@ -1284,8 +1278,11 @@ public partial class Dashboard : IDisposable
 
         if (!(fileType?.Contains("zip") ?? false))
         {
-            // TODO: Display Msg
-            Console.WriteLine("Uploaded file is not a ZIP archive.");
+            await ShowInformationAsync("Uploaded file is not a ZIP archive.");
+
+            _restoreLoading = false;
+            StateHasChanged();
+
             return;
         }
 
@@ -1301,8 +1298,7 @@ public partial class Dashboard : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception Dashboard  RestoreDb: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            // TODO: log error
+            Logger.LogError($"Exception Dashboard.RestoreDb(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
 
         _restoreLoading = false;

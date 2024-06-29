@@ -1,14 +1,7 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Disciplines;
-using EmpiriaBMS.Front.Components.Admin.Projects.Issues;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
-using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components;
 
@@ -31,11 +24,10 @@ public partial class Issues : ComponentBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception Issues.HandleValidSubmit() \n Exception: {ex.Message}  ->  \n InnerException: ");
-            Console.Write(ex.InnerException.Message);
+            Logger.LogError($"Exception Issues.HandleValidSubmit(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
-    
+
     private string _filterString = string.Empty;
     IQueryable<IssueVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };

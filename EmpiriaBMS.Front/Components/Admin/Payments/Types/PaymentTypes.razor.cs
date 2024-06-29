@@ -146,7 +146,7 @@ public partial class PaymentTypes
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<PaymentTypeExport> data = await Data.ImportData<PaymentTypeExport>(stream);
+                List<PaymentTypeExport> data = await Data.ImportDataFromCsv<PaymentTypeExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -163,8 +163,7 @@ public partial class PaymentTypes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception PaymentTypes import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception PaymentTypes.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

@@ -14,14 +14,16 @@ public class KpisRepo : IDisposable
     private bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
     protected readonly LedRepo _ledRepo;
+    protected readonly Logging.LoggerManager _logger;
 
     public KpisRepo(
         IDbContextFactory<AppDbContext> dbFactory,
-        LedRepo ledRepo
+        Logging.LoggerManager logger
     )
     {
         _dbContextFactory = dbFactory;
-        _ledRepo = ledRepo;
+        _ledRepo = new LedRepo(dbFactory, logger);
+        _logger = logger;
     }
 
     public async Task<double> GetNextYearNetIncome()

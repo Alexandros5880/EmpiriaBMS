@@ -71,7 +71,6 @@ public class IssueExport : IInport<IssueVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{ComplaintDate}' is not in the correct format.");
             complaintDate = null;
         }
 
@@ -84,7 +83,6 @@ public class IssueExport : IInport<IssueVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{SolutionDate}' is not in the correct format.");
             solutionDate = null;
         }
 
@@ -97,7 +95,6 @@ public class IssueExport : IInport<IssueVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{VerificationDate}' is not in the correct format.");
             verificationDate = null;
         }
 

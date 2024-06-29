@@ -36,36 +36,39 @@ public class DataProvider : IDataProvider, IDisposable
     public LedRepo Leds { get; set; }
     public KpisRepo KPIS { get; set; }
 
-    public DataProvider(IDbContextFactory<AppDbContext> dbFactory)
+    public DataProvider(
+        IDbContextFactory<AppDbContext> dbFactory,
+        Logging.LoggerManager logger
+    )
     {
-        Roles = new RolesRepo(dbFactory);
-        Users = new UsersRepo(dbFactory);
-        Projects = new ProjectsRepo(dbFactory);
-        Disciplines = new DisciplineRepo(dbFactory);
-        Deliverables = new DeliverableRepo(dbFactory);
-        SupportiveWorks = new SupportiveWorkRepo(dbFactory);
-        Invoices = new InvoiceRepo(dbFactory);
-        ProjectsCategories = new ProjectCategoryRepo(dbFactory);
-        SupportiveWorksTypes = new SupportiveWorkTypeRepo(dbFactory);
-        DeliverablesTypes = new DeliverableTypeRepo(dbFactory);
-        DisciplinesTypes = new DisciplineTypeRepo(dbFactory);
-        Permissions = new PermissionRepo(dbFactory);
-        Issues = new IssueRepo(dbFactory);
-        Payments = new PaymentRepo(dbFactory);
-        InvoiceTypes = new InvoiceTypeRepo(dbFactory);
-        PaymentTypes = new PaymentTypeRepo(dbFactory);
-        ProjectStages = new ProjectStageRepo(dbFactory);
-        ProjectsSubCategories = new ProjectSubCategoryRepo(dbFactory);
-        Address = new AddressRepo(dbFactory);
-        Clients = new ClientRepo(dbFactory);
-        OfferTypes = new OfferTypeRepo(dbFactory);
-        OfferStates = new OfferStateRepo(dbFactory);
-        Offers = new OfferRepo(dbFactory);
-        Emails = new EmailRepo(dbFactory);
-        TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory);
-        Contracts = new ContractRepo(dbFactory);
-        Leds = new LedRepo(dbFactory);
-        KPIS = new KpisRepo(dbFactory, Leds);
+        Roles = new RolesRepo(dbFactory, logger);
+        Users = new UsersRepo(dbFactory, logger);
+        Projects = new ProjectsRepo(dbFactory, logger);
+        Disciplines = new DisciplineRepo(dbFactory, logger);
+        Deliverables = new DeliverableRepo(dbFactory, logger);
+        SupportiveWorks = new SupportiveWorkRepo(dbFactory, logger);
+        Invoices = new InvoiceRepo(dbFactory, logger);
+        ProjectsCategories = new ProjectCategoryRepo(dbFactory, logger);
+        SupportiveWorksTypes = new SupportiveWorkTypeRepo(dbFactory, logger);
+        DeliverablesTypes = new DeliverableTypeRepo(dbFactory, logger);
+        DisciplinesTypes = new DisciplineTypeRepo(dbFactory, logger);
+        Permissions = new PermissionRepo(dbFactory, logger);
+        Issues = new IssueRepo(dbFactory, logger);
+        Payments = new PaymentRepo(dbFactory, logger);
+        InvoiceTypes = new InvoiceTypeRepo(dbFactory, logger);
+        PaymentTypes = new PaymentTypeRepo(dbFactory, logger);
+        ProjectStages = new ProjectStageRepo(dbFactory, logger);
+        ProjectsSubCategories = new ProjectSubCategoryRepo(dbFactory, logger);
+        Address = new AddressRepo(dbFactory, logger);
+        Clients = new ClientRepo(dbFactory, logger);
+        OfferTypes = new OfferTypeRepo(dbFactory, logger);
+        OfferStates = new OfferStateRepo(dbFactory, logger);
+        Offers = new OfferRepo(dbFactory, logger);
+        Emails = new EmailRepo(dbFactory, logger);
+        TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory, logger);
+        Contracts = new ContractRepo(dbFactory, logger);
+        Leds = new LedRepo(dbFactory, logger);
+        KPIS = new KpisRepo(dbFactory, logger);
     }
 
     protected virtual void Dispose(bool disposing)

@@ -150,7 +150,7 @@ public partial class Offers
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<OfferExport> data = await Data.ImportData<OfferExport>(stream);
+                List<OfferExport> data = await Data.ImportDataFromCsv<OfferExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -167,8 +167,7 @@ public partial class Offers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Offers import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Offers.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

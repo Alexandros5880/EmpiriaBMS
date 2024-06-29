@@ -1,5 +1,6 @@
 using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Core.Services;
 using EmpiriaBMS.Core.Services.DBManipulation;
 using EmpiriaBMS.Core.Services.EmailService;
@@ -9,6 +10,7 @@ using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Models.Models;
+using Logging;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -39,7 +41,7 @@ builder.Services.AddScoped<SeedData>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddScoped<DailyEmailSender>();
 
-// TODO: AutoMapper
+// AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
 {
     mc.AddProfile(new MappingProfile());
@@ -71,14 +73,35 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 15 * 1024 * 1024; // 15 MB
 });
 
+// Log Service
+builder.Services.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+    logging.AddDebug();
+    // Add other logging providers as needed, e.g., Application Insights, Serilog
+});
+// Register LoggerManager
+builder.Services.AddSingleton<Logging.LoggerManager>(sp =>
+{
+    var logger = sp.GetRequiredService<ILogger<LoggerManager>>();
+    return new LoggerManager(logger, "EmbiriaBMS.Front");
+});
+
 var app = builder.Build();
 
-// Create Seed Data
-//using (var scope = app.Services.CreateScope())
-//{
-//    var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
-//    await seedData.CreateData();
-//}
+// Scoped Services Initiations
+using (var scope = app.Services.CreateScope())
+{
+    // Create Seed Data
+    //var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
+    //await seedData.CreateData();
+
+    // Get logger from the service provider
+    var logger = app.Services.GetRequiredService<ILogger<LoggerManager>>();
+    // Initialize the LoggerManager with the logger instance and project name
+    Data.InitializeLogger(logger, "EmbiriaBMS.Core");
+}
 
 if (app.Environment.IsDevelopment())
 {

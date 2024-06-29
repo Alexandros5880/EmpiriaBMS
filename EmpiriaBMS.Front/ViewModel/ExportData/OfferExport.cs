@@ -83,7 +83,6 @@ public class OfferExport : IInport<OfferVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{Date}' is not in the correct format.");
             date = null;
         }
         return new OfferVM()

@@ -170,7 +170,7 @@ public partial class Users
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<UserExport> data = await Data.ImportData<UserExport>(stream);
+                List<UserExport> data = await Data.ImportDataFromCsv<UserExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -187,8 +187,7 @@ public partial class Users
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Users import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Users.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

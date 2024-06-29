@@ -146,7 +146,7 @@ public partial class SupportiveWorkTypes
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<SupportiveWorkTypeExport> data = await Data.ImportData<SupportiveWorkTypeExport>(stream);
+                List<SupportiveWorkTypeExport> data = await Data.ImportDataFromCsv<SupportiveWorkTypeExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -163,8 +163,7 @@ public partial class SupportiveWorkTypes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception SupportiveWorkTypes import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception SupportiveWorkTypes.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

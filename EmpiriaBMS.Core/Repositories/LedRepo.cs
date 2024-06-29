@@ -14,13 +14,14 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
     private readonly ContractRepo _contractRepo;
 
     public LedRepo(
-        IDbContextFactory<AppDbContext> DbFactory
-    ) : base(DbFactory)
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger)
     {
-        _projectRep = new ProjectsRepo(DbFactory);
-        _offerRepo = new OfferRepo(DbFactory);
-        _invoiceRepo = new InvoiceRepo(DbFactory);
-        _contractRepo = new ContractRepo(DbFactory);
+        _projectRep = new ProjectsRepo(DbFactory, logger);
+        _offerRepo = new OfferRepo(DbFactory, logger);
+        _invoiceRepo = new InvoiceRepo(DbFactory, logger);
+        _contractRepo = new ContractRepo(DbFactory, logger);
     }
 
     public new async Task<LedDto> Add(LedDto entity, bool update = false)
@@ -49,7 +50,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Add(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On LedRepo.Add(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -77,7 +78,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Update(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On LedRepo.Update(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -265,7 +266,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetAllOppenLeds(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.GetAllOppenLeds(): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return new List<LedDto>();
         }
     }
@@ -301,7 +302,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetSumOfAllOppenLedsPotencialFee(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.GetSumOfAllOppenLedsPotencialFee(): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -346,7 +347,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetSumOfPayedFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.GetSumOfPayedFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -391,7 +392,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetSumOfPotencialFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.GetSumOfPotencialFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -437,7 +438,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.IsClosed({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.IsClosed({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return false;
         }
     }

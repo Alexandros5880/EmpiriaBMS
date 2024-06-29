@@ -3,17 +3,15 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
 public class TeamsRequestedUserRepo : Repository<TeamsRequestedUserDto, TeamsRequestedUser>
 {
-    public TeamsRequestedUserRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public TeamsRequestedUserRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<TeamsRequestedUserDto> GetByObjectId(string objectId)
     {
@@ -22,7 +20,7 @@ public class TeamsRequestedUserRepo : Repository<TeamsRequestedUserDto, TeamsReq
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var record =  await _context.Set<TeamsRequestedUser>()
+            var record = await _context.Set<TeamsRequestedUser>()
                                         .Where(r => !r.IsDeleted)
                                         .FirstOrDefaultAsync(t => t.ObjectId.Equals(objectId));
             var dto = Mapping.Mapper.Map<TeamsRequestedUserDto>(record);

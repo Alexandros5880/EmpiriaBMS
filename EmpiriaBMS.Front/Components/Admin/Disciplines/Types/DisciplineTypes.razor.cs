@@ -145,7 +145,7 @@ public partial class DisciplineTypes
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<DisciplineTypeExport> data = await Data.ImportData<DisciplineTypeExport>(stream);
+                List<DisciplineTypeExport> data = await Data.ImportDataFromCsv<DisciplineTypeExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -162,8 +162,7 @@ public partial class DisciplineTypes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception DisciplineTypes import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception DisciplineTypes.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

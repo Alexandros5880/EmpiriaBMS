@@ -8,7 +8,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class DeliverableTypeRepo : Repository<DeliverableTypeDto, DeliverableType>, IDisposable
 {
-    public DeliverableTypeRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public DeliverableTypeRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<List<DeliverableTypeDto>> GetDrawingTypesSelections(int disciplineId)
     {

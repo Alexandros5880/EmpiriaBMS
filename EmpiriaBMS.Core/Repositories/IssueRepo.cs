@@ -9,7 +9,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class IssueRepo : Repository<IssueDto, Issue>
 {
-    public IssueRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public IssueRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<IssueDto?> Get(int id)
     {
@@ -122,7 +125,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Add(Issue): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On Repository.Add(Issue): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -227,7 +230,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On IssueRepo.DeleteDocument({Mapping.Mapper.Map<Document>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On IssueRepo.DeleteDocument({Mapping.Mapper.Map<Document>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

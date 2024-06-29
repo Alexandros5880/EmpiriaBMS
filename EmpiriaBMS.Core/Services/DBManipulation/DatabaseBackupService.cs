@@ -17,10 +17,15 @@ public class DatabaseBackupService : IDisposable
     public readonly string DatabaseName;
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    protected readonly Logging.LoggerManager _logger;
 
-    public DatabaseBackupService(IDbContextFactory<AppDbContext> dbFactory)
+    public DatabaseBackupService(
+        IDbContextFactory<AppDbContext> dbFactory,
+        Logging.LoggerManager logger
+    )
     {
         _dbContextFactory = dbFactory;
+        _logger = logger;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             ConnectionString = Environment.GetEnvironmentVariable("ConnectionString");
@@ -41,7 +46,7 @@ public class DatabaseBackupService : IDisposable
 
                 Type type = Data.GetListItemType(items);
                 var tableName = GetTableName(_context, type);
-                await SetDbIdentityInsert(_context, tableName, true);
+                await SetDbIdentityInsert(_context, _logger, tableName, true);
                 foreach (var item in items)
                 {
                     try
@@ -51,49 +56,51 @@ public class DatabaseBackupService : IDisposable
                     }
                     catch (Exception ex)
                     {
-                        // TODO: Log Exception
-                        Console.WriteLine($"Exception DatabaseBackupService SaveToDB Add Item: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                        _logger.LogError($"Exception DatabaseBackupService.SaveToDB(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                     }
                 }
 
-                await SetDbIdentityInsert(_context, tableName, false);
+                await SetDbIdentityInsert(_context, _logger, tableName, false);
             }
         }
 
     }
 
     #region DATA To CSV
-    public Dictionary<string, string> DatabaseToCSV()
+    public async Task<Dictionary<string, string>> DatabaseToCSV()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var data = _context.GetAllDbSets();
+            Dictionary<string, List<object>> data = await _context.GetAllDbSets();
             Dictionary<string, string> csvs = _convertDataToCsvAsync(data);
             return csvs;
         }
     }
 
-    private Dictionary<string, string> _convertDataToCsvAsync(List<List<object>> data)
+    private Dictionary<string, string> _convertDataToCsvAsync(Dictionary<string, List<object>> data)
     {
         Dictionary<string, string> content = new Dictionary<string, string>();
 
         // Iterate through each list in data
-        foreach (var dataList in data)
+        foreach (var dict in data)
         {
+            var tableName = dict.Key;
+            var dataList = dict.Value;
+
             if (dataList == null || dataList.Count == 0)
                 continue;
 
             // Get the type of the list
             Type listType = Data.GetListItemType(dataList);
 
-
             var date = DateTime.Today;
             var fileName = $"{listType.Name}-{date.ToEuropeFormat()}.csv";
 
-            string csvContent = Data.GenerateCsvContentDynamic(dataList, listType);
+            string csvContent = Data.GetCsvContent(dataList);
 
             if (!string.IsNullOrEmpty(csvContent))
-                content.Add(fileName, csvContent);
+                if (!content.ContainsKey(fileName))
+                    content.Add(fileName, csvContent);
         }
 
         return content;
@@ -186,8 +193,7 @@ public class DatabaseBackupService : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception DatabaseBackupService ZipStreamToCsv: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            // TODO: log error
+            _logger.LogError($"Exception DatabaseBackupService.ZipStreamToCsv(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
             return null;
         }
@@ -197,20 +203,19 @@ public class DatabaseBackupService : IDisposable
     {
         try
         {
-            List<T> data = await Data.ImportData<T>(stream);
+            List<T> data = await Data.ImportDataFromCsv<T>(stream);
             return data;
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception DatabaseBackupService _convertCsvToDataAsync: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception DatabaseBackupService._convertCsvToDataAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             return null;
         }
     }
     #endregion
 
     #region DB Settings
-    public static async Task<bool> SetDbIdentityInsert(AppDbContext context, string tableName, bool desiredState)
+    public static async Task<bool> SetDbIdentityInsert(AppDbContext context, Logging.LoggerManager logger, string tableName, bool desiredState)
     {
         if (context == null)
         {
@@ -242,8 +247,7 @@ public class DatabaseBackupService : IDisposable
         }
         catch (Exception ex)
         {
-            // Log Exception with detailed information
-            Console.WriteLine($"\n\nException in SetDbIdentityInsert: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            logger.LogError($"Exception DatabaseBackupService.SetDbIdentityInsert(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
             return false;
         }
@@ -251,7 +255,7 @@ public class DatabaseBackupService : IDisposable
     #endregion
 
     #region Retrieve Db Information
-    public static async Task<List<string>> GetTablesNames(AppDbContext context)
+    public static async Task<List<string>> GetTablesNames(AppDbContext context, Logging.LoggerManager logger)
     {
         using (var transaction = context.Database.BeginTransaction())
         {
@@ -272,8 +276,7 @@ public class DatabaseBackupService : IDisposable
             }
             catch (Exception ex)
             {
-                // TODO: Log Exception
-                Console.WriteLine($"Exception DatabaseBackupService _getDBTablesNames: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                logger.LogError($"Exception DatabaseBackupService._getDBTablesNames(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
                 await transaction.RollbackAsync();
                 return null;

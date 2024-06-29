@@ -11,10 +11,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     private InvoiceRepo _invoiceRepo;
 
     public ProjectsRepo(
-        IDbContextFactory<AppDbContext> DbFactory
-    ) : base(DbFactory)
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger)
     {
-        _invoiceRepo = new InvoiceRepo(DbFactory);
+        _invoiceRepo = new InvoiceRepo(DbFactory, logger);
     }
 
     public async Task<ProjectDto> Add(ProjectDto entity, bool update = false)
@@ -40,7 +41,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On ProjectsRepo.Add(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On ProjectsRepo.Add(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -70,7 +71,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On ProjectsRepo.Update(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On ProjectsRepo.Update(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -1069,7 +1070,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On ProjectsRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On ProjectsRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -1106,7 +1107,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On ProjectsRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On ProjectsRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -1146,7 +1147,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On ProjectsRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On ProjectsRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return false;
         }
     }

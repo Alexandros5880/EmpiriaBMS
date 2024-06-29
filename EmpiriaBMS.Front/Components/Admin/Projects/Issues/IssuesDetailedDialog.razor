@@ -1,3 +1,4 @@
 ﻿@implements IDialogContentComponent<IssueVM>
+@inject Logging.LoggerManager Logger
 
 <IssuesDetailed Content="@Content" OnSave="@SaveAsync" OnCancel="@CancelAsync"/>

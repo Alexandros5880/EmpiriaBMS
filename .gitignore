@@ -8,6 +8,8 @@ EmpiriaBMS.Front/bin
 EmpiriaBMS.Front/obj
 EmpiriaBMS.Models/bin
 EmpiriaBMS.Models/obj
+EmpiriaBMS.Logging/bin
+EmpiriaBMS.Logging/obj
 
 EmpiriaBMS.Core/bin/
 EmpiriaBMS.Core/obj/
@@ -17,6 +19,8 @@ EmpiriaBMS.Front/bin/
 EmpiriaBMS.Front/obj/
 EmpiriaBMS.Models/bin/
 EmpiriaBMS.Models/obj/
+EmpiriaBMS.Logging/bin/
+EmpiriaBMS.Logging/obj/
 
 # TeamsFx files
 build

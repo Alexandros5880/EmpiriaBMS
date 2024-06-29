@@ -87,7 +87,6 @@ public class ProjectExport : IInport<ProjectVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{StartDate}' is not in the correct format.");
             startDate = null;
         }
 
@@ -100,7 +99,6 @@ public class ProjectExport : IInport<ProjectVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{DeadLine}' is not in the correct format.");
             deadLine = null;
         }
 

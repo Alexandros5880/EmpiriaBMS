@@ -70,7 +70,6 @@ public partial class Roles
             await DataProvider.Roles.UpdatePermissions(role.Id, vm.RolesPermissions.Select(rp => rp.PermissionId));
 
             var r = role;
-            Console.WriteLine($"Added new Role: {role.Name}.");
 
             await _getRecords();
         }
@@ -174,7 +173,7 @@ public partial class Roles
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<RoleExport> data = await Data.ImportData<RoleExport>(stream);
+                List<RoleExport> data = await Data.ImportDataFromCsv<RoleExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -191,8 +190,7 @@ public partial class Roles
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Roles import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Roles.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

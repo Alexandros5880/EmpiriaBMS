@@ -10,7 +10,10 @@ using System.Linq.Expressions;
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>
 {
-    public UsersRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public UsersRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<bool> Exists(string email)
     {
@@ -743,7 +746,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On UsersRepo.DeleteUserRole({Mapping.Mapper.Map<UserRole>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On UsersRepo.DeleteUserRole({Mapping.Mapper.Map<UserRole>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

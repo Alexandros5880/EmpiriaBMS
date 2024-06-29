@@ -8,8 +8,11 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class AddressRepo : Repository<AddressDto, Address>
 {
-    public AddressRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
-    
+    public AddressRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
+
     public async Task<AddressDto> GetByPlaceId(string placeId)
     {
         if (string.IsNullOrEmpty(placeId))

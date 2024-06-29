@@ -59,7 +59,6 @@ public class InvoiceExport : IInport<InvoiceVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{EstimatedDate}' is not in the correct format.");
             date = null;
         }
 

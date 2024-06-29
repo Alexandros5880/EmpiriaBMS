@@ -193,7 +193,7 @@ public partial class Clients
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<ClientExport> data = await Data.ImportData<ClientExport>(stream);
+                List<ClientExport> data = await Data.ImportDataFromCsv<ClientExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -210,8 +210,7 @@ public partial class Clients
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Clients import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Clients.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

@@ -9,7 +9,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 {
-    public DisciplineRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public DisciplineRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public new async Task<DisciplineDto?> Get(int id)
     {
@@ -371,7 +374,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On DisciplineRepo.DeleteDisciplineEngineer({Mapping.Mapper.Map<DisciplineEngineerDto>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On DisciplineRepo.DeleteDisciplineEngineer({Mapping.Mapper.Map<DisciplineEngineerDto>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

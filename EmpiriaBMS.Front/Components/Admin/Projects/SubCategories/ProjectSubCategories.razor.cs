@@ -145,7 +145,7 @@ public partial class ProjectSubCategories
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<ProjectSubCategoryExport> data = await Data.ImportData<ProjectSubCategoryExport>(stream);
+                List<ProjectSubCategoryExport> data = await Data.ImportDataFromCsv<ProjectSubCategoryExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -162,8 +162,7 @@ public partial class ProjectSubCategories
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception ProjectSubCategories import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception ProjectSubCategories.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

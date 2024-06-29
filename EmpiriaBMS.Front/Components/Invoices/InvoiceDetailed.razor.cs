@@ -329,16 +329,16 @@ public partial class InvoiceDetailed
                 Content.Contract = Contract;
                 Content.Id = Content.Id;
             }
-                
+
         }
 
-        if (_contractDetailedRef!= null)
+        if (_contractDetailedRef != null)
         {
             Contract.Invoice = Content;
             Contract.InvoiceId = Content.Id;
             await _contractDetailedRef.Prepair(Contract, false);
         }
-            
+
     }
     #endregion
 }

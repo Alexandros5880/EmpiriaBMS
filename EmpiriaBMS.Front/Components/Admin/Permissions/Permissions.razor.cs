@@ -103,7 +103,7 @@ public partial class Permissions
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<PermissionExport> data = await Data.ImportData<PermissionExport>(stream);
+                List<PermissionExport> data = await Data.ImportDataFromCsv<PermissionExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -120,8 +120,7 @@ public partial class Permissions
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Permissions import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Permissions.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

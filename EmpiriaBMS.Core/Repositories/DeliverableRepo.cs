@@ -11,7 +11,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
 {
-    public DeliverableRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public DeliverableRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public new async Task<DeliverableDto?> Get(int id)
     {
@@ -340,7 +343,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On DrawingRepo.DeleteDrawingEmployee({Mapping.Mapper.Map<DeliverableEmployee>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On DrawingRepo.DeleteDrawingEmployee({Mapping.Mapper.Map<DeliverableEmployee>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

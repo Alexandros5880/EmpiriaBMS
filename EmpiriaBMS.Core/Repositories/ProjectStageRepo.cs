@@ -7,5 +7,9 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class ProjectStageRepo : Repository<ProjectStageDto, ProjectStage>
 {
-    public ProjectStageRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public ProjectStageRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
+
 }

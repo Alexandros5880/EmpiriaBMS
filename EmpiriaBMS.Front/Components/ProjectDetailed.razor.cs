@@ -124,15 +124,13 @@ public partial class ProjectDetailed : ComponentBase
         }
         catch (NullReferenceException ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception ProjectDetailed.SaveAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
             return null;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception ProjectDetailed.SaveAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
             return null;
         }

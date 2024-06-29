@@ -50,7 +50,6 @@ public class LedExport : IInport<LedVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{ExpectedDurationDate}' is not in the correct format.");
             date = null;
         }
 

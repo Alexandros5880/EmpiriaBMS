@@ -146,7 +146,7 @@ public partial class DeliverableTypes
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<DeliverableTypeExport> data = await Data.ImportData<DeliverableTypeExport>(stream);
+                List<DeliverableTypeExport> data = await Data.ImportDataFromCsv<DeliverableTypeExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -163,8 +163,7 @@ public partial class DeliverableTypes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception DrawingsTypes import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception DeliverableTypes.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

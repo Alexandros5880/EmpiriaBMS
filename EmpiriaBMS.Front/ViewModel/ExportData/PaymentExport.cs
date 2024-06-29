@@ -24,29 +24,21 @@ public class PaymentExport : IInport<PaymentVM>
 
     public PaymentExport(PaymentVM model)
     {
-        try
-        {
-            PaymentDate = model.PaymentDate?.ToEuropeFormat() ?? "";
-            Bank = model.Bank ?? "";
-            Fee = model.Fee;
-            Description = model.Description ?? "";
-            TypeId = model.TypeId;
-            TypeName = model.Type.Name;
-            InvoiceId = model.InvoiceId;
-            InvoiceMark = model.Invoice.Mark ?? "";
-            InvoiceType = model.Invoice.Type.Name;
-            InvoiceContractFee = model.Invoice.Contract?.ContractualFee ?? 0;
-            InvoiceContractDate = model.Invoice.Contract?.Date.ToEuropeFormat() ?? "";
-            ProjectId = model.Invoice.ProjectId;
-            ProjectCode = model.Invoice.Project.Code ?? "";
-            ProjectName = model.Invoice.Project.Name ?? "";
-            ProjectPM = model.Invoice.Project.ProjectManager?.FullName ?? "";
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception in PaymentExport(): {ex.Message} \n InnerException: {ex.InnerException} \n\n");
-            // TODO: Log Error
-        }
+        PaymentDate = model.PaymentDate?.ToEuropeFormat() ?? "";
+        Bank = model.Bank ?? "";
+        Fee = model.Fee;
+        Description = model.Description ?? "";
+        TypeId = model.TypeId;
+        TypeName = model.Type.Name;
+        InvoiceId = model.InvoiceId;
+        InvoiceMark = model.Invoice.Mark ?? "";
+        InvoiceType = model.Invoice.Type.Name;
+        InvoiceContractFee = model.Invoice.Contract?.ContractualFee ?? 0;
+        InvoiceContractDate = model.Invoice.Contract?.Date.ToEuropeFormat() ?? "";
+        ProjectId = model.Invoice.ProjectId;
+        ProjectCode = model.Invoice.Project.Code ?? "";
+        ProjectName = model.Invoice.Project.Name ?? "";
+        ProjectPM = model.Invoice.Project.ProjectManager?.FullName ?? "";
     }
 
     public PaymentExport()
@@ -64,7 +56,6 @@ public class PaymentExport : IInport<PaymentVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{PaymentDate}' is not in the correct format.");
             date = null;
         }
 

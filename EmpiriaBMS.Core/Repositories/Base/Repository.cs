@@ -12,9 +12,17 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
 {
     private bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    protected readonly Logging.LoggerManager _logger;
 
-    public Repository(IDbContextFactory<AppDbContext> dbFactory) =>
+    public Repository(
+        IDbContextFactory<AppDbContext> dbFactory,
+        Logging.LoggerManager logger
+    )
+    {
         _dbContextFactory = dbFactory;
+        _logger = logger;
+        _logger.ProjectName = "EmbiriaBMS.Core";
+    }
 
     public async Task<T> Add(T entity, bool update = false)
     {
@@ -43,7 +51,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Add({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On Repository.Add({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -93,7 +101,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }

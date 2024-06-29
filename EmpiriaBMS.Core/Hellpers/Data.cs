@@ -1,6 +1,8 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Models.Models;
+using Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 using System.Text;
 
@@ -11,61 +13,65 @@ public static class Data
 {
     private static string _seperator = "  ,  ";
 
-    #region Get CSV String Content From Data
+    private static LoggerManager _logger;
+    public static LoggerManager Logger => _logger;
+
+    public static void InitializeLogger(ILogger<LoggerManager> logger, string projectName) =>
+        _logger = new LoggerManager(logger, projectName);
+
     public static string GetCsvContent<T>(IList<T> data)
     {
-        var content = SCV.GenerateCsvContent(data);
+        Type dataType = data[0].GetType();
+        var properties = dataType.GetProperties();
+        var csvBuilder = new StringBuilder();
 
-        return content;
-    }
 
-    public static string GenerateCsvContentDynamic(List<object> dataList, Type itemType)
-    {
-        MethodInfo method = typeof(Data).GetMethod("GetCsvContent", BindingFlags.Public | BindingFlags.Static);
-        if (method == null)
-            throw new InvalidOperationException("The method GetCsvContent could not be found.");
-
-        // Make the method generic with the specified item type
-        MethodInfo genericMethod = method.MakeGenericMethod(itemType);
-
-        // Invoke the generic method and get the result
-        Array array = Array.CreateInstance(itemType, dataList.Count);
-        for (int i = 0; i < dataList.Count; i++)
+        // Add Columns
+        var columnValues = new List<string>();
+        foreach (var prop in properties)
         {
-            array.SetValue(dataList[i], i);
+            bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
+            bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
+            bool isCollection = prop.PropertyType.IsGenericType &&
+                                (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
+
+            if (isNotIEntity && !isCollection)
+                columnValues.Add(prop.Name);
+
+        }
+        csvBuilder.AppendLine(string.Join(_seperator, columnValues));
+
+
+        // Add Values
+        foreach (var item in data)
+        {
+            var lineValues = new List<string>();
+
+            foreach (var prop in properties)
+            {
+                bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
+                bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
+                bool isCollection = prop.PropertyType.IsGenericType &&
+                                (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
+
+                if (isNotIEntity && !isCollection)
+                {
+                    var propValue = prop.GetValue(item);
+                    lineValues.Add(propValue?.ToString() ?? "");
+                }
+
+            }
+
+            csvBuilder.AppendLine(string.Join(_seperator, lineValues));
         }
 
-        // Invoke the generic method and get the result
-        var result = genericMethod.Invoke(null, new object[] { array });
-
-        return (string)result;
-    }
-    #endregion
-
-    public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
-    {
-        switch (fileType)
-        {
-            case FileType.CSV:
-                var csvContent = SCV.GenerateCsvContent(data);
-                SCV.SaveCsvToFile(csvContent, filePath);
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    public static async Task<List<T>> ImportData<T>(Stream stream, FileType fileType = FileType.CSV)
-    {
-        switch (fileType)
-        {
-            case FileType.CSV:
-                return await SCV.ImportFromCsv<T>(stream);
-
-            default:
-                return null;
-        }
+        return csvBuilder.ToString();
     }
 
     public static Type GetListItemType(List<object> dataList)
@@ -192,8 +198,7 @@ public static class Data
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception Data.AddAsync: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception Data.AddAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
             return false;
         }
@@ -239,129 +244,66 @@ public static class Data
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception Data.Upsert<{nameof(T)}>: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception Data.Upsert<{nameof(T)}>(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
             return false;
         }
     }
     #endregion
 
-    private static class SCV
+    public static async Task<List<T>> ImportDataFromCsv<T>(Stream stream)
     {
-        public static string GenerateCsvContent<T>(IList<T> data)
+        try
         {
-            var properties = typeof(T).GetProperties();
-            var csvBuilder = new StringBuilder();
-
-
-            // Add Columns
-            var columnValues = new List<string>();
-            foreach (var prop in properties)
+            using (StreamReader reader = new StreamReader(stream))
             {
-                bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
-                bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
-                bool isCollection = prop.PropertyType.IsGenericType &&
-                                    (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
 
-                if (isNotIEntity && !isCollection)
-                    columnValues.Add(prop.Name);
+                List<string> columns = new List<string>();
+                List<List<string>> rows = new List<List<string>>();
 
-            }
-            csvBuilder.AppendLine(string.Join(_seperator, columnValues));
-
-
-            // Add Values
-            foreach (var item in data)
-            {
-                var lineValues = new List<string>();
-
-                foreach (var prop in properties)
+                string line;
+                int count = 0;
+                while ((line = await reader.ReadLineAsync()) != null)
                 {
-                    bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
-                    bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
-                    bool isCollection = prop.PropertyType.IsGenericType &&
-                                    (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
-
-                    if (isNotIEntity && !isCollection)
+                    if (count == 0)
                     {
-                        var propValue = prop.GetValue(item);
-                        lineValues.Add(propValue?.ToString() ?? "");
+                        columns = new List<string>(line.Split(_seperator));
                     }
-
+                    else
+                    {
+                        var row = new List<string>(line.Split(_seperator));
+                        if (row.Count > 1)
+                            rows.Add(row);
+                    }
+                    count++;
                 }
 
-                csvBuilder.AppendLine(string.Join(_seperator, lineValues));
-            }
+                // Create Instance
+                PropertyInfo[] properties = typeof(T).GetProperties();
+                List<T> data = new List<T>();
 
-            return csvBuilder.ToString();
-        }
-
-        public static void SaveCsvToFile(string csvContent, string filePath)
-        {
-            File.WriteAllText(filePath, csvContent);
-        }
-
-        public static async Task<List<T>> ImportFromCsv<T>(Stream stream)
-        {
-            try
-            {
-                using (StreamReader reader = new StreamReader(stream))
+                foreach (var row in rows)
                 {
-
-                    List<string> columns = new List<string>();
-                    List<List<string>> rows = new List<List<string>>();
-
-                    string line;
-                    int count = 0;
-                    while ((line = await reader.ReadLineAsync()) != null)
+                    if (row == null || row.Count == 0)
+                        continue;
+                    var column = 0;
+                    T instance = Activator.CreateInstance<T>();
+                    foreach (var val in row)
                     {
-                        if (count == 0)
-                        {
-                            columns = new List<string>(line.Split(_seperator));
-                        }
-                        else
-                        {
-                            var row = new List<string>(line.Split(_seperator));
-                            if (row.Count > 1)
-                                rows.Add(row);
-                        }
-                        count++;
+                        _setProperty(instance, columns[column], val);
+                        column++;
                     }
-
-                    // Create Instance
-                    PropertyInfo[] properties = typeof(T).GetProperties();
-                    List<T> data = new List<T>();
-
-                    foreach (var row in rows)
-                    {
-                        if (row == null || row.Count == 0)
-                            continue;
-                        var column = 0;
-                        T instance = Activator.CreateInstance<T>();
-                        foreach (var val in row)
-                        {
-                            _setProperty(instance, columns[column], val);
-                            column++;
-                        }
-                        data.Add(instance);
-                    }
-
-                    return data;
+                    data.Add(instance);
                 }
+
+                return data;
             }
-            catch (Exception ex)
-            {
-                // TODO: Log Exception
-                Console.WriteLine($"Exception Data.ImportFromCsv: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                return null;
-            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception Data.ImportFromCsv(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+
+            return null;
         }
     }
 
@@ -411,8 +353,7 @@ public static class Data
                         }
                         catch (ArgumentException aex)
                         {
-                            // TODO: Log Exception
-                            Console.WriteLine($"\n\nException Data._setProperty.Try_Parse_Enum: {aex.Message}, \nInner: {aex.InnerException?.Message}");
+                            _logger.LogError($"\n\nException Data._setProperty.Try_Parse_Enum: {aex.Message}, \nInner: {aex.InnerException?.Message}");
                         }
                     }
 
@@ -428,9 +369,7 @@ public static class Data
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.WriteLine($"\n\nException Data._setProperty: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.WriteLine($"Type: {instance?.GetType()?.Name}, PropertyName.Length: {propertyName.Length}, PropertyName: {propertyName}, PropertyValue.Length: {propertyValue.Length}, PropertyValue: {propertyValue}");
+            _logger.LogError($"Exception Data._setProperty(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -440,7 +379,3 @@ public static class Data
             propertyType.GetGenericArguments()[0] == typeof(DateTime));
 }
 
-public enum FileType
-{
-    CSV
-}

@@ -10,7 +10,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>, IDisposable
 {
-    public SupportiveWorkRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public SupportiveWorkRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public new async Task<SupportiveWorkDto?> Get(int id)
     {

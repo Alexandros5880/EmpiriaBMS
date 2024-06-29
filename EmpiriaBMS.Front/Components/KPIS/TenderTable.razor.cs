@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core.Dtos.KPIS;
-using EmpiriaBMS.Front.Components.General;
-using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Dtos.KPIS;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
-using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -48,7 +44,7 @@ public partial class TenderTable
 
     private void HandleRowFocus(FluentDataGridRow<TenderDataDto> row)
     {
-        Console.WriteLine($"Row focused: {row.Item?.ProjectStage}");
+        //Console.WriteLine($"Row focused: {row.Item?.ProjectStage}");
     }
 
 }

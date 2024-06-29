@@ -144,7 +144,7 @@ public partial class Contracts
     {
         var date = DateTime.Today;
         var fileName = $"Contracts-{date.ToEuropeFormat()}.csv";
-        var data = FilteredItems.Select(c => new ContractExport(c)).ToList();
+        var data = FilteredItems.Select(c => new ContractExport(Logger, c)).ToList();
         if (data.Count > 0)
         {
             string csvContent = Data.GetCsvContent(data);
@@ -163,7 +163,7 @@ public partial class Contracts
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<ContractExport> data = await Data.ImportData<ContractExport>(stream);
+                List<ContractExport> data = await Data.ImportDataFromCsv<ContractExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -180,8 +180,7 @@ public partial class Contracts
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Contracts import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Contracts.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

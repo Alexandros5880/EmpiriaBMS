@@ -151,7 +151,7 @@ public partial class Leds
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<LedExport> data = await Data.ImportData<LedExport>(stream);
+                List<LedExport> data = await Data.ImportDataFromCsv<LedExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
@@ -168,8 +168,7 @@ public partial class Leds
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Leds import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Leds.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }
