@@ -71,9 +71,7 @@ public class SeedData
             ConnectEveryDraftmanWithEverySupportiveWork
         };
 
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("\n\nStarting add Seed Data to DB.");
-        Console.ForegroundColor = ConsoleColor.White;
+        _logger.LogInformation($"\n\nStarting add Seed Data to DB.");
 
         for (int i = 0; i < tasks.Count; i++)
         {
@@ -81,12 +79,8 @@ public class SeedData
             UpdateProgress(i + 1, tasks.Count);
         }
 
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Seed Data added.\n\n");
-        Console.ForegroundColor = ConsoleColor.White;
+        _logger.LogInformation("Seed Data added.\n\n");
     }
-
-
 
 
     protected async Task CeatePermissions()
@@ -502,47 +496,47 @@ public class SeedData
                     Ord = 37
                 };
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Permissions", true);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Permissions", true);
 
-                await SeedIfNotExists<Permission>(context, per_1);
-                await SeedIfNotExists<Permission>(context, per_2);
-                await SeedIfNotExists<Permission>(context, per_3);
-                await SeedIfNotExists<Permission>(context, per_4);
-                await SeedIfNotExists<Permission>(context, per_5);
-                await SeedIfNotExists<Permission>(context, per_6);
-                await SeedIfNotExists<Permission>(context, per_7);
-                await SeedIfNotExists<Permission>(context, per_8);
-                await SeedIfNotExists<Permission>(context, per_9);
-                await SeedIfNotExists<Permission>(context, per_10);
-                await SeedIfNotExists<Permission>(context, per_11);
-                await SeedIfNotExists<Permission>(context, per_12);
-                await SeedIfNotExists<Permission>(context, per_13);
-                await SeedIfNotExists<Permission>(context, per_14);
-                await SeedIfNotExists<Permission>(context, per_15);
-                await SeedIfNotExists<Permission>(context, per_16);
-                await SeedIfNotExists<Permission>(context, per_17);
-                await SeedIfNotExists<Permission>(context, per_18);
-                await SeedIfNotExists<Permission>(context, per_19);
-                await SeedIfNotExists<Permission>(context, per_20);
-                await SeedIfNotExists<Permission>(context, per_21);
-                await SeedIfNotExists<Permission>(context, per_22);
-                await SeedIfNotExists<Permission>(context, per_23);
-                await SeedIfNotExists<Permission>(context, per_24);
-                await SeedIfNotExists<Permission>(context, per_25);
-                await SeedIfNotExists<Permission>(context, per_26);
-                await SeedIfNotExists<Permission>(context, per_27);
-                await SeedIfNotExists<Permission>(context, per_28);
-                await SeedIfNotExists<Permission>(context, per_29);
-                await SeedIfNotExists<Permission>(context, per_30);
-                await SeedIfNotExists<Permission>(context, per_31);
-                await SeedIfNotExists<Permission>(context, per_32);
-                await SeedIfNotExists<Permission>(context, per_33);
-                await SeedIfNotExists<Permission>(context, per_34);
-                await SeedIfNotExists<Permission>(context, per_35);
-                await SeedIfNotExists<Permission>(context, per_36);
-                await SeedIfNotExists<Permission>(context, per_37);
+                await SeedIfNotExists<Permission>(context, _logger, per_1);
+                await SeedIfNotExists<Permission>(context, _logger, per_2);
+                await SeedIfNotExists<Permission>(context, _logger, per_3);
+                await SeedIfNotExists<Permission>(context, _logger, per_4);
+                await SeedIfNotExists<Permission>(context, _logger, per_5);
+                await SeedIfNotExists<Permission>(context, _logger, per_6);
+                await SeedIfNotExists<Permission>(context, _logger, per_7);
+                await SeedIfNotExists<Permission>(context, _logger, per_8);
+                await SeedIfNotExists<Permission>(context, _logger, per_9);
+                await SeedIfNotExists<Permission>(context, _logger, per_10);
+                await SeedIfNotExists<Permission>(context, _logger, per_11);
+                await SeedIfNotExists<Permission>(context, _logger, per_12);
+                await SeedIfNotExists<Permission>(context, _logger, per_13);
+                await SeedIfNotExists<Permission>(context, _logger, per_14);
+                await SeedIfNotExists<Permission>(context, _logger, per_15);
+                await SeedIfNotExists<Permission>(context, _logger, per_16);
+                await SeedIfNotExists<Permission>(context, _logger, per_17);
+                await SeedIfNotExists<Permission>(context, _logger, per_18);
+                await SeedIfNotExists<Permission>(context, _logger, per_19);
+                await SeedIfNotExists<Permission>(context, _logger, per_20);
+                await SeedIfNotExists<Permission>(context, _logger, per_21);
+                await SeedIfNotExists<Permission>(context, _logger, per_22);
+                await SeedIfNotExists<Permission>(context, _logger, per_23);
+                await SeedIfNotExists<Permission>(context, _logger, per_24);
+                await SeedIfNotExists<Permission>(context, _logger, per_25);
+                await SeedIfNotExists<Permission>(context, _logger, per_26);
+                await SeedIfNotExists<Permission>(context, _logger, per_27);
+                await SeedIfNotExists<Permission>(context, _logger, per_28);
+                await SeedIfNotExists<Permission>(context, _logger, per_29);
+                await SeedIfNotExists<Permission>(context, _logger, per_30);
+                await SeedIfNotExists<Permission>(context, _logger, per_31);
+                await SeedIfNotExists<Permission>(context, _logger, per_32);
+                await SeedIfNotExists<Permission>(context, _logger, per_33);
+                await SeedIfNotExists<Permission>(context, _logger, per_34);
+                await SeedIfNotExists<Permission>(context, _logger, per_35);
+                await SeedIfNotExists<Permission>(context, _logger, per_36);
+                await SeedIfNotExists<Permission>(context, _logger, per_37);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Permissions", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Permissions", false);
 
                 permissionsIds.Clear();
                 permissionsIds.Add(per_1.Id);
@@ -586,10 +580,7 @@ public class SeedData
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Exception On SeedData.CeatePermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.ForegroundColor = ConsoleColor.White;
+            _logger.LogError($"Exception SeedData.CeatePermissions(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -760,23 +751,20 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Roles", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Roles", true);
             foreach (var role in roles)
             {
                 try
                 {
-                    await SeedIfNotExists<Role>(context, role);
+                    await SeedIfNotExists<Role>(context, _logger, role);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CeateRoles(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CeateRoles(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
 
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Roles", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Roles", false);
         }
 
     }
@@ -1898,138 +1886,135 @@ public class SeedData
                     PermissionId = GetRecordAtIndex(permissionsIds, 10)
                 };
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "RolesPermissions", true);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "RolesPermissions", true);
 
-                await SeedIfNotExists<RolePermission>(context, rp_1);
-                await SeedIfNotExists<RolePermission>(context, rp_2);
-                await SeedIfNotExists<RolePermission>(context, rp_3);
-                await SeedIfNotExists<RolePermission>(context, rp_4);
-                await SeedIfNotExists<RolePermission>(context, rp_5);
-                await SeedIfNotExists<RolePermission>(context, rp_6);
-                await SeedIfNotExists<RolePermission>(context, rp_7);
-                await SeedIfNotExists<RolePermission>(context, rp_8);
-                await SeedIfNotExists<RolePermission>(context, rp_9);
-                await SeedIfNotExists<RolePermission>(context, rp_10);
-                await SeedIfNotExists<RolePermission>(context, rp_11);
-                await SeedIfNotExists<RolePermission>(context, rp_12);
-                await SeedIfNotExists<RolePermission>(context, rp_13);
-                await SeedIfNotExists<RolePermission>(context, rp_14);
-                await SeedIfNotExists<RolePermission>(context, rp_15);
-                await SeedIfNotExists<RolePermission>(context, rp_16);
-                await SeedIfNotExists<RolePermission>(context, rp_17);
-                await SeedIfNotExists<RolePermission>(context, rp_18);
-                await SeedIfNotExists<RolePermission>(context, rp_19);
-                await SeedIfNotExists<RolePermission>(context, rp_20);
-                await SeedIfNotExists<RolePermission>(context, rp_21);
-                await SeedIfNotExists<RolePermission>(context, rp_22);
-                await SeedIfNotExists<RolePermission>(context, rp_23);
-                await SeedIfNotExists<RolePermission>(context, rp_24);
-                await SeedIfNotExists<RolePermission>(context, rp_25);
-                await SeedIfNotExists<RolePermission>(context, rp_26);
-                await SeedIfNotExists<RolePermission>(context, rp_27);
-                await SeedIfNotExists<RolePermission>(context, rp_28);
-                await SeedIfNotExists<RolePermission>(context, rp_29);
-                await SeedIfNotExists<RolePermission>(context, rp_30);
-                await SeedIfNotExists<RolePermission>(context, rp_31);
-                await SeedIfNotExists<RolePermission>(context, rp_32);
-                await SeedIfNotExists<RolePermission>(context, rp_33);
-                await SeedIfNotExists<RolePermission>(context, rp_34);
-                await SeedIfNotExists<RolePermission>(context, rp_35);
-                await SeedIfNotExists<RolePermission>(context, rp_36);
-                await SeedIfNotExists<RolePermission>(context, rp_37);
-                await SeedIfNotExists<RolePermission>(context, rp_38);
-                await SeedIfNotExists<RolePermission>(context, rp_39);
-                await SeedIfNotExists<RolePermission>(context, rp_40);
-                await SeedIfNotExists<RolePermission>(context, rp_41);
-                await SeedIfNotExists<RolePermission>(context, rp_42);
-                await SeedIfNotExists<RolePermission>(context, rp_43);
-                await SeedIfNotExists<RolePermission>(context, rp_44);
-                await SeedIfNotExists<RolePermission>(context, rp_45);
-                await SeedIfNotExists<RolePermission>(context, rp_46);
-                await SeedIfNotExists<RolePermission>(context, rp_47);
-                await SeedIfNotExists<RolePermission>(context, rp_48);
-                await SeedIfNotExists<RolePermission>(context, rp_49);
-                await SeedIfNotExists<RolePermission>(context, rp_50);
-                await SeedIfNotExists<RolePermission>(context, rp_51);
-                await SeedIfNotExists<RolePermission>(context, rp_52);
-                //await SeedIfNotExists<RolePermission>(context, rp_53);
-                //await SeedIfNotExists<RolePermission>(context, rp_54);
-                //await SeedIfNotExists<RolePermission>(context, rp_55);
-                await SeedIfNotExists<RolePermission>(context, rp_56);
-                await SeedIfNotExists<RolePermission>(context, rp_57);
-                await SeedIfNotExists<RolePermission>(context, rp_58);
-                await SeedIfNotExists<RolePermission>(context, rp_59);
-                await SeedIfNotExists<RolePermission>(context, rp_60);
-                await SeedIfNotExists<RolePermission>(context, rp_61);
-                await SeedIfNotExists<RolePermission>(context, rp_62);
-                await SeedIfNotExists<RolePermission>(context, rp_63);
-                await SeedIfNotExists<RolePermission>(context, rp_64);
-                await SeedIfNotExists<RolePermission>(context, rp_65);
-                await SeedIfNotExists<RolePermission>(context, rp_66);
-                await SeedIfNotExists<RolePermission>(context, rp_67);
-                await SeedIfNotExists<RolePermission>(context, rp_68);
-                await SeedIfNotExists<RolePermission>(context, rp_69);
-                await SeedIfNotExists<RolePermission>(context, rp_70);
-                await SeedIfNotExists<RolePermission>(context, rp_71);
-                await SeedIfNotExists<RolePermission>(context, rp_72);
-                await SeedIfNotExists<RolePermission>(context, rp_73);
-                await SeedIfNotExists<RolePermission>(context, rp_74);
-                await SeedIfNotExists<RolePermission>(context, rp_75);
-                await SeedIfNotExists<RolePermission>(context, rp_76);
-                await SeedIfNotExists<RolePermission>(context, rp_77);
-                await SeedIfNotExists<RolePermission>(context, rp_78);
-                await SeedIfNotExists<RolePermission>(context, rp_79);
-                await SeedIfNotExists<RolePermission>(context, rp_80);
-                await SeedIfNotExists<RolePermission>(context, rp_81);
-                await SeedIfNotExists<RolePermission>(context, rp_82);
-                await SeedIfNotExists<RolePermission>(context, rp_83);
-                await SeedIfNotExists<RolePermission>(context, rp_84);
-                await SeedIfNotExists<RolePermission>(context, rp_85);
-                await SeedIfNotExists<RolePermission>(context, rp_86);
-                await SeedIfNotExists<RolePermission>(context, rp_87);
-                await SeedIfNotExists<RolePermission>(context, rp_88);
-                //await SeedIfNotExists<RolePermission>(context, rp_89);
-                await SeedIfNotExists<RolePermission>(context, rp_90);
-                await SeedIfNotExists<RolePermission>(context, rp_91);
-                await SeedIfNotExists<RolePermission>(context, rp_92);
-                await SeedIfNotExists<RolePermission>(context, rp_93);
-                await SeedIfNotExists<RolePermission>(context, rp_94);
-                //await SeedIfNotExists<RolePermission>(context, rp_95);
-                //await SeedIfNotExists<RolePermission>(context, rp_96);
-                //await SeedIfNotExists<RolePermission>(context, rp_97);
-                //await SeedIfNotExists<RolePermission>(context, rp_98);
-                //await SeedIfNotExists<RolePermission>(context, rp_99);
-                await SeedIfNotExists<RolePermission>(context, rp_100);
-                await SeedIfNotExists<RolePermission>(context, rp_101);
-                await SeedIfNotExists<RolePermission>(context, rp_102);
-                await SeedIfNotExists<RolePermission>(context, rp_103);
-                await SeedIfNotExists<RolePermission>(context, rp_104);
-                await SeedIfNotExists<RolePermission>(context, rp_105);
-                await SeedIfNotExists<RolePermission>(context, rp_106);
-                await SeedIfNotExists<RolePermission>(context, rp_107);
-                await SeedIfNotExists<RolePermission>(context, rp_108);
-                await SeedIfNotExists<RolePermission>(context, rp_109);
-                await SeedIfNotExists<RolePermission>(context, rp_110);
-                await SeedIfNotExists<RolePermission>(context, rp_111);
-                await SeedIfNotExists<RolePermission>(context, rp_112);
-                await SeedIfNotExists<RolePermission>(context, rp_113);
-                await SeedIfNotExists<RolePermission>(context, rp_114);
-                await SeedIfNotExists<RolePermission>(context, rp_115);
-                await SeedIfNotExists<RolePermission>(context, rp_116);
-                await SeedIfNotExists<RolePermission>(context, rp_117);
-                await SeedIfNotExists<RolePermission>(context, rp_118);
-                //await SeedIfNotExists<RolePermission>(context, rp_119);
-                //await SeedIfNotExists<RolePermission>(context, rp_120);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_1);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_2);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_3);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_4);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_5);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_6);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_7);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_8);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_9);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_10);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_11);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_12);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_13);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_14);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_15);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_16);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_17);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_18);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_19);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_20);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_21);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_22);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_23);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_24);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_25);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_26);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_27);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_28);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_29);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_30);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_31);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_32);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_33);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_34);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_35);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_36);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_37);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_38);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_39);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_40);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_41);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_42);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_43);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_44);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_45);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_46);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_47);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_48);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_49);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_50);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_51);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_52);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_53);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_54);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_55);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_56);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_57);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_58);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_59);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_60);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_61);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_62);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_63);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_64);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_65);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_66);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_67);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_68);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_69);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_70);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_71);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_72);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_73);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_74);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_75);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_76);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_77);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_78);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_79);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_80);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_81);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_82);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_83);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_84);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_85);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_86);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_87);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_88);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_89);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_90);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_91);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_92);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_93);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_94);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_95);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_96);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_97);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_98);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_99);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_100);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_101);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_102);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_103);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_104);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_105);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_106);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_107);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_108);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_109);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_110);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_111);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_112);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_113);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_114);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_115);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_116);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_117);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_118);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_119);
+                //await SeedIfNotExists<RolePermission>(context, _logger, rp_120);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "RolesPermissions", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "RolesPermissions", false);
             }
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Exception On SeedData.CeateRolesPermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.ForegroundColor = ConsoleColor.White;
+            _logger.LogError($"Exception SeedData.CeateRolesPermissions(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -2075,25 +2060,22 @@ public class SeedData
                     RoleId = GetRecordAtIndex(rolesIds, 8)
                 };
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
-                await SeedIfNotExists<User>(context, admin_1);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", true);
+                await SeedIfNotExists<User>(context, _logger, admin_1);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", false);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", true);
-                await SeedIfNotExists<Email>(context, email_admin_1);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Emails", true);
+                await SeedIfNotExists<Email>(context, _logger, email_admin_1);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Emails", false);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
-                await SeedIfNotExists<UserRole>(context, admin_role_1);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, _logger, admin_role_1);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", false);
             }
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Exception On SeedData.CeateDefaultAdmins(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.ForegroundColor = ConsoleColor.White;
+            _logger.LogError($"Exception SeedData.CeateDefaultAdmins(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -2199,22 +2181,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsCategories", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "ProjectsCategories", true);
             foreach (var pc in projectCategories)
             {
                 try
                 {
-                    await SeedIfNotExists<ProjectCategory>(context, pc);
+                    await SeedIfNotExists<ProjectCategory>(context, _logger, pc);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CeateProjectCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CeateProjectCategories(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsCategories", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "ProjectsCategories", false);
         }
     }
 
@@ -2306,22 +2285,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsSubCategories", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "ProjectsSubCategories", true);
             foreach (var pc in projectSubCategories)
             {
                 try
                 {
-                    await SeedIfNotExists<ProjectSubCategory>(context, pc);
+                    await SeedIfNotExists<ProjectSubCategory>(context, _logger, pc);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CeateProjectSubCategories(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CeateProjectSubCategories(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsSubCategories", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "ProjectsSubCategories", false);
         }
     }
 
@@ -2381,22 +2357,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsStages", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "ProjectsStages", true);
             foreach (var pstage in projectStages)
             {
                 try
                 {
-                    await SeedIfNotExists<ProjectStage>(context, pstage);
+                    await SeedIfNotExists<ProjectStage>(context, _logger, pstage);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateProjectStages(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateProjectStages(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "ProjectsStages", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "ProjectsStages", false);
         }
     }
 
@@ -2436,22 +2409,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "InvoicesTypes", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "InvoicesTypes", true);
             foreach (var item in invoiceTypes)
             {
                 try
                 {
-                    await SeedIfNotExists<InvoiceType>(context, item);
+                    await SeedIfNotExists<InvoiceType>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateInvoiceTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateInvoiceTypes(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "InvoicesTypes", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "InvoicesTypes", false);
         }
     }
 
@@ -2505,22 +2475,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "PaymentsTypes", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "PaymentsTypes", true);
             foreach (var item in paymentTypes)
             {
                 try
                 {
-                    await SeedIfNotExists<PaymentType>(context, item);
+                    await SeedIfNotExists<PaymentType>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreatePaymentTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreatePaymentTypes(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "PaymentsTypes", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "PaymentsTypes", false);
         }
     }
 
@@ -2570,22 +2537,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "OffersTypes", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "OffersTypes", true);
             foreach (var item in offerTypes)
             {
                 try
                 {
-                    await SeedIfNotExists<OfferType>(context, item);
+                    await SeedIfNotExists<OfferType>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateOfferTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateOfferTypes(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "OffersTypes", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "OffersTypes", false);
         }
     }
 
@@ -2615,22 +2579,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "OffesStates", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "OffesStates", true);
             foreach (var item in offerStates)
             {
                 try
                 {
-                    await SeedIfNotExists<OfferState>(context, item);
+                    await SeedIfNotExists<OfferState>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateOfferState(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateOfferState(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "OffesStates", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "OffesStates", false);
         }
     }
 
@@ -2685,22 +2646,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplineTypes", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "DisciplineTypes", true);
             foreach (var item in disciplineTypes)
             {
                 try
                 {
-                    await SeedIfNotExists<DisciplineType>(context, item);
+                    await SeedIfNotExists<DisciplineType>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateDisciplineTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateDisciplineTypes(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplineTypes", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "DisciplineTypes", false);
         }
     }
 
@@ -2728,22 +2686,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "DeliverableTypes", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "DeliverableTypes", true);
             foreach (var item in deliverableTypes)
             {
                 try
                 {
-                    await SeedIfNotExists<DeliverableType>(context, item);
+                    await SeedIfNotExists<DeliverableType>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateDeliverableTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateDeliverableTypes(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "DeliverableTypes", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "DeliverableTypes", false);
         }
     }
 
@@ -2775,22 +2730,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkTypes", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "SupportiveWorkTypes", true);
             foreach (var item in otherTypes)
             {
                 try
                 {
-                    await SeedIfNotExists<SupportiveWorkType>(context, item);
+                    await SeedIfNotExists<SupportiveWorkType>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorkTypes(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateSupportiveWorkTypes(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkTypes", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "SupportiveWorkTypes", false);
         }
     }
 
@@ -2842,26 +2794,23 @@ public class SeedData
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
-                await SeedIfNotExists<User>(context, secretarie_1);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", true);
+                await SeedIfNotExists<User>(context, _logger, secretarie_1);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", false);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", true);
-                await SeedIfNotExists<Email>(context, email_6);
-                await SeedIfNotExists<Email>(context, email_7);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Emails", true);
+                await SeedIfNotExists<Email>(context, _logger, email_6);
+                await SeedIfNotExists<Email>(context, _logger, email_7);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Emails", false);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
-                await SeedIfNotExists<UserRole>(context, secretarieRole_1_em);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, _logger, secretarieRole_1_em);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", false);
             }
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Exception On SeedData.CreateSecretaries(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.ForegroundColor = ConsoleColor.White;
+            _logger.LogError($"Exception SeedData.CreateSecretaries(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -2968,31 +2917,28 @@ public class SeedData
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
-                await SeedIfNotExists<User>(context, draftman_1);
-                await SeedIfNotExists<User>(context, draftman_2);
-                await SeedIfNotExists<User>(context, draftman_3);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", true);
+                await SeedIfNotExists<User>(context, _logger, draftman_1);
+                await SeedIfNotExists<User>(context, _logger, draftman_2);
+                await SeedIfNotExists<User>(context, _logger, draftman_3);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", false);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", true);
-                await SeedIfNotExists<Email>(context, email_8);
-                await SeedIfNotExists<Email>(context, email_9);
-                await SeedIfNotExists<Email>(context, email_10);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Emails", true);
+                await SeedIfNotExists<Email>(context, _logger, email_8);
+                await SeedIfNotExists<Email>(context, _logger, email_9);
+                await SeedIfNotExists<Email>(context, _logger, email_10);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Emails", false);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
-                await SeedIfNotExists<UserRole>(context, DraftsmanRole_1_em);
-                await SeedIfNotExists<UserRole>(context, DraftsmanRole_2_em);
-                await SeedIfNotExists<UserRole>(context, DraftsmanRole_3_em);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, _logger, DraftsmanRole_1_em);
+                await SeedIfNotExists<UserRole>(context, _logger, DraftsmanRole_2_em);
+                await SeedIfNotExists<UserRole>(context, _logger, DraftsmanRole_3_em);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", false);
             }
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Exception On SeedData.CreateDraftmen(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.ForegroundColor = ConsoleColor.White;
+            _logger.LogError($"Exception SeedData.CreateDraftmen(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -3553,74 +3499,71 @@ public class SeedData
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
-                await SeedIfNotExists<User>(context, engineer_1);
-                await SeedIfNotExists<User>(context, engineer_2);
-                await SeedIfNotExists<User>(context, engineer_3);
-                await SeedIfNotExists<User>(context, engineer_4);
-                await SeedIfNotExists<User>(context, engineer_5);
-                await SeedIfNotExists<User>(context, engineer_6);
-                await SeedIfNotExists<User>(context, engineer_7);
-                await SeedIfNotExists<User>(context, engineer_8);
-                await SeedIfNotExists<User>(context, engineer_9);
-                await SeedIfNotExists<User>(context, engineer_10);
-                await SeedIfNotExists<User>(context, engineer_11);
-                await SeedIfNotExists<User>(context, engineer_12);
-                await SeedIfNotExists<User>(context, engineer_13);
-                await SeedIfNotExists<User>(context, engineer_14);
-                await SeedIfNotExists<User>(context, engineer_15);
-                await SeedIfNotExists<User>(context, engineer_16);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", true);
+                await SeedIfNotExists<User>(context, _logger, engineer_1);
+                await SeedIfNotExists<User>(context, _logger, engineer_2);
+                await SeedIfNotExists<User>(context, _logger, engineer_3);
+                await SeedIfNotExists<User>(context, _logger, engineer_4);
+                await SeedIfNotExists<User>(context, _logger, engineer_5);
+                await SeedIfNotExists<User>(context, _logger, engineer_6);
+                await SeedIfNotExists<User>(context, _logger, engineer_7);
+                await SeedIfNotExists<User>(context, _logger, engineer_8);
+                await SeedIfNotExists<User>(context, _logger, engineer_9);
+                await SeedIfNotExists<User>(context, _logger, engineer_10);
+                await SeedIfNotExists<User>(context, _logger, engineer_11);
+                await SeedIfNotExists<User>(context, _logger, engineer_12);
+                await SeedIfNotExists<User>(context, _logger, engineer_13);
+                await SeedIfNotExists<User>(context, _logger, engineer_14);
+                await SeedIfNotExists<User>(context, _logger, engineer_15);
+                await SeedIfNotExists<User>(context, _logger, engineer_16);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", false);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", true);
-                await SeedIfNotExists<Email>(context, email_11);
-                await SeedIfNotExists<Email>(context, email_12);
-                await SeedIfNotExists<Email>(context, email_13);
-                await SeedIfNotExists<Email>(context, email_14);
-                await SeedIfNotExists<Email>(context, email_15);
-                await SeedIfNotExists<Email>(context, email_16);
-                await SeedIfNotExists<Email>(context, email_17);
-                await SeedIfNotExists<Email>(context, email_18);
-                await SeedIfNotExists<Email>(context, email_19);
-                await SeedIfNotExists<Email>(context, email_20);
-                await SeedIfNotExists<Email>(context, email_21);
-                await SeedIfNotExists<Email>(context, email_22);
-                await SeedIfNotExists<Email>(context, email_23);
-                await SeedIfNotExists<Email>(context, email_24);
-                await SeedIfNotExists<Email>(context, email_25);
-                await SeedIfNotExists<Email>(context, email_26);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "Emails", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Emails", true);
+                await SeedIfNotExists<Email>(context, _logger, email_11);
+                await SeedIfNotExists<Email>(context, _logger, email_12);
+                await SeedIfNotExists<Email>(context, _logger, email_13);
+                await SeedIfNotExists<Email>(context, _logger, email_14);
+                await SeedIfNotExists<Email>(context, _logger, email_15);
+                await SeedIfNotExists<Email>(context, _logger, email_16);
+                await SeedIfNotExists<Email>(context, _logger, email_17);
+                await SeedIfNotExists<Email>(context, _logger, email_18);
+                await SeedIfNotExists<Email>(context, _logger, email_19);
+                await SeedIfNotExists<Email>(context, _logger, email_20);
+                await SeedIfNotExists<Email>(context, _logger, email_21);
+                await SeedIfNotExists<Email>(context, _logger, email_22);
+                await SeedIfNotExists<Email>(context, _logger, email_23);
+                await SeedIfNotExists<Email>(context, _logger, email_24);
+                await SeedIfNotExists<Email>(context, _logger, email_25);
+                await SeedIfNotExists<Email>(context, _logger, email_26);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Emails", false);
 
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
-                await SeedIfNotExists<UserRole>(context, engineerRole_1_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_2_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_3_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_4_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_5_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_5_em_3);
-                await SeedIfNotExists<UserRole>(context, engineerRole_6_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_6_em_coo);
-                await SeedIfNotExists<UserRole>(context, engineerRole_17_em_coo);
-                await SeedIfNotExists<UserRole>(context, admin_2);
-                await SeedIfNotExists<UserRole>(context, engineerRole_7_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_8_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_9_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_10_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_11_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_12_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_13_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_14_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_15_em);
-                await SeedIfNotExists<UserRole>(context, engineerRole_16_em);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_1_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_2_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_3_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_4_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_5_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_5_em_3);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_6_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_6_em_coo);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_17_em_coo);
+                await SeedIfNotExists<UserRole>(context, _logger, admin_2);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_7_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_8_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_9_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_10_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_11_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_12_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_13_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_14_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_15_em);
+                await SeedIfNotExists<UserRole>(context, _logger, engineerRole_16_em);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", false);
             }
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Exception On SeedData.CreateEngineers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.ForegroundColor = ConsoleColor.White;
+            _logger.LogError($"Exception SeedData.CreateEngineers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -3668,19 +3611,16 @@ public class SeedData
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", true);
-                await SeedIfNotExists<UserRole>(context, pmRole_1);
-                await SeedIfNotExists<UserRole>(context, pmRole_2);
-                await SeedIfNotExists<UserRole>(context, pmRole_3);
-                await DatabaseBackupService.SetDbIdentityInsert(context, "UsersRoles", false);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", true);
+                await SeedIfNotExists<UserRole>(context, _logger, pmRole_1);
+                await SeedIfNotExists<UserRole>(context, _logger, pmRole_2);
+                await SeedIfNotExists<UserRole>(context, _logger, pmRole_3);
+                await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "UsersRoles", false);
             }
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Exception On SeedData.CreateProjectManagers(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.ForegroundColor = ConsoleColor.White;
+            _logger.LogError($"Exception SeedData.CreateProjectManagers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -3811,86 +3751,79 @@ public class SeedData
         using (var context = _dbContextFactory.CreateDbContext())
         {
             // Clients
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", true);
             foreach (var item in clients)
             {
                 try
                 {
-                    await SeedIfNotExists<Client>(context, item);
+                    await SeedIfNotExists<Client>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateProjects() Clients: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", false);
 
             // Leds
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Leds", true);
             foreach (var item in leds)
             {
                 try
                 {
-                    await SeedIfNotExists<Led>(context, item);
+                    await SeedIfNotExists<Led>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    _logger.LogError($"Exception SeedData.CreateProjects() Leds: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Leds", false);
 
             // Offers
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Offers", true);
             foreach (var item in offers)
             {
                 try
                 {
-                    await SeedIfNotExists<Offer>(context, item);
+                    await SeedIfNotExists<Offer>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    _logger.LogError($"Exception SeedData.CreateProjects() Offers: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Offers", false);
 
             // Projects
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Projects", true);
             foreach (var item in projects)
             {
                 try
                 {
-                    await SeedIfNotExists<Project>(context, item);
+                    await SeedIfNotExists<Project>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    _logger.LogError($"Exception SeedData.CreateProjects() Projects: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Projects", false);
 
             // Invoices
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Invoices", true);
             foreach (var item in invoices)
             {
                 try
                 {
-                    await SeedIfNotExists<Invoice>(context, item);
+                    await SeedIfNotExists<Invoice>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    //Console.WriteLine($"Exception On SeedData.CreateProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                    _logger.LogError($"Exception SeedData.CreateProjects() Invoices: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Invoices", false);
         }
     }
 
@@ -4021,94 +3954,79 @@ public class SeedData
         using (var context = _dbContextFactory.CreateDbContext())
         {
             // Clients
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Users", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", true);
             foreach (var item in clients)
             {
                 try
                 {
-                    await SeedIfNotExists<Client>(context, item);
+                    await SeedIfNotExists<Client>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Clients: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateMissedDeadLineProjects() Clients: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Users", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", false);
 
             // Leds
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Leds", true);
             foreach (var item in leds)
             {
                 try
                 {
-                    await SeedIfNotExists<Led>(context, item);
+                    await SeedIfNotExists<Led>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Leds", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Leds", false);
 
             // Offers
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Offers", true);
             foreach (var item in offers)
             {
                 try
                 {
-                    await SeedIfNotExists<Offer>(context, item);
+                    await SeedIfNotExists<Offer>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Offers: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateMissedDeadLineProjects() Offers: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Offers", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Offers", false);
 
             // Projects
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Projects", true);
             foreach (var item in msprojects)
             {
                 try
                 {
-                    await SeedIfNotExists<Project>(context, item);
+                    await SeedIfNotExists<Project>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Projects: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateMissedDeadLineProjects() Projects: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Projects", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Projects", false);
 
             // Invoices
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Invoices", true);
             foreach (var item in invoices)
             {
                 try
                 {
-                    await SeedIfNotExists<Invoice>(context, item);
+                    await SeedIfNotExists<Invoice>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateMissedDeadLineProjects() Invoices: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateMissedDeadLineProjects() Invoices: {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Invoices", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Invoices", false);
         }
     }
 
@@ -4143,22 +4061,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Disciplines", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Disciplines", true);
             foreach (var item in disciplines)
             {
                 try
                 {
-                    await SeedIfNotExists<Discipline>(context, item);
+                    await SeedIfNotExists<Discipline>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateDisciplines(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateDisciplines(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Disciplines", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Disciplines", false);
         }
     }
 
@@ -4189,22 +4104,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Deliverables", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Deliverables", true);
             foreach (var item in deliverables)
             {
                 try
                 {
-                    await SeedIfNotExists<Deliverable>(context, item);
+                    await SeedIfNotExists<Deliverable>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateDeliverables(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateDeliverables(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "Deliverables", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Deliverables", false);
         }
     }
 
@@ -4234,22 +4146,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorks", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "SupportiveWorks", true);
             foreach (var item in supportiveWorks)
             {
                 try
                 {
-                    await SeedIfNotExists<SupportiveWork>(context, item);
+                    await SeedIfNotExists<SupportiveWork>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.CreateSupportiveWorks(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.CreateSupportiveWorks(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorks", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "SupportiveWorks", false);
         }
     }
 
@@ -4277,22 +4186,19 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplinesEngineers", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "DisciplinesEngineers", true);
             foreach (var item in data)
             {
                 try
                 {
-                    await SeedIfNotExists<DisciplineEngineer>(context, item);
+                    await SeedIfNotExists<DisciplineEngineer>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "DisciplinesEngineers", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "DisciplinesEngineers", false);
         }
     }
 
@@ -4320,27 +4226,24 @@ public class SeedData
 
         using (var context = _dbContextFactory.CreateDbContext())
         {
-            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkEmployees", true);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "SupportiveWorkEmployees", true);
             foreach (var item in data)
             {
                 try
                 {
-                    await SeedIfNotExists<SupportiveWorkEmployee>(context, item);
+                    await SeedIfNotExists<SupportiveWorkEmployee>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Log Exception
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Exception On SeedData.ConnectAllEngineersWithEveryDisclipline(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    _logger.LogError($"Exception SeedData.ConnectEveryDraftmanWithEverySupportiveWork(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
                 }
             }
-            await DatabaseBackupService.SetDbIdentityInsert(context, "SupportiveWorkEmployees", false);
+            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "SupportiveWorkEmployees", false);
         }
     }
 
     #region Private Helper Methods
-    private static async Task SeedIfNotExists<T>(DbContext context, T entity)
+    private static async Task SeedIfNotExists<T>(DbContext context, Logging.LoggerManager logger, T entity)
     where T : class, IEntity
     {
         try
@@ -4355,16 +4258,13 @@ public class SeedData
             }
             else
             {
-                //Console.WriteLine($"\n\nEntity of type: {entity.GetType().Name} with Id: {id} Exists\n\n");
+                logger.LogWarning($"\n\nSeedData.SeedIfNotExists(): Entity of type {entity.GetType().Name} with Id: {id} Exists\n\n");
             }
             data.Clear();
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Exception On SeedData.SeedIfNotExists(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.ForegroundColor = ConsoleColor.White;
+            logger.LogError($"Exception SeedData.SeedIfNotExists(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -4392,9 +4292,7 @@ public class SeedData
     private void UpdateProgress(int completed, int total)
     {
         int percentage = (completed * 100) / total;
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine($"Progress: {percentage}%");
-        Console.ForegroundColor = ConsoleColor.White;
+        _logger.LogInformation($"Progress: {percentage}%");
     }
     #endregion
 }

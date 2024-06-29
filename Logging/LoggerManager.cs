@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 
 namespace Logging;
 
@@ -28,7 +27,7 @@ public class LoggerManager
 
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(msg);
-        Debug.WriteLine(msg);
+        //Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
 
@@ -40,7 +39,7 @@ public class LoggerManager
 
         Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.WriteLine(msg);
-        Debug.WriteLine(msg);
+        //Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
 
@@ -52,7 +51,7 @@ public class LoggerManager
 
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine(msg);
-        Debug.WriteLine(msg);
+        //Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
 
@@ -64,7 +63,7 @@ public class LoggerManager
 
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine(msg);
-        Debug.WriteLine(msg);
+        //Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
 

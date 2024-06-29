@@ -13,11 +13,11 @@ public static class Data
 {
     private static string _seperator = "  ,  ";
 
-    private static LoggerManager _loggerManager;
-    public static LoggerManager LoggerManager => _loggerManager;
+    private static LoggerManager _logger;
+    public static LoggerManager Logger => _logger;
 
     public static void InitializeLogger(ILogger<LoggerManager> logger, string projectName) =>
-        _loggerManager = new LoggerManager(logger, projectName);
+        _logger = new LoggerManager(logger, projectName);
 
     #region Get CSV String Content From Data
     public static string GetCsvContent<T>(IList<T> data)
@@ -200,8 +200,7 @@ public static class Data
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception Data.AddAsync: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception Data.AddAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
             return false;
         }
@@ -247,8 +246,7 @@ public static class Data
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.WriteLine($"Exception Data.Upsert<{nameof(T)}>: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception Data.Upsert<{nameof(T)}>(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
             return false;
         }
@@ -366,8 +364,8 @@ public static class Data
             }
             catch (Exception ex)
             {
-                // TODO: Log Exception
-                Console.WriteLine($"Exception Data.ImportFromCsv: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                _logger.LogError($"Exception Data.ImportFromCsv(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+
                 return null;
             }
         }
@@ -436,9 +434,7 @@ public static class Data
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
-            Console.WriteLine($"\n\nException Data._setProperty: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            Console.WriteLine($"Type: {instance?.GetType()?.Name}, PropertyName.Length: {propertyName.Length}, PropertyName: {propertyName}, PropertyValue.Length: {propertyValue.Length}, PropertyValue: {propertyValue}");
+            _logger.LogError($"Exception Data._setProperty(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 

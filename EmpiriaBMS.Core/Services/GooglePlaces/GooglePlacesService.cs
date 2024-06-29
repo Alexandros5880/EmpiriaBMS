@@ -62,10 +62,9 @@ public class GooglePlacesService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            _logger.LogError($"Exception GooglePlacesService.GetPlaceDetailsByAddressAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
-            return null; // TODO: Google Address ->  Handle error cases
+            return null;
         }
     }
 
@@ -108,8 +107,7 @@ public class GooglePlacesService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            _logger.LogError($"Exception GooglePlacesService.GetPlaceDetailsByPlaceIdAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
             return null; // TODO: Google Address ->  Handle error cases
         }
