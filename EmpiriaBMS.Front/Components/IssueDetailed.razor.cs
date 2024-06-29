@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
-using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
-using System.Text.Json;
-using EmpiriaBMS.Front.ViewModel.Components;
-using System.ComponentModel;
+﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Front.ViewModel.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.EntityFrameworkCore;
-using EmpiriaBMS.Models.Models;
+using System.ComponentModel;
 
 namespace EmpiriaBMS.Front.Components;
 
@@ -39,7 +35,7 @@ public partial class IssueDetailed : ComponentBase, IDisposable
     SignaturePad verificatorSignature;
     SignaturePad pMSignature;
 
-    private List<DocumentVM> _documents =  new List<DocumentVM>();
+    private List<DocumentVM> _documents = new List<DocumentVM>();
 
     public void Refresh()
     {
@@ -103,8 +99,7 @@ public partial class IssueDetailed : ComponentBase, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception IssueDetailed.HandleValidSubmit() \"await DataProvider.Issues.Add(dto);\" \n Exception: {ex?.Message ?? "No Exception Msg"}  ->  \n InnerException: ");
-            Console.Write(ex?.InnerException?.Message ?? "No Exception Msg");
+            Logger.LogError($"Exception IssueDetailed.HandleValidSubmit(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 

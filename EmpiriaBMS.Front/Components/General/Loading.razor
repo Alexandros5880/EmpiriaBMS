@@ -4,6 +4,7 @@
 @inject IConfiguration Configuration
 @inject IJSRuntime jsRuntime
 @inject MicrosoftTeams MicrosoftTeams
+@inject Logging.LoggerManager Logger
 
 @if (isLoaded)
 {
@@ -20,9 +21,9 @@ else
 	bool isLoaded;
 
 	[Parameter]
-    public RenderFragment ChildContent { get; set; }
+	public RenderFragment ChildContent { get; set; }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		await base.OnAfterRenderAsync(firstRender);
 
@@ -34,6 +35,9 @@ else
 				StateHasChanged();
 			}
 		}
-		catch (Exception) { }	
+		catch (Exception)
+		{
+			Logger.LogError($"Exception Loading.OnAfterRenderAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+		}	
 	}
 }

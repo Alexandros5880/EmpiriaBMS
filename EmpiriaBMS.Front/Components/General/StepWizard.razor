@@ -1,5 +1,7 @@
 ﻿@inherits Microsoft.AspNetCore.Components.ComponentBase;
 
+@inject Logging.LoggerManager Logger
+
 @if (Steps != null && Steps.Count > 0)
 {
     <div>

@@ -146,8 +146,7 @@ public partial class EditUsersHours
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception EditUsersHours._getUsers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -172,8 +171,7 @@ public partial class EditUsersHours
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception EditUsersHours._getLeds(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -197,8 +195,7 @@ public partial class EditUsersHours
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception EditUsersHours._getOffers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -233,8 +230,7 @@ public partial class EditUsersHours
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}");
-            // TODO: Log Error
+            Logger.LogError($"Exception EditUsersHours._getProjects(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -666,9 +662,7 @@ public partial class EditUsersHours
         }
         catch (Exception ex)
         {
-            // TODO Exception Log
-            Console.WriteLine($"\n\nException: {ex.Message}");
-            Console.WriteLine($"\nException Inner: {ex.InnerException.Message}");
+            Logger.LogError($"Exception EditUsersHours.Save(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
 
         _startLoading = false;
