@@ -28,6 +28,7 @@
 @inject SharedAuthDataService _sharedAuthData
 @inject IDialogService DialogService
 @inject DatabaseBackupService DatabaseBackupService
+@inject Logging.LoggerManager Logger
 
 <!-- Loading -->
 <FluentOverlay @bind-Visible="@_startLoading"

@@ -65,6 +65,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EmpiriaBMS.Core\EmpiriaBMS.Core.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

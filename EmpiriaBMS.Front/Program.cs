@@ -71,6 +71,17 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 15 * 1024 * 1024; // 15 MB
 });
 
+// Log Service
+builder.Services.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+    logging.AddDebug();
+    // Add other logging providers as needed, e.g., Application Insights, Serilog
+});
+// Register LoggerManager
+builder.Services.AddSingleton<Logging.LoggerManager>();
+
 var app = builder.Build();
 
 // Create Seed Data
