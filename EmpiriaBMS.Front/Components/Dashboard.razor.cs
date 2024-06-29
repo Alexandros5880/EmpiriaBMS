@@ -1236,6 +1236,7 @@ public partial class Dashboard : IDisposable
     {
         _backUpLoading = true;
         StateHasChanged();
+
         try
         {
             Dictionary<string, string> csvs = DatabaseBackupService.DatabaseToCSV();

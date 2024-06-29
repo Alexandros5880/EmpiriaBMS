@@ -3642,30 +3642,25 @@ public class AppDbContext : DbContext
         List<List<object>> allEntities = new List<List<object>>();
 
         // Get all properties of this DbContext
-        var properties = GetType().GetProperties();
+        var dbSetsProperties = GetType().GetProperties()
+                                .Where(p => p.PropertyType.IsGenericType &&
+                                            p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
 
-        foreach (var property in properties)
+        foreach (var property in dbSetsProperties)
         {
-            // Check if the property is a DbSet<T>
-            if (property.PropertyType.IsGenericType &&
-                property.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
-            {
-                // Retrieve the DbSet<T> instance
-                var dbSet = property.GetValue(this);
+            // Retrieve the DbSet<T> instance
+            var dbSet = property.GetValue(this);
 
-                // If the dbSet is not null, add its contents to allEntities
-                if (dbSet != null)
-                {
-                    // Create a list to hold objects for this DbSet
-                    List<object> items = new List<object>();
+            if (dbSet == null) continue;
 
-                    // Cast dbSet to IEnumerable<object> to add all items to items list
-                    items.AddRange(((IEnumerable<object>)dbSet).ToList());
+            // Create a list to hold objects for this DbSet
+            List<object> items = new List<object>();
 
-                    // Add items list to allEntities
-                    allEntities.Add(items);
-                }
-            }
+            // Cast dbSet to IEnumerable<object> to add all items to items list
+            items.AddRange(((IEnumerable<object>)dbSet).ToList());
+
+            // Add items list to allEntities
+            allEntities.Add(items);
         }
 
         return allEntities;

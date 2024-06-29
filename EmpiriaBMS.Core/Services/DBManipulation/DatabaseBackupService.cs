@@ -94,10 +94,11 @@ public class DatabaseBackupService : IDisposable
             var date = DateTime.Today;
             var fileName = $"{listType.Name}-{date.ToEuropeFormat()}.csv";
 
-            string csvContent = Data.GenerateCsvContentDynamic(dataList, listType);
+            string csvContent = Data.GetCsvContent(dataList);
 
             if (!string.IsNullOrEmpty(csvContent))
-                content.Add(fileName, csvContent);
+                if (!content.ContainsKey(fileName))
+                    content.Add(fileName, csvContent);
         }
 
         return content;

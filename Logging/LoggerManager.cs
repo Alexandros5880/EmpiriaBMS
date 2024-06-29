@@ -23,10 +23,9 @@ public class LoggerManager
     {
         var msg = $"\n\nLog {ProjectName} --> \n{message}";
 
-        _logger.LogInformation(msg);
-
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(msg);
+        _logger.LogInformation(msg);
+        //Console.WriteLine(msg);
         //Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
@@ -35,10 +34,9 @@ public class LoggerManager
     {
         var msg = $"\n\nLog {ProjectName} --> \n{message}";
 
-        _logger.LogDebug(msg);
-
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine(msg);
+        _logger.LogDebug(msg);
+        //Console.WriteLine(msg);
         //Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
@@ -47,10 +45,9 @@ public class LoggerManager
     {
         var msg = $"\n\nLog {ProjectName} --> \n{message}";
 
-        _logger.LogError(msg);
-
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(msg);
+        _logger.LogError(msg);
+        //Console.WriteLine(msg);
         //Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
@@ -59,10 +56,9 @@ public class LoggerManager
     {
         var msg = $"\n\nLog {ProjectName} --> \n{message}";
 
-        _logger.LogWarning(msg);
-
         Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.WriteLine(msg);
+        _logger.LogWarning(msg);
+        //Console.WriteLine(msg);
         //Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }

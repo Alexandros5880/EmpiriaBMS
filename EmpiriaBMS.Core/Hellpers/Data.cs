@@ -27,42 +27,27 @@ public static class Data
         return content;
     }
 
-    public static string GenerateCsvContentDynamic(List<object> dataList, Type itemType)
+    public static string GenerateCsvContentDynamic(List<object> data)
     {
-        MethodInfo method = typeof(Data).GetMethod("GetCsvContent", BindingFlags.Public | BindingFlags.Static);
-        if (method == null)
-            throw new InvalidOperationException("The method GetCsvContent could not be found.");
+        var content = SCV.GenerateCsvContent(data);
 
-        // Make the method generic with the specified item type
-        MethodInfo genericMethod = method.MakeGenericMethod(itemType);
-
-        // Invoke the generic method and get the result
-        Array array = Array.CreateInstance(itemType, dataList.Count);
-        for (int i = 0; i < dataList.Count; i++)
-        {
-            array.SetValue(dataList[i], i);
-        }
-
-        // Invoke the generic method and get the result
-        var result = genericMethod.Invoke(null, new object[] { array });
-
-        return (string)result;
+        return content;
     }
     #endregion
 
-    public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
-    {
-        switch (fileType)
-        {
-            case FileType.CSV:
-                var csvContent = SCV.GenerateCsvContent(data);
-                SCV.SaveCsvToFile(csvContent, filePath);
-                break;
+    //public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
+    //{
+    //    switch (fileType)
+    //    {
+    //        case FileType.CSV:
+    //            var csvContent = SCV.GenerateCsvContent(data);
+    //            SCV.SaveCsvToFile(csvContent, filePath);
+    //            break;
 
-            default:
-                break;
-        }
-    }
+    //        default:
+    //            break;
+    //    }
+    //}
 
     public static async Task<List<T>> ImportData<T>(Stream stream, FileType fileType = FileType.CSV)
     {
