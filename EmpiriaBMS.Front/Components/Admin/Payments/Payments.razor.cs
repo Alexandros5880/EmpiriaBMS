@@ -176,8 +176,7 @@ public partial class Payments
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Payments import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Payments.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

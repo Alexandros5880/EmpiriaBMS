@@ -163,8 +163,7 @@ public partial class DeliverableTypes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception DrawingsTypes import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception DeliverableTypes.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

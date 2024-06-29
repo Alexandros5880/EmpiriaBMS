@@ -167,8 +167,7 @@ public partial class Offers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Offers import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Offers.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

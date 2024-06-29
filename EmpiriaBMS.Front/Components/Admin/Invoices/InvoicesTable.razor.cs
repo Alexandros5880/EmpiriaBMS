@@ -180,8 +180,7 @@ public partial class InvoicesTable
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Invoices import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception InvoicesTable.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

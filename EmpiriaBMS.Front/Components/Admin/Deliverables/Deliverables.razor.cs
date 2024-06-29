@@ -165,8 +165,7 @@ public partial class Deliverables
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Deliverables import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Deliverables.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

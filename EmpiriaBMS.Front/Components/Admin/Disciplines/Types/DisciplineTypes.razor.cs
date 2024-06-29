@@ -162,8 +162,7 @@ public partial class DisciplineTypes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception DisciplineTypes import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception DisciplineTypes.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

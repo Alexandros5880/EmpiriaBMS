@@ -164,8 +164,7 @@ public partial class InvoiceTypes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception InvoiceTypes import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception InvoiceTypes.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

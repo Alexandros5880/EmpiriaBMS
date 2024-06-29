@@ -168,8 +168,7 @@ public partial class Leds
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Leds import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Leds.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }
