@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Front.ViewModel.ExportData;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
@@ -253,11 +254,11 @@ public partial class Offers
     private async Task ExportToCSV()
     {
         var date = DateTime.Today;
+        var data = FilteredItems.Select(c => new OfferExport(c)).ToList();
         var fileName = $"Offers-{date.ToEuropeFormat()}.csv";
-        var offers = FilteredItems.ToList();
-        if (offers.Count > 0)
+        if (data.Count > 0)
         {
-            string csvContent = Data.GetCsvContent(offers);
+            string csvContent = Data.GetCsvContent(data);
             await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
         }
     }
