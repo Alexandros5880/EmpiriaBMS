@@ -148,7 +148,7 @@ public partial class Deliverables
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<DeliverableExport> data = await Data.ImportData<DeliverableExport>(stream);
+                List<DeliverableExport> data = await Data.ImportDataFromCsv<DeliverableExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)

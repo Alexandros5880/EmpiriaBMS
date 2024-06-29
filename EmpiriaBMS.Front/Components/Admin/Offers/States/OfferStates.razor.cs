@@ -146,7 +146,7 @@ public partial class OfferStates
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<OfferStateExport> data = await Data.ImportData<OfferStateExport>(stream);
+                List<OfferStateExport> data = await Data.ImportDataFromCsv<OfferStateExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)

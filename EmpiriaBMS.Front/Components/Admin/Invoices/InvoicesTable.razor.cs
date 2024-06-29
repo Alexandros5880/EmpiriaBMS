@@ -163,7 +163,7 @@ public partial class InvoicesTable
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<InvoiceExport> data = await Data.ImportData<InvoiceExport>(stream);
+                List<InvoiceExport> data = await Data.ImportDataFromCsv<InvoiceExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)

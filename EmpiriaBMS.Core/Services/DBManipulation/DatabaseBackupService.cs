@@ -203,7 +203,7 @@ public class DatabaseBackupService : IDisposable
     {
         try
         {
-            List<T> data = await Data.ImportData<T>(stream);
+            List<T> data = await Data.ImportDataFromCsv<T>(stream);
             return data;
         }
         catch (Exception ex)

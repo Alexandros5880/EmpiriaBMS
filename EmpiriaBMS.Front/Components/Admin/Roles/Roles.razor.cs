@@ -174,7 +174,7 @@ public partial class Roles
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<RoleExport> data = await Data.ImportData<RoleExport>(stream);
+                List<RoleExport> data = await Data.ImportDataFromCsv<RoleExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)

@@ -147,7 +147,7 @@ public partial class SupportiveWorks
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<SupportiveWorkExport> data = await Data.ImportData<SupportiveWorkExport>(stream);
+                List<SupportiveWorkExport> data = await Data.ImportDataFromCsv<SupportiveWorkExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)

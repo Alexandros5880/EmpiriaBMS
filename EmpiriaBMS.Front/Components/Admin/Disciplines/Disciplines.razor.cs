@@ -145,7 +145,7 @@ public partial class Disciplines
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<DisciplineExport> data = await Data.ImportData<DisciplineExport>(stream);
+                List<DisciplineExport> data = await Data.ImportDataFromCsv<DisciplineExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)

@@ -150,7 +150,7 @@ public partial class Offers
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<OfferExport> data = await Data.ImportData<OfferExport>(stream);
+                List<OfferExport> data = await Data.ImportDataFromCsv<OfferExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)

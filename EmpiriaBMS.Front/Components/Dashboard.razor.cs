@@ -1279,6 +1279,10 @@ public partial class Dashboard : IDisposable
         if (!(fileType?.Contains("zip") ?? false))
         {
             await ShowInformationAsync("Uploaded file is not a ZIP archive.");
+
+            _restoreLoading = false;
+            StateHasChanged();
+
             return;
         }
 

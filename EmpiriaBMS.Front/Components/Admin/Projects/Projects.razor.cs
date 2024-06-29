@@ -168,7 +168,7 @@ public partial class Projects
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<ProjectExport> data = await Data.ImportData<ProjectExport>(stream);
+                List<ProjectExport> data = await Data.ImportDataFromCsv<ProjectExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)

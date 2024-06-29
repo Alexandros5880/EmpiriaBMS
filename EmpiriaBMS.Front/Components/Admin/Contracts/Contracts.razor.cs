@@ -163,7 +163,7 @@ public partial class Contracts
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<ContractExport> data = await Data.ImportData<ContractExport>(stream);
+                List<ContractExport> data = await Data.ImportDataFromCsv<ContractExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)

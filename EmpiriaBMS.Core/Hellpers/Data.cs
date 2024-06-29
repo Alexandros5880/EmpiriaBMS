@@ -19,7 +19,6 @@ public static class Data
     public static void InitializeLogger(ILogger<LoggerManager> logger, string projectName) =>
         _logger = new LoggerManager(logger, projectName);
 
-    #region Get CSV String Content From Data
     public static string GetCsvContent<T>(IList<T> data)
     {
         Type dataType = data[0].GetType();
@@ -73,19 +72,6 @@ public static class Data
         }
 
         return csvBuilder.ToString();
-    }
-    #endregion
-
-    public static async Task<List<T>> ImportData<T>(Stream stream, FileType fileType = FileType.CSV)
-    {
-        switch (fileType)
-        {
-            case FileType.CSV:
-                return await SCV.ImportFromCsv<T>(stream);
-
-            default:
-                return null;
-        }
     }
 
     public static Type GetListItemType(List<object> dataList)
@@ -265,68 +251,59 @@ public static class Data
     }
     #endregion
 
-    private static class SCV
+    public static async Task<List<T>> ImportDataFromCsv<T>(Stream stream)
     {
-
-        public static void SaveCsvToFile(string csvContent, string filePath)
+        try
         {
-            File.WriteAllText(filePath, csvContent);
-        }
-
-        public static async Task<List<T>> ImportFromCsv<T>(Stream stream)
-        {
-            try
+            using (StreamReader reader = new StreamReader(stream))
             {
-                using (StreamReader reader = new StreamReader(stream))
+
+                List<string> columns = new List<string>();
+                List<List<string>> rows = new List<List<string>>();
+
+                string line;
+                int count = 0;
+                while ((line = await reader.ReadLineAsync()) != null)
                 {
-
-                    List<string> columns = new List<string>();
-                    List<List<string>> rows = new List<List<string>>();
-
-                    string line;
-                    int count = 0;
-                    while ((line = await reader.ReadLineAsync()) != null)
+                    if (count == 0)
                     {
-                        if (count == 0)
-                        {
-                            columns = new List<string>(line.Split(_seperator));
-                        }
-                        else
-                        {
-                            var row = new List<string>(line.Split(_seperator));
-                            if (row.Count > 1)
-                                rows.Add(row);
-                        }
-                        count++;
+                        columns = new List<string>(line.Split(_seperator));
                     }
-
-                    // Create Instance
-                    PropertyInfo[] properties = typeof(T).GetProperties();
-                    List<T> data = new List<T>();
-
-                    foreach (var row in rows)
+                    else
                     {
-                        if (row == null || row.Count == 0)
-                            continue;
-                        var column = 0;
-                        T instance = Activator.CreateInstance<T>();
-                        foreach (var val in row)
-                        {
-                            _setProperty(instance, columns[column], val);
-                            column++;
-                        }
-                        data.Add(instance);
+                        var row = new List<string>(line.Split(_seperator));
+                        if (row.Count > 1)
+                            rows.Add(row);
                     }
-
-                    return data;
+                    count++;
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception Data.ImportFromCsv(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
-                return null;
+                // Create Instance
+                PropertyInfo[] properties = typeof(T).GetProperties();
+                List<T> data = new List<T>();
+
+                foreach (var row in rows)
+                {
+                    if (row == null || row.Count == 0)
+                        continue;
+                    var column = 0;
+                    T instance = Activator.CreateInstance<T>();
+                    foreach (var val in row)
+                    {
+                        _setProperty(instance, columns[column], val);
+                        column++;
+                    }
+                    data.Add(instance);
+                }
+
+                return data;
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception Data.ImportFromCsv(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+
+            return null;
         }
     }
 
@@ -403,7 +380,3 @@ public static class Data
             propertyType.GetGenericArguments()[0] == typeof(DateTime));
 }
 
-public enum FileType
-{
-    CSV
-}

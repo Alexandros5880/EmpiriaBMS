@@ -151,7 +151,7 @@ public partial class Leds
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<LedExport> data = await Data.ImportData<LedExport>(stream);
+                List<LedExport> data = await Data.ImportDataFromCsv<LedExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
