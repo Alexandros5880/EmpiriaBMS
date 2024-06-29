@@ -21,6 +21,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
     {
         _dbContextFactory = dbFactory;
         _logger = logger;
+        _logger.ProjectName = "EmbiriaBMS.Core";
     }
 
     public async Task<T> Add(T entity, bool update = false)

@@ -29,10 +29,15 @@ public class SeedData
     private List<SupportiveWork> supportiveWorks = new List<SupportiveWork>();
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    protected readonly Logging.LoggerManager _logger;
 
-    public SeedData(IDbContextFactory<AppDbContext> dbFactory)
+    public SeedData(
+        IDbContextFactory<AppDbContext> dbFactory,
+        Logging.LoggerManager logger
+    )
     {
         _dbContextFactory = dbFactory;
+        _logger = logger;
     }
 
     public async Task CreateData()

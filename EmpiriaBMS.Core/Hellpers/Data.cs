@@ -1,6 +1,8 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Models.Models;
+using Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 using System.Text;
 
@@ -10,6 +12,12 @@ namespace EmpiriaBMS.Core.Hellpers;
 public static class Data
 {
     private static string _seperator = "  ,  ";
+
+    private static LoggerManager _loggerManager;
+    public static LoggerManager LoggerManager => _loggerManager;
+
+    public static void InitializeLogger(ILogger<LoggerManager> logger, string projectName) =>
+        _loggerManager = new LoggerManager(logger, projectName);
 
     #region Get CSV String Content From Data
     public static string GetCsvContent<T>(IList<T> data)

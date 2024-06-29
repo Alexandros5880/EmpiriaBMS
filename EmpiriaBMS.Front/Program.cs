@@ -1,5 +1,6 @@
 using AutoMapper;
 using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Core.Services;
 using EmpiriaBMS.Core.Services.DBManipulation;
 using EmpiriaBMS.Core.Services.EmailService;
@@ -89,12 +90,18 @@ builder.Services.AddSingleton<Logging.LoggerManager>(sp =>
 
 var app = builder.Build();
 
-// Create Seed Data
-//using (var scope = app.Services.CreateScope())
-//{
-//    var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
-//    await seedData.CreateData();
-//}
+// Scoped Services Initiations
+using (var scope = app.Services.CreateScope())
+{
+    // Create Seed Data
+    //var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
+    //await seedData.CreateData();
+
+    // Get logger from the service provider
+    var logger = app.Services.GetRequiredService<ILogger<LoggerManager>>();
+    // Initialize the LoggerManager with the logger instance and project name
+    Data.InitializeLogger(logger, "EmbiriaBMS.Core");
+}
 
 if (app.Environment.IsDevelopment())
 {

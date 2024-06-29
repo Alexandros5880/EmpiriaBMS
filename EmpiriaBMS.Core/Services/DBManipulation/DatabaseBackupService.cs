@@ -17,10 +17,15 @@ public class DatabaseBackupService : IDisposable
     public readonly string DatabaseName;
 
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    protected readonly Logging.LoggerManager _logger;
 
-    public DatabaseBackupService(IDbContextFactory<AppDbContext> dbFactory)
+    public DatabaseBackupService(
+        IDbContextFactory<AppDbContext> dbFactory,
+        Logging.LoggerManager logger
+    )
     {
         _dbContextFactory = dbFactory;
+        _logger = logger;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             ConnectionString = Environment.GetEnvironmentVariable("ConnectionString");

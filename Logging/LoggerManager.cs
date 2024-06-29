@@ -6,7 +6,8 @@ namespace Logging;
 public class LoggerManager
 {
     private readonly ILogger<LoggerManager> _logger;
-    private readonly string _projectName;
+
+    public string ProjectName { get; set; }
 
     public LoggerManager(ILogger<LoggerManager> logger)
     {
@@ -16,12 +17,12 @@ public class LoggerManager
     public LoggerManager(ILogger<LoggerManager> logger, string projectName)
     {
         _logger = logger;
-        _projectName = projectName;
+        ProjectName = projectName;
     }
 
     public void LogInformation(string message)
     {
-        var msg = $"\n\nLog {_projectName} --> \n{message}";
+        var msg = $"\n\nLog {ProjectName} --> \n{message}";
 
         _logger.LogInformation(msg);
 
@@ -33,7 +34,7 @@ public class LoggerManager
 
     public void LogDebug(string message)
     {
-        var msg = $"\n\nLog {_projectName} --> \n{message}";
+        var msg = $"\n\nLog {ProjectName} --> \n{message}";
 
         _logger.LogDebug(msg);
 
@@ -45,7 +46,7 @@ public class LoggerManager
 
     public void LogError(string message)
     {
-        var msg = $"\n\nLog {_projectName} --> \n{message}";
+        var msg = $"\n\nLog {ProjectName} --> \n{message}";
 
         _logger.LogError(msg);
 
@@ -57,7 +58,7 @@ public class LoggerManager
 
     public void LogWarning(string message)
     {
-        var msg = $"\n\nLog {_projectName} --> \n{message}";
+        var msg = $"\n\nLog {ProjectName} --> \n{message}";
 
         _logger.LogWarning(msg);
 

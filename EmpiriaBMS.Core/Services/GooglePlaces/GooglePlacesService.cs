@@ -1,12 +1,6 @@
 ﻿using EmpiriaBMS.Core.Services.GooglePlaces.Models;
 using EmpiriaBMS.Models.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Services.GooglePlaces;
 
@@ -14,10 +8,15 @@ public class GooglePlacesService
 {
     private readonly HttpClient _httpClient;
     private string _apiKey = "AIzaSyDMZgJASnCbYBKTiauVNYvP_hf4VNJu6p4";
+    protected readonly Logging.LoggerManager _logger;
 
-    public GooglePlacesService(HttpClient httpClient)
+    public GooglePlacesService(
+        HttpClient httpClient,
+        Logging.LoggerManager logger
+    )
     {
         _httpClient = httpClient;
+        _logger = logger;
     }
 
     public async Task<Address> GetPlaceDetailsByAddressAsync(string address)
