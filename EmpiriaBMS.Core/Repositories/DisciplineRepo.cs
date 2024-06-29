@@ -9,7 +9,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 {
-    public DisciplineRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public DisciplineRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public new async Task<DisciplineDto?> Get(int id)
     {

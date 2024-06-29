@@ -9,7 +9,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class IssueRepo : Repository<IssueDto, Issue>
 {
-    public IssueRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public IssueRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<IssueDto?> Get(int id)
     {

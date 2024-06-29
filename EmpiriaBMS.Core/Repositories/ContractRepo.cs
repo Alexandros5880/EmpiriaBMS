@@ -8,7 +8,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class ContractRepo : Repository<ContractDto, Contract>
 {
-    public ContractRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public ContractRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<ContractDto> Add(ContractDto entity, bool update = false)
     {

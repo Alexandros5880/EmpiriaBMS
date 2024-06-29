@@ -11,10 +11,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     private InvoiceRepo _invoiceRepo;
 
     public ProjectsRepo(
-        IDbContextFactory<AppDbContext> DbFactory
-    ) : base(DbFactory)
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger)
     {
-        _invoiceRepo = new InvoiceRepo(DbFactory);
+        _invoiceRepo = new InvoiceRepo(DbFactory, logger);
     }
 
     public async Task<ProjectDto> Add(ProjectDto entity, bool update = false)

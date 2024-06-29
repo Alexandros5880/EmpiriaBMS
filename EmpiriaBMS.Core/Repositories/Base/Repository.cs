@@ -12,9 +12,16 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
 {
     private bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    protected readonly Logging.LoggerManager _logger;
 
-    public Repository(IDbContextFactory<AppDbContext> dbFactory) =>
+    public Repository(
+        IDbContextFactory<AppDbContext> dbFactory,
+        Logging.LoggerManager logger
+    )
+    {
         _dbContextFactory = dbFactory;
+        _logger = logger;
+    }
 
     public async Task<T> Add(T entity, bool update = false)
     {

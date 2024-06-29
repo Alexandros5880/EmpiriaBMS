@@ -11,7 +11,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
 {
-    public DeliverableRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public DeliverableRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public new async Task<DeliverableDto?> Get(int id)
     {

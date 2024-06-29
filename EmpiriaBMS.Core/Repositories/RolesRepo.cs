@@ -9,7 +9,10 @@ using System.Linq.Expressions;
 namespace EmpiriaBMS.Core.Repositories;
 public class RolesRepo : Repository<RoleDto, Role>
 {
-    public RolesRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public RolesRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public new async Task<RoleDto?> Add(RoleDto entity, bool update = false)
     {

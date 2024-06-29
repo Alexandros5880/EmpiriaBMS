@@ -9,7 +9,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
 {
-    public PaymentRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public PaymentRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<PaymentDto> Add(PaymentDto entity, bool update = false)
     {

@@ -9,10 +9,10 @@ using Contract = EmpiriaBMS.Models.Models.Contract;
 namespace EmpiriaBMS.Core.Repositories;
 public class InvoiceRepo : Repository<InvoiceDto, Invoice>
 {
-    public InvoiceRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory)
-    {
-
-    }
+    public InvoiceRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<InvoiceDto> Add(InvoiceDto entity, bool update = false)
     {

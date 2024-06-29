@@ -3,18 +3,16 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
 public class EmailRepo : Repository<EmailDto, Email>
 {
-    public EmailRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
-    
+    public EmailRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
+
     public async Task RemoveAll(int userId)
     {
         if (userId == 0)
@@ -23,7 +21,7 @@ public class EmailRepo : Repository<EmailDto, Email>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var prevEmails = await _context.Set<Email>().Where(r => !r.IsDeleted).Where(e => e.UserId == userId).ToListAsync();
-            foreach(var e in prevEmails)
+            foreach (var e in prevEmails)
             {
                 await DeleteEmail(e);
             }

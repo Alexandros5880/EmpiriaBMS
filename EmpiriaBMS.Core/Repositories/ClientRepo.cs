@@ -8,7 +8,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class ClientRepo : Repository<ClientDto, Client>
 {
-    public ClientRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public ClientRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<ClientDto> Add(ClientDto entity, bool update = false)
     {

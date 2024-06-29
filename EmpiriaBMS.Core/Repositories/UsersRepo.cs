@@ -10,7 +10,10 @@ using System.Linq.Expressions;
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>
 {
-    public UsersRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public UsersRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<bool> Exists(string email)
     {

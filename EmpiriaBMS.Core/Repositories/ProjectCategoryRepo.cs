@@ -7,5 +7,9 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class ProjectCategoryRepo : Repository<ProjectCategoryDto, ProjectCategory>, IDisposable
 {
-    public ProjectCategoryRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public ProjectCategoryRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
+
 }

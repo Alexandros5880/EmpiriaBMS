@@ -8,7 +8,10 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class SupportiveWorkTypeRepo : Repository<SupportiveWorkTypeDto, SupportiveWorkType>, IDisposable
 {
-    public SupportiveWorkTypeRepo(IDbContextFactory<AppDbContext> DbFactory) : base(DbFactory) { }
+    public SupportiveWorkTypeRepo(
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger) { }
 
     public async Task<List<SupportiveWorkTypeDto>> GetOtherTypesSelections(int disciplineId)
     {

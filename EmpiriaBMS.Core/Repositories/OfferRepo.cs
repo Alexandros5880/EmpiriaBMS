@@ -12,10 +12,11 @@ public class OfferRepo : Repository<OfferDto, Offer>
     private ProjectsRepo _projectRepo;
 
     public OfferRepo(
-        IDbContextFactory<AppDbContext> DbFactory
-    ) : base(DbFactory)
+        IDbContextFactory<AppDbContext> DbFactory,
+        Logging.LoggerManager logger
+    ) : base(DbFactory, logger)
     {
-        _projectRepo = new ProjectsRepo(DbFactory);
+        _projectRepo = new ProjectsRepo(DbFactory, logger);
     }
 
     public new async Task<OfferDto?> Add(OfferDto entity, bool update = false)
