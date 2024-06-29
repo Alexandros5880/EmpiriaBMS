@@ -50,7 +50,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Add(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On LedRepo.Add(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -78,7 +78,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.Update(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On LedRepo.Update(Led): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -266,7 +266,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetAllOppenLeds(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.GetAllOppenLeds(): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return new List<LedDto>();
         }
     }
@@ -302,7 +302,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetSumOfAllOppenLedsPotencialFee(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.GetSumOfAllOppenLedsPotencialFee(): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -347,7 +347,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetSumOfPayedFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.GetSumOfPayedFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -392,7 +392,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.GetSumOfPotencialFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.GetSumOfPotencialFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -438,7 +438,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On LedRepo.IsClosed({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LedRepo.IsClosed({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return false;
         }
     }

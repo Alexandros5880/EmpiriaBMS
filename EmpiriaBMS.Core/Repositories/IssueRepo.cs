@@ -125,7 +125,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Add(Issue): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On Repository.Add(Issue): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -230,7 +230,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On IssueRepo.DeleteDocument({Mapping.Mapper.Map<Document>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On IssueRepo.DeleteDocument({Mapping.Mapper.Map<Document>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

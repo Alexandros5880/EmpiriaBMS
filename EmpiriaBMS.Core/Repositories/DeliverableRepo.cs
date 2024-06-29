@@ -343,7 +343,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On DrawingRepo.DeleteDrawingEmployee({Mapping.Mapper.Map<DeliverableEmployee>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On DrawingRepo.DeleteDrawingEmployee({Mapping.Mapper.Map<DeliverableEmployee>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

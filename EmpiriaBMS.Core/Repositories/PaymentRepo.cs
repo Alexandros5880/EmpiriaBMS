@@ -41,7 +41,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On PaymentRepo.Add(Payment): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On PaymentRepo.Add(Payment): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }

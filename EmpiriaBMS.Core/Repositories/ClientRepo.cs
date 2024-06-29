@@ -40,7 +40,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On ClientRepo.Add(Client): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On ClientRepo.Add(Client): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }

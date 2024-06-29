@@ -44,7 +44,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Add({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On Repository.Add({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }
@@ -77,7 +77,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Update({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On Repository.Update({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }
@@ -213,7 +213,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On OfferRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On OfferRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -250,7 +250,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On OfferRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On OfferRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return 0;
         }
     }
@@ -288,7 +288,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On OfferRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On OfferRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return false;
         }
     }

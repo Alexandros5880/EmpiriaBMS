@@ -64,7 +64,7 @@ public class EmailRepo : Repository<EmailDto, Email>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On EmailRepo.DeleteEmail({Mapping.Mapper.Map<Email>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On EmailRepo.DeleteEmail({Mapping.Mapper.Map<Email>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

@@ -41,7 +41,7 @@ public class ContractRepo : Repository<ContractDto, Contract>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Add({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On Repository.Add({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }
@@ -74,7 +74,7 @@ public class ContractRepo : Repository<ContractDto, Contract>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Update({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On Repository.Update({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }
@@ -103,7 +103,7 @@ public class ContractRepo : Repository<ContractDto, Contract>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On Repository.Get({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On Repository.Get({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

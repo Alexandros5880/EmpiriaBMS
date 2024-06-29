@@ -44,7 +44,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On RolesRepo.Add({Mapping.Mapper.Map<Role>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On RolesRepo.Add({Mapping.Mapper.Map<Role>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }
@@ -76,7 +76,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On RolesRepo.Update({Mapping.Mapper.Map<Role>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On RolesRepo.Update({Mapping.Mapper.Map<Role>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }
@@ -455,7 +455,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception On RolesRepo.DeleteRolePermission({Mapping.Mapper.Map<RolePermission>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On RolesRepo.DeleteRolePermission({Mapping.Mapper.Map<RolePermission>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return null;
         }
     }

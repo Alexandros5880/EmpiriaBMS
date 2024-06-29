@@ -353,8 +353,7 @@ public static class Data
                         }
                         catch (ArgumentException aex)
                         {
-                            // TODO: Log Exception
-                            Console.WriteLine($"\n\nException Data._setProperty.Try_Parse_Enum: {aex.Message}, \nInner: {aex.InnerException?.Message}");
+                            _logger.LogError($"\n\nException Data._setProperty.Try_Parse_Enum: {aex.Message}, \nInner: {aex.InnerException?.Message}");
                         }
                     }
 
