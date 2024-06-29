@@ -3637,31 +3637,65 @@ public class AppDbContext : DbContext
         }
     }
 
-    public List<List<object>> GetAllDbSets()
+    public async Task<Dictionary<string, List<object>>> GetAllDbSets()
     {
-        List<List<object>> allEntities = new List<List<object>>();
+        Dictionary<string, List<object>> allEntities = new Dictionary<string, List<object>>();
 
-        // Get all properties of this DbContext
-        var dbSetsProperties = GetType().GetProperties()
-                                .Where(p => p.PropertyType.IsGenericType &&
-                                            p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
+        #region Get Employees
+        var emplyeeRolesIds = await Roles.Where(r => !r.IsDeleted)
+                                            .Where(r => r.IsEmployee || r.Name.Contains("Admin") || r.Name.Contains("admin"))
+                                            .Select(r => r.Id)
+                                            .ToListAsync();
 
-        foreach (var property in dbSetsProperties)
-        {
-            // Retrieve the DbSet<T> instance
-            var dbSet = property.GetValue(this);
+        var employeeIds = await UsersRoles.Where(r => !r.IsDeleted)
+                                            .Where(ur => emplyeeRolesIds.Contains(ur.RoleId))
+                                            .Select(ur => ur.UserId)
+                                            .ToListAsync();
 
-            if (dbSet == null) continue;
+        var employees = await Users.Where(r => !r.IsDeleted)
+                                        .Where(u => employeeIds.Contains(u.Id))
+                                        .ToListAsync();
+        #endregion
 
-            // Create a list to hold objects for this DbSet
-            List<object> items = new List<object>();
-
-            // Cast dbSet to IEnumerable<object> to add all items to items list
-            items.AddRange(((IEnumerable<object>)dbSet).ToList());
-
-            // Add items list to allEntities
-            allEntities.Add(items);
-        }
+        allEntities.Add("Users", employees.Cast<object>().ToList());
+        allEntities.Add("Roles", await Roles.Cast<object>().ToListAsync());
+        allEntities.Add("Emails", await Emails.Cast<object>().ToListAsync());
+        allEntities.Add("Projects", await Projects.Cast<object>().ToListAsync());
+        allEntities.Add("ProjectsCategories", await ProjectsCategories.Cast<object>().ToListAsync());
+        allEntities.Add("ProjectsSubCategories", await ProjectsSubCategories.Cast<object>().ToListAsync());
+        allEntities.Add("ProjectsStages", await ProjectsStages.Cast<object>().ToListAsync());
+        allEntities.Add("Disciplines", await Disciplines.Cast<object>().ToListAsync());
+        allEntities.Add("DisciplineTypes", await DisciplineTypes.Cast<object>().ToListAsync());
+        allEntities.Add("Deliverables", await Deliverables.Cast<object>().ToListAsync());
+        allEntities.Add("DeliverableTypes", await DeliverableTypes.Cast<object>().ToListAsync());
+        allEntities.Add("SupportiveWorks", await SupportiveWorks.Cast<object>().ToListAsync());
+        allEntities.Add("SupportiveWorkTypes", await SupportiveWorkTypes.Cast<object>().ToListAsync());
+        allEntities.Add("SupportiveWorkEmployees", await SupportiveWorkEmployees.Cast<object>().ToListAsync());
+        allEntities.Add("Invoices", await Invoices.Cast<object>().ToListAsync());
+        allEntities.Add("InvoicesTypes", await InvoicesTypes.Cast<object>().ToListAsync());
+        allEntities.Add("Contracts", await Contracts.Cast<object>().ToListAsync());
+        allEntities.Add("TimeSpans", await TimeSpans.Cast<object>().ToListAsync());
+        allEntities.Add("DailyTime", await DailyTime.Cast<object>().ToListAsync());
+        allEntities.Add("ParsonalTime", await ParsonalTime.Cast<object>().ToListAsync());
+        allEntities.Add("TrainingTime", await TrainingTime.Cast<object>().ToListAsync());
+        allEntities.Add("CorporateEventTime", await CorporateEventTime.Cast<object>().ToListAsync());
+        allEntities.Add("Issues", await Issues.Cast<object>().ToListAsync());
+        allEntities.Add("Documents", await Documents.Cast<object>().ToListAsync());
+        allEntities.Add("Address", await Address.Cast<object>().ToListAsync());
+        allEntities.Add("Clients", await Clients.Cast<object>().ToListAsync());
+        allEntities.Add("Leds", await Leds.Cast<object>().ToListAsync());
+        allEntities.Add("Offers", await Offers.Cast<object>().ToListAsync());
+        allEntities.Add("OffesStates", await OffesStates.Cast<object>().ToListAsync());
+        allEntities.Add("OffersTypes", await OffersTypes.Cast<object>().ToListAsync());
+        allEntities.Add("Payments", await Payments.Cast<object>().ToListAsync());
+        allEntities.Add("PaymentsTypes", await PaymentsTypes.Cast<object>().ToListAsync());
+        allEntities.Add("Permissions", await Permissions.Cast<object>().ToListAsync());
+        allEntities.Add("UsersRoles", await UsersRoles.Cast<object>().ToListAsync());
+        allEntities.Add("RolesPermissions", await RolesPermissions.Cast<object>().ToListAsync());
+        allEntities.Add("DeliverablesEmployees", await DeliverablesEmployees.Cast<object>().ToListAsync());
+        allEntities.Add("ProjectsSubConstructors", await ProjectsSubConstructors.Cast<object>().ToListAsync());
+        allEntities.Add("TeamsRequestedUser", await TeamsRequestedUser.Cast<object>().ToListAsync());
+        allEntities.Add("DisciplinesEngineers", await DisciplinesEngineers.Cast<object>().ToListAsync());
 
         return allEntities;
     }
@@ -3671,17 +3705,14 @@ public class AppDbContext : DbContext
         List<Type> allEntities = new List<Type>();
 
         // Get all properties of this DbContext
-        var properties = GetType().GetProperties();
+        var dbSetsProperties = GetType().GetProperties()
+                                .Where(p => p.PropertyType.IsGenericType &&
+                                            p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
 
-        foreach (var property in properties)
+        foreach (var property in dbSetsProperties)
         {
-            // Check if the property is a DbSet<T>
-            if (property.PropertyType.IsGenericType &&
-                property.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
-            {
-                var entityType = property.PropertyType.GetGenericArguments()[0];
-                allEntities.Add(entityType);
-            }
+            var entityType = property.PropertyType.GetGenericArguments()[0];
+            allEntities.Add(entityType);
         }
 
         return allEntities;

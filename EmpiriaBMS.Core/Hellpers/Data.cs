@@ -22,32 +22,59 @@ public static class Data
     #region Get CSV String Content From Data
     public static string GetCsvContent<T>(IList<T> data)
     {
-        var content = SCV.GenerateCsvContent(data);
+        Type dataType = data[0].GetType();
+        var properties = dataType.GetProperties();
+        var csvBuilder = new StringBuilder();
 
-        return content;
-    }
 
-    public static string GenerateCsvContentDynamic(List<object> data)
-    {
-        var content = SCV.GenerateCsvContent(data);
+        // Add Columns
+        var columnValues = new List<string>();
+        foreach (var prop in properties)
+        {
+            bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
+            bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
+            bool isCollection = prop.PropertyType.IsGenericType &&
+                                (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
 
-        return content;
+            if (isNotIEntity && !isCollection)
+                columnValues.Add(prop.Name);
+
+        }
+        csvBuilder.AppendLine(string.Join(_seperator, columnValues));
+
+
+        // Add Values
+        foreach (var item in data)
+        {
+            var lineValues = new List<string>();
+
+            foreach (var prop in properties)
+            {
+                bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
+                bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
+                bool isCollection = prop.PropertyType.IsGenericType &&
+                                (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
+                                 prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
+
+                if (isNotIEntity && !isCollection)
+                {
+                    var propValue = prop.GetValue(item);
+                    lineValues.Add(propValue?.ToString() ?? "");
+                }
+
+            }
+
+            csvBuilder.AppendLine(string.Join(_seperator, lineValues));
+        }
+
+        return csvBuilder.ToString();
     }
     #endregion
-
-    //public static void ExportData<T>(string filePath, IList<T> data, FileType fileType = FileType.CSV)
-    //{
-    //    switch (fileType)
-    //    {
-    //        case FileType.CSV:
-    //            var csvContent = SCV.GenerateCsvContent(data);
-    //            SCV.SaveCsvToFile(csvContent, filePath);
-    //            break;
-
-    //        default:
-    //            break;
-    //    }
-    //}
 
     public static async Task<List<T>> ImportData<T>(Stream stream, FileType fileType = FileType.CSV)
     {
@@ -240,59 +267,6 @@ public static class Data
 
     private static class SCV
     {
-        public static string GenerateCsvContent<T>(IList<T> data)
-        {
-            var properties = typeof(T).GetProperties();
-            var csvBuilder = new StringBuilder();
-
-
-            // Add Columns
-            var columnValues = new List<string>();
-            foreach (var prop in properties)
-            {
-                bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
-                bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
-                bool isCollection = prop.PropertyType.IsGenericType &&
-                                    (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
-
-                if (isNotIEntity && !isCollection)
-                    columnValues.Add(prop.Name);
-
-            }
-            csvBuilder.AppendLine(string.Join(_seperator, columnValues));
-
-
-            // Add Values
-            foreach (var item in data)
-            {
-                var lineValues = new List<string>();
-
-                foreach (var prop in properties)
-                {
-                    bool isPrimitiveOrString = prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string);
-                    bool isNotIEntity = !typeof(IEntity).IsAssignableFrom(prop.PropertyType);
-                    bool isCollection = prop.PropertyType.IsGenericType &&
-                                    (prop.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
-                                     prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>));
-
-                    if (isNotIEntity && !isCollection)
-                    {
-                        var propValue = prop.GetValue(item);
-                        lineValues.Add(propValue?.ToString() ?? "");
-                    }
-
-                }
-
-                csvBuilder.AppendLine(string.Join(_seperator, lineValues));
-            }
-
-            return csvBuilder.ToString();
-        }
 
         public static void SaveCsvToFile(string csvContent, string filePath)
         {

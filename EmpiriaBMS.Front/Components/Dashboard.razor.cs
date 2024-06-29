@@ -1239,7 +1239,9 @@ public partial class Dashboard : IDisposable
 
         try
         {
-            Dictionary<string, string> csvs = DatabaseBackupService.DatabaseToCSV();
+            Dictionary<string, string> csvs = await DatabaseBackupService.DatabaseToCSV();
+
+
             if (csvs != null && csvs.Count > 0)
             {
                 var zipBytes = await DatabaseBackupService.CsvToZipBytes(csvs);

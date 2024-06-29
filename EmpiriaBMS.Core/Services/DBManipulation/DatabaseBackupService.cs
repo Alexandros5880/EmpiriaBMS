@@ -67,29 +67,31 @@ public class DatabaseBackupService : IDisposable
     }
 
     #region DATA To CSV
-    public Dictionary<string, string> DatabaseToCSV()
+    public async Task<Dictionary<string, string>> DatabaseToCSV()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var data = _context.GetAllDbSets();
+            Dictionary<string, List<object>> data = await _context.GetAllDbSets();
             Dictionary<string, string> csvs = _convertDataToCsvAsync(data);
             return csvs;
         }
     }
 
-    private Dictionary<string, string> _convertDataToCsvAsync(List<List<object>> data)
+    private Dictionary<string, string> _convertDataToCsvAsync(Dictionary<string, List<object>> data)
     {
         Dictionary<string, string> content = new Dictionary<string, string>();
 
         // Iterate through each list in data
-        foreach (var dataList in data)
+        foreach (var dict in data)
         {
+            var tableName = dict.Key;
+            var dataList = dict.Value;
+
             if (dataList == null || dataList.Count == 0)
                 continue;
 
             // Get the type of the list
             Type listType = Data.GetListItemType(dataList);
-
 
             var date = DateTime.Today;
             var fileName = $"{listType.Name}-{date.ToEuropeFormat()}.csv";
