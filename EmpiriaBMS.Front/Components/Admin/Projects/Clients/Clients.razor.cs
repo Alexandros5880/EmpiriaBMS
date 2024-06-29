@@ -210,8 +210,7 @@ public partial class Clients
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Clients import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Clients.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

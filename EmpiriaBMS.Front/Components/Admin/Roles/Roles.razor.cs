@@ -191,8 +191,7 @@ public partial class Roles
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Roles import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Roles.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

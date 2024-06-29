@@ -187,8 +187,7 @@ public partial class Users
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Users import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Users.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

@@ -185,8 +185,7 @@ public partial class Projects
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Projects import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Projects.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

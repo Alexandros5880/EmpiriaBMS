@@ -164,8 +164,7 @@ public partial class SupportiveWorks
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception SupportiveWorks import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception SupportiveWorks.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

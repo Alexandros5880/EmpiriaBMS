@@ -163,8 +163,7 @@ public partial class Stages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception ProjectStages import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Stages.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

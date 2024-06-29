@@ -163,8 +163,7 @@ public partial class SupportiveWorkTypes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception SupportiveWorkTypes import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception SupportiveWorkTypes.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

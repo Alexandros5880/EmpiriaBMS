@@ -170,8 +170,7 @@ public partial class Issues
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Issues import: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                // TODO: log error
+                Logger.LogError($"Exception Issues.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }
