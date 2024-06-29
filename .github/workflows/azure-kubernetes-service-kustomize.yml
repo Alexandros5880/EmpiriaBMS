@@ -35,7 +35,8 @@ name: Build and deploy an app to AKS with Kustomize
 
 on:
   push:
-    branches: ["main"]
+    tags:
+      - '*-staging'
   workflow_dispatch:
 
 env:
