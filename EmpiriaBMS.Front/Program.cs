@@ -9,6 +9,7 @@ using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Models.Models;
+using Logging;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -39,7 +40,7 @@ builder.Services.AddScoped<SeedData>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddScoped<DailyEmailSender>();
 
-// TODO: AutoMapper
+// AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
 {
     mc.AddProfile(new MappingProfile());
@@ -80,7 +81,11 @@ builder.Services.AddLogging(logging =>
     // Add other logging providers as needed, e.g., Application Insights, Serilog
 });
 // Register LoggerManager
-builder.Services.AddSingleton<Logging.LoggerManager>();
+builder.Services.AddSingleton<Logging.LoggerManager>(sp =>
+{
+    var logger = sp.GetRequiredService<ILogger<LoggerManager>>();
+    return new LoggerManager(logger, "EmbiriaBMS.Front");
+});
 
 var app = builder.Build();
 

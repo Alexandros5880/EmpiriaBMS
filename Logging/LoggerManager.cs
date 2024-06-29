@@ -6,51 +6,65 @@ namespace Logging;
 public class LoggerManager
 {
     private readonly ILogger<LoggerManager> _logger;
+    private readonly string _projectName;
 
     public LoggerManager(ILogger<LoggerManager> logger)
     {
         _logger = logger;
     }
 
+    public LoggerManager(ILogger<LoggerManager> logger, string projectName)
+    {
+        _logger = logger;
+        _projectName = projectName;
+    }
+
     public void LogInformation(string message)
     {
-        _logger.LogInformation(message);
+        var msg = $"\n\nLog {_projectName} --> \n{message}";
+
+        _logger.LogInformation(msg);
 
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(message);
-        Debug.WriteLine(message);
+        Console.WriteLine(msg);
+        Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
 
     public void LogDebug(string message)
     {
-        _logger.LogDebug(message);
+        var msg = $"\n\nLog {_projectName} --> \n{message}";
+
+        _logger.LogDebug(msg);
 
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine(message);
-        Debug.WriteLine(message);
+        Console.WriteLine(msg);
+        Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
 
     public void LogError(string message)
     {
-        _logger.LogError(message);
+        var msg = $"\n\nLog {_projectName} --> \n{message}";
+
+        _logger.LogError(msg);
 
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(message);
-        Debug.WriteLine(message);
+        Console.WriteLine(msg);
+        Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
 
     public void LogWarning(string message)
     {
-        _logger.LogWarning(message);
+        var msg = $"\n\nLog {_projectName} --> \n{message}";
+
+        _logger.LogWarning(msg);
 
         Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.WriteLine(message);
-        Debug.WriteLine(message);
+        Console.WriteLine(msg);
+        Debug.WriteLine(msg);
         Console.ForegroundColor = ConsoleColor.White;
     }
 
-    // Add other log levels as needed
 }

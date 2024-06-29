@@ -35,7 +35,7 @@ else
 				StateHasChanged();
 			}
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
 			Logger.LogError($"Exception Loading.OnAfterRenderAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 		}	
