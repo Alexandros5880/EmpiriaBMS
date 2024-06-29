@@ -49,7 +49,6 @@ public class DeliverableExport : IInport<DeliverableVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{CompletionDate}' is not in the correct format.");
             date = null;
         }
 

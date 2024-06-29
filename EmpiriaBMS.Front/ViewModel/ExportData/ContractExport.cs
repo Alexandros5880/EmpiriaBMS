@@ -43,7 +43,6 @@ public class ContractExport : IInport<ContractVM>
         }
         catch (FormatException)
         {
-            Console.WriteLine($"'{Date}' is not in the correct format.");
             date = null;
         }
 

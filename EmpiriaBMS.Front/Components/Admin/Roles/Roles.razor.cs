@@ -70,7 +70,6 @@ public partial class Roles
             await DataProvider.Roles.UpdatePermissions(role.Id, vm.RolesPermissions.Select(rp => rp.PermissionId));
 
             var r = role;
-            Console.WriteLine($"Added new Role: {role.Name}.");
 
             await _getRecords();
         }
