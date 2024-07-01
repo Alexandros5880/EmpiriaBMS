@@ -2,7 +2,7 @@ name: EmpiriaBMS-Front-Staging
 on:
   push:
     tags:
-      - '*-staging-no'
+      - '*-staging'
   workflow_dispatch: {}
 env:
   AZURE_WEBAPP_NAME: EmpiriaBMS-Front
