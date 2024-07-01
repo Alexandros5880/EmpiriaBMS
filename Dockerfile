@@ -13,30 +13,36 @@ COPY ["EmpiriaBMS.Core/EmpiriaBMS.Core.csproj", "EmpiriaBMS.Core/"]
 COPY ["Logging/Logging.csproj", "Logging/"]
 COPY ["EmpiriaBMS.Front/EmpiriaBMS.Front.csproj", "EmpiriaBMS.Front/"]
 
-# Clean Projects
+# Clean NuGet cache
+RUN dotnet nuget locals all --clear
+
+## Clean Projects
+RUN dotnet clean "Logging/Logging.csproj"
 RUN dotnet clean "EmpiriaBMS.Models/EmpiriaBMS.Models.csproj"
 RUN dotnet clean "EmpiriaBMS.Core/EmpiriaBMS.Core.csproj"
-RUN dotnet clean "Logging/Logging.csproj"
 RUN dotnet clean "EmpiriaBMS.Front/EmpiriaBMS.Front.csproj"
 
-# Restore Projects
+## Restore Projects
+RUN dotnet restore "Logging/Logging.csproj"
 RUN dotnet restore "EmpiriaBMS.Models/EmpiriaBMS.Models.csproj"
 RUN dotnet restore "EmpiriaBMS.Core/EmpiriaBMS.Core.csproj"
-RUN dotnet restore "Logging/Logging.csproj"
 RUN dotnet restore "EmpiriaBMS.Front/EmpiriaBMS.Front.csproj"
+
+RUN pwd
+RUN ls
 
 # Copy the entire solution
 COPY . .
 
 # Build all projects
+WORKDIR "/src/Logging"
+RUN dotnet build "Logging.csproj" -c Release -o /app/build
+
 WORKDIR "/src/EmpiriaBMS.Models"
 RUN dotnet build "EmpiriaBMS.Models.csproj" -c Release -o /app/build
 
 WORKDIR "/src/EmpiriaBMS.Core"
 RUN dotnet build "EmpiriaBMS.Core.csproj" -c Release -o /app/build
-
-WORKDIR "/src/Logging"
-RUN dotnet build "Logging.csproj" -c Release -o /app/build
 
 WORKDIR "/src/EmpiriaBMS.Front"
 RUN dotnet build "EmpiriaBMS.Front.csproj" -c Release -o /app/build
