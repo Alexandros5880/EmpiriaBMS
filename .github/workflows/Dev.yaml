@@ -1,8 +1,8 @@
-name: Dev
+name: 'Dev'
 on:
     push:
         tags:
-            - '*-staging'
+            - '*-staging-no'
     workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: EmpiriaBMS_Group
