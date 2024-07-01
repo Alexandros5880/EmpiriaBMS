@@ -1,8 +1,8 @@
 name: EmpiriaBMS-Front
 on:
   push:
-    tags:
-      - '*-staging'
+    branches:
+      - '97-azure-kubernetes-cdci'
   workflow_dispatch: {}
 env:
   AZURE_WEBAPP_NAME: EmpiriaBMS-Front
