@@ -8,11 +8,6 @@ public class LoggerManager
 
     public string ProjectName { get; set; }
 
-    public LoggerManager(ILogger<LoggerManager> logger)
-    {
-        _logger = logger;
-    }
-
     public LoggerManager(ILogger<LoggerManager> logger, string projectName)
     {
         _logger = logger;
