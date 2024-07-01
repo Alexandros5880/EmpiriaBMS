@@ -1,4 +1,4 @@
-name: EmpiriaBMS-Front
+name: EmpiriaBMS-Front-Staging
 on:
     push:
         tags:
@@ -31,7 +31,7 @@ jobs:
     # - name: Test
     #   run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
-      run: dotnet publish "EmpiriaBMS.Front.csproj" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+      run: dotnet publish "EmpiriaBMS.Front/EmpiriaBMS.Front.csproj" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
       with:
