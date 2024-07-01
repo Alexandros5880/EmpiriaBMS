@@ -9,7 +9,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: EmpiriaBMS.Front\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: EmpiriaBMS.Front/../
+  WORKING_DIRECTORY: EmpiriaBMS.Front
 jobs:
   build:
     runs-on: windows-latest
@@ -19,10 +19,18 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-    - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+    
+    - name: Restore Logging/Logging.csproj
+      run: dotnet restore "Logging/Logging.csproj"
+    - name: Restore EmpiriaBMS.Models/EmpiriaBMS.Models.csproj
+      run: dotnet restore "EmpiriaBMS.Models/EmpiriaBMS.Models.csproj"
+    - name: Restore EmpiriaBMS.Core/EmpiriaBMS.Core.csproj
+      run: dotnet restore "EmpiriaBMS.Core/EmpiriaBMS.Core.csproj"
+    - name: Restore EmpiriaBMS.Front/EmpiriaBMS.Front.csproj
+      run: dotnet restore "EmpiriaBMS.Front/EmpiriaBMS.Front.csproj"
+
     - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build "$EmpiriaBMS.Front/EmpiriaBMS.Front.csproj" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
       run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
