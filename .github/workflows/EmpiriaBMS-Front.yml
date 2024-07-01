@@ -30,7 +30,7 @@ jobs:
       run: dotnet restore "EmpiriaBMS.Front/EmpiriaBMS.Front.csproj"
 
     - name: Build
-      run: dotnet build "$EmpiriaBMS.Front/EmpiriaBMS.Front.csproj" --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build "EmpiriaBMS.Front/EmpiriaBMS.Front.csproj" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
       run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
