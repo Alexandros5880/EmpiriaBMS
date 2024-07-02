@@ -34,7 +34,13 @@
 			},
 			"dotnetRunMessages": true,
 			"applicationUrl": "https://localhost:44302;http://localhost:2544",
-			"hotReloadProfile": "aspnetcore"
+			"hotReloadProfile": "aspnetcore",
+			"Key": {
+				"Type": "Store",
+				"StoreName": "My",
+				"StoreLocation": "CurrentUser",
+				"Name": "CN=EmbiriaBMS-Staging"
+			}
 		},
 		"Production": {
 			"commandName": "Project",

@@ -8,9 +8,11 @@
 ### MicrosoftTeams User:
 `using MicrosoftUser = Microsoft.Graph.Models.User;`
 
-### Run Seed Data Ceator
+### Run Seed Data Ceator:
 ``dotnet run --project  EmpiriaBMS.EF.CLI/EmpiriaBMS.EF.CLI.csproj -- seed``
 
+### Run CI GitHub WorkFlow:
+``make ci -i``
 
 ### Ord -> Permisions:
 ***1*** -> ***See Dashboard Layout***
