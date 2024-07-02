@@ -1,26 +1,26 @@
 {
-  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.17",
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.16",
   "version": "1.0.0",
-  "id": "e9b1ba2f-629b-41a0-82ae-cd53b7e34765",
+  "id": "21adecd7-be9e-444b-a3d7-c994351518a2",
   "packageName": "com.embiriabms.teamsapp.staging",
   "developer": {
-    "name": "Alexandros PLatanios",
-    "websiteUrl": "http://www.alexandrosplatanios.com/",
-    "privacyUrl": "http://www.alexandrosplatanios.com//privacy",
-    "termsOfUseUrl": "http://www.alexandrosplatanios.com//termsofuse"
+    "name": "Alexandros Platanios",
+    "websiteUrl": "https://empiriabms-front-staging.azurewebsites.net",
+    "privacyUrl": "https://empiriabms-front-staging.azurewebsites.net/privacy",
+    "termsOfUseUrl": "https://empiriabms-front-staging.azurewebsites.net/termsofuse"
   },
   "icons": {
     "color": "color.png",
     "outline": "outline.png"
   },
   "name": {
-    "short": "Empiria BMS (Staging)",
-    "full": "Empiria BMS Staging"
+    "short": "EmbiriaBMS-Staging",
+    "full": "EmbiriaBMS-Staging"
   },
   "description": {
-    "short": "Short description of Empiria BMS",
-    "full": "Full description of Empiria BMS"
+    "short": "EmbiriaBMS-Staging",
+    "full": "EmbiriaBMS-Staging"
   },
   "accentColor": "#FFFFFF",
   "bots": [],
@@ -31,8 +31,7 @@
       "canUpdateConfiguration": true,
       "scopes": [
         "team",
-        "groupchat",
-        "personal"
+        "groupchat"
       ]
     }
   ],
@@ -52,12 +51,10 @@
     "messageTeamMembers"
   ],
   "validDomains": [
-    "ssotab8a064b.azurewebsites.net",
-    "empiriabms-front-staging.azurewebsites.net",
-    "login.microsoftonline.com"
+    "empiriabms-front-staging.azurewebsites.net/dashboard"
   ],
   "webApplicationInfo": {
-    "id": "21adecd7-be9e-444b-a3d7-c994351518a2",
+    "id": "e9b1ba2f-629b-41a0-82ae-cd53b7e3308f",
     "resource": "api://e9b1ba2f-629b-41a0-82ae-cd53b7e3308f"
   }
 }
