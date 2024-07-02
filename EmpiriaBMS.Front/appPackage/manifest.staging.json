@@ -1,30 +1,27 @@
 {
   "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.16",
   "version": "1.0.0",
+  "manifestVersion": "1.17",
   "id": "21adecd7-be9e-444b-a3d7-c994351518a2",
-  "packageName": "com.embiriabms.teamsapp.staging",
+  "name": {
+    "short": "EmbiriaBMS-Staging",
+    "full": "EmbiriaBMS-Staging"
+  },
   "developer": {
     "name": "Alexandros Platanios",
     "websiteUrl": "https://empiriabms-front-staging.azurewebsites.net",
     "privacyUrl": "https://empiriabms-front-staging.azurewebsites.net/privacy",
     "termsOfUseUrl": "https://empiriabms-front-staging.azurewebsites.net/termsofuse"
   },
-  "icons": {
-    "color": "color.png",
-    "outline": "outline.png"
-  },
-  "name": {
-    "short": "EmbiriaBMS-Staging",
-    "full": "EmbiriaBMS-Staging"
-  },
   "description": {
     "short": "EmbiriaBMS-Staging",
     "full": "EmbiriaBMS-Staging"
   },
+  "icons": {
+    "outline": "outline.png",
+    "color": "color.png"
+  },
   "accentColor": "#FFFFFF",
-  "bots": [],
-  "composeExtensions": [],
   "configurableTabs": [
     {
       "configurationUrl": "https://empiriabms-front-staging.azurewebsites.net/config",
@@ -46,15 +43,18 @@
       ]
     }
   ],
-  "permissions": [
-    "identity",
-    "messageTeamMembers"
-  ],
   "validDomains": [
+    "empiriabms-front-staging.azurewebsites.net",
     "empiriabms-front-staging.azurewebsites.net/dashboard"
   ],
   "webApplicationInfo": {
     "id": "e9b1ba2f-629b-41a0-82ae-cd53b7e3308f",
     "resource": "api://e9b1ba2f-629b-41a0-82ae-cd53b7e3308f"
+  },
+  "authorization": {
+    "permissions": {
+      "resourceSpecific": [
+      ]
+    }
   }
 }

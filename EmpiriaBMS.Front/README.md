@@ -57,6 +57,12 @@
 6. Insert the password that we used in the previous section.
 7. Click on Upload.
 
+### Create an app int MicrosoftTeams Dev Portal:
+1. Ceate an app example EmbiriaBMS-Production.
+2. Downlowd manifest.json.
+3. Rename to manifest.prod.json.
+4. Update Imfo like azure portal Application (Client Id) et cetera.
+
 ### Ord -> Permisions:
 ***1*** -> ***See Dashboard Layout***
 ***2*** -> ***Dashboard Edit My Hours***
