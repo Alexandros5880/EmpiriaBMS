@@ -23,6 +23,40 @@
 1. Teams apps -> Permission policies -> Add **Allow-All-Apps**
 
 
+### Create SSL Certificate:
+1. Open PowerShell With Admin Permissions.
+2. Press New-SelfSignedCertificate -Subject "CN=EmbiriaBMS-Staging" -CertStoreLocation "cert:\LocalMachine\My".
+3. Add to appsettings.json:
+```
+"Key": {
+    "Type": "Store",
+    "StoreName": "My",
+    "StoreLocation": "CurrentUser",
+    "Name": "CN=EmbiriaBMS-Staging"
+  }
+```
+4. Press Windows Key On Keyboard.
+5. Type Manage Computer Certificates and press Enter.
+6. Go to Personal (on the left), then Certificates.
+7. Double-click on the certificate you created.
+8. Go to Details.
+9. Press the button “Copy to File …”.
+10. Click Next.
+11. Click on “Yes, export the private key”, then Next.
+12. Click Next.
+13. Click on Password, and enter a password (write down the password, we will need it).
+14. In Encryption, select TripleDESH-SHA1, click Next.
+15. Select where you want to export your certificate, next and Finish.
+
+### Uploading the Certificate to Azure:
+1. Go to your Azure App Service.
+2. Go to TLS / SSL settings.
+3. Click on Private Key Certificates (.pfx).
+4. Click on Upload Certificate.
+5. Select the pfx file you created.
+6. Insert the password that we used in the previous section.
+7. Click on Upload.
+
 ### Ord -> Permisions:
 ***1*** -> ***See Dashboard Layout***
 ***2*** -> ***Dashboard Edit My Hours***
