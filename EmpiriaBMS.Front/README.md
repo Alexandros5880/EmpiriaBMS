@@ -14,6 +14,15 @@
 ### Run CI GitHub WorkFlow:
 ``make ci -i``
 
+### Microsoft 365 Admin User:
+1. Create an admin user.
+2. Add licences and apps -> Microsoft 365 Business Basc -> Apps Select All.
+3. Add licences and apps -> Microsoft Power Automate Free.
+
+### MicrosoftTeams Admin Center:
+1. Teams apps -> Permission policies -> Add **Allow-All-Apps**
+
+
 ### Ord -> Permisions:
 ***1*** -> ***See Dashboard Layout***
 ***2*** -> ***Dashboard Edit My Hours***
