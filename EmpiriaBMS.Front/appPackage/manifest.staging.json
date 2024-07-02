@@ -1,0 +1,63 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.17",
+  "version": "1.0.0",
+  "id": "e9b1ba2f-629b-41a0-82ae-cd53b7e34765",
+  "packageName": "com.embiriabms.teamsapp.staging",
+  "developer": {
+    "name": "Alexandros PLatanios",
+    "websiteUrl": "http://www.alexandrosplatanios.com/",
+    "privacyUrl": "http://www.alexandrosplatanios.com//privacy",
+    "termsOfUseUrl": "http://www.alexandrosplatanios.com//termsofuse"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "Empiria BMS (Staging)",
+    "full": "Empiria BMS Staging"
+  },
+  "description": {
+    "short": "Short description of Empiria BMS",
+    "full": "Full description of Empiria BMS"
+  },
+  "accentColor": "#FFFFFF",
+  "bots": [],
+  "composeExtensions": [],
+  "configurableTabs": [
+    {
+      "configurationUrl": "https://empiriabms-front-staging.azurewebsites.net/config",
+      "canUpdateConfiguration": true,
+      "scopes": [
+        "team",
+        "groupchat",
+        "personal"
+      ]
+    }
+  ],
+  "staticTabs": [
+    {
+      "entityId": "index",
+      "name": "Dashboard",
+      "contentUrl": "https://empiriabms-front-staging.azurewebsites.net/dashboard",
+      "websiteUrl": "https://empiriabms-front-staging.azurewebsites.net/dashboard",
+      "scopes": [
+        "personal"
+      ]
+    }
+  ],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "ssotab8a064b.azurewebsites.net",
+    "empiriabms-front-staging.azurewebsites.net",
+    "login.microsoftonline.com"
+  ],
+  "webApplicationInfo": {
+    "id": "21adecd7-be9e-444b-a3d7-c994351518a2",
+    "resource": "api://e9b1ba2f-629b-41a0-82ae-cd53b7e3308f"
+  }
+}
