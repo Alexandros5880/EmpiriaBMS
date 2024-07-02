@@ -14,14 +14,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.dockerignore = .dockerignore
 		.gitignore = .gitignore
 		.github\workflows\azure-kubernetes-service-kustomize.yml = .github\workflows\azure-kubernetes-service-kustomize.yml
+		azure-pipelines.yml = azure-pipelines.yml
 		.github\workflows\Dev.yaml = .github\workflows\Dev.yaml
 		docker-compose.yml = docker-compose.yml
 		Dockerfile = Dockerfile
+		Makefile = Makefile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpiriaBMS.EF.CLI", "EmpiriaBMS.EF.CLI\EmpiriaBMS.EF.CLI.csproj", "{743D6D5B-6C0A-4FF7-B4EA-072DF7CA2B30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{28832D85-9D46-4F56-8911-B9531E84AA2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.csproj", "{28832D85-9D46-4F56-8911-B9531E84AA2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
