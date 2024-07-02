@@ -13,6 +13,7 @@ using EmpiriaBMS.Models.Models;
 using Logging;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Fast.Components.FluentUI;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
