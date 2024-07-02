@@ -6,4 +6,3 @@ ci:
 	git push
 	git tag v0.0.1-staging
 	git push origin v0.0.1-staging
-	clear
