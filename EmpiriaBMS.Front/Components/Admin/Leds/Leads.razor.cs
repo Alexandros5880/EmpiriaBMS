@@ -56,7 +56,7 @@ public partial class Leads
             Width = "min(70%, 700px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(new LeadVM()
+        IDialogReference dialog = await DialogService.ShowDialogAsync<LeadDetailedDialog>(new LeadVM()
         {
             ExpectedDurationDate = DateTime.Now,
             Result = Models.Enum.LeadResult.UNSUCCESSFUL
@@ -87,7 +87,7 @@ public partial class Leads
             Width = "min(70%, 700px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(record, parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<LeadDetailedDialog>(record, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)

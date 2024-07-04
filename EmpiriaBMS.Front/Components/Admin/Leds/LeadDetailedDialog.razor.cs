@@ -1,11 +1,10 @@
-﻿using EmpiriaBMS.Front.Components.Admin.Contracts;
-using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin.Leds;
 
-public partial class LedDetailedDialog : IDialogContentComponent<LeadVM>
+public partial class LeadDetailedDialog : IDialogContentComponent<LeadVM>
 {
     [Parameter]
     public LeadVM Content { get; set; }
