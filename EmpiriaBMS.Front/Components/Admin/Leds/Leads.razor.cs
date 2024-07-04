@@ -8,7 +8,7 @@ using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin.Leds;
 
-public partial class Leds
+public partial class Leads
 {
     #region Data Grid
     private List<LeadVM> _records = new List<LeadVM>();
