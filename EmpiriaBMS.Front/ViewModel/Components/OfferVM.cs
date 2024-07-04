@@ -150,8 +150,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private Led? _led;
-    public Led? Led
+    private Lead? _led;
+    public Lead? Led
     {
         get => _led;
         set

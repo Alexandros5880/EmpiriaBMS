@@ -4,7 +4,7 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class LedVM : BaseVM
+public class LeadVM : BaseVM
 {
     // Not Mapped
     private TimeSpan _time = TimeSpan.Zero;

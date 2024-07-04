@@ -5,10 +5,10 @@ using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Admin.Leds;
 
-public partial class LedDetailedDialog : IDialogContentComponent<LedVM>
+public partial class LedDetailedDialog : IDialogContentComponent<LeadVM>
 {
     [Parameter]
-    public LedVM Content { get; set; }
+    public LeadVM Content { get; set; }
 
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class Led : Entity
+public class Lead : Entity
 {
     public string Name { get; set; }
 

@@ -11,12 +11,12 @@ namespace EmpiriaBMS.Front.Components.Admin.Leds;
 public partial class Leds
 {
     #region Data Grid
-    private List<LedVM> _records = new List<LedVM>();
+    private List<LeadVM> _records = new List<LeadVM>();
     private string _filterString = string.Empty;
-    IQueryable<LedVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<LeadVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private LedVM _selectedRecord = new LedVM();
+    private LeadVM _selectedRecord = new LeadVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -30,15 +30,15 @@ public partial class Leds
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<LedVM> row)
+    private void HandleRowFocus(FluentDataGridRow<LeadVM> row)
     {
-        _selectedRecord = row.Item as LedVM;
+        _selectedRecord = row.Item as LeadVM;
     }
 
     private async Task _getRecords()
     {
         var dtos = await DataProvider.Leds.GetAll();
-        _records = Mapper.Map<List<LedVM>>(dtos);
+        _records = Mapper.Map<List<LeadVM>>(dtos);
     }
 
     private async Task _add()
@@ -56,7 +56,7 @@ public partial class Leds
             Width = "min(70%, 700px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(new LedVM()
+        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(new LeadVM()
         {
             ExpectedDurationDate = DateTime.Now,
             Result = Models.Enum.LedResult.UNSUCCESSFUL
@@ -65,14 +65,14 @@ public partial class Leds
 
         if (result.Data is not null)
         {
-            LedVM vm = result.Data as LedVM;
-            var dto = Mapper.Map<LedDto>(vm);
+            LeadVM vm = result.Data as LeadVM;
+            var dto = Mapper.Map<LeadDto>(vm);
             await DataProvider.Leds.Add(dto);
             await _getRecords();
         }
     }
 
-    private async Task _edit(LedVM record)
+    private async Task _edit(LeadVM record)
     {
         DialogParameters parameters = new()
         {
@@ -92,14 +92,14 @@ public partial class Leds
 
         if (result.Data is not null)
         {
-            LedVM vm = result.Data as LedVM;
-            var dto = Mapper.Map<LedDto>(vm);
+            LeadVM vm = result.Data as LeadVM;
+            var dto = Mapper.Map<LeadDto>(vm);
             await DataProvider.Leds.Update(dto);
             await _getRecords();
         }
     }
 
-    private async Task _delete(LedVM record)
+    private async Task _delete(LeadVM record)
     {
         var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete led {record.Name}?", "Yes", "No", "Deleting record...");
 
@@ -157,11 +157,11 @@ public partial class Leds
                     foreach (var item in data)
                     {
                         var vm = item.Get();
-                        var dto = Mapper.Map<LedDto>(vm);
+                        var dto = Mapper.Map<LeadDto>(vm);
                         var added = await DataProvider.Leds.Add(dto);
                         if (added == null)
                             continue;
-                        var addedDto = Mapper.Map<LedVM>(added);
+                        var addedDto = Mapper.Map<LeadVM>(added);
                         _records.Add(addedDto);
                     }
                 }

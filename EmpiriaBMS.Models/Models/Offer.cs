@@ -21,7 +21,7 @@ public class Offer : Entity
     public ProjectSubCategory SubCategory { get; set; }
 
     public int? LedId { get; set; }
-    public Led? Led { get; set; }
+    public Lead? Led { get; set; }
 
     [Required]
     public OfferResult Result { get; set; }

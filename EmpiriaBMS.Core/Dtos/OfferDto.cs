@@ -19,7 +19,7 @@ public class OfferDto : EntityDto
     public ProjectSubCategory SubCategory { get; set; }
 
     public int? LedId { get; set; }
-    public Led? Led { get; set; }
+    public Lead? Led { get; set; }
 
     public OfferResult Result { get; set; }
 

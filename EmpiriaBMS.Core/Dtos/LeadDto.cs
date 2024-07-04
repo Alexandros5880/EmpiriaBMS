@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Core.Dtos;
 
-public class LedDto : EntityDto
+public class LeadDto : EntityDto
 {
     public string Name { get; set; }
 

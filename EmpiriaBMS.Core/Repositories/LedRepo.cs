@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class LedRepo : Repository<LedDto, Led>, IDisposable
+public class LedRepo : Repository<LeadDto, Lead>, IDisposable
 {
     private readonly OfferRepo _offerRepo;
     private readonly ProjectsRepo _projectRep;
@@ -24,7 +24,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         _contractRepo = new ContractRepo(DbFactory, logger);
     }
 
-    public new async Task<LedDto> Add(LedDto entity, bool update = false)
+    public new async Task<LeadDto> Add(LeadDto entity, bool update = false)
     {
         try
         {
@@ -36,7 +36,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var result = await _context.Set<Led>().AddAsync(Mapping.Mapper.Map<Led>(entity));
+                var result = await _context.Set<Lead>().AddAsync(Mapping.Mapper.Map<Lead>(entity));
                 await _context.SaveChangesAsync();
 
                 var id = result.Entity?.Id;
@@ -45,7 +45,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
 
                 var endry = await Get((int)id);
 
-                return Mapping.Mapper.Map<LedDto>(endry);
+                return Mapping.Mapper.Map<LeadDto>(endry);
             }
         }
         catch (Exception ex)
@@ -55,7 +55,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
     }
 
-    public new async Task<LedDto> Update(LedDto entity)
+    public new async Task<LeadDto> Update(LeadDto entity)
     {
         try
         {
@@ -66,14 +66,14 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var entry = await _context.Set<Led>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                var entry = await _context.Set<Lead>().FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (entry != null)
                 {
-                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Led>(entity));
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Lead>(entity));
                     await _context.SaveChangesAsync();
                 }
 
-                return Mapping.Mapper.Map<LedDto>(entry);
+                return Mapping.Mapper.Map<LeadDto>(entry);
             }
         }
         catch (Exception ex)
@@ -83,7 +83,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
     }
 
-    public async Task<LedDto> Delete(int id)
+    public async Task<LeadDto> Delete(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -165,7 +165,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         }
     }
 
-    public new async Task<LedDto?> Get(int id)
+    public new async Task<LeadDto?> Get(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -173,32 +173,32 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var i = await _context
-                             .Set<Led>()
+                             .Set<Lead>()
                              .Where(r => !r.IsDeleted)
                              .Include(l => l.Address)
                              .Include(l => l.Client)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
-            return Mapping.Mapper.Map<LedDto>(i);
+            return Mapping.Mapper.Map<LeadDto>(i);
         }
     }
 
-    public new async Task<ICollection<LedDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public new async Task<ICollection<LeadDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            List<Led> items;
+            List<Lead> items;
             if (pageSize == 0 || pageIndex == 0)
             {
-                items = await _context.Set<Led>()
+                items = await _context.Set<Lead>()
                                        .Where(r => !r.IsDeleted)
                                        .Include(l => l.Address)
                                        .Include(l => l.Client)
                                        .ToListAsync();
-                return Mapping.Mapper.Map<List<LedDto>>(items);
+                return Mapping.Mapper.Map<List<LeadDto>>(items);
             }
 
-            items = await _context.Set<Led>()
+            items = await _context.Set<Lead>()
                                   .Where(r => !r.IsDeleted)
                                   .Skip((pageIndex - 1) * pageSize)
                                   .Take(pageSize)
@@ -206,7 +206,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
                                   .Include(l => l.Client)
                                   .ToListAsync();
 
-            return Mapping.Mapper.Map<List<LedDto>>(items);
+            return Mapping.Mapper.Map<List<LeadDto>>(items);
         }
     }
 
@@ -232,21 +232,21 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
     }
 
     #region Next Income Functions
-    public async Task<List<LedDto>> GetAllOppenLeds()
+    public async Task<List<LeadDto>> GetAllOppenLeds()
     {
         try
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var allLedsIds = await _context.Set<Led>()
+                var allLedsIds = await _context.Set<Lead>()
                     .Where(l => !l.IsDeleted)
                     .Select(l => l.Id)
                     .ToListAsync();
 
                 if (allLedsIds == null || allLedsIds.Count == 0)
-                    return new List<LedDto>();
+                    return new List<LeadDto>();
 
-                var leds = new List<LedDto>();
+                var leds = new List<LeadDto>();
 
                 foreach (var id in allLedsIds)
                 {
@@ -267,7 +267,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On LedRepo.GetAllOppenLeds(): {ex.Message}, \nInner: {ex.InnerException.Message}");
-            return new List<LedDto>();
+            return new List<LeadDto>();
         }
     }
 
@@ -277,7 +277,7 @@ public class LedRepo : Repository<LedDto, Led>, IDisposable
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var allLedsIds = await _context.Set<Led>()
+                var allLedsIds = await _context.Set<Lead>()
                     .Where(l => !l.IsDeleted)
                     .Select(l => l.Id)
                     .ToListAsync();

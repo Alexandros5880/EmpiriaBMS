@@ -8,7 +8,7 @@ public class AppDbContext : DbContext
     //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
     const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
     const string azure_staging_DB = "Data Source=empiriabms-staging.database.windows.net;Initial Catalog=EmpiriaBMS-Staging;User Id=admin-user;Password=!@#$123456asdfgh";
-    const string migrationsDB = azure_staging_DB;
+    const string migrationsDB = localhostDB;
 
     public string SelectedConnectionString = string.Empty;
     public string Enviroment = string.Empty;
@@ -40,7 +40,7 @@ public class AppDbContext : DbContext
     public DbSet<Document>? Documents { get; set; }
     public DbSet<Address>? Address { get; set; }
     public DbSet<Client>? Clients { get; set; }
-    public DbSet<Led>? Leds { get; set; }
+    public DbSet<Lead>? Leads { get; set; }
     public DbSet<Offer>? Offers { get; set; }
     public DbSet<OfferState>? OffesStates { get; set; }
     public DbSet<OfferType>? OffersTypes { get; set; }
@@ -3303,7 +3303,7 @@ public class AppDbContext : DbContext
 
                 // Led
                 var ledId = random.Next(123456789, 999999999) + i * 3;
-                Led led = new Led()
+                Lead led = new Lead()
                 {
                     Id = ledId,
                     CreatedDate = DateTime.Now,
@@ -3313,7 +3313,7 @@ public class AppDbContext : DbContext
                     PotencialFee = random.Next(i, i * 3),
                     Result = LedResult.SUCCESSFUL
                 };
-                builder.Entity<Led>().HasData(led);
+                builder.Entity<Lead>().HasData(led);
 
                 // Offers
                 var offerId = random.Next(123456789, 999999999) + i * 3;
@@ -3418,7 +3418,7 @@ public class AppDbContext : DbContext
 
                 // Led
                 var ledId = random.Next(123456789, 999999999) + i * 3 + 13245;
-                Led led = new Led()
+                Lead led = new Lead()
                 {
                     Id = ledId,
                     CreatedDate = DateTime.Now,
@@ -3428,7 +3428,7 @@ public class AppDbContext : DbContext
                     PotencialFee = random.Next(i, i * 3),
                     Result = LedResult.SUCCESSFUL
                 };
-                builder.Entity<Led>().HasData(led);
+                builder.Entity<Lead>().HasData(led);
 
                 // Offers
                 var offerId = random.Next(123456789, 999999999) + i * 3;
@@ -3683,7 +3683,7 @@ public class AppDbContext : DbContext
         allEntities.Add("Documents", await Documents.Cast<object>().ToListAsync());
         allEntities.Add("Address", await Address.Cast<object>().ToListAsync());
         allEntities.Add("Clients", await Clients.Cast<object>().ToListAsync());
-        allEntities.Add("Leds", await Leds.Cast<object>().ToListAsync());
+        allEntities.Add("Leds", await Leads.Cast<object>().ToListAsync());
         allEntities.Add("Offers", await Offers.Cast<object>().ToListAsync());
         allEntities.Add("OffesStates", await OffesStates.Cast<object>().ToListAsync());
         allEntities.Add("OffersTypes", await OffersTypes.Cast<object>().ToListAsync());

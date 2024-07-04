@@ -38,7 +38,7 @@ public class DailyTime : Entity
     public Project? Project { get; set; }
 
     public int? LedId { get; set; }
-    public Led? Led { get; set; }
+    public Lead? Led { get; set; }
 
     public int? OfferId { get; set; }
     public Offer? Offer { get; set; }

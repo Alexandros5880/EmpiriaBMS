@@ -38,7 +38,7 @@ public class MappingCoreProfile : Profile
         CreateMap<DisciplineEngineerDto, DisciplineEngineer>().ReverseMap();
         CreateMap<TeamsRequestedUserDto, TeamsRequestedUser>().ReverseMap();
         CreateMap<ContractDto, Contract>().ReverseMap();
-        CreateMap<LedDto, Led>().ReverseMap();
+        CreateMap<LeadDto, Lead>().ReverseMap();
 
         // ViewModels
         CreateMap<Address, AddressVM>().ReverseMap();

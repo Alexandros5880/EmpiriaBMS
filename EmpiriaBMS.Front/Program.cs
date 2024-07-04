@@ -13,7 +13,6 @@ using EmpiriaBMS.Models.Models;
 using Logging;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Fast.Components.FluentUI;
-using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -94,14 +93,21 @@ var app = builder.Build();
 // Scoped Services Initiations
 using (var scope = app.Services.CreateScope())
 {
-    // Create Seed Data
-    //var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
-    //await seedData.CreateData();
-
     // Get logger from the service provider
     var logger = app.Services.GetRequiredService<ILogger<LoggerManager>>();
     // Initialize the LoggerManager with the logger instance and project name
     Data.InitializeLogger(logger, "EmbiriaBMS.Core");
+
+    // Create Seed Data
+    //try
+    //{
+    //    var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
+    //    await seedData.CreateData();
+    //}
+    //catch (Exception ex)
+    //{
+    //    logger.LogError($"Exception SeedData: {ex.Message}\nInner: {ex.InnerException?.Message}.");
+    //}
 }
 
 if (app.Environment.IsDevelopment())

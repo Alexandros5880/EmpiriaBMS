@@ -276,7 +276,7 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.Cascade);
 
         // Led DailyTime
-        builder.Entity<Led>()
+        builder.Entity<Lead>()
                .HasMany(p => p.DailyTime)
                .WithOne(c => c.Led)
                .HasForeignKey(c => c.LedId)

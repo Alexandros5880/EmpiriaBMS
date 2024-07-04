@@ -13,7 +13,7 @@ public partial class OfferCreationWizzard
     private bool _isNew => Offer?.Id == 0;
     private bool _loading = false;
 
-    public LedVM Led { get; set; } = default!;
+    public LeadVM Led { get; set; } = default!;
 
     [Parameter]
     public OfferVM Offer { get; set; } = default!;
@@ -43,7 +43,7 @@ public partial class OfferCreationWizzard
     {
         Offer = Offer != null ? Offer : new OfferVM()
         {
-            Led = new Led()
+            Led = new Lead()
             {
                 Result = LedResult.UNSUCCESSFUL
             }
@@ -51,14 +51,14 @@ public partial class OfferCreationWizzard
 
         if (Offer?.Led == null)
         {
-            Offer.Led = new Led()
+            Offer.Led = new Lead()
             {
                 Result = LedResult.UNSUCCESSFUL
             };
         }
 
-        var ledDto = Mapping.Mapper.Map<LedDto>(Offer.Led);
-        Led = _mapper.Map<LedVM>(ledDto);
+        var ledDto = Mapping.Mapper.Map<LeadDto>(Offer.Led);
+        Led = _mapper.Map<LeadVM>(ledDto);
 
         await _getProjects();
         await TabMenuClick(0);
@@ -85,7 +85,7 @@ public partial class OfferCreationWizzard
 
         if (valid)
         {
-            var dto = _mapper.Map<LedDto>(led);
+            var dto = _mapper.Map<LeadDto>(led);
 
             // Save Address
             // If Addres Then Save Address
@@ -109,17 +109,17 @@ public partial class OfferCreationWizzard
             {
                 var updated = await _dataProvider.Leds.Update(dto);
                 if (updated != null)
-                    led = _mapper.Map<LedVM>(updated);
+                    led = _mapper.Map<LeadVM>(updated);
             }
             else
             {
                 var updated = await _dataProvider.Leds.Add(dto);
                 if (updated != null)
-                    led = _mapper.Map<LedVM>(updated);
+                    led = _mapper.Map<LeadVM>(updated);
             }
 
             var ledDto = await _dataProvider.Leds.Get(led.Id);
-            Led = _mapper.Map<LedVM>(ledDto);
+            Led = _mapper.Map<LeadVM>(ledDto);
             Offer.LedId = led.Id;
         }
 

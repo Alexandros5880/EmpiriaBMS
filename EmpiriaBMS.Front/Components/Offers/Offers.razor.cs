@@ -170,7 +170,7 @@ public partial class Offers
     {
         _selectedOffer = new OfferVM()
         {
-            Led = new Led()
+            Led = new Lead()
             {
                 Result = LedResult.UNSUCCESSFUL
             }

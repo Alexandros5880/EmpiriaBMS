@@ -20,14 +20,14 @@ public partial class LedDetailed
     public bool DisplayActions { get; set; } = true;
 
     [Parameter]
-    public LedVM Content { get; set; } = new LedVM()
+    public LeadVM Content { get; set; } = new LeadVM()
     {
         ExpectedDurationDate = DateTime.Now.AddMonths(1),
         Result = LedResult.UNSUCCESSFUL
     };
 
     [Parameter]
-    public EventCallback<LedVM> OnSave { get; set; }
+    public EventCallback<LeadVM> OnSave { get; set; }
 
     [Parameter]
     public EventCallback<(string Value, string Text)> OnResultChanged { get; set; }
@@ -63,7 +63,7 @@ public partial class LedDetailed
         }
     }
 
-    public async Task Prepair(LedVM record = null, bool full = true)
+    public async Task Prepair(LeadVM record = null, bool full = true)
     {
         if (record != null)
             Content = record;
@@ -107,7 +107,7 @@ public partial class LedDetailed
         StateHasChanged();
     }
 
-    public async Task<LedVM> SaveAsync()
+    public async Task<LeadVM> SaveAsync()
     {
         var valid = Validate();
 
@@ -117,7 +117,7 @@ public partial class LedDetailed
         {
             Content.ClientId = Client.Id;
 
-            var dto = _mapper.Map<LedDto>(Content);
+            var dto = _mapper.Map<LeadDto>(Content);
 
             // Save Address
             // If Addres Then Save Address
@@ -140,12 +140,12 @@ public partial class LedDetailed
             if (await _dataProvider.Leds.Any(p => p.Id == Content.Id))
             {
                 var updated = await _dataProvider.Leds.Update(dto);
-                Content = _mapper.Map<LedVM>(updated);
+                Content = _mapper.Map<LeadVM>(updated);
             }
             else
             {
                 var updated = await _dataProvider.Leds.Add(dto);
-                Content = _mapper.Map<LedVM>(updated);
+                Content = _mapper.Map<LeadVM>(updated);
             }
 
             await OnSave.InvokeAsync(Content);
@@ -164,7 +164,7 @@ public partial class LedDetailed
         await OnResultChanged.InvokeAsync(resultOption);
     }
 
-    public LedVM GetLed()
+    public LeadVM GetLed()
     {
         Content.ClientId = Client.Id;
         return Content;

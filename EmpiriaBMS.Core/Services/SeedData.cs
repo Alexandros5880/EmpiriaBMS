@@ -47,28 +47,28 @@ public class SeedData
             CeatePermissions,
             CeateRoles,
             CeateRolesPermissions,
-            CeateDefaultAdmins,
-            CeateProjectCategories,
-            CreateProjectSubCategories,
-            CreateProjectStages,
-            CreateInvoiceTypes,
-            CreatePaymentTypes,
-            CreateOfferTypes,
-            CreateOfferState,
-            CreateDisciplineTypes,
-            CreateDeliverableTypes,
-            CreateSupportiveWorkTypes,
-            CreateSecretaries,
-            CreateDraftmen,
-            CreateEngineers,
-            CreateProjectManagers,
-            CreateProjects,
-            CreateMissedDeadLineProjects,
-            CreateDisciplines,
-            CreateDeliverables,
-            CreateSupportiveWorks,
-            ConnectAllEngineersWithEveryDisclipline,
-            ConnectEveryDraftmanWithEverySupportiveWork
+            //CeateDefaultAdmins,
+            //CeateProjectCategories,
+            //CreateProjectSubCategories,
+            //CreateProjectStages,
+            //CreateInvoiceTypes,
+            //CreatePaymentTypes,
+            //CreateOfferTypes,
+            //CreateOfferState,
+            //CreateDisciplineTypes,
+            //CreateDeliverableTypes,
+            //CreateSupportiveWorkTypes,
+            //CreateSecretaries,
+            //CreateDraftmen,
+            //CreateEngineers,
+            //CreateProjectManagers,
+            //CreateProjects,
+            //CreateMissedDeadLineProjects,
+            //CreateDisciplines,
+            //CreateDeliverables,
+            //CreateSupportiveWorks,
+            //ConnectAllEngineersWithEveryDisclipline,
+            //ConnectEveryDraftmanWithEverySupportiveWork
         };
 
         _logger.LogInformation($"\n\nStarting add Seed Data to DB.");
@@ -3631,7 +3631,7 @@ public class SeedData
         projects.Clear();
 
         List<Client> clients = new List<Client>();
-        List<Led> leds = new List<Led>();
+        List<Lead> leds = new List<Lead>();
         List<Offer> offers = new List<Offer>();
         List<Invoice> invoices = new List<Invoice>();
 
@@ -3662,7 +3662,7 @@ public class SeedData
 
             // Led
             var ledId = random.Next(123456789, 999999999) + i * 3;
-            Led led = new Led()
+            Lead led = new Lead()
             {
                 Id = ledId,
                 CreatedDate = DateTime.Now,
@@ -3771,7 +3771,7 @@ public class SeedData
             {
                 try
                 {
-                    await SeedIfNotExists<Led>(context, _logger, item);
+                    await SeedIfNotExists<Lead>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
@@ -3834,7 +3834,7 @@ public class SeedData
         msprojects.Clear();
 
         List<Client> clients = new List<Client>();
-        List<Led> leds = new List<Led>();
+        List<Lead> leds = new List<Lead>();
         List<Offer> offers = new List<Offer>();
         List<Invoice> invoices = new List<Invoice>();
 
@@ -3865,7 +3865,7 @@ public class SeedData
 
             // Led
             var ledId = random.Next(123456789, 999999999) + i * 3 + 13245;
-            Led led = new Led()
+            Lead led = new Lead()
             {
                 Id = ledId,
                 CreatedDate = DateTime.Now,
@@ -3974,7 +3974,7 @@ public class SeedData
             {
                 try
                 {
-                    await SeedIfNotExists<Led>(context, _logger, item);
+                    await SeedIfNotExists<Lead>(context, _logger, item);
                 }
                 catch (Exception ex)
                 {
