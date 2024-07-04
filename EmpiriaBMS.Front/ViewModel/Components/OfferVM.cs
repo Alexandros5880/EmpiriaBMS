@@ -165,6 +165,35 @@ public class OfferVM : BaseVM
 
     public string LedName => Lead != null ? Lead.Name : "";
 
+    // Project
+    private int? _projectId;
+    public int? ProjectId
+    {
+        get => _projectId;
+        set
+        {
+            if (value == _projectId)
+                return;
+            _projectId = value;
+            NotifyPropertyChanged(nameof(ProjectId));
+        }
+    }
+
+    private Project? _project;
+    public Project? Project
+    {
+        get => _project;
+        set
+        {
+            if (value == _project)
+                return;
+            _project = value;
+            NotifyPropertyChanged(nameof(Project));
+        }
+    }
+
+    public string ProjectName => Project != null ? Project.Name : "";
+
     // Result
     public OfferResult Result { get; set; }
     public string ResultName => Result.GetDisplayName();
@@ -273,8 +302,6 @@ public class OfferVM : BaseVM
             NotifyPropertyChanged(nameof(Comments));
         }
     }
-
-    public ICollection<Project>? Projects { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
 }

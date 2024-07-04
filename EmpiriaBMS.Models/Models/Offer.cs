@@ -23,6 +23,9 @@ public class Offer : Entity
     public int? LeadId { get; set; }
     public Lead? Lead { get; set; }
 
+    public int? ProjectId { get; set; }
+    public Project? Project { get; set; }
+
     [Required]
     public OfferResult Result { get; set; }
 

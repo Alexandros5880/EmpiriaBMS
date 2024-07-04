@@ -100,6 +100,8 @@ public class OfferRepo : Repository<OfferDto, Offer>
                                        .ThenInclude(l => l.Address)
                                        .Include(o => o.SubCategory)
                                        .Include(o => o.Category)
+                                       .Include(o => o.Project)
+                                       .ThenInclude(p => p.Stage)
                                        .FirstOrDefaultAsync(o => o.Id == id);
 
             return Mapping.Mapper.Map<Offer, OfferDto>(offer);
@@ -110,30 +112,24 @@ public class OfferRepo : Repository<OfferDto, Offer>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var offers = await _context.Set<Project>()
-                                       .Where(p => !p.IsDeleted)
-                                       .Where(p => (projectId == 0 || p.Id == projectId))
-                                       .Include(p => p.Offer)
-                                       .ThenInclude(o => o.Lead)
-                                       .ThenInclude(l => l.Client)
-                                       .Include(p => p.Offer)
-                                       .ThenInclude(o => o.Lead)
+            var offers = await _context.Set<Offer>()
+                                       .Include(o => o.Lead)
+                                       .Include(o => o.State)
+                                       .Include(o => o.Type)
+                                       .Include(o => o.Lead)
+                                       .ThenInclude(p => p.Client)
+                                       .Include(o => o.Lead)
                                        .ThenInclude(l => l.Address)
-                                       .Include(p => p.Offer)
-                                       .ThenInclude(o => o.State)
-                                       .Include(p => p.Offer)
-                                       .ThenInclude(o => o.Type)
-                                       .Include(p => p.Offer)
-                                       .ThenInclude(o => o.SubCategory)
-                                       .Include(p => p.Offer)
-                                       .ThenInclude(o => o.Category)
-                                       .Select(p => p.Offer)
+                                       .Include(o => o.SubCategory)
+                                       .Include(o => o.Category)
+                                       .Include(o => o.Project)
+                                       .ThenInclude(p => p.Stage)
                                        .Where(o => !o.IsDeleted
                                                     && (stateId == 0 || o.StateId == stateId)
                                                     && (typeId == 0 || o.TypeId == typeId)
                                                     && (result == null || o.Result == result)
-                                         )
-                                         .ToListAsync();
+                                       )
+                                       .ToListAsync();
 
             return Mapping.Mapper.Map<List<Offer>, List<OfferDto>>(offers);
         }

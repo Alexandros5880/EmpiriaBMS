@@ -21,6 +21,9 @@ public class OfferDto : EntityDto
     public int? LeadId { get; set; }
     public Lead? Lead { get; set; }
 
+    public int? ProjectId { get; set; }
+    public Project? Project { get; set; }
+
     public OfferResult Result { get; set; }
 
     public string Code { get; set; }
