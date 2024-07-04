@@ -1,15 +1,20 @@
 trigger:
-- main
+  tags:
+    include:
+      - '*-staging'
+  branches:
+    exclude:
+      - '*'
 
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
   dockerRegistryServiceConnection: 'Azure-Kubernetes-Cluster'
-  dockerComposeFile: .
+  dockerComposeFile: 'docker-compose.yml'
   imageName: 'EmpiriaBMS'
   projectName: 'EmpiriaBMS'
-  containerRegistry: 'acrworkflow1710346566236'
+  containerRegistry: 'acrworkflow1710346566236.azurecr.io'
   kubernetesNamespace: 'namespace-workflow-1710346566236'
   kubernetesServiceConnection: 'Azure-Kubernetes'
 
@@ -40,3 +45,5 @@ steps:
     manifests: |
       $(Build.SourcesDirectory)/<path-to-your-kubernetes-manifests>/deployment.yml
       $(Build.SourcesDirectory)/<path-to-your-kubernetes-manifests>/service.yml
+    containers: |
+      $(containerRegistry)/$(imageName):$(Build.BuildId)
