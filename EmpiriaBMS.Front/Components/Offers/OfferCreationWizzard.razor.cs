@@ -68,7 +68,7 @@ public partial class OfferCreationWizzard
         await OnSave.InvokeAsync();
 
     #region Led Tab
-    private LedDetailed _ledCompoment;
+    private LeadDetailed _ledCompoment;
 
     private void _onLeadResultChanged((string Value, string Text) resultOption)
     {

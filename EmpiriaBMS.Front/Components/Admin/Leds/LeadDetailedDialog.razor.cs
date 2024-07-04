@@ -12,7 +12,7 @@ public partial class LeadDetailedDialog : IDialogContentComponent<LeadVM>
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
 
-    private LedDetailed _compoment;
+    private LeadDetailed _compoment;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace EmpiriaBMS.Front.Components.Admin.Leds;
 
-public partial class LedDetailed
+public partial class LeadDetailed
 {
     private FluentCombobox<ClientVM> _clientCombo;
     private FluentCombobox<(string Value, string Text)> _resultCombo;
