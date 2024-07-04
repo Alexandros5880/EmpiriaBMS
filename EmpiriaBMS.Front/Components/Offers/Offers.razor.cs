@@ -170,9 +170,9 @@ public partial class Offers
     {
         _selectedOffer = new OfferVM()
         {
-            Led = new Lead()
+            Lead = new Lead()
             {
-                Result = LedResult.UNSUCCESSFUL
+                Result = LeadResult.UNSUCCESSFUL
             }
         };
 

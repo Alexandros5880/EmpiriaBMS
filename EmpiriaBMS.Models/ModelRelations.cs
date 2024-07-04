@@ -92,12 +92,11 @@ public static class ModelRelations
                .IsRequired(false)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // Led Offer (OneToOne)
+        // Offers Lead
         builder.Entity<Offer>()
-               .HasOne(b => b.Led)
-               .WithOne()
-               .HasForeignKey<Offer>(o => o.LedId)
-               .IsRequired(false)
+               .HasOne(i => i.Lead)
+               .WithMany(p => p.Offers)
+               .HasForeignKey(i => i.LeadId)
                .OnDelete(DeleteBehavior.Cascade);
 
         // Invoices Project
@@ -278,8 +277,8 @@ public static class ModelRelations
         // Led DailyTime
         builder.Entity<Lead>()
                .HasMany(p => p.DailyTime)
-               .WithOne(c => c.Led)
-               .HasForeignKey(c => c.LedId)
+               .WithOne(c => c.Lead)
+               .HasForeignKey(c => c.LeadId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // Offer DailyTime

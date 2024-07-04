@@ -111,8 +111,8 @@ public class LeadVM : BaseVM
         }
     }
 
-    private LedResult _result;
-    public LedResult Result
+    private LeadResult _result;
+    public LeadResult Result
     {
         get => _result;
         set
@@ -125,4 +125,6 @@ public class LeadVM : BaseVM
     }
 
     public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<Offer> Offers { get; set; }
 }

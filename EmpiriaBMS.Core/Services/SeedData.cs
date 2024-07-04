@@ -3670,7 +3670,7 @@ public class SeedData
                 Name = $"Led-{i}",
                 ClientId = clientId,
                 PotencialFee = random.Next(i, i * 3),
-                Result = LedResult.SUCCESSFUL
+                Result = LeadResult.SUCCESSFUL
             };
             leds.Add(led);
 
@@ -3690,7 +3690,7 @@ public class SeedData
                 OfferPrice = 1000 * i * 2,
                 CategoryId = projectCategories[categoriesIndex].Id,
                 SubCategoryId = projectSubCategories[i - 1].Id,
-                LedId = ledId,
+                LeadId = ledId,
             };
             offers.Add(offer);
 
@@ -3873,7 +3873,7 @@ public class SeedData
                 Name = $"Led-M-{i}",
                 ClientId = clientId,
                 PotencialFee = random.Next(i, i * 3),
-                Result = LedResult.SUCCESSFUL
+                Result = LeadResult.SUCCESSFUL
             };
             leds.Add(led);
 
@@ -3893,7 +3893,7 @@ public class SeedData
                 OfferPrice = 1000 * i * 2,
                 CategoryId = projectCategories[categoriesIndex].Id,
                 SubCategoryId = projectSubCategories[i - 1].Id,
-                LedId = ledId,
+                LeadId = ledId,
             };
             offers.Add(offer);
 

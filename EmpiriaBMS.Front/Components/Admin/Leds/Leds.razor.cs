@@ -37,7 +37,7 @@ public partial class Leds
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.Leds.GetAll();
+        var dtos = await DataProvider.Leads.GetAll();
         _records = Mapper.Map<List<LeadVM>>(dtos);
     }
 
@@ -59,7 +59,7 @@ public partial class Leds
         IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(new LeadVM()
         {
             ExpectedDurationDate = DateTime.Now,
-            Result = Models.Enum.LedResult.UNSUCCESSFUL
+            Result = Models.Enum.LeadResult.UNSUCCESSFUL
         }, parameters);
         DialogResult? result = await dialog.Result;
 
@@ -67,7 +67,7 @@ public partial class Leds
         {
             LeadVM vm = result.Data as LeadVM;
             var dto = Mapper.Map<LeadDto>(vm);
-            await DataProvider.Leds.Add(dto);
+            await DataProvider.Leads.Add(dto);
             await _getRecords();
         }
     }
@@ -94,7 +94,7 @@ public partial class Leds
         {
             LeadVM vm = result.Data as LeadVM;
             var dto = Mapper.Map<LeadDto>(vm);
-            await DataProvider.Leds.Update(dto);
+            await DataProvider.Leads.Update(dto);
             await _getRecords();
         }
     }
@@ -107,7 +107,7 @@ public partial class Leds
 
         if (!result.Cancelled)
         {
-            await DataProvider.Leds.Delete(record.Id);
+            await DataProvider.Leads.Delete(record.Id);
         }
 
         await dialog.CloseAsync();
@@ -158,7 +158,7 @@ public partial class Leds
                     {
                         var vm = item.Get();
                         var dto = Mapper.Map<LeadDto>(vm);
-                        var added = await DataProvider.Leds.Add(dto);
+                        var added = await DataProvider.Leads.Add(dto);
                         if (added == null)
                             continue;
                         var addedDto = Mapper.Map<LeadVM>(added);

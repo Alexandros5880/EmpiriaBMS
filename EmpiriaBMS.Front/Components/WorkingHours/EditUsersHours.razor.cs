@@ -164,7 +164,7 @@ public partial class EditUsersHours
 
         try
         {
-            var dtos = await _dataProvider.Leds.GetAll();
+            var dtos = await _dataProvider.Leads.GetAll();
             var vms = Mapper.Map<List<LeadVM>>(dtos);
             _leds.Clear();
             vms.ForEach(_leds.Add);
@@ -188,7 +188,7 @@ public partial class EditUsersHours
 
         try
         {
-            var dtos = await _dataProvider.Offers.GetAllByLed(_selectedLed?.Id ?? 0);
+            var dtos = await _dataProvider.Offers.GetAllByLead(_selectedLed?.Id ?? 0);
             var vms = Mapper.Map<List<OfferVM>>(dtos);
             _offers.Clear();
             vms.ForEach(_offers.Add);
@@ -604,7 +604,7 @@ public partial class EditUsersHours
             // Update Leds
             foreach (var led in _ledsChanged)
             {
-                await _dataProvider.Leds.AddTime(userId, led.Id, led.Time);
+                await _dataProvider.Leads.AddTime(userId, led.Id, led.Time);
             }
             _ledsChanged.Clear();
             _selectedLed = null;

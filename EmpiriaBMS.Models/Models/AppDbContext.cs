@@ -3311,7 +3311,7 @@ public class AppDbContext : DbContext
                     Name = $"Led-{i}",
                     ClientId = clientId,
                     PotencialFee = random.Next(i, i * 3),
-                    Result = LedResult.SUCCESSFUL
+                    Result = LeadResult.SUCCESSFUL
                 };
                 builder.Entity<Lead>().HasData(led);
 
@@ -3331,7 +3331,7 @@ public class AppDbContext : DbContext
                     OfferPrice = 1000 * i * 2,
                     CategoryId = projectCategories[categoriesIndex].Id,
                     SubCategoryId = projectSubCategories[i - 1].Id,
-                    LedId = ledId,
+                    LeadId = ledId,
                 };
                 builder.Entity<Offer>().HasData(offer);
 
@@ -3426,7 +3426,7 @@ public class AppDbContext : DbContext
                     Name = $"Led-M-{i}",
                     ClientId = clientId,
                     PotencialFee = random.Next(i, i * 3),
-                    Result = LedResult.SUCCESSFUL
+                    Result = LeadResult.SUCCESSFUL
                 };
                 builder.Entity<Lead>().HasData(led);
 
@@ -3446,7 +3446,7 @@ public class AppDbContext : DbContext
                     OfferPrice = 1000 * i * 3,
                     CategoryId = projectCategories[categoriesIndex].Id,
                     SubCategoryId = projectSubCategories[subCategoriesIndex].Id,
-                    LedId = ledId,
+                    LeadId = ledId,
                 };
                 builder.Entity<Offer>().HasData(offer);
 

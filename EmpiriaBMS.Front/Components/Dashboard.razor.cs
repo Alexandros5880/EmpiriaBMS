@@ -270,7 +270,7 @@ public partial class Dashboard : IDisposable
 
         try
         {
-            var dtos = await _dataProvider.Leds.GetAll();
+            var dtos = await _dataProvider.Leads.GetAll();
             var vms = Mapper.Map<List<LeadVM>>(dtos);
             _leds.Clear();
             vms.ForEach(_leds.Add);
@@ -295,7 +295,7 @@ public partial class Dashboard : IDisposable
 
         try
         {
-            var dtos = await _dataProvider.Offers.GetAllByLed(_selectedLed?.Id ?? 0);
+            var dtos = await _dataProvider.Offers.GetAllByLead(_selectedLed?.Id ?? 0);
             var vms = Mapper.Map<List<OfferVM>>(dtos);
             _offers.Clear();
             vms.ForEach(_offers.Add);

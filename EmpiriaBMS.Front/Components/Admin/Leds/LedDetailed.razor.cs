@@ -23,7 +23,7 @@ public partial class LedDetailed
     public LeadVM Content { get; set; } = new LeadVM()
     {
         ExpectedDurationDate = DateTime.Now.AddMonths(1),
-        Result = LedResult.UNSUCCESSFUL
+        Result = LeadResult.UNSUCCESSFUL
     };
 
     [Parameter]
@@ -93,7 +93,7 @@ public partial class LedDetailed
         }
         else
         {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
+            SelectedResult = _results.FirstOrDefault(r => r.Value == LeadResult.UNSUCCESSFUL.ToString());
             if (_resultCombo != null)
             {
                 var value = SelectedResult.Value;
@@ -137,14 +137,14 @@ public partial class LedDetailed
             dto.Address = null;
 
             // Save Led
-            if (await _dataProvider.Leds.Any(p => p.Id == Content.Id))
+            if (await _dataProvider.Leads.Any(p => p.Id == Content.Id))
             {
-                var updated = await _dataProvider.Leds.Update(dto);
+                var updated = await _dataProvider.Leads.Update(dto);
                 Content = _mapper.Map<LeadVM>(updated);
             }
             else
             {
-                var updated = await _dataProvider.Leds.Add(dto);
+                var updated = await _dataProvider.Leads.Add(dto);
                 Content = _mapper.Map<LeadVM>(updated);
             }
 
@@ -226,8 +226,8 @@ public partial class LedDetailed
     }
 
     // Result Selection
-    private List<(string Value, string Text)> _results = Enum.GetValues(typeof(LedResult))
-                                                             .Cast<LedResult>()
+    private List<(string Value, string Text)> _results = Enum.GetValues(typeof(LeadResult))
+                                                             .Cast<LeadResult>()
                                                              .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
                                                                 .First()
                                                                 .GetCustomAttribute<DisplayAttribute>()?
@@ -241,7 +241,7 @@ public partial class LedDetailed
         set
         {
             _selectedResult = value;
-            LedResult result = (LedResult)Enum.Parse(typeof(LedResult), value.Value);
+            LeadResult result = (LeadResult)Enum.Parse(typeof(LeadResult), value.Value);
             Content.Result = result;
         }
     }

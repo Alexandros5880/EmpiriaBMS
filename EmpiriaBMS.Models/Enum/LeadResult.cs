@@ -2,7 +2,7 @@
 
 namespace EmpiriaBMS.Models.Enum;
 
-public enum LedResult
+public enum LeadResult
 {
     [Display(Name = "SUCCESSFUL")]
     SUCCESSFUL = 0,

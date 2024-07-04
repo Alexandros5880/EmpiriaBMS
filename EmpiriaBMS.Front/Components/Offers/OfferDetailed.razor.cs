@@ -82,7 +82,7 @@ public partial class OfferDetailed
         }
         else
         {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
+            SelectedResult = _results.FirstOrDefault(r => r.Value == LeadResult.UNSUCCESSFUL.ToString());
             if (_resultCombo != null)
             {
                 _resultCombo.Value = SelectedResult.Value;

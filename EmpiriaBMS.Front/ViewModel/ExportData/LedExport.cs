@@ -60,7 +60,7 @@ public class LedExport : IInport<LeadVM>
             AddressId = AddressId,
             PotencialFee = PotencialFee,
             ExpectedDurationDate = date,
-            Result = Result.GetValueFromDisplayName<LedResult>()
+            Result = Result.GetValueFromDisplayName<LeadResult>()
         };
     }
 }

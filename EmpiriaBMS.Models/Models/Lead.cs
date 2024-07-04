@@ -20,7 +20,9 @@ public class Lead : Entity
     [Column(TypeName = "datetime2")]
     public DateTime? ExpectedDurationDate { get; set; }
 
-    public LedResult Result { get; set; }
+    public LeadResult Result { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<Offer> Offers { get; set; }
 }
