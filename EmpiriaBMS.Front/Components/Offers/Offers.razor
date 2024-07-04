@@ -4,6 +4,7 @@
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
 @using EmpiriaBMS.Front.Components.Offers;
+@using EmpiriaBMS.Models.Enum;
 
 @inject IDialogService DialogService
 @inject TeamsUserCredential teamsUserCredential
@@ -95,8 +96,22 @@
                             TGridItem="OfferVM"
                             GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 240px; overflow:auto;">
+                >
 
-                <PropertyColumn Property="@(p => p.Result.GetDisplayName())" Sortable="true" Title="Result" Style="min-width: 140px;" />
+                <!-- Result -->
+                <TemplateColumn Title="Result" Sortable="true">
+                    <ChildContent>
+                        <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
+                            @foreach (var result in Enum.GetValues(typeof(OfferResult)).Cast<OfferResult>())
+                            {
+                                <option value="@(result)" selected="@(context.Result == result)">
+                                    @result.GetDisplayName()
+                                </option>
+                            }
+                        </select>
+                    </ChildContent>
+                </TemplateColumn>
+
                 <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.Category.Name)" Sortable="true" Title="Category" Align="@Align.Start" />

@@ -7,6 +7,8 @@ using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace EmpiriaBMS.Front.Components.Leads;
 
@@ -48,9 +50,9 @@ public partial class Leads
         }
     }
 
-    private async Task _getRecords()
+    private async Task _getRecords(LeadResult result = LeadResult.WAITING)
     {
-        var dtos = await DataProvider.Leads.GetWaitingLeads();
+        var dtos = await DataProvider.Leads.GetByResult(result);
         _records = Mapper.Map<List<LeadVM>>(dtos);
     }
 
@@ -139,6 +141,26 @@ public partial class Leads
             StateHasChanged();
         }
     }
+
+    #region Filter Result
+    private List<(string Value, string Text)> _leadResults = Enum.GetValues(typeof(LeadResult))
+                                                                  .Cast<LeadResult>()
+                                                                  .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
+                                                                      .First()
+                                                                      .GetCustomAttribute<DisplayAttribute>()?
+                                                                      .GetName() ?? e.ToString()))
+                                                                  .ToList();
+
+    private (string Value, string Text) _selectedResult;
+
+    private async Task _onResultSelectionChanged((string Value, string Text) result)
+    {
+        _selectedResult = result;
+        LeadResult e;
+        Enum.TryParse(result.Value, out e);
+        await _getRecords(e);
+    }
+    #endregion
 
     #region Import/Export Data
     private async Task ExportToCSV()

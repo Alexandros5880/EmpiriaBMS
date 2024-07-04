@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Hellpers;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
@@ -61,6 +62,17 @@ public partial class Offers
         else if (string.IsNullOrWhiteSpace(_clientNameFilter) || string.IsNullOrEmpty(_clientNameFilter))
         {
             _clientNameFilter = string.Empty;
+        }
+    }
+
+    private async Task HandleResultChange(OfferVM context, ChangeEventArgs e)
+    {
+        if (Enum.TryParse<OfferResult>(e.Value.ToString(), out var newResult))
+        {
+            context.Result = newResult;
+            var dto = Mapper.Map<OfferDto>(context);
+            await _dataProvider.Offers.Update(dto);
+            await Refresh();
         }
     }
     #endregion

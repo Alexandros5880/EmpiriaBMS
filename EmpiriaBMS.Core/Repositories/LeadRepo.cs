@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -205,6 +206,21 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
                                   .Include(l => l.Address)
                                   .Include(l => l.Client)
                                   .ToListAsync();
+
+            return Mapping.Mapper.Map<List<LeadDto>>(items);
+        }
+    }
+
+    public new async Task<ICollection<LeadDto>> GetByResult(LeadResult result = LeadResult.WAITING)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Lead> items = await _context.Set<Lead>()
+                .Where(r => !r.IsDeleted)
+                .Where(l => l.Result == result)
+                .Include(l => l.Address)
+                .Include(l => l.Client)
+                .ToListAsync();
 
             return Mapping.Mapper.Map<List<LeadDto>>(items);
         }
