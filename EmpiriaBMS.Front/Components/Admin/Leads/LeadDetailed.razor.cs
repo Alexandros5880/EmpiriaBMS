@@ -23,7 +23,7 @@ public partial class LeadDetailed
     public LeadVM Content { get; set; } = new LeadVM()
     {
         ExpectedDurationDate = DateTime.Now.AddMonths(1),
-        Result = LeadResult.UNSUCCESSFUL
+        Result = LeadResult.WAITING
     };
 
     [Parameter]
