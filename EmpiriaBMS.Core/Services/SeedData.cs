@@ -496,6 +496,17 @@ public class SeedData
                     Ord = 37
                 };
 
+                // See Leads On Dashboard
+                var per_38_id = 38;
+                Permission per_38 = new Permission()
+                {
+                    Id = per_38_id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = "See Leads On Dashboard",
+                    Ord = 38
+                };
+
                 await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Permissions", true);
 
                 await SeedIfNotExists<Permission>(context, _logger, per_1);
@@ -535,6 +546,7 @@ public class SeedData
                 await SeedIfNotExists<Permission>(context, _logger, per_35);
                 await SeedIfNotExists<Permission>(context, _logger, per_36);
                 await SeedIfNotExists<Permission>(context, _logger, per_37);
+                await SeedIfNotExists<Permission>(context, _logger, per_38);
 
                 await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Permissions", false);
 
@@ -576,6 +588,7 @@ public class SeedData
                 permissionsIds.Add(per_35.Id);
                 permissionsIds.Add(per_36.Id);
                 permissionsIds.Add(per_37.Id);
+                permissionsIds.Add(per_38.Id);
             }
         }
         catch (Exception ex)
@@ -1406,6 +1419,16 @@ public class SeedData
                     PermissionId = GetRecordAtIndex(permissionsIds, 36)
                 };
 
+                // CTO || See Leads On Dashboard
+                RolePermission rp_89 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9 + 3245,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 37)
+                };
+
 
                 // CEO
                 // CEO || See Dashboard Layout
@@ -1718,6 +1741,16 @@ public class SeedData
                     PermissionId = GetRecordAtIndex(permissionsIds, 36)
                 };
 
+                // CEO || See Leads On Dashboard
+                RolePermission rp_53 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9 + 215,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 37)
+                };
+
 
                 // Guest
                 // Guest || See Dashboard Layout
@@ -1940,7 +1973,7 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_50);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_51);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_52);
-                //await SeedIfNotExists<RolePermission>(context, _logger, rp_53);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_53);
                 //await SeedIfNotExists<RolePermission>(context, _logger, rp_54);
                 //await SeedIfNotExists<RolePermission>(context, _logger, rp_55);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_56);
@@ -1976,7 +2009,7 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_86);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_87);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_88);
-                //await SeedIfNotExists<RolePermission>(context, _logger, rp_89);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_89);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_90);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_91);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_92);

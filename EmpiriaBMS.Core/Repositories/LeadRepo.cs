@@ -210,6 +210,51 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
     }
 
+    public new async Task<ICollection<LeadDto>> GetWaitingLeads()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Lead> items = await _context.Set<Lead>()
+                .Where(r => !r.IsDeleted)
+                .Where(l => l.Result == Models.Enum.LeadResult.WAITING)
+                .Include(l => l.Address)
+                .Include(l => l.Client)
+                .ToListAsync();
+
+            return Mapping.Mapper.Map<List<LeadDto>>(items);
+        }
+    }
+
+    public new async Task<ICollection<LeadDto>> GetSuccessfuleLeads()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Lead> items = await _context.Set<Lead>()
+                .Where(r => !r.IsDeleted)
+                .Where(l => l.Result == Models.Enum.LeadResult.SUCCESSFUL)
+                .Include(l => l.Address)
+                .Include(l => l.Client)
+                .ToListAsync();
+
+            return Mapping.Mapper.Map<List<LeadDto>>(items);
+        }
+    }
+
+    public new async Task<ICollection<LeadDto>> GetUnsuccessfuleLeads()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Lead> items = await _context.Set<Lead>()
+                .Where(r => !r.IsDeleted)
+                .Where(l => l.Result == Models.Enum.LeadResult.SUCCESSFUL)
+                .Include(l => l.Address)
+                .Include(l => l.Client)
+                .ToListAsync();
+
+            return Mapping.Mapper.Map<List<LeadDto>>(items);
+        }
+    }
+
     public async Task AddTime(int userId, int ledId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         using (var _context = _dbContextFactory.CreateDbContext())

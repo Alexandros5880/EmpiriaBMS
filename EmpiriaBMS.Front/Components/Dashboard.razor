@@ -3,6 +3,7 @@
 @layout MainLayout
 
 @using EmpiriaBMS.Front.Components.Invoices
+@using EmpiriaBMS.Front.Components.Leads
 @using Microsoft.Fast.Components.FluentUI
 @using EmpiriaBMS.Front.Components.General
 @using EmpiriaBMS.Front.Components
@@ -192,7 +193,28 @@
                                 }
                             </div>
 
-                            <!-- Offers-->
+                            <!-- Leads -->
+                            @if (seeLeadsOnDashboard)
+                            {
+                                <div class="mt-5">
+                                    <FluentAccordion>
+                                        <FluentAccordionItem Expanded="false">
+                                            <HeadingTemplate>
+                                                <div class="accordion-header">
+                                                    <h3>Leads</h3>
+                                                </div>
+                                            </HeadingTemplate>
+                                            <ChildContent>
+                                                <div style="max-height: 300px; overflow-y: auto;">
+                                                    <Leads />
+                                                </div>
+                                            </ChildContent>
+                                        </FluentAccordionItem>
+                                    </FluentAccordion>
+                                </div>
+                            }
+
+                            <!-- Offers -->
                             @if (seeOffers)
                             {
                                 <div class="mt-5">
@@ -204,7 +226,9 @@
                                                 </div>
                                             </HeadingTemplate>
                                             <ChildContent>
-                                                <Offers />
+                                                <div style="max-height: 300px; overflow-y: auto;">
+                                                    <Offers />
+                                                </div>
                                             </ChildContent>
                                         </FluentAccordionItem>
                                     </FluentAccordion>

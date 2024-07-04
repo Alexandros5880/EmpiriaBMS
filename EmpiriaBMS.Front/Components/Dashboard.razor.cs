@@ -43,6 +43,7 @@ public partial class Dashboard : IDisposable
     bool seeBackupDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 35);
     bool seeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
     bool canChangeEverybodyHours => _sharedAuthData.Permissions.Any(p => p.Ord == 37);
+    bool seeLeadsOnDashboard => _sharedAuthData.Permissions.Any(p => p.Ord == 38);
     #endregion
 
     // General Fields
