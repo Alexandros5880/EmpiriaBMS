@@ -3,6 +3,7 @@ using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Components.Admin.Leads;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
+using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
@@ -34,6 +35,17 @@ public partial class Leads
     private void HandleRowFocus(FluentDataGridRow<LeadVM> row)
     {
         _selectedRecord = row.Item as LeadVM;
+    }
+
+    private async Task HandleResultChange(LeadVM context, ChangeEventArgs e)
+    {
+        if (Enum.TryParse<LeadResult>(e.Value.ToString(), out var newResult))
+        {
+            context.Result = newResult;
+            var dto = Mapper.Map<LeadDto>(context);
+            await DataProvider.Leads.Update(dto);
+            await _getRecords();
+        }
     }
 
     private async Task _getRecords()

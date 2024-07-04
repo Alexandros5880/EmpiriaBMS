@@ -1,6 +1,7 @@
 ﻿@page "/leds"
 
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Models.Enum;
 
 @inject IDataProvider DataProvider
 @inject MicrosoftTeams MicrosoftTeams
@@ -37,7 +38,18 @@
                             style="height: 70vh; overflow:auto;">
 
                 <!-- Result -->
-                <PropertyColumn Property="@(p => p.Result.GetDisplayName())" Sortable="true" Title="Result" Align="@Align.Start" />
+                <TemplateColumn Title="Result" Sortable="true">
+                    <ChildContent>
+                        <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
+                            @foreach (var result in Enum.GetValues(typeof(LeadResult)).Cast<LeadResult>())
+                            {
+                                <option value="@(result)" selected="@(context.Result == result)">
+                                    @result.GetDisplayName()
+                                </option>
+                            }
+                        </select>
+                    </ChildContent>
+                </TemplateColumn>
 
                 <!-- Name -->
                 <TemplateColumn Title="Name"
