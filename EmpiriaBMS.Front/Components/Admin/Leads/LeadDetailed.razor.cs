@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace EmpiriaBMS.Front.Components.Admin.Leds;
+namespace EmpiriaBMS.Front.Components.Admin.Leads;
 
 public partial class LeadDetailed
 {

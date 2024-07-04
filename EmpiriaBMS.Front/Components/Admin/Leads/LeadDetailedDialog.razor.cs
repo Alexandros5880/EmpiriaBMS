@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.Admin.Leds;
+namespace EmpiriaBMS.Front.Components.Admin.Leads;
 
 public partial class LeadDetailedDialog : IDialogContentComponent<LeadVM>
 {
