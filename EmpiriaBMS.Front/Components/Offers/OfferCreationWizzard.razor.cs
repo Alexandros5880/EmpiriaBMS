@@ -257,7 +257,8 @@ public partial class OfferCreationWizzard
             tabs[tabIndex] = true;
 
             StateHasChanged();
-            await _offerCompoment.Prepair(Offer, _prevTabIndex == 0);
+            if (_offerCompoment != null)
+                await _offerCompoment.Prepair(Offer, _prevTabIndex == 0);
         }
 
         // Project Tabs
