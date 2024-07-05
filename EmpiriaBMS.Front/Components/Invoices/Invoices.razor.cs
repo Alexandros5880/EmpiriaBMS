@@ -53,7 +53,8 @@ public partial class Invoices : ComponentBase
     {
         SelectedRecord = new InvoiceVM()
         {
-            Date = DateTime.Now,
+            EstimatedDate = DateTime.Now,
+            PaymentDate = DateTime.Now,
         };
         StateHasChanged();
         await OnSelect.InvokeAsync(SelectedRecord);

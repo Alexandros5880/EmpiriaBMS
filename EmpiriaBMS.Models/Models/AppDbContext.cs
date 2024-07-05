@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Models.Enum;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
@@ -60,7 +61,7 @@ public class AppDbContext : DbContext
         Enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
         optionsBuilder.UseSqlServer(SelectedConnectionString);
-        //optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
+        optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
         optionsBuilder.EnableSensitiveDataLogging();
         //optionsBuilder.EnableDetailedErrors();
         //optionsBuilder.EnableServiceProviderCaching();
@@ -3412,7 +3413,8 @@ public class AppDbContext : DbContext
                     Id = invoiceId,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    Date = DateTime.Now,
+                    PaymentDate = DateTime.Now,
+                    EstimatedDate = DateTime.Now,
                     Total = i * Math.Pow(1, 3),
                     Vat = i % 2 == 0 ? Vat.TwentyFour : Vat.Seventeen,
                     Fee = 1000 * i,
@@ -3515,7 +3517,8 @@ public class AppDbContext : DbContext
                     Id = invoiceId,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    Date = DateTime.Now,
+                    PaymentDate = DateTime.Now,
+                    EstimatedDate = DateTime.Now,
                     Total = i * Math.Pow(1, 3),
                     Vat = i % 2 == 0 ? Vat.TwentyFour : Vat.Seventeen,
                     Fee = 1100 * i,

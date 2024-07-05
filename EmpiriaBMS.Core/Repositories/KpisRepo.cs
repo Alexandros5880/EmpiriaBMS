@@ -402,7 +402,7 @@ public class KpisRepo : IDisposable
                                        .Where(r => !r.IsDeleted)
                                        .Include(p => p.Invoice)
                                        .Include(p => p.Invoice.Project)
-                                       .Where(p => p.Invoice.Date < p.PaymentDate)
+                                       .Where(p => p.Invoice.PaymentDate < p.PaymentDate)
                                        .ToListAsync();
 
             var result = payments.GroupBy(p => p.Invoice.Project)

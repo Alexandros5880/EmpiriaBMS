@@ -1,6 +1,4 @@
 ﻿using EmpiriaBMS.Core.Dtos.Base;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaBMS.Core.Dtos;
@@ -15,11 +13,11 @@ public class InvoiceDto : EntityDto
 
     public DateTime? EstimatedDate { get; set; }
 
+    public DateTime PaymentDate { get; set; }
+
     public int? Number { get; set; }
 
     public string? Mark { get; set; }
-
-    public DateTime Date { get; set; }
 
     public int TypeId { get; set; }
 
