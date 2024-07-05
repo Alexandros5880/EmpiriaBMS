@@ -252,7 +252,7 @@ public class KpisRepo : IDisposable
                                                 .GroupBy(p => p.Offer?.SubCategory?.Name)
                                                 .ToDictionary(
                                                     g => g.Key ?? "Uknown Category",
-                                                    g => allProjects.Where(p => p.Offer.SubCategory.Name.Equals(g.Key)).Count()
+                                                    g => allProjects.Where(p => p.Offer?.SubCategory?.Name?.Equals(g.Key) ?? false).Count()
                                                 );
 
 
