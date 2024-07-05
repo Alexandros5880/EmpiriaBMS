@@ -206,8 +206,9 @@ public partial class Offers
         {
             Lead = new Lead()
             {
-                Result = LeadResult.UNSUCCESSFUL
-            }
+                Result = LeadResult.WAITING
+            },
+            Result = OfferResult.WAITING
         };
 
         DialogParameters parameters = new()
@@ -220,8 +221,11 @@ public partial class Offers
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(80%, 1000px);"
+            Width = "min(80%, 1000px);",
+            Height = "min(80%, 1000px);"
         };
+
+        _selectedOffer.LeadId = _selectedLead?.Id;
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);
         DialogResult? result = await dialog.Result;
@@ -249,7 +253,8 @@ public partial class Offers
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(80%, 1000px);"
+            Width = "min(80%, 1000px);",
+            Height = "min(80%, 1000px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);

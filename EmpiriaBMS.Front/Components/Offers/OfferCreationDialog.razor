@@ -21,11 +21,13 @@
     @* <OfferCreationWizzard Offer="@Content" OnSave="@(async () => await SaveAsync())" OnCansel="@(async () => await CancelAsync())" /> *@
 
     <!-- Offers Detailed -->
-    <OfferDetailed @ref="@_offerCompoment"
-                   Content="@Content"
-                   OnSave="@_saveOffer"
-                   DisplayTitle="false"
-                   DisplayActions="false"
-                   OnResultChanged="@_onOfferResultChanged" />
+    <div style="height: 500px;">
+        <OfferDetailed @ref="@_offerCompoment"
+                       Content="@Content"
+                       OnSave="@_saveOffer"
+                       DisplayTitle="false"
+                       DisplayActions="true"
+                       OnResultChanged="@_onOfferResultChanged" />
+    </div>
 
 </FluentDialogBody>

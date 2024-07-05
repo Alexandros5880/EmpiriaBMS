@@ -10,9 +10,6 @@ public partial class OfferCreationDialog : IDialogContentComponent<OfferVM>
     [Parameter]
     public OfferVM Content { get; set; } = default!;
 
-    [Parameter]
-    public LeadVM Led { get; set; } = default!;
-
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
 
@@ -42,7 +39,7 @@ public partial class OfferCreationDialog : IDialogContentComponent<OfferVM>
         _loading = true;
 
 
-        Content.LeadId = Led.Id;
+        //Content.LeadId = Led.Id;
 
         //if (valid)
         //{
