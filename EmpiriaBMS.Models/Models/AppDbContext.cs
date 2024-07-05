@@ -1395,17 +1395,6 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_114);
 
-            // CTO || Can Change Everybody Hours
-            RolePermission rp_119 = new RolePermission()
-            {
-                Id = random.Next(123456789, 999999999) * 9,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                RoleId = role_5_id,
-                PermissionId = per_37_id
-            };
-            builder.Entity<RolePermission>().HasData(rp_119);
-
             // CTO || See Leads On Dashboard
             RolePermission rp_122 = new RolePermission()
             {
@@ -1759,17 +1748,6 @@ public class AppDbContext : DbContext
                 PermissionId = per_36_id
             };
             builder.Entity<RolePermission>().HasData(rp_116);
-
-            // CEO || Can Change Everybody Hours
-            RolePermission rp_120 = new RolePermission()
-            {
-                Id = random.Next(123456789, 999999999) * 9,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                RoleId = role_6_id,
-                PermissionId = per_37_id
-            };
-            builder.Entity<RolePermission>().HasData(rp_120);
 
             // CTO || See Leads On Dashboard
             RolePermission rp_123 = new RolePermission()
@@ -2907,16 +2885,6 @@ public class AppDbContext : DbContext
                 RoleId = role_5_id
             };
             builder.Entity<UserRole>().HasData(engineerRole_17_em_coo);
-            // Admin
-            UserRole admin_2 = new UserRole()
-            {
-                Id = random.Next(123456789, 999999999) / 3,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = engineer_6_Id,
-                RoleId = role_9_id
-            };
-            builder.Entity<UserRole>().HasData(admin_2);
 
             // ΤΖΑΝΗΣ ΒΑΣΙΛΕΙΟΣ
             var engineer_7_Id = random.Next(123456789, 999999999) + random.Next(0, 333) + 16;
