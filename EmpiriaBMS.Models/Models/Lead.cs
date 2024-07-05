@@ -8,8 +8,8 @@ public class Lead : Entity
 {
     public string Name { get; set; }
 
-    public int ClientId { get; set; }
-    public Client Client { get; set; }
+    public int? ClientId { get; set; }
+    public Client? Client { get; set; }
 
     public int? AddressId { get; set; }
     public Address? Address { get; set; }

@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
-using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Components.Invoices;
 using EmpiriaBMS.Front.Components.WorkingHours;
 using EmpiriaBMS.Front.Services;
@@ -16,8 +15,6 @@ using System.Collections.ObjectModel;
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
 {
-    private UserTimes _editLogedUserTimes;
-
     #region Authorization Properties
     public bool assignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
     public bool assignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
@@ -611,38 +608,7 @@ public partial class Dashboard : IDisposable
         isWorkingMode = false;
         remainingTime = StopTimer();
 
-        _editLogedUserTimes = new UserTimes()
-        {
-            DailyTime = TimeSpan.Zero,
-            PersonalTime = TimeSpan.Zero,
-            TrainingTime = TimeSpan.Zero,
-            CorporateEventTime = TimeSpan.Zero,
-        };
-
-        _leds.Clear();
-        _offers.Clear();
-        _projects.Clear();
-        _supportiveWork.Clear();
-        _deliverables.Clear();
-        _disciplines.Clear();
-        _selectedLed = null;
-        _selectedOffer = null;
-        _selectedProject = null;
-        _selectedSupportiveWork = null;
-        __selectedDeliverable = null;
-        _selectedDiscipline = null;
-        _selectedProject = null;
-
-        if (workOnLeds)
-            await _getLeds();
-
-        if (workOnOffers)
-            await _getOffers();
-
-        if (!workOnLeds && !workOnOffers)
-            await _getProjects();
-
-        StateHasChanged();
+        await _editHoursCompoment.Refresh(remainingTime);
 
         _endWorkDialog.Show();
         _isEndWorkDialogOdepened = true;
@@ -1161,6 +1127,9 @@ public partial class Dashboard : IDisposable
 
     private async Task _onSelectedInvoice(InvoiceVM invoice)
     {
+        if (invoice == null)
+            return;
+
         _selectedInvoice = invoice;
         if (_invoiceDetailedRef != null)
         {

@@ -141,7 +141,8 @@ public partial class InvoiceDetailed
         };
         Content = new InvoiceVM()
         {
-            Date = DateTime.Now,
+            EstimatedDate = DateTime.Now,
+            PaymentDate = DateTime.Now,
             Contract = Contract,
             ContractId = 0
         };

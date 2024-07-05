@@ -249,10 +249,10 @@ public class KpisRepo : IDisposable
                                                 .ToListAsync();
 
                 projectTypesWithDeadLines = allProjects
-                                                .GroupBy(p => p.Offer.SubCategory.Name)
+                                                .GroupBy(p => p.Offer?.SubCategory?.Name)
                                                 .ToDictionary(
                                                     g => g.Key ?? "Uknown Category",
-                                                    g => allProjects.Where(p => p.Offer.SubCategory.Name.Equals(g.Key)).Count()
+                                                    g => allProjects.Where(p => p.Offer?.SubCategory?.Name?.Equals(g.Key) ?? false).Count()
                                                 );
 
 
@@ -402,7 +402,7 @@ public class KpisRepo : IDisposable
                                        .Where(r => !r.IsDeleted)
                                        .Include(p => p.Invoice)
                                        .Include(p => p.Invoice.Project)
-                                       .Where(p => p.Invoice.Date < p.PaymentDate)
+                                       .Where(p => p.Invoice.PaymentDate < p.PaymentDate)
                                        .ToListAsync();
 
             var result = payments.GroupBy(p => p.Invoice.Project)

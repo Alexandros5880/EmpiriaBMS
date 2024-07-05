@@ -19,6 +19,10 @@ public class Invoice : Entity
     [Column(TypeName = "datetime2")]
     public DateTime? EstimatedDate { get; set; }
 
+    [DataType(DataType.DateTime)]
+    [Column(TypeName = "datetime2")]
+    public DateTime PaymentDate { get; set; }
+
     public int? Number { get; set; }
 
     public string? Mark { get; set; }
@@ -30,10 +34,6 @@ public class Invoice : Entity
     public int ProjectId { get; set; }
 
     public Project Project { get; set; }
-
-    [DataType(DataType.DateTime)]
-    [Column(TypeName = "datetime2")]
-    public DateTime Date { get; set; }
 
     public ICollection<Payment> Payments { get; set; }
 }

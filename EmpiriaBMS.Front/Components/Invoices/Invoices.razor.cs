@@ -20,6 +20,8 @@ public partial class Invoices : ComponentBase
     IQueryable<InvoiceVM>? FilteredItems => _invoices?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
+    private Dictionary<int, double> _pendingPayments = new Dictionary<int, double>();
+
     [Parameter]
     public InvoiceVM SelectedRecord { get; set; } = new InvoiceVM();
 
@@ -47,13 +49,23 @@ public partial class Invoices : ComponentBase
     {
         var dtosInv = await DataProvider.Invoices.GetAll();
         _invoices = Mapper.Map<List<InvoiceVM>>(dtosInv);
+        await _loadPendingPayments();
+    }
+
+    private async Task _loadPendingPayments()
+    {
+        foreach (var item in _invoices)
+        {
+            _pendingPayments[item.Id] = await DataProvider.Invoices.GetSumOfPotencialFee(item.Id);
+        }
     }
 
     private async Task _add()
     {
         SelectedRecord = new InvoiceVM()
         {
-            Date = DateTime.Now,
+            EstimatedDate = DateTime.Now,
+            PaymentDate = DateTime.Now,
         };
         StateHasChanged();
         await OnSelect.InvokeAsync(SelectedRecord);
@@ -123,6 +135,12 @@ public partial class Invoices : ComponentBase
 
         await dialog.CloseAsync();
         await _getRecords();
+    }
+
+    private async Task<double> _getPendingPaiment(InvoiceVM record)
+    {
+
+        return 0.0;
     }
     #endregion
 

@@ -8,9 +8,10 @@ ci:
 	git tag v0.0.1-staging
 	git push origin v0.0.1-staging
 
-SUBDIR := EmpiriaBMS.EF.CLI
-MIGRATIONSDIR := Migrations
+
 dropdb:
+	SUBDIR := EmpiriaBMS.EF.CLI
+	MIGRATIONSDIR := Migrations
 	@cd $(SUBDIR) && \
 	@rd /s /q $(MIGRATIONSDIR)
 	@dotnet ef database drop -f -v

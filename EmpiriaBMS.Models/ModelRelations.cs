@@ -204,12 +204,12 @@ public static class ModelRelations
                .HasForeignKey(c => c.ProjectManagerId)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-        // Led Client
+        // Leds Client
         builder.Entity<Client>()
                .HasMany(p => p.Leds)
                .WithOne(c => c.Client)
                .HasForeignKey(c => c.ClientId)
-               .OnDelete(DeleteBehavior.ClientCascade);
+               .OnDelete(DeleteBehavior.ClientSetNull);
 
         // Client Address
         builder.Entity<Address>()

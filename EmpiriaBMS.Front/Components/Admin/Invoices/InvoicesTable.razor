@@ -37,7 +37,7 @@
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
-                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 100% min-height: 300px; overflow:auto;">
 
                 <TemplateColumn Title="Project"
@@ -59,7 +59,8 @@
                 </TemplateColumn>
 
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Date)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Fee)" Sortable="true" Title="Fee" Align="@Align.Start" />
