@@ -234,189 +234,186 @@
                                 <div class="@((seeAdmin ? "col-lg" : "")) col-md col-sm mt-3"
                                      style="min-width: @(isWorkingMode ? "660px" : "500px")">
                                     <!-- Table Projects -->
-                                    @if (!_isEndWorkDialogOdepened)
-                                    {
-                                        <div style="height: 74px;">
-                                            <div class="text-center row me-2">
-                                                <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
+                                    <div style="height: 74px;">
+                                        <div class="text-center row me-2">
+                                            <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
+                                        </div>
+                                        <div class="text-center row me-2">
+                                            <div class="col-6">
+                                                <FluentSearch @bind-Value="@_projectNameFilter"
+                                                              @oninput="@HandleProjectFilter"
+                                                              Placeholder="Search Project"
+                                                              Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;" />
                                             </div>
-                                            <div class="text-center row me-2">
-                                                <div class="col-6">
-                                                    <FluentSearch @bind-Value="@_projectNameFilter"
-                                                                  @oninput="@HandleProjectFilter"
-                                                                  Placeholder="Search Project" 
-                                                                  Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;"/>
-                                                </div>
-                                                <div class="col-6">
-                                                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
-                                                        @if (isWorkingMode && editProject)
+                                            <div class="col-6">
+                                                <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                                                    @if (isWorkingMode && editProject)
+                                                    {
+                                                        @if (_selectedProject != null)
                                                         {
-                                                            @if (_selectedProject != null)
-                                                            {
-                                                                <span class="navigate-outline my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
-                                                                style="display: @((_selectedProject?.Offer?.Lead?.Address != null ? "block" : "none" ));"
-                                                                @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Lead?.Address))" />
+                                                            <span class="navigate-outline my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
+                                                                  style="display: @((_selectedProject?.Offer?.Lead?.Address != null ? "block" : "none" ));"
+                                                                  @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Lead?.Address))" />
 
-                                                                @* <span class="fluent--delete-28-regular"
-                                                                        @onclick="@(() => DeleteProject())" /> *@
+                                                            @* <span class="fluent--delete-28-regular"
+                                                @onclick="@(() => DeleteProject())" /> *@
 
-                                                                <span class="material-symbols--edit-outline"
-                                                                @onclick="@(async () => await EditProject())" />
-                                                            }
-                                                            @* <span class="grommet-icons--add"
-                                                                @onclick="@(() => AddProject())" /> *@
+                                                            <span class="material-symbols--edit-outline"
+                                                                  @onclick="@(async () => await EditProject())" />
                                                         }
+                                                        @* <span class="grommet-icons--add"
+                                                @onclick="@(() => AddProject())" /> *@
+                                                    }
 
-                                                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                                                        Appearance="Appearance.Outline"
-                                                                        OnClick="@(async (e) => await ExportProjectsToCSV())"
-                                                                        Disabled="@(_projects.Count() == 0)">
-                                                            Export
-                                                        </FluentButton>
+                                                    <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                                                  Appearance="Appearance.Outline"
+                                                                  OnClick="@(async (e) => await ExportProjectsToCSV())"
+                                                                  Disabled="@(_projects.Count() == 0)">
+                                                        Export
+                                                    </FluentButton>
 
-                                                    </FluentStack>
-                                                </div>
+                                                </FluentStack>
                                             </div>
                                         </div>
-                                        <div class="table-responsive p-1 table-container"
-                                             style="overflow-x: auto !important;">
-                                            <table class="table table-hover table-success text-center">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col" class="sticky-header">Status</th>
-                                                        <th scope="col" class="sticky-header">Project</th>
-                                                        <th scope="col" class="sticky-header">Work Package Declared Completed</th>
-                                                        <th scope="col" class="sticky-header">Estimated Hours Completed</th>
-                                                        <th scope="col" class="sticky-header">Deadline</th>
+                                    </div>
+                                    <div class="table-responsive p-1 table-container"
+                                         style="overflow-x: auto !important;">
+                                        <table class="table table-hover table-success text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="sticky-header">Status</th>
+                                                    <th scope="col" class="sticky-header">Project</th>
+                                                    <th scope="col" class="sticky-header">Work Package Declared Completed</th>
+                                                    <th scope="col" class="sticky-header">Estimated Hours Completed</th>
+                                                    <th scope="col" class="sticky-header">Deadline</th>
+                                                    @if (isWorkingMode)
+                                                    {
+                                                        <th scope="col" class="sticky-header">Issue</th>
+                                                    }
+                                                    @if (isWorkingMode && assignPm)
+                                                    {
+                                                        <th scope="col" class="sticky-header">PM</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @*
+                                            @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-warning" : ""))
+                                            @(( project.DeadLine < DateTime.Now ? "table-danger" : ""))
+                                            @(( project.EstimatedCompleted >= 100 || !project.Active ? "table-secondary" : ""))
+                                            *@
+                                                @foreach (var project in _filteredProjects)
+                                                {
+                                                    <tr class="align-middle">
+
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                            style="word-wrap: break-word; max-width: 110px;"
+                                                            @onclick="@(async () => await OnSelectProject(project.Id))">
+
+                                                            @if (@GetProjectMenHours(project.Id) > project.EstimatedHours)
+                                                            {
+                                                                <span class="icon-worked-hours-passed"></span>
+                                                            }
+                                                            else if (project.DeadLine < DateTime.Now)
+                                                            {
+                                                                <span class="icon-missed-deadline"></span>
+                                                            }
+                                                            else if (project.EstimatedCompleted >= 100 || !project.Active)
+                                                            {
+                                                                <span class="icon-estimation-completion-passed"></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="icon-all-ok"></span>
+                                                            }
+
+                                                        </td>
+
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                            style="word-wrap: break-word; max-width: 110px;"
+                                                            @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                            <labe>@project.Name</labe>
+                                                        </td>
+
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                            @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                            <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
+                                                        </td>
+
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                            @onclick="@(async () => await OnSelectProject(project.Id))">
+                                                            <label>@(project.EstimatedCompleted.ToString("##0.0")) %</label>
+                                                        </td>
+
+                                                        <td class="align-middle
+                                                            @((_selectedProject == null ||
+                                                                    !_selectedProject.Id.Equals(project.Id)
+                                                                                    ? "" : "selected_table_projects_row"))"
+                                                            @onclick="@(async () => await OnSelectProject(project.Id))"
+                                                            style="min-width: 100px;">
+                                                            <label>@project.DeadLine?.ToEuropeFormat()</label>
+                                                        </td>
+
                                                         @if (isWorkingMode)
                                                         {
-                                                            <th scope="col" class="sticky-header">Issue</th>
-                                                        }
-                                                        @if (isWorkingMode && assignPm)
-                                                        {
-                                                            <th scope="col" class="sticky-header">PM</th>
-                                                        }
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @*
-                                                        @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-warning" : ""))
-                                                        @(( project.DeadLine < DateTime.Now ? "table-danger" : ""))
-                                                        @(( project.EstimatedCompleted >= 100 || !project.Active ? "table-secondary" : ""))
-                                                    *@
-                                                    @foreach (var project in _filteredProjects)
-                                                    {
-                                                        <tr class="align-middle">
-
                                                             <td class="align-middle
-                                                            @((_selectedProject == null ||
-                                                                    !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_projects_row"))"
-                                                                style="word-wrap: break-word; max-width: 110px;"
-                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
-
-                                                                @if (@GetProjectMenHours(project.Id) > project.EstimatedHours)
-                                                                {
-                                                                    <span class="icon-worked-hours-passed"></span>
-                                                                }
-                                                                else if (project.DeadLine < DateTime.Now)
-                                                                {
-                                                                    <span class="icon-missed-deadline"></span>
-                                                                }
-                                                                else if (project.EstimatedCompleted >= 100 || !project.Active)
-                                                                {
-                                                                    <span class="icon-estimation-completion-passed"></span>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span class="icon-all-ok"></span>
-                                                                }
-
-                                                            </td>
-
-                                                            <td class="align-middle
-                                                            @((_selectedProject == null ||
-                                                                    !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_projects_row"))"
-                                                                style="word-wrap: break-word; max-width: 110px;"
-                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
-                                                                <labe>@project.Name</labe>
-                                                            </td>
-
-                                                            <td class="align-middle
-                                                            @((_selectedProject == null ||
-                                                                    !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_projects_row"))"
-                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
-                                                                <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
-                                                            </td>
-
-                                                            <td class="align-middle
-                                                            @((_selectedProject == null ||
-                                                                    !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_projects_row"))"
-                                                                @onclick="@(async () => await OnSelectProject(project.Id))">
-                                                                <label>@(project.EstimatedCompleted.ToString("##0.0")) %</label>
-                                                            </td>
-
-                                                            <td class="align-middle
-                                                            @((_selectedProject == null ||
-                                                                    !_selectedProject.Id.Equals(project.Id)
-                                                                                    ? "" : "selected_table_projects_row"))"
-                                                                @onclick="@(async () => await OnSelectProject(project.Id))"
-                                                                style="min-width: 100px;">
-                                                                <label>@project.DeadLine?.ToEuropeFormat()</label>
-                                                            </td>
-
-                                                            @if (isWorkingMode)
-                                                            {
-                                                                <td class="align-middle
                                                                 @((_selectedProject == null ||
                                                                     !_selectedProject.Id.Equals(project.Id)
                                                                                     ? "" : "selected_table_projects_row"))">
-                                                                    <span class="majesticons--chat-2-text"
-                                                                          @onclick="@OnAddIssueClick">
-                                                                    </span>
-                                                                </td>
-                                                            }
+                                                                <span class="majesticons--chat-2-text"
+                                                                      @onclick="@OnAddIssueClick">
+                                                                </span>
+                                                            </td>
+                                                        }
 
-                                                            @if (isWorkingMode && assignPm)
-                                                            {
-                                                                <td class="align-middle
+                                                        @if (isWorkingMode && assignPm)
+                                                        {
+                                                            <td class="align-middle
                                                                 @((_selectedProject == null ||
                                                                         !_selectedProject.Id.Equals(project.Id)
                                                                                         ? "" : "selected_table_projects_row"))">
-                                                                    @if (project?.Offer?.SubCategory?.CanAssignePM ?? false)
+                                                                @if (project?.Offer?.SubCategory?.CanAssignePM ?? false)
+                                                                {
+                                                                    @if (!string.IsNullOrEmpty(project.PmName))
                                                                     {
-                                                                        @if (!string.IsNullOrEmpty(project.PmName))
-                                                                        {
-                                                                            <button type="button" class="btn btn-outline-info default-color"
-                                                                                    @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                                @project.PmName
-                                                                            </button>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <span class="clarity--assign-user-line"
-                                                                                  @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                            </span>
-                                                                        }
+                                                                        <button type="button" class="btn btn-outline-info default-color"
+                                                                                @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                            @project.PmName
+                                                                        </button>
                                                                     }
-                                                                </td>
-                                                            }
+                                                                    else
+                                                                    {
+                                                                        <span class="clarity--assign-user-line"
+                                                                              @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                        </span>
+                                                                    }
+                                                                }
+                                                            </td>
+                                                        }
 
-                                                        </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
 
                                 <div class="@((seeAdmin ? "col-xl col-lg" : "")) col-md col-sm mt-3"
                                      style="min-width:440px">
                                     <!-- Table Disciplines -->
-                                    @if (_selectedProject != null && !_isEndWorkDialogOdepened)
+                                    @if (_selectedProject != null)
                                     {
                                         <div style="height: 74px;">
                                             <div class="text-center row me-2">
@@ -514,7 +511,7 @@
 
                                     <!-- Table Deliverables -->
                                     <div class="col" style="min-width:460px">
-                                        @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
+                                        @if (_selectedDiscipline != null)
                                         {
                                             <div style="height: 74px;">
                                                 <div class="text-center row me-2">
@@ -616,7 +613,7 @@
 
                                     <!-- Table Others -->
                                     <div class="col" style="min-width:460px">
-                                        @if (_selectedDiscipline != null && !_isEndWorkDialogOdepened)
+                                        @if (_selectedDiscipline != null)
                                         {
                                             <div style="height: 74px;">
                                                 <div class="text-center row me-2">

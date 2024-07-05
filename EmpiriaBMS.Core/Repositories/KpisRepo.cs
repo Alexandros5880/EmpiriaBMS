@@ -249,7 +249,7 @@ public class KpisRepo : IDisposable
                                                 .ToListAsync();
 
                 projectTypesWithDeadLines = allProjects
-                                                .GroupBy(p => p.Offer.SubCategory.Name)
+                                                .GroupBy(p => p.Offer?.SubCategory?.Name)
                                                 .ToDictionary(
                                                     g => g.Key ?? "Uknown Category",
                                                     g => allProjects.Where(p => p.Offer.SubCategory.Name.Equals(g.Key)).Count()
