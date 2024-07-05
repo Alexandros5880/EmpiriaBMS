@@ -1,6 +1,8 @@
 ﻿@page "/invoices"
 
 @using EmpiriaBMS.Front.Services
+@using System.Globalization
+
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 @inject IDialogService DialogService
@@ -50,6 +52,12 @@
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="EstimatedDate" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="PaymentDate" Align="@Align.Start" />
+                <!-- PendingPaiment -->
+                <TemplateColumn Title="PendingPaiment" Sortable="true">
+                    <ChildContent>
+                        @(_pendingPayments.TryGetValue(context.Id, out var payment) ? payment.ToString("C", CultureInfo.CurrentCulture) : "Loading...")
+                    </ChildContent>
+                </TemplateColumn>
                 <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
 

@@ -1161,6 +1161,9 @@ public partial class Dashboard : IDisposable
 
     private async Task _onSelectedInvoice(InvoiceVM invoice)
     {
+        if (invoice == null)
+            return;
+
         _selectedInvoice = invoice;
         if (_invoiceDetailedRef != null)
         {
