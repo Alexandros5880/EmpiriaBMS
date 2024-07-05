@@ -138,11 +138,15 @@ public partial class Leads
         {
             await _getRecords();
 
+            _selectedResult = _leadResults.FirstOrDefault(r => r.Text.Equals("WAITING"));
+            _resultFilterCombo.Value = _selectedResult.Value;
+
             StateHasChanged();
         }
     }
 
     #region Filter Result
+    FluentCombobox<(string Value, string Text)> _resultFilterCombo;
     private List<(string Value, string Text)> _leadResults = Enum.GetValues(typeof(LeadResult))
                                                                   .Cast<LeadResult>()
                                                                   .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())

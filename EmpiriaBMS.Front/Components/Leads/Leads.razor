@@ -13,7 +13,8 @@
     <div class="col-12 card shadow">
         <div class="mt-2 d-flex justify-content-between">
             <FluentStack HorizontalAlignment="HorizontalAlignment.Start">
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                <FluentCombobox @ref="_resultFilterCombo"
+                                Autocomplete="ComboboxAutocomplete.Both"
                                 Placeholder="Select Result..."
                                 Items="_leadResults"
                                 Width="400px"
