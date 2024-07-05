@@ -9,9 +9,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace EmpiriaBMS.Front.Components.Admin.Leds;
+namespace EmpiriaBMS.Front.Components.Admin.Leads;
 
-public partial class LedDetailed
+public partial class LeadDetailed
 {
     private FluentCombobox<ClientVM> _clientCombo;
     private FluentCombobox<(string Value, string Text)> _resultCombo;
@@ -20,14 +20,14 @@ public partial class LedDetailed
     public bool DisplayActions { get; set; } = true;
 
     [Parameter]
-    public LedVM Content { get; set; } = new LedVM()
+    public LeadVM Content { get; set; } = new LeadVM()
     {
         ExpectedDurationDate = DateTime.Now.AddMonths(1),
-        Result = LedResult.UNSUCCESSFUL
+        Result = LeadResult.WAITING
     };
 
     [Parameter]
-    public EventCallback<LedVM> OnSave { get; set; }
+    public EventCallback<LeadVM> OnSave { get; set; }
 
     [Parameter]
     public EventCallback<(string Value, string Text)> OnResultChanged { get; set; }
@@ -63,7 +63,7 @@ public partial class LedDetailed
         }
     }
 
-    public async Task Prepair(LedVM record = null, bool full = true)
+    public async Task Prepair(LeadVM record = null, bool full = true)
     {
         if (record != null)
             Content = record;
@@ -93,7 +93,7 @@ public partial class LedDetailed
         }
         else
         {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
+            SelectedResult = _results.FirstOrDefault(r => r.Value == LeadResult.UNSUCCESSFUL.ToString());
             if (_resultCombo != null)
             {
                 var value = SelectedResult.Value;
@@ -107,7 +107,7 @@ public partial class LedDetailed
         StateHasChanged();
     }
 
-    public async Task<LedVM> SaveAsync()
+    public async Task<LeadVM> SaveAsync()
     {
         var valid = Validate();
 
@@ -117,7 +117,7 @@ public partial class LedDetailed
         {
             Content.ClientId = Client.Id;
 
-            var dto = _mapper.Map<LedDto>(Content);
+            var dto = _mapper.Map<LeadDto>(Content);
 
             // Save Address
             // If Addres Then Save Address
@@ -137,15 +137,15 @@ public partial class LedDetailed
             dto.Address = null;
 
             // Save Led
-            if (await _dataProvider.Leds.Any(p => p.Id == Content.Id))
+            if (await _dataProvider.Leads.Any(p => p.Id == Content.Id))
             {
-                var updated = await _dataProvider.Leds.Update(dto);
-                Content = _mapper.Map<LedVM>(updated);
+                var updated = await _dataProvider.Leads.Update(dto);
+                Content = _mapper.Map<LeadVM>(updated);
             }
             else
             {
-                var updated = await _dataProvider.Leds.Add(dto);
-                Content = _mapper.Map<LedVM>(updated);
+                var updated = await _dataProvider.Leads.Add(dto);
+                Content = _mapper.Map<LeadVM>(updated);
             }
 
             await OnSave.InvokeAsync(Content);
@@ -164,7 +164,7 @@ public partial class LedDetailed
         await OnResultChanged.InvokeAsync(resultOption);
     }
 
-    public LedVM GetLed()
+    public LeadVM GetLed()
     {
         Content.ClientId = Client.Id;
         return Content;
@@ -226,8 +226,8 @@ public partial class LedDetailed
     }
 
     // Result Selection
-    private List<(string Value, string Text)> _results = Enum.GetValues(typeof(LedResult))
-                                                             .Cast<LedResult>()
+    private List<(string Value, string Text)> _results = Enum.GetValues(typeof(LeadResult))
+                                                             .Cast<LeadResult>()
                                                              .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
                                                                 .First()
                                                                 .GetCustomAttribute<DisplayAttribute>()?
@@ -241,7 +241,7 @@ public partial class LedDetailed
         set
         {
             _selectedResult = value;
-            LedResult result = (LedResult)Enum.Parse(typeof(LedResult), value.Value);
+            LeadResult result = (LeadResult)Enum.Parse(typeof(LeadResult), value.Value);
             Content.Result = result;
         }
     }

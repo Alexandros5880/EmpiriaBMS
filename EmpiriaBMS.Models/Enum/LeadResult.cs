@@ -2,10 +2,12 @@
 
 namespace EmpiriaBMS.Models.Enum;
 
-public enum LedResult
+public enum LeadResult
 {
     [Display(Name = "SUCCESSFUL")]
     SUCCESSFUL = 0,
     [Display(Name = "UNSUCCESSFUL")]
-    UNSUCCESSFUL = 1
+    UNSUCCESSFUL = 1,
+    [Display(Name = "WAITING")]
+    WAITING = 2
 }

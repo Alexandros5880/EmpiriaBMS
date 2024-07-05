@@ -92,12 +92,25 @@ public static class ModelRelations
                .IsRequired(false)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // Led Offer (OneToOne)
+        // Offer Project (OneToOne)
         builder.Entity<Offer>()
-               .HasOne(b => b.Led)
-               .WithOne()
-               .HasForeignKey<Offer>(o => o.LedId)
+               .HasOne(a => a.Project)
+               .WithOne(b => b.Offer)
+               .HasForeignKey<Project>(b => b.OfferId)
                .IsRequired(false)
+               .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<Project>()
+               .HasOne(b => b.Offer)
+               .WithOne(a => a.Project)
+               .HasForeignKey<Offer>(a => a.ProjectId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Offers Lead
+        builder.Entity<Offer>()
+               .HasOne(i => i.Lead)
+               .WithMany(p => p.Offers)
+               .HasForeignKey(i => i.LeadId)
                .OnDelete(DeleteBehavior.Cascade);
 
         // Invoices Project
@@ -105,13 +118,6 @@ public static class ModelRelations
                .HasOne(i => i.Project)
                .WithMany(p => p.Invoices)
                .HasForeignKey(i => i.ProjectId)
-               .OnDelete(DeleteBehavior.Cascade);
-
-        // Projects Offer
-        builder.Entity<Project>()
-               .HasOne(i => i.Offer)
-               .WithMany(p => p.Projects)
-               .HasForeignKey(i => i.OfferId)
                .OnDelete(DeleteBehavior.Cascade);
 
         // InvoiceType Invoices
@@ -198,13 +204,6 @@ public static class ModelRelations
                .HasForeignKey(c => c.ProjectManagerId)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-        // Offer Project
-        builder.Entity<Offer>()
-               .HasMany(p => p.Projects)
-               .WithOne(c => c.Offer)
-               .HasForeignKey(c => c.OfferId)
-               .OnDelete(DeleteBehavior.SetNull);
-
         // Led Client
         builder.Entity<Client>()
                .HasMany(p => p.Leds)
@@ -276,10 +275,10 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.Cascade);
 
         // Led DailyTime
-        builder.Entity<Led>()
+        builder.Entity<Lead>()
                .HasMany(p => p.DailyTime)
-               .WithOne(c => c.Led)
-               .HasForeignKey(c => c.LedId)
+               .WithOne(c => c.Lead)
+               .HasForeignKey(c => c.LeadId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // Offer DailyTime

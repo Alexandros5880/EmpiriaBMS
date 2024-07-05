@@ -1,19 +1,18 @@
-﻿using EmpiriaBMS.Front.Components.Admin.Contracts;
-using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.Admin.Leds;
+namespace EmpiriaBMS.Front.Components.Admin.Leads;
 
-public partial class LedDetailedDialog : IDialogContentComponent<LedVM>
+public partial class LeadDetailedDialog : IDialogContentComponent<LeadVM>
 {
     [Parameter]
-    public LedVM Content { get; set; }
+    public LeadVM Content { get; set; }
 
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
 
-    private LedDetailed _compoment;
+    private LeadDetailed _compoment;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

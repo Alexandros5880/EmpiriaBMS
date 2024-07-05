@@ -4,7 +4,7 @@ using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class LedVM : BaseVM
+public class LeadVM : BaseVM
 {
     // Not Mapped
     private TimeSpan _time = TimeSpan.Zero;
@@ -111,8 +111,8 @@ public class LedVM : BaseVM
         }
     }
 
-    private LedResult _result;
-    public LedResult Result
+    private LeadResult _result;
+    public LeadResult Result
     {
         get => _result;
         set
@@ -125,4 +125,6 @@ public class LedVM : BaseVM
     }
 
     public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<Offer> Offers { get; set; }
 }

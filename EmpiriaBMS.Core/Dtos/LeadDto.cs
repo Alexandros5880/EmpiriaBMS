@@ -1,10 +1,12 @@
-﻿using EmpiriaBMS.Models.Enum;
+﻿using EmpiriaBMS.Core.Dtos.Base;
+using EmpiriaBMS.Models.Enum;
+using EmpiriaBMS.Models.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EmpiriaBMS.Models.Models;
+namespace EmpiriaBMS.Core.Dtos;
 
-public class Led : Entity
+public class LeadDto : EntityDto
 {
     public string Name { get; set; }
 
@@ -20,7 +22,9 @@ public class Led : Entity
     [Column(TypeName = "datetime2")]
     public DateTime? ExpectedDurationDate { get; set; }
 
-    public LedResult Result { get; set; }
+    public LeadResult Result { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
+
+    public ICollection<Offer> Offers { get; set; }
 }

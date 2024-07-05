@@ -43,6 +43,7 @@ public partial class Dashboard : IDisposable
     bool seeBackupDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 35);
     bool seeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
     bool canChangeEverybodyHours => _sharedAuthData.Permissions.Any(p => p.Ord == 37);
+    bool seeLeadsOnDashboard => _sharedAuthData.Permissions.Any(p => p.Ord == 38);
     #endregion
 
     // General Fields
@@ -80,13 +81,13 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Lists
-    private ObservableCollection<LedVM> _leds = new ObservableCollection<LedVM>();
+    private ObservableCollection<LeadVM> _leds = new ObservableCollection<LeadVM>();
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DeliverableVM> _deliverables = new ObservableCollection<DeliverableVM>();
     private ObservableCollection<SupportiveWorkVM> _supportiveWork = new ObservableCollection<SupportiveWorkVM>();
-    private List<LedVM> _ledsChanged = new List<LedVM>();
+    private List<LeadVM> _ledsChanged = new List<LeadVM>();
     private List<OfferVM> _offersChanged = new List<OfferVM>();
     private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
     private List<DeliverableVM> _deliverablesChanged = new List<DeliverableVM>();
@@ -99,7 +100,7 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Selected Models
-    private LedVM _selectedLed = new LedVM();
+    private LeadVM _selectedLed = new LeadVM();
     private OfferVM _selectedOffer = new OfferVM();
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
@@ -270,8 +271,8 @@ public partial class Dashboard : IDisposable
 
         try
         {
-            var dtos = await _dataProvider.Leds.GetAll();
-            var vms = Mapper.Map<List<LedVM>>(dtos);
+            var dtos = await _dataProvider.Leads.GetAll();
+            var vms = Mapper.Map<List<LeadVM>>(dtos);
             _leds.Clear();
             vms.ForEach(_leds.Add);
         }
@@ -295,7 +296,7 @@ public partial class Dashboard : IDisposable
 
         try
         {
-            var dtos = await _dataProvider.Offers.GetAllByLed(_selectedLed?.Id ?? 0);
+            var dtos = await _dataProvider.Offers.GetAllByLead(_selectedLed?.Id ?? 0);
             var vms = Mapper.Map<List<OfferVM>>(dtos);
             _offers.Clear();
             vms.ForEach(_offers.Add);

@@ -20,7 +20,7 @@ public partial class OfferDetailed
     public OfferVM Content { get; set; }
 
     [Parameter]
-    public EventCallback OnSave { get; set; }
+    public EventCallback<OfferVM> OnSave { get; set; }
 
     [Parameter]
     public bool DisplayTitle { get; set; } = true;
@@ -82,7 +82,7 @@ public partial class OfferDetailed
         }
         else
         {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LedResult.UNSUCCESSFUL.ToString());
+            SelectedResult = _results.FirstOrDefault(r => r.Value == LeadResult.UNSUCCESSFUL.ToString());
             if (_resultCombo != null)
             {
                 _resultCombo.Value = SelectedResult.Value;
@@ -131,7 +131,9 @@ public partial class OfferDetailed
         else
             updated = await _dataProvider.Offers.Update(dto);
 
-        await OnSave.InvokeAsync();
+        Content = _mapper.Map<OfferVM>(updated);
+
+        await OnSave.InvokeAsync(Content);
     }
 
     private async Task _onResultChanged((string Value, string Text) resultOption)

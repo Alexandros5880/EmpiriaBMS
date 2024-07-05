@@ -13,7 +13,7 @@ public class KpisRepo : IDisposable
 {
     private bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
-    protected readonly LedRepo _ledRepo;
+    protected readonly LeadRepo _ledRepo;
     protected readonly Logging.LoggerManager _logger;
 
     public KpisRepo(
@@ -22,7 +22,7 @@ public class KpisRepo : IDisposable
     )
     {
         _dbContextFactory = dbFactory;
-        _ledRepo = new LedRepo(dbFactory, logger);
+        _ledRepo = new LeadRepo(dbFactory, logger);
         _logger = logger;
     }
 
@@ -30,7 +30,7 @@ public class KpisRepo : IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var icome = await _ledRepo.GetSumOfAllOppenLedsPotencialFee();
+            var icome = await _ledRepo.GetSumOfAllOppenLeadsPotencialFee();
 
             return icome;
         }
@@ -137,10 +137,10 @@ public class KpisRepo : IDisposable
                                                 .Include(p => p.Offer)
                                                 .ThenInclude(o => o.SubCategory)
                                                 .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Led)
+                                                .ThenInclude(o => o.Lead)
                                                 .ThenInclude(l => l.Address)
                                                 .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Led)
+                                                .ThenInclude(o => o.Lead)
                                                 .ThenInclude(l => l.Client)
                                                 .Include(p => p.ProjectManager)
                                                 .Include(p => p.ProjectsSubConstructors)
@@ -188,10 +188,10 @@ public class KpisRepo : IDisposable
                                          .Include(p => p.Offer)
                                          .ThenInclude(o => o.SubCategory)
                                          .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(o => o.Lead)
                                          .ThenInclude(l => l.Address)
                                          .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(o => o.Lead)
                                          .ThenInclude(l => l.Client)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
@@ -238,10 +238,10 @@ public class KpisRepo : IDisposable
                                                 .Include(p => p.Offer)
                                                 .ThenInclude(o => o.SubCategory)
                                                 .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Led)
+                                                .ThenInclude(o => o.Lead)
                                                 .ThenInclude(l => l.Address)
                                                 .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Led)
+                                                .ThenInclude(o => o.Lead)
                                                 .ThenInclude(l => l.Client)
                                                 .Include(p => p.ProjectManager)
                                                 .Include(p => p.ProjectsSubConstructors)
@@ -295,10 +295,10 @@ public class KpisRepo : IDisposable
                                          .Include(p => p.Offer)
                                          .ThenInclude(o => o.SubCategory)
                                          .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(o => o.Lead)
                                          .ThenInclude(l => l.Address)
                                          .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Led)
+                                         .ThenInclude(o => o.Lead)
                                          .ThenInclude(l => l.Client)
                                          .Include(p => p.ProjectManager)
                                          .Include(p => p.ProjectsSubConstructors)
@@ -331,11 +331,12 @@ public class KpisRepo : IDisposable
                                                     .Include(p => p.Offer)
                                                     .ThenInclude(o => o.SubCategory)
                                                     .Include(p => p.Offer)
-                                                    .ThenInclude(o => o.Led)
+                                                    .ThenInclude(o => o.Lead)
                                                     .ThenInclude(l => l.Address)
                                                     .Include(p => p.Offer)
-                                                    .ThenInclude(o => o.Led)
+                                                    .ThenInclude(o => o.Lead)
                                                     .ThenInclude(l => l.Client)
+                                                    .Include(p => p.Offer)
                                                     .Include(p => p.ProjectManager)
                                                     .Include(p => p.ProjectsSubConstructors)
                                                    .Where(p => p.DeadLine < DateTime.Now)
@@ -347,38 +348,39 @@ public class KpisRepo : IDisposable
 
             foreach (var project in projects)
             {
-                ProjectCategory parentCategory = null;
-                var parentCatId = project.Offer.SubCategory?.CategoryId;
-
-                if (parentCatId != null)
-                    parentCategory = await _context.Set<ProjectCategory>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(c => c.Id == parentCatId);
+                var projectOffer = await _context.Set<Offer>()
+                                                 .Where(o => !o.IsDeleted)
+                                                 .Include(o => o.Lead)
+                                                 .ThenInclude(l => l.Client)
+                                                 .FirstOrDefaultAsync(o => o.Id == project.OfferId);
 
                 // Get All Offers
-                var offers = await _context.Set<Project>()
-                                         .Where(p => !p.IsDeleted)
-                                         .Where(p => (project.Id == 0 || p.Id == project.Id))
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Led)
-                                         .ThenInclude(l => l.Client)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.State)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Type)
-                                         .Select(p => p.Offer)
-                                         .Where(o => !o.IsDeleted)
-                                         .ToListAsync();
+                var offers = await _context.Set<Offer>()
+                                       .Where(o => !o.IsDeleted)
+                                       .Include(o => o.Lead)
+                                       .Include(o => o.State)
+                                       .Include(o => o.Type)
+                                       .Include(o => o.Lead)
+                                       .ThenInclude(p => p.Client)
+                                       .Include(o => o.Lead)
+                                       .ThenInclude(l => l.Address)
+                                       .Include(o => o.SubCategory)
+                                       .Include(o => o.Category)
+                                       .Include(o => o.Project)
+                                       .ThenInclude(p => p.Stage)
+                                       .ToListAsync();
 
-                var client = project.Offer?.Led?.Client;
+                var client = projectOffer?.Lead?.Client;
 
                 var data = new TenderDataDto()
                 {
                     ProjectName = project.Name ?? "",
                     ProjectStage = project.Stage?.Name ?? "",
-                    ProjectCategory = parentCategory?.Name ?? "",
-                    ProjectSubCategory = project.Offer.SubCategory?.Name ?? "",
+                    ProjectCategory = projectOffer?.Category?.Name ?? "",
+                    ProjectSubCategory = projectOffer?.SubCategory?.Name ?? "",
                     ProjectPrice = offers.Sum(o => o.OfferPrice) ?? 0,
                     ProjectPudgedPrice = offers.Sum(o => o.PudgetPrice) ?? 0,
-                    ClientCompanyName = project.Offer?.Led?.Client?.CompanyName ?? "",
+                    ClientCompanyName = projectOffer?.Lead?.Client?.CompanyName ?? "",
                     ClientFullName = client?.FullName ?? "",
                     ClientPhone = client?.Phone1 ?? client?.Phone2 ?? client?.Phone3 ?? "",
                     ClientEmail = client?.Emails?.FirstOrDefault()?.Address ?? ""

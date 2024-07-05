@@ -33,7 +33,7 @@ public class DataProvider : IDataProvider, IDisposable
     public EmailRepo Emails { get; set; }
     public TeamsRequestedUserRepo TeamsRequestedUsers { get; set; }
     public ContractRepo Contracts { get; set; }
-    public LedRepo Leds { get; set; }
+    public LeadRepo Leads { get; set; }
     public KpisRepo KPIS { get; set; }
 
     public DataProvider(
@@ -67,7 +67,7 @@ public class DataProvider : IDataProvider, IDisposable
         Emails = new EmailRepo(dbFactory, logger);
         TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory, logger);
         Contracts = new ContractRepo(dbFactory, logger);
-        Leds = new LedRepo(dbFactory, logger);
+        Leads = new LeadRepo(dbFactory, logger);
         KPIS = new KpisRepo(dbFactory, logger);
     }
 
@@ -103,7 +103,7 @@ public class DataProvider : IDataProvider, IDisposable
                 Emails.Dispose();
                 TeamsRequestedUsers.Dispose();
                 Contracts.Dispose();
-                Leds.Dispose();
+                Leads.Dispose();
                 KPIS.Dispose();
             }
             disposedValue = true;

@@ -4,6 +4,7 @@
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
 @using EmpiriaBMS.Front.Components.Offers;
+@using EmpiriaBMS.Models.Enum;
 
 @inject IDialogService DialogService
 @inject TeamsUserCredential teamsUserCredential
@@ -19,7 +20,7 @@
 @inject Logging.LoggerManager Logger
 
 <div class="mt-3 ms-3">
-    <FluentStack>
+    <FluentStack HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
         <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@(async (e) => await _add(e))">
             Add Offer
         </FluentButton>
@@ -37,53 +38,60 @@
 
     <div class="col-12">
         <!-- Filters -->
-        <div class="d-flex justify-content-start">
-            <div>
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                AriaLabel="Pre-selected option"
-                                Height="400px"
-                                Items="@_projects"
-                                TOption="ProjectVM"
-                                OptionValue="@((t) => t.Id.ToString())"
-                                OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == _selectedProject?.Id)"
-                                SelectedOptionChanged="@(async (o) => await _onProjectSelectionChanged(o))"/>
-            </div>
-            <div class="ms-2">
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                AriaLabel="Pre-selected option"
-                                Height="400px"
-                                Items="@_offerStates"
-                                TOption="OfferStateVM"
-                                OptionValue="@((t) => t.Id.ToString())"
-                                OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == _selectedOfferState?.Id)"
-                                SelectedOptionChanged="@(async (o) => await _onStateSelectionChanged(o))" />
-            </div>
-            <div class="ms-2">
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                AriaLabel="Pre-selected option"
-                                Height="400px"
-                                Items="@_offerTypes"
-                                TOption="OfferTypeVM"
-                                OptionValue="@((t) => t.Id.ToString())"
-                                OptionText="@((t) => t.Name)"
-                                OptionSelected="@(i => i.Id == _selectedOfferType?.Id)"
-                                SelectedOptionChanged="@(async (o) => await _onTypeSelectionChanged(o))" />
-            </div>
-            <div class="ms-2">
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                Placeholder="Select Result..."
-                                Items="_offerResults"
-                                Width="400px"
-                                Class="float-end"
-                                TOption="(string Value, string Text)"
-                                OptionText="@(c => c.Text)"
-                                OptionValue="@(c => c.Value)"
-                                SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-right: 10px;" Wrap="true">
+            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                            AriaLabel="Pre-selected option"
+                            Height="400px"
+                            Items="@_leads"
+                            TOption="LeadVM"
+                            OptionValue="@((t) => t.Id.ToString())"
+                            OptionText="@((t) => t.Name)"
+                            OptionSelected="@(i => i.Id == _selectedLead?.Id)"
+                            SelectedOptionChanged="@(async (o) => await _onLeadSelectionChanged(o))" />
 
-            </div>
-        </div>
+            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                            AriaLabel="Pre-selected option"
+                            Height="400px"
+                            Items="@_projects"
+                            TOption="ProjectVM"
+                            OptionValue="@((t) => t.Id.ToString())"
+                            OptionText="@((t) => t.Name)"
+                            OptionSelected="@(i => i.Id == _selectedProject?.Id)"
+                            SelectedOptionChanged="@(async (o) => await _onProjectSelectionChanged(o))"
+                            Class="ms-1"/>
+
+            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                            AriaLabel="Pre-selected option"
+                            Height="400px"
+                            Items="@_offerStates"
+                            TOption="OfferStateVM"
+                            OptionValue="@((t) => t.Id.ToString())"
+                            OptionText="@((t) => t.Name)"
+                            OptionSelected="@(i => i.Id == _selectedOfferState?.Id)"
+                            SelectedOptionChanged="@(async (o) => await _onStateSelectionChanged(o))"
+                            Class="ms-1" />
+
+            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                            AriaLabel="Pre-selected option"
+                            Height="400px"
+                            Items="@_offerTypes"
+                            TOption="OfferTypeVM"
+                            OptionValue="@((t) => t.Id.ToString())"
+                            OptionText="@((t) => t.Name)"
+                            OptionSelected="@(i => i.Id == _selectedOfferType?.Id)"
+                            SelectedOptionChanged="@(async (o) => await _onTypeSelectionChanged(o))"
+                            Class="ms-1" />
+
+            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                            Placeholder="Select Result..."
+                            Items="_offerResults"
+                            Height="400px"
+                            TOption="(string Value, string Text)"
+                            OptionText="@(c => c.Text)"
+                            OptionValue="@(c => c.Value)"
+                            SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))"
+                            Class="ms-1" />
+        </FluentStack>
     </div>
 
     <!-- Offers Table -->
@@ -93,10 +101,23 @@
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="OfferVM"
-                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="3fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 240px; overflow:auto;">
 
-                <PropertyColumn Property="@(p => p.Result.GetDisplayName())" Sortable="true" Title="Result" Style="min-width: 140px;" />
+                <!-- Result -->
+                <TemplateColumn Title="Result" Sortable="true">
+                    <ChildContent>
+                        <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
+                            @foreach (var result in Enum.GetValues(typeof(OfferResult)).Cast<OfferResult>())
+                            {
+                                <option value="@(result)" selected="@(context.Result == result)">
+                                    @result.GetDisplayName()
+                                </option>
+                            }
+                        </select>
+                    </ChildContent>
+                </TemplateColumn>
+
                 <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
                 <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.Category.Name)" Sortable="true" Title="Category" Align="@Align.Start" />

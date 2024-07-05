@@ -3,9 +3,9 @@
 @using Color = Microsoft.Fast.Components.FluentUI.Color
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
-@using EmpiriaBMS.Front.Components.Admin.Leds
+@using EmpiriaBMS.Front.Components.Admin.Leads
 
-@implements IDialogContentComponent<LedVM>
+@implements IDialogContentComponent<LeadVM>
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
@@ -32,6 +32,6 @@
 @* Body *@
 <FluentDialogBody>
 
-    <LedDetailed @ref="@_compoment" DisplayActions="false" />
+    <LeadDetailed @ref="@_compoment" DisplayActions="false" />
 
 </FluentDialogBody>

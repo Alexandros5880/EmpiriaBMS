@@ -43,7 +43,7 @@ public partial class EditUsersHours
 
     #region Selections Lists
     private ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
-    private ObservableCollection<LedVM> _leds = new ObservableCollection<LedVM>();
+    private ObservableCollection<LeadVM> _leds = new ObservableCollection<LeadVM>();
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
@@ -53,7 +53,7 @@ public partial class EditUsersHours
 
     #region Selected Models
     private UserVM _selectedUser = new UserVM();
-    private LedVM _selectedLed = new LedVM();
+    private LeadVM _selectedLed = new LeadVM();
     private OfferVM _selectedOffer = new OfferVM();
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
@@ -62,7 +62,7 @@ public partial class EditUsersHours
     #endregion
 
     #region Changed Records Lists
-    private List<LedVM> _ledsChanged = new List<LedVM>();
+    private List<LeadVM> _ledsChanged = new List<LeadVM>();
     private List<OfferVM> _offersChanged = new List<OfferVM>();
     private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
     private List<DeliverableVM> _deliverablesChanged = new List<DeliverableVM>();
@@ -112,7 +112,7 @@ public partial class EditUsersHours
             await _getProjects();
 
         _selectedUser = new UserVM() { Id = 0 };
-        _selectedLed = new LedVM() { Id = 0 };
+        _selectedLed = new LeadVM() { Id = 0 };
         _selectedOffer = new OfferVM() { Id = 0 };
         _selectedProject = new ProjectVM() { Id = 0 };
         _selectedDiscipline = new DisciplineVM() { Id = 0 };
@@ -164,8 +164,8 @@ public partial class EditUsersHours
 
         try
         {
-            var dtos = await _dataProvider.Leds.GetAll();
-            var vms = Mapper.Map<List<LedVM>>(dtos);
+            var dtos = await _dataProvider.Leads.GetAll();
+            var vms = Mapper.Map<List<LeadVM>>(dtos);
             _leds.Clear();
             vms.ForEach(_leds.Add);
         }
@@ -188,7 +188,7 @@ public partial class EditUsersHours
 
         try
         {
-            var dtos = await _dataProvider.Offers.GetAllByLed(_selectedLed?.Id ?? 0);
+            var dtos = await _dataProvider.Offers.GetAllByLead(_selectedLed?.Id ?? 0);
             var vms = Mapper.Map<List<OfferVM>>(dtos);
             _offers.Clear();
             vms.ForEach(_offers.Add);
@@ -247,7 +247,7 @@ public partial class EditUsersHours
     #endregion
 
     #region On Time Changed
-    private async Task _onLedTimeChanged(LedVM led, TimeSpan newTimeSpan)
+    private async Task _onLedTimeChanged(LeadVM led, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -460,7 +460,7 @@ public partial class EditUsersHours
 
         await _getLeds();
 
-        _selectedLed = new LedVM() { Id = 0 };
+        _selectedLed = new LeadVM() { Id = 0 };
         _selectedOffer = new OfferVM() { Id = 0 };
         _selectedProject = new ProjectVM() { Id = 0 };
         _selectedDiscipline = new DisciplineVM() { Id = 0 };
@@ -481,7 +481,7 @@ public partial class EditUsersHours
         _supportiveWork.Clear();
         _disciplines.Clear();
 
-        _selectedLed = led ?? new LedVM { Id = 0 };
+        _selectedLed = led ?? new LeadVM { Id = 0 };
 
         await _getOffers();
 
@@ -604,7 +604,7 @@ public partial class EditUsersHours
             // Update Leds
             foreach (var led in _ledsChanged)
             {
-                await _dataProvider.Leds.AddTime(userId, led.Id, led.Time);
+                await _dataProvider.Leads.AddTime(userId, led.Id, led.Time);
             }
             _ledsChanged.Clear();
             _selectedLed = null;

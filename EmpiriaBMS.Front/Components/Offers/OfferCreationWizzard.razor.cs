@@ -1,6 +1,6 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Leds;
+using EmpiriaBMS.Front.Components.Admin.Leads;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
@@ -13,7 +13,7 @@ public partial class OfferCreationWizzard
     private bool _isNew => Offer?.Id == 0;
     private bool _loading = false;
 
-    public LedVM Led { get; set; } = default!;
+    public LeadVM Led { get; set; } = default!;
 
     [Parameter]
     public OfferVM Offer { get; set; } = default!;
@@ -25,7 +25,7 @@ public partial class OfferCreationWizzard
     public EventCallback OnCansel { get; set; }
 
     #region Actions Enabled Variables
-    private bool _offerTabEnable => Led?.Result == LedResult.SUCCESSFUL;
+    private bool _offerTabEnable => Led?.Result == LeadResult.SUCCESSFUL;
     private bool _projectsTabEnable => _offerTabEnable && Offer?.Result == OfferResult.SUCCESSFUL;
     #endregion
 
@@ -43,22 +43,22 @@ public partial class OfferCreationWizzard
     {
         Offer = Offer != null ? Offer : new OfferVM()
         {
-            Led = new Led()
+            Lead = new Lead()
             {
-                Result = LedResult.UNSUCCESSFUL
+                Result = LeadResult.UNSUCCESSFUL
             }
         };
 
-        if (Offer?.Led == null)
+        if (Offer?.Lead == null)
         {
-            Offer.Led = new Led()
+            Offer.Lead = new Lead()
             {
-                Result = LedResult.UNSUCCESSFUL
+                Result = LeadResult.UNSUCCESSFUL
             };
         }
 
-        var ledDto = Mapping.Mapper.Map<LedDto>(Offer.Led);
-        Led = _mapper.Map<LedVM>(ledDto);
+        var ledDto = Mapping.Mapper.Map<LeadDto>(Offer.Lead);
+        Led = _mapper.Map<LeadVM>(ledDto);
 
         await _getProjects();
         await TabMenuClick(0);
@@ -68,11 +68,11 @@ public partial class OfferCreationWizzard
         await OnSave.InvokeAsync();
 
     #region Led Tab
-    private LedDetailed _ledCompoment;
+    private LeadDetailed _ledCompoment;
 
-    private void _onLedResultChanged((string Value, string Text) resultOption)
+    private void _onLeadResultChanged((string Value, string Text) resultOption)
     {
-        LedResult result = (LedResult)Enum.Parse(typeof(LedResult), resultOption.Value);
+        LeadResult result = (LeadResult)Enum.Parse(typeof(LeadResult), resultOption.Value);
         Led.Result = result;
     }
 
@@ -85,7 +85,7 @@ public partial class OfferCreationWizzard
 
         if (valid)
         {
-            var dto = _mapper.Map<LedDto>(led);
+            var dto = _mapper.Map<LeadDto>(led);
 
             // Save Address
             // If Addres Then Save Address
@@ -105,22 +105,22 @@ public partial class OfferCreationWizzard
             dto.Address = null;
 
             // Save Led
-            if (await _dataProvider.Leds.Any(p => p.Id == Led.Id))
+            if (await _dataProvider.Leads.Any(p => p.Id == Led.Id))
             {
-                var updated = await _dataProvider.Leds.Update(dto);
+                var updated = await _dataProvider.Leads.Update(dto);
                 if (updated != null)
-                    led = _mapper.Map<LedVM>(updated);
+                    led = _mapper.Map<LeadVM>(updated);
             }
             else
             {
-                var updated = await _dataProvider.Leds.Add(dto);
+                var updated = await _dataProvider.Leads.Add(dto);
                 if (updated != null)
-                    led = _mapper.Map<LedVM>(updated);
+                    led = _mapper.Map<LeadVM>(updated);
             }
 
-            var ledDto = await _dataProvider.Leds.Get(led.Id);
-            Led = _mapper.Map<LedVM>(ledDto);
-            Offer.LedId = led.Id;
+            var ledDto = await _dataProvider.Leads.Get(led.Id);
+            Led = _mapper.Map<LeadVM>(ledDto);
+            Offer.LeadId = led.Id;
         }
 
         _loading = false;
@@ -143,13 +143,13 @@ public partial class OfferCreationWizzard
 
         var valid = _offerCompoment.Validate();
         Offer = _offerCompoment.GetOffer();
-        Offer.LedId = Led.Id;
+        Offer.LeadId = Led.Id;
 
         if (valid)
         {
             var dto = _mapper.Map<OfferDto>(Offer);
 
-            dto.Led = null;
+            dto.Lead = null;
             dto.Type = null;
             dto.State = null;
             dto.Category = null;

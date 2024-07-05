@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
-public class LedExport : IInport<LedVM>
+public class LedExport : IInport<LeadVM>
 {
     public string Name { get; set; }
 
@@ -22,7 +22,7 @@ public class LedExport : IInport<LedVM>
 
     public string Result { get; set; }
 
-    public LedExport(LedVM model)
+    public LedExport(LeadVM model)
     {
         Name = model.Name;
         ClientId = model.ClientId;
@@ -40,7 +40,7 @@ public class LedExport : IInport<LedVM>
 
     }
 
-    public LedVM Get()
+    public LeadVM Get()
     {
         DateTime? date;
         try
@@ -53,14 +53,14 @@ public class LedExport : IInport<LedVM>
             date = null;
         }
 
-        return new LedVM()
+        return new LeadVM()
         {
             Name = Name,
             ClientId = ClientId,
             AddressId = AddressId,
             PotencialFee = PotencialFee,
             ExpectedDurationDate = date,
-            Result = Result.GetValueFromDisplayName<LedResult>()
+            Result = Result.GetValueFromDisplayName<LeadResult>()
         };
     }
 }

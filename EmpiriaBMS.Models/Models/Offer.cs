@@ -20,8 +20,11 @@ public class Offer : Entity
     public int? SubCategoryId { get; set; }
     public ProjectSubCategory SubCategory { get; set; }
 
-    public int? LedId { get; set; }
-    public Led? Led { get; set; }
+    public int? LeadId { get; set; }
+    public Lead? Lead { get; set; }
+
+    public int? ProjectId { get; set; }
+    public Project? Project { get; set; }
 
     [Required]
     public OfferResult Result { get; set; }

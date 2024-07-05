@@ -1,22 +1,26 @@
 ﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Components.Admin.Leads;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
+using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
-namespace EmpiriaBMS.Front.Components.Admin.Leds;
+namespace EmpiriaBMS.Front.Components.Leads;
 
-public partial class Leds
+public partial class Leads
 {
     #region Data Grid
-    private List<LedVM> _records = new List<LedVM>();
+    private List<LeadVM> _records = new List<LeadVM>();
     private string _filterString = string.Empty;
-    IQueryable<LedVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<LeadVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private LedVM _selectedRecord = new LedVM();
+    private LeadVM _selectedRecord = new LeadVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -30,15 +34,26 @@ public partial class Leds
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<LedVM> row)
+    private void HandleRowFocus(FluentDataGridRow<LeadVM> row)
     {
-        _selectedRecord = row.Item as LedVM;
+        _selectedRecord = row.Item as LeadVM;
     }
 
-    private async Task _getRecords()
+    private async Task HandleResultChange(LeadVM context, ChangeEventArgs e)
     {
-        var dtos = await DataProvider.Leds.GetAll();
-        _records = Mapper.Map<List<LedVM>>(dtos);
+        if (Enum.TryParse<LeadResult>(e.Value.ToString(), out var newResult))
+        {
+            context.Result = newResult;
+            var dto = Mapper.Map<LeadDto>(context);
+            await DataProvider.Leads.Update(dto);
+            await _getRecords();
+        }
+    }
+
+    private async Task _getRecords(LeadResult result = LeadResult.WAITING)
+    {
+        var dtos = await DataProvider.Leads.GetByResult(result);
+        _records = Mapper.Map<List<LeadVM>>(dtos);
     }
 
     private async Task _add()
@@ -56,23 +71,23 @@ public partial class Leds
             Width = "min(70%, 700px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(new LedVM()
+        IDialogReference dialog = await DialogService.ShowDialogAsync<LeadDetailedDialog>(new LeadVM()
         {
             ExpectedDurationDate = DateTime.Now,
-            Result = Models.Enum.LedResult.UNSUCCESSFUL
+            Result = Models.Enum.LeadResult.WAITING
         }, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            LedVM vm = result.Data as LedVM;
-            var dto = Mapper.Map<LedDto>(vm);
-            await DataProvider.Leds.Add(dto);
+            LeadVM vm = result.Data as LeadVM;
+            var dto = Mapper.Map<LeadDto>(vm);
+            await DataProvider.Leads.Add(dto);
             await _getRecords();
         }
     }
 
-    private async Task _edit(LedVM record)
+    private async Task _edit(LeadVM record)
     {
         DialogParameters parameters = new()
         {
@@ -87,19 +102,19 @@ public partial class Leds
             Width = "min(70%, 700px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<LedDetailedDialog>(record, parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<LeadDetailedDialog>(record, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            LedVM vm = result.Data as LedVM;
-            var dto = Mapper.Map<LedDto>(vm);
-            await DataProvider.Leds.Update(dto);
+            LeadVM vm = result.Data as LeadVM;
+            var dto = Mapper.Map<LeadDto>(vm);
+            await DataProvider.Leads.Update(dto);
             await _getRecords();
         }
     }
 
-    private async Task _delete(LedVM record)
+    private async Task _delete(LeadVM record)
     {
         var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete led {record.Name}?", "Yes", "No", "Deleting record...");
 
@@ -107,7 +122,7 @@ public partial class Leds
 
         if (!result.Cancelled)
         {
-            await DataProvider.Leds.Delete(record.Id);
+            await DataProvider.Leads.Delete(record.Id);
         }
 
         await dialog.CloseAsync();
@@ -123,9 +138,33 @@ public partial class Leds
         {
             await _getRecords();
 
+            _selectedResult = _leadResults.FirstOrDefault(r => r.Text.Equals("WAITING"));
+            _resultFilterCombo.Value = _selectedResult.Value;
+
             StateHasChanged();
         }
     }
+
+    #region Filter Result
+    FluentCombobox<(string Value, string Text)> _resultFilterCombo;
+    private List<(string Value, string Text)> _leadResults = Enum.GetValues(typeof(LeadResult))
+                                                                  .Cast<LeadResult>()
+                                                                  .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
+                                                                      .First()
+                                                                      .GetCustomAttribute<DisplayAttribute>()?
+                                                                      .GetName() ?? e.ToString()))
+                                                                  .ToList();
+
+    private (string Value, string Text) _selectedResult;
+
+    private async Task _onResultSelectionChanged((string Value, string Text) result)
+    {
+        _selectedResult = result;
+        LeadResult e;
+        Enum.TryParse(result.Value, out e);
+        await _getRecords(e);
+    }
+    #endregion
 
     #region Import/Export Data
     private async Task ExportToCSV()
@@ -157,11 +196,11 @@ public partial class Leds
                     foreach (var item in data)
                     {
                         var vm = item.Get();
-                        var dto = Mapper.Map<LedDto>(vm);
-                        var added = await DataProvider.Leds.Add(dto);
+                        var dto = Mapper.Map<LeadDto>(vm);
+                        var added = await DataProvider.Leads.Add(dto);
                         if (added == null)
                             continue;
-                        var addedDto = Mapper.Map<LedVM>(added);
+                        var addedDto = Mapper.Map<LeadVM>(added);
                         _records.Add(addedDto);
                     }
                 }

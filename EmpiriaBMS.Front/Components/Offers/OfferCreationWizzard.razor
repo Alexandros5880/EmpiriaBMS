@@ -1,4 +1,4 @@
-﻿@using EmpiriaBMS.Front.Components.Admin.Leds
+﻿@using EmpiriaBMS.Front.Components.Admin.Leads
 @using EmpiriaBMS.Front.Components.Admin.Projects
 @using EmpiriaBMS.Front.Components.General
 @using EmpiriaBMS.Front.Components.Admin.Invoices
@@ -67,11 +67,11 @@
                             @if (Offer != null)
                             {
                                 <!-- Led Detailed -->
-                                <LedDetailed @ref="@_ledCompoment"
+                                <LeadDetailed @ref="@_ledCompoment"
                                              Content="@Led"
                                              OnSave="@OnSave"
                                              DisplayActions="false"
-                                             OnResultChanged="@_onLedResultChanged" />
+                                             OnResultChanged="@_onLeadResultChanged" />
                             }
                         </div>
                         <div class="col-12 mt-2">

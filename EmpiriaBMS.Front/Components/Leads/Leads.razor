@@ -1,6 +1,7 @@
-﻿@page "/admin/projects/leds"
+﻿@page "/leds"
 
-@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Services;
+@using EmpiriaBMS.Models.Enum;
 
 @inject IDataProvider DataProvider
 @inject MicrosoftTeams MicrosoftTeams
@@ -10,8 +11,22 @@
 
 <div class="row" style="overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow">
-        <div>
-            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+        <div class="mt-2 d-flex justify-content-between">
+            <FluentStack HorizontalAlignment="HorizontalAlignment.Start" Wrap="true">
+                <FluentCombobox @ref="_resultFilterCombo"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                Placeholder="Select Result..."
+                                Items="_leadResults"
+                                Width="400px"
+                                Class="float-end"
+                                TOption="(string Value, string Text)"
+                                OptionText="@(c => c.Text)"
+                                OptionValue="@(c => c.Value)"
+                                SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
+            </FluentStack>
+
+            <FluentStack HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                <!-- Import -->
                 <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
                 <InputFile @ref="@fileInput" OnChange="ImportFromCSV" style="display: none;" />
                 <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
@@ -19,6 +34,8 @@
                               OnClick="@(async () => await TriggerFileInput())">
                     Import
                 </FluentButton>
+
+                <!-- Export -->
                 <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
                               Appearance="Appearance.Outline"
                               OnClick="@(async (e) => await ExportToCSV())"
@@ -31,10 +48,24 @@
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
                             Pagination="@pagination"
-                            TGridItem="LedVM"
+                            TGridItem="LeadVM"
                             OnRowFocus="HandleRowFocus"
                             GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 100px"
-                            style="height: 70vh; overflow:auto;">
+                            style="height: 240px; overflow:auto;">
+
+                <!-- Result -->
+                <TemplateColumn Title="Result" Sortable="true">
+                    <ChildContent>
+                        <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
+                            @foreach (var result in Enum.GetValues(typeof(LeadResult)).Cast<LeadResult>())
+                            {
+                                <option value="@(result)" selected="@(context.Result == result)">
+                                    @result.GetDisplayName()
+                                </option>
+                            }
+                        </select>
+                    </ChildContent>
+                </TemplateColumn>
 
                 <!-- Name -->
                 <TemplateColumn Title="Name"
@@ -68,9 +99,6 @@
                 <!-- PotencialFee -->
                 <PropertyColumn Property="@(p => p.PotencialFee)" Sortable="true" Title="Potencial Fee" Align="@Align.Start" />
 
-                <!-- Result -->
-                <PropertyColumn Property="@(p => p.Result.GetDisplayName())" Sortable="true" Title="Result" Align="@Align.Start" />
-
                 <!-- Address -->
                 <TemplateColumn Title="Address"
                                 Sortable="true"
@@ -92,7 +120,7 @@
 
             </FluentDataGrid>
         </div>
-        <div style="min-width: 50%;">
+        <div style="min-width: 50%; margin: 0 auto;">
             <FluentPaginator State="@pagination">
                 <SummaryTemplate>
                     There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows

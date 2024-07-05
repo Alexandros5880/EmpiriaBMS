@@ -137,33 +137,62 @@ public class OfferVM : BaseVM
     public string ProjectSubCategoryName => SubCategory != null ? SubCategory.Name : "";
 
     // Led
-    private int? _ledId;
-    public int? LedId
+    private int? _leadId;
+    public int? LeadId
     {
-        get => _ledId;
+        get => _leadId;
         set
         {
-            if (value == _ledId)
+            if (value == _leadId)
                 return;
-            _ledId = value;
-            NotifyPropertyChanged(nameof(LedId));
+            _leadId = value;
+            NotifyPropertyChanged(nameof(LeadId));
         }
     }
 
-    private Led? _led;
-    public Led? Led
+    private Lead? _lead;
+    public Lead? Lead
     {
-        get => _led;
+        get => _lead;
         set
         {
-            if (value == _led)
+            if (value == _lead)
                 return;
-            _led = value;
-            NotifyPropertyChanged(nameof(Led));
+            _lead = value;
+            NotifyPropertyChanged(nameof(Lead));
         }
     }
 
-    public string LedName => Led != null ? Led.Name : "";
+    public string LedName => Lead != null ? Lead.Name : "";
+
+    // Project
+    private int? _projectId;
+    public int? ProjectId
+    {
+        get => _projectId;
+        set
+        {
+            if (value == _projectId)
+                return;
+            _projectId = value;
+            NotifyPropertyChanged(nameof(ProjectId));
+        }
+    }
+
+    private Project? _project;
+    public Project? Project
+    {
+        get => _project;
+        set
+        {
+            if (value == _project)
+                return;
+            _project = value;
+            NotifyPropertyChanged(nameof(Project));
+        }
+    }
+
+    public string ProjectName => Project != null ? Project.Name : "";
 
     // Result
     public OfferResult Result { get; set; }
@@ -273,8 +302,6 @@ public class OfferVM : BaseVM
             NotifyPropertyChanged(nameof(Comments));
         }
     }
-
-    public ICollection<Project>? Projects { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
 }
