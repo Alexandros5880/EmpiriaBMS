@@ -386,7 +386,7 @@
                                                                 @((_selectedProject == null ||
                                                                         !_selectedProject.Id.Equals(project.Id)
                                                                                         ? "" : "selected_table_projects_row"))">
-                                                                    @if (project.Offer.SubCategory?.CanAssignePM ?? false)
+                                                                    @if (project?.Offer?.SubCategory?.CanAssignePM ?? false)
                                                                     {
                                                                         @if (!string.IsNullOrEmpty(project.PmName))
                                                                         {
@@ -1110,7 +1110,7 @@
                   Hidden="@(!_isAddEditProjectDialogOdepened || _startLoading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: min(80vw, 700px) !important;">
+                  style="--dialog-width: min(80vw, 800px) !important;">
 
         <div class="modal-body row mb-1">
 
@@ -1118,8 +1118,8 @@
                 <span class="carbon--close-outline float-end" @onclick="CloseAddProjectClick"></span>
             </div>
 
-            <div class="col-12 justify-content-center" style="max-height: 500px; overflow-y: auto;">
-                <ProjectDetailed @ref="@projectCompoment" Content="@_selectedProject"/>
+            <div class="col-12 justify-content-center" style="max-height: 640px; overflow-y: hidden;">
+                <ProjectDetailed @ref="@projectCompoment" Content="@_selectedProject" DisplayActions="false"/>
             </div>
 
         </div>

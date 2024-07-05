@@ -12,6 +12,9 @@ public partial class ProjectDetailed : ComponentBase
     FluentCombobox<UserVM> _pmCombo;
 
     private ProjectVM _project;
+
+    private OfferVM _offer;
+
     [Parameter]
     public ProjectVM Content
     {
@@ -71,6 +74,7 @@ public partial class ProjectDetailed : ComponentBase
 
         await _getRecords();
 
+        // Stage
         if (Content.Stage != null)
         {
             var stageDto = Mapping.Mapper.Map<ProjectStageDto>(Content.Stage);
@@ -82,6 +86,7 @@ public partial class ProjectDetailed : ComponentBase
         }
         _stageCombo.Value = Stage.Name;
 
+        // ProjectManager
         if (Content.ProjectManager != null)
         {
             var pmDto = Mapping.Mapper.Map<UserDto>(Content.ProjectManager);
@@ -202,6 +207,7 @@ public partial class ProjectDetailed : ComponentBase
     {
         await _getStages();
         await _getProjectManagers();
+        await _getOffer();
     }
 
     private async Task _getStages()
@@ -218,6 +224,15 @@ public partial class ProjectDetailed : ComponentBase
         var vms = Mapper.Map<List<UserVM>>(dtos);
         _pms.Clear();
         vms.ForEach(_pms.Add);
+    }
+
+    private async Task _getOffer()
+    {
+        if (Content == null || Content.OfferId == null)
+            return;
+
+        var dto = await DataProvider.Offers.Get((int)Content.OfferId);
+        _offer = Mapper.Map<OfferVM>(dto);
     }
     #endregion
 }
