@@ -58,8 +58,8 @@
                                 @if (_sharedAuthData.LogedUser != null)
                                 {
                                 <FluentStack Orientation="Orientation.Horizontal"
-                                             Class="ms-2 me-8 d-flex justify-content-between"
-                                             Style="overflow:hidden;">
+                                             Class="d-flex justify-content-between m-1"
+                                             Wrap="true">
 
                                         <!-- User Name + Roles + Current Date -->
                                         <div class="row">
@@ -83,7 +83,7 @@
                                         </div>
 
                                         <!-- Start / Stop Buttons -->
-                                        <div class="d-grid">
+                                        <div class="d-grid ms-4">
                                             @if (editMyHours && !_isEndWorkDialogOdepened)
                                             {
                                                 @if (isWorkingMode)
@@ -107,87 +107,85 @@
                                             }
                                         </div>
 
-                                        <!-- TeamsRequestedUsers / Issues / Display Hours Passed / Refresh Page / RestoreDB / BackupDB -->
-                                        <div class="d-flex justify-content-between"
-                                             style="height: auto !important; margin-right: 4px;">
-                                            <!-- Teams Requested Users Badge -->
-                                            @if (seeTeamsRequestedUsers)
-                                            {
-                                                <div style="width: 50px; margin-top: 4px;">
-                                                    <FluentCounterBadge Count="@_teamsRequestedUsers.Count"
-                                                                        ShowZero="false"
-                                                                        Appearance="Appearance.Neutral"
-                                                                        HorizontalPosition="-25"
-                                                                        BottomPosition="-25">
-                                                        <FluentButton OnClick="@OpenTeamsRequestedUsersClick"
-                                                                      Appearance="Appearance.Accent">
-                                                            <FluentIcon Value="@(new Icons.Regular.Size24.People())"
-                                                                        Color="@Color.Fill" />
-                                                        </FluentButton>
-                                                    </FluentCounterBadge>
-                                                </div>
-                                            }
-
-                                            <!-- Issues Badge -->
+                                        <!-- Teams Requested Users Badge -->
+                                        @if (seeTeamsRequestedUsers)
+                                        {
                                             <div style="width: 50px; margin-top: 4px;">
-                                                <FluentCounterBadge Count="@_issues.Count"
+                                                <FluentCounterBadge Count="@_teamsRequestedUsers.Count"
                                                                     ShowZero="false"
                                                                     Appearance="Appearance.Neutral"
                                                                     HorizontalPosition="-25"
                                                                     BottomPosition="-25">
-                                                    <FluentButton OnClick="@OpenIssuesClick"
+                                                    <FluentButton OnClick="@OpenTeamsRequestedUsersClick"
                                                                   Appearance="Appearance.Accent">
-                                                        <FluentIcon Value="@(new Icons.Regular.Size24.Alert())"
+                                                        <FluentIcon Value="@(new Icons.Regular.Size24.People())"
                                                                     Color="@Color.Fill" />
                                                     </FluentButton>
                                                 </FluentCounterBadge>
                                             </div>
+                                        }
 
-                                            <!-- Display Hours Passed -->
-                                            @if (seeMyHours)
-                                            {
-                                                <div class="primary-bg-color rounded float-end" style="min-width: 300px;">
-                                                    <div class="h5 text-center m-2">
-                                                        <span class="align-middle">My Total Hours This Month: </span>
-                                                        <b class="align-middle">@_userTotalHoursThisMonth</b>
-                                                    </div>
-                                                </div>
-                                            }
-                                            
-                                            <!-- Refresh / RestoreDB / BackupDB Page -->
-                                            <FluentStack Orientation="Orientation.Horizontal"
-                                                         Style="margin-left: 12px; max-width: 120px;">
-                                                <!-- Refresh -->
-                                                <FluentButton IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
-                                                              Loading="@_refreshLoading"
-                                                              Appearance="Appearance.Outline"
-                                                              OnClick="@Refresh"
-                                                              Style="width: 40px;">
+                                        <!-- Issues Badge -->
+                                        <div style="width: 50px; margin-top: 4px;">
+                                            <FluentCounterBadge Count="@_issues.Count"
+                                                                ShowZero="false"
+                                                                Appearance="Appearance.Neutral"
+                                                                HorizontalPosition="-25"
+                                                                BottomPosition="-25">
+                                                <FluentButton OnClick="@OpenIssuesClick"
+                                                              Appearance="Appearance.Accent">
+                                                    <FluentIcon Value="@(new Icons.Regular.Size24.Alert())"
+                                                                Color="@Color.Fill" />
                                                 </FluentButton>
-                                                <FluentStack Orientation="Orientation.Vertical"
-                                                             Style="margin-left: 4px; max-width: 80px;">
-                                                    <!-- Restore Database -->
-                                                    @if (seeRestoreDatabase)
-                                                    {
-                                                        <InputFile @ref="@fileRestoreDB" OnChange="RestoreDb" style="display: none;" />
-                                                        <FluentButton IconStart="@(new MyIcons.Size32.RestoreDB())"
-                                                                      Loading="@_restoreLoading"
-                                                                      Appearance="Appearance.Outline"
-                                                                      OnClick="@(async () => await TriggerRestoreDbInport())">
-                                                        </FluentButton>
-                                                    }
-                                                    <!-- BackUp Database -->
-                                                    @if (seeBackupDatabase)
-                                                    {
-                                                        <FluentButton OnClick="@(async() => await BackUpDb())"
-                                                                      Loading="@_backUpLoading"
-                                                                      IconStart="@(new MyIcons.Size32.BackupDB())"
-                                                                      Appearance="Appearance.Outline">
-                                                        </FluentButton>
-                                                    }
-                                                </FluentStack>
-                                            </FluentStack>
+                                            </FluentCounterBadge>
                                         </div>
+
+                                        <!-- Display Hours Passed -->
+                                        @if (seeMyHours)
+                                        {
+                                            <div class="primary-bg-color rounded float-end" style="min-width: 300px;">
+                                                <div class="h5 text-center m-2">
+                                                    <span class="align-middle">My Total Hours This Month: </span>
+                                                    <b class="align-middle">@_userTotalHoursThisMonth</b>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Refresh / RestoreDB / BackupDB Page -->
+                                        <FluentStack Orientation="Orientation.Horizontal" 
+                                                     HorizontalAlignment="HorizontalAlignment.End"
+                                                     Wrap="true"
+                                                     Style="width: 140px;">
+                                            <!-- Refresh -->
+                                            <FluentButton IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
+                                                          Loading="@_refreshLoading"
+                                                          Appearance="Appearance.Outline"
+                                                          OnClick="@Refresh"
+                                                          Style="width: 40px;">
+                                            </FluentButton>
+                                            <FluentStack Orientation="Orientation.Vertical"
+                                                         Style="margin-left: 4px; max-width: 80px;">
+                                                <!-- Restore Database -->
+                                                @if (seeRestoreDatabase)
+                                                {
+                                                    <InputFile @ref="@fileRestoreDB" OnChange="RestoreDb" style="display: none;" />
+                                                    <FluentButton IconStart="@(new MyIcons.Size32.RestoreDB())"
+                                                                  Loading="@_restoreLoading"
+                                                                  Appearance="Appearance.Outline"
+                                                                  OnClick="@(async () => await TriggerRestoreDbInport())">
+                                                    </FluentButton>
+                                                }
+                                                <!-- BackUp Database -->
+                                                @if (seeBackupDatabase)
+                                                {
+                                                    <FluentButton OnClick="@(async() => await BackUpDb())"
+                                                                  Loading="@_backUpLoading"
+                                                                  IconStart="@(new MyIcons.Size32.BackupDB())"
+                                                                  Appearance="Appearance.Outline">
+                                                    </FluentButton>
+                                                }
+                                            </FluentStack>
+                                        </FluentStack>
 
                                     </FluentStack>
                                 }
