@@ -82,11 +82,11 @@ public partial class EditUsersHours
         if (firstRender)
         {
             RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
-            await _refresh();
+            await Refresh();
         }
     }
 
-    private async Task _refresh(TimeSpan? timespan = null)
+    public async Task Refresh(TimeSpan? timespan = null)
     {
         if (timespan != null)
             RemainingTime = (TimeSpan)timespan;
@@ -658,7 +658,7 @@ public partial class EditUsersHours
             await OnEnd.InvokeAsync();
 
             TimeSpan? timespan = IsFromDashboard ? null : new TimeSpan(300, 0, 0);
-            await _refresh(timespan);
+            await Refresh(timespan);
         }
         catch (Exception ex)
         {
