@@ -16,6 +16,7 @@ namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class Offers
 {
+    private ObservableCollection<LeadVM> _leads = new ObservableCollection<LeadVM>();
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<OfferStateVM> _offerStates = new ObservableCollection<OfferStateVM>();
     private ObservableCollection<OfferTypeVM> _offerTypes = new ObservableCollection<OfferTypeVM>();
@@ -29,6 +30,7 @@ public partial class Offers
                                                                       .GetName() ?? e.ToString()))
                                                                   .ToList();
 
+    private LeadVM _selectedLead;
     private OfferStateVM _selectedOfferState;
     private OfferTypeVM _selectedOfferType;
     private (string Value, string Text) _selectedOfferResult;
@@ -90,6 +92,15 @@ public partial class Offers
     }
 
     #region Get Records
+    private async Task _getLeads()
+    {
+        var dtos = await _dataProvider.Leads.GetAll();
+        var vms = Mapper.Map<List<LeadVM>>(dtos);
+        _leads.Clear();
+        _leads.Add(new LeadVM { Id = 0, Name = "Select Lead..." });
+        vms.ForEach(_leads.Add);
+    }
+
     private async Task _getOfferStates()
     {
         var dtos = await _dataProvider.OfferStates.GetAll();
@@ -117,9 +128,9 @@ public partial class Offers
         vms.ForEach(_projects.Add);
     }
 
-    private async Task _getOffers(int projectId, int stateId = 0, int typeId = 0, OfferResult? result = null, bool refresh = false)
+    private async Task _getOffers(int projectId, int stateId = 0, int typeId = 0, int leadId = 0, OfferResult? result = null, bool refresh = false)
     {
-        var dtos = await _dataProvider.Offers.GetAll(projectId: projectId, stateId: stateId, typeId: typeId, result: result);
+        var dtos = await _dataProvider.Offers.GetAll(projectId: projectId, stateId: stateId, typeId: typeId, leadId: leadId, result: result);
         var vms = Mapper.Map<List<OfferVM>>(dtos);
         _offers.Clear();
         vms.ForEach(_offers.Add);
@@ -130,6 +141,7 @@ public partial class Offers
 
     private async Task Refresh()
     {
+        await _getLeads();
         await _getAllProjects();
         await _getOfferStates();
         await _getOfferTypes();
@@ -137,19 +149,29 @@ public partial class Offers
         _selectedOfferState = _offerStates.FirstOrDefault(o => o.Name.Equals("Select State..."));
         _selectedOfferType = _offerTypes.FirstOrDefault(o => o.Name.Equals("Select Type..."));
         _selectedOfferResult = OfferResult.SUCCESSFUL.ToTuple();
+        _selectedLead = _leads?.OrderByDescending(l => l.LastUpdatedDate).FirstOrDefault(o => o.Name.Equals("Select Lead..."));
         OfferResult e;
         Enum.TryParse(_selectedOfferResult.Value, out e);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, e, refresh: true);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
         StateHasChanged();
     }
 
     #region On Filters Event Changed
+    private async Task _onLeadSelectionChanged(LeadVM lead)
+    {
+        OfferResult result;
+        Enum.TryParse(_selectedOfferResult.Value, out result);
+
+        _selectedLead = lead;
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead.Id, result, refresh: true);
+    }
+
     private async Task _onProjectSelectionChanged(ProjectVM project)
     {
         _selectedProject = project;
         OfferResult result;
         Enum.TryParse(_selectedOfferResult.Value, out result);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, result, refresh: true);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, result, refresh: true);
     }
 
     private async Task _onStateSelectionChanged(OfferStateVM state)
@@ -157,7 +179,7 @@ public partial class Offers
         _selectedOfferState = state;
         OfferResult result;
         Enum.TryParse(_selectedOfferResult.Value, out result);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, result, refresh: true);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, result, refresh: true);
     }
 
     private async Task _onTypeSelectionChanged(OfferTypeVM type)
@@ -165,7 +187,7 @@ public partial class Offers
         _selectedOfferType = type;
         OfferResult result;
         Enum.TryParse(_selectedOfferResult.Value, out result);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, result, refresh: true);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, result, refresh: true);
     }
 
     private async Task _onResultSelectionChanged((string Value, string Text) result)
@@ -173,7 +195,7 @@ public partial class Offers
         _selectedOfferResult = result;
         OfferResult e;
         Enum.TryParse(result.Value, out e);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, e, refresh: true);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
     }
     #endregion
 
@@ -255,7 +277,7 @@ public partial class Offers
             await _dataProvider.Offers.Delete(_selectedOffer.Id);
             OfferResult or;
             Enum.TryParse(_selectedOfferResult.Value, out or);
-            await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, or, true);
+            await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, or, true);
         }
 
         await dialog.CloseAsync();

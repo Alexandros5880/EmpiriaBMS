@@ -3,6 +3,9 @@
 
 @implements IDialogContentComponent<OfferVM>
 
+@inject MicrosoftTeams MicrosoftTeams
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
 @inject Logging.LoggerManager Logger
 
 <FluentDialogHeader ShowDismiss="true">
@@ -15,5 +18,14 @@
 </FluentDialogHeader>
 
 <FluentDialogBody>
-    <OfferCreationWizzard Offer="@Content" OnSave="@(async () => await SaveAsync())" OnCansel="@(async () => await CancelAsync())" />
+    @* <OfferCreationWizzard Offer="@Content" OnSave="@(async () => await SaveAsync())" OnCansel="@(async () => await CancelAsync())" /> *@
+
+    <!-- Offers Detailed -->
+    <OfferDetailed @ref="@_offerCompoment"
+                   Content="@Content"
+                   OnSave="@_saveOffer"
+                   DisplayTitle="false"
+                   DisplayActions="false"
+                   OnResultChanged="@_onOfferResultChanged" />
+
 </FluentDialogBody>

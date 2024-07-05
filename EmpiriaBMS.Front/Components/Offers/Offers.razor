@@ -38,8 +38,19 @@
 
     <div class="col-12">
         <!-- Filters -->
-        <div class="d-flex justify-content-start">
+        <FluentStack class="d-flex justify-content-start">
             <div>
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                AriaLabel="Pre-selected option"
+                                Height="400px"
+                                Items="@_leads"
+                                TOption="LeadVM"
+                                OptionValue="@((t) => t.Id.ToString())"
+                                OptionText="@((t) => t.Name)"
+                                OptionSelected="@(i => i.Id == _selectedLead?.Id)"
+                                SelectedOptionChanged="@(async (o) => await _onLeadSelectionChanged(o))" />
+            </div>
+            <div class="ms-1">
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                 AriaLabel="Pre-selected option"
                                 Height="400px"
@@ -50,7 +61,7 @@
                                 OptionSelected="@(i => i.Id == _selectedProject?.Id)"
                                 SelectedOptionChanged="@(async (o) => await _onProjectSelectionChanged(o))"/>
             </div>
-            <div class="ms-2">
+            <div class="ms-1">
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                 AriaLabel="Pre-selected option"
                                 Height="400px"
@@ -61,7 +72,7 @@
                                 OptionSelected="@(i => i.Id == _selectedOfferState?.Id)"
                                 SelectedOptionChanged="@(async (o) => await _onStateSelectionChanged(o))" />
             </div>
-            <div class="ms-2">
+            <div class="ms-1">
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                 AriaLabel="Pre-selected option"
                                 Height="400px"
@@ -72,7 +83,7 @@
                                 OptionSelected="@(i => i.Id == _selectedOfferType?.Id)"
                                 SelectedOptionChanged="@(async (o) => await _onTypeSelectionChanged(o))" />
             </div>
-            <div class="ms-2">
+            <div class="ms-1">
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                 Placeholder="Select Result..."
                                 Items="_offerResults"
@@ -84,7 +95,7 @@
                                 SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
 
             </div>
-        </div>
+        </FluentStack>
     </div>
 
     <!-- Offers Table -->
@@ -96,7 +107,6 @@
                             TGridItem="OfferVM"
                             GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 240px; overflow:auto;">
-                >
 
                 <!-- Result -->
                 <TemplateColumn Title="Result" Sortable="true">
