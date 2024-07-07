@@ -1,4 +1,7 @@
-﻿using System.Collections.Concurrent;
+﻿using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Services.EmailService;
+using Logging;
+using System.Collections.Concurrent;
 using System.Timers;
 
 namespace EmpiriaBMS.Front.Services
@@ -11,9 +14,19 @@ namespace EmpiriaBMS.Front.Services
         private readonly ConcurrentDictionary<string, TimeSpan> _elapsedTime = new();
         private readonly ConcurrentDictionary<string, TimeSpan> _pausedTime = new();
         private readonly System.Timers.Timer _dailyResetTimer;
+        private readonly IEmailService _emailService;
+        private readonly IDataProvider _dataProvider;
+        private readonly LoggerManager _logger;
 
-        public TimerService()
+        public TimerService(
+            IEmailService emailService,
+            IDataProvider dataProvider,
+            LoggerManager logger
+        )
         {
+            _emailService = emailService;
+            _dataProvider = dataProvider;
+            _logger = logger;
             _dailyResetTimer = new System.Timers.Timer(GetMillisecondsUntilMidnight());
             _dailyResetTimer.Elapsed += OnDailyReset;
             _dailyResetTimer.AutoReset = false;
@@ -114,11 +127,29 @@ namespace EmpiriaBMS.Front.Services
             }
         }
 
-        private void OnDailyReset(object sender, ElapsedEventArgs e)
+        private async void OnDailyReset(object sender, ElapsedEventArgs e)
         {
             foreach (var userId in _timers.Keys.ToList())
             {
-                StopTimer(userId);
+                if (IsRunning(userId))
+                {
+                    var timeNow = GetElapsedTime(userId);
+                    StopTimer(userId);
+                    try
+                    {
+                        var user = await _dataProvider.Users.Get(Convert.ToInt32(userId));
+                        var emails = await _dataProvider.Users.GetEmails(Convert.ToInt32(userId));
+                        var emailsStr = emails.Select(e => e.Address).ToList();
+                        List<string> recipients = new List<string>(emailsStr);
+                        var subject = "EmbiriaBMS Daily Timer Reset";
+                        var body = $"Mr/Ms. {user.LastName} {user.FirstName}, you forgot to spend your hours today, your hours are {timeNow.DisplayDHMS()}";
+                        await _emailService.SendEmailAsync(subject, body, recipients.ToArray());
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"\nException in TimerService.OnDailyReset(object sender, ElapsedEventArgs e): {ex.Message}.\nInner: {ex.InnerException?.Message}.");
+                    }
+                }
             }
 
             // Reset the timer to trigger at the next midnight
