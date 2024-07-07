@@ -225,92 +225,79 @@ public class KpisRepo : IDisposable
                                             .Select(pr => pr.Permission)
                                             .ToListAsync();
 
+            var offers = await _context.Set<Offer>()
+                .Include(o => o.Category)
+                .Include(o => o.SubCategory)
+                .Where(r => !r.IsDeleted)
+                .ToListAsync();
+
+            var offersIds = offers.Select(o => o.Id).ToList();
+
             Dictionary<string, int> projectTypesWithDeadLines;
+            List<Project> allProjects;
 
             if (permissions.Any(p => p.Ord == 20))
             {
-                var allProjects = await _context.Set<Project>()
-                                                .Where(r => !r.IsDeleted)
-                                                .Include(r => r.Invoices)
-                                                .Include(p => p.Stage)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Category)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.SubCategory)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Lead)
-                                                .ThenInclude(l => l.Address)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Lead)
-                                                .ThenInclude(l => l.Client)
-                                                .Include(p => p.ProjectManager)
-                                                .Include(p => p.ProjectsSubConstructors)
-                                                .Where(p => p.DeadLine < DateTime.Now)
-                                                .ToListAsync();
-
-                projectTypesWithDeadLines = allProjects
-                                                .GroupBy(p => p.Offer?.SubCategory?.Name)
-                                                .ToDictionary(
-                                                    g => g.Key ?? "Uknown Category",
-                                                    g => allProjects.Where(p => p.Offer?.SubCategory?.Name?.Equals(g.Key) ?? false).Count()
-                                                );
-
-
-                return projectTypesWithDeadLines;
+                allProjects = await _context.Set<Project>()
+                        .Where(r => !r.IsDeleted)
+                        .Include(r => r.Invoices)
+                        .Include(p => p.Stage)
+                        .Include(p => p.ProjectManager)
+                        .Include(p => p.ProjectsSubConstructors)
+                        .ToListAsync();
             }
-
-            // Filter Projects
-            var myDrawingIds = await _context.Set<DeliverableEmployee>()
-                                             .Where(r => !r.IsDeleted)
-                                             .Where(de => de.EmployeeId == userId)
-                                             .Select(e => e.DeliverableId)
-                                             .ToListAsync();
-
-            var drawingsDisciplinesIds = await _context.Set<Deliverable>()
+            else
+            {
+                // Filter Projects
+                var myDrawingIds = await _context.Set<DeliverableEmployee>()
                                                  .Where(r => !r.IsDeleted)
-                                                 .Where(dd => myDrawingIds.Contains(dd.Id))
-                                                 .Select(e => e.DisciplineId)
+                                                 .Where(de => de.EmployeeId == userId)
+                                                 .Select(e => e.DeliverableId)
                                                  .ToListAsync();
 
-            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
-                                                      .Where(r => !r.IsDeleted)
-                                                      .Where(d => d.EngineerId == userId)
-                                                      .Select(e => e.DisciplineId)
-                                                      .ToListAsync();
+                var drawingsDisciplinesIds = await _context.Set<Deliverable>()
+                                                     .Where(r => !r.IsDeleted)
+                                                     .Where(dd => myDrawingIds.Contains(dd.Id))
+                                                     .Select(e => e.DisciplineId)
+                                                     .ToListAsync();
 
-            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
+                var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                          .Where(r => !r.IsDeleted)
+                                                          .Where(d => d.EngineerId == userId)
+                                                          .Select(e => e.DisciplineId)
+                                                          .ToListAsync();
 
-            var projectsFromDisciplineIds = await _context.Set<Discipline>()
-                                                        .Where(r => !r.IsDeleted)
-                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
-                                                        .Select(dp => dp.ProjectId)
-                                                        .ToArrayAsync();
+                var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
-            var projects = await _context.Set<Project>()
-                                         .Where(r => !r.IsDeleted)
-                                         .Include(r => r.Invoices)
-                                         .Include(p => p.Stage)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Category)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.SubCategory)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Lead)
-                                         .ThenInclude(l => l.Address)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Lead)
-                                         .ThenInclude(l => l.Client)
-                                         .Include(p => p.ProjectManager)
-                                         .Include(p => p.ProjectsSubConstructors)
-                                         .Where(p => projectsFromDisciplineIds.Contains(p.Id)
-                                                            || p.ProjectManagerId == userId)
-                                         .Where(p => p.DeadLine < DateTime.Now)
-                                         .ToListAsync();
+                var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                            .Where(r => !r.IsDeleted)
+                                                            .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                            .Select(dp => dp.ProjectId)
+                                                            .ToArrayAsync();
 
-            projectTypesWithDeadLines = projects.GroupBy(p => p.Offer.SubCategory.Name)
+                allProjects = await _context.Set<Project>()
+                            .Where(r => !r.IsDeleted)
+                            .Where(p => projectsFromDisciplineIds.Contains(p.Id))
+                            .Include(r => r.Invoices)
+                            .Include(p => p.Stage)
+                            .Include(p => p.ProjectManager)
+                            .Include(p => p.ProjectsSubConstructors)
+                            .ToListAsync();
+            }
+
+            // Perform the projection after the data is loaded
+            allProjects = allProjects.Select(p =>
+            {
+                p.Offer = offers.FirstOrDefault(o => o.Id == p.OfferId);
+                return p;
+            }).ToList();
+
+            allProjects = allProjects.Where(p => p.DeadLine < DateTime.Now).ToList();
+
+            projectTypesWithDeadLines = allProjects.GroupBy(p => p.Offer.SubCategory.Name)
                                                 .ToDictionary(
                                                     g => g.Key ?? "Uknown Category",
-                                                    g => projects.Where(p => p.Offer.SubCategory.Name.Equals(g.Key)).Count()
+                                                    g => allProjects.Where(p => p.Offer.SubCategory.Name.Equals(g.Key)).Count()
                                                 );
 
 

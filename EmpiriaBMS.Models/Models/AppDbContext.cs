@@ -76,13 +76,11 @@ public class AppDbContext : DbContext
         // Relations
         ModelRelations.CreateRelations(builder);
 
-        bool runSeedData = true;
+        Random random = new Random();
+        var createdDate = DateTime.Now;
 
-        if (runSeedData)
+        if (false)
         {
-            Random random = new Random();
-            var createdDate = DateTime.Now;
-
             #region Permissions
             // See Dashboard Layout
             var per_1_id = random.Next(123456789, 999999999);
