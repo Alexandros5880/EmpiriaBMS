@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net;
 using System.Net.Mail;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
 
 namespace EmpiriaBMS.Core.Services.EmailService;
 
@@ -19,13 +13,13 @@ public class EmailService : IEmailService
 
     public EmailService()
     {
-        _smtpServerAddress = "smtp.azurecomm.net";
-        _smtpAuthUsername = "<Azure Communication Services Resource name>|<Entra Application Id>|<Entra Application Tenant Id>";
-        _smtpAuthPassword = "<Entra Application Client Secret>";
-        _sender = "empiriasoft@empiriasoftplat.onmicrosoft.com";
+        _smtpServerAddress = "smtp.gmail.com";
+        _smtpAuthUsername = "alexandrosplatanios15@gmail.com";
+        _smtpAuthPassword = "-Plat1234Tak1234!!";
+        _sender = "alexandrosplatanios15@gmail.com";
         _smtpClient = new SmtpClient(_smtpServerAddress)
         {
-            Port = 587,
+            Port = 465,
             Credentials = new NetworkCredential(_smtpAuthUsername, _smtpAuthPassword),
             EnableSsl = true,
         };

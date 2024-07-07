@@ -18,7 +18,7 @@ public partial class Leads
     private List<LeadVM> _records = new List<LeadVM>();
     private string _filterString = string.Empty;
     IQueryable<LeadVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
-    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    PaginationState pagination = new PaginationState { ItemsPerPage = 4 };
 
     private LeadVM _selectedRecord = new LeadVM();
 
