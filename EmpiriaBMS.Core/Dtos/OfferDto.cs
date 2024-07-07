@@ -42,7 +42,5 @@ public class OfferDto : EntityDto
 
     public string? Comments { get; set; }
 
-    public ICollection<Project>? Projects { get; set; }
-
     public ICollection<DailyTime> DailyTime { get; set; }
 }
