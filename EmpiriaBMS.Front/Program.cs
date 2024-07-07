@@ -23,7 +23,6 @@ builder.Services.AddServerSideBlazor();
 var config = builder.Configuration.Get<ConfigOptions>();
 builder.Services.AddTeamsFx(config.TeamsFx.Authentication);
 builder.Services.AddScoped<MicrosoftTeams>();
-builder.Services.AddSingleton<TimerService>();
 builder.Services.AddScoped<SharedAuthDataService>();
 builder.Services.AddScoped<AuthorizeServices>();
 builder.Services.AddBlazorBootstrap();
@@ -87,6 +86,9 @@ builder.Services.AddSingleton<Logging.LoggerManager>(sp =>
     var logger = sp.GetRequiredService<ILogger<LoggerManager>>();
     return new LoggerManager(logger, "EmbiriaBMS.Front");
 });
+
+// AddSingleton
+builder.Services.AddScoped<TimerService>();
 
 var app = builder.Build();
 
