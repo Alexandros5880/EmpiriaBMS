@@ -18,7 +18,7 @@
 
 <div>
 
-    <div class="mt-1 row gx-1">
+    <div class="mt-1 row gx-2">
 
         <!-- Select User -->
         @if(!IsFromDashboard || User != null)
@@ -41,6 +41,7 @@
                         <h5>Select User</h5>
                     </div>
                     <select class="form-select form-select-lg"
+                            style="max-height: 200px; overflow-y: auto;"
                             aria-label="Select User"
                             value="@_selectedUser?.Id"
                             @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
@@ -65,6 +66,7 @@
                 </div>
                 <select class="form-select form-select-lg"
                         aria-label="Select Led"
+                        style="max-height: 200px; overflow-y: auto;"
                         value="@_selectedLed?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectLed(Convert.ToInt32(e.Value)))">
                     <option value="0" selected>Select Led</option>
@@ -87,6 +89,7 @@
                 </div>
                 <select class="form-select form-select-lg"
                         aria-label="Select Offer"
+                        style="max-height: 200px; overflow-y: auto;"
                         value="@_selectedOffer?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
                     <option value="0" selected>Select Offer</option>
@@ -109,6 +112,7 @@
                 </div>
                 <select class="form-select form-select-lg"
                         aria-label="Select Project"
+                        style="max-height: 200px; overflow-y: auto;"
                         value="@_selectedProject?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
                     <option value="0" selected>Select Project</option>
@@ -131,6 +135,7 @@
                 </div>
                 <select class="form-select form-select-lg"
                         aria-label="Select Discipline"
+                        style="max-height: 200px; overflow-y: auto;"
                         value="@_selectedDiscipline?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
                     <option value="0" selected>Select Discipline</option>
@@ -146,7 +151,7 @@
 
     </div>
 
-    <div class="mt-1 row gx-1">
+    <div class="mt-1 row gx-2">
 
         <!-- Deliverables -->
         @if (IsFromDashboard || (_selectedDiscipline != null && _selectedDiscipline.Id != 0))

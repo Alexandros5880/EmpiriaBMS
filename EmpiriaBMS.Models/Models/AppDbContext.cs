@@ -33,6 +33,7 @@ public class AppDbContext : DbContext
     public DbSet<InvoiceType>? InvoicesTypes { get; set; }
     public DbSet<Contract>? Contracts { get; set; }
     public DbSet<Timespan>? TimeSpans { get; set; }
+    public DbSet<DailyTimeRequest>? DailyTimeRequests { get; set; }
     public DbSet<DailyTime>? DailyTime { get; set; }
     public DbSet<DailyTime>? ParsonalTime { get; set; }
     public DbSet<DailyTime>? TrainingTime { get; set; }
