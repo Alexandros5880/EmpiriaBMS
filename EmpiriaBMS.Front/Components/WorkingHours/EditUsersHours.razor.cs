@@ -15,6 +15,9 @@ public partial class EditUsersHours
     public TimeSpan RemainingTime { get; set; }
 
     [Parameter]
+    public UserVM User { get; set; } = null;
+
+    [Parameter]
     public EventCallback OnEnd { get; set; }
 
     [Parameter]
@@ -83,6 +86,11 @@ public partial class EditUsersHours
         {
             RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
             await Refresh();
+
+            if (User != null)
+            {
+                await OnSelectUser(User.Id);
+            }
         }
     }
 

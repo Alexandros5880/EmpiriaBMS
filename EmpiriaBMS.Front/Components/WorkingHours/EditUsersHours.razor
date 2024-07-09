@@ -16,30 +16,44 @@
     }
 </div>
 
-<div class="modal-body">
+<div>
 
-    <div class="mt-2 row gx-3">
+    <div class="mt-1 row gx-1">
 
         <!-- Select User -->
-        @if (!IsFromDashboard)
+        @if(!IsFromDashboard || User != null)
         {
-            <div class="col selections">
-                <div class="text-center">
-                    <h5>Select User</h5>
+            @if (User != null)
+            {
+                <div class="col selections">
+                    <div class="text-center">
+                        <h5>User: </h5>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <span>@User.FullName</span>
+                    </div>
                 </div>
-                <select class="form-select form-select-lg"
-                        aria-label="Select User"
-                        value="@_selectedUser?.Id"
-                        @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
-                    <option value="0" selected>Select User</option>
-                    @foreach (var user in _users)
-                    {
-                        <option value="@user.Id">
-                            <span>@user.LastName</span> &ensp; <span>@user.FirstName</span>
-                        </option>
-                    }
-                </select>
-            </div>
+            }
+            else
+            {
+                <div class="col selections">
+                    <div class="text-center">
+                        <h5>Select User</h5>
+                    </div>
+                    <select class="form-select form-select-lg"
+                            aria-label="Select User"
+                            value="@_selectedUser?.Id"
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select User</option>
+                        @foreach (var user in _users)
+                        {
+                            <option value="@user.Id">
+                                <span>@user.LastName</span> &ensp; <span>@user.FirstName</span>
+                            </option>
+                        }
+                    </select>
+                </div>
+            }
         }
 
         <!-- Select Led -->
@@ -132,7 +146,7 @@
 
     </div>
 
-    <div class="mt-1 row gx-3">
+    <div class="mt-1 row gx-1">
 
         <!-- Deliverables -->
         @if (IsFromDashboard || (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
@@ -142,7 +156,7 @@
                     <h5>Deliverables</h5>
                 </div>
                 <div class="table-responsive"
-                     style="height: 300px;">
+                     style="height: 240px;">
                     <table class="table table-hover table-borderless">
                         <thead>
                             <tr>
@@ -196,7 +210,7 @@
                     <h5>Supportive Works</h5>
                 </div>
                 <div class="table-responsive"
-                     style="height: 300px;">
+                     style="height: 240px;">
                     <table class="table table-hover table-borderless">
                         <thead>
                             <tr>
@@ -234,7 +248,7 @@
         @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
         {
             <div class="col-12 border rounded mb-1">
-                <div class="row gx-3 m-2">
+                <div class="row gx-2 m-1">
                     @if ((workOnLeds || seeAdmin) && (_selectedLed != null && _selectedLed.Id != 0))
                     {
                         <div class="col-4 text-center">
@@ -291,7 +305,7 @@
 
 @if (!IsFromDashboard && _selectedUser != null)
 {
-    <div class="mt-3">
+    <div class="mt-1">
         <FluentStack Orientation="Orientation.Horizontal" Class="d-flex justify-content-center">
             <!-- Class="d-flex justify-content-end" -->
             <FluentButton OnClick="@(async () => await Save())" Disabled="@(!_hasChanged)">

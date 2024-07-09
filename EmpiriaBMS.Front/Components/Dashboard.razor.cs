@@ -166,6 +166,10 @@ public partial class Dashboard : IDisposable
     private bool _isDeleteDialogOdepened = false;
     private string _deleteDialogMsg = "";
     private string _deleteObj = null;
+
+    // On Corrext Hours
+    private FluentDialog _correctHoursDialog;
+    private bool _isCorrectHoursDialogOdepened = false;
     #endregion
 
     protected override void OnInitialized()
@@ -1069,9 +1073,19 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Correct Hours Dialog
-    private async Task _correctHours()
+    private void _correctHours()
     {
-        await Task.Delay(1);
+        _correctHoursDialog.Show();
+        _isCorrectHoursDialogOdepened = true;
+    }
+
+    private void _onCorrectHoursClose()
+    {
+        if (_isCorrectHoursDialogOdepened)
+        {
+            _correctHoursDialog.Hide();
+            _isCorrectHoursDialogOdepened = false;
+        }
     }
     #endregion
 
