@@ -12,6 +12,9 @@ public partial class EditUsersHours
     public bool IsFromDashboard { get; set; } = false;
 
     [Parameter]
+    public bool SendRequest { get; set; } = false;
+
+    [Parameter]
     public TimeSpan RemainingTime { get; set; }
 
     [Parameter]
@@ -593,6 +596,12 @@ public partial class EditUsersHours
         if (!_hasChanged)
             return;
 
+        if (SendRequest)
+        {
+            await _sendRequest();
+            return;
+        }
+
         try
         {
             // Validate
@@ -674,5 +683,10 @@ public partial class EditUsersHours
         }
 
         _startLoading = false;
+    }
+
+    private async Task _sendRequest()
+    {
+        await Task.Delay(1);
     }
 }
