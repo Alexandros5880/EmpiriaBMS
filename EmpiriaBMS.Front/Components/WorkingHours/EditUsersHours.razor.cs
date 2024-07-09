@@ -47,6 +47,8 @@ public partial class EditUsersHours
 
     private bool _hasChanged = false;
 
+    private string _description { get; set; }
+
     #region Selections Lists
     private ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
     private ObservableCollection<LeadVM> _leds = new ObservableCollection<LeadVM>();
@@ -694,7 +696,7 @@ public partial class EditUsersHours
             // Update Leds
             foreach (var led in _ledsChanged)
             {
-                await _dataProvider.Leads.AddTimeRequest(userId, led.Id, led.Time);
+                await _dataProvider.Leads.AddTimeRequest(userId, led.Id, led.Time, _description);
             }
             _ledsChanged.Clear();
             _selectedLed = null;
@@ -702,7 +704,7 @@ public partial class EditUsersHours
             // Update Offers
             foreach (var offer in _offersChanged)
             {
-                await _dataProvider.Offers.AddTimeRequest(userId, offer.Id, offer.Time);
+                await _dataProvider.Offers.AddTimeRequest(userId, offer.Id, offer.Time, _description);
             }
             _offersChanged.Clear();
             _selectedOffer = null;
@@ -710,26 +712,26 @@ public partial class EditUsersHours
             // Update Projects
             foreach (var project in _projectsChanged)
             {
-                await _dataProvider.Projects.AddTimeRequest(userId, project.Id, project.Time);
+                await _dataProvider.Projects.AddTimeRequest(userId, project.Id, project.Time, _description);
             }
             _projectsChanged.Clear();
             //_selectedProject = null;
 
             // Update Draws
             foreach (var draw in _deliverablesChanged)
-                await _dataProvider.Deliverables.AddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+                await _dataProvider.Deliverables.AddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, _description);
 
             // Update Others
             foreach (var other in _supportiveWorkChanged)
-                await _dataProvider.SupportiveWorks.AddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+                await _dataProvider.SupportiveWorks.AddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, _description);
 
             // Update User Hours
             if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-                await _dataProvider.Users.AddPersonaTimeRequest(userId, _editLogedUserTimes.PersonalTime);
+                await _dataProvider.Users.AddPersonaTimeRequest(userId, _editLogedUserTimes.PersonalTime, _description);
             if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-                await _dataProvider.Users.AddTraningTimeRequest(userId, _editLogedUserTimes.TrainingTime);
+                await _dataProvider.Users.AddTraningTimeRequest(userId, _editLogedUserTimes.TrainingTime, _description);
             if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-                await _dataProvider.Users.AddCorporateEventTimeRequest(userId, _editLogedUserTimes.CorporateEventTime);
+                await _dataProvider.Users.AddCorporateEventTimeRequest(userId, _editLogedUserTimes.CorporateEventTime, _description);
 
             await OnEnd.InvokeAsync();
 

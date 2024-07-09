@@ -261,7 +261,10 @@
     <div class="mt-1 row">
 
         <!-- Set User With High Roles Time -->
-        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
+        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0 
+                                    && (_selectedLed != null && _selectedLed.Id != 0 
+                                        || _selectedOffer != null && _selectedOffer.Id != 0
+                                        || _selectedProject != null && _selectedProject.Id != 0)))
         {
             <div class="col-12 border rounded mb-1">
                 <div class="row gx-2 m-1">
@@ -315,6 +318,13 @@
             </div>
         }
 
+    </div>
+
+    <div class="mt-1 row">
+        <!-- Description -->
+        <div class="col-12">
+            <FluentTextArea Style="width:100%;" @bind-Value="@_description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+        </div>
     </div>
 
 </div>

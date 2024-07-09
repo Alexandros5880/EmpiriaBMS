@@ -302,7 +302,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
     }
 
-    public async Task AddTimeRequest(int userId, int ledId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task AddTimeRequest(int userId, int ledId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -323,6 +323,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
                         timeSpans[i].Seconds
                     ),
                     IsEditByAdmin = isEditByAdmin,
+                    Description = description,
                     IsClosed = false
                 };
                 await _context.Set<DailyTimeRequest>().AddAsync(time);

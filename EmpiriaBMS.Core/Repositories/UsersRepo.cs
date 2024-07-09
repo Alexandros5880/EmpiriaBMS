@@ -459,7 +459,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task AddDailyTimeRequest(int userId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task AddDailyTimeRequest(int userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -482,6 +482,7 @@ public class UsersRepo : Repository<UserDto, User>
                         timeSpans[i].Seconds
                     ),
                     IsEditByAdmin = isEditByAdmin,
+                    Description = description,
                     IsClosed = false
                 };
                 await _context.Set<DailyTimeRequest>().AddAsync(time);
@@ -553,7 +554,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task AddPersonaTimeRequest(int userId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task AddPersonaTimeRequest(int userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -576,6 +577,7 @@ public class UsersRepo : Repository<UserDto, User>
                         timeSpans[i].Seconds
                     ),
                     IsEditByAdmin = isEditByAdmin,
+                    Description = description,
                     IsClosed = false
                 };
                 await _context.Set<DailyTimeRequest>().AddAsync(time);
@@ -647,7 +649,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task AddTraningTimeRequest(int userId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task AddTraningTimeRequest(int userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -670,6 +672,7 @@ public class UsersRepo : Repository<UserDto, User>
                         timeSpans[i].Seconds
                     ),
                     IsEditByAdmin = isEditByAdmin,
+                    Description = description,
                     IsClosed = false
                 };
                 await _context.Set<DailyTimeRequest>().AddAsync(time);
@@ -741,7 +744,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task AddCorporateEventTimeRequest(int userId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task AddCorporateEventTimeRequest(int userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -764,6 +767,7 @@ public class UsersRepo : Repository<UserDto, User>
                         timeSpans[i].Seconds
                     ),
                     IsEditByAdmin = isEditByAdmin,
+                    Description = description,
                     IsClosed = false
                 };
                 await _context.Set<DailyTimeRequest>().AddAsync(time);

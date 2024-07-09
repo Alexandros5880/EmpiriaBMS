@@ -256,7 +256,7 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         }
     }
 
-    public async Task AddTimeRequest(int userId, int projectId, int disciplineId, int otherId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task AddTimeRequest(int userId, int projectId, int disciplineId, int otherId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -279,6 +279,7 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
                         timeSpans[i].Seconds
                     ),
                     IsEditByAdmin = isEditByAdmin,
+                    Description = description,
                     IsClosed = false
                 };
                 await _context.Set<DailyTimeRequest>().AddAsync(time);

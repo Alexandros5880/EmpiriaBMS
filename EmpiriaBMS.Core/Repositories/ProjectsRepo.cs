@@ -1048,7 +1048,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task AddTimeRequest(int userId, int projectId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task AddTimeRequest(int userId, int projectId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -1069,6 +1069,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                         timeSpans[i].Seconds
                     ),
                     IsEditByAdmin = isEditByAdmin,
+                    Description = description,
                     IsClosed = false
                 };
                 await _context.Set<DailyTimeRequest>().AddAsync(time);

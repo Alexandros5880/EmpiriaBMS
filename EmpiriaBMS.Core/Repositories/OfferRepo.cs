@@ -189,7 +189,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
         }
     }
 
-    public async Task AddTimeRequest(int userId, int offerId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task AddTimeRequest(int userId, int offerId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -210,6 +210,7 @@ public class OfferRepo : Repository<OfferDto, Offer>
                         timeSpans[i].Seconds
                     ),
                     IsEditByAdmin = isEditByAdmin,
+                    Description = description,
                     IsClosed = false
                 };
                 await _context.Set<DailyTimeRequest>().AddAsync(time);
