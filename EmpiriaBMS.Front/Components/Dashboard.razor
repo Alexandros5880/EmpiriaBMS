@@ -58,6 +58,7 @@
                                 @if (_sharedAuthData.LogedUser != null)
                                 {
                                 <FluentStack Orientation="Orientation.Horizontal"
+                                             HorizontalAlignment="HorizontalAlignment.Center"
                                              Class="d-flex justify-content-between m-1"
                                              Wrap="true">
 
@@ -156,23 +157,41 @@
                                                      HorizontalAlignment="HorizontalAlignment.End"
                                                      Wrap="true"
                                                      Style="width: 140px;">
-                                            <!-- Refresh -->
-                                            <FluentButton IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
-                                                          Loading="@_refreshLoading"
-                                                          Appearance="Appearance.Outline"
-                                                          OnClick="@Refresh"
-                                                          Style="width: 40px;">
-                                            </FluentButton>
+                                            
                                             <FluentStack Orientation="Orientation.Vertical"
-                                                         Style="margin-left: 4px; max-width: 80px;">
+                                                         HorizontalAlignment="HorizontalAlignment.End"
+                                                         Style="width: 64px;"
+                                                         Wrap="false">
+                                                <!-- Refresh -->
+                                                <FluentButton IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
+                                                              Loading="@_refreshLoading"
+                                                              Appearance="Appearance.Outline"
+                                                              OnClick="@Refresh"
+                                                              Style="width: 40px !important;">
+                                                </FluentButton>
+                                                <!-- Correct Hours -->
+                                                <FluentButton IconStart="@(new Icons.Regular.Size32.Clock())"
+                                                              Appearance="Appearance.Outline"
+                                                              OnClick="@Refresh"
+                                                              Style="width: 40px !important;">
+                                                </FluentButton>
+                                            </FluentStack>
+
+                                            <FluentStack Orientation="Orientation.Vertical"
+                                                         HorizontalAlignment="HorizontalAlignment.Center"
+                                                         Style="width: 64px;"
+                                                         Wrap="false">
                                                 <!-- Restore Database -->
                                                 @if (seeRestoreDatabase)
                                                 {
-                                                    <InputFile @ref="@fileRestoreDB" OnChange="RestoreDb" style="display: none;" />
+                                                    <InputFile @ref="@fileRestoreDB"
+                                                               OnChange="RestoreDb"
+                                                               style="display: none;" />
                                                     <FluentButton IconStart="@(new MyIcons.Size32.RestoreDB())"
                                                                   Loading="@_restoreLoading"
                                                                   Appearance="Appearance.Outline"
-                                                                  OnClick="@(async () => await TriggerRestoreDbInport())">
+                                                                  OnClick="@(async () => await TriggerRestoreDbInport())"
+                                                                  Style="width: 40px !important;">
                                                     </FluentButton>
                                                 }
                                                 <!-- BackUp Database -->
@@ -181,10 +200,12 @@
                                                     <FluentButton OnClick="@(async() => await BackUpDb())"
                                                                   Loading="@_backUpLoading"
                                                                   IconStart="@(new MyIcons.Size32.BackupDB())"
-                                                                  Appearance="Appearance.Outline">
+                                                                  Appearance="Appearance.Outline"
+                                                                  Style="width: 40px !important;">
                                                     </FluentButton>
                                                 }
                                             </FluentStack>
+
                                         </FluentStack>
 
                                     </FluentStack>
