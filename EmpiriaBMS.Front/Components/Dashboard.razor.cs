@@ -1068,6 +1068,13 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
+    #region Correct Hours Dialog
+    private async Task _correctHours()
+    {
+        await Task.Delay(1);
+    }
+    #endregion
+
     #region Delete Dialog Actions
     private async Task OnDeleteAccept()
     {
