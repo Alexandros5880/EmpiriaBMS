@@ -687,6 +687,58 @@ public partial class EditUsersHours
 
     private async Task _sendRequest()
     {
-        await Task.Delay(1);
+        try
+        {
+            var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+
+            // Update Leds
+            foreach (var led in _ledsChanged)
+            {
+                await _dataProvider.Leads.AddTimeRequest(userId, led.Id, led.Time);
+            }
+            _ledsChanged.Clear();
+            _selectedLed = null;
+
+            // Update Offers
+            foreach (var offer in _offersChanged)
+            {
+                await _dataProvider.Offers.AddTimeRequest(userId, offer.Id, offer.Time);
+            }
+            _offersChanged.Clear();
+            _selectedOffer = null;
+
+            // Update Projects
+            foreach (var project in _projectsChanged)
+            {
+                await _dataProvider.Projects.AddTimeRequest(userId, project.Id, project.Time);
+            }
+            _projectsChanged.Clear();
+            //_selectedProject = null;
+
+            // Update Draws
+            foreach (var draw in _deliverablesChanged)
+                await _dataProvider.Deliverables.AddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+
+            // Update Others
+            foreach (var other in _supportiveWorkChanged)
+                await _dataProvider.SupportiveWorks.AddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+
+            // Update User Hours
+            if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
+                await _dataProvider.Users.AddPersonaTimeRequest(userId, _editLogedUserTimes.PersonalTime);
+            if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
+                await _dataProvider.Users.AddTraningTimeRequest(userId, _editLogedUserTimes.TrainingTime);
+            if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
+                await _dataProvider.Users.AddCorporateEventTimeRequest(userId, _editLogedUserTimes.CorporateEventTime);
+
+            await OnEnd.InvokeAsync();
+
+            TimeSpan? timespan = IsFromDashboard ? null : new TimeSpan(300, 0, 0);
+            await Refresh(timespan);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Exception EditUsersHours._sendRequest(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+        }
     }
 }

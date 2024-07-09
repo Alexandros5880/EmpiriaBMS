@@ -14,6 +14,8 @@ public class SharedAuthDataService
     public UserVM LogedUser { get; set; }
     public string LogedUserObjectId { get; set; } = null;
 
+    public bool IsLogedUserEmployee => LoggedUserRoles.Any(r => r.IsEmployee);
+
     public void Clear()
     {
         TeamsLogedUser = null;

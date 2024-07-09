@@ -255,4 +255,37 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task AddTimeRequest(int userId, int projectId, int disciplineId, int otherId, TimeSpan timespan, bool isEditByAdmin = false)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
+            {
+                DailyTimeRequest time = new DailyTimeRequest()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now.AddDays(-i),
+                    DailyUserId = userId,
+                    ProjectId = projectId,
+                    DisciplineId = disciplineId,
+                    OtherId = otherId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = isEditByAdmin,
+                    IsClosed = false
+                };
+                await _context.Set<DailyTimeRequest>().AddAsync(time);
+            }
+
+            // Save Changes
+            await _context.SaveChangesAsync();
+        }
+    }
 }

@@ -152,7 +152,7 @@
                                             </div>
                                         }
 
-                                        <!-- Refresh / RestoreDB / BackupDB Page -->
+                                        <!-- Refresh / Correct Hours / RestoreDB / BackupDB Page -->
                                         <FluentStack Orientation="Orientation.Horizontal" 
                                                      HorizontalAlignment="HorizontalAlignment.End"
                                                      Wrap="true"
@@ -170,11 +170,14 @@
                                                               Style="width: 40px !important;">
                                                 </FluentButton>
                                                 <!-- Correct Hours -->
-                                                <FluentButton IconStart="@(new Icons.Regular.Size32.Clock())"
-                                                              Appearance="Appearance.Outline"
-                                                              OnClick="@_correctHours"
-                                                              Style="width: 40px !important;">
-                                                </FluentButton>
+                                                @if (isEmployee)
+                                                {
+                                                    <FluentButton IconStart="@(new Icons.Regular.Size32.Clock())"
+                                                                  Appearance="Appearance.Outline"
+                                                                  OnClick="@_correctHours"
+                                                                  Style="width: 40px !important;">
+                                                    </FluentButton>
+                                                }
                                             </FluentStack>
 
                                             <FluentStack Orientation="Orientation.Vertical"

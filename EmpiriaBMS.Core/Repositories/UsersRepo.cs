@@ -396,7 +396,8 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<DailyTime> AddDailyTime(int userId, DateTime date, TimeSpan ts)
+    #region Add Time
+    public async Task<DailyTime> AddDailyTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -427,6 +428,7 @@ public class UsersRepo : Repository<UserDto, User>
                 var newHours = timespan.Hours + ts.Hours;
                 yesterdayDailyHour.TimeSpan = new Timespan(
                     timespan.Days, newHours, timespan.Minutes, timespan.Seconds);
+                yesterdayDailyHour.IsEditByAdmin = isEditByAdmin;
 
                 await _context.SaveChangesAsync();
 
@@ -445,7 +447,8 @@ public class UsersRepo : Repository<UserDto, User>
                             ts.Hours,
                             ts.Minutes,
                             ts.Seconds
-                        )
+                        ),
+                        IsEditByAdmin = isEditByAdmin,
                     }
                 );
 
@@ -456,7 +459,39 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<DailyTime> AddPersonalTime(int userId, DateTime date, TimeSpan ts)
+    public async Task AddDailyTimeRequest(int userId, TimeSpan timespan, bool isEditByAdmin = false)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
+            {
+                DailyTimeRequest time = new DailyTimeRequest()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now.AddDays(-i),
+                    DailyUserId = userId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = isEditByAdmin,
+                    IsClosed = false
+                };
+                await _context.Set<DailyTimeRequest>().AddAsync(time);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<DailyTime> AddPersonalTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -479,6 +514,7 @@ public class UsersRepo : Repository<UserDto, User>
                                                    .Where(r => !r.IsDeleted)
                                                    .Where(u => u.PersonalUserId == userId)
                                                    .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
+                yesterdayDailyHour.IsEditByAdmin = isEditByAdmin;
 
                 if (yesterdayDailyHour == null)
                     throw new NullReferenceException(nameof(yesterdayDailyHour));
@@ -505,7 +541,8 @@ public class UsersRepo : Repository<UserDto, User>
                             ts.Hours,
                             ts.Minutes,
                             ts.Seconds
-                        )
+                        ),
+                        IsEditByAdmin = isEditByAdmin,
                     }
                 );
 
@@ -516,7 +553,39 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<DailyTime> AddTraningTime(int userId, DateTime date, TimeSpan ts)
+    public async Task AddPersonaTimeRequest(int userId, TimeSpan timespan, bool isEditByAdmin = false)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
+            {
+                DailyTimeRequest time = new DailyTimeRequest()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now.AddDays(-i),
+                    PersonalUserId = userId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = isEditByAdmin,
+                    IsClosed = false
+                };
+                await _context.Set<DailyTimeRequest>().AddAsync(time);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<DailyTime> AddTraningTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -547,6 +616,7 @@ public class UsersRepo : Repository<UserDto, User>
                 var newHours = timespan.Hours + ts.Hours;
                 yesterdayDailyHour.TimeSpan = new Timespan(
                     timespan.Days, newHours, timespan.Minutes, timespan.Seconds);
+                yesterdayDailyHour.IsEditByAdmin = isEditByAdmin;
 
                 await _context.SaveChangesAsync();
 
@@ -565,7 +635,8 @@ public class UsersRepo : Repository<UserDto, User>
                             ts.Hours,
                             ts.Minutes,
                             ts.Seconds
-                        )
+                        ),
+                        IsEditByAdmin = isEditByAdmin,
                     }
                 );
 
@@ -576,7 +647,39 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<DailyTime> AddCorporateEventTime(int userId, DateTime date, TimeSpan ts)
+    public async Task AddTraningTimeRequest(int userId, TimeSpan timespan, bool isEditByAdmin = false)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
+            {
+                DailyTimeRequest time = new DailyTimeRequest()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now.AddDays(-i),
+                    TrainingUserId = userId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = isEditByAdmin,
+                    IsClosed = false
+                };
+                await _context.Set<DailyTimeRequest>().AddAsync(time);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<DailyTime> AddCorporateEventTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -599,6 +702,7 @@ public class UsersRepo : Repository<UserDto, User>
                                                    .Where(r => !r.IsDeleted)
                                                    .Where(u => u.CorporateUserId == userId)
                                                    .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
+                yesterdayDailyHour.IsEditByAdmin = isEditByAdmin;
 
                 if (yesterdayDailyHour == null)
                     throw new NullReferenceException(nameof(yesterdayDailyHour));
@@ -625,7 +729,8 @@ public class UsersRepo : Repository<UserDto, User>
                             ts.Hours,
                             ts.Minutes,
                             ts.Seconds
-                        )
+                        ),
+                        IsEditByAdmin = isEditByAdmin,
                     }
                 );
 
@@ -635,6 +740,39 @@ public class UsersRepo : Repository<UserDto, User>
             }
         }
     }
+
+    public async Task AddCorporateEventTimeRequest(int userId, TimeSpan timespan, bool isEditByAdmin = false)
+    {
+        if (userId == 0)
+            throw new ArgumentException(nameof(userId));
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
+            {
+                DailyTimeRequest time = new DailyTimeRequest()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now.AddDays(-i),
+                    CorporateUserId = userId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = isEditByAdmin,
+                    IsClosed = false
+                };
+                await _context.Set<DailyTimeRequest>().AddAsync(time);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+    }
+    #endregion
 
     public async Task<UserTimes> GetTime(int userId, DateTime date)
     {

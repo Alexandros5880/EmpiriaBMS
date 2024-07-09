@@ -40,19 +40,20 @@
                     <div class="text-center">
                         <h5>Select User</h5>
                     </div>
-                    <select class="form-select form-select-lg"
-                            style="max-height: 200px; overflow-y: auto;"
-                            aria-label="Select User"
-                            value="@_selectedUser?.Id"
-                            @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
-                        <option value="0" selected>Select User</option>
-                        @foreach (var user in _users)
-                        {
-                            <option value="@user.Id">
-                                <span>@user.LastName</span> &ensp; <span>@user.FirstName</span>
-                            </option>
-                        }
-                    </select>
+                    <div class="select-wrapper form-column form-column-field">
+                        <select class="form-select form-select-lg"
+                                aria-label="Select User"
+                                value="@_selectedUser?.Id"
+                                @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
+                            <option value="0" selected>Select User</option>
+                            @foreach (var user in _users)
+                            {
+                                <option value="@user.Id">
+                                    <span>@user.LastName</span> &ensp; <span>@user.FirstName</span>
+                                </option>
+                            }
+                        </select>
+                    </div>
                 </div>
             }
         }
@@ -64,19 +65,20 @@
                 <div class="text-center">
                     <h5>Select Led</h5>
                 </div>
-                <select class="form-select form-select-lg"
-                        aria-label="Select Led"
-                        style="max-height: 200px; overflow-y: auto;"
-                        value="@_selectedLed?.Id"
-                        @onchange="@(async (ChangeEventArgs e) => await OnSelectLed(Convert.ToInt32(e.Value)))">
-                    <option value="0" selected>Select Led</option>
-                    @foreach (var led in _leds)
-                    {
-                        <option value="@led.Id">
-                            @led.Name
-                        </option>
-                    }
-                </select>
+                <div class="select-wrapper form-column form-column-field">
+                    <select class="form-select form-select-lg"
+                            aria-label="Select Led"
+                            value="@_selectedLed?.Id"
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectLed(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select Led</option>
+                        @foreach (var led in _leds)
+                        {
+                            <option value="@led.Id">
+                                @led.Name
+                            </option>
+                        }
+                    </select>
+                </div>
             </div>
         }
 
@@ -87,19 +89,20 @@
                 <div class="text-center">
                     <h5>Select Offer</h5>
                 </div>
-                <select class="form-select form-select-lg"
-                        aria-label="Select Offer"
-                        style="max-height: 200px; overflow-y: auto;"
-                        value="@_selectedOffer?.Id"
-                        @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
-                    <option value="0" selected>Select Offer</option>
-                    @foreach (var offer in _offers)
-                    {
-                        <option value="@offer.Id">
-                            @offer.Code
-                        </option>
-                    }
-                </select>
+                <div class="select-wrapper form-column form-column-field">
+                    <select class="form-select form-select-lg"
+                            aria-label="Select Offer"
+                            value="@_selectedOffer?.Id"
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select Offer</option>
+                        @foreach (var offer in _offers)
+                        {
+                            <option value="@offer.Id">
+                                @offer.Code
+                            </option>
+                        }
+                    </select>
+                </div>
             </div>
         }
 
@@ -110,19 +113,20 @@
                 <div class="text-center">
                     <h5>Select Project</h5>
                 </div>
-                <select class="form-select form-select-lg"
-                        aria-label="Select Project"
-                        style="max-height: 200px; overflow-y: auto;"
-                        value="@_selectedProject?.Id"
-                        @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
-                    <option value="0" selected>Select Project</option>
-                    @foreach (var project in _projects)
-                    {
-                        <option value="@project.Id">
-                            @project.Name
-                        </option>
-                    }
-                </select>
+                <div class="select-wrapper form-column form-column-field">
+                    <select class="form-select form-select-lg"
+                            aria-label="Select Project"
+                            value="@_selectedProject?.Id"
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select Project</option>
+                        @foreach (var project in _projects)
+                        {
+                            <option value="@project.Id">
+                                @project.Name
+                            </option>
+                        }
+                    </select>
+                </div>
             </div>
         }
 
@@ -133,19 +137,20 @@
                 <div class="text-center">
                     <h5>Select Discipline</h5>
                 </div>
-                <select class="form-select form-select-lg"
-                        aria-label="Select Discipline"
-                        style="max-height: 200px; overflow-y: auto;"
-                        value="@_selectedDiscipline?.Id"
-                        @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
-                    <option value="0" selected>Select Discipline</option>
-                    @foreach (var discipline in _disciplines)
-                    {
-                        <option value="@discipline.Id">
-                            @discipline.Type.Name
-                        </option>
-                    }
-                </select>
+                <div class="select-wrapper form-column form-column-field">
+                    <select class="form-select form-select-lg"
+                            aria-label="Select Discipline"
+                            value="@_selectedDiscipline?.Id"
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select Discipline</option>
+                        @foreach (var discipline in _disciplines)
+                        {
+                            <option value="@discipline.Id">
+                                @discipline.Type.Name
+                            </option>
+                        }
+                    </select>
+                </div>
             </div>
         }
 
@@ -167,7 +172,10 @@
                             <tr>
                                 <th scope="col" class="sticky-header">Deliverable</th>
                                 <th scope="col" class="sticky-header">Time</th>
-                                <th scope="col" class="sticky-header">Declared Completion</th>
+                                @if (!SendRequest)
+                                {
+                                    <th scope="col" class="sticky-header">Declared Completion</th>
+                                }
                             </tr>
                         </thead>
                         <tbody>
@@ -183,22 +191,25 @@
                                                    Time="_deliverable.Time"
                                                    OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
                                     </td>
-                                    <td class="align-middle">
-                                        <div class="input-group" style="width: 110px;">
-                                            <input type="number"
-                                                   class="form-control"
-                                                   EnableMinMax="true"
-                                                   min="0"
-                                                   max="100"
-                                                   style="min-width: 52px !important; max-width: 52px !important;"
-                                                   onkeyup="if(value<0) value=0; if(value>100) value=100;"
-                                                   onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
-                                                   @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">%</span>
+                                    @if (!SendRequest)
+                                    {
+                                        <td class="align-middle">
+                                            <div class="input-group" style="width: 110px;">
+                                                <input type="number"
+                                                       class="form-control"
+                                                       EnableMinMax="true"
+                                                       min="0"
+                                                       max="100"
+                                                       style="min-width: 52px !important; max-width: 52px !important;"
+                                                       onkeyup="if(value<0) value=0; if(value>100) value=100;"
+                                                       onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+                                                       @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
+                                        </td>
+                                    }
                                 </tr>
                             }
                         </tbody>

@@ -16,6 +16,7 @@ namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
 {
     #region Authorization Properties
+    bool isEmployee => _sharedAuthData.IsLogedUserEmployee;
     public bool assignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
     public bool assignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
     public bool assignPm => _sharedAuthData.PermissionOrds.Contains(5);
