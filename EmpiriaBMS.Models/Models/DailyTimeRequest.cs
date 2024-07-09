@@ -44,4 +44,6 @@ public class DailyTimeRequest : Entity
 
     public int? OfferId { get; set; }
     public Offer? Offer { get; set; }
+
+    public string Description { get; set; }
 }
