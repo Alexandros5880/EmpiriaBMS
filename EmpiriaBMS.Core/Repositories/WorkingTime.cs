@@ -216,7 +216,6 @@ public class WorkingTime : IDisposable
     }
     #endregion
 
-
     #region User General Time
     public async Task<DailyTime> AddDailyTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
