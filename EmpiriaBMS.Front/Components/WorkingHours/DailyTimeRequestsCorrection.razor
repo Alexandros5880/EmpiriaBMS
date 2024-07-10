@@ -38,15 +38,15 @@
 </style>
 
 <!-- Header -->
-<div class="d-flex justify-content-between mb-2 p-3 primary-bg-color rounded">
+<div class="d-flex justify-content-between p-3 primary-bg-color rounded">
     <h3>Working time requests</h3>
     <div style="max-width: 340px;" class="d-flex justify-content-between">
         <h5>Requests Count: </h5>
-        <span class="text-warning">@RequestCount</span>
+        <span class="text-danger ms-2">@RequestCount</span>
     </div>
 </div>
 
-<div class="card-container">
+<div class="card-container mt-3">
     @foreach (var dict in DailyRequests)
     {
         <div class="mb-3">

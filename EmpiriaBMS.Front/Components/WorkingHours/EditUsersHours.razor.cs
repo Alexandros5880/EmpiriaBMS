@@ -123,7 +123,7 @@ public partial class EditUsersHours
             await _getOffers();
 
         if (!workOnLeds && !workOnOffers)
-            await _getProjects();
+            await _getProjects(active: true);
 
         _selectedUser = new UserVM() { Id = 0 };
         _selectedLed = new LeadVM() { Id = 0 };
@@ -718,6 +718,15 @@ public partial class EditUsersHours
         catch (Exception ex)
         {
             Logger.LogError($"Exception EditUsersHours.Save(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+        }
+
+        // Refresh
+        RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
+        await Refresh();
+
+        if (User != null)
+        {
+            await OnSelectUser(User.Id);
         }
 
         _startLoading = false;
