@@ -507,6 +507,17 @@ public class SeedData
                     Ord = 38
                 };
 
+                // Approve Time Requests
+                var per_39_id = 39;
+                Permission per_39 = new Permission()
+                {
+                    Id = per_39_id,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Name = "Approve Time Requests",
+                    Ord = 39
+                };
+
                 await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Permissions", true);
 
                 await SeedIfNotExists<Permission>(context, _logger, per_1);
@@ -547,6 +558,7 @@ public class SeedData
                 await SeedIfNotExists<Permission>(context, _logger, per_36);
                 await SeedIfNotExists<Permission>(context, _logger, per_37);
                 await SeedIfNotExists<Permission>(context, _logger, per_38);
+                await SeedIfNotExists<Permission>(context, _logger, per_39);
 
                 await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Permissions", false);
 
@@ -589,6 +601,7 @@ public class SeedData
                 permissionsIds.Add(per_36.Id);
                 permissionsIds.Add(per_37.Id);
                 permissionsIds.Add(per_38.Id);
+                permissionsIds.Add(per_39.Id);
             }
         }
         catch (Exception ex)
@@ -1429,6 +1442,16 @@ public class SeedData
                     PermissionId = GetRecordAtIndex(permissionsIds, 37)
                 };
 
+                // CTO || Approve Time Requests
+                RolePermission rp_54 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9 + 3245,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = GetRecordAtIndex(rolesIds, 4),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 38)
+                };
+
 
                 // CEO
                 // CEO || See Dashboard Layout
@@ -1751,6 +1774,16 @@ public class SeedData
                     PermissionId = GetRecordAtIndex(permissionsIds, 37)
                 };
 
+                // CEO || Approve Time Requests
+                RolePermission rp_55 = new RolePermission()
+                {
+                    Id = random.Next(123456789, 999999999) * 9 + 215,
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    RoleId = GetRecordAtIndex(rolesIds, 5),
+                    PermissionId = GetRecordAtIndex(permissionsIds, 38)
+                };
+
 
                 // Guest
                 // Guest || See Dashboard Layout
@@ -1974,8 +2007,8 @@ public class SeedData
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_51);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_52);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_53);
-                //await SeedIfNotExists<RolePermission>(context, _logger, rp_54);
-                //await SeedIfNotExists<RolePermission>(context, _logger, rp_55);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_54);
+                await SeedIfNotExists<RolePermission>(context, _logger, rp_55);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_56);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_57);
                 await SeedIfNotExists<RolePermission>(context, _logger, rp_58);

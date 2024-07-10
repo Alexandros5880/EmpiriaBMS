@@ -158,27 +158,6 @@ public class OfferRepo : Repository<OfferDto, Offer>
         }
     }
 
-    public async Task AddTime(int userId, int offerId, TimeSpan timespan, bool isEditByAdmin = false)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            DailyTime time = new DailyTime()
-            {
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Date = DateTime.Now,
-                DailyUserId = userId,
-                OfferId = offerId,
-                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds),
-                IsEditByAdmin = isEditByAdmin
-            };
-            await _context.Set<DailyTime>().AddAsync(time);
-
-            // Save Changes
-            await _context.SaveChangesAsync();
-        }
-    }
-
     public async Task<double> GetSumOfPayedFee(int offerId)
     {
         try

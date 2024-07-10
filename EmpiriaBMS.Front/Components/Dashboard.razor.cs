@@ -4,6 +4,7 @@ using EmpiriaBMS.Front.Components.Invoices;
 using EmpiriaBMS.Front.Components.WorkingHours;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -16,6 +17,7 @@ namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
 {
     #region Authorization Properties
+    bool isEmployee => _sharedAuthData.IsLogedUserEmployee;
     public bool assignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
     public bool assignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
     public bool assignPm => _sharedAuthData.PermissionOrds.Contains(5);
@@ -41,6 +43,7 @@ public partial class Dashboard : IDisposable
     bool seeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
     bool canChangeEverybodyHours => _sharedAuthData.Permissions.Any(p => p.Ord == 37);
     bool seeLeadsOnDashboard => _sharedAuthData.Permissions.Any(p => p.Ord == 38);
+    bool canApproveTimeRequests => _sharedAuthData.Permissions.Any(p => p.Ord == 39);
     #endregion
 
     // General Fields
@@ -94,6 +97,7 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
     private ObservableCollection<TeamsRequestedUserVM> _teamsRequestedUsers = new ObservableCollection<TeamsRequestedUserVM>();
+    private Dictionary<DailyTimeTypes, List<DailyTimeRequest>> _dailyTimeRequest = new Dictionary<DailyTimeTypes, List<DailyTimeRequest>>();
     #endregion
 
     #region Selected Models
@@ -138,6 +142,10 @@ public partial class Dashboard : IDisposable
     private FluentDialog _displayTeamsRequestedUsersDialog;
     private bool _isDisplayTeamsRequestedUsersDialogOdepened = false;
 
+    // On Add/Edit Hours Correction rEQUESTS Dialog
+    private FluentDialog _displayHoursCorrectionRequestsDialog;
+    private bool _isDisplayHoursCorrectionRequestsDialogOdepened = false;
+
     // On Add Project Dialog
     private FluentDialog _addEditProjectDialog;
     private bool _isAddEditProjectDialogOdepened = false;
@@ -166,6 +174,10 @@ public partial class Dashboard : IDisposable
     private bool _isDeleteDialogOdepened = false;
     private string _deleteDialogMsg = "";
     private string _deleteObj = null;
+
+    // On Corrext Hours
+    private FluentDialog _correctHoursDialog;
+    private bool _isCorrectHoursDialogOdepened = false;
     #endregion
 
     protected override void OnInitialized()
@@ -203,11 +215,28 @@ public partial class Dashboard : IDisposable
         await _getUserTotalHoursThisMonth();
         await _getIssues();
         await _getProjects();
+        if (canApproveTimeRequests)
+        {
+            await _getHoursCorrectionsRequests();
+            await _getHoursCorrectionRequestsCount();
+        }
         _refreshLoading = false;
         StateHasChanged();
     }
 
     #region Get Records
+    private async Task _getHoursCorrectionsRequests()
+    {
+        _dailyTimeRequest.Clear();
+        _dailyTimeRequest = await _dataProvider.WorkingTime.GetDailyTimeRequests();
+    }
+
+    private int _hoursCorrectionCount = 0;
+    private async Task _getHoursCorrectionRequestsCount()
+    {
+        _hoursCorrectionCount = await _dataProvider.WorkingTime.GetDailyTimeRequestsCount();
+    }
+
     private async Task _getTeamsRequestedUsers()
     {
         try
@@ -888,6 +917,24 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
+    #region Display Hours Correction Request
+    private async Task OpenHoursCorrectionRequestsClick(MouseEventArgs e)
+    {
+        _displayHoursCorrectionRequestsDialog.Show();
+        _isDisplayHoursCorrectionRequestsDialogOdepened = true;
+    }
+
+    private async Task CloseHoursCorrectionRequestsClick()
+    {
+        if (_isDisplayHoursCorrectionRequestsDialogOdepened)
+        {
+            _displayHoursCorrectionRequestsDialog.Hide();
+            _isDisplayHoursCorrectionRequestsDialogOdepened = false;
+            await _getHoursCorrectionRequestsCount();
+        }
+    }
+    #endregion
+
     #region Add/Edit/Delete Project Actions
     private async Task NavigateOnMap(Address address)
     {
@@ -1065,6 +1112,30 @@ public partial class Dashboard : IDisposable
         _deleteObj = nameof(_selectedSupportiveWork);
         _deleteDialog.Show();
         _isDeleteDialogOdepened = true;
+    }
+    #endregion
+
+    #region Correct Hours Dialog
+    private void _correctHours()
+    {
+        _correctHoursDialog.Show();
+        _isCorrectHoursDialogOdepened = true;
+    }
+
+    private async Task _onCorrectHoursClose()
+    {
+        if (_isCorrectHoursDialogOdepened)
+        {
+            _correctHoursDialog.Hide();
+            _isCorrectHoursDialogOdepened = false;
+        }
+    }
+
+    private async Task _onHoursRequestChange()
+    {
+        await _getHoursCorrectionsRequests();
+        await _getHoursCorrectionRequestsCount();
+        await _getUserTotalHoursThisMonth();
     }
     #endregion
 

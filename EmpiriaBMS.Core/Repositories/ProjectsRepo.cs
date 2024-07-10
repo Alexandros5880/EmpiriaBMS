@@ -351,104 +351,115 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
     public new async Task<ICollection<ProjectDto>> GetLastMonthProjects(int userId, int offerId = 0, bool? active = null)
     {
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            // Get User Roles
-            var roleIds = await _context.Set<UserRole>()
-                                        .Where(r => !r.IsDeleted)
-                                        .Where(r => r.UserId == userId)
-                                        .Select(r => r.RoleId)
-                                        .ToListAsync();
+            if (userId == 0)
+                return new List<ProjectDto>();
 
-            // Get Roles Permissions
-            var permissions = await _context.Set<RolePermission>()
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                // Get User Roles
+                var roleIds = await _context.Set<UserRole>()
                                             .Where(r => !r.IsDeleted)
-                                            .Where(pr => roleIds.Contains(pr.RoleId))
-                                            .Include(pr => pr.Permission)
-                                            .Select(pr => pr.Permission)
+                                            .Where(r => r.UserId == userId)
+                                            .Select(r => r.RoleId)
                                             .ToListAsync();
 
-
-            if (permissions.Any(p => p.Ord == 11))
-            {
-                var allProjects = await _context.Set<Project>()
+                // Get Roles Permissions
+                var permissions = await _context.Set<RolePermission>()
                                                 .Where(r => !r.IsDeleted)
-                                                .Where(r => active == null || r.Active == active)
-                                                .Where(p => (offerId == 0 || p.OfferId == offerId))
-                                                .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
-                                                .Include(r => r.Invoices)
-                                                .Include(p => p.Stage)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Category)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.SubCategory)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Lead)
-                                                .ThenInclude(l => l.Address)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Lead)
-                                                .ThenInclude(l => l.Client)
-                                                .Include(p => p.ProjectManager)
-                                                .Include(p => p.ProjectsSubConstructors)
-                                                .OrderBy(e => !e.Active)
-                                                .ThenByDescending(e => e.DeadLine)
+                                                .Where(pr => roleIds.Contains(pr.RoleId))
+                                                .Include(pr => pr.Permission)
+                                                .Select(pr => pr.Permission)
                                                 .ToListAsync();
 
-                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(allProjects.Distinct().ToList());
-            }
 
-            // Filter Projects
-            var myDrawingIds = await _context.Set<DeliverableEmployee>()
-                                             .Where(r => !r.IsDeleted)
-                                             .Where(de => de.EmployeeId == userId)
-                                             .Select(e => e.DeliverableId)
-                                             .ToListAsync();
+                if (permissions.Any(p => p.Ord == 11))
+                {
+                    var allProjects = await _context.Set<Project>()
+                                                    .Where(r => !r.IsDeleted)
+                                                    .Where(r => active == null || r.Active == active)
+                                                    .Where(p => (offerId == 0 || p.OfferId == offerId))
+                                                    .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
+                                                    .Include(r => r.Invoices)
+                                                    .Include(p => p.Stage)
+                                                    .Include(p => p.Offer)
+                                                    .ThenInclude(o => o.Category)
+                                                    .Include(p => p.Offer)
+                                                    .ThenInclude(o => o.SubCategory)
+                                                    .Include(p => p.Offer)
+                                                    .ThenInclude(o => o.Lead)
+                                                    .ThenInclude(l => l.Address)
+                                                    .Include(p => p.Offer)
+                                                    .ThenInclude(o => o.Lead)
+                                                    .ThenInclude(l => l.Client)
+                                                    .Include(p => p.ProjectManager)
+                                                    .Include(p => p.ProjectsSubConstructors)
+                                                    .OrderBy(e => !e.Active)
+                                                    .ThenByDescending(e => e.DeadLine)
+                                                    .ToListAsync();
 
-            var drawingsDisciplinesIds = await _context.Set<Deliverable>()
+                    return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(allProjects.Distinct().ToList());
+                }
+
+                // Filter Projects
+                var myDrawingIds = await _context.Set<DeliverableEmployee>()
                                                  .Where(r => !r.IsDeleted)
-                                                 .Where(dd => myDrawingIds.Contains(dd.Id))
-                                                 .Select(e => e.DisciplineId)
+                                                 .Where(de => de.EmployeeId == userId)
+                                                 .Select(e => e.DeliverableId)
                                                  .ToListAsync();
 
-            var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
-                                                      .Where(r => !r.IsDeleted)
-                                                      .Where(d => d.EngineerId == userId)
-                                                      .Select(e => e.DisciplineId)
-                                                      .ToListAsync();
+                var drawingsDisciplinesIds = await _context.Set<Deliverable>()
+                                                     .Where(r => !r.IsDeleted)
+                                                     .Where(dd => myDrawingIds.Contains(dd.Id))
+                                                     .Select(e => e.DisciplineId)
+                                                     .ToListAsync();
 
-            var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
+                var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                          .Where(r => !r.IsDeleted)
+                                                          .Where(d => d.EngineerId == userId)
+                                                          .Select(e => e.DisciplineId)
+                                                          .ToListAsync();
 
-            var projectsFromDisciplineIds = await _context.Set<Discipline>()
-                                                        .Where(r => !r.IsDeleted)
-                                                        .Where(d => myDisciplinesIds.Contains(d.Id))
-                                                        .Select(dp => dp.ProjectId)
-                                                        .ToArrayAsync();
+                var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
 
-            var projects = await _context.Set<Project>()
-                                         .Where(r => !r.IsDeleted)
-                                         .Where(r => active == null || r.Active == active)
-                                         .Where(p => (offerId == 0 || p.OfferId == offerId))
-                                         .Where(p => projectsFromDisciplineIds.Contains(p.Id))
-                                         .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
-                                         .Include(r => r.Invoices)
-                                         .Include(p => p.Stage)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Category)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.SubCategory)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Lead)
-                                         .ThenInclude(l => l.Address)
-                                         .Include(p => p.Offer)
-                                         .ThenInclude(o => o.Lead)
-                                         .ThenInclude(l => l.Client)
-                                         .Include(p => p.ProjectManager)
-                                         .Include(p => p.ProjectsSubConstructors)
-                                         .OrderBy(e => !e.Active)
-                                         .ThenByDescending(e => e.DeadLine)
-                                         .ToListAsync();
+                var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                            .Where(r => !r.IsDeleted)
+                                                            .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                            .Select(dp => dp.ProjectId)
+                                                            .ToArrayAsync();
 
-            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+                var projects = await _context.Set<Project>()
+                                             .Where(r => !r.IsDeleted)
+                                             .Where(r => active == null || r.Active == active)
+                                             .Where(p => (offerId == 0 || p.OfferId == offerId))
+                                             .Where(p => projectsFromDisciplineIds.Contains(p.Id))
+                                             .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
+                                             .Include(r => r.Invoices)
+                                             .Include(p => p.Stage)
+                                             .Include(p => p.Offer)
+                                             .ThenInclude(o => o.Category)
+                                             .Include(p => p.Offer)
+                                             .ThenInclude(o => o.SubCategory)
+                                             .Include(p => p.Offer)
+                                             .ThenInclude(o => o.Lead)
+                                             .ThenInclude(l => l.Address)
+                                             .Include(p => p.Offer)
+                                             .ThenInclude(o => o.Lead)
+                                             .ThenInclude(l => l.Client)
+                                             .Include(p => p.ProjectManager)
+                                             .Include(p => p.ProjectsSubConstructors)
+                                             .OrderBy(e => !e.Active)
+                                             .ThenByDescending(e => e.DeadLine)
+                                             .ToListAsync();
+
+                return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.GetLastMonthProjects({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return new List<ProjectDto>();
         }
     }
 
@@ -1004,40 +1015,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task AddTime(int userId, int projectId, TimeSpan timespan, bool isEditByAdmin = false)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            DailyTime time = new DailyTime()
-            {
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Date = DateTime.Now,
-                DailyUserId = userId,
-                ProjectId = projectId,
-                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds),
-                IsEditByAdmin = isEditByAdmin
-            };
-            await _context.Set<DailyTime>().AddAsync(time);
-
-            // Get Project && Calculate Estimated Hours
-            var project = await _context.Set<Project>()
-                                        .Where(r => !r.IsDeleted)
-                                        .Include(p => p.DailyTime)
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-            if (project == null)
-                throw new NullReferenceException(nameof(project));
-            var projectsTimes = project.DailyTime.Select(dt => dt.TimeSpan).ToList();
-            var projectMenHours = projectsTimes.Select(t => t.Hours).Sum();
-
-            decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
-            project.EstimatedCompleted = (float)divitionProResult * 100;
-
-            // Save Changes
-            await _context.SaveChangesAsync();
-        }
-    }
-
     public async Task<double> GetSumOfPayedFee(int projectId)
     {
         try
@@ -1070,7 +1047,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On ProjectsRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On ProjectsRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -1107,7 +1084,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On ProjectsRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On ProjectsRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -1147,7 +1124,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On ProjectsRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On ProjectsRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return false;
         }
     }

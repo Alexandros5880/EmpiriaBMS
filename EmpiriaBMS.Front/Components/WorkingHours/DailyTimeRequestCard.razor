@@ -1,0 +1,70 @@
+﻿<!-- DailyTimeRequestsCorrection.razor -->
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Models.Enum
+@using EmpiriaBMS.Models.Models
+@using Microsoft.AspNetCore.Components
+@using EmpiriaBMS.Front.Components.WorkingHours;
+
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+@inject SharedAuthDataService _sharedAuthData
+@inject TimerService TimerService
+@inject Logging.LoggerManager Logger
+
+<style>
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 20px;
+        margin: 10px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    .description-text {
+        width: 100%;
+        height: 50px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+</style>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Request.Date.ToShortDateString()</h5>
+        <div>
+            <h5>
+                @if (Type == DailyTimeTypes.PersonalUser)
+                {
+                    @Request.PersonalUser?.FullName
+                }
+                else if (Type == DailyTimeTypes.TrainingUser)
+                {
+                    @Request.TrainingUser?.FullName
+                }
+                else if (Type == DailyTimeTypes.CorporateUser)
+                {
+                    @Request.CorporateUser?.FullName
+                }
+                else
+                {
+                    @Request.DailyUser?.FullName
+                }
+            </h5>
+        </div>
+        <p class="card-text description-text">@Request.Description</p>
+        <p class="card-text"><small class="text-muted">@FormatTimeSpan(Request.TimeSpan)</small></p>
+    
+        <FluentStack Orientation="Orientation.Horizontal"
+                     VerticalAlignment="VerticalAlignment.Center">
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Delete())"
+                          OnClick="@_reject">
+                Reject
+            </FluentButton>
+            <FluentButton IconStart="@(new Icons.Regular.Size16.ApprovalsApp())"
+                          Appearance="Appearance.Accent"
+                          OnClick="@_approve">
+                Approve
+            </FluentButton>
+        </FluentStack>
+    </div>
+</div>

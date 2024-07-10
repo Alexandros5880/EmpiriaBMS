@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
@@ -183,74 +182,6 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
             var disciplinesCounter = disciplines.Count();
             project.DeclaredCompleted = sumCompplitionOfDisciplines / disciplinesCounter;
 
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task AddTime(int userId, int projectId, int disciplineId, int drawId, TimeSpan timespan, bool isEditByAdmin = false)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-            for (int i = timeSpans.Count() - 1; i >= 0; i--)
-            {
-                DailyTime time = new DailyTime()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Date = DateTime.Now.AddDays(-i),
-                    DailyUserId = userId,
-                    ProjectId = projectId,
-                    DisciplineId = disciplineId,
-                    DrawingId = drawId,
-                    TimeSpan = new Timespan(
-                        timeSpans[i].Days,
-                        timeSpans[i].Hours,
-                        timeSpans[i].Minutes,
-                        timeSpans[i].Seconds
-                    ),
-                    IsEditByAdmin = isEditByAdmin
-                };
-                await _context.Set<DailyTime>().AddAsync(time);
-            }
-
-            // Save Changes
-            await _context.SaveChangesAsync();
-
-            // Get Discipline && Calculate Estimated Hours
-            var discipline = await _context.Set<Discipline>()
-                                           .Where(r => !r.IsDeleted)
-                                           .Include(p => p.DailyTime)
-                                           .FirstOrDefaultAsync(p => p.Id == disciplineId);
-            if (discipline == null)
-                throw new NullReferenceException(nameof(discipline));
-            var disciplineMenHours = await _context.Set<DailyTime>()
-                                                   .Where(r => !r.IsDeleted)
-                                                   .Where(d => d.DisciplineId == disciplineId)
-                                                   .Select(d => d.TimeSpan.Hours)
-                                                   .SumAsync();
-            decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours)
-                                                    / Convert.ToDecimal(discipline.EstimatedHours);
-            discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
-
-            // Get Project && Calculate Estimated Hours
-            var project = await _context.Set<Project>()
-                                        .Where(r => !r.IsDeleted)
-                                        .Include(p => p.DailyTime)
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-            if (project == null)
-                throw new NullReferenceException(nameof(project));
-            var projectsTimes = project.DailyTime.Where(r => !r.IsDeleted).Select(dt => dt.TimeSpan).ToList();
-            var projectMenHours = await _context.Set<DailyTime>()
-                                                .Where(r => !r.IsDeleted)
-                                                .Where(d => d.ProjectId == projectId)
-                                                .Select(d => d.TimeSpan.Hours)
-                                                .SumAsync();
-            decimal divitionProResult = Convert.ToDecimal(projectMenHours)
-                                                    / Convert.ToDecimal(project.EstimatedHours);
-            project.EstimatedCompleted = (float)divitionProResult * 100;
-
-            // Save Changes
             await _context.SaveChangesAsync();
         }
     }
