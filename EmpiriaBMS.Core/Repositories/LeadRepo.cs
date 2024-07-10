@@ -1,6 +1,5 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
@@ -269,68 +268,6 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
                 .ToListAsync();
 
             return Mapping.Mapper.Map<List<LeadDto>>(items);
-        }
-    }
-
-    public async Task AddTime(int userId, int ledId, TimeSpan timespan, bool isEditByAdmin = false)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-            for (int i = timeSpans.Count() - 1; i >= 0; i--)
-            {
-                DailyTime time = new DailyTime()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Date = DateTime.Now.AddDays(-i),
-                    DailyUserId = userId,
-                    LeadId = ledId,
-                    TimeSpan = new Timespan(
-                        timeSpans[i].Days,
-                        timeSpans[i].Hours,
-                        timeSpans[i].Minutes,
-                        timeSpans[i].Seconds
-                    ),
-                    IsEditByAdmin = isEditByAdmin
-                };
-                await _context.Set<DailyTime>().AddAsync(time);
-            }
-
-            // Save Changes
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task AddTimeRequest(int userId, int ledId, TimeSpan timespan, string description, bool isEditByAdmin = false)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-            for (int i = timeSpans.Count() - 1; i >= 0; i--)
-            {
-                DailyTimeRequest time = new DailyTimeRequest()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Date = DateTime.Now.AddDays(-i),
-                    DailyUserId = userId,
-                    LeadId = ledId,
-                    TimeSpan = new Timespan(
-                        timeSpans[i].Days,
-                        timeSpans[i].Hours,
-                        timeSpans[i].Minutes,
-                        timeSpans[i].Seconds
-                    ),
-                    IsEditByAdmin = isEditByAdmin,
-                    Description = description,
-                    IsClosed = false
-                };
-                await _context.Set<DailyTimeRequest>().AddAsync(time);
-            }
-
-            // Save Changes
-            await _context.SaveChangesAsync();
         }
     }
 

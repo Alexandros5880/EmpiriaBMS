@@ -213,6 +213,11 @@ public partial class Dashboard : IDisposable
     }
 
     #region Get Records
+    private async Task _getHoursCorrectionsRequests()
+    {
+        await Task.Delay(1);
+    }
+
     private async Task _getTeamsRequestedUsers()
     {
         try
