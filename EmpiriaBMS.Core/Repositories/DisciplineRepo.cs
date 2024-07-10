@@ -241,53 +241,6 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task AddTime(int userId, int projectId, int disciplineId, TimeSpan timespan, bool isEditByAdmin = false)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            DailyTime time = new DailyTime()
-            {
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Date = DateTime.Now,
-                DailyUserId = userId,
-                ProjectId = projectId,
-                DisciplineId = disciplineId,
-                TimeSpan = new Timespan(timespan.Days, timespan.Hours, timespan.Minutes, timespan.Seconds),
-                IsEditByAdmin = isEditByAdmin
-            };
-            await _context.Set<DailyTime>().AddAsync(time);
-
-            // Get Discipline && Calculate Estimated Hours
-            var discipline = await _context.Set<Discipline>()
-                                           .Where(r => !r.IsDeleted)
-                                           .Include(p => p.DailyTime)
-                                           .FirstOrDefaultAsync(p => p.Id == disciplineId);
-            if (discipline == null)
-                throw new NullReferenceException(nameof(discipline));
-            var disciplineMenHours = discipline.DailyTime.Select(h => h.TimeSpan.Hours).Sum();
-
-            decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
-            discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
-
-            // Get Project && Calculate Estimated Hours
-            var project = await _context.Set<Project>()
-                                        .Where(r => !r.IsDeleted)
-                                        .Include(p => p.DailyTime)
-                                        .FirstOrDefaultAsync(p => p.Id == projectId);
-            if (project == null)
-                throw new NullReferenceException(nameof(project));
-            var projectsTimes = project.DailyTime.Select(dt => dt.TimeSpan).ToList();
-            var projectMenHours = projectsTimes.Select(t => t.Hours).Sum();
-
-            decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
-            project.EstimatedCompleted = (float)divitionProResult * 100;
-
-            // Save Changes
-            await _context.SaveChangesAsync();
-        }
-    }
-
     public async Task<ICollection<UserDto>> GetEngineers(int disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())

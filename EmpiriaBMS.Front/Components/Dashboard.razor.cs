@@ -42,6 +42,7 @@ public partial class Dashboard : IDisposable
     bool seeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
     bool canChangeEverybodyHours => _sharedAuthData.Permissions.Any(p => p.Ord == 37);
     bool seeLeadsOnDashboard => _sharedAuthData.Permissions.Any(p => p.Ord == 38);
+    bool canApproveTimeRequests => _sharedAuthData.Permissions.Any(p => p.Ord == 39);
     #endregion
 
     // General Fields
@@ -208,6 +209,8 @@ public partial class Dashboard : IDisposable
         await _getUserTotalHoursThisMonth();
         await _getIssues();
         await _getProjects();
+        if (canApproveTimeRequests)
+            await _getHoursCorrectionsRequests();
         _refreshLoading = false;
         StateHasChanged();
     }
@@ -215,7 +218,10 @@ public partial class Dashboard : IDisposable
     #region Get Records
     private async Task _getHoursCorrectionsRequests()
     {
-        await Task.Delay(1);
+        var requests = await _dataProvider.WorkingTime.GetDailyTimeRequests();
+
+
+        var r = requests;
     }
 
     private async Task _getTeamsRequestedUsers()

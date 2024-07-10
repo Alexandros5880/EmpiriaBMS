@@ -19,6 +19,201 @@ public class WorkingTime : IDisposable
         _logger = logger;
     }
 
+    #region Get Time Correction Requests
+    public async Task<Dictionary<string, List<DailyTimeRequest>>> GetDailyTimeRequests()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var requests = await _context.Set<DailyTimeRequest>()
+                                         .Where(r => !r.IsDeleted && !r.IsClosed)
+                                         .Include(r => r.TimeSpan)
+                                         .Include(r => r.DailyUser)
+                                         .Include(r => r.PersonalUser)
+                                         .Include(r => r.TrainingUser)
+                                         .Include(r => r.CorporateUser)
+                                         .Include(r => r.Drawing)
+                                         .Include(r => r.Other)
+                                         .Include(r => r.Discipline)
+                                         .Include(r => r.Project)
+                                         .Include(r => r.Lead)
+                                         .Include(r => r.Offer)
+                                         .ToListAsync();
+
+            var groupedRequests = new Dictionary<string, List<DailyTimeRequest>>();
+
+            foreach (var request in requests)
+            {
+                string key = await _getGroupingKey(request, _context);
+                if (!groupedRequests.ContainsKey(key))
+                {
+                    groupedRequests[key] = new List<DailyTimeRequest>();
+                }
+                groupedRequests[key].Add(request);
+            }
+
+            return groupedRequests;
+        }
+    }
+
+    private async Task<string> _getGroupingKey(DailyTimeRequest request, AppDbContext _context)
+    {
+        // DailyUser
+        if (request.DailyUserId.HasValue &&
+            !request.PersonalUserId.HasValue &&
+            !request.TrainingUserId.HasValue &&
+            !request.CorporateUserId.HasValue &&
+            !request.LeadId.HasValue &&
+            !request.OfferId.HasValue &&
+            !request.ProjectId.HasValue &&
+            !request.DisciplineId.HasValue &&
+            !request.DrawingId.HasValue &&
+            !request.OtherId.HasValue)
+        {
+            var dailyUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.DailyUserId);
+            return $"DailyUser_{request.DailyUserId}";
+        }
+        // PersonalUser
+        else if (request.PersonalUserId.HasValue &&
+            !request.DailyUserId.HasValue &&
+            !request.TrainingUserId.HasValue &&
+            !request.CorporateUserId.HasValue &&
+            !request.LeadId.HasValue &&
+            !request.OfferId.HasValue &&
+            !request.ProjectId.HasValue &&
+            !request.DisciplineId.HasValue &&
+            !request.DrawingId.HasValue &&
+            !request.OtherId.HasValue)
+        {
+            var personalUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.PersonalUserId);
+            return $"PersonalUser_{request.PersonalUserId}";
+        }
+        // TrainingUser
+        else if (request.TrainingUserId.HasValue &&
+            !request.DailyUserId.HasValue &&
+            !request.PersonalUserId.HasValue &&
+            !request.CorporateUserId.HasValue &&
+            !request.LeadId.HasValue &&
+            !request.OfferId.HasValue &&
+            !request.ProjectId.HasValue &&
+            !request.DisciplineId.HasValue &&
+            !request.DrawingId.HasValue &&
+            !request.OtherId.HasValue)
+        {
+            var trainingUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.TrainingUserId);
+            return $"TrainingUser_{request.TrainingUserId}";
+        }
+        // CorporateUser
+        else if (request.CorporateUserId.HasValue &&
+            !request.DailyUserId.HasValue &&
+            !request.PersonalUserId.HasValue &&
+            !request.TrainingUserId.HasValue &&
+            !request.LeadId.HasValue &&
+            !request.OfferId.HasValue &&
+            !request.ProjectId.HasValue &&
+            !request.DisciplineId.HasValue &&
+            !request.DrawingId.HasValue &&
+            !request.OtherId.HasValue)
+        {
+            var corporateUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.CorporateUserId);
+            return $"CorporateUser_{request.CorporateUserId}";
+        }
+        // Lead
+        else if (request.LeadId.HasValue &&
+                 request.DailyUserId.HasValue &&
+                !request.PersonalUserId.HasValue &&
+                !request.TrainingUserId.HasValue &&
+                !request.CorporateUserId.HasValue &&
+                !request.OfferId.HasValue &&
+                !request.ProjectId.HasValue &&
+                !request.DisciplineId.HasValue &&
+                !request.DrawingId.HasValue &&
+                !request.OtherId.HasValue)
+        {
+            var lead = await _context.Set<Lead>().FirstOrDefaultAsync(u => u.Id == request.LeadId);
+            return $"Lead_{request.LeadId}";
+        }
+        // Offer
+        else if (request.OfferId.HasValue &&
+                 request.DailyUserId.HasValue &&
+                !request.PersonalUserId.HasValue &&
+                !request.TrainingUserId.HasValue &&
+                !request.CorporateUserId.HasValue &&
+                !request.LeadId.HasValue &&
+                !request.ProjectId.HasValue &&
+                !request.DisciplineId.HasValue &&
+                !request.DrawingId.HasValue &&
+                !request.OtherId.HasValue)
+        {
+            var offer = await _context.Set<Offer>().FirstOrDefaultAsync(u => u.Id == request.OfferId);
+            return $"Offer_{request.OfferId}";
+        }
+        // Project
+        else if (request.ProjectId.HasValue &&
+                 request.DailyUserId.HasValue &&
+                !request.PersonalUserId.HasValue &&
+                !request.TrainingUserId.HasValue &&
+                !request.CorporateUserId.HasValue &&
+                !request.LeadId.HasValue &&
+                !request.OfferId.HasValue &&
+                !request.DisciplineId.HasValue &&
+                !request.DrawingId.HasValue &&
+                !request.OtherId.HasValue)
+        {
+            var project = await _context.Set<Project>().FirstOrDefaultAsync(u => u.Id == request.ProjectId);
+            return $"Project_{request.ProjectId}";
+        }
+        // Discipline
+        else if (request.DisciplineId.HasValue &&
+                 request.DailyUserId.HasValue &&
+                 request.ProjectId.HasValue &&
+                 request.DisciplineId.HasValue &&
+                !request.PersonalUserId.HasValue &&
+                !request.TrainingUserId.HasValue &&
+                !request.CorporateUserId.HasValue &&
+                !request.LeadId.HasValue &&
+                !request.OfferId.HasValue &&
+                !request.DrawingId.HasValue &&
+                !request.OtherId.HasValue)
+        {
+            var discipline = await _context.Set<Discipline>().FirstOrDefaultAsync(u => u.Id == request.DisciplineId);
+            return $"Discipline_{request.DisciplineId}";
+        }
+        // Drawing
+        else if (request.DrawingId.HasValue &&
+                 request.DisciplineId.HasValue &&
+                 request.ProjectId.HasValue &&
+                 request.DailyUserId.HasValue &&
+                !request.PersonalUserId.HasValue &&
+                !request.TrainingUserId.HasValue &&
+                !request.CorporateUserId.HasValue &&
+                !request.LeadId.HasValue &&
+                !request.OfferId.HasValue &&
+                !request.OtherId.HasValue)
+        {
+            var deliverable = await _context.Set<Deliverable>().FirstOrDefaultAsync(u => u.Id == request.DrawingId);
+            return $"Drawing_{request.DrawingId}";
+        }
+        // Other
+        else if (request.OtherId.HasValue &&
+                 request.DisciplineId.HasValue &&
+                 request.ProjectId.HasValue &&
+                 request.DailyUserId.HasValue &&
+                !request.PersonalUserId.HasValue &&
+                !request.TrainingUserId.HasValue &&
+                !request.CorporateUserId.HasValue &&
+                !request.LeadId.HasValue &&
+                !request.OfferId.HasValue &&
+                !request.DrawingId.HasValue)
+        {
+            var supportiveWork = await _context.Set<SupportiveWork>().FirstOrDefaultAsync(u => u.Id == request.OtherId);
+            return $"Other_{request.OtherId}";
+        }
+
+        return "Uncategorized";
+    }
+    #endregion
+
+
     #region User General Time
     public async Task<DailyTime> AddDailyTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
@@ -587,6 +782,97 @@ public class WorkingTime : IDisposable
                     Date = DateTime.Now.AddDays(-i),
                     DailyUserId = userId,
                     OfferId = offerId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = isEditByAdmin,
+                    Description = description,
+                    IsClosed = false
+                };
+                await _context.Set<DailyTimeRequest>().AddAsync(time);
+            }
+
+            // Save Changes
+            await _context.SaveChangesAsync();
+        }
+    }
+    #endregion
+
+    #region Discipline Time
+    public async Task DisciplineAddTime(int userId, int projectId, int disciplineId, TimeSpan timespan, bool isEditByAdmin = false)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
+            {
+                DailyTime time = new DailyTime()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now,
+                    DailyUserId = userId,
+                    ProjectId = projectId,
+                    DisciplineId = disciplineId,
+                    TimeSpan = new Timespan(
+                        timeSpans[i].Days,
+                        timeSpans[i].Hours,
+                        timeSpans[i].Minutes,
+                        timeSpans[i].Seconds
+                    ),
+                    IsEditByAdmin = isEditByAdmin
+                };
+                await _context.Set<DailyTime>().AddAsync(time);
+            }
+
+            // Get Discipline && Calculate Estimated Hours
+            var discipline = await _context.Set<Discipline>()
+                                           .Where(r => !r.IsDeleted)
+                                           .Include(p => p.DailyTime)
+                                           .FirstOrDefaultAsync(p => p.Id == disciplineId);
+            if (discipline == null)
+                throw new NullReferenceException(nameof(discipline));
+            var disciplineMenHours = discipline.DailyTime.Select(h => h.TimeSpan.Hours).Sum();
+
+            decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
+            discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
+
+            // Get Project && Calculate Estimated Hours
+            var project = await _context.Set<Project>()
+                                        .Where(r => !r.IsDeleted)
+                                        .Include(p => p.DailyTime)
+                                        .FirstOrDefaultAsync(p => p.Id == projectId);
+            if (project == null)
+                throw new NullReferenceException(nameof(project));
+            var projectsTimes = project.DailyTime.Select(dt => dt.TimeSpan).ToList();
+            var projectMenHours = projectsTimes.Select(t => t.Hours).Sum();
+
+            decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
+            project.EstimatedCompleted = (float)divitionProResult * 100;
+
+            // Save Changes
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task DisciplineAddTimeRequest(int userId, int projectId, int disciplineId, int otherId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+            for (int i = timeSpans.Count() - 1; i >= 0; i--)
+            {
+                DailyTimeRequest time = new DailyTimeRequest()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    Date = DateTime.Now,
+                    DailyUserId = userId,
+                    ProjectId = projectId,
+                    DisciplineId = disciplineId,
                     TimeSpan = new Timespan(
                         timeSpans[i].Days,
                         timeSpans[i].Hours,
