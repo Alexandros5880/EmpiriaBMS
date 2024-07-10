@@ -1122,12 +1122,14 @@ public partial class Dashboard : IDisposable
         _isCorrectHoursDialogOdepened = true;
     }
 
-    private void _onCorrectHoursClose()
+    private async Task _onCorrectHoursClose()
     {
         if (_isCorrectHoursDialogOdepened)
         {
             _correctHoursDialog.Hide();
             _isCorrectHoursDialogOdepened = false;
+
+            await Refresh();
         }
     }
 
