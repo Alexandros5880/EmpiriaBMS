@@ -1130,6 +1130,12 @@ public partial class Dashboard : IDisposable
             _isCorrectHoursDialogOdepened = false;
         }
     }
+
+    private async Task _onHoursRequestChange()
+    {
+        await _getHoursCorrectionsRequests();
+        await _getHoursCorrectionRequestsCount();
+    }
     #endregion
 
     #region Delete Dialog Actions

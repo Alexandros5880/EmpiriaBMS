@@ -20,7 +20,7 @@ public class WorkingTime : IDisposable
         _logger = logger;
     }
 
-    #region Get Time Correction Requests
+    #region Time Correction Requests
     public async Task<Dictionary<DailyTimeTypes, List<DailyTimeRequest>>> GetDailyTimeRequests()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -224,6 +224,21 @@ public class WorkingTime : IDisposable
         }
 
         return null;
+    }
+
+    public async Task ApproveDailyTimeRequest(DailyTimeRequest request)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            await Task.Delay(1);
+        }
+    }
+    public async Task RejectDailyTimeRequest(DailyTimeRequest request)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            await Task.Delay(1);
+        }
     }
     #endregion
 

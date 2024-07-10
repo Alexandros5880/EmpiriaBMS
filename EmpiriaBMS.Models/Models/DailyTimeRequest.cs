@@ -46,4 +46,34 @@ public class DailyTimeRequest : Entity
     public Offer? Offer { get; set; }
 
     public string? Description { get; set; }
+
+    public DailyTime GetDailyTime()
+    {
+        return new DailyTime()
+        {
+            Date = Date,
+            TimeSpan = TimeSpan,
+            IsEditByAdmin = IsEditByAdmin,
+            DailyUserId = DailyUserId,
+            DailyUser = DailyUser,
+            PersonalUserId = PersonalUserId,
+            PersonalUser = PersonalUser,
+            TrainingUserId = TrainingUserId,
+            TrainingUser = TrainingUser,
+            CorporateUserId = CorporateUserId,
+            CorporateUser = CorporateUser,
+            DrawingId = DrawingId,
+            Drawing = Drawing,
+            OtherId = OtherId,
+            Other = Other,
+            DisciplineId = DisciplineId,
+            Discipline = Discipline,
+            ProjectId = ProjectId,
+            Project = Project,
+            LeadId = LeadId,
+            Lead = Lead,
+            OfferId = OfferId,
+            Offer = Offer
+        };
+    }
 }

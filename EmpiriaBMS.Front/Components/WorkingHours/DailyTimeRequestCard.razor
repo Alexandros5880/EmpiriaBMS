@@ -1,4 +1,16 @@
-﻿
+﻿<!-- DailyTimeRequestsCorrection.razor -->
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Models.Enum
+@using EmpiriaBMS.Models.Models
+@using Microsoft.AspNetCore.Components
+@using EmpiriaBMS.Front.Components.WorkingHours;
+
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+@inject SharedAuthDataService _sharedAuthData
+@inject TimerService TimerService
+@inject Logging.LoggerManager Logger
+
 <style>
     .card {
         border: 1px solid #ddd;
@@ -23,12 +35,14 @@
         <p class="card-text"><small class="text-muted">@FormatTimeSpan(Request.TimeSpan)</small></p>
     
         <FluentStack Orientation="Orientation.Horizontal"
-                      VerticalAlignment="VerticalAlignment.Center">
-            <FluentButton IconStart="@(new Icons.Regular.Size16.Globe())">
-                Cancel
+                     VerticalAlignment="VerticalAlignment.Center">
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Globe())"
+                          OnClick="@_reject">
+                Reject
             </FluentButton>
             <FluentButton IconStart="@(new Icons.Regular.Size16.Globe())"
-                          Appearance="Appearance.Accent">
+                          Appearance="Appearance.Accent"
+                          OnClick="@_approve">
                 Approve
             </FluentButton>
         </FluentStack>

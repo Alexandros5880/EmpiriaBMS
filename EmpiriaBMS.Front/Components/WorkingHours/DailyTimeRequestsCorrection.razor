@@ -56,7 +56,7 @@
                     @foreach (var request in dict.Value)
                     {
                         <div class="card-col">
-                            <DailyTimeRequestCard Request="request" />
+                            <DailyTimeRequestCard Request="request" OnEnd="@(async (r) => await _onEnd(r))" />
                         </div>
                     }
                 </div>

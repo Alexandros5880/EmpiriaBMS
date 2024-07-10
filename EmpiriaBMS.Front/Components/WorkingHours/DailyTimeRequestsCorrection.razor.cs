@@ -12,6 +12,9 @@ public partial class DailyTimeRequestsCorrection
     public int RequestCount { get; set; }
 
     [Parameter]
+    public EventCallback<DailyTimeRequest> OnChange { get; set; }
+
+    [Parameter]
     public Dictionary<DailyTimeTypes, List<DailyTimeRequest>> DailyRequests { get; set; }
 
     private string GetDisplayName(DailyTimeTypes dailyTimeType)
@@ -20,4 +23,7 @@ public partial class DailyTimeRequestsCorrection
         var attribute = (DisplayAttribute)field.GetCustomAttribute(typeof(DisplayAttribute));
         return attribute?.Name ?? dailyTimeType.ToString();
     }
+
+    private async Task _onEnd(DailyTimeRequest request) =>
+        await OnChange.InvokeAsync(request);
 }

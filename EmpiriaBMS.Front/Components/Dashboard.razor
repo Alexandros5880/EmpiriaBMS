@@ -1191,7 +1191,9 @@
             </div>
 
             <div class="col-12 justify-content-center">
-                <DailyTimeRequestsCorrection RequestCount="@_hoursCorrectionCount" DailyRequests="@_dailyTimeRequest" />
+                <DailyTimeRequestsCorrection RequestCount="@_hoursCorrectionCount"
+                                             DailyRequests="@_dailyTimeRequest"
+                                             OnChange="@_onHoursRequestChange" />
             </div>
 
         </div>
