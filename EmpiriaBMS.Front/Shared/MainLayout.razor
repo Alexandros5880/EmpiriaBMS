@@ -35,35 +35,38 @@
         </div>
     }
 
-    <!-- Remove This -->
-    <select class="form-select" @onchange="UsersSelectionChanged"
-            style="position:fixed !important; bottom:0px !important; width: auto; right: 10px; z-index: 1000;">
-        @foreach (var _user in _allUsers)
-        {
-            @if (@_user.Id.Equals(_sharedAuthData?.LogedUser?.Id))
+    <!-- Select User For Debuging -->
+    @if (HostEnvironment.EnvironmentName.Equals("Development"))
+    {
+        <select class="form-select" @onchange="UsersSelectionChanged"
+                style="position:fixed !important; bottom:0px !important; width: auto; right: 10px; z-index: 1000;">
+            @foreach (var _user in _allUsers)
             {
-                <option value="@_user?.Id" selected>
-                    @_user.LastName @_user.FirstName  -->  [
-                    @foreach (var r in _user.Roles)
-                    {
-                        <span>&nbsp; &nbsp; @r.Name &nbsp; &nbsp;</span>
-                    }
-                    ]
-                </option>
+                @if (@_user.Id.Equals(_sharedAuthData?.LogedUser?.Id))
+                {
+                    <option value="@_user?.Id" selected>
+                        @_user.LastName @_user.FirstName  -->  [
+                        @foreach (var r in _user.Roles)
+                        {
+                            <span>&nbsp; &nbsp; @r.Name &nbsp; &nbsp;</span>
+                        }
+                        ]
+                    </option>
+                }
+                else
+                {
+                    <option value="@_user?.Id">
+                        @_user.LastName @_user.FirstName  -->  [
+                        @foreach (var r in _user.Roles)
+                        {
+                            <span>&nbsp; &nbsp; @r.Name &nbsp; &nbsp;</span>
+                        }
+                        ]
+                    </option>
+                }
             }
-            else
-            {
-                <option value="@_user?.Id">
-                    @_user.LastName @_user.FirstName  -->  [
-                    @foreach (var r in _user.Roles)
-                    {
-                        <span>&nbsp; &nbsp; @r.Name &nbsp; &nbsp;</span>
-                    }
-                    ]
-                </option>
-            }
-        }
-    </select>
+        </select>
+    }
 }
 else
 {
@@ -112,7 +115,11 @@ else
         if (firstRender)
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
-            await GetAllUsers(); // TODO: Remove This
+
+            // For Debuging Only
+            if (HostEnvironment.EnvironmentName.Equals("Development"))
+                await GetAllUsers();
+
             authorizeServices.CallBackOnAuthorize += _afterAuthCallBack;
             var result = await authorizeServices.Authorize(runInTeams: _runInTeams);
             if (!result)
@@ -132,7 +139,7 @@ else
         return HostEnvironment.IsDevelopment() ? "local environment" : "Azure environment";
     }
 
-    // TODO: Remove This
+    #region For Debuging Only
     private ICollection<UserDto> _allUsers = new List<UserDto>();
 
     private async Task UsersSelectionChanged(ChangeEventArgs e)
@@ -150,4 +157,5 @@ else
         _allUsers.Clear();
         users.Where(u => u.Roles.Count > 0).ToList().ForEach(_allUsers.Add);
     }
+    #endregion
 }
