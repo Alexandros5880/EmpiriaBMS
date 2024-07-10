@@ -347,20 +347,23 @@
     </div>
 
     <!-- Description -->
-    <div class="mt-1 w-98">
-        <div>
-            Description<span class="text-danger">*</span>
-        </div>
-        <div>
-            <FluentTextArea Class="" Style="width:100%;" @bind-Value="@_description" Rows="3" Resize="TextAreaResize.Vertical" />
-        </div>
-        @if (!validDescription)
-        {
+    @if (SendRequest)
+    {
+        <div class="mt-1 w-98">
             <div>
-                <span class="text-warning">Field is required!</span>
+                Description<span class="text-danger">*</span>
             </div>
-        }
-    </div>
+            <div>
+                <FluentTextArea Class="" Style="width:100%;" @bind-Value="@_description" Rows="3" Resize="TextAreaResize.Vertical" />
+            </div>
+            @if (!validDescription)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+    }
 
 </div>
 
@@ -369,7 +372,8 @@
     <div class="mt-1">
         <FluentStack Orientation="Orientation.Horizontal" Class="d-flex justify-content-center">
             <!-- Class="d-flex justify-content-end" -->
-            <FluentButton OnClick="@(async () => await Save())" Disabled="@(!_hasChanged)">
+            <FluentButton OnClick="@(async () => await Save())"
+                          Disabled="@(!_hasChanged)"> <!--  && (SendRequest && (string.IsNullOrEmpty(_description) || string.IsNullOrWhiteSpace(_description))) -->
                 Save
             </FluentButton>
         </FluentStack>
