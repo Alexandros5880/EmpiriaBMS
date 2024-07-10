@@ -1176,6 +1176,28 @@
 
     </FluentDialog>
 
+    <!-- On Display TeamsRequestedUsers Dialog -->
+    <FluentDialog @ref="_displayHoursCorrectionRequestsDialog"
+                  Hidden="@(!_isDisplayHoursCorrectionRequestsDialogOdepened || _startLoading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: min(98vw, 1300px) !important;
+                         --dialog-height: min(86vh, 1400px) !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="@(async() => await CloseHoursCorrectionRequestsClick())"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <DailyTimeRequestsCorrectio. RequestCount="@_hoursCorrectionCount" DailyRequests="@_dailyTimeRequest" />
+            </div>
+
+        </div>
+
+    </FluentDialog>
+
     <!-- On Add/Edit Project Dialog -->
     <FluentDialog @ref="_addEditProjectDialog"
                   Hidden="@(!_isAddEditProjectDialogOdepened || _startLoading)"
