@@ -34,7 +34,7 @@ public class DailyTimeRequest : Entity
     public SupportiveWork? Other { get; set; }
 
     public int? DisciplineId { get; set; }
-    public Discipline? Discipline { get; set; }
+    public Discipline Discipline { get; set; }
 
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
@@ -45,5 +45,5 @@ public class DailyTimeRequest : Entity
     public int? OfferId { get; set; }
     public Offer? Offer { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 }

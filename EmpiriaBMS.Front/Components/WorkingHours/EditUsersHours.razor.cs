@@ -600,7 +600,9 @@ public partial class EditUsersHours
 
         if (SendRequest)
         {
-            await _sendRequest();
+            var valid = Validate();
+            if (valid)
+                await _sendRequest();
             return;
         }
 
@@ -743,4 +745,33 @@ public partial class EditUsersHours
             Logger.LogError($"Exception EditUsersHours._sendRequest(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
+
+    #region Validation
+    private bool validDescription = true;
+
+    public bool Validate(string fieldname = null)
+    {
+        if (fieldname == null)
+        {
+            validDescription = !string.IsNullOrEmpty(_description) && !string.IsNullOrWhiteSpace(_description);
+
+            return validDescription;
+        }
+        else
+        {
+            validDescription = true;
+
+            switch (fieldname)
+            {
+                case "Description":
+                    validDescription = !string.IsNullOrEmpty(_description) && !string.IsNullOrWhiteSpace(_description);
+                    return validDescription;
+
+                default:
+                    return true;
+            }
+
+        }
+    }
+    #endregion
 }

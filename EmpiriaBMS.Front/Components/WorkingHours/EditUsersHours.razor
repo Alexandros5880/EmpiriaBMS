@@ -16,9 +16,9 @@
     }
 </div>
 
-<div>
+<div style="max-height: 600px; width: auto; overflow-y: auto; overflow-x: none;">
 
-    <div class="mt-1 row gx-2">
+    <div class="mt-1 row gx-2 ms-1 me-1">
 
         <!-- Select User -->
         @if(!IsFromDashboard || User != null)
@@ -156,12 +156,12 @@
 
     </div>
 
-    <div class="mt-1 row gx-2">
+    <FluentStack Orientation="Orientation.Horizontal" Class="mt-1">
 
         <!-- Deliverables -->
         @if (IsFromDashboard || (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
         {
-            <div class="col">
+            <div class="w-50">
                 <div class="text-center">
                     <h5>Deliverables</h5>
                 </div>
@@ -221,7 +221,7 @@
         <!-- Others -->
         @if (IsFromDashboard || (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
         {
-            <div class="col">
+            <div class="w-50">
                 <div class="text-center">
                     <h5>Supportive Works</h5>
                 </div>
@@ -255,76 +255,100 @@
             </div>
         }
 
-    </div>
+    </FluentStack>
 
+    <div class="mt-2">
 
-    <div class="mt-1 row">
-
-        <!-- Set User With High Roles Time -->
-        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0 
-                                    && (_selectedLed != null && _selectedLed.Id != 0 
-                                        || _selectedOffer != null && _selectedOffer.Id != 0
-                                        || _selectedProject != null && _selectedProject.Id != 0)))
-        {
-            <div class="col-12 border rounded mb-1">
-                <div class="row gx-2 m-1">
-                    @if ((workOnLeds || seeAdmin) && (_selectedLed != null && _selectedLed.Id != 0))
-                    {
-                        <div class="col-4 text-center">
-                            <span class="mb-2 fs-5">Led</span>
-                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
-                                       MaxTime="@RemainingTime"
-                                       Time="_selectedLed.Time"
-                                       OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedLed, time)) />
-                        </div>
-                    }
-
-                    @if ((workOnOffers || seeAdmin) && (_selectedOffer != null && _selectedOffer.Id != 0))
-                    {
-                        <div class="col-4 text-center">
-                            <span class="mb-2 fs-5">Offer</span>
-                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
-                                       MaxTime="@RemainingTime"
-                                       Time="_selectedOffer.Time"
-                                       OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
-                        </div>
-                    }
-
-                    @if ((workOnProject || seeAdmin) && (_selectedProject != null && _selectedProject.Id != 0))
-                    {
-                        <div class="col-4 text-center">
-                            <span class="mb-2 fs-5">Project</span>
-                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
-                                       MaxTime="@RemainingTime"
-                                       Time="_selectedProject.Time"
-                                       OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
-                        </div>
-                    }
-                </div>
-            </div>
-
-        }
-        
-        <!-- Set User Extra Time -->
         @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
         {
-            <div class="col-12 border rounded mb-1">
-                <SetUserTime LogedUserTimes="@_editLogedUserTimes"
-                             RemainingTime="@RemainingTime"
-                             MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
-                             OnPersonalTimeChanged="@_onPersonalTimeChanged"
-                             OnTrainingTimeChanged="@_onTrainingTimeChanged"
-                             OnCorporateTimeChanged="@_onCorporateTimeChanged" />
-            </div>
+            <FluentAccordion>
+                <FluentAccordionItem Expanded="false">
+                    <HeadingTemplate>
+                        <div class="accordion-header">
+                            <h3>General Time</h3>
+                        </div>
+                    </HeadingTemplate>
+                    <ChildContent>
+
+                        <!-- Set User With High Roles Time -->
+                        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0
+                               && (_selectedLed != null && _selectedLed.Id != 0
+                               || _selectedOffer != null && _selectedOffer.Id != 0
+                               || _selectedProject != null && _selectedProject.Id != 0)))
+                        {
+                            <div class="mb-1">
+                                <div class="row gx-3 m-2 w-96">
+
+                                    @if ((workOnLeds || seeAdmin) && (_selectedLed != null && _selectedLed.Id != 0))
+                                    {
+                                        <div class="col-4 text-center">
+                                            <span class="mb-2 fs-5">Led</span>
+                                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
+                                                       MaxTime="@RemainingTime"
+                                                       Time="_selectedLed.Time"
+                                                       OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedLed, time)) />
+                                        </div>
+                                    }
+
+                                    @if ((workOnOffers || seeAdmin) && (_selectedOffer != null && _selectedOffer.Id != 0))
+                                    {
+                                        <div class="col-4 text-center">
+                                            <span class="mb-2 fs-5">Offer</span>
+                                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
+                                                       MaxTime="@RemainingTime"
+                                                       Time="_selectedOffer.Time"
+                                                       OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
+                                        </div>
+                                    }
+
+                                    @if ((workOnProject || seeAdmin) && (_selectedProject != null && _selectedProject.Id != 0))
+                                    {
+                                        <div class="col-4 text-center">
+                                            <span class="mb-2 fs-5">Project</span>
+                                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
+                                                       MaxTime="@RemainingTime"
+                                                       Time="_selectedProject.Time"
+                                                       OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Set User Extra Time -->
+                        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
+                        {
+                            <div class="mb-1">
+                                <SetUserTime LogedUserTimes="@_editLogedUserTimes"
+                                             RemainingTime="@RemainingTime"
+                                             MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
+                                             OnPersonalTimeChanged="@_onPersonalTimeChanged"
+                                             OnTrainingTimeChanged="@_onTrainingTimeChanged"
+                                             OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+                            </div>
+                        }
+
+                    </ChildContent>
+                </FluentAccordionItem>
+            </FluentAccordion>
         }
 
     </div>
 
-    <div class="mt-1 row">
-        <!-- Description -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@_description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+    <!-- Description -->
+    <div class="mt-1 w-98">
+        <div>
+            Description<span class="text-danger">*</span>
         </div>
+        <div>
+            <FluentTextArea Class="" Style="width:100%;" @bind-Value="@_description" Rows="3" Resize="TextAreaResize.Vertical" />
+        </div>
+        @if (!validDescription)
+        {
+            <div>
+                <span class="text-warning">Field is required!</span>
+            </div>
+        }
     </div>
 
 </div>

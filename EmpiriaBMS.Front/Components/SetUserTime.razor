@@ -7,21 +7,21 @@
     <div class="row gx-3 m-2 ">
         <div class="col-4 text-center">
             <span class="mb-2 fs-5">Personal</span>
-            <TimeInput MinTime="TimeSpan.Zero"
+            <TimeInput MinTime="MinTime"
                        MaxTime="@RemainingTime"
                        Time="LogedUserTimes.PersonalTime"
                        OnPropertyChanged=@(async (time) => await OnPersonalTimeChanged.InvokeAsync(time)) />
         </div>
         <div class="col-4 text-center">
             <span class="mb-2 fs-5">Training</span>
-            <TimeInput MinTime="TimeSpan.Zero"
+            <TimeInput MinTime="MinTime"
                        MaxTime="@RemainingTime"
                        Time="LogedUserTimes.TrainingTime"
                        OnPropertyChanged=@(async (time) => await OnTrainingTimeChanged.InvokeAsync(time)) />
         </div>
         <div class="col-4 text-center">
             <span class="mb-2 fs-5">Corporate Event</span>
-            <TimeInput MinTime="TimeSpan.Zero"
+            <TimeInput MinTime="MinTime"
                        MaxTime="@RemainingTime"
                        Time="LogedUserTimes.CorporateEventTime"
                        OnPropertyChanged=@(async (time) => await OnCorporateTimeChanged.InvokeAsync(time)) />
