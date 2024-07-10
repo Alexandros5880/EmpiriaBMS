@@ -73,6 +73,7 @@ public partial class EditUsersHours
     private List<LeadVM> _ledsChanged = new List<LeadVM>();
     private List<OfferVM> _offersChanged = new List<OfferVM>();
     private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
+    private List<DisciplineVM> _disciplinesChanged = new List<DisciplineVM>();
     private List<DeliverableVM> _deliverablesChanged = new List<DeliverableVM>();
     private List<SupportiveWorkVM> _supportiveWorkChanged = new List<SupportiveWorkVM>();
     #endregion
@@ -327,6 +328,31 @@ public partial class EditUsersHours
         }
         else
             _projectsChanged.Add(project);
+
+        _hasChanged = true;
+
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
+        StateHasChanged();
+    }
+
+    private async Task _onDisciplineTimeChanged(DisciplineVM discipline, TimeSpan newTimeSpan)
+    {
+        // previusTime, updatedTime, RemainingTime
+
+        var previusTime = discipline.Time;
+        var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
+
+        discipline.Time = newTimeSpan;
+
+        if (_disciplinesChanged.Any(d => d.Id == discipline.Id))
+        {
+            var d = _disciplinesChanged.FirstOrDefault(d => d.Id == discipline.Id);
+            d.Time = discipline.Time;
+        }
+        else
+            _disciplinesChanged.Add(discipline);
 
         _hasChanged = true;
 
@@ -646,6 +672,14 @@ public partial class EditUsersHours
             _projectsChanged.Clear();
             //_selectedProject = null;
 
+            // Update Discipline
+            foreach (var discipline in _disciplinesChanged)
+            {
+                await _dataProvider.WorkingTime.DisciplineAddTime(userId, _selectedProject.Id, discipline.Id, discipline.Time);
+            }
+            _disciplinesChanged.Clear();
+            //_selectedDiscipline = null;
+
             // Update Draws
             foreach (var draw in _deliverablesChanged)
             {
@@ -718,6 +752,14 @@ public partial class EditUsersHours
             }
             _projectsChanged.Clear();
             //_selectedProject = null;
+
+            // Update Discipline
+            foreach (var discipline in _disciplinesChanged)
+            {
+                await _dataProvider.WorkingTime.DisciplineAddTimeRequest(userId, _selectedProject.Id, discipline.Id, discipline.Time, _description);
+            }
+            _disciplinesChanged.Clear();
+            //_selectedDiscipline = null;
 
             // Update Draws
             foreach (var draw in _deliverablesChanged)

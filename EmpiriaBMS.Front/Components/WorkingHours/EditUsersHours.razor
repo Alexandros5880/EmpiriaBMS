@@ -311,6 +311,17 @@
                                                        OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
                                         </div>
                                     }
+
+                                    @if ((workOnProject || seeAdmin) && (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
+                                    {
+                                        <div class="col-4 text-center">
+                                            <span class="mb-2 fs-5">Discipline</span>
+                                            <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
+                                                       MaxTime="@RemainingTime"
+                                                       Time="_selectedDiscipline.Time"
+                                                       OnPropertyChanged=@((time) => _onDisciplineTimeChanged(_selectedDiscipline, time)) />
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         }

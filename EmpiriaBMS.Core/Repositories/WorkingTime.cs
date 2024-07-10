@@ -861,7 +861,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task DisciplineAddTimeRequest(int userId, int projectId, int disciplineId, int otherId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task DisciplineAddTimeRequest(int userId, int projectId, int disciplineId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
