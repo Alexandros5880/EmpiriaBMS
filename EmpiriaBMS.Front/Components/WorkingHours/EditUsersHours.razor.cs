@@ -631,11 +631,11 @@ public partial class EditUsersHours
             var valid = Validate();
             if (valid)
                 await _sendRequest();
+            else
+                return;
         }
         else
-        {
             await _addHours();
-        }
 
         // Refresh
         RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);

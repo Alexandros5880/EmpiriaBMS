@@ -1128,8 +1128,6 @@ public partial class Dashboard : IDisposable
         {
             _correctHoursDialog.Hide();
             _isCorrectHoursDialogOdepened = false;
-
-            await Refresh();
         }
     }
 
@@ -1137,6 +1135,7 @@ public partial class Dashboard : IDisposable
     {
         await _getHoursCorrectionsRequests();
         await _getHoursCorrectionRequestsCount();
+        await _getUserTotalHoursThisMonth();
     }
     #endregion
 
