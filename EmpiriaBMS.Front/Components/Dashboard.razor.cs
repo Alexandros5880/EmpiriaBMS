@@ -4,6 +4,7 @@ using EmpiriaBMS.Front.Components.Invoices;
 using EmpiriaBMS.Front.Components.WorkingHours;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -96,7 +97,7 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
     private ObservableCollection<TeamsRequestedUserVM> _teamsRequestedUsers = new ObservableCollection<TeamsRequestedUserVM>();
-    private Dictionary<Type, List<DailyTimeRequest>> _dailyTimeRequest = new Dictionary<Type, List<DailyTimeRequest>>();
+    private Dictionary<DailyTimeTypes, List<DailyTimeRequest>> _dailyTimeRequest = new Dictionary<DailyTimeTypes, List<DailyTimeRequest>>();
     #endregion
 
     #region Selected Models

@@ -1,0 +1,28 @@
+﻿
+<style>
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 20px;
+        margin: 10px;
+    }
+</style>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Request.Date.ToShortDateString()</h5>
+        <p class="card-text">@Request.Description</p>
+        <p class="card-text"><small class="text-muted">@FormatTimeSpan(Request.TimeSpan)</small></p>
+    
+        <FluentStack Orientation="Orientation.Horizontal"
+                      VerticalAlignment="VerticalAlignment.Center">
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Globe())">
+                Cancel
+            </FluentButton>
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Globe())"
+                          Appearance="Appearance.Accent">
+                Approve
+            </FluentButton>
+        </FluentStack>
+    </div>
+</div>

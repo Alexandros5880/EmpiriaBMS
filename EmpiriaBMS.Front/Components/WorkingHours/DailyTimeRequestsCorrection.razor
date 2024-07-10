@@ -1,4 +1,9 @@
-﻿@using EmpiriaBMS.Front.Services
+﻿<!-- DailyTimeRequestsCorrection.razor -->
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Models.Enum
+@using EmpiriaBMS.Models.Models
+@using Microsoft.AspNetCore.Components
+@using EmpiriaBMS.Front.Components.WorkingHours;
 
 @inject IDataProvider _dataProvider
 @inject IMapper Mapper
@@ -6,5 +11,56 @@
 @inject TimerService TimerService
 @inject Logging.LoggerManager Logger
 
-<h3>DailyTimeRequestsCorrection</h3>
+<style>
+    /* Vertical scroll container for rows */
+    .card-container {
+        max-height: min(60vh, 500px); /* Adjust the height as needed */
+        overflow-y: auto;
+        padding: 10px;
+    }
 
+    /* Horizontal scroll for each row */
+    .card-grid {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .card-row {
+        display: flex;
+        flex-direction: row;
+        gap: 10px; /* Adjust the gap between cards as needed */
+    }
+
+    .card-col {
+        flex: 0 0 auto;
+        width: auto; /* Adjust the width of the cards as needed */
+    }
+</style>
+
+<!-- Header -->
+<div class="d-flex justify-content-between mb-2 p-3 primary-bg-color rounded">
+    <h3>Working time requests</h3>
+    <div style="max-width: 340px;" class="d-flex justify-content-between">
+        <h5>Requests Count: </h5>
+        <span class="text-warning">@RequestCount</span>
+    </div>
+</div>
+
+<div class="card-container">
+    @foreach (var dict in DailyRequests)
+    {
+        <div class="mb-3">
+            <h4>@GetDisplayName(dict.Key)</h4>
+            <div class="card-grid">
+                <div class="card-row">
+                    @foreach (var request in dict.Value)
+                    {
+                        <div class="card-col">
+                            <DailyTimeRequestCard Request="request" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

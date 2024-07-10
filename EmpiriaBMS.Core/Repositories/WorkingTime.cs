@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +21,7 @@ public class WorkingTime : IDisposable
     }
 
     #region Get Time Correction Requests
-    public async Task<Dictionary<Type, List<DailyTimeRequest>>> GetDailyTimeRequests()
+    public async Task<Dictionary<DailyTimeTypes, List<DailyTimeRequest>>> GetDailyTimeRequests()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -39,19 +40,20 @@ public class WorkingTime : IDisposable
                                          .Include(r => r.Offer)
                                          .ToListAsync();
 
-            var groupedRequests = new Dictionary<Type, List<DailyTimeRequest>>();
+            var groupedRequests = new Dictionary<DailyTimeTypes, List<DailyTimeRequest>>();
 
             foreach (var request in requests)
             {
-                Type key = await _getGroupingKey(request, _context);
+                DailyTimeTypes? key = _getGroupingKey(request, _context);
                 if (key == null)
                     continue;
 
-                if (!groupedRequests.ContainsKey(key))
+                var k = (DailyTimeTypes)key;
+                if (!groupedRequests.ContainsKey(k))
                 {
-                    groupedRequests[key] = new List<DailyTimeRequest>();
+                    groupedRequests[k] = new List<DailyTimeRequest>();
                 }
-                groupedRequests[key].Add(request);
+                groupedRequests[k].Add(request);
             }
 
             return groupedRequests;
@@ -67,7 +69,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    private async Task<Type?> _getGroupingKey(DailyTimeRequest request, AppDbContext _context)
+    private DailyTimeTypes? _getGroupingKey(DailyTimeRequest request, AppDbContext _context)
     {
         // DailyUser
         if (request.DailyUserId.HasValue &&
@@ -81,8 +83,8 @@ public class WorkingTime : IDisposable
             !request.DrawingId.HasValue &&
             !request.OtherId.HasValue)
         {
-            var dailyUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.DailyUserId);
-            return dailyUser?.GetType();
+            //var dailyUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.DailyUserId);
+            return DailyTimeTypes.DailyUser;
         }
         // PersonalUser
         else if (request.PersonalUserId.HasValue &&
@@ -96,8 +98,8 @@ public class WorkingTime : IDisposable
             !request.DrawingId.HasValue &&
             !request.OtherId.HasValue)
         {
-            var personalUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.PersonalUserId);
-            return personalUser?.GetType();
+            //var personalUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.PersonalUserId);
+            return DailyTimeTypes.PersonalUser;
         }
         // TrainingUser
         else if (request.TrainingUserId.HasValue &&
@@ -111,8 +113,8 @@ public class WorkingTime : IDisposable
             !request.DrawingId.HasValue &&
             !request.OtherId.HasValue)
         {
-            var trainingUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.TrainingUserId);
-            return trainingUser?.GetType();
+            //var trainingUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.TrainingUserId);
+            return DailyTimeTypes.TrainingUser;
         }
         // CorporateUser
         else if (request.CorporateUserId.HasValue &&
@@ -126,8 +128,8 @@ public class WorkingTime : IDisposable
             !request.DrawingId.HasValue &&
             !request.OtherId.HasValue)
         {
-            var corporateUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.CorporateUserId);
-            return corporateUser?.GetType();
+            //var corporateUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.CorporateUserId);
+            return DailyTimeTypes.CorporateUser;
         }
         // Lead
         else if (request.LeadId.HasValue &&
@@ -141,8 +143,8 @@ public class WorkingTime : IDisposable
                 !request.DrawingId.HasValue &&
                 !request.OtherId.HasValue)
         {
-            var lead = await _context.Set<Lead>().FirstOrDefaultAsync(u => u.Id == request.LeadId);
-            return lead?.GetType();
+            //var lead = await _context.Set<Lead>().FirstOrDefaultAsync(u => u.Id == request.LeadId);
+            return DailyTimeTypes.Lead;
         }
         // Offer
         else if (request.OfferId.HasValue &&
@@ -156,8 +158,8 @@ public class WorkingTime : IDisposable
                 !request.DrawingId.HasValue &&
                 !request.OtherId.HasValue)
         {
-            var offer = await _context.Set<Offer>().FirstOrDefaultAsync(u => u.Id == request.OfferId);
-            return offer?.GetType();
+            //var offer = await _context.Set<Offer>().FirstOrDefaultAsync(u => u.Id == request.OfferId);
+            return DailyTimeTypes.Offer;
         }
         // Project
         else if (request.ProjectId.HasValue &&
@@ -171,8 +173,8 @@ public class WorkingTime : IDisposable
                 !request.DrawingId.HasValue &&
                 !request.OtherId.HasValue)
         {
-            var project = await _context.Set<Project>().FirstOrDefaultAsync(u => u.Id == request.ProjectId);
-            return project?.GetType();
+            //var project = await _context.Set<Project>().FirstOrDefaultAsync(u => u.Id == request.ProjectId);
+            return DailyTimeTypes.Project;
         }
         // Discipline
         else if (request.DisciplineId.HasValue &&
@@ -187,8 +189,8 @@ public class WorkingTime : IDisposable
                 !request.DrawingId.HasValue &&
                 !request.OtherId.HasValue)
         {
-            var discipline = await _context.Set<Discipline>().FirstOrDefaultAsync(u => u.Id == request.DisciplineId);
-            return discipline?.GetType();
+            //var discipline = await _context.Set<Discipline>().FirstOrDefaultAsync(u => u.Id == request.DisciplineId);
+            return DailyTimeTypes.Discipline;
         }
         // Drawing
         else if (request.DrawingId.HasValue &&
@@ -202,8 +204,8 @@ public class WorkingTime : IDisposable
                 !request.OfferId.HasValue &&
                 !request.OtherId.HasValue)
         {
-            var deliverable = await _context.Set<Deliverable>().FirstOrDefaultAsync(u => u.Id == request.DrawingId);
-            return deliverable?.GetType();
+            //var deliverable = await _context.Set<Deliverable>().FirstOrDefaultAsync(u => u.Id == request.DrawingId);
+            return DailyTimeTypes.Deliverable;
         }
         // Other
         else if (request.OtherId.HasValue &&
@@ -217,8 +219,8 @@ public class WorkingTime : IDisposable
                 !request.OfferId.HasValue &&
                 !request.DrawingId.HasValue)
         {
-            var supportiveWork = await _context.Set<SupportiveWork>().FirstOrDefaultAsync(u => u.Id == request.OtherId);
-            return supportiveWork?.GetType();
+            //var supportiveWork = await _context.Set<SupportiveWork>().FirstOrDefaultAsync(u => u.Id == request.OtherId);
+            return DailyTimeTypes.SupportiveWork;
         }
 
         return null;
