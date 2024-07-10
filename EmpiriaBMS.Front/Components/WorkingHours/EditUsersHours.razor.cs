@@ -105,6 +105,8 @@ public partial class EditUsersHours
         if (timespan != null)
             RemainingTime = (TimeSpan)timespan;
 
+        _description = string.Empty;
+
         _users.Clear();
         _leds.Clear();
         _offers.Clear();
@@ -629,9 +631,88 @@ public partial class EditUsersHours
             var valid = Validate();
             if (valid)
                 await _sendRequest();
-            return;
+        }
+        else
+        {
+            await _addHours();
         }
 
+        // Refresh
+        RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
+        await Refresh(RemainingTime);
+
+        if (User != null)
+        {
+            await OnSelectUser(User.Id);
+        }
+
+        _startLoading = false;
+    }
+
+    private async Task _sendRequest()
+    {
+        try
+        {
+            var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+
+            // Update Leds
+            foreach (var led in _ledsChanged)
+            {
+                await _dataProvider.WorkingTime.LeadAddTimeRequest(userId, led.Id, led.Time, _description);
+            }
+            _ledsChanged.Clear();
+            _selectedLed = null;
+
+            // Update Offers
+            foreach (var offer in _offersChanged)
+            {
+                await _dataProvider.WorkingTime.OfferAddTimeRequest(userId, offer.Id, offer.Time, _description);
+            }
+            _offersChanged.Clear();
+            _selectedOffer = null;
+
+            // Update Projects
+            foreach (var project in _projectsChanged)
+            {
+                await _dataProvider.WorkingTime.ProjectAddTimeRequest(userId, project.Id, project.Time, _description);
+            }
+            _projectsChanged.Clear();
+            //_selectedProject = null;
+
+            // Update Discipline
+            foreach (var discipline in _disciplinesChanged)
+            {
+                await _dataProvider.WorkingTime.DisciplineAddTimeRequest(userId, _selectedProject.Id, discipline.Id, discipline.Time, _description);
+            }
+            _disciplinesChanged.Clear();
+            //_selectedDiscipline = null;
+
+            // Update Draws
+            foreach (var draw in _deliverablesChanged)
+                await _dataProvider.WorkingTime.DeliverableAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, _description);
+
+            // Update Others
+            foreach (var other in _supportiveWorkChanged)
+                await _dataProvider.WorkingTime.SupportiveWorkAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, _description);
+
+            // Update User Hours
+            if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
+                await _dataProvider.WorkingTime.AddPersonaTimeRequest(userId, _editLogedUserTimes.PersonalTime, _description);
+            if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
+                await _dataProvider.WorkingTime.AddTraningTimeRequest(userId, _editLogedUserTimes.TrainingTime, _description);
+            if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
+                await _dataProvider.WorkingTime.AddCorporateEventTimeRequest(userId, _editLogedUserTimes.CorporateEventTime, _description);
+
+            await OnEnd.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Exception EditUsersHours._sendRequest(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+        }
+    }
+
+    private async Task _addHours()
+    {
         try
         {
             // Validate
@@ -711,89 +792,10 @@ public partial class EditUsersHours
                 await _dataProvider.WorkingTime.AddCorporateEventTime(userId, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
 
             await OnEnd.InvokeAsync();
-
-            TimeSpan? timespan = IsFromDashboard ? null : new TimeSpan(300, 0, 0);
-            await Refresh(timespan);
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception EditUsersHours.Save(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
-
-        // Refresh
-        RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
-        await Refresh();
-
-        if (User != null)
-        {
-            await OnSelectUser(User.Id);
-        }
-
-        _startLoading = false;
-    }
-
-    private async Task _sendRequest()
-    {
-        try
-        {
-            var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
-
-            // Update Leds
-            foreach (var led in _ledsChanged)
-            {
-                await _dataProvider.WorkingTime.LeadAddTimeRequest(userId, led.Id, led.Time, _description);
-            }
-            _ledsChanged.Clear();
-            _selectedLed = null;
-
-            // Update Offers
-            foreach (var offer in _offersChanged)
-            {
-                await _dataProvider.WorkingTime.OfferAddTimeRequest(userId, offer.Id, offer.Time, _description);
-            }
-            _offersChanged.Clear();
-            _selectedOffer = null;
-
-            // Update Projects
-            foreach (var project in _projectsChanged)
-            {
-                await _dataProvider.WorkingTime.ProjectAddTimeRequest(userId, project.Id, project.Time, _description);
-            }
-            _projectsChanged.Clear();
-            //_selectedProject = null;
-
-            // Update Discipline
-            foreach (var discipline in _disciplinesChanged)
-            {
-                await _dataProvider.WorkingTime.DisciplineAddTimeRequest(userId, _selectedProject.Id, discipline.Id, discipline.Time, _description);
-            }
-            _disciplinesChanged.Clear();
-            //_selectedDiscipline = null;
-
-            // Update Draws
-            foreach (var draw in _deliverablesChanged)
-                await _dataProvider.WorkingTime.DeliverableAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, _description);
-
-            // Update Others
-            foreach (var other in _supportiveWorkChanged)
-                await _dataProvider.WorkingTime.SupportiveWorkAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, _description);
-
-            // Update User Hours
-            if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddPersonaTimeRequest(userId, _editLogedUserTimes.PersonalTime, _description);
-            if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddTraningTimeRequest(userId, _editLogedUserTimes.TrainingTime, _description);
-            if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddCorporateEventTimeRequest(userId, _editLogedUserTimes.CorporateEventTime, _description);
-
-            await OnEnd.InvokeAsync();
-
-            TimeSpan? timespan = IsFromDashboard ? null : new TimeSpan(300, 0, 0);
-            await Refresh(timespan);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception EditUsersHours._sendRequest(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception EditUsersHours._addHours(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
