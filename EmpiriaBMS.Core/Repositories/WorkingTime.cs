@@ -20,7 +20,7 @@ public class WorkingTime : IDisposable
     }
 
     #region Get Time Correction Requests
-    public async Task<Dictionary<string, List<DailyTimeRequest>>> GetDailyTimeRequests()
+    public async Task<Dictionary<Type, List<DailyTimeRequest>>> GetDailyTimeRequests()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -39,11 +39,14 @@ public class WorkingTime : IDisposable
                                          .Include(r => r.Offer)
                                          .ToListAsync();
 
-            var groupedRequests = new Dictionary<string, List<DailyTimeRequest>>();
+            var groupedRequests = new Dictionary<Type, List<DailyTimeRequest>>();
 
             foreach (var request in requests)
             {
-                string key = await _getGroupingKey(request, _context);
+                Type key = await _getGroupingKey(request, _context);
+                if (key == null)
+                    continue;
+
                 if (!groupedRequests.ContainsKey(key))
                 {
                     groupedRequests[key] = new List<DailyTimeRequest>();
@@ -55,7 +58,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    private async Task<string> _getGroupingKey(DailyTimeRequest request, AppDbContext _context)
+    private async Task<Type?> _getGroupingKey(DailyTimeRequest request, AppDbContext _context)
     {
         // DailyUser
         if (request.DailyUserId.HasValue &&
@@ -70,7 +73,7 @@ public class WorkingTime : IDisposable
             !request.OtherId.HasValue)
         {
             var dailyUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.DailyUserId);
-            return $"DailyUser_{request.DailyUserId}";
+            return dailyUser?.GetType();
         }
         // PersonalUser
         else if (request.PersonalUserId.HasValue &&
@@ -85,7 +88,7 @@ public class WorkingTime : IDisposable
             !request.OtherId.HasValue)
         {
             var personalUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.PersonalUserId);
-            return $"PersonalUser_{request.PersonalUserId}";
+            return personalUser?.GetType();
         }
         // TrainingUser
         else if (request.TrainingUserId.HasValue &&
@@ -100,7 +103,7 @@ public class WorkingTime : IDisposable
             !request.OtherId.HasValue)
         {
             var trainingUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.TrainingUserId);
-            return $"TrainingUser_{request.TrainingUserId}";
+            return trainingUser?.GetType();
         }
         // CorporateUser
         else if (request.CorporateUserId.HasValue &&
@@ -115,7 +118,7 @@ public class WorkingTime : IDisposable
             !request.OtherId.HasValue)
         {
             var corporateUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.CorporateUserId);
-            return $"CorporateUser_{request.CorporateUserId}";
+            return corporateUser?.GetType();
         }
         // Lead
         else if (request.LeadId.HasValue &&
@@ -130,7 +133,7 @@ public class WorkingTime : IDisposable
                 !request.OtherId.HasValue)
         {
             var lead = await _context.Set<Lead>().FirstOrDefaultAsync(u => u.Id == request.LeadId);
-            return $"Lead_{request.LeadId}";
+            return lead?.GetType();
         }
         // Offer
         else if (request.OfferId.HasValue &&
@@ -145,7 +148,7 @@ public class WorkingTime : IDisposable
                 !request.OtherId.HasValue)
         {
             var offer = await _context.Set<Offer>().FirstOrDefaultAsync(u => u.Id == request.OfferId);
-            return $"Offer_{request.OfferId}";
+            return offer?.GetType();
         }
         // Project
         else if (request.ProjectId.HasValue &&
@@ -160,7 +163,7 @@ public class WorkingTime : IDisposable
                 !request.OtherId.HasValue)
         {
             var project = await _context.Set<Project>().FirstOrDefaultAsync(u => u.Id == request.ProjectId);
-            return $"Project_{request.ProjectId}";
+            return project?.GetType();
         }
         // Discipline
         else if (request.DisciplineId.HasValue &&
@@ -176,7 +179,7 @@ public class WorkingTime : IDisposable
                 !request.OtherId.HasValue)
         {
             var discipline = await _context.Set<Discipline>().FirstOrDefaultAsync(u => u.Id == request.DisciplineId);
-            return $"Discipline_{request.DisciplineId}";
+            return discipline?.GetType();
         }
         // Drawing
         else if (request.DrawingId.HasValue &&
@@ -191,7 +194,7 @@ public class WorkingTime : IDisposable
                 !request.OtherId.HasValue)
         {
             var deliverable = await _context.Set<Deliverable>().FirstOrDefaultAsync(u => u.Id == request.DrawingId);
-            return $"Drawing_{request.DrawingId}";
+            return deliverable?.GetType();
         }
         // Other
         else if (request.OtherId.HasValue &&
@@ -206,10 +209,10 @@ public class WorkingTime : IDisposable
                 !request.DrawingId.HasValue)
         {
             var supportiveWork = await _context.Set<SupportiveWork>().FirstOrDefaultAsync(u => u.Id == request.OtherId);
-            return $"Other_{request.OtherId}";
+            return supportiveWork?.GetType();
         }
 
-        return "Uncategorized";
+        return null;
     }
     #endregion
 
