@@ -54,13 +54,12 @@
                         <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
 
                             <!-- Headder -->
-                            <div class="mt-2 shadow p-2 d-flex justify-content-center">
+                            <div class="mt-2 shadow p-2">
                                 @if (_sharedAuthData.LogedUser != null)
                                 {
-                                <FluentStack Orientation="Orientation.Horizontal"
-                                             HorizontalAlignment="HorizontalAlignment.Start"
+                                    <FluentStack Orientation="Orientation.Horizontal"
+                                             HorizontalAlignment="HorizontalAlignment.Left"
                                              Class="d-flex justify-content-between m-1"
-                                             Style="background-color: green;"
                                              Wrap="true">
 
                                         <!-- User Name + Roles + Current Date -->
