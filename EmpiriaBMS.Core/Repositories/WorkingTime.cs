@@ -226,18 +226,153 @@ public class WorkingTime : IDisposable
         return null;
     }
 
-    public async Task ApproveDailyTimeRequest(DailyTimeRequest request)
+    public async Task ApproveDailyTimeRequest(DailyTimeRequest request, DailyTimeTypes type)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            await Task.Delay(1);
+            var dailyTime = request.GetDailyTime();
+            if (dailyTime.TimeSpan == null)
+                return;
+
+            Timespan timespan = dailyTime.TimeSpan;
+            TimeSpan timeSpan = new TimeSpan((int)timespan.Days, (int)timespan.Hours, (int)timespan.Minutes, (int)timespan.Seconds);
+
+            request.IsClosed = true;
+            await UpdateDailyTimeRequest(request);
+
+            switch (type)
+            {
+                case DailyTimeTypes.DailyUser:
+                    await AddDailyTime((int)dailyTime.DailyUserId,
+                                        dailyTime.Date,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+                case DailyTimeTypes.PersonalUser:
+                    await AddPersonalTime((int)dailyTime.PersonalUserId,
+                                        dailyTime.Date,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+                case DailyTimeTypes.TrainingUser:
+                    await AddTraningTime((int)dailyTime.TrainingUserId,
+                                        dailyTime.Date,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+                case DailyTimeTypes.CorporateUser:
+                    await AddCorporateEventTime((int)dailyTime.CorporateUserId,
+                                        dailyTime.Date,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+                case DailyTimeTypes.Lead:
+                    await LeadAddTime((int)dailyTime.DailyUserId,
+                                        (int)dailyTime.LeadId,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+                case DailyTimeTypes.Offer:
+                    await OfferAddTime((int)dailyTime.DailyUserId,
+                                        (int)dailyTime.OfferId,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+                case DailyTimeTypes.Project:
+                    await ProjectAddTime((int)dailyTime.DailyUserId,
+                                        (int)dailyTime.ProjectId,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+                case DailyTimeTypes.Discipline:
+                    await DisciplineAddTime((int)dailyTime.DailyUserId,
+                                        (int)dailyTime.ProjectId,
+                                        (int)dailyTime.DisciplineId,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+                case DailyTimeTypes.Deliverable:
+                    await DeliverableAddTime((int)dailyTime.DailyUserId,
+                                        (int)dailyTime.ProjectId,
+                                        (int)dailyTime.DisciplineId,
+                                        (int)dailyTime.DrawingId,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+                case DailyTimeTypes.SupportiveWork:
+                    await SupportiveWorkAddTime((int)dailyTime.DailyUserId,
+                                        (int)dailyTime.ProjectId,
+                                        (int)dailyTime.DisciplineId,
+                                        (int)dailyTime.OtherId,
+                                        timeSpan,
+                                        dailyTime.IsEditByAdmin);
+                    break;
+            }
         }
     }
     public async Task RejectDailyTimeRequest(DailyTimeRequest request)
     {
-        using (var _context = _dbContextFactory.CreateDbContext())
+        request.IsClosed = true;
+        await UpdateDailyTimeRequest(request);
+    }
+
+    public async Task<DailyTimeRequest> UpdateDailyTimeRequest(DailyTimeRequest request)
+    {
+        try
         {
-            await Task.Delay(1);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            request.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<DailyTimeRequest>().FirstOrDefaultAsync(x => x.Id == request.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(request);
+                    await _context.SaveChangesAsync();
+                }
+
+                var r = await GetDayliTymeRequest(request.Id);
+
+                if (r == null)
+                    throw new NullReferenceException(nameof(r));
+
+                return r;
+            }
+
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On WorkingTime.UpdateDailyTimeRequest({request.GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
+    public async Task<DailyTimeRequest?> GetDayliTymeRequest(int id)
+    {
+        try
+        {
+            if (id == 0)
+                throw new ArgumentNullException(nameof(id));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+
+                var i = await _context
+                                 .Set<DailyTimeRequest>()
+                                 .Where(r => !r.IsDeleted)
+                                 .FirstOrDefaultAsync(r => r.Id == id);
+
+                return i;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On WorkingTime.GetDayliTymeRequest({typeof(DailyTimeRequest)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            return null;
         }
     }
     #endregion
@@ -863,7 +998,7 @@ public class WorkingTime : IDisposable
                                            .FirstOrDefaultAsync(p => p.Id == disciplineId);
             if (discipline == null)
                 throw new NullReferenceException(nameof(discipline));
-            var disciplineMenHours = discipline.DailyTime.Select(h => h.TimeSpan.Hours).Sum();
+            var disciplineMenHours = discipline.DailyTime.Select(h => h.TimeSpan?.Hours ?? 0).Sum();
 
             decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
             discipline.EstimatedCompleted = (float)divitionDiscResult * 100;

@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Models.Enum;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.WorkingHours;
@@ -7,6 +8,9 @@ public partial class DailyTimeRequestCard
 {
     [Parameter]
     public DailyTimeRequest Request { get; set; }
+
+    [Parameter]
+    public DailyTimeTypes Type { get; set; }
 
     [Parameter]
     public EventCallback<DailyTimeRequest> OnEnd { get; set; }
@@ -18,7 +22,7 @@ public partial class DailyTimeRequestCard
 
     private async Task _approve()
     {
-        await _dataProvider.WorkingTime.ApproveDailyTimeRequest(Request);
+        await _dataProvider.WorkingTime.ApproveDailyTimeRequest(Request, Type);
 
         await OnEnd.InvokeAsync(Request);
     }

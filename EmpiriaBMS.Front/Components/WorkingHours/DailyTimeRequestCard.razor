@@ -22,7 +22,7 @@
     }
     .description-text {
         width: 100%;
-        height: 100px;
+        height: 50px;
         word-wrap: break-word;
         overflow-wrap: break-word;
     }
@@ -31,6 +31,26 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">@Request.Date.ToShortDateString()</h5>
+        <div>
+            <h5>
+                @if (Type == DailyTimeTypes.PersonalUser)
+                {
+                    @Request.PersonalUser?.FullName
+                }
+                else if (Type == DailyTimeTypes.TrainingUser)
+                {
+                    @Request.TrainingUser?.FullName
+                }
+                else if (Type == DailyTimeTypes.CorporateUser)
+                {
+                    @Request.CorporateUser?.FullName
+                }
+                else
+                {
+                    @Request.DailyUser?.FullName
+                }
+            </h5>
+        </div>
         <p class="card-text description-text">@Request.Description</p>
         <p class="card-text"><small class="text-muted">@FormatTimeSpan(Request.TimeSpan)</small></p>
     
