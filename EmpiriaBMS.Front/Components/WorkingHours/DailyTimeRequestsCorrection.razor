@@ -47,17 +47,18 @@
 </div>
 
 <div class="card-container mt-3">
-    @foreach (var dict in DailyRequests)
+    @foreach (var key in DailyRequests.Keys.OrderBy(k => k))
     {
+        var requests = DailyRequests[key];
         <div class="mb-3">
-            <h4>@GetDisplayName(dict.Key)</h4>
+            <h4>@GetDisplayName(key)</h4>
             <div class="card-grid">
                 <div class="card-row">
-                    @foreach (var request in dict.Value)
+                    @foreach (var request in requests)
                     {
                         <div class="card-col">
                             <DailyTimeRequestCard Request="request"
-                                                  Type="@dict.Key"
+                                                  Type="@key"
                                                   OnEnd="@(async (r) => await _onEnd(r))" />
                         </div>
                     }
