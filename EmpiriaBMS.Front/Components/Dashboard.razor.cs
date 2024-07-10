@@ -96,6 +96,7 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
     private ObservableCollection<TeamsRequestedUserVM> _teamsRequestedUsers = new ObservableCollection<TeamsRequestedUserVM>();
+    private Dictionary<Type, List<DailyTimeRequest>> _dailyTimeRequest = new Dictionary<Type, List<DailyTimeRequest>>();
     #endregion
 
     #region Selected Models
@@ -139,6 +140,10 @@ public partial class Dashboard : IDisposable
     // On Add/Edit TeamsRequestedUsers Dialog
     private FluentDialog _displayTeamsRequestedUsersDialog;
     private bool _isDisplayTeamsRequestedUsersDialogOdepened = false;
+
+    // On Add/Edit Hours Correction rEQUESTS Dialog
+    private FluentDialog _displayHoursCorrectionRequestsDialog;
+    private bool _isDisplayHoursCorrectionRequestsDialogOdepened = false;
 
     // On Add Project Dialog
     private FluentDialog _addEditProjectDialog;
@@ -210,7 +215,10 @@ public partial class Dashboard : IDisposable
         await _getIssues();
         await _getProjects();
         if (canApproveTimeRequests)
+        {
             await _getHoursCorrectionsRequests();
+            await _getHoursCorrectionRequestsCount();
+        }
         _refreshLoading = false;
         StateHasChanged();
     }
@@ -218,10 +226,14 @@ public partial class Dashboard : IDisposable
     #region Get Records
     private async Task _getHoursCorrectionsRequests()
     {
-        var requests = await _dataProvider.WorkingTime.GetDailyTimeRequests();
+        _dailyTimeRequest.Clear();
+        _dailyTimeRequest = await _dataProvider.WorkingTime.GetDailyTimeRequests();
+    }
 
-
-        var r = requests;
+    private int _hoursCorrectionCount = 0;
+    private async Task _getHoursCorrectionRequestsCount()
+    {
+        _hoursCorrectionCount = await _dataProvider.WorkingTime.GetDailyTimeRequestsCount();
     }
 
     private async Task _getTeamsRequestedUsers()
@@ -900,6 +912,24 @@ public partial class Dashboard : IDisposable
             _displayTeamsRequestedUsersDialog.Hide();
             _isDisplayTeamsRequestedUsersDialogOdepened = false;
             await _getTeamsRequestedUsers();
+        }
+    }
+    #endregion
+
+    #region Display Hours Correction Request
+    private async Task OpenHoursCorrectionRequestsClick(MouseEventArgs e)
+    {
+        _displayHoursCorrectionRequestsDialog.Show();
+        _isDisplayHoursCorrectionRequestsDialogOdepened = true;
+    }
+
+    private async Task CloseHoursCorrectionRequestsClick()
+    {
+        if (_isDisplayHoursCorrectionRequestsDialogOdepened)
+        {
+            _displayHoursCorrectionRequestsDialog.Hide();
+            _isDisplayHoursCorrectionRequestsDialogOdepened = false;
+            await _getHoursCorrectionRequestsCount();
         }
     }
     #endregion

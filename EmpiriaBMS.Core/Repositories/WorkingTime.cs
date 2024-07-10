@@ -58,6 +58,15 @@ public class WorkingTime : IDisposable
         }
     }
 
+    public async Task<int> GetDailyTimeRequestsCount()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context.Set<DailyTimeRequest>()
+                .Where(r => !r.IsDeleted && !r.IsClosed).CountAsync();
+        }
+    }
+
     private async Task<Type?> _getGroupingKey(DailyTimeRequest request, AppDbContext _context)
     {
         // DailyUser
