@@ -36,6 +36,21 @@ public partial class Reports
 
     protected override void OnInitialized()
     {
+        InitializeChart();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+
+        }
+    }
+
+    private void InitializeChart()
+    {
         _barChartConfig = new BarConfig
         {
             Options = new BarOptions
@@ -103,8 +118,24 @@ public partial class Reports
             BorderWidth = 1
         };
         _barChartConfig.Data.Datasets.Add(dataset2);
-
     }
+
+
+    #region Get Records
+
+    #endregion
+
+    #region Client Filter
+
+    #endregion
+
+    #region Project Type Filter
+
+    #endregion
+
+    #region Project Filter
+
+    #endregion
 
     #region Date Range Filter
     DateTimeOffset? StartDate { get; set; } = null;
