@@ -1,8 +1,11 @@
 ﻿using ChartJs.Blazor.BarChart;
+using ChartJs.Blazor.BarChart.Axes;
 using ChartJs.Blazor.Common;
 using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common.Axes.Ticks;
 using ChartJs.Blazor.Util;
+using System.Drawing;
+using ChartEnums = ChartJs.Blazor.Common.Enums;
 
 namespace EmpiriaBMS.Front.Components.Reports;
 
@@ -35,40 +38,69 @@ public partial class Reports
         {
             Options = new BarOptions
             {
-                Responsive = true,
-                MaintainAspectRatio = false,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Projects Profit",
+                    Position = ChartEnums.Position.Left,
+                    FontSize = 24
+                },
                 Scales = new BarScales
                 {
+                    XAxes = new List<CartesianAxis>
+                    {
+                        new BarCategoryAxis
+                        {
+                            Stacked = true,
+                            Ticks = new CategoryTicks
+                            {
+                                FontColor = ColorUtil.FromDrawingColor(Color.FromArgb(255, 99, 132, 1)),
+                            }
+                        }
+                    },
                     YAxes = new List<CartesianAxis>
                     {
-                        new LinearCartesianAxis
+                        new BarLinearCartesianAxis
                         {
+                            Stacked = true,
                             Ticks = new LinearCartesianTicks
                             {
                                 BeginAtZero = true
                             }
                         }
                     }
-                }
+                },
+                Responsive = true,
+                AspectRatio = 3.5,
             }
         };
 
-        // Using IndexableOption<string> instead of List<string>
+        // Labels (Dates for start date to end date per 1 week)
         List<string> dates = new List<string> { "Jul 24", "Jul 25", "Jul 26", "Jul 27" };
         foreach (var date in dates)
         {
             _barChartConfig.Data.Labels.Add(date);
         }
 
-        var dataset = new BarDataset<int>(new List<int> { 8, 9, 7, 6 })
+        // Dataset Labes are Projects Names And Values are Projects Fee
+        var dataset1 = new BarDataset<int>(new List<int> { 10, 20, 30 })
         {
-            Label = "Hours Worked",
-            BackgroundColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(System.Drawing.Color.LightSkyBlue)),
-            BorderColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(System.Drawing.Color.Blue)),
+            Label = "dataset1",
+            BackgroundColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.LightSkyBlue)),
+            BorderColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.SkyBlue)),
             BorderWidth = 1
         };
+        _barChartConfig.Data.Datasets.Add(dataset1);
 
-        _barChartConfig.Data.Datasets.Add(dataset);
+        var dataset2 = new BarDataset<int>(new List<int> { 8, 9, 7, 6 })
+        {
+            Label = "dataset2",
+            BackgroundColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.LightSeaGreen)),
+            BorderColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.SeaGreen)),
+            BorderWidth = 1
+        };
+        _barChartConfig.Data.Datasets.Add(dataset2);
+
     }
 
 }
