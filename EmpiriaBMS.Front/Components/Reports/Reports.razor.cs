@@ -5,8 +5,10 @@ using ChartJs.Blazor.Common;
 using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common.Axes.Ticks;
 using ChartJs.Blazor.Util;
+using EmpiriaBMS.Front.ViewModel.Components;
 using System.Drawing;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
+using Fluent = Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Reports;
 
@@ -36,6 +38,7 @@ public partial class Reports
 
     protected override void OnInitialized()
     {
+        base.OnInitializedAsync();
         InitializeChart();
     }
 
@@ -45,10 +48,13 @@ public partial class Reports
 
         if (firstRender)
         {
-
+            await _refreshData();
+            LoadDataOnChart();
+            StateHasChanged();
         }
     }
 
+    #region Initialize Chart
     private void InitializeChart()
     {
         _barChartConfig = new BarConfig
@@ -91,7 +97,10 @@ public partial class Reports
                 AspectRatio = 3.5,
             }
         };
+    }
 
+    private void LoadDataOnChart()
+    {
         // Labels (Dates for start date to end date per 1 week)
         List<string> dates = new List<string> { "Jul 24", "Jul 25", "Jul 26", "Jul 27" };
         foreach (var date in dates)
@@ -119,31 +128,152 @@ public partial class Reports
         };
         _barChartConfig.Data.Datasets.Add(dataset2);
     }
-
+    #endregion
 
     #region Get Records
+    private async Task _refreshData()
+    {
+        await _getClients();
+        await _getProjectCategories();
+        //await _getProjectSubCategories();
+        //await _getProjects();
+    }
 
+    private async Task _getClients()
+    {
+        var dtos = await _dataProvider.Clients.GetAll();
+        var vms = _mapper.Map<List<ClientVM>>(dtos);
+        _clients.Clear();
+        vms.ForEach(_clients.Add);
+    }
+
+    private async Task _getProjectCategories()
+    {
+        var dtos = await _dataProvider.ProjectsCategories.GetAll();
+        var vms = _mapper.Map<List<ProjectCategoryVM>>(dtos);
+        _projectCategories.Clear();
+        vms.ForEach(_projectCategories.Add);
+    }
+
+    private async Task _getProjectSubCategories()
+    {
+        if (ProjectCategory == null) return;
+        var dtos = await _dataProvider.ProjectsSubCategories.GetAll(ProjectCategory.Id);
+        var vms = _mapper.Map<List<ProjectSubCategoryVM>>(dtos);
+        _projectSubCategories.Clear();
+        vms.ForEach(_projectSubCategories.Add);
+    }
+
+    private async Task _getProjects()
+    {
+        var dtos = await _dataProvider.Projects.GetAll();
+        var vms = _mapper.Map<List<ProjectVM>>(dtos);
+        _projects.Clear();
+        vms.ForEach(_projects.Add);
+    }
     #endregion
 
     #region Client Filter
+    private List<ClientVM> _clients = new List<ClientVM>();
 
+    private ClientVM _client = new ClientVM();
+    public ClientVM Client
+    {
+        get => _client;
+        set
+        {
+            if (_client == value || value == null) return;
+            _client = value;
+        }
+    }
+
+    private async Task _onClientSelected(ClientVM obj)
+    {
+        Client = obj;
+        await _refreshData();
+    }
     #endregion
 
-    #region Project Type Filter
+    #region Project Category Filter
+    private List<ProjectCategoryVM> _projectCategories = new List<ProjectCategoryVM>();
 
+    private ProjectCategoryVM _projectCategoryVM = new ProjectCategoryVM();
+    public ProjectCategoryVM ProjectCategory
+    {
+        get => _projectCategoryVM;
+        set
+        {
+            if (_projectCategoryVM == value || value == null) return;
+            _projectCategoryVM = value;
+        }
+    }
+
+    private async Task _onCategorySelected(ProjectCategoryVM obj)
+    {
+        ProjectCategory = obj;
+        await _getProjectSubCategories();
+        var firstSubCategory = _projectSubCategories.FirstOrDefault();
+        subCategoryCombo.SelectedOption = firstSubCategory;
+        subCategoryCombo.Value = firstSubCategory.Name;
+        await _refreshData();
+    }
+    #endregion
+
+    #region Project SubCategory Filter
+    private Fluent.FluentCombobox<ProjectSubCategoryVM> subCategoryCombo;
+    private List<ProjectSubCategoryVM> _projectSubCategories = new List<ProjectSubCategoryVM>();
+
+    private ProjectSubCategoryVM _projectSubCategory = new ProjectSubCategoryVM();
+    public ProjectSubCategoryVM ProjectSubCategory
+    {
+        get => _projectSubCategory;
+        set
+        {
+            if (_projectSubCategory == value || value == null) return;
+            _projectSubCategory = value;
+        }
+    }
+
+    private async Task _onSubCategorySelected(ProjectSubCategoryVM obj)
+    {
+        ProjectSubCategory = obj;
+        await _getProjects();
+        var firatProject = _projects.FirstOrDefault();
+        projectCombo.SelectedOption = firatProject;
+        projectCombo.Value = firatProject.Name;
+        await _refreshData();
+    }
     #endregion
 
     #region Project Filter
+    private Fluent.FluentCombobox<ProjectVM> projectCombo;
+    private List<ProjectVM> _projects = new List<ProjectVM>();
 
+    private ProjectVM _project = new ProjectVM();
+    public ProjectVM Project
+    {
+        get => _project;
+        set
+        {
+            if (_project == value || value == null) return;
+            _project = value;
+        }
+    }
+
+    private async Task _onProjectSelected(ProjectVM obj)
+    {
+        Project = obj;
+        await _refreshData();
+    }
     #endregion
 
     #region Date Range Filter
     DateTimeOffset? StartDate { get; set; } = null;
     DateTimeOffset? EndDate { get; set; } = null;
 
-    public void OnDateSelect(DateRange range)
+    public async Task OnDateSelect(DateRange range)
     {
-
+        await _refreshData();
     }
     #endregion
 }

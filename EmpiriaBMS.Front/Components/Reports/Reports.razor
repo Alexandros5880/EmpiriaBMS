@@ -3,6 +3,8 @@
 @using ChartJs.Blazor;
 
 @inject IDataProvider _dataProvider
+@inject IMapper _mapper
+@inject Logging.LoggerManager _logger
 
 @if (_barChartConfig != null)
 {
@@ -11,12 +13,55 @@
         <!-- Filters -->
         <div class="col-12 mb-2 d-flex justify-content-between">
 
+            <!-- Client -->
+            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                            Placeholder="Select Client..."
+                            Items="@_clients"
+                            Height="200px"
+                            TOption="ClientVM"
+                            OptionText="@(c => c.CompanyName)"
+                            OptionValue="@(c => c.Id.ToString())"
+                            SelectedOptionChanged="@(async (e) => await _onClientSelected(e))" />
+
+            <!-- ProjectCategory -->
+            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                            Placeholder="Select Project Category..."
+                            Items="@_projectCategories"
+                            Height="200px"
+                            TOption="ProjectCategoryVM"
+                            OptionText="@(c => c.Name)"
+                            OptionValue="@(c => c.Id.ToString())"
+                            SelectedOptionChanged="@(async (e) => await _onCategorySelected(e))" />
+
+            <!-- ProjectSubCategory -->
+            <FluentCombobox @ref="subCategoryCombo"
+                            Autocomplete="ComboboxAutocomplete.Both"
+                            Placeholder="Select Project SubCategory..."
+                            Items="@_projectSubCategories"
+                            Height="200px"
+                            TOption="ProjectSubCategoryVM"
+                            OptionText="@(c => c.Name)"
+                            OptionValue="@(c => c.Id.ToString())"
+                            SelectedOptionChanged="@(async (e) => await _onSubCategorySelected(e))" />
+
+            <!-- Project -->
+            <FluentCombobox @ref="projectCombo"
+                            Autocomplete="ComboboxAutocomplete.Both"
+                            Placeholder="Select Project..."
+                            Items="@_projects"
+                            Height="200px"
+                            TOption="ProjectVM"
+                            OptionText="@(c => c.Name)"
+                            OptionValue="@(c => c.Id.ToString())"
+                            SelectedOptionChanged="@(async (e) => await _onProjectSelected(e))" />
+
+            <!-- Date Range -->
             <DateRangePicker class="form-control form-control-sm"
                              title="Dates"
                              placeholder="Select dates..."
                              @bind-StartDate="StartDate"
                              @bind-EndDate="EndDate"
-                             OnRangeSelect="OnDateSelect"
+                             OnRangeSelect="@(async (e) => await OnDateSelect(e))"
                              style="width: 200px;"/>
         </div>
 
