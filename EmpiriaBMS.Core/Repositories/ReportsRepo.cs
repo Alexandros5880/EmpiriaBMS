@@ -18,6 +18,8 @@ public class ReportsRepo : IDisposable
         _logger = logger;
     }
 
+
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposedValue)

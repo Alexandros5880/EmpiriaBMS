@@ -1,4 +1,5 @@
-﻿using ChartJs.Blazor.BarChart;
+﻿using BlazorDateRangePicker;
+using ChartJs.Blazor.BarChart;
 using ChartJs.Blazor.BarChart.Axes;
 using ChartJs.Blazor.Common;
 using ChartJs.Blazor.Common.Axes;
@@ -28,6 +29,7 @@ public partial class Reports
         public double Hours { get; set; }
     }
     #endregion
+
 
 
     private BarConfig _barChartConfig;
@@ -104,4 +106,13 @@ public partial class Reports
 
     }
 
+    #region Date Range Filter
+    DateTimeOffset? StartDate { get; set; } = null;
+    DateTimeOffset? EndDate { get; set; } = null;
+
+    public void OnDateSelect(DateRange range)
+    {
+
+    }
+    #endregion
 }

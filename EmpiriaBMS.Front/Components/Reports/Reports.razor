@@ -2,9 +2,23 @@
 @using System.Threading.Tasks
 @using ChartJs.Blazor;
 
+@inject IDataProvider _dataProvider
+
 @if (_barChartConfig != null)
 {
     <div class="row">
+
+        <!-- Filters -->
+        <div class="col-12 mb-2 d-flex justify-content-between">
+
+            <DateRangePicker class="form-control form-control-sm"
+                             title="Dates"
+                             placeholder="Select dates..."
+                             @bind-StartDate="StartDate"
+                             @bind-EndDate="EndDate"
+                             OnRangeSelect="OnDateSelect"
+                             style="width: 200px;"/>
+        </div>
 
         <!-- Chart -->
         <div class="col-12 container">
