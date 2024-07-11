@@ -82,7 +82,8 @@ public partial class Reports
             _barChartConfig.Data.Labels.Add(date);
         }
 
-        // Dataset Labes are Projects Names And Values are Projects Fee
+        // Dataset Labes are Projects.Client.CompanyName
+        // Dataset Values are Client.Projects.Invoices.Payments.Sum
         var dataset1 = new BarDataset<int>(new List<int> { 10, 20, 30 })
         {
             Label = "dataset1",
