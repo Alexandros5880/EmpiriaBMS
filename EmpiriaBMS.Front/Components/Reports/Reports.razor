@@ -1,3 +1,60 @@
-﻿<h3>Reports</h3>
+﻿@page "/reports"
+@using System.Threading.Tasks
+@using ChartJs.Blazor;
 
+<style>
+    .report-container {
+        width: 100%;
+        height: max(54vh, 440px);
+        margin: auto;
+    }
 
+    .report-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    .report-table th, .report-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .report-table th {
+        background-color: #f2f2f2;
+    }
+</style>
+
+@if (_barChartConfig != null)
+{
+    <div class="report-container">
+        <h3>Reports</h3>
+        <Chart Config="@_barChartConfig" />
+    </div>
+
+    <div class="mt-5">
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Date</th>
+                    <th>Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var entry in reportEntries)
+                {
+                    <tr>
+                        <td>@entry.ProjectName</td>
+                        <td>@entry.Date.ToString("yyyy-MM-dd")</td>
+                        <td>@entry.Hours</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <span class="text-warning ms-5">No Data!</span>
+}
