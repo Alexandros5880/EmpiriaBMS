@@ -7,8 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class OfferRepo : Repository<OfferDto, Offer>
+public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
 {
+    private bool disposedValue;
     private ProjectsRepo _projectRepo;
 
     public OfferRepo(
@@ -268,5 +269,23 @@ public class OfferRepo : Repository<OfferDto, Offer>
             _logger.LogError($"Exception On OfferRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
             return false;
         }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                _projectRepo.Dispose();
+            }
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

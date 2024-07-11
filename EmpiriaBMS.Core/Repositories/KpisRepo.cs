@@ -437,7 +437,7 @@ public class KpisRepo : IDisposable
         {
             if (disposing)
             {
-
+                _ledRepo.Dispose();
             }
             disposedValue = true;
         }

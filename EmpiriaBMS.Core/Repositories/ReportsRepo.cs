@@ -1,18 +1,22 @@
-﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Repositories.Base;
-using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class OfferStateRepo : Repository<OfferStateDto, OfferState>, IDisposable
+public class ReportsRepo : IDisposable
 {
     private bool disposedValue;
+    protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    protected readonly Logging.LoggerManager _logger;
 
-    public OfferStateRepo(
-        IDbContextFactory<AppDbContext> DbFactory,
+    public ReportsRepo(
+        IDbContextFactory<AppDbContext> dbFactory,
         Logging.LoggerManager logger
-    ) : base(DbFactory, logger) { }
+    )
+    {
+        _dbContextFactory = dbFactory;
+        _logger = logger;
+    }
 
     protected virtual void Dispose(bool disposing)
     {

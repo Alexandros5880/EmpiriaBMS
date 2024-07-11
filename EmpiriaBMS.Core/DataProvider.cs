@@ -36,6 +36,7 @@ public class DataProvider : IDataProvider, IDisposable
     public LeadRepo Leads { get; set; }
     public KpisRepo KPIS { get; set; }
     public WorkingTime WorkingTime { get; set; }
+    public ReportsRepo Reports { get; set; }
 
     public DataProvider(
         IDbContextFactory<AppDbContext> dbFactory,
@@ -71,6 +72,7 @@ public class DataProvider : IDataProvider, IDisposable
         Leads = new LeadRepo(dbFactory, logger);
         KPIS = new KpisRepo(dbFactory, logger);
         WorkingTime = new WorkingTime(dbFactory, logger);
+        Reports = new ReportsRepo(dbFactory, logger);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -108,6 +110,7 @@ public class DataProvider : IDataProvider, IDisposable
                 Leads.Dispose();
                 KPIS.Dispose();
                 WorkingTime.Dispose();
+                Reports.Dispose();
             }
             disposedValue = true;
         }

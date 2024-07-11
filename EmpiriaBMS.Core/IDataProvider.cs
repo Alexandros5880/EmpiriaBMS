@@ -33,5 +33,6 @@ namespace EmpiriaBMS.Core
         public LeadRepo Leads { get; set; }
         public KpisRepo KPIS { get; set; }
         public WorkingTime WorkingTime { get; set; }
+        public ReportsRepo Reports { get; set; }
     }
 }
