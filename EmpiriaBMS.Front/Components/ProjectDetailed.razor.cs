@@ -90,36 +90,56 @@ public partial class ProjectDetailed : ComponentBase
         {
             var offerDto = Mapping.Mapper.Map<OfferDto>(Content.Offer);
             Offer = Mapper.Map<OfferVM>(offerDto);
+            _offerCombo.Value = Offer.Code;
         }
-        else if (Content.OfferId != 0)
+        else if (Content.OfferId != 0 && Content.OfferId != null)
         {
-            Offer = _offers.FirstOrDefault(c => c.Id == Content.OfferId);
+            Offer = _offers.OrderByDescending(o => o.CreatedDate).FirstOrDefault(c => c.Id == Content.OfferId);
+            _offerCombo.Value = Offer.Code;
         }
-        _offerCombo.Value = Offer.Code;
+        else
+        {
+            Offer = new OfferVM();
+            _offerCombo.Value = string.Empty;
+        }
+
 
         // Stage
         if (Content.Stage != null)
         {
             var stageDto = Mapping.Mapper.Map<ProjectStageDto>(Content.Stage);
             Stage = Mapper.Map<ProjectStageVM>(stageDto);
+            _stageCombo.Value = Stage.Name;
         }
-        else if (Content.StageId != 0)
+        else if (Content.StageId != 0 && Content.StageId != null)
         {
             Stage = _stages.FirstOrDefault(c => c.Id == Content.StageId);
+            _stageCombo.Value = Stage.Name;
         }
-        _stageCombo.Value = Stage.Name;
+        else
+        {
+            Stage = new ProjectStageVM();
+            _stageCombo.Value = string.Empty;
+        }
 
         // ProjectManager
         if (Content.ProjectManager != null)
         {
             var pmDto = Mapping.Mapper.Map<UserDto>(Content.ProjectManager);
             Pm = Mapper.Map<UserVM>(pmDto);
+            _pmCombo.Value = Pm.FullName;
         }
-        else if (Content.ProjectManagerId != 0)
+        else if (Content.ProjectManagerId != 0 && Content.ProjectManagerId != null)
         {
             Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId);
+            _pmCombo.Value = Pm.FullName;
         }
-        _pmCombo.Value = Pm.FullName;
+        else
+        {
+            Pm = new UserVM();
+            _pmCombo.Value = string.Empty;
+        }
+
 
         StateHasChanged();
     }

@@ -336,7 +336,7 @@
                                                                   @onclick="@(async () => await EditProject())" />
                                                         }
                                                         <span class="grommet-icons--add"
-                                                            @onclick="@(() => AddProject())" />
+                                                            @onclick="@(async () => await AddProject())" />
                                                     }
 
                                                     <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"

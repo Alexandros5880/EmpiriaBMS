@@ -39,7 +39,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Add({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On Repository.Add({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -72,7 +72,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Update({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On Repository.Update({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -260,7 +260,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On InvoiceRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On InvoiceRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -293,7 +293,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On InvoiceRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On InvoiceRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -324,7 +324,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On InvoiceRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On InvoiceRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return false;
         }
     }

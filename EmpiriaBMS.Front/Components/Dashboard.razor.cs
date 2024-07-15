@@ -944,16 +944,19 @@ public partial class Dashboard : IDisposable
         await MicrosoftTeams.OpenDirectionsInNewWindow(directionsUrl);
     }
 
-    private void AddProject()
+    private async Task AddProject()
     {
         _prevSelectedProject = _selectedProject;
-        _selectedProject = new ProjectVM()
-        {
-            Offer = null,
-            OfferId = 0
-        };
+        _selectedProject = null;
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
+        await projectCompoment.Prepair(new ProjectVM()
+        {
+            Stage = null,
+            StageId = 0,
+            Offer = null,
+            OfferId = 0
+        });
     }
 
     private async Task EditProject()

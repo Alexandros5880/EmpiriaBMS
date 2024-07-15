@@ -34,7 +34,7 @@ public class DailyEmailSender
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Exception in DailyEmailSender.SendDailyEmail() \n Exception: {ex.Message} \n Inner Exception: {ex.InnerException.Message}");
+            Debug.WriteLine($"Exception in DailyEmailSender.SendDailyEmail() \n Exception: {ex.Message} \n Inner Exception: {ex.InnerException?.Message}");
         }
     }
 
