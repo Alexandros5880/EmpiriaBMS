@@ -17,7 +17,9 @@ public partial class DeliverableDetailed : ComponentBase, IDisposable
 
     private async Task _getDrawingTypes()
     {
-        var types = await DataProvider.DeliverablesTypes.GetDrawingTypesSelections(DisciplineId);
+        // TODO: Deliverables Types Get By Discipline Id
+        //var types = await DataProvider.DeliverablesTypes.GetDrawingTypesSelections(DisciplineId);
+        var types = await DataProvider.DeliverablesTypes.GetAll();
         _drawingTypes = types.ToList();
     }
 
@@ -28,7 +30,7 @@ public partial class DeliverableDetailed : ComponentBase, IDisposable
         await _getDrawingTypes();
         _drawing = new DeliverableVM();
         _drawing.DisciplineId = DisciplineId;
-        _drawing.TypeId = _drawingTypes.FirstOrDefault().Id;
+        _drawing.TypeId = _drawingTypes.FirstOrDefault()?.Id;
         StateHasChanged();
     }
 

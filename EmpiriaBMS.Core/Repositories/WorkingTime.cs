@@ -63,7 +63,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.GetDailyTimeRequests: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.GetDailyTimeRequests: {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return new Dictionary<DailyTimeTypes, List<DailyTimeRequest>>();
         }
     }
@@ -80,7 +80,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.GetDailyTimeRequestsCount: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.GetDailyTimeRequestsCount: {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -245,7 +245,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime._getGroupingKey: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime._getGroupingKey: {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -338,7 +338,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.ApproveDailyTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.ApproveDailyTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -403,7 +403,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.GetDayliTymeRequest({typeof(DailyTimeRequest)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.GetDayliTymeRequest({typeof(DailyTimeRequest)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -475,7 +475,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.AddDailyTime: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.AddDailyTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -516,7 +516,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.AddDailyTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.AddDailyTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -585,7 +585,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.AddPersonalTime(: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.AddPersonalTime(: {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -626,7 +626,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.AddPersonaTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.AddPersonaTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -695,7 +695,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.AddTraningTime: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.AddTraningTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -736,7 +736,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.AddTraningTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.AddTraningTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -805,7 +805,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.AddCorporateEventTime: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.AddCorporateEventTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -846,7 +846,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.AddCorporateEventTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.AddCorporateEventTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
     #endregion
@@ -885,7 +885,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.LeadAddTime: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.LeadAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -924,7 +924,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.LeadAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.LeadAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
     #endregion
@@ -976,7 +976,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.ProjectAddTime: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.ProjectAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -1015,7 +1015,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.ProjectAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.ProjectAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
     #endregion
@@ -1054,7 +1054,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.OfferAddTime: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.OfferAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -1093,7 +1093,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.OfferAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.OfferAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
     #endregion
@@ -1158,7 +1158,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.DisciplineAddTime: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.DisciplineAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -1198,7 +1198,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.DisciplineAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.DisciplineAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
     #endregion
@@ -1275,7 +1275,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.DeliverableAddTime: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.DeliverableAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -1316,7 +1316,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.DeliverableAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.DeliverableAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
     #endregion
@@ -1391,7 +1391,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.SupportiveWorkAddTime: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.SupportiveWorkAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
@@ -1432,7 +1432,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.SupportiveWorkAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On WorkingTime.SupportiveWorkAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
     #endregion

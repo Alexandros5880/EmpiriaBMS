@@ -329,14 +329,14 @@
                                                                   style="display: @((_selectedProject?.Offer?.Lead?.Address != null ? "block" : "none" ));"
                                                                   @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Lead?.Address))" />
 
-                                                            @* <span class="fluent--delete-28-regular"
-                                                @onclick="@(() => DeleteProject())" /> *@
+                                                            <span class="fluent--delete-28-regular mb-1"
+                                                                    @onclick="@(() => DeleteProject())" />
 
                                                             <span class="material-symbols--edit-outline"
                                                                   @onclick="@(async () => await EditProject())" />
                                                         }
-                                                        @* <span class="grommet-icons--add"
-                                                @onclick="@(() => AddProject())" /> *@
+                                                        <span class="grommet-icons--add"
+                                                            @onclick="@(async () => await AddProject())" />
                                                     }
 
                                                     <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
@@ -598,7 +598,7 @@
                                                         <FluentStack HorizontalAlignment="HorizontalAlignment.End">
                                                             @if (isWorkingMode && editDeliverable)
                                                             {
-                                                                @if (__selectedDeliverable != null)
+                                                                @if (_selectedDeliverable != null)
                                                                 {
                                                                     <span class="fluent--delete-28-regular"
                                                                           @onclick="@(() => DeleteDeliverable())" />
@@ -608,11 +608,8 @@
                                                                               @onclick="@(() => EditDeliverable())" />
                                                                     }
                                                                 }
-                                                                @if (_hasDeliverablessSelections)
-                                                                {
-                                                                    <span class="grommet-icons--add"
-                                                                          @onclick="@(() => AddDeliverable())" />
-                                                                }
+                                                                <span class="grommet-icons--add"
+                                                                        @onclick="@(() => AddDeliverable())" />
                                                             }
 
                                                             <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
@@ -645,22 +642,22 @@
                                                                 @onclick="@(() => OnSelectDeliverable(deliverable))">
 
                                                                 <td class="align-middle
-                                                            @(((__selectedDeliverable == null ||
-                                                                    !__selectedDeliverable.Id.Equals(deliverable.Id))
+                                                            @(((_selectedDeliverable == null ||
+                                                                    !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                                         ? "" : "selected_table_deliverables_row"))">
                                                                     <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
                                                                 </td>
 
                                                                 <td class="align-middle
-                                                            @(((__selectedDeliverable == null ||
-                                                                    !__selectedDeliverable.Id.Equals(deliverable.Id))
+                                                            @(((_selectedDeliverable == null ||
+                                                                    !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                                         ? "" : "selected_table_deliverables_row"))">
                                                                     <label>@GetDeliverableMenHours(deliverable.Id) h</label>
                                                                 </td>
 
                                                                 <td class="align-middle
-                                                            @(((__selectedDeliverable == null ||
-                                                                !__selectedDeliverable.Id.Equals(deliverable.Id))
+                                                            @(((_selectedDeliverable == null ||
+                                                                !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                                     ? "" : "selected_table_deliverables_row"))">
                                                                     <label>@deliverable.CompletionEstimation %</label>
                                                                 </td>
@@ -668,8 +665,8 @@
                                                                 @if (isWorkingMode && assignDesigner)
                                                                 {
                                                                     <td class="align-middle
-                                                                @((__selectedDeliverable == null ||
-                                                                        !__selectedDeliverable.Id.Equals(deliverable?.Id)
+                                                                @((_selectedDeliverable == null ||
+                                                                        !_selectedDeliverable.Id.Equals(deliverable?.Id)
                                                                                         ? "" : "selected_table_deliverables_row"))">
                                                                         <span class="clarity--assign-user-line"
                                                                               @onclick="@(async (x) => await OnDeliverableAssignClick(deliverable))">
@@ -710,11 +707,8 @@
                                                                               @onclick="@(() => EditSupportiveWork())" />
                                                                     }
                                                                 }
-                                                                @if (_hasSapportiveWorksSelections)
-                                                                {
-                                                                    <span class="grommet-icons--add col-1"
-                                                                          @onclick="@(() => AddSupportiveWork())" />
-                                                                }
+                                                                <span class="grommet-icons--add col-1"
+                                                                        @onclick="@(() => AddSupportiveWork())" />
                                                             }
 
                                                             <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
@@ -924,7 +918,7 @@
                         IsFromDashboard="true"
                         OnTimeChanged="@_onTimeTimeChanged"/>
 
-        <div class="row">
+        <div class="row mt-1">
             <FluentButton Disabled="@_isEndWorkAcceptDialogDisabled"
                           class="col-6"
                           OnClick="@(async () => await _endWorkDialogAccept())">

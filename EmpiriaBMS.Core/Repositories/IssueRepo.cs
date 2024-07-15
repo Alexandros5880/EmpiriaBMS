@@ -230,7 +230,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On IssueRepo.DeleteDocument({Mapping.Mapper.Map<Document>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On IssueRepo.DeleteDocument({Mapping.Mapper.Map<Document>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }

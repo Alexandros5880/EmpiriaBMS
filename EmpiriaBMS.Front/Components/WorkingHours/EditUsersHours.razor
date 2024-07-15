@@ -16,7 +16,7 @@
     }
 </div>
 
-<div style="max-height: 600px; width: auto; overflow-y: auto; overflow-x: none;">
+<div style="max-height: 600px; width: auto; overflow-y: hidden; overflow-x: hidden;">
 
     <div class="mt-1 row gx-2 ms-1 me-1">
 
@@ -262,7 +262,7 @@
         @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
         {
             <FluentAccordion>
-                <FluentAccordionItem Expanded="false">
+                <FluentAccordionItem Expanded="@(!IsFromDashboard && !SendRequest)">
                     <HeadingTemplate>
                         <div class="accordion-header">
                             <h3>General Time</h3>

@@ -17,7 +17,9 @@ public partial class OtherDetailed : ComponentBase, IDisposable
 
     private async Task _getOtherTypes()
     {
-        var types = await DataProvider.SupportiveWorksTypes.GetOtherTypesSelections(DisciplineId);
+        // TODO: SupportiveWorks Types Get By Discipline Id
+        //var types = await DataProvider.SupportiveWorksTypes.GetOtherTypesSelections(DisciplineId);
+        var types = await DataProvider.SupportiveWorksTypes.GetAll();
         _otherTypes = types.ToList();
     }
 

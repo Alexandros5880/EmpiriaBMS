@@ -50,6 +50,33 @@
         </div>
     </div>
 
+    <!-- Offer -->
+    <div class="col-12 row gx-2">
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            <div>
+                Offer<span class="text-danger">*</span>
+            </div>
+            <div>
+                <FluentCombobox @ref="_offerCombo" 
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                Placeholder="Select Offer..."
+                                Items="@_offers"
+                                Height="200px"
+                                Width="100%"
+                                TOption="OfferVM"
+                                OptionText="@(c => c.Code)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                @bind-SelectedOption="@Offer" />
+            </div>
+            @if (!validOffer)
+            {
+                <div>
+                    <span class="text-warning">Field is required!</span>
+                </div>
+            }
+        </div>
+    </div>
+
     <div class="col-12 row gx-2">
         <!-- Category -->
         <div class="col-lg-6 col-md-12">
