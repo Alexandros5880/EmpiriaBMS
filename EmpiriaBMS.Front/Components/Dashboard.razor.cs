@@ -103,6 +103,7 @@ public partial class Dashboard : IDisposable
     #region Selected Models
     private LeadVM _selectedLed = new LeadVM();
     private OfferVM _selectedOffer = new OfferVM();
+    private ProjectVM _prevSelectedProject = new ProjectVM();
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DeliverableVM __selectedDeliverable = new DeliverableVM();
@@ -945,7 +946,12 @@ public partial class Dashboard : IDisposable
 
     private void AddProject()
     {
-        _selectedProject = null;
+        _prevSelectedProject = _selectedProject;
+        _selectedProject = new ProjectVM()
+        {
+            Offer = null,
+            OfferId = 0
+        };
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
     }
@@ -963,6 +969,8 @@ public partial class Dashboard : IDisposable
         {
             _addEditProjectDialog.Hide();
             _isAddEditProjectDialogOdepened = false;
+            _selectedProject = _prevSelectedProject != null || _prevSelectedProject?.Id == 0 ? null : _prevSelectedProject;
+            _prevSelectedProject = null;
         }
     }
 
