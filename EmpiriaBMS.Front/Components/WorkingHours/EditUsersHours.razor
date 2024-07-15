@@ -262,7 +262,7 @@
         @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
         {
             <FluentAccordion>
-                <FluentAccordionItem Expanded="false">
+                <FluentAccordionItem Expanded="@(!IsFromDashboard && !SendRequest)">
                     <HeadingTemplate>
                         <div class="accordion-header">
                             <h3>General Time</h3>
