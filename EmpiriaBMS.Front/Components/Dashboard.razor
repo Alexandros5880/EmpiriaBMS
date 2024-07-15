@@ -329,14 +329,14 @@
                                                                   style="display: @((_selectedProject?.Offer?.Lead?.Address != null ? "block" : "none" ));"
                                                                   @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Lead?.Address))" />
 
-                                                            @* <span class="fluent--delete-28-regular"
-                                                @onclick="@(() => DeleteProject())" /> *@
+                                                            <span class="fluent--delete-28-regular"
+                                                                    @onclick="@(() => DeleteProject())" />
 
                                                             <span class="material-symbols--edit-outline"
                                                                   @onclick="@(async () => await EditProject())" />
                                                         }
-                                                        @* <span class="grommet-icons--add"
-                                                @onclick="@(() => AddProject())" /> *@
+                                                        <span class="grommet-icons--add"
+                                                            @onclick="@(() => AddProject())" />
                                                     }
 
                                                     <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"

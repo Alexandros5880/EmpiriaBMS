@@ -8,12 +8,11 @@ using System.Collections.ObjectModel;
 namespace EmpiriaBMS.Front.Components;
 public partial class ProjectDetailed : ComponentBase
 {
+    FluentCombobox<OfferVM> _offerCombo;
     FluentCombobox<ProjectStageVM> _stageCombo;
     FluentCombobox<UserVM> _pmCombo;
 
     private ProjectVM _project;
-
-    private OfferVM _offer;
 
     [Parameter]
     public ProjectVM Content
@@ -30,8 +29,20 @@ public partial class ProjectDetailed : ComponentBase
 
     public bool _isNew => Content?.Id != 0 && Content?.Id != null;
 
+    ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     ObservableCollection<ProjectStageVM> _stages = new ObservableCollection<ProjectStageVM>();
     ObservableCollection<UserVM> _pms = new ObservableCollection<UserVM>();
+
+    private OfferVM _offer = new OfferVM();
+    public OfferVM Offer
+    {
+        get => _offer;
+        set
+        {
+            if (_offer == value || value == null) return;
+            _offer = value;
+        }
+    }
 
     private ProjectStageVM _stage = new ProjectStageVM();
     public ProjectStageVM Stage
@@ -73,6 +84,18 @@ public partial class ProjectDetailed : ComponentBase
             Content = project;
 
         await _getRecords();
+
+        // Offer
+        if (Content.Offer != null)
+        {
+            var offerDto = Mapping.Mapper.Map<OfferDto>(Content.Offer);
+            Offer = Mapper.Map<OfferVM>(offerDto);
+        }
+        else if (Content.OfferId != 0)
+        {
+            Offer = _offers.FirstOrDefault(c => c.Id == Content.OfferId);
+        }
+        _offerCombo.Value = Offer.Code;
 
         // Stage
         if (Content.Stage != null)
@@ -144,6 +167,7 @@ public partial class ProjectDetailed : ComponentBase
     public ProjectVM GetProject() => Content as ProjectVM;
 
     #region Validation
+    private bool validOffer = true;
     private bool validName = true;
     private bool validCode = true;
     private bool validStage = true;
@@ -155,16 +179,18 @@ public partial class ProjectDetailed : ComponentBase
         var valid = false;
         if (fieldname == null)
         {
+            validOffer = _offer != null && _offer.Id != 0;
             validName = !string.IsNullOrEmpty(Content.Name);
             validCode = !string.IsNullOrEmpty(Content.Code);
             validStage = _stage != null && _stage.Id != 0;
             validPm = _pm != null && _pm.Id != 0;
             validEstHours = Content.EstimatedHours > 0;
 
-            valid = validName && validCode && validStage && validPm && validEstHours;
+            valid = validOffer && validName && validCode && validStage && validPm && validEstHours;
         }
         else
         {
+            validOffer = true;
             validName = true;
             validCode = true;
             validStage = true;
@@ -172,6 +198,10 @@ public partial class ProjectDetailed : ComponentBase
 
             switch (fieldname)
             {
+                case "Offer":
+                    validOffer = _offer != null && _offer.Id != 0;
+                    valid = validOffer;
+                    break;
                 case "Name":
                     validName = !string.IsNullOrEmpty(Content.Name);
                     valid = validName;
@@ -205,6 +235,7 @@ public partial class ProjectDetailed : ComponentBase
     #region Get Related Records
     private async Task _getRecords()
     {
+        await _getOffers();
         await _getStages();
         await _getProjectManagers();
         await _getOffer();
@@ -233,6 +264,14 @@ public partial class ProjectDetailed : ComponentBase
 
         var dto = await DataProvider.Offers.Get((int)Content.OfferId);
         _offer = Mapper.Map<OfferVM>(dto);
+    }
+
+    private async Task _getOffers()
+    {
+        var dtos = await DataProvider.Offers.GetAll();
+        var vms = Mapper.Map<List<OfferVM>>(dtos);
+        _offers.Clear();
+        vms.ForEach(_offers.Add);
     }
     #endregion
 }
