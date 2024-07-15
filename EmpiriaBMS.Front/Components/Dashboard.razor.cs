@@ -945,6 +945,7 @@ public partial class Dashboard : IDisposable
 
     private void AddProject()
     {
+        _selectedProject = null;
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
     }
