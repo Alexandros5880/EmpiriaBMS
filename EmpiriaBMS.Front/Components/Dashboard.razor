@@ -608,11 +608,8 @@
                                                                               @onclick="@(() => EditDeliverable())" />
                                                                     }
                                                                 }
-                                                                @if (_hasDeliverablessSelections)
-                                                                {
-                                                                    <span class="grommet-icons--add"
-                                                                          @onclick="@(() => AddDeliverable())" />
-                                                                }
+                                                                <span class="grommet-icons--add"
+                                                                        @onclick="@(() => AddDeliverable())" />
                                                             }
 
                                                             <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
@@ -710,11 +707,8 @@
                                                                               @onclick="@(() => EditSupportiveWork())" />
                                                                     }
                                                                 }
-                                                                @if (_hasSapportiveWorksSelections)
-                                                                {
-                                                                    <span class="grommet-icons--add col-1"
-                                                                          @onclick="@(() => AddSupportiveWork())" />
-                                                                }
+                                                                <span class="grommet-icons--add col-1"
+                                                                        @onclick="@(() => AddSupportiveWork())" />
                                                             }
 
                                                             <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
