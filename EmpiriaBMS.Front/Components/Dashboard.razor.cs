@@ -106,7 +106,7 @@ public partial class Dashboard : IDisposable
     private ProjectVM _prevSelectedProject = new ProjectVM();
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
-    private DeliverableVM __selectedDeliverable = new DeliverableVM();
+    private DeliverableVM _selectedDeliverable = new DeliverableVM();
     private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
     private int _selectedPmId;
     private InvoiceVM _selectedInvoice = new InvoiceVM();
@@ -290,7 +290,7 @@ public partial class Dashboard : IDisposable
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
@@ -315,7 +315,7 @@ public partial class Dashboard : IDisposable
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
@@ -339,7 +339,7 @@ public partial class Dashboard : IDisposable
     {
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
@@ -381,7 +381,7 @@ public partial class Dashboard : IDisposable
             if (disigners == null)
                 throw new NullReferenceException(nameof(disigners));
 
-            var myDesignersIds = (await _dataProvider.Deliverables.GetDesigners(__selectedDeliverable.Id)).Select(d => d.Id);
+            var myDesignersIds = (await _dataProvider.Deliverables.GetDesigners(_selectedDeliverable.Id)).Select(d => d.Id);
 
             var disignersVM = Mapper.Map<List<UserVM>>(disigners);
             _designers.Clear();
@@ -500,7 +500,7 @@ public partial class Dashboard : IDisposable
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
 
         await _getOffers();
@@ -520,7 +520,7 @@ public partial class Dashboard : IDisposable
         _selectedOffer = offer;
         _selectedProject = null;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
 
         await _getProjects(active: true);
@@ -538,7 +538,7 @@ public partial class Dashboard : IDisposable
         _disciplines.Clear();
         _selectedProject = project;
         _selectedDiscipline = null;
-        __selectedDeliverable = null;
+        _selectedDeliverable = null;
         _selectedSupportiveWork = null;
 
         var disciplines = await _dataProvider.Projects.GetDisciplines(project.Id, _sharedAuthData.LogedUser.Id, getAllDisciplines);
@@ -576,8 +576,8 @@ public partial class Dashboard : IDisposable
 
     private void OnSelectDeliverable(DeliverableVM draw)
     {
-        if (draw == null || draw.Id == __selectedDeliverable?.Id) return;
-        __selectedDeliverable = draw;
+        if (draw == null || draw.Id == _selectedDeliverable?.Id) return;
+        _selectedDeliverable = draw;
         StateHasChanged();
     }
 
@@ -700,7 +700,7 @@ public partial class Dashboard : IDisposable
         _selectedOffer = null;
         //_selectedProject = null;
         //_selectedDiscipline = null;
-        //__selectedDeliverable = null;
+        //_selectedDeliverable = null;
         //_selectedSupportiveWork = null;
 
         StartWorkClick();
@@ -715,7 +715,7 @@ public partial class Dashboard : IDisposable
         if (!isWorkingMode) return;
         try
         {
-            __selectedDeliverable = draw;
+            _selectedDeliverable = draw;
             await _getDesigners();
             StateHasChanged();
             _addDesignerDialog.Show();
@@ -737,11 +737,11 @@ public partial class Dashboard : IDisposable
         var forDeleteIds = _designers.Where(d => d.IsSelected == null || d.IsSelected == false)
                                      .Select(d => d.Id)
                                      .ToList();
-        await _dataProvider.Deliverables.RemoveDesigners(__selectedDeliverable.Id, forDeleteIds);
+        await _dataProvider.Deliverables.RemoveDesigners(_selectedDeliverable.Id, forDeleteIds);
 
         var forAdd = _designers.Where(d => d.IsSelected == true).ToList();
         var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
-        await _dataProvider.Deliverables.AddDesigners(__selectedDeliverable.Id, forAddDto);
+        await _dataProvider.Deliverables.AddDesigners(_selectedDeliverable.Id, forAddDto);
 
         _startLoading = false;
     }
@@ -948,6 +948,9 @@ public partial class Dashboard : IDisposable
     {
         _prevSelectedProject = _selectedProject;
         _selectedProject = null;
+        _selectedDiscipline = null;
+        _selectedDeliverable = null;
+        _selectedSupportiveWork = null;
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
         await projectCompoment.Prepair(new ProjectVM()
@@ -961,6 +964,10 @@ public partial class Dashboard : IDisposable
 
     private async Task EditProject()
     {
+        _selectedProject = null;
+        _selectedDiscipline = null;
+        _selectedDeliverable = null;
+        _selectedSupportiveWork = null;
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
         await projectCompoment.Prepair();
@@ -1055,7 +1062,7 @@ public partial class Dashboard : IDisposable
 
     private void EditDeliverable()
     {
-        deliverableCompoment.PrepairForEdit(__selectedDeliverable);
+        deliverableCompoment.PrepairForEdit(_selectedDeliverable);
         _addEditDeliverableDialog.Show();
         _isAddEditDeliverableDialogOdepened = true;
     }
@@ -1079,8 +1086,8 @@ public partial class Dashboard : IDisposable
 
     private void DeleteDeliverable()
     {
-        _deleteDialogMsg = $"Are you sure you want delete {__selectedDeliverable.Type.Name}";
-        _deleteObj = nameof(__selectedDeliverable);
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedDeliverable.Type.Name}";
+        _deleteObj = nameof(_selectedDeliverable);
         _deleteDialog.Show();
         _isDeleteDialogOdepened = true;
     }
@@ -1164,8 +1171,8 @@ public partial class Dashboard : IDisposable
                 case nameof(_selectedDiscipline):
                     await _dataProvider.Disciplines.Delete(_selectedDiscipline.Id);
                     break;
-                case nameof(__selectedDeliverable):
-                    await _dataProvider.Deliverables.Delete(__selectedDeliverable.Id);
+                case nameof(_selectedDeliverable):
+                    await _dataProvider.Deliverables.Delete(_selectedDeliverable.Id);
                     break;
                 case nameof(_selectedSupportiveWork):
                     await _dataProvider.SupportiveWorks.Delete(_selectedSupportiveWork.Id);

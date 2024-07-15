@@ -598,7 +598,7 @@
                                                         <FluentStack HorizontalAlignment="HorizontalAlignment.End">
                                                             @if (isWorkingMode && editDeliverable)
                                                             {
-                                                                @if (__selectedDeliverable != null)
+                                                                @if (_selectedDeliverable != null)
                                                                 {
                                                                     <span class="fluent--delete-28-regular"
                                                                           @onclick="@(() => DeleteDeliverable())" />
@@ -645,22 +645,22 @@
                                                                 @onclick="@(() => OnSelectDeliverable(deliverable))">
 
                                                                 <td class="align-middle
-                                                            @(((__selectedDeliverable == null ||
-                                                                    !__selectedDeliverable.Id.Equals(deliverable.Id))
+                                                            @(((_selectedDeliverable == null ||
+                                                                    !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                                         ? "" : "selected_table_deliverables_row"))">
                                                                     <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
                                                                 </td>
 
                                                                 <td class="align-middle
-                                                            @(((__selectedDeliverable == null ||
-                                                                    !__selectedDeliverable.Id.Equals(deliverable.Id))
+                                                            @(((_selectedDeliverable == null ||
+                                                                    !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                                         ? "" : "selected_table_deliverables_row"))">
                                                                     <label>@GetDeliverableMenHours(deliverable.Id) h</label>
                                                                 </td>
 
                                                                 <td class="align-middle
-                                                            @(((__selectedDeliverable == null ||
-                                                                !__selectedDeliverable.Id.Equals(deliverable.Id))
+                                                            @(((_selectedDeliverable == null ||
+                                                                !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                                     ? "" : "selected_table_deliverables_row"))">
                                                                     <label>@deliverable.CompletionEstimation %</label>
                                                                 </td>
@@ -668,8 +668,8 @@
                                                                 @if (isWorkingMode && assignDesigner)
                                                                 {
                                                                     <td class="align-middle
-                                                                @((__selectedDeliverable == null ||
-                                                                        !__selectedDeliverable.Id.Equals(deliverable?.Id)
+                                                                @((_selectedDeliverable == null ||
+                                                                        !_selectedDeliverable.Id.Equals(deliverable?.Id)
                                                                                         ? "" : "selected_table_deliverables_row"))">
                                                                         <span class="clarity--assign-user-line"
                                                                               @onclick="@(async (x) => await OnDeliverableAssignClick(deliverable))">
