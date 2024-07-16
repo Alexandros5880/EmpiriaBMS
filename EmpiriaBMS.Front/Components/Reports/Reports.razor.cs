@@ -94,23 +94,18 @@ public partial class Reports
 
         // Dataset Labes are Projects.Client.CompanyName
         // Dataset Values are Client.Projects.Invoices.Payments.Sum
-        var dataset1 = new BarDataset<int>(new List<int> { 10, 20, 30 })
+        foreach (var report in reportEntries)
         {
-            Label = "dataset1",
-            BackgroundColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.LightSkyBlue)),
-            BorderColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.SkyBlue)),
-            BorderWidth = 1
-        };
-        _barChartConfig.Data.Datasets.Add(dataset1);
+            var dataset = new BarDataset<double>(report.)
+            {
+                Label = report.Client.CompanyName,
+                BackgroundColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.LightSkyBlue)),
+                BorderColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.SkyBlue)),
+                BorderWidth = 1
+            };
+            _barChartConfig.Data.Datasets.Add(dataset);
+        }
 
-        var dataset2 = new BarDataset<int>(new List<int> { 8, 9, 7, 6 })
-        {
-            Label = "dataset2",
-            BackgroundColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.LightSeaGreen)),
-            BorderColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.SeaGreen)),
-            BorderWidth = 1
-        };
-        _barChartConfig.Data.Datasets.Add(dataset2);
     }
     #endregion
 
