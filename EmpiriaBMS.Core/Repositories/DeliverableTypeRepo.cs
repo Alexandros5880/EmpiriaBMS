@@ -17,40 +17,48 @@ public class DeliverableTypeRepo : Repository<DeliverableTypeDto, DeliverableTyp
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            if (disciplineId == 0)
+            try
             {
-                var noDrawingTypes = await _context.Set<DeliverableType>()
-                                                   .Where(r => !r.IsDeleted)
-                                                   .ToListAsync();
-
-                return Mapping.Mapper.Map<List<DeliverableTypeDto>>(noDrawingTypes);
-            }
-            else
-            {
-                var noDrawingTypesIds = await _context.Set<Deliverable>()
-                                                      .Where(r => !r.IsDeleted)
-                                                      .Where(d => d.DisciplineId == disciplineId)
-                                                      .Select(d => d.TypeId)
-                                                      .ToListAsync();
-
-                if (noDrawingTypesIds == null)
-                    throw new NullReferenceException(nameof(noDrawingTypesIds));
-
-                if (noDrawingTypesIds.Count() == 0)
+                if (disciplineId == 0)
                 {
-                    var allDrawingTypes = await _context.Set<DeliverableType>()
-                                                        .Where(r => !r.IsDeleted)
-                                                        .ToListAsync();
+                    var noDrawingTypes = await _context.Set<DeliverableType>()
+                                                       .Where(r => !r.IsDeleted)
+                                                       .ToListAsync();
 
-                    return Mapping.Mapper.Map<List<DeliverableTypeDto>>(allDrawingTypes);
+                    return Mapping.Mapper.Map<List<DeliverableTypeDto>>(noDrawingTypes);
                 }
+                else
+                {
+                    var noDrawingTypesIds = await _context.Set<Deliverable>()
+                                                          .Where(r => !r.IsDeleted)
+                                                          .Where(d => d.DisciplineId == disciplineId)
+                                                          .Select(d => d.TypeId)
+                                                          .ToListAsync();
 
-                var noDrawingTypes = await _context.Set<DeliverableType>()
-                                                   .Where(r => !r.IsDeleted)
-                                                   .Where(t => !noDrawingTypesIds.Contains(t.Id))
-                                                   .ToListAsync();
+                    if (noDrawingTypesIds == null)
+                        throw new NullReferenceException(nameof(noDrawingTypesIds));
 
-                return Mapping.Mapper.Map<List<DeliverableTypeDto>>(noDrawingTypes);
+                    if (noDrawingTypesIds.Count() == 0)
+                    {
+                        var allDrawingTypes = await _context.Set<DeliverableType>()
+                                                            .Where(r => !r.IsDeleted)
+                                                            .ToListAsync();
+
+                        return Mapping.Mapper.Map<List<DeliverableTypeDto>>(allDrawingTypes);
+                    }
+
+                    var noDrawingTypes = await _context.Set<DeliverableType>()
+                                                       .Where(r => !r.IsDeleted)
+                                                       .Where(t => !noDrawingTypesIds.Contains(t.Id))
+                                                       .ToListAsync();
+
+                    return Mapping.Mapper.Map<List<DeliverableTypeDto>>(noDrawingTypes);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception On DeliverableTypeRepo.GetDrawingTypesSelections(int disciplineId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                return null;
             }
         }
     }

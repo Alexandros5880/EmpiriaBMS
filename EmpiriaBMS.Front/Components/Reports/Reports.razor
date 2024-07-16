@@ -44,17 +44,6 @@
                             OptionValue="@(c => c.Id.ToString())"
                             SelectedOptionChanged="@(async (e) => await _onSubCategorySelected(e))" />
 
-            <!-- Project -->
-            <FluentCombobox @ref="projectCombo"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            Placeholder="Select Project..."
-                            Items="@_projects"
-                            Height="200px"
-                            TOption="ProjectVM"
-                            OptionText="@(c => c.Name)"
-                            OptionValue="@(c => c.Id.ToString())"
-                            SelectedOptionChanged="@(async (e) => await _onProjectSelected(e))" />
-
             <!-- Date Range -->
             <DateRangePicker class="form-control form-control-sm"
                              title="Dates"

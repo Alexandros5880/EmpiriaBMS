@@ -308,7 +308,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On LeadRepo.GetAllOppenLeads(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LeadRepo.GetAllOppenLeads(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return new List<LeadDto>();
         }
     }
@@ -344,7 +344,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On LeadRepo.GetSumOfAllOppenLeadsPotencialFee(): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LeadRepo.GetSumOfAllOppenLeadsPotencialFee(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -389,7 +389,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On LeadRepo.GetSumOfPayedFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LeadRepo.GetSumOfPayedFee({ledId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -434,7 +434,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On LeadRepo.GetSumOfPotencialFee({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LeadRepo.GetSumOfPotencialFee({ledId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -480,7 +480,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On LeadRepo.IsClosed({ledId}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On LeadRepo.IsClosed({ledId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return false;
         }
     }

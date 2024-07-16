@@ -45,7 +45,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Add({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On Repository.Add({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -78,34 +78,42 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Update({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On Repository.Update({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
 
     public new async Task<OfferDto> Get(int id)
     {
-        if (id == 0)
-            throw new ArgumentException(nameof(id));
-
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            var offer = await _context.Set<Offer>()
-                                       .Where(r => !r.IsDeleted)
-                                       .Include(o => o.Lead)
-                                       .Include(o => o.State)
-                                       .Include(o => o.Type)
-                                       .Include(o => o.Lead)
-                                       .ThenInclude(p => p.Client)
-                                       .Include(o => o.Lead)
-                                       .ThenInclude(l => l.Address)
-                                       .Include(o => o.SubCategory)
-                                       .Include(o => o.Category)
-                                       .Include(o => o.Project)
-                                       .ThenInclude(p => p.Stage)
-                                       .FirstOrDefaultAsync(o => o.Id == id);
+            if (id == 0)
+                throw new ArgumentException(nameof(id));
 
-            return Mapping.Mapper.Map<Offer, OfferDto>(offer);
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var offer = await _context.Set<Offer>()
+                                           .Where(r => !r.IsDeleted)
+                                           .Include(o => o.Lead)
+                                           .Include(o => o.State)
+                                           .Include(o => o.Type)
+                                           .Include(o => o.Lead)
+                                           .ThenInclude(p => p.Client)
+                                           .Include(o => o.Lead)
+                                           .ThenInclude(l => l.Address)
+                                           .Include(o => o.SubCategory)
+                                           .Include(o => o.Category)
+                                           .Include(o => o.Project)
+                                           .ThenInclude(p => p.Stage)
+                                           .FirstOrDefaultAsync(o => o.Id == id);
+
+                return Mapping.Mapper.Map<Offer, OfferDto>(offer);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On Repository.Get(Offer.Id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
         }
     }
 
@@ -191,7 +199,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On OfferRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On OfferRepo.GetSumOfPayedFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -228,7 +236,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On OfferRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On OfferRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -266,7 +274,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On OfferRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On OfferRepo.IsClosed({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return false;
         }
     }

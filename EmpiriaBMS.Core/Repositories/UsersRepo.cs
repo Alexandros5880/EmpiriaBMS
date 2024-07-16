@@ -506,7 +506,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On UsersRepo.DeleteUserRole({Mapping.Mapper.Map<UserRole>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException.Message}");
+            _logger.LogError($"Exception On UsersRepo.DeleteUserRole({Mapping.Mapper.Map<UserRole>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }

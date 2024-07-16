@@ -5,6 +5,7 @@ using ChartJs.Blazor.Common;
 using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common.Axes.Ticks;
 using ChartJs.Blazor.Util;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using System.Drawing;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
@@ -31,8 +32,6 @@ public partial class Reports
         public double Hours { get; set; }
     }
     #endregion
-
-
 
     private BarConfig _barChartConfig;
 
@@ -164,12 +163,12 @@ public partial class Reports
         vms.ForEach(_projectSubCategories.Add);
     }
 
-    private async Task _getProjects()
+    private async Task _getReportData()
     {
-        var dtos = await _dataProvider.Projects.GetAll();
-        var vms = _mapper.Map<List<ProjectVM>>(dtos);
-        _projects.Clear();
-        vms.ForEach(_projects.Add);
+        var clientDto = _mapper.Map<ClientDto>(Client);
+        var categoryDto = _mapper.Map<ProjectCategoryDto>(ProjectCategory);
+        var subCategoryDto = _mapper.Map<ProjectSubCategoryDto>(ProjectSubCategory);
+        var data = await _dataProvider.Reports.GetProjectPerEmployeeReport(StartDate?.Date, EndDate?.Date, clientDto, categoryDto, subCategoryDto);
     }
     #endregion
 
@@ -245,35 +244,15 @@ public partial class Reports
     }
     #endregion
 
-    #region Project Filter
-    private Fluent.FluentCombobox<ProjectVM> projectCombo;
-    private List<ProjectVM> _projects = new List<ProjectVM>();
-
-    private ProjectVM _project = new ProjectVM();
-    public ProjectVM Project
-    {
-        get => _project;
-        set
-        {
-            if (_project == value || value == null) return;
-            _project = value;
-        }
-    }
-
-    private async Task _onProjectSelected(ProjectVM obj)
-    {
-        Project = obj;
-        await _refreshData();
-    }
-    #endregion
-
     #region Date Range Filter
     DateTimeOffset? StartDate { get; set; } = null;
     DateTimeOffset? EndDate { get; set; } = null;
 
     public async Task OnDateSelect(DateRange range)
     {
-        await _refreshData();
+        //var startDate = range.Start.DateTime;
+        //var endDate = range.End.DateTime;
+        await _getReportData();
     }
     #endregion
 }
