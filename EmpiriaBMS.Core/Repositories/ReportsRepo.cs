@@ -33,63 +33,94 @@ public class ReportsRepo : IDisposable
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var projectsReports = await _context.Set<Project>()
-                    .Join(
-                        _context.Set<Offer>(),
-                        project => project.OfferId,
-                        offer => offer.Id,
-                        (project, offer) => new { project, offer })
-                    .Join(
-                        _context.Set<Lead>(),
-                        offerProject => offerProject.offer.LeadId,
-                        lead => lead.Id,
-                        (offerProject, lead) => new { offerProject.project, offerProject.offer, lead })
-                    .Join(
-                        _context.Set<Client>(),
-                        leadOfferProject => leadOfferProject.lead.ClientId,
-                        client => client.Id,
-                        (leadOfferProject, client) => new
-                        {
-                            Project = leadOfferProject.project,
-                            Offer = leadOfferProject.offer,
-                            Lead = leadOfferProject.lead,
-                            Client = client
-                        })
-                    .Join(
-                        _context.Set<ProjectCategory>(),
-                        leadOfferClientProject => leadOfferClientProject.Offer.CategoryId,
-                        cat => cat.Id,
-                        (leadOfferClientProject, cat) => new
-                        {
-                            Project = leadOfferClientProject.Project,
-                            Offer = leadOfferClientProject.Offer,
-                            Lead = leadOfferClientProject.Lead,
-                            Client = leadOfferClientProject.Client,
-                            Category = cat
-                        })
-                    .Join(
-                        _context.Set<ProjectSubCategory>(),
-                        leadOfferClientCatProject => leadOfferClientCatProject.Offer.SubCategoryId,
-                        cat => cat.Id,
-                        (leadOfferClientProject, cat) => new ReportProjectReturnModel()
-                        {
-                            Project = leadOfferClientProject.Project,
-                            Offer = leadOfferClientProject.Offer,
-                            Lead = leadOfferClientProject.Lead,
-                            Client = leadOfferClientProject.Client,
-                            Category = leadOfferClientProject.Category,
-                            SubCategory = cat
-                        })
-                    .Where(p => (
-                        (start == null || p.Project.CreatedDate >= start) &&
-                        (end == null || p.Project.CreatedDate >= end) &&
-                        (category == null || p.Category.Id == category.Id) &&
-                        (subCategory == null || p.SubCategory.Id == subCategory.Id) &&
-                        (client == null || p.Client.Id == client.Id)
-                    ))
+                var projects = await _context.Set<Project>()
+                .Where(dt => !dt.IsDeleted)
+                .Join(
+                    _context.Set<Offer>(),
+                    project => project.OfferId,
+                    offer => offer.Id,
+                    (project, offer) => new { project, offer })
+                .Join(
+                    _context.Set<Lead>(),
+                    offerProject => offerProject.offer.LeadId,
+                    lead => lead.Id,
+                    (offerProject, lead) => new { offerProject.project, offerProject.offer, lead })
+                .Join(
+                    _context.Set<Client>(),
+                    leadOfferProject => leadOfferProject.lead.ClientId,
+                    client => client.Id,
+                    (leadOfferProject, client) => new { leadOfferProject.project, leadOfferProject.offer, leadOfferProject.lead, client })
+                .Join(
+                    _context.Set<ProjectCategory>(),
+                    leadOfferClientProject => leadOfferClientProject.offer.CategoryId,
+                    cat => cat.Id,
+                    (leadOfferClientProject, cat) => new
+                    {
+                        project = leadOfferClientProject.project,
+                        offer = leadOfferClientProject.offer,
+                        lead = leadOfferClientProject.lead,
+                        client = leadOfferClientProject.client,
+                        category = cat
+                    })
+                .Join(
+                    _context.Set<ProjectSubCategory>(),
+                    leadOfferClientCatProject => leadOfferClientCatProject.offer.SubCategoryId,
+                    subCat => subCat.Id,
+                    (leadOfferClientCatProject, subCat) => new ReportProjectReturnModel
+                    {
+                        Project = leadOfferClientCatProject.project,
+                        Offer = leadOfferClientCatProject.offer,
+                        Lead = leadOfferClientCatProject.lead,
+                        Client = leadOfferClientCatProject.client,
+                        Category = leadOfferClientCatProject.category,
+                        SubCategory = subCat
+                    })
+                //.GroupJoin(
+                //    _context.Set<DailyTime>(),
+                //    projectDetails => projectDetails.project.Id,
+                //    dailyTime => dailyTime.ProjectId,
+                //    (pd, dailyTimes) => new ReportProjectReturnModel
+                //    {
+                //        Project = pd.project,
+                //        Category = pd.category,
+                //        SubCategory = pd.sbCategory,
+                //        Offer = pd.offer,
+                //        Lead = pd.lead,
+                //        Client = pd.client,
+                //        TotalWorkedTime = new TimeSpan(dailyTimes.Sum(dt => dt.TimeSpan.ToTimeSpan().Ticks))
+                //    })
+                //.Select(pd => new ReportProjectReturnModel
+                //{
+                //    Project = pd.project,
+                //    Category = pd.category,
+                //    SubCategory = pd.sbCategory,
+                //    Offer = pd.offer,
+                //    Lead = pd.lead,
+                //    Client = pd.client,
+                //    TotalWorkedTime = new TimeSpan()
+                //})
+                .ToListAsync();
+
+                // projects
+                // Get Times
+                var projectsIds = projects.Select(p => p.Project.Id).ToList();
+                var dailyTimes = await _context.Set<DailyTime>()
+                    .Include(dt => dt.TimeSpan)
+                    .Where(dt => !dt.IsDeleted)
+                    .Where(dt => projectsIds.Contains((int)dt.ProjectId))
                     .ToListAsync();
 
-                return projectsReports;
+                foreach (var project in projects)
+                {
+                    var sum = dailyTimes
+                        .Where(dt => dt.ProjectId == project.Project.Id)
+                        .Select(dt => dt.TimeSpan?.ToTimeSpan().Ticks)
+                        .Sum();
+
+                    project.TotalWorkedTime = new TimeSpan((long)sum);
+                }
+
+                return projects;
             }
         }
         catch (Exception ex)

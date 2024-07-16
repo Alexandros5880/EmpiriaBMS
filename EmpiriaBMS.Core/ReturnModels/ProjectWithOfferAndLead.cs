@@ -5,6 +5,7 @@ namespace EmpiriaBMS.Core.ReturnModels;
 public class ReportProjectReturnModel
 {
     public Project Project { get; set; }
+    public TimeSpan? TotalWorkedTime { get; set; }
     public Offer Offer { get; set; }
     public ProjectCategory Category { get; set; }
     public ProjectSubCategory SubCategory { get; set; }

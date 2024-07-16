@@ -73,9 +73,9 @@
                     @foreach (var entry in reportEntries)
                     {
                         <tr>
-                            <td>@entry.ProjectName</td>
-                            <td>@entry.Date.ToString("yyyy-MM-dd")</td>
-                            <td>@entry.Hours</td>
+                            <td>@(entry.Project?.Name ?? "--")</td>
+                            <td>@(entry.Project?.CreatedDate.ToEuropeFormat() ?? "--")</td>
+                            <td>@entry.TotalWorkedTime?.DisplayDHMS()</td>
                         </tr>
                     }
                 </tbody>

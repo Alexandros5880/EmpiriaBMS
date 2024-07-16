@@ -6,6 +6,7 @@ using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common.Axes.Ticks;
 using ChartJs.Blazor.Util;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.ViewModel.Components;
 using System.Drawing;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
@@ -15,30 +16,13 @@ namespace EmpiriaBMS.Front.Components.Reports;
 
 public partial class Reports
 {
-
-    #region For Development
-    private List<ReportEntry> reportEntries = new()
-    {
-        new ReportEntry { ProjectName = "General Services", Date = new DateTime(2024, 7, 24), Hours = 8 },
-        new ReportEntry { ProjectName = "General Services", Date = new DateTime(2024, 7, 25), Hours = 9 },
-        new ReportEntry { ProjectName = "General Services", Date = new DateTime(2024, 7, 26), Hours = 7 },
-        new ReportEntry { ProjectName = "General Services", Date = new DateTime(2024, 7, 27), Hours = 6 }
-    };
-
-    public class ReportEntry
-    {
-        public string ProjectName { get; set; }
-        public DateTime Date { get; set; }
-        public double Hours { get; set; }
-    }
-    #endregion
-
+    private List<ReportProjectReturnModel> reportEntries = new();
     private BarConfig _barChartConfig;
 
     protected override void OnInitialized()
     {
         base.OnInitializedAsync();
-        InitializeChart();
+        _initializeChart();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -48,13 +32,13 @@ public partial class Reports
         if (firstRender)
         {
             await _refreshData();
-            LoadDataOnChart();
+            await _getReportData();
             StateHasChanged();
         }
     }
 
     #region Initialize Chart
-    private void InitializeChart()
+    private void _initializeChart()
     {
         _barChartConfig = new BarConfig
         {
@@ -98,8 +82,11 @@ public partial class Reports
         };
     }
 
-    private void LoadDataOnChart()
+    private void _loadDataOnChart()
     {
+        _barChartConfig.Data.Labels.Clear();
+        _barChartConfig.Data.Datasets.Clear();
+
         // Labels (Dates for start date to end date per 1 week)
         List<string> dates = new List<string> { "Jul 24", "Jul 25", "Jul 26", "Jul 27" };
         foreach (var date in dates)
@@ -169,6 +156,8 @@ public partial class Reports
         var categoryDto = _mapper.Map<ProjectCategoryDto>(ProjectCategory);
         var subCategoryDto = _mapper.Map<ProjectSubCategoryDto>(ProjectSubCategory);
         var data = await _dataProvider.Reports.GetProjectPerEmployeeReport(StartDate?.Date, EndDate?.Date, clientDto, categoryDto, subCategoryDto);
+        reportEntries = data;
+        _loadDataOnChart();
     }
     #endregion
 
@@ -189,7 +178,8 @@ public partial class Reports
     private async Task _onClientSelected(ClientVM obj)
     {
         Client = obj;
-        await _refreshData();
+
+        await _getReportData();
     }
     #endregion
 
@@ -214,7 +204,8 @@ public partial class Reports
         var firstSubCategory = _projectSubCategories.FirstOrDefault();
         subCategoryCombo.SelectedOption = firstSubCategory;
         subCategoryCombo.Value = firstSubCategory.Name;
-        await _refreshData();
+
+        await _getReportData();
     }
     #endregion
 
@@ -236,11 +227,7 @@ public partial class Reports
     private async Task _onSubCategorySelected(ProjectSubCategoryVM obj)
     {
         ProjectSubCategory = obj;
-        await _getProjects();
-        var firatProject = _projects.FirstOrDefault();
-        projectCombo.SelectedOption = firatProject;
-        projectCombo.Value = firatProject.Name;
-        await _refreshData();
+        await _getReportData();
     }
     #endregion
 
