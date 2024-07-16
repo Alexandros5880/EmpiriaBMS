@@ -10,6 +10,7 @@ public class ReportsRepo : IDisposable
     private bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
     protected readonly Logging.LoggerManager _logger;
+    protected readonly ProjectsRepo _projectsRepo;
 
     public ReportsRepo(
         IDbContextFactory<AppDbContext> dbFactory,
@@ -18,6 +19,7 @@ public class ReportsRepo : IDisposable
     {
         _dbContextFactory = dbFactory;
         _logger = logger;
+        _projectsRepo = new ProjectsRepo(dbFactory, logger);
     }
 
 
@@ -75,33 +77,8 @@ public class ReportsRepo : IDisposable
                         Category = leadOfferClientCatProject.category,
                         SubCategory = subCat
                     })
-                //.GroupJoin(
-                //    _context.Set<DailyTime>(),
-                //    projectDetails => projectDetails.project.Id,
-                //    dailyTime => dailyTime.ProjectId,
-                //    (pd, dailyTimes) => new ReportProjectReturnModel
-                //    {
-                //        Project = pd.project,
-                //        Category = pd.category,
-                //        SubCategory = pd.sbCategory,
-                //        Offer = pd.offer,
-                //        Lead = pd.lead,
-                //        Client = pd.client,
-                //        TotalWorkedTime = new TimeSpan(dailyTimes.Sum(dt => dt.TimeSpan.ToTimeSpan().Ticks))
-                //    })
-                //.Select(pd => new ReportProjectReturnModel
-                //{
-                //    Project = pd.project,
-                //    Category = pd.category,
-                //    SubCategory = pd.sbCategory,
-                //    Offer = pd.offer,
-                //    Lead = pd.lead,
-                //    Client = pd.client,
-                //    TotalWorkedTime = new TimeSpan()
-                //})
                 .ToListAsync();
 
-                // projects
                 // Get Times
                 var projectsIds = projects.Select(p => p.Project.Id).ToList();
                 var dailyTimes = await _context.Set<DailyTime>()
@@ -118,6 +95,7 @@ public class ReportsRepo : IDisposable
                         .Sum();
 
                     project.TotalWorkedTime = new TimeSpan((long)sum);
+                    project.TotalWorkedSum = await _projectsRepo.GetSumOfPayedFee(project.Project.Id);
                 }
 
                 return projects;

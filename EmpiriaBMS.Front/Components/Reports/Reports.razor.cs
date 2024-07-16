@@ -88,11 +88,9 @@ public partial class Reports
         _barChartConfig.Data.Datasets.Clear();
 
         // Labels (Dates for start date to end date per 1 week)
-        List<string> dates = new List<string> { "Jul 24", "Jul 25", "Jul 26", "Jul 27" };
-        foreach (var date in dates)
-        {
-            _barChartConfig.Data.Labels.Add(date);
-        }
+        var weekleDates = _getWeeklyDates(StartDate?.DateTime, EndDate);
+        foreach (var date in weekleDates)
+            _barChartConfig.Data.Labels.Add(date.ToEuropeFormat());
 
         // Dataset Labes are Projects.Client.CompanyName
         // Dataset Values are Client.Projects.Invoices.Payments.Sum
@@ -242,4 +240,29 @@ public partial class Reports
         await _getReportData();
     }
     #endregion
+
+    public static IEnumerable<DateTime> _getWeeklyDates(DateTimeOffset? start, DateTimeOffset? end)
+    {
+        if (start != null || end == null)
+        {
+            end = DateTime.Now;
+        }
+        else if (start == null || end != null)
+        {
+            start = DateTime.Now.AddMonths(-1);
+        }
+        else
+        {
+            end = DateTime.Now;
+            start = DateTime.Now.AddMonths(-1);
+        }
+
+        DateTime current = start?.DateTime ?? DateTime.Now.AddMonths(-1);
+
+        while (current <= end)
+        {
+            yield return current;
+            current = current.AddDays(7); // Move to the next week
+        }
+    }
 }
