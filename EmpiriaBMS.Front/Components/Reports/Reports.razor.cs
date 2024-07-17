@@ -1,4 +1,5 @@
-﻿using BlazorDateRangePicker;
+﻿using BlazorBootstrap;
+using BlazorDateRangePicker;
 using ChartJs.Blazor.BarChart;
 using ChartJs.Blazor.BarChart.Axes;
 using ChartJs.Blazor.Common;
@@ -7,6 +8,7 @@ using ChartJs.Blazor.Common.Axes.Ticks;
 using ChartJs.Blazor.Util;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.ViewModel.Components;
 using System.Drawing;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
@@ -16,6 +18,8 @@ namespace EmpiriaBMS.Front.Components.Reports;
 
 public partial class Reports
 {
+    private static Random _random = new Random();
+
     private List<ReportProjectReturnModel> reportEntries = new();
     private BarConfig _barChartConfig;
 
@@ -68,10 +72,9 @@ public partial class Reports
                     {
                         new BarLinearCartesianAxis
                         {
-                            Stacked = true,
                             Ticks = new LinearCartesianTicks
                             {
-                                BeginAtZero = true
+                                Callback = new CustomAxisTickHandler()
                             }
                         }
                     }
@@ -88,25 +91,65 @@ public partial class Reports
         _barChartConfig.Data.Datasets.Clear();
 
         // Labels (Dates for start date to end date per 1 week)
-        var weekleDates = _getWeeklyDates(StartDate?.DateTime, EndDate);
-        foreach (var date in weekleDates)
+        var weeklyDates = _getWeeklyDates(StartDate?.DateTime, EndDate).ToList();
+
+        if (weeklyDates == null || !weeklyDates.Any())
+        {
+            return;
+        }
+
+        // Initialize a list to store project totals for each week
+        List<double> weeklyTotals = new List<double>();
+
+
+        // Set X Axel Labels
+        for (int i = 0; i < weeklyDates.Count - 1; i++)
+        {
+            var date = weeklyDates[i];
+            var nextWeek = weeklyDates[i + 1];
             _barChartConfig.Data.Labels.Add(date.ToEuropeFormat());
 
-        // Dataset Labes are Projects.Client.CompanyName
-        // Dataset Values are Client.Projects.Invoices.Payments.Sum
-        foreach (var report in reportEntries)
-        {
-            var dataset = new BarDataset<double>(report.)
+            // Get All Projects Where create date is > date and < from next week
+            //var projectsThisWeek = reportEntries
+            //    .Where(p => p.Project.CreatedDate > date && p.Project.CreatedDate <= nextWeek)
+            //    .ToList();
+        }
+
+        // Group projects by creation date proximity and calculate sums
+        var groupedProjects = reportEntries
+            .GroupBy(p => _getWeekIndex(p.Project.CreatedDate, weeklyDates))
+            .Select(g => new
             {
-                Label = report.Client.CompanyName,
-                BackgroundColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.LightSkyBlue)),
-                BorderColor = new IndexableOption<string>(ColorUtil.FromDrawingColor(Color.SkyBlue)),
+                WeekIndex = g.Key,
+                TotalTime = new TimeSpan(g.Sum(p => p.TotalWorkedTime?.Ticks ?? 0)),
+                Projects = g.ToList()
+            })
+            .ToList();
+
+        // Assign colors to each project based on proximity to the weekly dates
+        foreach (var group in groupedProjects)
+        {
+            var color = _getRandomColor();
+            var dataset = new BarDataset<double>(new double[] { group.TotalTime.TotalHours })
+            {
+                Label = $"Week {group.WeekIndex + 1}",
+                BackgroundColor = new IndexableOption<string>(color.Item1.ToHexaString()),
+                BorderColor = new IndexableOption<string>(color.Item2.ToHexaString()),
                 BorderWidth = 1
             };
             _barChartConfig.Data.Datasets.Add(dataset);
         }
 
+
+        // Ensure datasets are added properly
+        _barChartConfig.Data.Datasets.Reverse();
+
+        // Update the data with the calculated totals
+        BarDataset<double> barDataset = _barChartConfig.Data.Datasets[0] as BarDataset<double>;
+        barDataset.AddRange(weeklyTotals);
     }
+
+
     #endregion
 
     #region Get Records
@@ -259,5 +302,29 @@ public partial class Reports
             yield return current;
             current = current.AddDays(7); // Move to the next week
         }
+    }
+
+    private int _getWeekIndex(DateTime date, List<DateTime> weeklyDates)
+    {
+        for (int i = 0; i < weeklyDates.Count - 1; i++)
+        {
+            if (date >= weeklyDates[i] && date < weeklyDates[i + 1])
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private (Color, Color) _getRandomColor()
+    {
+        var r = _random.Next(256);
+        var g = _random.Next(256);
+        var b = _random.Next(256);
+
+        var bodyColor = Color.FromArgb(255, r, g, b);
+        var borderColor = Color.FromArgb(r, g, b);
+
+        return (bodyColor, borderColor);
     }
 }
