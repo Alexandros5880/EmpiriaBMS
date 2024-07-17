@@ -115,7 +115,7 @@ public partial class Reports
             //    .ToList();
         }
 
-        // Group projects by creation date proximity and calculate sums
+        // Group Projects By CreatedDate in Weeckly Dates
         var groupedProjects = reportEntries
             .GroupBy(p => _getWeekIndex(p.Project.CreatedDate, weeklyDates))
             .Select(g => new
