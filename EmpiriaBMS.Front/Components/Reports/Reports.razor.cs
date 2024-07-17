@@ -108,11 +108,6 @@ public partial class Reports
             var date = weeklyDates[i];
             var nextWeek = weeklyDates[i + 1];
             _barChartConfig.Data.Labels.Add(date.ToEuropeFormat());
-
-            // Get All Projects Where create date is > date and < from next week
-            //var projectsThisWeek = reportEntries
-            //    .Where(p => p.Project.CreatedDate > date && p.Project.CreatedDate <= nextWeek)
-            //    .ToList();
         }
 
         // Group Projects By CreatedDate in Weeckly Dates
@@ -142,10 +137,6 @@ public partial class Reports
 
         // Ensure datasets are added properly
         _barChartConfig.Data.Datasets.Reverse();
-
-        //// Update the data with the calculated totals
-        //BarDataset<double> barDataset = _barChartConfig.Data.Datasets[0] as BarDataset<double>;
-        //barDataset.AddRange(weeklyTotals);
     }
 
 
