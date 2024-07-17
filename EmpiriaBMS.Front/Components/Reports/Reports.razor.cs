@@ -116,23 +116,23 @@ public partial class Reports
         }
 
         // Group Projects By CreatedDate in Weeckly Dates
-        var groupedProjects = reportEntries
-            .GroupBy(p => _getWeekIndex(p.Project.CreatedDate, weeklyDates))
-            .Select(g => new
-            {
-                WeekIndex = g.Key,
-                TotalTime = new TimeSpan(g.Sum(p => p.TotalWorkedTime?.Ticks ?? 0)),
-                Projects = g.ToList()
-            })
-            .ToList();
+        //var groupedProjects = reportEntries
+        //    .GroupBy(p => _getWeekIndex(p.Project.CreatedDate, weeklyDates))
+        //    .Select(g => new
+        //    {
+        //        WeekIndex = g.Key,
+        //        TotalTime = new TimeSpan(g.Sum(p => p.TotalWorkedTime?.Ticks ?? 0)),
+        //        Projects = g.ToList()
+        //    })
+        //    .ToList();
 
-        // Assign colors to each project based on proximity to the weekly dates
-        foreach (var group in groupedProjects)
+        // Create Dataset Fro Every Project
+        foreach (var report in reportEntries)
         {
             var color = _getRandomColor();
-            var dataset = new BarDataset<double>(new double[] { group.TotalTime.TotalHours })
+            var dataset = new BarDataset<double>(new double[] { report.TotalWorkedTime?.Ticks ?? 0 })
             {
-                Label = $"Week {group.WeekIndex + 1}",
+                Label = $"{report.Project.Name}",
                 BackgroundColor = new IndexableOption<string>(color.Item1.ToHexaString()),
                 BorderColor = new IndexableOption<string>(color.Item2.ToHexaString()),
                 BorderWidth = 1
@@ -140,13 +140,12 @@ public partial class Reports
             _barChartConfig.Data.Datasets.Add(dataset);
         }
 
-
         // Ensure datasets are added properly
         _barChartConfig.Data.Datasets.Reverse();
 
-        // Update the data with the calculated totals
-        BarDataset<double> barDataset = _barChartConfig.Data.Datasets[0] as BarDataset<double>;
-        barDataset.AddRange(weeklyTotals);
+        //// Update the data with the calculated totals
+        //BarDataset<double> barDataset = _barChartConfig.Data.Datasets[0] as BarDataset<double>;
+        //barDataset.AddRange(weeklyTotals);
     }
 
 
