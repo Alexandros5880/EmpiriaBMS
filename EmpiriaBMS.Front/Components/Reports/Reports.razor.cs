@@ -101,8 +101,7 @@ public partial class Reports
         // Initialize a list to store project totals for each week
         List<double> weeklyTotals = new List<double>();
 
-
-        // Set X Axel Labels
+        // Set X-axis Labels
         for (int i = 0; i < weeklyDates.Count - 1; i++)
         {
             var date = weeklyDates[i];
@@ -110,36 +109,53 @@ public partial class Reports
             _barChartConfig.Data.Labels.Add(date.ToEuropeFormat());
         }
 
-        // Group Projects By CreatedDate in Weeckly Dates
-        //var groupedProjects = reportEntries
-        //    .GroupBy(p => _getWeekIndex(p.Project.CreatedDate, weeklyDates))
-        //    .Select(g => new
-        //    {
-        //        WeekIndex = g.Key,
-        //        TotalTime = new TimeSpan(g.Sum(p => p.TotalWorkedTime?.Ticks ?? 0)),
-        //        Projects = g.ToList()
-        //    })
-        //    .ToList();
+        // Create a list of datasets, one for each project
+        var datasets = new List<BarDataset<double>>();
 
-        // Create Dataset Fro Every Project
+        // Initialize datasets for each project
         foreach (var report in reportEntries)
         {
             var color = _getRandomColor();
-            var dataset = new BarDataset<double>(new double[] { report.TotalWorkedTime?.Ticks ?? 0 })
+            var dataset = new BarDataset<double>(new double[weeklyDates.Count - 1])
             {
                 Label = $"{report.Project.Name}",
                 BackgroundColor = new IndexableOption<string>(color.Item1.ToHexaString()),
                 BorderColor = new IndexableOption<string>(color.Item2.ToHexaString()),
                 BorderWidth = 1
             };
+            datasets.Add(dataset);
+        }
+
+        // Assign the project data to the appropriate weekly bucket
+        foreach (var report in reportEntries)
+        {
+            var createdDate = report.Project.CreatedDate;
+            for (int i = 0; i < weeklyDates.Count - 1; i++)
+            {
+                var startDate = weeklyDates[i];
+                var endDate = weeklyDates[i + 1];
+                if (createdDate >= startDate && createdDate < endDate)
+                {
+                    // Add the worked time in ticks to the appropriate week for the current project
+                    var index = datasets.FindIndex(ds => ds.Label == $"{report.Project.Name}");
+                    if (index >= 0)
+                    {
+                        datasets[index].AddValue(i, report.TotalWorkedTime?.Ticks ?? 0);
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Add all datasets to the chart configuration
+        foreach (var dataset in datasets)
+        {
             _barChartConfig.Data.Datasets.Add(dataset);
         }
 
         // Ensure datasets are added properly
         _barChartConfig.Data.Datasets.Reverse();
     }
-
-
     #endregion
 
     #region Get Records
