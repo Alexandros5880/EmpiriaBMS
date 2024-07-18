@@ -8,7 +8,6 @@ using ChartJs.Blazor.Common.Axes.Ticks;
 using ChartJs.Blazor.Util;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
-using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.ViewModel.Components;
 using System.Drawing;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
@@ -51,7 +50,7 @@ public partial class Reports
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Projects Profit",
+                    Text = "Projects Hours",
                     Position = ChartEnums.Position.Left,
                     FontSize = 24
                 },
@@ -74,7 +73,7 @@ public partial class Reports
                         {
                             Ticks = new LinearCartesianTicks
                             {
-                                Callback = new CustomAxisTickHandler()
+                                BeginAtZero = true
                             }
                         }
                     }
@@ -107,9 +106,6 @@ public partial class Reports
         {
             return;
         }
-
-        // Initialize a list to store project totals for each week
-        List<double> weeklyTotals = new List<double>();
 
         // Set X-axis Labels
         for (int i = 0; i < weeklyDates.Count - 1; i++)
@@ -150,7 +146,7 @@ public partial class Reports
                     var index = datasets.FindIndex(ds => ds.Label == $"{report.Project.Name}");
                     if (index >= 0)
                     {
-                        datasets[index].AddValue(i, report.TotalWorkedTime?.Ticks ?? 0);
+                        datasets[index].AddValue(i, report.TotalWorkedTime?.TotalHours ?? 0);
                     }
                     break;
                 }
