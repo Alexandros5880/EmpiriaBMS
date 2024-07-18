@@ -11,7 +11,11 @@
     <div class="row">
 
         <!-- Filters -->
-        <div class="col-12 mb-2 d-flex justify-content-between">
+        <FluentStack Orientation="Orientation.Horizontal"
+                     HorizontalAlignment="HorizontalAlignment.Start"
+                     HorizontalGap="8"
+                     VerticalAlignment="VerticalAlignment.Center"
+                     Class="col-12 mb-2 ">
 
             <!-- Client -->
             <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
@@ -52,7 +56,8 @@
                              @bind-EndDate="EndDate"
                              OnRangeSelect="@(async (e) => await OnDateSelect(e))"
                              style="width: 200px;"/>
-        </div>
+
+        </FluentStack>
 
         <!-- Chart -->
         <div class="col-12 container">

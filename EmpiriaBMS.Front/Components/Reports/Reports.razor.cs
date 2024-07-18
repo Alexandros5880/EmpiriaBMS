@@ -79,9 +79,19 @@ public partial class Reports
                         }
                     }
                 },
+                Legend = new Legend
+                {
+                    Display = false,
+                    Position = ChartEnums.Position.Top,
+                    Labels = new LegendLabels
+                    {
+                        FontColor = ColorUtil.FromDrawingColor(Color.Black),
+                        FontSize = 14
+                    }
+                },
                 Responsive = true,
                 AspectRatio = 3.5,
-            }
+            },
         };
     }
 

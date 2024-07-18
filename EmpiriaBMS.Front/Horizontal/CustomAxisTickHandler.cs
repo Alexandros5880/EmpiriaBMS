@@ -13,16 +13,25 @@ public class CustomAxisTickHandler : IMethodHandler<AxisTickCallback>
         return _customAxisTickCallback(value, index, values);
     }
 
-    public string _customAxisTickCallback(JValue value, int index, JArray values)
+    private string _customAxisTickCallback(JValue value, int index, JArray values)
     {
-        if (value != null)
-        {
-            DateTime dateTimeValue = value.ToObject<DateTime>();
-            return $"{dateTimeValue.Day}d {dateTimeValue.Hour}h:{dateTimeValue.Minute}m:{dateTimeValue.Second}s";
-        }
-        else
-        {
-            return "--";
-        }
+        return value?.ToString() ?? "--";
+    }
+
+    public string GenerateJavascript()
+    {
+        return @"
+            function(value, index, values) {
+                var ticks = value;
+                var totalSeconds = ticks / 10000000; // Convert ticks to seconds
+                var days = Math.floor(totalSeconds / 86400);
+                totalSeconds %= 86400;
+                var hours = Math.floor(totalSeconds / 3600);
+                totalSeconds %= 3600;
+                var minutes = Math.floor(totalSeconds / 60);
+                var seconds = totalSeconds % 60;
+                return days + 'd ' + hours + 'h:' + minutes + 'm:' + seconds + 's';
+            }
+        ";
     }
 }
