@@ -11,7 +11,6 @@ using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
-using System.Text;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Color = System.Drawing.Color;
 using Fluent = Microsoft.Fast.Components.FluentUI;
@@ -130,7 +129,7 @@ public partial class Reports
                 Label = $"{report.Project.Name}",
                 BackgroundColor = new IndexableOption<string>(color.Item1.ToHexaString()),
                 BorderColor = new IndexableOption<string>(color.Item2.ToHexaString()),
-                BorderWidth = 1
+                BorderWidth = 1,
             };
             datasets.Add(dataset);
         }
@@ -326,16 +325,7 @@ public partial class Reports
         try
         {
             exporting = true;
-
-            // Get the HTML content of the exportable area
-
-            var htmlContent = await MicrosoftTeams.GeneratePdfContent("export-to-pdf-projects-report");
-
-            // Send the HTML content to the server for PDF generation
-            var pdfBytes = Encoding.UTF8.GetBytes($"<pdf>{htmlContent}</pdf>");
-
-            // Save the PDF file on the client side
-            await MicrosoftTeams.SaveAsFile("report.pdf", Convert.ToBase64String(pdfBytes), "application/pdf");
+            await MicrosoftTeams.ExportPdfContent("export-to-pdf-projects-report", $"Projects-Reports-{DateTime.Now.ToEuropeFormat()}.pdf");
         }
         catch (Exception ex)
         {

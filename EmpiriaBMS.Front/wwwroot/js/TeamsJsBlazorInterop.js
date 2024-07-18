@@ -405,7 +405,26 @@ export function triggerFileInputClick(element) {
 
 
 // PDF
-export function generatePdfContent(elementId) {
-    return document.getElementById(elementId).innerHTML;
+export async function exportPdfContent(divId, fileName) {
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const elementHTML = document.getElementById(divId);
+
+        // Use html2canvas to capture the element
+        const canvas = await html2canvas(elementHTML, { scale: 1 });
+        const imgData = canvas.toDataURL('image/png');
+
+        // Calculate the width and height of the PDF page
+        const pdfWidth = doc.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        // Add the image to the PDF
+        doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        doc.save(fileName);
+    } catch (error) {
+        console.error('Error exporting div to PDF:', error);
+    }
 };
 // - PDF
