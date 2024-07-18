@@ -11,6 +11,7 @@ using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using System.Text;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Color = System.Drawing.Color;
 using Fluent = Microsoft.Fast.Components.FluentUI;
@@ -314,6 +315,36 @@ public partial class Reports
     private void HandleRowFocus(FluentDataGridRow<ReportProjectReturnModel> row)
     {
         _selectedRecord = row.Item as ReportProjectReturnModel;
+    }
+    #endregion
+
+    #region Export As Pdf
+    private bool exporting = false;
+
+    private async Task _exportToPdf()
+    {
+        try
+        {
+            exporting = true;
+
+            // Get the HTML content of the exportable area
+
+            var htmlContent = await MicrosoftTeams.GeneratePdfContent("export-to-pdf-projects-report");
+
+            // Send the HTML content to the server for PDF generation
+            var pdfBytes = Encoding.UTF8.GetBytes($"<pdf>{htmlContent}</pdf>");
+
+            // Save the PDF file on the client side
+            await MicrosoftTeams.SaveAsFile("report.pdf", Convert.ToBase64String(pdfBytes), "application/pdf");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"\n\nException in Reports.razor.cs: {ex.Message}.\nInner: {ex.InnerException?.Message}.\n\n");
+        }
+        finally
+        {
+            exporting = false;
+        }
     }
     #endregion
 

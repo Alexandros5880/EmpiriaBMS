@@ -2,14 +2,28 @@
 @using System.Threading.Tasks
 @using ChartJs.Blazor;
 @using EmpiriaBMS.Core.ReturnModels;
+@using Color = Microsoft.Fast.Components.FluentUI.Color;
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
 @inject Logging.LoggerManager _logger
+@inject MicrosoftTeams MicrosoftTeams
 
 @if (_barChartConfig != null)
 {
-    <div class="row">
+    <div class="row" id="export-to-pdf-projects-report">
+
+        <!-- Export to PDF -->
+        <FluentStack Orientation="Orientation.Horizontal"
+                     HorizontalAlignment="HorizontalAlignment.End"
+                     VerticalAlignment="VerticalAlignment.Center"
+                     Class="col-12 mb-1">
+            <FluentButton Appearance="Appearance.Outline"
+                          OnClick="@(async () => await _exportToPdf())">
+                Export
+                <FluentIcon Value="@(new Icons.Regular.Size32.DocumentPdf())" Color="Color.Error" Slot="start" />
+            </FluentButton>
+        </FluentStack>
 
         <!-- Filters -->
         <FluentStack Orientation="Orientation.Horizontal"

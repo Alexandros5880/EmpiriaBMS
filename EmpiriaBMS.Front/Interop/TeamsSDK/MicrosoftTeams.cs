@@ -54,6 +54,12 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("registerGlobalMouseWheelEvent", objRef, Id);
     }
 
+    public async Task SaveAsFile(string fileName, string byteBase64, string fileType)
+    {
+        if (fileName != null && byteBase64 != null && fileType != null)
+            await InvokeVoidAsync("saveAsFile", fileName, byteBase64, fileType);
+    }
+
     #region Cookies
     public async Task SetCookie(string key, string value)
     {
@@ -147,6 +153,13 @@ public class MicrosoftTeams : InteropModuleBase
     {
         if (element != null)
             await InvokeVoidAsync("triggerFileInputClick", element);
+    }
+    #endregion
+
+    #region PDF
+    public async Task<string> GeneratePdfContent(string elementId)
+    {
+        return await InvokeAsync<string>("generatePdfContent", elementId);
     }
     #endregion
 }

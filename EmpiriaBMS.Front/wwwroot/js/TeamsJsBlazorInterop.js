@@ -86,6 +86,16 @@ export function navigateToAdmin(url, objectId) {
 }
 
 
+
+export function saveAsFile(fileName, byteBase64, contentType) {
+    const linkSource = `data:${contentType};base64,${byteBase64}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+};
+
+
 // Register MNouse Weel Event
 export function registerGlobalMouseWheelEvent(objRef, id) {
     $('[data-id="' + id + '"]').on('wheel', function (e) {
@@ -391,3 +401,11 @@ export function triggerFileInputClick(element) {
     element.click();
 };
 // - Element Click
+
+
+
+// PDF
+export function generatePdfContent(elementId) {
+    return document.getElementById(elementId).innerHTML;
+};
+// - PDF
