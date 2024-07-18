@@ -1,6 +1,7 @@
 ﻿@page "/reports"
 @using System.Threading.Tasks
 @using ChartJs.Blazor;
+@using EmpiriaBMS.Core.ReturnModels;
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
@@ -65,26 +66,61 @@
         </div>
 
         <!-- Table -->
-        <div class="col-12 mt-5 table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Project</th>
-                        <th>Date</th>
-                        <th>Hours</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var entry in reportEntries)
-                    {
-                        <tr>
-                            <td>@(entry.Project?.Name ?? "--")</td>
-                            <td>@(entry.Project?.CreatedDate.ToEuropeFormat() ?? "--")</td>
-                            <td>@entry.TotalWorkedTime?.DisplayDHMS()</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="col-12 mt-2">
+
+            <div>
+                <FluentDataGrid Items="@FilteredItems"
+                                ResizableColumns=true
+                                Pagination="@pagination"
+                                TGridItem="ReportProjectReturnModel"
+                                OnRowFocus="HandleRowFocus"
+                                GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr"
+                                style="height: 240px; overflow:auto;">
+
+                    <TemplateColumn Title="Name"
+                                    Sortable="true"
+                                    InitialSortDirection=SortDirection.Descending
+                                    IsDefaultSortColumn=true>
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterString"
+                                              Placeholder="Name..."
+                                              @oninput="@HandleFilter" />
+                            </div>
+                        </ColumnOptions>
+                        <ChildContent>
+                            @(context.Project.Name)
+                        </ChildContent>
+                    </TemplateColumn>
+
+                    <PropertyColumn Property="@(p => p.Client.CompanyName)" Sortable="true" Title="Client" Align="@Align.Start" />
+
+                    <PropertyColumn Property="@(p => p.Lead.Name)" Sortable="true" Title="Lead" Align="@Align.Start" />
+
+                    <PropertyColumn Property="@(p => p.Offer.Code)" Sortable="true" Title="Offer" Align="@Align.Start" />
+
+                    <PropertyColumn Property="@(p => p.Category.Name)" Sortable="true" Title="Category" Align="@Align.Start" />
+
+                    <PropertyColumn Property="@(p => p.SubCategory.Name)" Sortable="true" Title="Category" Align="@Align.Start" />
+
+                    <PropertyColumn Property="@(p => p.Project.CreatedDate.ToEuropeFormat() ?? "--")" Sortable="true" Title="Created Date" Align="@Align.Start" />
+
+                    <PropertyColumn Property="@(p => p.TotalWorkedTime.DisplayDHMS())" Sortable="true" Title="Worked Time" Align="@Align.Start" />
+
+                </FluentDataGrid>
+            </div>
+            <div style="min-width: 50%;">
+                <FluentPaginator State="@pagination">
+                    <SummaryTemplate>
+                        There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                    </PaginationTextTemplate>
+                </FluentPaginator>
+            </div>
         </div>
 
     </div>

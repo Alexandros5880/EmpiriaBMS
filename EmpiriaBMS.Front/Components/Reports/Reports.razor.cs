@@ -9,8 +9,10 @@ using ChartJs.Blazor.Util;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.ViewModel.Components;
-using System.Drawing;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
+using Color = System.Drawing.Color;
 using Fluent = Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.Reports;
@@ -146,7 +148,7 @@ public partial class Reports
                     var index = datasets.FindIndex(ds => ds.Label == $"{report.Project.Name}");
                     if (index >= 0)
                     {
-                        datasets[index].AddValue(i, report.TotalWorkedTime?.TotalHours ?? 0);
+                        datasets[index].AddValue(i, report.TotalWorkedTime.TotalHours);
                     }
                     break;
                 }
@@ -288,6 +290,30 @@ public partial class Reports
         //var startDate = range.Start.DateTime;
         //var endDate = range.End.DateTime;
         await _getReportData();
+    }
+    #endregion
+
+    #region Data Table
+    private string _filterString = string.Empty;
+    IQueryable<ReportProjectReturnModel>? FilteredItems => reportEntries?.AsQueryable().Where(x => x.Project.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
+
+    private void HandleFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        {
+            _filterString = string.Empty;
+        }
+    }
+
+    private ReportProjectReturnModel _selectedRecord = new ReportProjectReturnModel();
+    private void HandleRowFocus(FluentDataGridRow<ReportProjectReturnModel> row)
+    {
+        _selectedRecord = row.Item as ReportProjectReturnModel;
     }
     #endregion
 

@@ -10,6 +10,6 @@ public class ReportProjectReturnModel
     public ProjectSubCategory SubCategory { get; set; }
     public Lead Lead { get; set; }
     public Client Client { get; set; }
-    public TimeSpan? TotalWorkedTime { get; set; }
-    public double? TotalWorkedSum { get; set; }
+    public TimeSpan TotalWorkedTime { get; set; }
+    public double TotalWorkedSum { get; set; }
 }
