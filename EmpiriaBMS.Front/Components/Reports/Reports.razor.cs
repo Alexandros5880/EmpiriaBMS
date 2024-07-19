@@ -322,12 +322,15 @@ public partial class Reports
 
     private async Task _exportToPdf()
     {
+        exporting = true;
+        StateHasChanged();
+        await Task.Delay(1000);
+
         try
         {
-            exporting = true;
-            StateHasChanged();
-            string[] divsIds = { "export-to-pdf-projects-report-chart", "export-to-pdf-projects-report-table" };
+            string[] divsIds = new string[] { "export-to-pdf-projects-report-chart", "export-to-pdf-projects-report-table" };
             string fileName = $"Projects-Reports-{DateTime.Now.ToEuropeFormat()}.pdf";
+
             await MicrosoftTeams.ExportPdfContent(divsIds, fileName);
         }
         catch (Exception ex)
@@ -336,6 +339,7 @@ public partial class Reports
         }
         finally
         {
+            await Task.Delay(1000);
             exporting = false;
             StateHasChanged();
         }
