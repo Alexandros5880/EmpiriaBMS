@@ -50,9 +50,9 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/downloaded
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     - name: Extract Artifacts
-      run: tar -xzf ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/downloaded/webapp.tar.gz -C ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      run: tar -xzf ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/webapp.tar.gz -C ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
