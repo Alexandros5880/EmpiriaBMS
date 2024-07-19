@@ -4,10 +4,12 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - EmpiriaBMS-Front
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  tags:
+    include:
+      - '*-staging-no'
+  # branches:
+  #   exclude:
+  #     - '*'
 
 jobs:
   build:

@@ -1,13 +1,11 @@
 ﻿using ChartJs.Blazor.BarChart;
 using ChartJs.Blazor.BarChart.Axes;
-using ChartJs.Blazor.Common.Axes.Ticks;
-using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.General;
+using ChartJs.Blazor.Common.Axes;
+using ChartJs.Blazor.Common.Axes.Ticks;
+using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Horizontal;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
-using EmpiriaBMS.Core.ReturnModels;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -48,25 +46,25 @@ public partial class DelayedPaymentsKpi
                     Scales = new BarScales
                     {
                         XAxes = new List<CartesianAxis>
-                    {
-                        new BarCategoryAxis
                         {
-                            BarPercentage = 0.5,
-                            BarThickness = BarThickness.Flex
-                        }
-                    },
-                        YAxes = new List<CartesianAxis>
-                    {
-                        new BarLinearCartesianAxis
-                        {
-                            Ticks = new LinearCartesianTicks
+                            new BarCategoryAxis
                             {
-                                BeginAtZero = true,
-                                StepSize = 2,
-                                //SuggestedMax = 100
+                                BarPercentage = 0.5,
+                                BarThickness = BarThickness.Flex
+                            }
+                        },
+                        YAxes = new List<CartesianAxis>
+                        {
+                            new BarLinearCartesianAxis
+                            {
+                                Ticks = new LinearCartesianTicks
+                                {
+                                    BeginAtZero = true,
+                                    StepSize = 2,
+                                    //SuggestedMax = 100
+                                }
                             }
                         }
-                    }
                     },
                     Responsive = true,
 

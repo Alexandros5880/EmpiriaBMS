@@ -1,10 +1,10 @@
 trigger:
   tags:
     include:
-      - '*-staging'
-  branches:
-    exclude:
-      - '*'
+      - '*-staging-no'
+  # branches:
+  #   exclude:
+  #     - '*'
 
 pool:
   vmImage: 'ubuntu-latest'

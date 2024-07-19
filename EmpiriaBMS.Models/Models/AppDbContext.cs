@@ -80,7 +80,7 @@ public class AppDbContext : DbContext
         Random random = new Random();
         var createdDate = DateTime.Now;
 
-        if (false)
+        if (true)
         {
             #region Permissions
             // See Dashboard Layout
@@ -550,6 +550,18 @@ public class AppDbContext : DbContext
                 Ord = 39
             };
             builder.Entity<Permission>().HasData(per_39);
+
+            // See Reports
+            var per_40_id = random.Next(123456789, 999999999);
+            Permission per_40 = new Permission()
+            {
+                Id = per_40_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Reports",
+                Ord = 40
+            };
+            builder.Entity<Permission>().HasData(per_40);
             #endregion
 
             #region Roles
@@ -1428,6 +1440,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_119);
 
+            // CTO || See Reports
+            RolePermission rp_124 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_40_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_124);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -1792,6 +1815,17 @@ public class AppDbContext : DbContext
                 PermissionId = per_39_id
             };
             builder.Entity<RolePermission>().HasData(rp_120);
+
+            // CEO || See Reports
+            RolePermission rp_125 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_40_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_125);
 
 
             // Guest

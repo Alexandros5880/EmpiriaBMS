@@ -86,6 +86,16 @@ export function navigateToAdmin(url, objectId) {
 }
 
 
+
+export function saveAsFile(fileName, byteBase64, contentType) {
+    const linkSource = `data:${contentType};base64,${byteBase64}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+};
+
+
 // Register MNouse Weel Event
 export function registerGlobalMouseWheelEvent(objRef, id) {
     $('[data-id="' + id + '"]').on('wheel', function (e) {
@@ -391,3 +401,55 @@ export function triggerFileInputClick(element) {
     element.click();
 };
 // - Element Click
+
+
+
+// PDF
+export async function exportPdfContent(elementIds, fileName) {
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        const padding = 20;
+
+        for (let i = 0; i < elementIds.length; i += 2) {
+            // Add a new page for every pair of elements
+            if (i > 0) {
+                doc.addPage();
+            }
+
+            for (let j = 0; j < 2; j++) {
+                const elementId = elementIds[i + j];
+                if (elementId) {
+                    const elementHTML = document.getElementById(elementId);
+                    if (elementHTML) {
+                        // Use html2canvas to capture the element
+                        const canvas = await html2canvas(elementHTML, { scale: 1 });
+                        const imgData = canvas.toDataURL('image/png');
+
+                        // Calculate the width and height of the PDF page
+                        const pdfWidth = doc.internal.pageSize.getWidth() - 2 * padding;
+                        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+                        // Position the first element at the top and the second element below it
+                        const yOffset = padding + j * (pdfHeight + 2 * padding);
+
+                        // Add the image to the PDF
+                        doc.addImage(imgData, 'PNG', padding, yOffset, pdfWidth, pdfHeight);
+                    } else {
+                        console.warn(`Element with ID ${elementId} not found.`);
+                    }
+                }
+            }
+        }
+
+        doc.save(fileName);
+    } catch (error) {
+        console.error('Error exporting elements to PDF:', error);
+    }
+}
+// - PDF

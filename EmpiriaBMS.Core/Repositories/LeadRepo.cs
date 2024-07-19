@@ -9,6 +9,8 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
 {
+    private bool disposedValue;
+
     private readonly OfferRepo _offerRepo;
     private readonly ProjectsRepo _projectRep;
     private readonly InvoiceRepo _invoiceRepo;
@@ -482,6 +484,26 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
             return false;
         }
     }
-
     #endregion
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                _offerRepo.Dispose();
+                _projectRep.Dispose();
+                _invoiceRepo.Dispose();
+                _contractRepo.Dispose();
+            }
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
 }
