@@ -11,7 +11,7 @@
 
 @if (_barChartConfig != null)
 {
-    <div class="row" id="export-to-pdf-projects-report">
+    <div class="row" >
 
         <!-- Export to PDF -->
         <FluentStack Orientation="Orientation.Horizontal"
@@ -19,6 +19,7 @@
                      VerticalAlignment="VerticalAlignment.Center"
                      Class="col-12 mb-1">
             <FluentButton Appearance="Appearance.Outline"
+                          Loading="@exporting"
                           OnClick="@(async () => await _exportToPdf())">
                 Export
                 <FluentIcon Value="@(new Icons.Regular.Size32.DocumentPdf())" Color="Color.Error" Slot="start" />
@@ -75,12 +76,12 @@
         </FluentStack>
 
         <!-- Chart -->
-        <div class="col-12 container">
+        <div class="col-12 container" id="export-to-pdf-projects-report-chart">
             <Chart Config="@_barChartConfig"/>
         </div>
 
         <!-- Table -->
-        <div class="col-12 mt-2">
+        <div class="col-12 mt-2" id="export-to-pdf-projects-report-table">
 
             <div>
                 <FluentDataGrid Items="@FilteredItems"

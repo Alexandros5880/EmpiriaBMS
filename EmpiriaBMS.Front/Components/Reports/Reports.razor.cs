@@ -325,7 +325,10 @@ public partial class Reports
         try
         {
             exporting = true;
-            await MicrosoftTeams.ExportPdfContent("export-to-pdf-projects-report", $"Projects-Reports-{DateTime.Now.ToEuropeFormat()}.pdf");
+            StateHasChanged();
+            string[] divsIds = { "export-to-pdf-projects-report-chart", "export-to-pdf-projects-report-table" };
+            string fileName = $"Projects-Reports-{DateTime.Now.ToEuropeFormat()}.pdf";
+            await MicrosoftTeams.ExportPdfContent(divsIds, fileName);
         }
         catch (Exception ex)
         {
@@ -334,6 +337,7 @@ public partial class Reports
         finally
         {
             exporting = false;
+            StateHasChanged();
         }
     }
     #endregion

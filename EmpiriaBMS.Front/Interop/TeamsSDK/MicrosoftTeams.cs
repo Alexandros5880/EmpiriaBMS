@@ -157,9 +157,9 @@ public class MicrosoftTeams : InteropModuleBase
     #endregion
 
     #region PDF
-    public Task ExportPdfContent(string elementId, string filename)
+    public async Task ExportPdfContent(string[] elementsIds, string filename)
     {
-        return InvokeAsync<string>("exportPdfContent", elementId, filename);
+        await InvokeAsync<string>("exportPdfContent", elementsIds, filename);
     }
     #endregion
 }
