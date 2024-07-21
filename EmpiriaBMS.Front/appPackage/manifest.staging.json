@@ -48,7 +48,8 @@
     "https://empiriabms-front-staging.azurewebsites.net/dashboard",
     "https://empiriabms-front-staging.azurewebsites.net/config",
     "https://empiriabms-front-staging.azurewebsites.net/termsofuse",
-    "https://empiriabms-front-staging.azurewebsites.net/privacy"
+    "https://empiriabms-front-staging.azurewebsites.net/privacy",
+    "https://unpkg.com/@microsoft/teams-js@2.7.1/dist/MicrosoftTeams.min.js"
   ],
   "webApplicationInfo": {
     "id": "e9b1ba2f-629b-41a0-82ae-cd53b7e3308f",

@@ -70,6 +70,7 @@ builder.Services.AddSingleton<Logging.LoggerManager>(sp =>
 builder.Services.AddScoped<TimerService>();
 
 
+// Add Cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowTeams",
@@ -81,6 +82,17 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowUnpkg",
+        builder =>
+        {
+            builder.WithOrigins("https://unpkg.com")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+// | Add Cors
 
 builder.Services.AddFluentUIComponents();
 
@@ -131,7 +143,11 @@ else
     app.UseHsts();
 }
 
+// Add Cors
 app.UseCors("AllowTeams");
+app.UseCors("AllowUnpkg");
+// | Add Cors
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
