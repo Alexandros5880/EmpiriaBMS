@@ -51,27 +51,6 @@ builder.Services.AddSingleton(mapper);
 // Google PLaces Api Service
 builder.Services.AddScoped<GooglePlacesService>();
 
-
-builder.Services.AddFluentUIComponents();
-
-builder.Services.AddControllers();
-builder.Services.AddControllersWithViews();
-
-builder.Services.AddRazorPages();
-builder.Services.AddHttpClient("WebClient", client => client.Timeout = TimeSpan.FromSeconds(600));
-builder.Services.AddHttpContextAccessor();
-
-// Add configuration
-builder.Configuration
-    .AddJsonFile("appsettings.json")
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
-
-// Increase the file upload limit
-builder.Services.Configure<FormOptions>(options =>
-{
-    options.MultipartBodyLengthLimit = 15 * 1024 * 1024; // 15 MB
-});
-
 // Log Service
 builder.Services.AddLogging(logging =>
 {
@@ -89,6 +68,35 @@ builder.Services.AddSingleton<Logging.LoggerManager>(sp =>
 
 // AddSingleton
 builder.Services.AddScoped<TimerService>();
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowTeams",
+        builder =>
+        {
+            builder.WithOrigins("https://teams.microsoft.com")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+
+builder.Services.AddFluentUIComponents();
+
+builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddRazorPages();
+builder.Services.AddHttpClient("WebClient", client => client.Timeout = TimeSpan.FromSeconds(600));
+builder.Services.AddHttpContextAccessor();
+
+// Increase the file upload limit
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 15 * 1024 * 1024; // 15 MB
+});
+
 
 var app = builder.Build();
 
@@ -123,10 +131,9 @@ else
     app.UseHsts();
 }
 
+app.UseCors("AllowTeams");
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
