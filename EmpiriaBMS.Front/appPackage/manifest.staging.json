@@ -44,8 +44,9 @@
     }
   ],
   "validDomains": [
-    "empiriabms-front-staging.azurewebsites.net",
-    "empiriabms-front-staging.azurewebsites.net/dashboard"
+    "https://empiriabms-front-staging.azurewebsites.net",
+    "https://empiriabms-front-staging.azurewebsites.net/dashboard",
+    "https://empiriabms-front-staging.azurewebsites.net/config"
   ],
   "webApplicationInfo": {
     "id": "e9b1ba2f-629b-41a0-82ae-cd53b7e3308f",
