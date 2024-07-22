@@ -2,7 +2,7 @@ name: EmpiriaBMS-Production
 on:
   push:
     tags:
-      - '*-staging'
+      - '*-production'
   workflow_dispatch: {}
 env:
   AZURE_WEBAPP_NAME: EmpiriaBMS
@@ -54,4 +54,4 @@ jobs:
         app-name: EmpiriaBMS
         slot-name: 'empiriabms'
         package: .
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_2fc366fc19494d3c9b752cf2c68641e1 }}
+        publish-profile: ${{ secrets.ACTIONS_SECRET }}

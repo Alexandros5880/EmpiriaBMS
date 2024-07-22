@@ -54,4 +54,4 @@ jobs:
         app-name: EmpiriaBMS
         slot-name: 'empiriabms-staging'
         package: .
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_2fc366fc19494d3c9b752cf2c68641e1 }}
+        publish-profile: ${{ secrets.ACTIONS_SECRET }}
