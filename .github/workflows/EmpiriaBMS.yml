@@ -10,7 +10,7 @@ env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: EmpiriaBMS.Front
-  AZURE_SLOT_NAME: staging
+  AZURE_SLOT_NAME: empiriabms-staging
 jobs:
   build:
     runs-on: windows-latest
