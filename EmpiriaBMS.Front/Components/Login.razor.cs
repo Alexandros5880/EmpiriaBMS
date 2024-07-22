@@ -7,11 +7,19 @@ public partial class Login
     private string username;
     private string password;
     private string errorMessage;
+    private bool loading;
 
     private async Task _login()
     {
+        loading = true;
+        StateHasChanged();
+
         if (!Validate())
+        {
+            loading = false;
+            StateHasChanged();
             return;
+        }
 
         var result = await authorizeServices.Login(username, password);
 
@@ -23,6 +31,9 @@ public partial class Login
         }
         else
         {
+            loading = false;
+            StateHasChanged();
+
             errorMessage = result;
         }
     }
