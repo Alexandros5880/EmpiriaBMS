@@ -49,7 +49,7 @@ public partial class Dashboard : IDisposable
 
     // General Fields
     private bool disposedValue;
-    bool _runInTeams = false;
+    bool _runInTeams = true;
     bool _startLoading = true;
     bool _refreshLoading = true;
     private double _userTotalHoursThisMonth = 0;

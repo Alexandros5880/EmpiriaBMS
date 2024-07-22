@@ -39,13 +39,13 @@
     <FluentProgressRing />
 </FluentOverlay>
 
-@if (!_runInTeams)
-{
-    <h2 class="m-3">Embiria BMS</h2>
-}
-
 @if (!_startLoading)
 {
+    @*@if (!_runInTeams)
+    {
+        <h2 class="m-3">Embiria BMS</h2>
+    }*@
+
     <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
 
         <!-- Dashboard -->
