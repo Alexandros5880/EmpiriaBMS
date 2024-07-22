@@ -6,9 +6,9 @@ namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
 {
     const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
-    const string azure_staging_DB = "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-staging;User Id=admin-user;Password=!@%369gsdgl^%78n";
-    const string azure_duction_DB = "Data Source=tcp:embiriabms-staging.database.windows.net,1433;Initial Catalog=embiriabms-product;User Id=admin-user;Password=!@%369gsdgl^%78n";
-    const string migrationsDB = azure_staging_DB;
+    const string azure_staging_db = "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-staging;User Id=admin-user;Password=!@%369gsdgl^%78n";
+    const string azure_production_db = "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-production;User Id=admin-user;Password=!@%369gsdgl^%78n";
+    const string migrationsDB = azure_production_db;
 
     public string SelectedConnectionString = string.Empty;
     public string Enviroment = string.Empty;
