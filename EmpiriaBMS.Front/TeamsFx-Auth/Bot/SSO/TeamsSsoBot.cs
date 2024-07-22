@@ -1,9 +1,9 @@
 ﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Teams;
 using Microsoft.Bot.Schema;
-using Microsoft.Bot.Builder.Dialogs;
 
-namespace {{YOUR_NAMESPACE}}.SSO;
+namespace EmpiriaBMS.Front.SSO;
 
 public class TeamsSsoBot<T> : TeamsActivityHandler where T : Dialog
 {
@@ -11,7 +11,7 @@ public class TeamsSsoBot<T> : TeamsActivityHandler where T : Dialog
     private readonly BotState _conversationState;
     private readonly Dialog _dialog;
     private readonly IStatePropertyAccessor<DialogState> _dialogState;
-    
+
     public TeamsSsoBot(ConversationState conversationState, T dialog, ILogger<TeamsSsoBot<T>> logger)
     {
         Console.WriteLine("sso bot init");

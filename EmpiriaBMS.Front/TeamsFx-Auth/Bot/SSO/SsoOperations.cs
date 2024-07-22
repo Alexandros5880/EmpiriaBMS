@@ -3,25 +3,25 @@ using Microsoft.Graph;
 using Microsoft.Kiota.Abstractions.Authentication;
 using Microsoft.TeamsFx.Configuration;
 
-namespace {{YOUR_NAMESPACE}}.SSO;
+namespace EmpiriaBMS.Front.SSO;
 
 public class TokenProvider : IAccessTokenProvider
 {
-  private string token { get; set; }
+    private string token { get; set; }
 
-  public TokenProvider(String token)
-  {
-    this.token = token;
-  }
+    public TokenProvider(String token)
+    {
+        this.token = token;
+    }
 
-  public Task<string> GetAuthorizationTokenAsync(Uri uri, Dictionary<string, object> additionalAuthenticationContext = default,
-      CancellationToken cancellationToken = default)
-  {
-    // get the token and return it
-    return Task.FromResult(this.token);
-  }
+    public Task<string> GetAuthorizationTokenAsync(Uri uri, Dictionary<string, object> additionalAuthenticationContext = default,
+        CancellationToken cancellationToken = default)
+    {
+        // get the token and return it
+        return Task.FromResult(this.token);
+    }
 
-  public AllowedHostsValidator AllowedHostsValidator { get; }
+    public AllowedHostsValidator AllowedHostsValidator { get; }
 }
 
 public static class SsoOperations

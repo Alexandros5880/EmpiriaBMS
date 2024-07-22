@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.TeamsFx.Bot;
 using Microsoft.TeamsFx.Configuration;
 
-namespace {{YOUR_NAMESPACE}}.SSO;
+namespace EmpiriaBMS.Front.SSO;
 
 public class DialogConstants
 {
@@ -24,7 +24,7 @@ public class SsoDialog : ComponentDialog
     BotAuthenticationOptions _botAuthOptions;
     Dictionary<string, string> _commandMapping = new Dictionary<string, string>();
     IStorage _dedupStorage = new MemoryStorage();
-    List<string> _dedupStorageKeys = new List<string>() {};
+    List<string> _dedupStorageKeys = new List<string>() { };
 
     public SsoDialog(IOptions<BotAuthenticationOptions> botAuthenticationOptions, ILogger<SsoDialog> logger)
     {
@@ -123,7 +123,8 @@ public class SsoDialog : ComponentDialog
         try
         {
             return await stepContext.BeginDialogAsync(DialogConstants.TEAMS_SSO_PROMPT, null, cancellationToken);
-        } catch (Exception error)
+        }
+        catch (Exception error)
         {
             await stepContext.Context.SendActivityAsync("Failed to run SSO prompt");
             await stepContext.Context.SendActivityAsync(error.Message);
