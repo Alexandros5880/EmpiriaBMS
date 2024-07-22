@@ -2,20 +2,20 @@
   "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
   "version": "1.0.0",
   "manifestVersion": "1.17",
-  "id": "21adecd7-be9e-444b-a3d7-c994351518a2",
+  "id": "${{TEAMS_APP_ID}}",
   "name": {
     "short": "EmbiriaBMS-Staging",
     "full": "EmbiriaBMS-Staging"
   },
   "developer": {
     "name": "Alexandros Platanios",
-    "websiteUrl": "https://empiriabms-staging.azurewebsites.net",
-    "privacyUrl": "https://empiriabms-staging.azurewebsites.net/privacy",
-    "termsOfUseUrl": "https://empiriabms-staging.azurewebsites.net/termsofuse"
+    "websiteUrl": "${{TAB_ENDPOINT}}",
+    "privacyUrl": "${{TAB_ENDPOINT}}/privacy",
+    "termsOfUseUrl": "${{TAB_ENDPOINT}}/termsofuse"
   },
   "description": {
-    "short": "EmbiriaBMS-Staging",
-    "full": "EmbiriaBMS-Staging"
+    "short": "Short description of Embiria BMS",
+    "full": "Full description of Embiria BMS"
   },
   "icons": {
     "outline": "outline.png",
@@ -24,7 +24,7 @@
   "accentColor": "#FFFFFF",
   "configurableTabs": [
     {
-      "configurationUrl": "https://empiriabms-staging.azurewebsites.net/config",
+      "configurationUrl": "${{TAB_ENDPOINT}}/config",
       "canUpdateConfiguration": true,
       "scopes": [
         "team",
@@ -36,24 +36,18 @@
     {
       "entityId": "index",
       "name": "Dashboard",
-      "contentUrl": "https://empiriabms-staging.azurewebsites.net/dashboard",
-      "websiteUrl": "https://empiriabms-staging.azurewebsites.net/dashboard",
+      "contentUrl": "${{TAB_ENDPOINT}}/dashboard",
+      "websiteUrl": "${{TAB_ENDPOINT}}/dashboard",
       "scopes": [
         "personal"
       ]
     }
   ],
   "validDomains": [
-    "https://empiriabms-staging.azurewebsites.net",
-    "https://empiriabms-staging.azurewebsites.net/",
-    "https://empiriabms-staging.azurewebsites.net/*",
-    "https://empiriabms-staging.azurewebsites.net/dashboard",
-    "https://empiriabms-staging.azurewebsites.net/config",
-    "https://empiriabms-staging.azurewebsites.net/termsofuse",
-    "https://empiriabms-staging.azurewebsites.net/privacy"
+    "${{TAB_DOMAIN}}"
   ],
   "webApplicationInfo": {
-    "id": "176f4ca7-c709-4638-8796-3bb92b173827",
-    "resource": "api://empiriabms-staging.azurewebsites.net/176f4ca7-c709-4638-8796-3bb92b173827"
+    "id": "${{AAD_APP_CLIENT_ID}}",
+    "resource": "api://${{TAB_DOMAIN}}/${{AAD_APP_CLIENT_ID}}"
   }
 }
