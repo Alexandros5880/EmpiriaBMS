@@ -1,15 +1,4 @@
-﻿using AutoMapper;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Hellpers;
-using EmpiriaBMS.Front.ViewModel.Components;
-using EmpiriaBMS.Front.ViewModel.Interfaces;
-using EmpiriaBMS.Models.Models;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Fast.Components.FluentUI;
-using Microsoft.Graph.Models;
-using System;
-using System.Text.RegularExpressions;
-using static Microsoft.Fast.Components.FluentUI.Emojis.Objects.Color.Default;
+﻿using EmpiriaBMS.Core.Hellpers;
 
 namespace EmpiriaBMS.Front.Components;
 
@@ -21,8 +10,8 @@ public partial class Login
 
     private async Task _login()
     {
-        if (!Validate())
-            return;
+        //if (!Validate())
+        //    return;
 
         var result = await authorizeServices.Login(username, password);
 
