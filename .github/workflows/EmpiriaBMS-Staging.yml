@@ -1,4 +1,4 @@
-name: EmpiriaBMS
+name: EmpiriaBMS-Staging
 on:
   push:
     tags:
@@ -51,6 +51,7 @@ jobs:
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.EmpiriaBMS_Front_Staging_587B }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        app-name: EmpiriaBMS
+        slot-name: 'empiriabms-staging'
+        package: .
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_2fc366fc19494d3c9b752cf2c68641e1 }}
