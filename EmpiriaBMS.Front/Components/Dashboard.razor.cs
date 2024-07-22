@@ -49,6 +49,7 @@ public partial class Dashboard : IDisposable
 
     // General Fields
     private bool disposedValue;
+    bool _runInTeams = false;
     bool _startLoading = true;
     bool _refreshLoading = true;
     private double _userTotalHoursThisMonth = 0;
@@ -204,7 +205,7 @@ public partial class Dashboard : IDisposable
         if (firstRender)
         {
             _startLoading = true;
-            var runInTeams = await MicrosoftTeams.IsInTeams();
+            _runInTeams = await MicrosoftTeams.IsInTeams();
             await Refresh();
             _startLoading = false;
         }
