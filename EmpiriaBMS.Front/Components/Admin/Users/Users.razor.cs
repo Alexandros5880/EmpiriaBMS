@@ -104,6 +104,9 @@ public partial class Users
         if (result.Data is not null)
         {
             UserVM vm = result.Data as UserVM;
+            // Create Password Hash
+            var password = vm.Password;
+            vm.PasswordHash = password != null ? PasswordHasher.HashPassword(password) : null;
             var emails = Mapping.Mapper.Map<List<EmailDto>>(vm.Emails);
             emails.ForEach(e => e.User = null);
             vm.Emails = null;

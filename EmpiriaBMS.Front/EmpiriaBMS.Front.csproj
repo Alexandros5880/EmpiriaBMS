@@ -35,6 +35,9 @@
 
   <ItemGroup>
     <ProjectCapability Include="TeamsFx" />
+	<Compile Remove="TeamsFx-Auth/**/*" />
+	<None Include="TeamsFx-Auth/**/*" />
+	 <Content Remove="TeamsFx-Auth/Tab/GetUserProfile.razor"/>
   </ItemGroup>
 
   <ItemGroup>
