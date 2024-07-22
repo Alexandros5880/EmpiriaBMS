@@ -7,7 +7,7 @@ public partial class Login
     private string username;
     private string password;
     private string errorMessage;
-    private bool loading;
+    private bool loading = false;
 
     private async Task _login()
     {

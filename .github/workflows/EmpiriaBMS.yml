@@ -1,14 +1,16 @@
-name: EmpiriaBMS-Front-Staging
+name: EmpiriaBMS
 on:
   push:
     tags:
-      - '*-staging-no'
+      - '*-staging'
   workflow_dispatch: {}
 env:
-  AZURE_WEBAPP_NAME: EmpiriaBMS-Front-Staging
+  AZURE_WEBAPP_NAME: EmpiriaBMS
   AZURE_WEBAPP_PACKAGE_PATH: published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
+  WORKING_DIRECTORY: EmpiriaBMS.Front
+  AZURE_SLOT_NAME: staging
 jobs:
   build:
     runs-on: windows-latest

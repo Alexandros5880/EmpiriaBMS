@@ -5,11 +5,9 @@ using Microsoft.Extensions.Logging;
 namespace EmpiriaBMS.Models.Models;
 public class AppDbContext : DbContext
 {
-
-    //const string SmarterASPNetDB = "Data Source=SQL5106.site4now.net;Initial Catalog=db_a8c181_empiriabms;User Id=db_a8c181_empiriabms_admin;Password=admin1234567";
     const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
-    const string azure_staging_DB = "Data Source=empiriabms-staging.database.windows.net;Initial Catalog=EmpiriaBMS-Staging;User Id=admin-user;Password=!@#$123456asdfgh";
-    const string migrationsDB = localhostDB;
+    const string azure_staging_DB = "Data Source=tcp:embiriabms-staging.database.windows.net,1433;Initial Catalog=empiriabms-staging;User Id=admin-user;Password=!@#$123456asdfgh";
+    const string migrationsDB = azure_staging_DB;
 
     public string SelectedConnectionString = string.Empty;
     public string Enviroment = string.Empty;
@@ -60,7 +58,7 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         Enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? Environment.GetEnvironmentVariable("DefaultConnection");
+        SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
         optionsBuilder.UseSqlServer(SelectedConnectionString);
         optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
         optionsBuilder.EnableSensitiveDataLogging();

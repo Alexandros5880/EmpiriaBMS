@@ -9,9 +9,9 @@
   },
   "developer": {
     "name": "Alexandros Platanios",
-    "websiteUrl": "https://empiriabms-front-staging.azurewebsites.net",
-    "privacyUrl": "https://empiriabms-front-staging.azurewebsites.net/privacy",
-    "termsOfUseUrl": "https://empiriabms-front-staging.azurewebsites.net/termsofuse"
+    "websiteUrl": "https://empiriabms-staging.azurewebsites.net",
+    "privacyUrl": "https://empiriabms-staging.azurewebsites.net/privacy",
+    "termsOfUseUrl": "https://empiriabms-staging.azurewebsites.net/termsofuse"
   },
   "description": {
     "short": "EmbiriaBMS-Staging",
@@ -24,7 +24,7 @@
   "accentColor": "#FFFFFF",
   "configurableTabs": [
     {
-      "configurationUrl": "https://empiriabms-front-staging.azurewebsites.net/config",
+      "configurationUrl": "https://empiriabms-staging.azurewebsites.net/config",
       "canUpdateConfiguration": true,
       "scopes": [
         "team",
@@ -36,24 +36,24 @@
     {
       "entityId": "index",
       "name": "Dashboard",
-      "contentUrl": "https://empiriabms-front-staging.azurewebsites.net/dashboard",
-      "websiteUrl": "https://empiriabms-front-staging.azurewebsites.net/dashboard",
+      "contentUrl": "https://empiriabms-staging.azurewebsites.net/dashboard",
+      "websiteUrl": "https://empiriabms-staging.azurewebsites.net/dashboard",
       "scopes": [
         "personal"
       ]
     }
   ],
   "validDomains": [
-    "https://empiriabms-front-staging.azurewebsites.net",
-    "https://empiriabms-front-staging.azurewebsites.net/",
-    "https://empiriabms-front-staging.azurewebsites.net/*",
-    "https://empiriabms-front-staging.azurewebsites.net/dashboard",
-    "https://empiriabms-front-staging.azurewebsites.net/config",
-    "https://empiriabms-front-staging.azurewebsites.net/termsofuse",
-    "https://empiriabms-front-staging.azurewebsites.net/privacy"
+    "https://empiriabms-staging.azurewebsites.net",
+    "https://empiriabms-staging.azurewebsites.net/",
+    "https://empiriabms-staging.azurewebsites.net/*",
+    "https://empiriabms-staging.azurewebsites.net/dashboard",
+    "https://empiriabms-staging.azurewebsites.net/config",
+    "https://empiriabms-staging.azurewebsites.net/termsofuse",
+    "https://empiriabms-staging.azurewebsites.net/privacy"
   ],
   "webApplicationInfo": {
-    "id": "e9b1ba2f-629b-41a0-82ae-cd53b7e3308f",
-    "resource": "api://empiriabms-front-staging.azurewebsites.net/e9b1ba2f-629b-41a0-82ae-cd53b7e3308f"
+    "id": "176f4ca7-c709-4638-8796-3bb92b173827",
+    "resource": "api://empiriabms-staging.azurewebsites.net/176f4ca7-c709-4638-8796-3bb92b173827"
   }
 }

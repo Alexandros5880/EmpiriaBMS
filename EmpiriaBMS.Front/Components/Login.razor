@@ -18,6 +18,16 @@
     }
 </style>
 
+@if (loading)
+{
+    <FluentOverlay @bind-Visible="@loading"
+                   Opacity="0.1"
+                   BackgroundColor="#444791">
+        <FluentProgressRing />
+    </FluentOverlay>
+}
+else
+{
 <div class="centered shadow-lg p-3 mb-5 bg-body rounded bg-primary">
 
     <div>
@@ -68,3 +78,4 @@
     </FluentButton>
 
 </div>
+}
