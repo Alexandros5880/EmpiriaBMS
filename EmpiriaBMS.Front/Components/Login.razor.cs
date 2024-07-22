@@ -10,8 +10,8 @@ public partial class Login
 
     private async Task _login()
     {
-        //if (!Validate())
-        //    return;
+        if (!Validate())
+            return;
 
         var result = await authorizeServices.Login(username, password);
 
