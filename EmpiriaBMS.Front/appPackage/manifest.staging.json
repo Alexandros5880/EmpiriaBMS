@@ -9,8 +9,8 @@
   },
   "developer": {
     "name": "Alexandros Platanios",
-    "websiteUrl": "$https://empiriabms-staging.azurewebsites.net",
-    "privacyUrl": "$https://empiriabms-staging.azurewebsites.net/privacy",
+    "websiteUrl": "https://empiriabms-staging.azurewebsites.net",
+    "privacyUrl": "https://empiriabms-staging.azurewebsites.net/privacy",
     "termsOfUseUrl": "https://empiriabms-staging.azurewebsites.net/termsofuse"
   },
   "description": {
@@ -24,7 +24,7 @@
   "accentColor": "#FFFFFF",
   "configurableTabs": [
     {
-      "configurationUrl": "$https://empiriabms-staging.azurewebsites.net/config",
+      "configurationUrl": "https://empiriabms-staging.azurewebsites.net/config",
       "canUpdateConfiguration": true,
       "scopes": [
         "team",
@@ -36,18 +36,18 @@
     {
       "entityId": "index",
       "name": "Dashboard",
-      "contentUrl": "$https://empiriabms-staging.azurewebsites.net/dashboard",
-      "websiteUrl": "$https://empiriabms-staging.azurewebsites.net/dashboard",
+      "contentUrl": "https://empiriabms-staging.azurewebsites.net/dashboard",
+      "websiteUrl": "https://empiriabms-staging.azurewebsites.net/dashboard",
       "scopes": [
         "personal"
       ]
     }
   ],
   "validDomains": [
-    "${{TAB_DOMAIN}}"
+    "$https://empiriabms-staging.azurewebsites.net"
   ],
   "webApplicationInfo": {
-    "id": "${{env.AAD_APP_CLIENT_ID}}",
+    "id": "6215baad-2d3d-4801-a6e6-6fe04409f7c0",
     "resource": "api://empiriabms-staging.azurewebsites.net/6215baad-2d3d-4801-a6e6-6fe04409f7c0"
   }
 }

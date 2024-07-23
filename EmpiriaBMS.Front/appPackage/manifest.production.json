@@ -9,7 +9,7 @@
   },
   "developer": {
     "name": "Alexandros Platanios",
-    "websiteUrl": "$https://empiriabms-production.azurewebsites.net",
+    "websiteUrl": "https://empiriabms-production.azurewebsites.net",
     "privacyUrl": "https://empiriabms-production.azurewebsites.net/privacy",
     "termsOfUseUrl": "https://empiriabms-production.azurewebsites.net/termsofuse"
   },
