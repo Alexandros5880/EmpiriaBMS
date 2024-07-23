@@ -8,7 +8,8 @@ public class AppDbContext : DbContext
     const string localhostDB = "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456";
     const string azure_staging_db = "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-staging;User Id=admin-user;Password=!@%369gsdgl^%78n";
     const string azure_production_db = "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-production;User Id=admin-user;Password=!@%369gsdgl^%78n";
-    const string migrationsDB = azure_production_db;
+
+    const string migrationsDB = localhostDB;
 
     public string SelectedConnectionString = string.Empty;
     public string Enviroment = string.Empty;
@@ -59,13 +60,8 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         Enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        // azure_staging_db , azure_production_db
-        SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString");
 
-        if (string.IsNullOrEmpty(SelectedConnectionString))
-        {
-            throw new InvalidOperationException("Connection string is not configured.");
-        }
+        SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
 
         optionsBuilder.UseSqlServer(SelectedConnectionString);
         optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
