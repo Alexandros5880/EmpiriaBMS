@@ -1,0 +1,185 @@
+{
+	"id": "0f142034-7a8b-4c55-8018-2859451a5fe1",
+	"acceptMappedClaims": null,
+	"accessTokenAcceptedVersion": 2,
+	"addIns": [],
+	"allowPublicClient": null,
+	"appId": "176f4ca7-c709-4638-8796-3bb92b173827",
+	"appRoles": [],
+	"oauth2AllowUrlPathMatching": false,
+	"createdDateTime": "2024-07-22T18:33:21Z",
+	"description": null,
+	"certification": null,
+	"disabledByMicrosoftStatus": null,
+	"groupMembershipClaims": null,
+	"identifierUris": [
+		"api://empiriabms.azurewebsites.net/176f4ca7-c709-4638-8796-3bb92b173827"
+	],
+	"informationalUrls": {
+		"termsOfService": "https://empiriabms.azurewebsites.net/176f4ca7-c709-4638-8796-3bb92b173827/termsofuse",
+		"support": null,
+		"privacy": "https://empiriabms.azurewebsites.net/176f4ca7-c709-4638-8796-3bb92b173827/privacy",
+		"marketing": null
+	},
+	"keyCredentials": [],
+	"knownClientApplications": [],
+	"logoUrl": "https://aadcdn.msftauthimages.net/c1c6b6c8-vx9rycluivkk3gtlkpjj1qxjqyfguhs3cnlp9s0bjpo/appbranding/saee2o1wbjtolsqysjjh1fgryrhavw-m2y1u2xp0uwe/1033/bannerlogo?ts=638573263561286269",
+	"logoutUrl": null,
+	"name": "EmpiriaBMS",
+	"notes": null,
+	"oauth2AllowIdTokenImplicitFlow": false,
+	"oauth2AllowImplicitFlow": false,
+	"oauth2Permissions": [
+		{
+			"adminConsentDescription": "Read-Write-All",
+			"adminConsentDisplayName": "Read-Write-All-Staging",
+			"id": "e0e7f561-1900-4037-a26b-762a38efd0e4",
+			"isEnabled": true,
+			"lang": null,
+			"origin": "Application",
+			"type": "User",
+			"userConsentDescription": "Read-Write-All",
+			"userConsentDisplayName": "Read-Write-All",
+			"value": "EmbiriaBMS-Staging"
+		}
+	],
+	"oauth2RequirePostResponse": false,
+	"optionalClaims": null,
+	"orgRestrictions": [],
+	"parentalControlSettings": {
+		"countriesBlockedForMinors": [],
+		"legalAgeGroupRule": "Allow"
+	},
+	"passwordCredentials": [
+		{
+			"customKeyIdentifier": null,
+			"endDate": "2025-01-18T19:36:07.743Z",
+			"keyId": "b0f69693-f8e9-4751-aa2e-0b63e8d264ea",
+			"startDate": "2024-07-22T18:36:07.743Z",
+			"value": null,
+			"createdOn": "2024-07-22T18:36:38.9406261Z",
+			"hint": "468",
+			"displayName": "EmpiriaBMS-Secret"
+		}
+	],
+	"preAuthorizedApplications": [],
+	"publisherDomain": "empiriasoftplat.onmicrosoft.com",
+	"replyUrlsWithType": [
+		{
+			"url": "https://empiriabms.azurewebsites.net",
+			"type": "Web"
+		}
+	],
+	"requiredResourceAccess": [
+		{
+			"resourceAppId": "00000003-0000-0000-c000-000000000000",
+			"resourceAccess": [
+				{
+					"id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+					"type": "Scope"
+				},
+				{
+					"id": "1bfefb4e-e0b5-418b-a88f-73c46d2cc8e9",
+					"type": "Role"
+				},
+				{
+					"id": "bebd0841-a3d8-4313-a51d-731112c8ee41",
+					"type": "Role"
+				},
+				{
+					"id": "19dbc75e-c2e2-444c-a770-ec69d8559fc7",
+					"type": "Role"
+				},
+				{
+					"id": "75359482-378d-4052-8f01-80520e7db3cd",
+					"type": "Role"
+				},
+				{
+					"id": "23fc2474-f741-46ce-8465-674744c5c361",
+					"type": "Role"
+				},
+				{
+					"id": "2280dda6-0bfd-44ee-a2f4-cb867cfc4c1e",
+					"type": "Role"
+				},
+				{
+					"id": "660b7406-55f1-41ca-a0ed-0b035e182f3e",
+					"type": "Role"
+				},
+				{
+					"id": "0121dc95-1b9f-4aed-8bac-58c5ac466691",
+					"type": "Role"
+				},
+				{
+					"id": "4437522e-9a86-4a41-a7da-e380edd4a97d",
+					"type": "Role"
+				},
+				{
+					"id": "70dec828-f620-4914-aa83-a29117306807",
+					"type": "Role"
+				},
+				{
+					"id": "a267235f-af13-44dc-8385-c1dc93023186",
+					"type": "Role"
+				},
+				{
+					"id": "242607bd-1d2c-432c-82eb-bdb27baa23ab",
+					"type": "Role"
+				},
+				{
+					"id": "bdd80a03-d9bc-451d-b7c4-ce7c63fe3c8f",
+					"type": "Role"
+				},
+				{
+					"id": "49981c42-fd7b-4530-be03-e77b21aed25e",
+					"type": "Role"
+				},
+				{
+					"id": "46890524-499a-4bb2-ad64-1476b4f3e1cf",
+					"type": "Role"
+				},
+				{
+					"id": "a96d855f-016b-47d7-b51c-1218a98d791c",
+					"type": "Role"
+				},
+				{
+					"id": "fd9ce730-a250-40dc-bd44-8dc8d20f39ea",
+					"type": "Role"
+				},
+				{
+					"id": "6163d4f4-fbf8-43da-a7b4-060fe85ed148",
+					"type": "Role"
+				},
+				{
+					"id": "425b4b59-d5af-45c8-832f-bb0b7402348a",
+					"type": "Role"
+				},
+				{
+					"id": "9f62e4a2-a2d6-4350-b28b-d244728c4f86",
+					"type": "Role"
+				},
+				{
+					"id": "91c32b81-0ef0-453f-a5c7-4ce2e562f449",
+					"type": "Role"
+				},
+				{
+					"id": "3c42dec6-49e8-4a0a-b469-36cff0d9da93",
+					"type": "Role"
+				},
+				{
+					"id": "a91eadaf-2c3c-4362-908b-fb172d208fc6",
+					"type": "Role"
+				},
+				{
+					"id": "741f803b-c850-494e-b5df-cde7c675a1ca",
+					"type": "Role"
+				}
+			]
+		}
+	],
+	"samlMetadataUrl": null,
+	"signInUrl": "https://empiriabms.azurewebsites.net/176f4ca7-c709-4638-8796-3bb92b173827/dashboard",
+	"signInAudience": "AzureADandPersonalMicrosoftAccount",
+	"tags": [],
+	"tokenEncryptionKeyId": null
+}

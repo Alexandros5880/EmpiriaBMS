@@ -1,16 +1,23 @@
-name: EmpiriaBMS-Staging
+name: EmpiriaBMS-Production
 on:
   push:
     tags:
-      - '*-staging'
+      - '*-production'
   workflow_dispatch: {}
 env:
-  AZURE_WEBAPP_NAME: empiriabms
-  AZURE_WEBAPP_PACKAGE_PATH: published
+  AZURE_WEBAPP_NAME: EmpiriaBMS-Production
+  AZURE_WEBAPP_PACKAGE_PATH: EmpiriaBMS.Front\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: EmpiriaBMS.Front
-  AZURE_WEBAPP_SLOT_NAME: staging
+  AAD_APP_CLIENT_ID: ${{ secrets.AAD_APP_CLIENT_ID }}
+  AAD_APP_OBJECT_ID: ${{ secrets.AAD_APP_OBJECT_ID }}
+  AAD_APP_TENANT_ID: ${{ secrets.AAD_APP_TENANT_ID }}
+  AAD_APP_OAUTH_AUTHORITY: ${{ secrets.AAD_APP_OAUTH_AUTHORITY }}
+  TEAMS_APP_ID: ${{ secrets.TEAMS_APP_ID }}
+  TAB_DOMAIN: ${{ secrets.TAB_DOMAIN }}
+  TAB_ENDPOINT: ${{ secrets.TAB_ENDPOINT }}
+  TEAMSFX_ENV: ${{ secrets.TEAMSFX_ENV }}
 jobs:
   build:
     runs-on: windows-latest
@@ -52,6 +59,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.empiriabms_staging_439F }}
+        publish-profile: ${{ secrets.EmpiriaBMS_Production_5A02 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-        slot-name: ${{ env.AZURE_WEBAPP_SLOT_NAME }}
