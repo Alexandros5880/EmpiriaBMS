@@ -51,7 +51,11 @@
     "messageTeamMembers"
   ],
   "validDomains": [
-    "${{TAB_DOMAIN}}"
+    "${{TAB_DOMAIN}}",
+    "${{TAB_ENDPOINT}}/dashboard",
+    "${{TAB_ENDPOINT}}/config",
+    "${{TAB_ENDPOINT}}/termsofuse",
+    "${{TAB_ENDPOINT}}/privacy"
   ],
   "webApplicationInfo": {
     "id": "${{AAD_APP_CLIENT_ID}}",

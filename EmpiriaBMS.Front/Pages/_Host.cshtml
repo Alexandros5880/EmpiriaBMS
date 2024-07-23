@@ -10,6 +10,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://statics.teams.cdn.office.net https://cdnjs.cloudflare.com;">
     <title>Empiria BMS</title>
     <base href="~/" />
     <link href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" rel="stylesheet"/>
@@ -32,6 +33,9 @@
 
     <!-- Stepper -->
     <link rel="stylesheet" href="css/bs-stepper.min.css" />
+
+    <!-- Microsoft Teams Library -->
+    <script src="js/MicrosoftTeams.min.js"></script>
     
     <!-- PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
