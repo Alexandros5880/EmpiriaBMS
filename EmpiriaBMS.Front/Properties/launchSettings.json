@@ -1,6 +1,6 @@
 {
 	"profiles": {
-		"LocalHost-DB": {
+		"Localhost": {
 			"commandName": "Project",
 			"launchBrowser": true,
 			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
@@ -14,32 +14,26 @@
 				"AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
 			}
 		},
-		"StagingDB": {
+		"Staging": {
 			"commandName": "Project",
 			"launchBrowser": true,
 			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
 			"dotnetRunMessages": true,
-			"applicationUrl": "https://localhost:44302;http://localhost:2544",
+			"applicationUrl": "https://empiriabms-staging.azurewebsites.net",
 			"hotReloadProfile": "Staging",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Staging",
-				"ConnectionString": "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-staging;User Id=admin-user;Password=!@%369gsdgl^%78n",
-				"VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
-				"AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
 			}
 		},
-		"ProductionDB": {
+		"Production": {
 			"commandName": "Project",
 			"launchBrowser": true,
 			"launchUrl": "https://teams.microsoft.com/l/app/d7515493-12bc-48d6-82f3-0c3c190b16b0?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
 			"dotnetRunMessages": true,
-			"applicationUrl": "https://localhost:44302;http://localhost:2544",
+			"applicationUrl": "https://empiriabms.azurewebsites.net",
 			"hotReloadProfile": "aspnetcore",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Production",
-				"ConnectionString": "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-production;User Id=admin-user;Password=!@%369gsdgl^%78n",
-				"VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
-				"AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
 			}
 		},
 		"WSL": {
