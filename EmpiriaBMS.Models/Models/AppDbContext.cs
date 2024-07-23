@@ -59,7 +59,14 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         Enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
+        // azure_staging_db , azure_production_db
+        SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString");
+
+        if (string.IsNullOrEmpty(SelectedConnectionString))
+        {
+            throw new InvalidOperationException("Connection string is not configured.");
+        }
+
         optionsBuilder.UseSqlServer(SelectedConnectionString);
         optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
         optionsBuilder.EnableSensitiveDataLogging();
