@@ -43,8 +43,11 @@
 {
     <div class="row">
 
-        <div class="col-12" style="display: @((_runInTeams ? "none" : "block")) max-height: 80px;">
-            <h2 class="m-3">Embiria BMS</h2>
+        <div class="col-12" style="min-height: 0px; max-height: 80px;">
+            @if(!_runInTeams)
+            {
+                <h2 class="m-3">Embiria BMS</h2>
+            }
         </div>
 
         <div class="col-12">
