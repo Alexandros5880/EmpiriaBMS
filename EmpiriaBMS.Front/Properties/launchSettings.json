@@ -22,7 +22,7 @@
 			"applicationUrl": "https://localhost:44302;http://localhost:2544",
 			"hotReloadProfile": "Staging",
 			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
+				"ASPNETCORE_ENVIRONMENT": "Staging",
 				"ConnectionString": "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-staging;User Id=admin-user;Password=!@%369gsdgl^%78n",
 				"VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
 				"AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
