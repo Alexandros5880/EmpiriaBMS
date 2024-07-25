@@ -216,33 +216,53 @@ public class UsersRepo : Repository<UserDto, User>
         if (rolesids == null)
             throw new NullReferenceException($"No Roles Ids Specified!");
 
+        List<UserRole> userRolesToDelete;
+
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var userRolesToDelete = await _context.Set<UserRole>()
-                                                  .Where(r => !r.IsDeleted)
-                                                  .Where(r => r.UserId == userId)
-                                                  .ToListAsync();
+            userRolesToDelete = await _context.Set<UserRole>()
+                                              .Where(r => !r.IsDeleted)
+                                              .Where(r => r.UserId == userId)
+                                              .ToListAsync();
+        }
 
-            foreach (var ur in userRolesToDelete)
+        foreach (var ur in userRolesToDelete)
+        {
+            ur.IsDeleted = true;
+            await DeleteUserRole(ur);
+        }
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            try
             {
-                ur.IsDeleted = true;
-                await DeleteUserRole(ur);
+                Random random = new Random();
+
+                List<UserRole> userRolesToAdd = rolesids.Select(roleId => new UserRole()
+                {
+                    CreatedDate = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now,
+                    UserId = userId,
+                    RoleId = roleId
+                }).ToList();
+
+                foreach (var userRole in userRolesToAdd)
+                {
+                    if (!_context.UsersRoles
+                        .Where(r => !r.IsDeleted)
+                        .Any(ur => ur.RoleId == userRole.RoleId && ur.UserId == userRole.UserId))
+                    {
+                        await _context.Set<UserRole>().AddAsync(userRole);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
             }
-            //_context.Set<UserRole>().RemoveRange(userRolesToDelete);
-
-            Random random = new Random();
-
-            List<UserRole> userRolesToAdd = rolesids.Select(roleId => new UserRole()
+            catch (Exception ex)
             {
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                UserId = userId,
-                RoleId = roleId
-            }).ToList();
-
-            await _context.Set<UserRole>().AddRangeAsync(userRolesToAdd);
-
-            await _context.SaveChangesAsync();
+                _logger.LogError($"Exception On UsersRepo.UpdateRoles(UserRole): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                await _context.Set<UserRole>().AddRangeAsync(userRolesToDelete);
+            }
         }
     }
 
@@ -498,6 +518,9 @@ public class UsersRepo : Repository<UserDto, User>
                 if (entry != null)
                 {
                     entry.IsDeleted = true;
+
+                    _context.UsersRoles.Remove(entry);
+
                     await _context.SaveChangesAsync();
                 }
 

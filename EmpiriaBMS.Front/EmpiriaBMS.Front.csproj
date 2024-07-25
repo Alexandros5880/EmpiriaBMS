@@ -5,8 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RuntimeFrameworkVersion>6.0.10</RuntimeFrameworkVersion>
     <UserSecretsId>f4fdf5df-fb9b-4826-b7e2-e6f29985ddc8</UserSecretsId>
-    <Configurations>Development;Staging;Production;Release</Configurations>
+    <Configurations>Development;Staging;Production;Release;Debuging</Configurations>
     <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -20,6 +21,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Staging|AnyCPU'">
+    <Optimize>True</Optimize>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debuging|AnyCPU'">
     <Optimize>True</Optimize>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
@@ -96,6 +102,13 @@
     <Content Update="Components\KPIS\TenderTable.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties apppackage_4manifest_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

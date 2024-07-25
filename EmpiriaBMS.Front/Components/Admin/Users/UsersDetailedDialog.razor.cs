@@ -22,8 +22,17 @@ public partial class UsersDetailedDialog : IDialogContentComponent<UserVM>
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
 
+    private UserDetailed _uersDetailedComp;
+
     private async Task SaveAsync()
     {
+        var valid = _uersDetailedComp.Validate();
+        if (!valid) return;
+
+        Content.PasswordHash = Content.Password != null ? PasswordHasher.HashPassword(Content.Password) : null;
+        Content.Emails = _uersDetailedComp.Emails;
+        Content.MyRolesIds = _uersDetailedComp.Roles.Where(r => r.IsSelected).Select(r => r.Id).ToList();
+
         await Dialog.CloseAsync(Content);
     }
 
