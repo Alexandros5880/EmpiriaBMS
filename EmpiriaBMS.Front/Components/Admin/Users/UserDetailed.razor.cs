@@ -56,8 +56,8 @@ public partial class UserDetailed
         if (!valid) return;
 
         Content.PasswordHash = Content.Password != null ? PasswordHasher.HashPassword(Content.Password) : null;
-        Content.Emails = _emails;
-        Content.MyRolesIds = _roles.Where(r => r.IsSelected).Select(r => r.Id).ToList();
+        Content.Emails = Emails;
+        Content.MyRolesIds = Roles.Where(r => r.IsSelected).Select(r => r.Id).ToList();
         await OnSave.InvokeAsync(Content);
     }
 
@@ -67,9 +67,9 @@ public partial class UserDetailed
     }
 
     #region Data Grid Roles
-    private List<RoleVM> _roles = new List<RoleVM>();
+    public List<RoleVM> Roles = new List<RoleVM>();
     private string _filterRoleString = string.Empty;
-    IQueryable<RoleVM> FilteredRoles => _roles?.AsQueryable().Where(x => x.Name.Contains(_filterRoleString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<RoleVM> FilteredRoles => Roles?.AsQueryable().Where(x => x.Name.Contains(_filterRoleString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState paginationRoles = new PaginationState { ItemsPerPage = 5 };
 
     private void HandleRoleFilter(ChangeEventArgs args)
@@ -99,22 +99,22 @@ public partial class UserDetailed
             roles.Add(p);
         });
 
-        _roles = roles.OrderByDescending(p => p.IsSelected).ToList();
+        Roles = roles.OrderByDescending(p => p.IsSelected).ToList();
     }
 
     private void _onRoleSelectionChange(int roleId, bool val)
     {
-        var role = _roles.FirstOrDefault(r => r.Id == roleId);
-        var index = _roles.IndexOf(role);
-        _roles[index].IsSelected = val;
+        var role = Roles.FirstOrDefault(r => r.Id == roleId);
+        var index = Roles.IndexOf(role);
+        Roles[index].IsSelected = val;
     }
     #endregion
 
     #region Data Grid Emails
     FluentDataGrid<Email> myEmailsGrid;
-    private List<Email> _emails = new List<Email>();
+    public List<Email> Emails = new List<Email>();
     private string _filterEmailString = string.Empty;
-    IQueryable<Email> FilteredEmails => _emails?.AsQueryable().Where(x => x.Address.Contains(_filterEmailString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<Email> FilteredEmails => Emails?.AsQueryable().Where(x => x.Address.Contains(_filterEmailString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState paginationEmails = new PaginationState { ItemsPerPage = 5 };
 
     private void HandleEmailsFilter(ChangeEventArgs args)
@@ -132,7 +132,7 @@ public partial class UserDetailed
     private async Task _getEmails()
     {
         var emails = await _dataProvider.Users.GetEmails(Content.Id);
-        _emails = emails.ToList();
+        Emails = emails.ToList();
         Content.Emails = emails;
     }
 
@@ -143,16 +143,16 @@ public partial class UserDetailed
         if (!validRegex)
             return;
 
-        var email = _emails.FirstOrDefault(r => r.Address.Equals(preEmailAddress));
+        var email = Emails.FirstOrDefault(r => r.Address.Equals(preEmailAddress));
         if (email != null)
         {
-            var index = _emails.IndexOf(email);
-            _emails[index].Address = newEmailAddress;
+            var index = Emails.IndexOf(email);
+            Emails[index].Address = newEmailAddress;
         }
 
         else
         {
-            _emails.Add(new Email()
+            Emails.Add(new Email()
             {
                 Address = newEmailAddress,
                 UserId = Content.Id,
@@ -161,12 +161,12 @@ public partial class UserDetailed
 
         var valid = Validate("Emails");
         if (valid)
-            Content.Emails = _emails;
+            Content.Emails = Emails;
     }
 
     private async Task _addEmail()
     {
-        _emails.Add(new Email()
+        Emails.Add(new Email()
         {
             Address = string.Empty,
             UserId = Content.Id
@@ -176,7 +176,7 @@ public partial class UserDetailed
 
     private async Task _deleteEmail(Email email)
     {
-        _emails.Remove(email);
+        Emails.Remove(email);
         await myEmailsGrid.RefreshDataAsync();
     }
     #endregion
@@ -190,11 +190,11 @@ public partial class UserDetailed
     private bool validPhone3 = true;
     private bool validProxyAddress = true;
 
-    private bool Validate(string fieldname = null)
+    public bool Validate(string fieldname = null)
     {
         if (fieldname == null)
         {
-            validEmails = _emails?.Any() ?? false;
+            validEmails = Emails?.Any() ?? false;
             validFirstName = !string.IsNullOrEmpty(Content.FirstName);
             validLastName = !string.IsNullOrEmpty(Content.LastName);
             validPhone1 = !string.IsNullOrEmpty(Content.Phone1) && _isValidPhoneNumber(Content.Phone1);
@@ -217,7 +217,7 @@ public partial class UserDetailed
             switch (fieldname)
             {
                 case "Emails":
-                    validEmails = _emails?.Any() ?? false;
+                    validEmails = Emails?.Any() ?? false;
                     return validEmails;
                 case "FirstName":
                     validFirstName = !string.IsNullOrEmpty(Content.FirstName);

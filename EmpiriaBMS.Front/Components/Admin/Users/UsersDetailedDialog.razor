@@ -5,8 +5,16 @@
 @* Body *@
 <FluentDialogBody>
 
-    <EmpiriaBMS.Front.Components.Admin.Users.UserDetailed Content="@Content"
+    <EmpiriaBMS.Front.Components.Admin.Users.UserDetailed @ref="@_uersDetailedComp"
+                                                          Content="@Content"
                                                           OnSave="@SaveAsync"
                                                           OnCancel="@CancelAsync" />
 
 </FluentDialogBody>
+
+<FluentDialogFooter>
+    <div class="d-flex justify-content-between">
+        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+    </div>
+</FluentDialogFooter>

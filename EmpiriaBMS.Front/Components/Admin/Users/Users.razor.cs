@@ -87,8 +87,8 @@ public partial class Users
         DialogParameters parameters = new()
         {
             Title = $"Edit {record.FullName}",
-            PrimaryActionEnabled = true,
-            SecondaryActionEnabled = true,
+            PrimaryActionEnabled = false,
+            SecondaryActionEnabled = false,
             PrimaryAction = "Save",
             SecondaryAction = "Cancel",
             TrapFocus = true,
@@ -104,9 +104,9 @@ public partial class Users
         if (result.Data is not null)
         {
             UserVM vm = result.Data as UserVM;
-            // Create Password Hash
+            // Update Password Hash
             var password = vm.Password;
-            vm.PasswordHash = password != null ? PasswordHasher.HashPassword(password) : null;
+            vm.PasswordHash = password != null ? PasswordHasher.HashPassword(password) : record.PasswordHash;
             var emails = Mapping.Mapper.Map<List<EmailDto>>(vm.Emails);
             emails.ForEach(e => e.User = null);
             vm.Emails = null;

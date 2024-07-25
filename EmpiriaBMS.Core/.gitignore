@@ -44,7 +44,6 @@ EmpiriaBMS.Core/obj/
 
 EmpiriaBMS.EF.CLI/bin/
 EmpiriaBMS.EF.CLI/obj/
-EmpiriaBMS.EF.CLI/Migrations/
 
 EmpiriaBMS.Front/bin/
 EmpiriaBMS.Front/obj/
