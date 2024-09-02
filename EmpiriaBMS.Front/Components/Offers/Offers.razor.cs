@@ -18,6 +18,9 @@ namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class Offers
 {
+    private FluentCombobox<LeadVM> leadFilterCombo;
+    private FluentCombobox<(string Value, string Text)> resultFilterCombo;
+
     private ObservableCollection<LeadVM> _leads = new ObservableCollection<LeadVM>();
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<OfferStateVM> _offerStates = new ObservableCollection<OfferStateVM>();
@@ -155,6 +158,24 @@ public partial class Offers
         OfferResult e;
         Enum.TryParse(_selectedOfferResult.Value, out e);
         await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
+        StateHasChanged();
+    }
+
+    public async Task SetLeadFilter(LeadVM lead)
+    {
+        await _getLeads();
+        _selectedLead = _leads?.FirstOrDefault(l => l.Id == lead.Id);
+        leadFilterCombo.Value = _selectedLead.Name;
+        StateHasChanged();
+    }
+
+    public async Task SetResultFilter(OfferResult result)
+    {
+        _selectedOfferResult = result.ToTuple();
+        OfferResult e;
+        Enum.TryParse(_selectedOfferResult.Value, out e);
+        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
+        resultFilterCombo.Value = _selectedOfferResult.Text;
         StateHasChanged();
     }
 

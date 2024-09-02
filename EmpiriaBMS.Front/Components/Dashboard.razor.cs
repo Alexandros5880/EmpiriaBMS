@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
+using System;
 using System.Collections.ObjectModel;
 using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
 
@@ -230,10 +231,13 @@ public partial class Dashboard : IDisposable
 
     #region On Create Offer WorkFlow
     private OffersComp _offersComp;
-    private async Task _onLeadResultChanged(LeadResult result)
+    private async Task _onLeadResultChanged(LeadVM lead)
     {
-        if (result == LeadResult.SUCCESSFUL)
-            await _offersComp.Refresh();
+        if (lead.Result == LeadResult.SUCCESSFUL)
+        {
+            await _offersComp.SetLeadFilter(lead);
+            await _offersComp.SetResultFilter(OfferResult.WAITING);
+        }
     }
     #endregion
 

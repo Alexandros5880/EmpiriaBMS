@@ -16,7 +16,7 @@ namespace EmpiriaBMS.Front.Components.Leads;
 public partial class Leads
 {
     [Parameter]
-    public EventCallback<LeadResult> OnResultChanged { get; set; }
+    public EventCallback<LeadVM> OnResultChanged { get; set; }
 
     #region Data Grid
     private List<LeadVM> _records = new List<LeadVM>();
@@ -52,7 +52,7 @@ public partial class Leads
             await DataProvider.Leads.Update(dto);
             await _getRecords();
 
-            await OnResultChanged.InvokeAsync(newResult);
+            await OnResultChanged.InvokeAsync(context);
         }
     }
 
@@ -132,7 +132,11 @@ public partial class Leads
         }
 
         await dialog.CloseAsync();
-        await _getRecords();
+
+        LeadResult e;
+        Enum.TryParse(_selectedResult.Value, out e);
+        await _getRecords(e);
+        StateHasChanged();
     }
     #endregion
 

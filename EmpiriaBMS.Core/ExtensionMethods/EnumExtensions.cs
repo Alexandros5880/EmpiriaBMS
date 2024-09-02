@@ -28,7 +28,7 @@ public static class EnumExtensions
             var displayAttribute = memberInfo.GetCustomAttribute<DisplayAttribute>();
             if (displayAttribute != null)
             {
-                return (enumValue.ToString(), displayAttribute.Name);
+                return (enumValue?.ToString() ?? "", displayAttribute?.Name ?? "");
             }
         }
         return (enumValue.ToString(), enumValue.ToString());
