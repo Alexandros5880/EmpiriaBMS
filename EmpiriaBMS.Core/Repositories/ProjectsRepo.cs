@@ -349,13 +349,23 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-
-    public new async Task<ICollection<ProjectDto>> GetLastMonthProjects(int userId, int offerId = 0, bool? active = null)
+    // Used
+    public async Task<ICollection<ProjectDto>> GetAll(int userId, int offerId = 0, bool? active = null, TimeSpan? period = null)
     {
         try
         {
             if (userId == 0)
                 return new List<ProjectDto>();
+
+            // From Date Until Now
+            DateTime fromDate;
+            if (period.HasValue)
+            {
+                fromDate = DateTime.Now.Subtract(period.Value);
+            } else
+            {
+                fromDate = DateTime.MinValue;
+            }
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -392,7 +402,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                 .Where(r => !r.IsDeleted)
                                                 .Where(r => active == null || r.Active == active)
                                                 .Where(p => (offerId == 0 || p.OfferId == offerId))
-                                                .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
+                                                .Where(p => p.StartDate >= fromDate)
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Stage)
                                                 .Include(p => p.Offer)
@@ -445,7 +455,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                 .Where(r => active == null || r.Active == active)
                                                 .Where(p => (offerId == 0 || p.OfferId == offerId))
                                                 .Where(p => projectsFromDisciplineIds.Contains(p.Id))
-                                                .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
+                                                .Where(p => p.StartDate >= fromDate)
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Stage)
                                                 .Include(p => p.Offer)
@@ -481,6 +491,154 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return new List<ProjectDto>();
         }
     }
+
+    // Used
+    public async Task<List<ProjectDto>> GetProjectsWithFallback(int userId, int offerId, bool? active)
+    {
+        List<ProjectDto> projectsDto = new List<ProjectDto>();
+        int monthsToCheck = 1;
+
+        while (!projectsDto.Any())
+        {
+            TimeSpan period = TimeSpan.FromDays(30 * monthsToCheck);
+            monthsToCheck++;
+            projectsDto = (await GetAll(userId, offerId, active, period)).ToList();
+        }
+
+        return projectsDto;
+    }
+
+    //public new async Task<ICollection<ProjectDto>> GetLastMonthProjects(int userId, int offerId = 0, bool? active = null)
+    //{
+    //    try // TODO: IF NO PROJECTS GET THE LAST ACTIVE PROJECTS
+    //    {
+    //        if (userId == 0)
+    //            return new List<ProjectDto>();
+
+    //        using (var _context = _dbContextFactory.CreateDbContext())
+    //        {
+    //            // Get User Roles
+    //            var roleIds = await _context.Set<UserRole>()
+    //                                        .Where(r => !r.IsDeleted)
+    //                                        .Where(r => r.UserId == userId)
+    //                                        .Select(r => r.RoleId)
+    //                                        .ToListAsync();
+
+    //            // Get Roles Permissions
+    //            var permissions = await _context.Set<RolePermission>()
+    //                                            .Where(r => !r.IsDeleted)
+    //                                            .Where(pr => roleIds.Contains(pr.RoleId))
+    //                                            .Include(pr => pr.Permission)
+    //                                            .Select(pr => pr.Permission)
+    //                                            .ToListAsync();
+
+    //            var offers = await _context.Set<Offer>()
+    //                .Include(o => o.Category)
+    //                .Include(o => o.SubCategory)
+    //                .Include(o => o.Lead)
+    //                .ThenInclude(l => l.Address)
+    //                .Where(r => !r.IsDeleted)
+    //                .ToListAsync();
+
+    //            var offersIds = offers.Select(o => o.Id).ToList();
+
+    //            List<Project> allProjects;
+
+    //            if (permissions.Any(p => p.Ord == 11))
+    //            {
+    //                allProjects = await _context.Set<Project>()
+    //                                            .Where(r => !r.IsDeleted)
+    //                                            .Where(r => active == null || r.Active == active)
+    //                                            .Where(p => (offerId == 0 || p.OfferId == offerId))
+    //                                            .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
+    //                                            .Include(r => r.Invoices)
+    //                                            .Include(p => p.Stage)
+    //                                            .Include(p => p.Offer)
+    //                                            .ThenInclude(o => o.Category)
+    //                                            .Include(p => p.Offer)
+    //                                            .ThenInclude(o => o.SubCategory)
+    //                                            .Include(p => p.Offer)
+    //                                            .ThenInclude(o => o.Lead)
+    //                                            .ThenInclude(l => l.Address)
+    //                                            .Include(p => p.Offer)
+    //                                            .ThenInclude(o => o.Lead)
+    //                                            .ThenInclude(l => l.Client)
+    //                                            .Include(p => p.ProjectManager)
+    //                                            .Include(p => p.ProjectsSubConstructors)
+    //                                            .OrderBy(e => !e.Active)
+    //                                            .ThenByDescending(e => e.DeadLine)
+    //                                            .ToListAsync();
+    //            }
+    //            else
+    //            {
+    //                // Filter Projects
+    //                var myDrawingIds = await _context.Set<DeliverableEmployee>()
+    //                                                 .Where(r => !r.IsDeleted)
+    //                                                 .Where(de => de.EmployeeId == userId)
+    //                                                 .Select(e => e.DeliverableId)
+    //                                                 .ToListAsync();
+
+    //                var drawingsDisciplinesIds = await _context.Set<Deliverable>()
+    //                                                     .Where(r => !r.IsDeleted)
+    //                                                     .Where(dd => myDrawingIds.Contains(dd.Id))
+    //                                                     .Select(e => e.DisciplineId)
+    //                                                     .ToListAsync();
+
+    //                var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+    //                                                          .Where(r => !r.IsDeleted)
+    //                                                          .Where(d => d.EngineerId == userId)
+    //                                                          .Select(e => e.DisciplineId)
+    //                                                          .ToListAsync();
+
+    //                var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
+
+    //                var projectsFromDisciplineIds = await _context.Set<Discipline>()
+    //                                                            .Where(r => !r.IsDeleted)
+    //                                                            .Where(d => myDisciplinesIds.Contains(d.Id))
+    //                                                            .Select(dp => dp.ProjectId)
+    //                                                            .ToArrayAsync();
+
+    //                allProjects = await _context.Set<Project>()
+    //                                            .Where(r => !r.IsDeleted)
+    //                                            .Where(r => active == null || r.Active == active)
+    //                                            .Where(p => (offerId == 0 || p.OfferId == offerId))
+    //                                            .Where(p => projectsFromDisciplineIds.Contains(p.Id))
+    //                                            .Where(p => p.CreatedDate >= DateTime.Now.AddMonths(-1))
+    //                                            .Include(r => r.Invoices)
+    //                                            .Include(p => p.Stage)
+    //                                            .Include(p => p.Offer)
+    //                                            .ThenInclude(o => o.Category)
+    //                                            .Include(p => p.Offer)
+    //                                            .ThenInclude(o => o.SubCategory)
+    //                                            .Include(p => p.Offer)
+    //                                            .ThenInclude(o => o.Lead)
+    //                                            .ThenInclude(l => l.Address)
+    //                                            .Include(p => p.Offer)
+    //                                            .ThenInclude(o => o.Lead)
+    //                                            .ThenInclude(l => l.Client)
+    //                                            .Include(p => p.ProjectManager)
+    //                                            .Include(p => p.ProjectsSubConstructors)
+    //                                            .OrderBy(e => !e.Active)
+    //                                            .ThenByDescending(e => e.DeadLine)
+    //                                            .ToListAsync();
+    //            }
+
+    //            // Perform the projection after the data is loaded
+    //            allProjects = allProjects.Select(p =>
+    //            {
+    //                p.Offer = offers.FirstOrDefault(o => o.Id == p.OfferId);
+    //                return p;
+    //            }).ToList();
+
+    //            return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(allProjects.Distinct().ToList());
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _logger.LogError($"Exception On ProjectsRepo.GetLastMonthProjects({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+    //        return new List<ProjectDto>();
+    //    }
+    //}
 
     public async Task<ICollection<ProjectDto>> GetAll(int userId, int pageSize = 0, int pageIndex = 0)
     {
