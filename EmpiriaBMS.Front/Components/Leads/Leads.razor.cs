@@ -18,6 +18,9 @@ public partial class Leads
     [Parameter]
     public EventCallback<LeadVM> OnResultChanged { get; set; }
 
+    [Parameter]
+    public bool IsWorkingMode { get; set; } = false;
+
     #region Data Grid
     private List<LeadVM> _records = new List<LeadVM>();
     private string _filterString = string.Empty;

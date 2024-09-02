@@ -19,11 +19,17 @@
 @inject SharedAuthDataService _sharedAuthData
 @inject Logging.LoggerManager Logger
 
-<div class="mt-3 ms-3">
+<div class="mt-2 ms-2 me-2">
     <FluentStack HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
-        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Appearance="Appearance.Accent" OnClick="@(async (e) => await _add(e))">
-            Add Offer
-        </FluentButton>
+
+        @if (IsWorkingMode)
+        {
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Add())"
+                          Appearance="Appearance.Accent"
+                          OnClick="@(async (e) => await _add(e))">
+                Add Offer
+            </FluentButton>   
+        }
 
         <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
                       Appearance="Appearance.Outline"
@@ -34,11 +40,15 @@
     </FluentStack>
 </div>
 
-<div class="row m-3 mt-4">
+<div class="row mt-2">
 
     <div class="col-12">
         <!-- Filters -->
-        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-right: 10px;" Wrap="true">
+        <FluentStack Orientation="Orientation.Horizontal" 
+                     HorizontalAlignment="HorizontalAlignment.Start"
+                     Style="margin-right: 10px; column-gap: 10px; row-gap: 5px;"
+                     class="m-2"
+                     Wrap="true">
             <FluentCombobox @ref="leadFilterCombo"
                             Autocomplete="ComboboxAutocomplete.Both"
                             AriaLabel="Pre-selected option"
@@ -97,14 +107,14 @@
     </div>
 
     <!-- Offers Table -->
-    <div class="col-12 border border-1 rounded mt-1">
-        <div>
+    <div class="col-12">
+        <div class="border border-1 rounded mt-2 m-2" style="height: 280px;">
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="OfferVM"
-                            GridTemplateColumns="3fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
-                            style="height: 240px; overflow:auto;">
+                            GridTemplateColumns="@((IsWorkingMode ? "3fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 2fr 100px" : "3fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 2fr 100px"))"
+                            style="height: 280px; overflow:auto;">
 
                 <!-- Result -->
                 <TemplateColumn Title="Result" Sortable="true">
@@ -148,14 +158,17 @@
                 <PropertyColumn Property="@(p => p.OfferPrice)" Sortable="true" Title="Price" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="min-width: 160px;" />
 
-                <TemplateColumn Title="Actions" Align="@Align.End">
-                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(async () => await _edit(context))" />
-                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(async () => await _delete(context))" />
-                </TemplateColumn>
+                @if (IsWorkingMode)
+                {
+                    <TemplateColumn Title="Actions" Align="@Align.End">
+                        <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(async () => await _edit(context))" />
+                        <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(async () => await _delete(context))" />
+                    </TemplateColumn>
+                }
 
             </FluentDataGrid>
         </div>
-        <div style="max-width: 64vw; margin: 0 auto;">
+        <div class="ms-2 me-2" style="min-width: 50%; margin: 0 auto;">
             <FluentPaginator State="@pagination">
                 <SummaryTemplate>
                     There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows

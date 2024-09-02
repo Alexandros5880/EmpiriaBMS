@@ -17,6 +17,9 @@ namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class Offers
 {
+    [Parameter]
+    public bool IsWorkingMode { get; set; } = false;
+
     private FluentCombobox<LeadVM> leadFilterCombo;
     private FluentCombobox<(string Value, string Text)> resultFilterCombo;
 

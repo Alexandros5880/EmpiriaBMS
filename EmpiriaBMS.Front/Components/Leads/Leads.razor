@@ -9,49 +9,65 @@
 @inject IDialogService DialogService
 @inject Logging.LoggerManager Logger
 
-<div class="row" style="overflow-x: auto; margin: 0 auto;">
-    <div class="col-12 card shadow">
-        <div class="mt-2 d-flex justify-content-between">
-            <FluentStack HorizontalAlignment="HorizontalAlignment.Start" Wrap="true">
-                <FluentCombobox @ref="_resultFilterCombo"
-                                Autocomplete="ComboboxAutocomplete.Both"
-                                Placeholder="Select Result..."
-                                Items="_leadResults"
-                                Width="400px"
-                                Class="float-end"
-                                TOption="(string Value, string Text)"
-                                OptionText="@(c => c.Text)"
-                                OptionValue="@(c => c.Value)"
-                                SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
-            </FluentStack>
+<div class="mt-1 ms-2 me-2">
+    <FluentStack HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+        <!-- Add -->
+        @if (IsWorkingMode)
+        {
+            <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+        }
+                
+        <!-- Import -->
+        <InputFile @ref="@fileInput" OnChange="ImportFromCSV" style="display: none;" />
+        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
+                        Appearance="Appearance.Outline"
+                        OnClick="@(async () => await TriggerFileInput())">
+            Import
+        </FluentButton>
 
-            <FluentStack HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
-                <!-- Import -->
-                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
-                <InputFile @ref="@fileInput" OnChange="ImportFromCSV" style="display: none;" />
-                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
-                              Appearance="Appearance.Outline"
-                              OnClick="@(async () => await TriggerFileInput())">
-                    Import
-                </FluentButton>
+        <!-- Export -->
+        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                        Appearance="Appearance.Outline"
+                        OnClick="@(async (e) => await ExportToCSV())"
+                        Disabled="@(FilteredItems?.Count() == 0)">
+            Export
+        </FluentButton>
+    </FluentStack>
+</div>
 
-                <!-- Export -->
-                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                              Appearance="Appearance.Outline"
-                              OnClick="@(async (e) => await ExportToCSV())"
-                              Disabled="@(FilteredItems?.Count() == 0)">
-                    Export
-                </FluentButton>
-            </FluentStack>
-        </div>
-        <div>
+<div class="row mt-1">
+
+    <div class="col-12">
+        <!-- Filters -->
+        <FluentStack Orientation="Orientation.Horizontal" 
+                     HorizontalAlignment="HorizontalAlignment.Start"
+                     Style="margin-right: 10px; column-gap: 10px; row-gap: 5px;"
+                     class="ms-2 me-2"
+                     Wrap="true">
+            
+            <FluentCombobox @ref="_resultFilterCombo"
+                            Autocomplete="ComboboxAutocomplete.Both"
+                            Placeholder="Select Result..."
+                            Items="_leadResults"
+                            Width="200px"
+                            Class="float-end"
+                            TOption="(string Value, string Text)"
+                            OptionText="@(c => c.Text)"
+                            OptionValue="@(c => c.Value)"
+                            SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
+
+        </FluentStack>
+    </div>
+
+    <div class="col-12">
+        <div class="border border-1 rounded mt-2 m-2" style="height: 280px;">
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="LeadVM"
                             OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 100px"
-                            style="height: 240px; overflow:auto;">
+                            GridTemplateColumns="@((IsWorkingMode ? "2fr 2fr 2fr 2fr 2fr 2fr 100px" : "2fr 2fr 2fr 2fr 2fr 100px"))"
+                            style="height: 280px; overflow:auto;">
 
                 <!-- Result -->
                 <TemplateColumn Title="Result" Sortable="true">
@@ -113,14 +129,17 @@
                 <PropertyColumn Property="@(p => p.ExpectedDurationDate)" Format="dd-mm-yyyy" Sortable="true" Title="Duratio nDate" Align="@Align.Start" />
 
                 <!-- Actions -->
-                <TemplateColumn Title="Actions" Align="@Align.End">
-                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
-                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
-                </TemplateColumn>
+                @if (IsWorkingMode)
+                {
+                    <TemplateColumn Title="Actions" Align="@Align.End">
+                        <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                        <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                    </TemplateColumn>
+                }
 
             </FluentDataGrid>
         </div>
-        <div style="min-width: 50%; margin: 0 auto;">
+        <div class="ms-2 me-2" style="min-width: 50%; margin: 0 auto;">
             <FluentPaginator State="@pagination">
                 <SummaryTemplate>
                     There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
@@ -131,4 +150,5 @@
             </FluentPaginator>
         </div>
     </div>
+
 </div>
