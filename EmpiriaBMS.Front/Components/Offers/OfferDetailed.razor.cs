@@ -31,7 +31,7 @@ public partial class OfferDetailed
     [Parameter]
     public EventCallback<(string Value, string Text)> OnResultChanged { get; set; }
 
-    private bool _isNew => Content.Id == 0;
+    private bool _isNew => Content?.Id == 0;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

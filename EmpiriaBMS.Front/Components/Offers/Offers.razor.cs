@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Dtos;
+﻿using AutoMapper;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -11,6 +12,7 @@ using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using EmpiriaBMS.Core.Config;
 
 namespace EmpiriaBMS.Front.Components.Offers;
 
@@ -159,6 +161,8 @@ public partial class Offers
     #region On Filters Event Changed
     private async Task _onLeadSelectionChanged(LeadVM lead)
     {
+        if (lead == null) return;
+
         OfferResult result;
         Enum.TryParse(_selectedOfferResult.Value, out result);
 
@@ -168,6 +172,8 @@ public partial class Offers
 
     private async Task _onProjectSelectionChanged(ProjectVM project)
     {
+        if (project == null) return;
+
         _selectedProject = project;
         OfferResult result;
         Enum.TryParse(_selectedOfferResult.Value, out result);
@@ -202,12 +208,12 @@ public partial class Offers
     #region Dialogs Functions
     private async Task _add(MouseEventArgs e)
     {
+        var leadDto = Mapper.Map<LeadDto>(_selectedLead);
+        var lead = Mapping.Mapper.Map<Lead>(leadDto);
+
         _selectedOffer = new OfferVM()
         {
-            Lead = new Lead()
-            {
-                Result = LeadResult.WAITING
-            },
+            Lead = lead,
             Result = OfferResult.WAITING
         };
 
