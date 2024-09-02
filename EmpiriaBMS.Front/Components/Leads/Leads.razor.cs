@@ -87,12 +87,17 @@ public partial class Leads
         }, parameters);
         DialogResult? result = await dialog.Result;
 
+        await dialog.CloseAsync();
+
         if (result.Data is not null)
         {
             LeadVM vm = result.Data as LeadVM;
             var dto = Mapper.Map<LeadDto>(vm);
             await DataProvider.Leads.Add(dto);
-            await _getRecords();
+
+            await _onResultSelectionChanged(LeadResult.WAITING.ToTuple());
+            _resultFilterCombo.Value = _selectedResult.Text;
+            StateHasChanged();
         }
     }
 
