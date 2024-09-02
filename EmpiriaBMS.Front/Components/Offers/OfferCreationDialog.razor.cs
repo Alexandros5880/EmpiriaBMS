@@ -34,39 +34,4 @@ public partial class OfferCreationDialog : IDialogContentComponent<OfferVM>
         StateHasChanged();
     }
 
-    private async Task _saveOffer(OfferVM offer)
-    {
-        _loading = true;
-
-
-        //Content.LeadId = Led.Id;
-
-        //if (valid)
-        //{
-        //    var dto = _mapper.Map<OfferDto>(Content);
-
-        //    dto.Lead = null;
-        //    dto.Type = null;
-        //    dto.State = null;
-        //    dto.Category = null;
-        //    dto.SubCategory = null;
-
-        //    // Save Offer
-        //    if (await _dataProvider.Offers.Any(p => p.Id == Offer.Id))
-        //    {
-        //        var updated = await _dataProvider.Offers.Update(dto);
-        //        if (updated != null)
-        //            Content = _mapper.Map<OfferVM>(updated);
-        //    }
-        //    else
-        //    {
-        //        var updated = await _dataProvider.Offers.Add(dto);
-        //        if (updated != null)
-        //            Content = _mapper.Map<OfferVM>(updated);
-        //    }
-        //}
-
-        _loading = false;
-    }
-
 }

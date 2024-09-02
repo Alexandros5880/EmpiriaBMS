@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
@@ -12,7 +12,6 @@ using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using EmpiriaBMS.Core.Config;
 
 namespace EmpiriaBMS.Front.Components.Offers;
 
@@ -153,11 +152,16 @@ public partial class Offers
         _selectedProject = _projects.FirstOrDefault(o => o.Name.Equals("Select Project..."));
         _selectedOfferState = _offerStates.FirstOrDefault(o => o.Name.Equals("Select State..."));
         _selectedOfferType = _offerTypes.FirstOrDefault(o => o.Name.Equals("Select Type..."));
-        _selectedOfferResult = OfferResult.SUCCESSFUL.ToTuple();
+
         _selectedLead = _leads?.OrderByDescending(l => l.LastUpdatedDate).FirstOrDefault(o => o.Name.Equals("Select Lead..."));
+        leadFilterCombo.Value = _selectedLead.Name;
+
+        _selectedOfferResult = OfferResult.SUCCESSFUL.ToTuple();
+        resultFilterCombo.Value = _selectedOfferResult.Text;
         OfferResult e;
         Enum.TryParse(_selectedOfferResult.Value, out e);
         await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
+
         StateHasChanged();
     }
 
@@ -260,10 +264,30 @@ public partial class Offers
 
         if (result.Data is not null)
         {
-            //OfferVM vm = result.Data as OfferVM;
-            //var dto = Mapper.Map<OfferDto>(vm);
+            _selectedProject = _projects.FirstOrDefault(o => o.Name.Equals("Select Project..."));
+            _selectedOfferState = _offerStates.FirstOrDefault(o => o.Name.Equals("Select State..."));
+            _selectedOfferType = _offerTypes.FirstOrDefault(o => o.Name.Equals("Select Type..."));
 
-            await Refresh();
+            await _getLeads();
+            OfferVM offerVMData = result.Data as OfferVM;
+            _selectedLead = _leads?.FirstOrDefault(l => l.Id == offerVMData.LeadId);
+            leadFilterCombo.Value = _selectedLead.Name;
+            StateHasChanged();
+
+            _selectedOfferResult = OfferResult.WAITING.ToTuple();
+            OfferResult offerResult;
+            Enum.TryParse(_selectedOfferResult.Value, out offerResult);
+            resultFilterCombo.Value = _selectedOfferResult.Text;
+            StateHasChanged();
+
+            await _getOffers(_selectedProject.Id,
+                _selectedOfferState.Id, 
+                _selectedOfferType.Id, 
+                _selectedLead?.Id ?? 0, 
+                offerResult, 
+                refresh: true);
+
+            StateHasChanged();
         }
     }
 

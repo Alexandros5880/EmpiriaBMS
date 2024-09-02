@@ -24,7 +24,7 @@
     <div style="height: 500px;">
         <OfferDetailed @ref="@_offerCompoment"
                        Content="@Content"
-                       OnSave="@_saveOffer"
+                       OnSave="@SaveAsync"
                        DisplayTitle="false"
                        DisplayActions="true"
                        OnResultChanged="@_onOfferResultChanged" />
