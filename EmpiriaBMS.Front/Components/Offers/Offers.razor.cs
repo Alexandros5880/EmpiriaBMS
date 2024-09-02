@@ -214,6 +214,7 @@ public partial class Offers
         _selectedOffer = new OfferVM()
         {
             Lead = lead,
+            LeadId = lead.Id,
             Result = OfferResult.WAITING
         };
 

@@ -121,6 +121,7 @@ public partial class OfferDetailed
         Content.StateId = State.Id;
         Content.CategoryId = Category.Id;
         Content.SubCategoryId = SubCategory.Id;
+        Content.Lead = null;
 
         var dto = _mapper.Map<OfferDto>(Content);
         OfferDto updated;
