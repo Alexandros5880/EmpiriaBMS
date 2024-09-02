@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
+using Humanizer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
@@ -121,9 +122,9 @@ public partial class OfferDetailed
         Content.StateId = State.Id;
         Content.CategoryId = Category.Id;
         Content.SubCategoryId = SubCategory.Id;
-        Content.Lead = null;
 
         var dto = _mapper.Map<OfferDto>(Content);
+        dto.Lead = null;
         OfferDto updated;
 
         if (_isNew)

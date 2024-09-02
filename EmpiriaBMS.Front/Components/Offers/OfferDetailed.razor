@@ -16,38 +16,49 @@
 
     <div class="col-12 row" style="height: 440px; overflow-y: auto;">
         
-        <!-- Result -->
         <div class="col-12 row gx-2 mt-2">
-            @if (_isNew)
-            {
-                <div>
-                    Result
-                </div>
-                <div>
-                    @Content.Result.GetDisplayName()
-                </div>
-            }
-            else
-            {
-                <div class="col-xl-4 col-lg-4 col-md-12">
+            <!-- Result -->
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                @if (_isNew)
+                {
                     <div>
                         Result
                     </div>
                     <div>
-                        <FluentCombobox @ref="@_resultCombo"
-                                        Autocomplete="ComboboxAutocomplete.Both"
-                                        Placeholder="Select Result..."
-                                        Items="_results"
-                                        Height="200px"
-                                        Width="100%"
-                                        Class="float-end"
-                                        TOption="(string Value, string Text)"
-                                        OptionText="@(c => c.Text)"
-                                        OptionValue="@(c => c.Value)"
-                                        SelectedOptionChanged="@(async (e) => await _onResultChanged(e))" />
+                        @(Content?.Result.GetDisplayName() ?? "--")
                     </div>
+                }
+                else
+                {
+                    <div class="col-xl-4 col-lg-4 col-md-12">
+                        <div>
+                            Result
+                        </div>
+                        <div>
+                            <FluentCombobox @ref="@_resultCombo"
+                                            Autocomplete="ComboboxAutocomplete.Both"
+                                            Placeholder="Select Result..."
+                                            Items="_results"
+                                            Height="200px"
+                                            Width="100%"
+                                            Class="float-end"
+                                            TOption="(string Value, string Text)"
+                                            OptionText="@(c => c.Text)"
+                                            OptionValue="@(c => c.Value)"
+                                            SelectedOptionChanged="@(async (e) => await _onResultChanged(e))" />
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- Lead -->
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="col-12">
+                    Lead
                 </div>
-            }
+                <div class="col-12">
+                    @(Content.Lead.Name ?? "--")
+                </div>
+            </div>
         </div>
 
         <div class="col-12 row gx-2 mt-1">

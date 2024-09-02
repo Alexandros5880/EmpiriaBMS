@@ -141,7 +141,7 @@ public partial class Offers
     }
     #endregion
 
-    private async Task Refresh()
+    public async Task Refresh()
     {
         await _getLeads();
         await _getAllProjects();

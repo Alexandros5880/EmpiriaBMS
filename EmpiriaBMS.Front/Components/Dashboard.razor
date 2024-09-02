@@ -288,7 +288,7 @@
                                                         </div>
                                                     </HeadingTemplate>
                                                     <ChildContent>
-                                                        <Leads />
+                                                        <Leads OnResultChanged="@_onLeadResultChanged"/>
                                                     </ChildContent>
                                                 </FluentAccordionItem>
                                             </FluentAccordion>
@@ -307,7 +307,7 @@
                                                         </div>
                                                     </HeadingTemplate>
                                                     <ChildContent>
-                                                        <Offers />
+                                                        <Offers @ref="_offersComp" />
                                                     </ChildContent>
                                                 </FluentAccordionItem>
                                             </FluentAccordion>

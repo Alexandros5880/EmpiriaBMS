@@ -9,11 +9,15 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Reflection.Metadata;
 
 namespace EmpiriaBMS.Front.Components.Leads;
 
 public partial class Leads
 {
+    [Parameter]
+    public EventCallback<LeadResult> OnResultChanged { get; set; }
+
     #region Data Grid
     private List<LeadVM> _records = new List<LeadVM>();
     private string _filterString = string.Empty;
@@ -47,6 +51,8 @@ public partial class Leads
             var dto = Mapper.Map<LeadDto>(context);
             await DataProvider.Leads.Update(dto);
             await _getRecords();
+
+            await OnResultChanged.InvokeAsync(newResult);
         }
     }
 

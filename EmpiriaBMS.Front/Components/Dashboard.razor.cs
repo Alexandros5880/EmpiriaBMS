@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
+using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
@@ -225,6 +226,13 @@ public partial class Dashboard : IDisposable
         }
         _refreshLoading = false;
         StateHasChanged();
+    }
+
+    private OffersComp _offersComp;
+    private async Task _onLeadResultChanged(LeadResult result)
+    {
+        if (result == LeadResult.SUCCESSFUL)
+            await _offersComp.Refresh();
     }
 
     #region Get Records
