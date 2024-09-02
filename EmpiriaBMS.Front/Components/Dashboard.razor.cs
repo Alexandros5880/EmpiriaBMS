@@ -228,12 +228,14 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
+    #region On Create Offer WorkFlow
     private OffersComp _offersComp;
     private async Task _onLeadResultChanged(LeadResult result)
     {
         if (result == LeadResult.SUCCESSFUL)
             await _offersComp.Refresh();
     }
+    #endregion
 
     #region Get Records
     private async Task _getHoursCorrectionsRequests()
