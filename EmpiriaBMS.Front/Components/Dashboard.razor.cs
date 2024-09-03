@@ -922,7 +922,7 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Display TeamsRequestedUsers
-    private async Task OpenTeamsRequestedUsersClick(MouseEventArgs e)
+    private void OpenTeamsRequestedUsersClick(MouseEventArgs e)
     {
         _displayTeamsRequestedUsersDialog.Show();
         _isDisplayTeamsRequestedUsersDialogOdepened = true;

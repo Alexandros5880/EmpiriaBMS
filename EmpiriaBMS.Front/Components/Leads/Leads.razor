@@ -14,7 +14,7 @@
         <!-- Add -->
         @if (IsWorkingMode)
         {
-            <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+            <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@_add">Add</FluentButton>
         }
                 
         <!-- Import -->
@@ -44,14 +44,17 @@
                      Style="margin-right: 10px; column-gap: 10px; row-gap: 5px;"
                      class="ms-2 me-2"
                      Wrap="true">
-            
-            <FluentCombobox @ref="_resultFilterCombo"                            Autocomplete="ComboboxAutocomplete.Both"
+
+            <FluentCombobox @ref="_resultFilterCombo"
+                            Autocomplete="ComboboxAutocomplete.Both"
+                            Multiple="false"
                             Placeholder="Select Result..."
                             Items="_leadResults"
                             Width="200px"
                             TOption="(string Value, string Text)"
                             OptionText="@(c => c.Text)"
                             OptionValue="@(c => c.Value)"
+                            @bind-Value="_selectedResultValue"
                             SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))"
                             Class="ms-1" />
 

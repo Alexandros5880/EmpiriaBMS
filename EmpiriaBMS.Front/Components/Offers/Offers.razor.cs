@@ -6,6 +6,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Fast.Components.FluentUI;
@@ -41,6 +42,7 @@ public partial class Offers
     private OfferStateVM _selectedOfferState;
     private OfferTypeVM _selectedOfferType;
     private (string Value, string Text) _selectedOfferResult;
+    private string _selectedResultValue;
     private ProjectVM _selectedProject;
     private OfferVM _selectedOffer;
 
@@ -231,6 +233,15 @@ public partial class Offers
         Enum.TryParse(result.Value, out e);
         await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
     }
+
+    public void SetSelectedOption(string value)
+    {
+        var selectedOption = _offerResults.FirstOrDefault(item => item.Value == value);
+        if (selectedOption != default)
+        {
+            _selectedResultValue = selectedOption.Value;
+        }
+    }
     #endregion
 
     #region Dialogs Functions
@@ -263,7 +274,7 @@ public partial class Offers
         _selectedOffer.LeadId = _selectedLead?.Id;
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
@@ -277,11 +288,20 @@ public partial class Offers
             leadFilterCombo.Value = _selectedLead.Name;
             StateHasChanged();
 
-            _selectedOfferResult = OfferResult.WAITING.ToTuple();
+            //_selectedOfferResult = OfferResult.WAITING.ToTuple();
+            //OfferResult offerResult;
+            //Enum.TryParse(_selectedOfferResult.Value, out offerResult);
+            //resultFilterCombo.Value = _selectedOfferResult.Text;
+            //StateHasChanged();
+
+            // Update Result Filter To Waiting
+            var waitingResult = offerVMData.Result.ToTuple();
+            SetSelectedOption(waitingResult.Value);
+            StateHasChanged();
+            await _onResultSelectionChanged(waitingResult);
+
             OfferResult offerResult;
             Enum.TryParse(_selectedOfferResult.Value, out offerResult);
-            resultFilterCombo.Value = _selectedOfferResult.Text;
-            StateHasChanged();
 
             await _getOffers(_selectedProject.Id,
                 _selectedOfferState.Id, 
@@ -313,14 +333,17 @@ public partial class Offers
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            //OfferVM vm = result.Data as OfferVM;
-            //var dto = Mapper.Map<OfferDto>(vm);
+            OfferVM vm = result.Data as OfferVM;
 
-            await Refresh();
+            // Update Result Filter To Waiting
+            var waitingResult = vm.Result.ToTuple();
+            SetSelectedOption(waitingResult.Value);
+            StateHasChanged();
+            await _onResultSelectionChanged(waitingResult);
         }
     }
 

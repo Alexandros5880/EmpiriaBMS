@@ -24,7 +24,7 @@ public partial class Leads
     #region Data Grid
     private List<LeadVM> _records = new List<LeadVM>();
     private string _filterString = string.Empty;
-    IQueryable<LeadVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<LeadVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 4 };
 
     private LeadVM _selectedRecord = new LeadVM();
@@ -85,19 +85,21 @@ public partial class Leads
             ExpectedDurationDate = DateTime.Now,
             Result = Models.Enum.LeadResult.WAITING
         }, parameters);
-        DialogResult? result = await dialog.Result;
-
-        await dialog.CloseAsync();
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
+            // Update Record
             LeadVM vm = result.Data as LeadVM;
             var dto = Mapper.Map<LeadDto>(vm);
             await DataProvider.Leads.Add(dto);
 
-            await _onResultSelectionChanged(LeadResult.WAITING.ToTuple());
-            _resultFilterCombo.Value = _selectedResult.Text;
+            // Update Result Filter To Waiting
+            var waitingResult = dto.Result.ToTuple();
+            SetSelectedOption(waitingResult.Value);
             StateHasChanged();
+            await _onResultSelectionChanged(waitingResult);
+
         }
     }
 
@@ -117,14 +119,20 @@ public partial class Leads
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<LeadDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
+            // Update Record
             LeadVM vm = result.Data as LeadVM;
             var dto = Mapper.Map<LeadDto>(vm);
             await DataProvider.Leads.Update(dto);
-            await _getRecords();
+
+            // Update Result Filter To Waiting
+            var waitingResult = dto.Result.ToTuple();
+            SetSelectedOption(waitingResult.Value);
+            StateHasChanged();
+            await _onResultSelectionChanged(waitingResult);
         }
     }
 
@@ -165,6 +173,7 @@ public partial class Leads
 
     #region Filter Result
     FluentCombobox<(string Value, string Text)> _resultFilterCombo;
+
     private List<(string Value, string Text)> _leadResults = Enum.GetValues(typeof(LeadResult))
                                                                   .Cast<LeadResult>()
                                                                   .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
@@ -174,6 +183,7 @@ public partial class Leads
                                                                   .ToList();
 
     private (string Value, string Text) _selectedResult;
+    private string _selectedResultValue;
 
     private async Task _onResultSelectionChanged((string Value, string Text) result)
     {
@@ -181,6 +191,15 @@ public partial class Leads
         LeadResult e;
         Enum.TryParse(result.Value, out e);
         await _getRecords(e);
+    }
+
+    public void SetSelectedOption(string value)
+    {
+        var selectedOption = _leadResults.FirstOrDefault(item => item.Value == value);
+        if (selectedOption != default)
+        {
+            _selectedResultValue = selectedOption.Value;
+        }
     }
     #endregion
 

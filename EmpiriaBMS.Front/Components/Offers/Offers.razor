@@ -101,6 +101,7 @@
                             TOption="(string Value, string Text)"
                             OptionText="@(c => c.Text)"
                             OptionValue="@(c => c.Value)"
+                            @bind-Value="_selectedResultValue"
                             SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))"
                             Class="ms-1" />
         </FluentStack>
