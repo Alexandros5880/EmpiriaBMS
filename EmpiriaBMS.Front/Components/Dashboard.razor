@@ -325,10 +325,29 @@
                                                 </div>
                                                 <div class="text-center row me-2">
                                                     <div class="col-6">
-                                                        <FluentSearch @bind-Value="@_projectNameFilter"
-                                                                      @oninput="@HandleProjectFilter"
-                                                                      Placeholder="Search Project"
-                                                                      Style="max-width: 300px; margin-left: 14px; margin-bottom: 4px;" />
+                                                        <!-- Projects Filters -->
+                                                        <FluentStack HorizontalAlignment="HorizontalAlignment.Start">
+                                                            
+                                                            <!-- Project Name -->
+                                                            <FluentSearch @bind-Value="@_projectNameFilter"
+                                                                          @oninput="@HandleProjectNameFilter"
+                                                                          Placeholder="Project"
+                                                                          AriaLabel="Name"
+                                                                          Style="min-width: 150px !important; max-width: 151px !important; margin-left: 14px; margin-bottom: 4px;" />
+
+                                                            <!-- Offer -->
+                                                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                                                            Placeholder="Offer"
+                                                                            AriaLabel="Offer"
+                                                                            Height="200px"
+                                                                            Width="150px"
+                                                                            Items="@_offers"
+                                                                            TOption="OfferVM"
+                                                                            OptionValue="@((t) => t.Id.ToString())"
+                                                                            OptionText="@((t) => t.Code)"
+                                                                            SelectedOptionChanged="@_onOfferFilterChanged" />
+
+                                                        </FluentStack>
                                                     </div>
                                                     <div class="col-6">
                                                         <FluentStack HorizontalAlignment="HorizontalAlignment.End">

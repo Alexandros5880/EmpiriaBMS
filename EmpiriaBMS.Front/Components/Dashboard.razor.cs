@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.RulesetToEditorconfig;
 using Microsoft.Fast.Components.FluentUI;
 using System;
 using System.Collections.ObjectModel;
@@ -68,10 +69,13 @@ public partial class Dashboard : IDisposable
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
     #region Projects Filter
-    IQueryable<ProjectVM>? _filteredProjects => _projects?.AsQueryable().Where(x => x.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase));
-    private string _projectNameFilter = string.Empty;
+    IQueryable<ProjectVM>? _filteredProjects => _projects?.AsQueryable()
+        .Where(p => _filterProjects(p));
 
-    private void HandleProjectFilter(ChangeEventArgs args)
+    private string _projectNameFilter = string.Empty;
+    private string selectedOfferFilterId = string.Empty;
+
+    private void HandleProjectNameFilter(ChangeEventArgs args)
     {
         if (args.Value is string value)
         {
@@ -81,6 +85,21 @@ public partial class Dashboard : IDisposable
         {
             _projectNameFilter = string.Empty;
         }
+    }
+
+    private void _onOfferFilterChanged(OfferVM offer)
+    {
+        if (offer != null && offer.Id != 0)
+            selectedOfferFilterId = offer.Id.ToString();
+        else
+            selectedOfferFilterId = string.Empty;
+    }
+
+    private bool _filterProjects(ProjectVM project)
+    {
+        return project.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase)
+                &&
+               (string.IsNullOrEmpty(selectedOfferFilterId) || Convert.ToString(project.OfferId) == selectedOfferFilterId);
     }
     #endregion
 
@@ -225,6 +244,7 @@ public partial class Dashboard : IDisposable
             await _getHoursCorrectionsRequests();
             await _getHoursCorrectionRequestsCount();
         }
+        await _getOffers(false);
         _refreshLoading = false;
         StateHasChanged();
     }
@@ -326,16 +346,19 @@ public partial class Dashboard : IDisposable
         _startLoading = false;
     }
 
-    public async Task _getOffers()
+    public async Task _getOffers(bool reset = true)
     {
-        _selectedOffer = null;
-        _selectedProject = null;
-        _selectedDiscipline = null;
-        _selectedDeliverable = null;
-        _selectedSupportiveWork = null;
-        _disciplines.Clear();
-        _deliverables.Clear();
-        _supportiveWork.Clear();
+        if (reset)
+        {
+            _selectedOffer = null;
+            _selectedProject = null;
+            _selectedDiscipline = null;
+            _selectedDeliverable = null;
+            _selectedSupportiveWork = null;
+            _disciplines.Clear();
+            _deliverables.Clear();
+            _supportiveWork.Clear();
+        }
 
         try
         {
@@ -985,7 +1008,6 @@ public partial class Dashboard : IDisposable
 
     private async Task EditProject()
     {
-        //_selectedProject = null;
         _selectedDiscipline = null;
         _selectedDeliverable = null;
         _selectedSupportiveWork = null;
