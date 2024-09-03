@@ -22,7 +22,7 @@ public class Lead : Entity
 
     public LeadResult Result { get; set; }
 
-    public ICollection<DailyTime> DailyTime { get; set; }
+    public ICollection<DailyTime>? DailyTime { get; set; }
 
-    public ICollection<Offer> Offers { get; set; }
+    public ICollection<Offer>? Offers { get; set; }
 }

@@ -10,7 +10,7 @@ public class ProjectSubCategory : Entity
     public string? Description { get; set; }
 
     public int? CategoryId { get; set; }
-    public ProjectCategory Category { get; set; }
+    public ProjectCategory? Category { get; set; }
 
-    public ICollection<Offer> Offers { get; set; }
+    public ICollection<Offer>? Offers { get; set; }
 }

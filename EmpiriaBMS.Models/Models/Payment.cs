@@ -18,10 +18,10 @@ public class Payment : Entity
 
     [Required]
     public int TypeId { get; set; }
-    public PaymentType Type { get; set; }
+    public PaymentType? Type { get; set; }
 
     [Required]
     public int InvoiceId { get; set; }
 
-    public Invoice Invoice { get; set; }
+    public Invoice? Invoice { get; set; }
 }

@@ -165,7 +165,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TimeSpanId")
+                    b.Property<int?>("TimeSpanId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TrainingUserId")
@@ -254,7 +254,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TimeSpanId")
+                    b.Property<int?>("TimeSpanId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TrainingUserId")
@@ -501,18 +501,15 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<byte[]>("Content")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("ContentType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FileName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -669,7 +666,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DisplayedRoleId")
@@ -1111,6 +1107,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1390,7 +1387,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DisplayName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -1400,11 +1396,9 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ObjectId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProxyAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1495,7 +1489,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProxyAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TeamsObjectId")
@@ -1603,9 +1596,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.HasOne("EmpiriaBMS.Models.Models.Timespan", "TimeSpan")
                         .WithMany()
-                        .HasForeignKey("TimeSpanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TimeSpanId");
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "TrainingUser")
                         .WithMany("TrainingTime")
@@ -1675,9 +1666,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.HasOne("EmpiriaBMS.Models.Models.Timespan", "TimeSpan")
                         .WithMany()
-                        .HasForeignKey("TimeSpanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TimeSpanId");
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "TrainingUser")
                         .WithMany()

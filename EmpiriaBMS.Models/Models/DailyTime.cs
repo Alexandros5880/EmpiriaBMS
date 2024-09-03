@@ -9,7 +9,7 @@ public class DailyTime : Entity
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
-    public Timespan TimeSpan { get; set; }
+    public Timespan? TimeSpan { get; set; }
 
     public bool IsEditByAdmin { get; set; }
 

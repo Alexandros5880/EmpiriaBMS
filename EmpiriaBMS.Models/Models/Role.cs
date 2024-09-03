@@ -17,11 +17,11 @@ public class Role : Entity
     public Role? ParentRole { get; set; }
 
     // Child Roles
-    public ICollection<Role> ChildRoles { get; set; }
+    public ICollection<Role>? ChildRoles { get; set; }
 
-    public ICollection<UserRole> UserRoles { get; set; }
+    public ICollection<UserRole>? UserRoles { get; set; }
 
-    public ICollection<RolePermission> RolesPermissions { get; set; }
+    public ICollection<RolePermission>? RolesPermissions { get; set; }
 
-    public ICollection<Issue> Issues { get; set; }
+    public ICollection<Issue>? Issues { get; set; }
 }

@@ -7,5 +7,5 @@ public class ProjectStage : Entity
 
     public string? Description { get; set; }
 
-    public List<Project> Projects { get; set; }
+    public List<Project>? Projects { get; set; }
 }

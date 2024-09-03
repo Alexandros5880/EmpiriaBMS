@@ -14,9 +14,9 @@ public class Issue : Entity
     public int CreatorId { get; set; }
     public User? Creator { get; set; }
 
-    public ICollection<Document> Documents { get; set; }
+    public ICollection<Document>? Documents { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public string? Solution { get; set; }
 

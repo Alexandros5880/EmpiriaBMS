@@ -9,6 +9,6 @@ public class DeliverableType : Entity
 
     public string? Description { get; set; }
 
-    public ICollection<Deliverable> Deliverables { get; set; }
+    public ICollection<Deliverable>? Deliverables { get; set; }
 }
 

@@ -7,7 +7,7 @@ public class Invoice : Entity
 {
     [Required]
     public int TypeId { get; set; }
-    public InvoiceType Type { get; set; }
+    public InvoiceType? Type { get; set; }
 
     public double? Total { get; set; }
 
@@ -33,7 +33,7 @@ public class Invoice : Entity
 
     public int ProjectId { get; set; }
 
-    public Project Project { get; set; }
+    public Project? Project { get; set; }
 
-    public ICollection<Payment> Payments { get; set; }
+    public ICollection<Payment>? Payments { get; set; }
 }

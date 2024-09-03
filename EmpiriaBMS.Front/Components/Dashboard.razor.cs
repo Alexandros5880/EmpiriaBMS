@@ -985,7 +985,7 @@ public partial class Dashboard : IDisposable
 
     private async Task EditProject()
     {
-        _selectedProject = null;
+        //_selectedProject = null;
         _selectedDiscipline = null;
         _selectedDeliverable = null;
         _selectedSupportiveWork = null;

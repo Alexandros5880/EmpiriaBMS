@@ -48,5 +48,5 @@ public class Offer : Entity
 
     public string? Comments { get; set; }
 
-    public ICollection<DailyTime> DailyTime { get; set; }
+    public ICollection<DailyTime>? DailyTime { get; set; }
 }
