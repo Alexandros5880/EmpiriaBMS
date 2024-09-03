@@ -288,7 +288,7 @@ public partial class ProjectDetailed : ComponentBase
 
     private async Task _getOffers()
     {
-        var dtos = await DataProvider.Offers.GetAll();
+        var dtos = await DataProvider.Offers.GetAll(result: Models.Enum.OfferResult.SUCCESSFUL);
         var vms = Mapper.Map<List<OfferVM>>(dtos);
         _offers.Clear();
         vms.ForEach(_offers.Add);

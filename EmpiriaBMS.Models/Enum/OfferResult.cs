@@ -8,6 +8,6 @@ public enum OfferResult
     UNSUCCESSFUL = 0,
     [Display(Name = "SUCCESSFUL")]
     SUCCESSFUL = 1,
-    [Display(Name = "WAITING FOR RESUL")]
+    [Display(Name = "WAITING")]
     WAITING = 2
 }
