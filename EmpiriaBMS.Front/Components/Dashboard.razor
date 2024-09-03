@@ -554,7 +554,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="table-responsive p-1 table-container">
+                                                <div class="table-responsive p-1 table-container"
+                                                     style="overflow-x: auto !important;">
                                                     <table class="table table-hover table-danger text-center">
                                                         <thead>
                                                             <tr>
@@ -609,11 +610,11 @@
                                             }
                                         </div>
 
-                                        <div class="row @((seeAdmin ? "col-xl col-lg" : "")) col-md col-sm mt-3"
-                                             style="min-width:460px">
+                                        <div class="@((seeAdmin ? "col-xl col-lg" : "")) col-md col-sm mt-3"
+                                             style="d-flex justify-content-between">
 
                                             <!-- Table Deliverables -->
-                                            <div class="col" style="min-width:460px">
+                                            <div style="min-width:460px">
                                                 @if (_selectedDiscipline != null)
                                                 {
                                                     <div style="height: 74px;">
@@ -651,7 +652,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="table-responsive p-1 table-container">
+                                                    <div class="table-responsive p-1 table-container"
+                                                         style="overflow-x: auto !important;">
                                                         <table class="table table-hover table-primary text-center">
                                                             <thead>
                                                                 <tr>
@@ -712,7 +714,7 @@
                                             </div>
 
                                             <!-- Table Others -->
-                                            <div class="col" style="min-width:460px">
+                                            <div style="min-width:460px">
                                                 @if (_selectedDiscipline != null)
                                                 {
                                                     <div style="height: 74px;">
@@ -750,7 +752,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="table-responsive p-1 table-container">
+                                                    <div class="table-responsive p-1 table-container"
+                                                         style="overflow-x: auto !important;">
                                                         <table class="table table-hover table-warning text-center">
                                                             <thead>
                                                                 <tr>

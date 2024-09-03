@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Components.Invoices;
 using EmpiriaBMS.Front.Components.WorkingHours;
@@ -6,6 +7,7 @@ using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
@@ -997,12 +999,21 @@ public partial class Dashboard : IDisposable
         _selectedSupportiveWork = null;
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
+
+        Offer offer = null;
+        if (!string.IsNullOrEmpty(selectedOfferFilterId))
+        {
+            var offerId = Convert.ToInt32(selectedOfferFilterId);
+            var dto = await _dataProvider.Offers.Get(offerId);
+            offer = Mapping.Mapper.Map<Offer>(dto);
+        }
+
         await projectCompoment.Prepair(new ProjectVM()
         {
             Stage = null,
             StageId = 0,
-            Offer = null,
-            OfferId = 0
+            Offer = offer,
+            OfferId = offer != null ? offer.Id : 0,
         });
     }
 
