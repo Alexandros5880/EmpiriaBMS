@@ -74,14 +74,21 @@
                 <!-- Result -->
                 <TemplateColumn Title="Result" Sortable="true">
                     <ChildContent>
-                        <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
-                            @foreach (var result in Enum.GetValues(typeof(LeadResult)).Cast<LeadResult>())
-                            {
-                                <option value="@(result)" selected="@(context.Result == result)">
-                                    @result.GetDisplayName()
-                                </option>
-                            }
-                        </select>
+                        @if (IsWorkingMode)
+                        {
+                            <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
+                                @foreach (var result in Enum.GetValues(typeof(LeadResult)).Cast<LeadResult>())
+                                {
+                                    <option value="@(result)" selected="@(context.Result == result)">
+                                        @result.GetDisplayName()
+                                    </option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <span>@context.Result.GetDisplayName()</span>
+                        }
                     </ChildContent>
                 </TemplateColumn>
 
