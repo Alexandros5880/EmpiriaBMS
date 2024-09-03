@@ -162,7 +162,7 @@ public partial class Offers
         leadFilterCombo.Value = _selectedLead.Name;
 
         _selectedOfferResult = OfferResult.SUCCESSFUL.ToTuple();
-        resultFilterCombo.Value = _selectedOfferResult.Text;
+        SetSelectedOption(_selectedOfferResult.Value);
         OfferResult e;
         Enum.TryParse(_selectedOfferResult.Value, out e);
         await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
@@ -184,8 +184,7 @@ public partial class Offers
         OfferResult e;
         Enum.TryParse(_selectedOfferResult.Value, out e);
         await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
-        resultFilterCombo.Value = _selectedOfferResult.Text;
-        StateHasChanged();
+        SetSelectedOption(_selectedOfferResult.Value);
     }
 
     #region On Filters Event Changed
@@ -287,12 +286,6 @@ public partial class Offers
             _selectedLead = _leads?.FirstOrDefault(l => l.Id == offerVMData.LeadId);
             leadFilterCombo.Value = _selectedLead.Name;
             StateHasChanged();
-
-            //_selectedOfferResult = OfferResult.WAITING.ToTuple();
-            //OfferResult offerResult;
-            //Enum.TryParse(_selectedOfferResult.Value, out offerResult);
-            //resultFilterCombo.Value = _selectedOfferResult.Text;
-            //StateHasChanged();
 
             // Update Result Filter To Waiting
             var waitingResult = offerVMData.Result.ToTuple();

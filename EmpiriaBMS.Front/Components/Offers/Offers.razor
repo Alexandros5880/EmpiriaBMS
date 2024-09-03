@@ -49,6 +49,19 @@
                      Style="margin-right: 10px; column-gap: 10px; row-gap: 5px;"
                      class="m-2"
                      Wrap="true">
+
+            <FluentCombobox @ref="resultFilterCombo"
+                            Autocomplete="ComboboxAutocomplete.Both"
+                            Placeholder="Select Result..."
+                            Items="_offerResults"
+                            Height="400px"
+                            TOption="(string Value, string Text)"
+                            OptionText="@(c => c.Text)"
+                            OptionValue="@(c => c.Value)"
+                            @bind-Value="_selectedResultValue"
+                            SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))"
+                            Class="ms-1" />
+
             <FluentCombobox @ref="leadFilterCombo"
                             Autocomplete="ComboboxAutocomplete.Both"
                             AriaLabel="Pre-selected option"
@@ -92,18 +105,7 @@
                             OptionSelected="@(i => i.Id == _selectedOfferType?.Id)"
                             SelectedOptionChanged="@(async (o) => await _onTypeSelectionChanged(o))"
                             Class="ms-1" />
-
-            <FluentCombobox @ref="resultFilterCombo"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            Placeholder="Select Result..."
-                            Items="_offerResults"
-                            Height="400px"
-                            TOption="(string Value, string Text)"
-                            OptionText="@(c => c.Text)"
-                            OptionValue="@(c => c.Value)"
-                            @bind-Value="_selectedResultValue"
-                            SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))"
-                            Class="ms-1" />
+            
         </FluentStack>
     </div>
 

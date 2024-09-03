@@ -162,12 +162,10 @@ public partial class Leads
 
         if (firstRender)
         {
-            await _getRecords();
-
-            _selectedResult = _leadResults.FirstOrDefault(r => r.Text.Equals("WAITING"));
-            _resultFilterCombo.Value = _selectedResult.Value;
-
-            StateHasChanged();
+            var resultFilter = LeadResult.WAITING;
+            _selectedResult = resultFilter.ToTuple();
+            SetSelectedOption(_selectedResult.Value);
+            await _getRecords(resultFilter);
         }
     }
 
