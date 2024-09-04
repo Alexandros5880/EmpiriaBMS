@@ -88,7 +88,7 @@ code {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-    width: 20px;
+    width: 0px; /* If you want to appears set 20px*/
 }
 
 ::-webkit-scrollbar-track {
