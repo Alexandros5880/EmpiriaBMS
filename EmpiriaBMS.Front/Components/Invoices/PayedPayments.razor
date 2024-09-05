@@ -3,7 +3,7 @@
 
 @if (payedPayment != null)
 {
-    <span>@payedPayment</span>
+    <h4>Payed: </h4><span>@payedPayment</span>
 }
 else
 {
@@ -12,7 +12,7 @@ else
 
 @code {
     [Parameter]
-    public InvoiceVM Item { get; set; }
+    public IQueryable<InvoiceVM> Items { get; set; }
 
     private double? payedPayment;
 
@@ -23,6 +23,15 @@ else
 
     private async Task<double?> _loadPayedPayment()
     {
-        return await DataProvider.Invoices.GetSumOfPayedFee(Item.Id);
+        if (Items == null)
+            return null;
+
+        double sum = 0;
+        foreach (var item in Items)
+        {
+            double pendingFee = await DataProvider.Invoices.GetSumOfPayedFee(item.Id);
+            sum += pendingFee;
+        }
+        return sum;
     }
 }

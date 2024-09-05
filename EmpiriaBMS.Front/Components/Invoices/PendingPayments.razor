@@ -3,7 +3,7 @@
 
 @if (pendingPayment != null)
 {
-    <span>@pendingPayment</span>
+    <h4>Pendyng: </h4><span>@pendingPayment</span>
 }
 else
 {
@@ -12,7 +12,7 @@ else
 
 @code {
     [Parameter]
-    public InvoiceVM Item { get; set; }
+    public IQueryable<InvoiceVM> Items { get; set; }
 
     private double? pendingPayment;
 
@@ -23,6 +23,15 @@ else
 
     private async Task<double?> _loadPendingPayment()
     {
-        return await DataProvider.Invoices.GetSumOfPotencialFee(Item.Id);
+        if (Items == null)
+            return null;
+
+        double sum = 0;
+        foreach (var item in Items)
+        {
+            double pendingFee = await DataProvider.Invoices.GetSumOfPotencialFee(item.Id);
+            sum += pendingFee;
+        }
+        return sum;
     }
 }
