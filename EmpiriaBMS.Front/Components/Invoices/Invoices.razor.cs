@@ -45,6 +45,11 @@ public partial class Invoices : ComponentBase
         await OnSelect.InvokeAsync(SelectedRecord);
     }
 
+    private bool IsRowSelect(int rowId)
+    {
+        return SelectedRecord.Id == rowId;
+    }
+
     private async Task _getRecords()
     {
         var dtosInv = await DataProvider.Invoices.GetAll();

@@ -29,8 +29,22 @@
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
+                            GridTemplateColumns="1fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 100%; overflow:auto;">
 
+                <!-- CheckBox -->
+                <TemplateColumn Title="" Sortable="false">
+                    <ChildContent>
+                        <div>
+                            @if (IsRowSelect(context.Id))
+                            {
+                                <FluentIcon Icon="Icons.Regular.Size32.Checkmark" />
+                            }
+                        </div>
+                    </ChildContent>
+                </TemplateColumn>
+                
+                <!-- Project Name -->
                 <TemplateColumn Title="Project"
                                 Sortable="true"
                                 InitialSortDirection=SortDirection.Descending
@@ -49,18 +63,29 @@
                     </ChildContent>
                 </TemplateColumn>
 
+                <!-- Type Name -->
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
+
+                <!-- Estimate Date -->
                 <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="EstimatedDate" Align="@Align.Start" />
+
+                <!-- Payment Date -->
                 <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="PaymentDate" Align="@Align.Start" />
+                
                 <!-- PendingPaiment -->
                 <TemplateColumn Title="PendingPaiment" Sortable="true">
                     <ChildContent>
                         @(_pendingPayments.TryGetValue(context.Id, out var payment) ? payment.ToString("C", CultureInfo.CurrentCulture) : "Loading...")
                     </ChildContent>
                 </TemplateColumn>
+
+                <!-- Mark -->
                 <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
+
+                <!-- Number -->
                 <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
 
+                <!-- Actions -->
                 <TemplateColumn Title="Actions" Align="@Align.End">
                     @* <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" /> *@
                     <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
