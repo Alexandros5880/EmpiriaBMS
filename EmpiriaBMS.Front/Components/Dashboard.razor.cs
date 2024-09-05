@@ -947,8 +947,13 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Display TeamsRequestedUsers
-    private void OpenTeamsRequestedUsersClick(MouseEventArgs e)
+    private async Task OpenTeamsRequestedUsersClick(MouseEventArgs e)
     {
+        if (!isWorkingMode)
+        {
+            await ShowInformationAsync("You need to have started your work to see the users requests!");
+            return;
+        }
         _displayTeamsRequestedUsersDialog.Show();
         _isDisplayTeamsRequestedUsersDialogOdepened = true;
     }
@@ -967,6 +972,11 @@ public partial class Dashboard : IDisposable
     #region Display Hours Correction Request
     private async Task OpenHoursCorrectionRequestsClick(MouseEventArgs e)
     {
+        if (!isWorkingMode)
+        {
+            await ShowInformationAsync("You need to have started your work to see and accept users hours corrections requests!");
+            return;
+        }
         _displayHoursCorrectionRequestsDialog.Show();
         _isDisplayHoursCorrectionRequestsDialogOdepened = true;
     }
@@ -1189,8 +1199,13 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Correct Hours Dialog
-    private void _correctHours()
+    private async Task _correctHours()
     {
+        if (!isWorkingMode)
+        {
+            await ShowInformationAsync("You need to have started your work to correct hours!");
+            return;
+        }
         _correctHoursDialog.Show();
         _isCorrectHoursDialogOdepened = true;
     }
