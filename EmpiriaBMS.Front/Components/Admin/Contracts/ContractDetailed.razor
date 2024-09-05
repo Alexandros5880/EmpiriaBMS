@@ -31,7 +31,8 @@
                                         TOption="InvoiceVM"
                                         OptionText="@(c => c.Mark)"
                                         OptionValue="@(c => c.Id.ToString())"
-                                        @bind-SelectedOption="@Invoice" />
+                                        @bind-SelectedOption="@Invoice"
+                                        Disabled="@(!Editable)" />
                     </div>
                     @if (!validInvoice)
                     {
@@ -50,7 +51,9 @@
                     Date
                 </div>
                 <div>
-                    <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.Date" />
+                    <FluentDatePicker Style="width: 100%;"
+                                      @bind-Value="@Content.Date"
+                                      Disabled="@(!Editable)" />
                 </div>
             </div>
             <!-- ContractualFee -->
@@ -59,7 +62,10 @@
                     ContractualFee<span class="text-danger">*</span>
                 </div>
                 <div>
-                    <FluentNumberField Style="width:100%;" @bind-Value="@Content.ContractualFee" Min="0" />
+                    <FluentNumberField Style="width:100%;"
+                                       @bind-Value="@Content.ContractualFee"
+                                       Min="0"
+                                       Disabled="@(!Editable)" />
                 </div>
                 @if (!validContractualFee)
                 {
@@ -72,13 +78,19 @@
 
         <!-- Description -->
         <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+            <FluentTextArea Style="width:100%;"
+                            @bind-Value="@Content.Description"
+                            Rows="3"
+                            Resize="TextAreaResize.Vertical"
+                            Disabled="@(!Editable)">
+                Description:
+            </FluentTextArea>
         </div>
 
         @if (DisplayActions)
         {
             <div class="col-12 mt-2 d-flex justify-content-end">
-                <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+                <FluentButton Disabled="@(!Editable)" Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
             </div>
         }
 
