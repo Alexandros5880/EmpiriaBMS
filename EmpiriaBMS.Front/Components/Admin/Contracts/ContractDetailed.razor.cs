@@ -19,6 +19,9 @@ public partial class ContractDetailed
     [Parameter]
     public bool DisplayInvoice { get; set; } = true;
 
+    [Parameter]
+    public bool Editable { get; set; } = true;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);

@@ -1,0 +1,29 @@
+﻿@using EmpiriaBMS.Front.Services
+@inject IDataProvider DataProvider
+
+@if (pendingPayment != null)
+{
+    <span class="text-danger">@pendingPayment</span>
+    <strong>€</strong>
+}
+else
+{
+    <span>Loading...</span>
+}
+
+@code {
+    [Parameter]
+    public InvoiceVM Item { get; set; }
+
+    private double? pendingPayment;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        pendingPayment = await _loadPendingPayment();
+    }
+
+    private async Task<double?> _loadPendingPayment()
+    {
+        return await DataProvider.Invoices.GetSumOfPotencialFee(Item.Id);
+    }
+}

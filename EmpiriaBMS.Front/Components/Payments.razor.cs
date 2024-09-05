@@ -12,6 +12,9 @@ public partial class Payments : ComponentBase
     [Parameter]
     public InvoiceVM Invoice { get; set; }
 
+    [Parameter]
+    public bool IsWorkingMode { get; set; } = false;
+
     #region Data Grid
     private List<PaymentVM> _records = new List<PaymentVM>();
     private string _filterString = string.Empty;

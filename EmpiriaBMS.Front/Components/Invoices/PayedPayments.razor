@@ -1,0 +1,39 @@
+﻿@using EmpiriaBMS.Front.Services
+@inject IDataProvider DataProvider
+
+@if (payedPayment != null)
+{
+    <strong>Payed: </strong>
+    <span class="text-success">@payedPayment </span>
+    <strong>€</strong>
+}
+else
+{
+    <span>Loading...</span>
+}
+
+@code {
+    [Parameter]
+    public IQueryable<InvoiceVM> Items { get; set; }
+
+    private double? payedPayment;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        payedPayment = await _loadPayedPayment();
+    }
+
+    private async Task<double?> _loadPayedPayment()
+    {
+        if (Items == null)
+            return null;
+
+        double sum = 0;
+        foreach (var item in Items)
+        {
+            double pendingFee = await DataProvider.Invoices.GetSumOfPayedFee(item.Id);
+            sum += pendingFee;
+        }
+        return sum;
+    }
+}

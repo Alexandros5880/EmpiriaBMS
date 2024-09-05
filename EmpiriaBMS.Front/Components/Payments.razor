@@ -10,7 +10,7 @@
     <div class="col-12 card shadow">
         <div>
             <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
-                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+                <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
             </FluentStack>
         </div>
         <div>
@@ -47,8 +47,8 @@
                 <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Payment Date" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
-                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
-                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                    <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                    <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
                 </TemplateColumn>
 
             </FluentDataGrid>

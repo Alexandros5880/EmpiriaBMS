@@ -14,13 +14,14 @@ public partial class Invoices : ComponentBase
     [Parameter]
     public EventCallback<InvoiceVM> OnSelect { get; set; }
 
+    [Parameter]
+    public bool IsWorkingMode { get; set; } = false;
+
     #region Data Grid
     public List<InvoiceVM> _invoices { get; set; }
     private string _filterString = string.Empty;
     IQueryable<InvoiceVM>? FilteredItems => _invoices?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
-
-    private Dictionary<int, double> _pendingPayments = new Dictionary<int, double>();
 
     [Parameter]
     public InvoiceVM SelectedRecord { get; set; } = new InvoiceVM();
@@ -45,19 +46,15 @@ public partial class Invoices : ComponentBase
         await OnSelect.InvokeAsync(SelectedRecord);
     }
 
+    private bool IsRowSelect(int rowId)
+    {
+        return SelectedRecord.Id == rowId;
+    }
+
     private async Task _getRecords()
     {
         var dtosInv = await DataProvider.Invoices.GetAll();
         _invoices = Mapper.Map<List<InvoiceVM>>(dtosInv);
-        await _loadPendingPayments();
-    }
-
-    private async Task _loadPendingPayments()
-    {
-        foreach (var item in _invoices)
-        {
-            _pendingPayments[item.Id] = await DataProvider.Invoices.GetSumOfPotencialFee(item.Id);
-        }
     }
 
     private async Task _add()
@@ -135,12 +132,6 @@ public partial class Invoices : ComponentBase
 
         await dialog.CloseAsync();
         await _getRecords();
-    }
-
-    private async Task<double> _getPendingPaiment(InvoiceVM record)
-    {
-
-        return 0.0;
     }
     #endregion
 

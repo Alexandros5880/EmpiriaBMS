@@ -51,6 +51,9 @@ public partial class InvoiceDetailed
     [Parameter]
     public EventCallback<InvoiceVM> OnSave { get; set; }
 
+    [Parameter]
+    public bool IsWorkingMode { get; set; } = false;
+
     private FluentCombobox<InvoiceTypeVM> _typeCompoment;
 
     private ContractDetailed _contractDetailedRef;

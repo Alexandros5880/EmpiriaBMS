@@ -12,7 +12,7 @@
 @inject Logging.LoggerManager Logger
 
 <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
-    <div class="col-12 card shadow" style="height: 620px; overflow:auto;">
+    <div class="col-12 card shadow" style="height: 85vh; overflow:auto;">
         @if (Content != null)
         {
             <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
@@ -40,7 +40,8 @@
                                                 Width="100%"
                                                 TOption="ProjectVM"
                                                 OptionText="@(c => c.Name)"
-                                                OptionValue="@(c => c.Id.ToString())" />
+                                                OptionValue="@(c => c.Id.ToString())"
+                                                Disabled="@(!IsWorkingMode)" />
                             </div>
                             @if (!validProject)
                             {
@@ -71,7 +72,8 @@
                                             TOption="InvoiceTypeVM"
                                             OptionText="@(c => c.Name)"
                                             OptionValue="@(c => c.Id.ToString())"
-                                            @bind-SelectedOption="@Type" />
+                                            @bind-SelectedOption="@Type"
+                                            Disabled="@(!IsWorkingMode)" />
                         </div>
                         @if (!validType)
                         {
@@ -85,7 +87,9 @@
                         <div>
                             Mark
                         </div>
-                        <FluentTextField Style="width:100%;" @bind-Value="@Content.Mark" />
+                        <FluentTextField Style="width:100%;"
+                                         @bind-Value="@Content.Mark"
+                                         Disabled="@(!IsWorkingMode)" />
                         @if (!validMark)
                         {
                             <div class="col-12">
@@ -112,12 +116,16 @@
                                             TOption="(string Value, string Text)"
                                             OptionText="@(c => c.Text)"
                                             OptionValue="@(c => c.Text)"
-                                            @bind-SelectedOption="SelectedVat" />
+                                            @bind-SelectedOption="SelectedVat"
+                                            Disabled="@(!IsWorkingMode)" />
                         </div>
                     </div>
                     <!-- Fee -->
                     <div class="col-xl-6 col-lg-6 col-md-12">
-                        <FluentNumberField Style="width:100%;" @bind-Value="@Content.Fee" Min="0">
+                        <FluentNumberField Style="width:100%;"
+                                           @bind-Value="@Content.Fee"
+                                           Min="0"
+                                           Disabled="@(!IsWorkingMode)">
                             Fee
                         </FluentNumberField>
                     </div>
@@ -129,14 +137,20 @@
                         <div>
                             Number
                         </div>
-                        <FluentNumberField Style="width:100%;" @bind-Value="@Content.Number" Min="0" />
+                        <FluentNumberField Style="width:100%;"
+                                           @bind-Value="@Content.Number"
+                                           Min="0"
+                                           Disabled="@(!IsWorkingMode)" />
                     </div>
                     <!-- Total -->
                     <div class="col-xl-6 col-lg-6 col-md-12">
                         <div>
                             Total
                         </div>
-                        <FluentNumberField Style="width:100%;" @bind-Value="@Content.Total" Min="0" />
+                        <FluentNumberField Style="width:100%;"
+                                           @bind-Value="@Content.Total"
+                                           Min="0"
+                                           Disabled="@(!IsWorkingMode)" />
                     </div>
                 </div>
 
@@ -146,14 +160,18 @@
                         <div>
                             EstimatedDate
                         </div>
-                        <FluentDatePicker Style="width:100%;" @bind-Value="@Content.EstimatedDate" />
+                        <FluentDatePicker Style="width:100%;"
+                                          @bind-Value="@Content.EstimatedDate"
+                                          Disabled="@(!IsWorkingMode)" />
                     </div>
                     <!-- PaymentDate -->
                     <div class="col-xl-6 col-lg-6 col-md-12">
                         <div>
                             PaymentDate
                         </div>
-                        <FluentDatePicker Style="width:100%;" @bind-Value="@Content.PaymentDate" />
+                        <FluentDatePicker Style="width:100%;"
+                                          @bind-Value="@Content.PaymentDate"
+                                          Disabled="@(!IsWorkingMode)" />
                     </div>
                 </div>
 
@@ -165,7 +183,11 @@
                         </div>
                         <div class="col-12">
                             <!-- Contract Detailed -->
-                            <ContractDetailed @ref="@_contractDetailedRef" Content="@Contract" DisplayActions="false" DisplayInvoice="false" />
+                            <ContractDetailed @ref="@_contractDetailedRef"
+                                              Content="@Contract"
+                                              DisplayActions="false"
+                                              DisplayInvoice="false"
+                                              Editable="@IsWorkingMode"/>
                         </div>
                     </div>
                 </div>
@@ -173,7 +195,9 @@
                 @if (DisplayAcions)
                 {
                     <div class="col-12 mb-2 mt-1 d-flex justify-content-end">
-                        <FluentButton Appearance="Appearance.Accent" OnClick="@(async () => await Save())">Save</FluentButton>
+                        <FluentButton Disabled="@(!IsWorkingMode)"
+                                      Appearance="Appearance.Outline"
+                                      OnClick="@(async () => await Save())">Save</FluentButton>
                     </div>
                 }
 

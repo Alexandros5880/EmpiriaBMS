@@ -10,27 +10,56 @@
 @inject Logging.LoggerManager Logger
 
 <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
-    <div class="col-12 card shadow" style="height: 620px; cursor: pointer;">
-        <div>
-            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
-                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
-
-                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+    <div class="col-12 card shadow" style="height: 85vh; cursor: pointer;">
+        
+        <div class="d-flex justify-content-between w-90 mt-2">
+            <div>
+                <!-- Ttitle -->
+                <h3>Invoices</h3>
+            </div>
+            <div>
+                <!-- Payed Payments -->
+                <PayedPayments Items="@FilteredItems" />
+            </div>
+            <div>
+                <!-- Pending Payments -->
+                <PendingPayments Items="@FilteredItems" />
+            </div>
+            <div class="d-flex justify-content-end">
+                <!-- Add -->
+                <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+                <!-- Export -->
+                <FluentButton class="ms-1" IconStart="@(new Icons.Regular.Size16.ArrowExport())"
                               Appearance="Appearance.Outline"
                               OnClick="@(async (e) => await _exportToCSV())"
                               Disabled="@((FilteredItems?.Count() ?? 0) == 0)">
                     Export
                 </FluentButton>
-            </FluentStack>
+            </div>
         </div>
+
         <div>
             <FluentDataGrid Items="@FilteredItems"
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
+                            GridTemplateColumns="1fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 100%; overflow:auto;">
 
+                <!-- CheckBox -->
+                <TemplateColumn Title="" Sortable="false">
+                    <ChildContent>
+                        <div>
+                            @if (IsRowSelect(context.Id))
+                            {
+                                <FluentIcon Icon="Icons.Regular.Size32.Checkmark" />
+                            }
+                        </div>
+                    </ChildContent>
+                </TemplateColumn>
+                
+                <!-- Project Name -->
                 <TemplateColumn Title="Project"
                                 Sortable="true"
                                 InitialSortDirection=SortDirection.Descending
@@ -49,21 +78,39 @@
                     </ChildContent>
                 </TemplateColumn>
 
+                <!-- Type Name -->
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
+
+                <!-- Estimate Date -->
                 <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="EstimatedDate" Align="@Align.Start" />
+
+                <!-- Payment Date -->
                 <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="PaymentDate" Align="@Align.Start" />
-                <!-- PendingPaiment -->
-                <TemplateColumn Title="PendingPaiment" Sortable="true">
+                
+                <!-- Pending Paiments -->
+                <TemplateColumn Title="Pending" Sortable="true">
                     <ChildContent>
-                        @(_pendingPayments.TryGetValue(context.Id, out var payment) ? payment.ToString("C", CultureInfo.CurrentCulture) : "Loading...")
+                        <PendingPaymentCell Item="context" />
                     </ChildContent>
                 </TemplateColumn>
+
+                <!-- Payed Paiments -->
+                <TemplateColumn Title="Payed" Sortable="true">
+                    <ChildContent>
+                        <PayedPaymentCell Item="context" />
+                    </ChildContent>
+                </TemplateColumn>
+
+                <!-- Mark -->
                 <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
+
+                <!-- Number -->
                 <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
 
+                <!-- Actions -->
                 <TemplateColumn Title="Actions" Align="@Align.End">
-                    @* <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" /> *@
-                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                    @* <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" /> *@
+                    <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
                 </TemplateColumn>
 
             </FluentDataGrid>
