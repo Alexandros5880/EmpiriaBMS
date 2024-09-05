@@ -36,7 +36,7 @@
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
-                            GridTemplateColumns="1fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="1fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 100%; overflow:auto;">
 
                 <!-- CheckBox -->
@@ -79,10 +79,17 @@
                 <!-- Payment Date -->
                 <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="PaymentDate" Align="@Align.Start" />
                 
-                <!-- PendingPaiment -->
-                <TemplateColumn Title="PendingPaiment" Sortable="true">
+                <!-- Pending Paiments -->
+                <TemplateColumn Title="Pending" Sortable="true">
                     <ChildContent>
-                        @(_pendingPayments.TryGetValue(context.Id, out var payment) ? payment.ToString("C", CultureInfo.CurrentCulture) : "Loading...")
+                        <PendingPaymentCell Item="context" />
+                    </ChildContent>
+                </TemplateColumn>
+
+                <!-- Payed Paiments -->
+                <TemplateColumn Title="Payed" Sortable="true">
+                    <ChildContent>
+                        <PayedPaymentCell Item="context" />
                     </ChildContent>
                 </TemplateColumn>
 
