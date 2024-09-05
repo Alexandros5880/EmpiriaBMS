@@ -173,7 +173,9 @@
                 @if (DisplayAcions)
                 {
                     <div class="col-12 mb-2 mt-1 d-flex justify-content-end">
-                        <FluentButton Appearance="Appearance.Accent" OnClick="@(async () => await Save())">Save</FluentButton>
+                        <FluentButton Disabled="@(!IsWorkingMode)"
+                                      Appearance="Appearance.Outline"
+                                      OnClick="@(async () => await Save())">Save</FluentButton>
                     </div>
                 }
 

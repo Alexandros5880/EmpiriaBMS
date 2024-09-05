@@ -14,6 +14,9 @@ public partial class Invoices : ComponentBase
     [Parameter]
     public EventCallback<InvoiceVM> OnSelect { get; set; }
 
+    [Parameter]
+    public bool IsWorkingMode { get; set; } = false;
+
     #region Data Grid
     public List<InvoiceVM> _invoices { get; set; }
     private string _filterString = string.Empty;
