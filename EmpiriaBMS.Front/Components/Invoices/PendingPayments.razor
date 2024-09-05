@@ -3,7 +3,9 @@
 
 @if (pendingPayment != null)
 {
-    <h4>Pendyng: </h4><span>@pendingPayment</span>
+    <strong>Pending: </strong>
+    <span class="text-danger">@pendingPayment </span>
+    <strong>€</strong>
 }
 else
 {
