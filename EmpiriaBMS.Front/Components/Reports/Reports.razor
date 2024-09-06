@@ -11,7 +11,7 @@
 
 @if (_barChartConfig != null)
 {
-    <div class="row" >
+    <div class="row mb-1" >
 
         <!-- Filters -->
         <div class="col-6">
@@ -19,6 +19,15 @@
                          HorizontalAlignment="HorizontalAlignment.Start"
                          HorizontalGap="8"
                          VerticalAlignment="VerticalAlignment.Center">
+
+                <!-- Date Range -->
+                <DateRangePicker class="form-control"
+                                 title="Dates"
+                                 placeholder="Select dates..."
+                                 @bind-StartDate="StartDate"
+                                 @bind-EndDate="EndDate"
+                                 OnRangeSelect="@(async (e) => await OnDateSelect(e))"
+                                 style="width: 200px;" />
 
                 <!-- Client -->
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
@@ -50,15 +59,6 @@
                                 OptionText="@(c => c.Name)"
                                 OptionValue="@(c => c.Id.ToString())"
                                 SelectedOptionChanged="@(async (e) => await _onSubCategorySelected(e))" />
-
-                <!-- Date Range -->
-                <DateRangePicker class="form-control form-control-sm"
-                                 title="Dates"
-                                 placeholder="Select dates..."
-                                 @bind-StartDate="StartDate"
-                                 @bind-EndDate="EndDate"
-                                 OnRangeSelect="@(async (e) => await OnDateSelect(e))"
-                                 style="width: 200px;" />
 
             </FluentStack>
         </div>

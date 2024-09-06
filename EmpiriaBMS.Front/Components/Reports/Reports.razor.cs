@@ -282,13 +282,13 @@ public partial class Reports
     #endregion
 
     #region Date Range Filter
-    DateTimeOffset? StartDate { get; set; } = null;
-    DateTimeOffset? EndDate { get; set; } = null;
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Now);
+    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Now.AddMonths(-1));
 
     public async Task OnDateSelect(DateRange range)
     {
-        //var startDate = range.Start.DateTime;
-        //var endDate = range.End.DateTime;
+        StartDate = range.Start;
+        EndDate = range.End;
         await _getReportData();
     }
     #endregion
