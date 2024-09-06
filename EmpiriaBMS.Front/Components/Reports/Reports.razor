@@ -11,73 +11,77 @@
 
 @if (_barChartConfig != null)
 {
-    <div class="row" >
-
-        <!-- Export to PDF -->
-        <FluentStack Orientation="Orientation.Horizontal"
-                     HorizontalAlignment="HorizontalAlignment.End"
-                     VerticalAlignment="VerticalAlignment.Center"
-                     Class="col-12 mb-1">
-            <FluentButton Appearance="Appearance.Outline"
-                          Loading="@exporting"
-                          OnClick="@(async () => await _exportToPdf())">
-                Export
-                <FluentIcon Value="@(new Icons.Regular.Size32.DocumentPdf())" Color="Color.Error" Slot="start" />
-            </FluentButton>
-        </FluentStack>
+    <div class="row mb-1" >
 
         <!-- Filters -->
-        <FluentStack Orientation="Orientation.Horizontal"
-                     HorizontalAlignment="HorizontalAlignment.Start"
-                     HorizontalGap="8"
-                     VerticalAlignment="VerticalAlignment.Center"
-                     Class="col-12 mb-2 ">
+        <div class="col-6">
+            <FluentStack Orientation="Orientation.Horizontal"
+                         HorizontalAlignment="HorizontalAlignment.Start"
+                         HorizontalGap="8"
+                         VerticalAlignment="VerticalAlignment.Center">
 
-            <!-- Client -->
-            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                            Placeholder="Select Client..."
-                            Items="@_clients"
-                            Height="200px"
-                            TOption="ClientVM"
-                            OptionText="@(c => c.CompanyName)"
-                            OptionValue="@(c => c.Id.ToString())"
-                            SelectedOptionChanged="@(async (e) => await _onClientSelected(e))" />
+                <!-- Date Range -->
+                <DateRangePicker class="form-control"
+                                 title="Dates"
+                                 placeholder="Select dates..."
+                                 @bind-StartDate="StartDate"
+                                 @bind-EndDate="EndDate"
+                                 OnRangeSelect="@(async (e) => await OnDateSelect(e))"
+                                 style="width: 200px;" />
 
-            <!-- ProjectCategory -->
-            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                            Placeholder="Select Project Category..."
-                            Items="@_projectCategories"
-                            Height="200px"
-                            TOption="ProjectCategoryVM"
-                            OptionText="@(c => c.Name)"
-                            OptionValue="@(c => c.Id.ToString())"
-                            SelectedOptionChanged="@(async (e) => await _onCategorySelected(e))" />
+                <!-- Client -->
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                Placeholder="Select Client..."
+                                Items="@_clients"
+                                Height="200px"
+                                TOption="ClientVM"
+                                OptionText="@(c => c.CompanyName)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                SelectedOptionChanged="@(async (e) => await _onClientSelected(e))" />
 
-            <!-- ProjectSubCategory -->
-            <FluentCombobox @ref="subCategoryCombo"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            Placeholder="Select Project SubCategory..."
-                            Items="@_projectSubCategories"
-                            Height="200px"
-                            TOption="ProjectSubCategoryVM"
-                            OptionText="@(c => c.Name)"
-                            OptionValue="@(c => c.Id.ToString())"
-                            SelectedOptionChanged="@(async (e) => await _onSubCategorySelected(e))" />
+                <!-- ProjectCategory -->
+                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                Placeholder="Select Project Category..."
+                                Items="@_projectCategories"
+                                Height="200px"
+                                TOption="ProjectCategoryVM"
+                                OptionText="@(c => c.Name)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                SelectedOptionChanged="@(async (e) => await _onCategorySelected(e))" />
 
-            <!-- Date Range -->
-            <DateRangePicker class="form-control form-control-sm"
-                             title="Dates"
-                             placeholder="Select dates..."
-                             @bind-StartDate="StartDate"
-                             @bind-EndDate="EndDate"
-                             OnRangeSelect="@(async (e) => await OnDateSelect(e))"
-                             style="width: 200px;"/>
+                <!-- ProjectSubCategory -->
+                <FluentCombobox @ref="subCategoryCombo"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                Placeholder="Select Project SubCategory..."
+                                Items="@_projectSubCategories"
+                                Height="200px"
+                                TOption="ProjectSubCategoryVM"
+                                OptionText="@(c => c.Name)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                SelectedOptionChanged="@(async (e) => await _onSubCategorySelected(e))" />
 
-        </FluentStack>
+            </FluentStack>
+        </div>
+
+        <!-- Export to PDF -->
+        <div class="col-6">
+            <FluentStack Orientation="Orientation.Horizontal"
+                         HorizontalAlignment="HorizontalAlignment.End"
+                         HorizontalGap="8"
+                         VerticalAlignment="VerticalAlignment.Center">
+                <FluentButton Appearance="Appearance.Outline"
+                              Loading="@exporting"
+                              OnClick="@(async () => await _exportToPdf())">
+                    Export
+                    <FluentIcon Value="@(new Icons.Regular.Size32.DocumentPdf())" Color="Color.Error" Slot="start" />
+                </FluentButton>
+            </FluentStack>
+        </div>
 
         <!-- Chart -->
-        <div class="col-12 container" id="export-to-pdf-projects-report-chart">
-            <Chart Config="@_barChartConfig"/>
+        <div class="col-12 container mt-1"
+             id="export-to-pdf-projects-report-chart">
+            <Chart @ref="@_chartInstance" Config="@_barChartConfig" />
         </div>
 
         <!-- Table -->

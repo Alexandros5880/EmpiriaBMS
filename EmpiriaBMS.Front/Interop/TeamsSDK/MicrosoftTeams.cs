@@ -60,6 +60,11 @@ public class MicrosoftTeams : InteropModuleBase
             await InvokeVoidAsync("saveAsFile", fileName, byteBase64, fileType);
     }
 
+    public Task<double> GetAspectRatio()
+    {
+        return InvokeAsync<double>("getAspectRatio");
+    }
+
     #region Cookies
     public async Task SetCookie(string key, string value)
     {
