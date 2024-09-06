@@ -199,7 +199,7 @@ public partial class Reports
             BorderColor = new IndexableOption<string>(Color.Gray.ToHexString()),
             BorderWidth = 2,
             Stack = "Total",
-            BarThickness = 8
+            BarThickness = 12
         };
 
         _datasets.Add(totalDataset);
