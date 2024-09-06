@@ -48,7 +48,7 @@ public partial class Reports
         {
             await _refreshData();
             await _getReportData();
-            RefreshChart();
+            await RefreshChart();
         }
     }
 
@@ -124,6 +124,22 @@ public partial class Reports
         }
     }
 
+    private void _updateAspectRatio()
+    {
+        if (_chartInstance != null)
+        {
+            // Update the Aspect Ratio
+            var options = _barChartConfig.Options;
+            if (options != null)
+            {
+                options.AspectRatio = _chartAspectRatio;
+                // Reassign the updated config to the chart
+                _chartInstance.Config = _barChartConfig;
+                _chartInstance.Update();  // Refresh the chart
+            }
+        }
+    }
+
     private void _prepaireDataForChart()
     {
         _labels.Clear();
@@ -183,7 +199,8 @@ public partial class Reports
         }
 
         // Find the week with the largest sum
-        _maxYValue = weeklySums.Max() + 50;
+        var max = weeklySums.Max();
+        _maxYValue = max + (max)/4;
     }
 
     private void _loadDataOnChart()
@@ -198,7 +215,9 @@ public partial class Reports
         _barChartConfig.Data.Datasets.Reverse();
     }
 
-    public void RefreshChart() {
+    public async Task RefreshChart() {
+        await _getAspectRatio();
+        _updateAspectRatio();
         _prepaireDataForChart();
         _updateYAxisMax();
         _loadDataOnChart();
@@ -269,7 +288,7 @@ public partial class Reports
         Client = obj;
 
         await _getReportData();
-        RefreshChart();
+        await RefreshChart();
     }
     #endregion
 
@@ -296,7 +315,7 @@ public partial class Reports
         subCategoryCombo.Value = firstSubCategory.Name;
 
         await _getReportData();
-        RefreshChart();
+        await RefreshChart();
     }
     #endregion
 
@@ -319,7 +338,7 @@ public partial class Reports
     {
         ProjectSubCategory = obj;
         await _getReportData();
-        RefreshChart();
+        await RefreshChart();
     }
     #endregion
 
@@ -332,7 +351,7 @@ public partial class Reports
         StartDate = range.Start;
         EndDate = range.End;
         await _getReportData();
-        RefreshChart();
+        await RefreshChart();
     }
     #endregion
 
