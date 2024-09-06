@@ -49,6 +49,7 @@ public partial class Reports
             await _refreshData();
             await _getReportData();
             await RefreshChart();
+            StateHasChanged();
         }
     }
 
@@ -297,6 +298,7 @@ public partial class Reports
 
         await _getReportData();
         await RefreshChart();
+        StateHasChanged();
     }
     #endregion
 
@@ -324,6 +326,7 @@ public partial class Reports
 
         await _getReportData();
         await RefreshChart();
+        StateHasChanged();
     }
     #endregion
 
@@ -347,6 +350,7 @@ public partial class Reports
         ProjectSubCategory = obj;
         await _getReportData();
         await RefreshChart();
+        StateHasChanged();
     }
     #endregion
 
@@ -360,6 +364,7 @@ public partial class Reports
         EndDate = range.End;
         await _getReportData();
         await RefreshChart();
+        StateHasChanged();
     }
     #endregion
 
