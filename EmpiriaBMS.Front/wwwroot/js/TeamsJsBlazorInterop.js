@@ -85,8 +85,6 @@ export function navigateToAdmin(url, objectId) {
     });
 }
 
-
-
 export function saveAsFile(fileName, byteBase64, contentType) {
     const linkSource = `data:${contentType};base64,${byteBase64}`;
     const downloadLink = document.createElement('a');
@@ -94,6 +92,12 @@ export function saveAsFile(fileName, byteBase64, contentType) {
     downloadLink.download = fileName;
     downloadLink.click();
 };
+
+export function getAspectRatio() {
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    return width / height;
+}
 
 
 // Register MNouse Weel Event
@@ -401,8 +405,6 @@ export function triggerFileInputClick(element) {
     element.click();
 };
 // - Element Click
-
-
 
 // PDF
 export async function exportPdfContent(elementIds, fileName) {

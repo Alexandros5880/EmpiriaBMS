@@ -28,11 +28,16 @@ public partial class Reports
     private List<ReportProjectReturnModel> reportEntries = new();
     private BarConfig _barChartConfig;
     private Chart _chartInstance;
+    private double? _chartAspectRatio = null;
+    private double _maxYValue = 100;
+    private List<string> _labels = new List<string>();
+    private List<BarDataset<double>> _datasets = new List<BarDataset<double>>();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitializedAsync();
+        await _getAspectRatio();
         _initializeChart();
+        await base.OnInitializedAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -43,7 +48,7 @@ public partial class Reports
         {
             await _refreshData();
             await _getReportData();
-            StateHasChanged();
+            RefreshChart();
         }
     }
 
@@ -98,12 +103,12 @@ public partial class Reports
                     }
                 },
                 Responsive = true,
-                AspectRatio = 3.5,
+                AspectRatio = _chartAspectRatio ?? 3.5,
             },
         };
     }
 
-    private void _updateYAxisMax(double newMaxHours)
+    private void _updateYAxisMax()
     {
         if (_chartInstance != null)
         {
@@ -111,7 +116,7 @@ public partial class Reports
             var yAxis = _barChartConfig.Options.Scales.YAxes.OfType<BarLinearCartesianAxis>().FirstOrDefault();
             if (yAxis != null)
             {
-                yAxis.Ticks.Max = newMaxHours;
+                yAxis.Ticks.Max = _maxYValue;
                 // Reassign the updated config to the chart
                 _chartInstance.Config = _barChartConfig;
                 _chartInstance.Update();  // Refresh the chart
@@ -119,8 +124,11 @@ public partial class Reports
         }
     }
 
-    private void _loadDataOnChart()
+    private void _prepaireDataForChart()
     {
+        _labels.Clear();
+        _datasets.Clear();
+
         // Labels (Dates for start date to end date per 1 week)
         var weeklyDates = _getWeeklyDates(StartDate?.DateTime, EndDate).ToList();
 
@@ -129,14 +137,11 @@ public partial class Reports
             return;
         }
 
-        List<string> labels = new List<string>();
-        List<BarDataset<double>> datasets = new List<BarDataset<double>>();
-
         // Set X-axis Labels
         for (int i = 0; i < weeklyDates.Count - 1; i++)
         {
             var date = weeklyDates[i];
-            labels.Add(date.ToEuropeFormat());
+            _labels.Add(date.ToEuropeFormat());
         }
 
         // Initialize datasets for each project
@@ -163,12 +168,12 @@ public partial class Reports
                 }
             }
 
-            datasets.Add(dataset);
+            _datasets.Add(dataset);
         }
 
         // Calculate weekly sums
         var weeklySums = new double[weeklyDates.Count - 1];
-        foreach (var dataset in datasets)
+        foreach (var dataset in _datasets)
         {
             for (int i = 0; i < weeklySums.Length; i++)
             {
@@ -178,19 +183,26 @@ public partial class Reports
         }
 
         // Find the week with the largest sum
-        var maxHours = weeklySums.Max() + 50;
+        _maxYValue = weeklySums.Max() + 50;
+    }
 
-        // Update Max Hours on Y axes
-        _updateYAxisMax(maxHours);
-
+    private void _loadDataOnChart()
+    {
         // Update Bar Labers And Datasets
         _barChartConfig.Data.Labels.Clear();
         _barChartConfig.Data.Datasets.Clear();
-        labels.ForEach(_barChartConfig.Data.Labels.Add);
-        datasets.ForEach(_barChartConfig.Data.Datasets.Add);
+        _labels.ForEach(_barChartConfig.Data.Labels.Add);
+        _datasets.ForEach(_barChartConfig.Data.Datasets.Add);
 
         // Ensure datasets are added properly
         _barChartConfig.Data.Datasets.Reverse();
+    }
+
+    public void RefreshChart() {
+        _prepaireDataForChart();
+        _updateYAxisMax();
+        _loadDataOnChart();
+        StateHasChanged();
     }
     #endregion
 
@@ -235,7 +247,6 @@ public partial class Reports
         var subCategoryDto = _mapper.Map<ProjectSubCategoryDto>(ProjectSubCategory);
         var data = await _dataProvider.Reports.GetProjectPerEmployeeReport(StartDate?.Date, EndDate?.Date, clientDto, categoryDto, subCategoryDto);
         reportEntries = data;
-        _loadDataOnChart();
     }
     #endregion
 
@@ -258,6 +269,7 @@ public partial class Reports
         Client = obj;
 
         await _getReportData();
+        RefreshChart();
     }
     #endregion
 
@@ -284,6 +296,7 @@ public partial class Reports
         subCategoryCombo.Value = firstSubCategory.Name;
 
         await _getReportData();
+        RefreshChart();
     }
     #endregion
 
@@ -306,6 +319,7 @@ public partial class Reports
     {
         ProjectSubCategory = obj;
         await _getReportData();
+        RefreshChart();
     }
     #endregion
 
@@ -318,6 +332,7 @@ public partial class Reports
         StartDate = range.Start;
         EndDate = range.End;
         await _getReportData();
+        RefreshChart();
     }
     #endregion
 
@@ -416,18 +431,6 @@ public partial class Reports
         return -1;
     }
 
-    //private (Color, Color) _getRandomColor()
-    //{
-    //    var r = _random.Next(256);
-    //    var g = _random.Next(256);
-    //    var b = _random.Next(256);
-
-    //    var bodyColor = Color.FromArgb(255, r, g, b);
-    //    var borderColor = Color.FromArgb(r, g, b);
-
-    //    return (bodyColor, borderColor);
-    //}
-
     private (Color, Color) _getRandomColor()
     {
         const int minColorValue = 50;  // Minimum value to avoid too dark colors
@@ -442,5 +445,11 @@ public partial class Reports
         var borderColor = Color.FromArgb(r, g, b);
 
         return (bodyColor, borderColor);
+    }
+
+    private async Task _getAspectRatio()
+    {
+        var screeenAspectRatio = await MicrosoftTeams.GetAspectRatio();
+        _chartAspectRatio = screeenAspectRatio * 2;
     }
 }
