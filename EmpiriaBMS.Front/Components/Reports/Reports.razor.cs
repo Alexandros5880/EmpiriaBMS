@@ -160,6 +160,8 @@ public partial class Reports
             _labels.Add(date.ToEuropeFormat());
         }
 
+        var totalHoursPerWeek = new double[weeklyDates.Count - 1];
+
         // Initialize datasets for each project
         foreach (var report in reportEntries)
         {
@@ -178,8 +180,10 @@ public partial class Reports
                 var endDate = weeklyDates[i + 1];
                 if (createdDate >= startDate && createdDate < endDate)
                 {
+                    var hours = report.TotalWorkedTime.TotalHours;
+                    totalHoursPerWeek[i] += hours;
                     // Correctly place the bar in the corresponding week
-                    dataset.AddValue(i, report.TotalWorkedTime.TotalHours);
+                    dataset.AddValue(i, hours);
                     break; // Exit loop once the correct week is found
                 }
             }
@@ -187,19 +191,21 @@ public partial class Reports
             _datasets.Add(dataset);
         }
 
-        // Calculate weekly sums
-        var weeklySums = new double[weeklyDates.Count - 1];
-        foreach (var dataset in _datasets)
+        // Add the total hours dataset to the chart
+        var totalDataset = new BarDataset<double>(totalHoursPerWeek)
         {
-            for (int i = 0; i < weeklySums.Length; i++)
-            {
-                BarDataset<double> barDataset = dataset as BarDataset<double>;
-                weeklySums[i] += barDataset[i];
-            }
-        }
+            Label = "Total Hours",
+            BackgroundColor = new IndexableOption<string>(Color.LightGray.ToHexString()),
+            BorderColor = new IndexableOption<string>(Color.Gray.ToHexString()),
+            BorderWidth = 2,
+            Stack = "Total",
+            BarThickness = 8
+        };
+
+        _datasets.Add(totalDataset);
 
         // Find the week with the largest sum
-        var max = weeklySums.Max();
+        var max = totalHoursPerWeek.Max();
         _maxYValue = max + (max)/4;
     }
 
@@ -213,6 +219,9 @@ public partial class Reports
 
         // Ensure datasets are added properly
         _barChartConfig.Data.Datasets.Reverse();
+
+        // Refresh chart
+        _chartInstance.Update();
     }
 
     public async Task RefreshChart() {
@@ -221,7 +230,6 @@ public partial class Reports
         _prepaireDataForChart();
         _updateYAxisMax();
         _loadDataOnChart();
-        StateHasChanged();
     }
     #endregion
 
