@@ -346,6 +346,7 @@ public partial class Reports
     }
     #endregion
 
+    // Divide Timespan to weeks and return list of weeks
     public static IEnumerable<DateTime> _getWeeklyDates(DateTimeOffset? start, DateTimeOffset? end)
     {
         if (start != null || end == null)
@@ -371,6 +372,7 @@ public partial class Reports
         }
     }
 
+    // Find the index (possition) of a date in date array span
     private int _getWeekIndex(DateTime date, List<DateTime> weeklyDates)
     {
         for (int i = 0; i < weeklyDates.Count - 1; i++)
