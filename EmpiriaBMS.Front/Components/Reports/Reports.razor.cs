@@ -1,16 +1,20 @@
 ﻿using BlazorBootstrap;
 using BlazorDateRangePicker;
+using Chart = ChartJs.Blazor.Chart;
 using ChartJs.Blazor.BarChart;
 using ChartJs.Blazor.BarChart.Axes;
 using ChartJs.Blazor.Common;
 using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common.Axes.Ticks;
+using ChartJs.Blazor.Common.Enums;
 using ChartJs.Blazor.Util;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.Graph.Models;
+using Microsoft.Kiota.Abstractions;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Color = System.Drawing.Color;
 using Fluent = Microsoft.Fast.Components.FluentUI;
@@ -23,6 +27,7 @@ public partial class Reports
 
     private List<ReportProjectReturnModel> reportEntries = new();
     private BarConfig _barChartConfig;
+    private Chart _chartInstance;
 
     protected override void OnInitialized()
     {
@@ -43,7 +48,7 @@ public partial class Reports
     }
 
     #region Initialize Chart
-    private void _initializeChart()
+    private void _initializeChart(double maxHours = 100)
     {
         _barChartConfig = new BarConfig
         {
@@ -73,9 +78,11 @@ public partial class Reports
                     {
                         new BarLinearCartesianAxis
                         {
+                            Stacked = true,
                             Ticks = new LinearCartesianTicks
                             {
-                                BeginAtZero = true
+                                BeginAtZero = true,
+                                Max = maxHours
                             }
                         }
                     }
@@ -96,11 +103,24 @@ public partial class Reports
         };
     }
 
+    private void _updateYAxisMax(double newMaxHours)
+    {
+        if (_chartInstance != null)
+        {
+            // Update the Y-axis max value
+            var yAxis = _barChartConfig.Options.Scales.YAxes.OfType<BarLinearCartesianAxis>().FirstOrDefault();
+            if (yAxis != null)
+            {
+                yAxis.Ticks.Max = newMaxHours;
+                // Reassign the updated config to the chart
+                _chartInstance.Config = _barChartConfig;
+                _chartInstance.Update();  // Refresh the chart
+            }
+        }
+    }
+
     private void _loadDataOnChart()
     {
-        _barChartConfig.Data.Labels.Clear();
-        _barChartConfig.Data.Datasets.Clear();
-
         // Labels (Dates for start date to end date per 1 week)
         var weeklyDates = _getWeeklyDates(StartDate?.DateTime, EndDate).ToList();
 
@@ -109,16 +129,15 @@ public partial class Reports
             return;
         }
 
+        List<string> labels = new List<string>();
+        List<BarDataset<double>> datasets = new List<BarDataset<double>>();
+
         // Set X-axis Labels
         for (int i = 0; i < weeklyDates.Count - 1; i++)
         {
             var date = weeklyDates[i];
-            var nextWeek = weeklyDates[i + 1];
-            _barChartConfig.Data.Labels.Add(date.ToEuropeFormat());
+            labels.Add(date.ToEuropeFormat());
         }
-
-        // Create a list of datasets, one for each project
-        var datasets = new List<BarDataset<double>>();
 
         // Initialize datasets for each project
         foreach (var report in reportEntries)
@@ -126,17 +145,11 @@ public partial class Reports
             var color = _getRandomColor();
             var dataset = new BarDataset<double>(new double[weeklyDates.Count - 1])
             {
-                Label = $"{report.Project.Name}",
+                Label = $"Name: {report.Project.Name}   Date: {report.Project.CreatedDate.ToEuropeFormat()}   Hours",
                 BackgroundColor = new IndexableOption<string>(color.Item1.ToHexaString()),
                 BorderColor = new IndexableOption<string>(color.Item2.ToHexaString()),
-                BorderWidth = 1,
             };
-            datasets.Add(dataset);
-        }
 
-        // Assign the project data to the appropriate weekly bucket
-        foreach (var report in reportEntries)
-        {
             var createdDate = report.Project.CreatedDate;
             for (int i = 0; i < weeklyDates.Count - 1; i++)
             {
@@ -144,22 +157,37 @@ public partial class Reports
                 var endDate = weeklyDates[i + 1];
                 if (createdDate >= startDate && createdDate < endDate)
                 {
-                    // Add the worked time in ticks to the appropriate week for the current project
-                    var index = datasets.FindIndex(ds => ds.Label == $"{report.Project.Name}");
-                    if (index >= 0)
-                    {
-                        datasets[index].AddValue(i, report.TotalWorkedTime.TotalHours);
-                    }
-                    break;
+                    // Correctly place the bar in the corresponding week
+                    dataset.AddValue(i, report.TotalWorkedTime.TotalHours);
+                    break; // Exit loop once the correct week is found
                 }
+            }
+
+            datasets.Add(dataset);
+        }
+
+        // Calculate weekly sums
+        var weeklySums = new double[weeklyDates.Count - 1];
+        foreach (var dataset in datasets)
+        {
+            for (int i = 0; i < weeklySums.Length; i++)
+            {
+                BarDataset<double> barDataset = dataset as BarDataset<double>;
+                weeklySums[i] += barDataset[i];
             }
         }
 
-        // Add all datasets to the chart configuration
-        foreach (var dataset in datasets)
-        {
-            _barChartConfig.Data.Datasets.Add(dataset);
-        }
+        // Find the week with the largest sum
+        var maxHours = weeklySums.Max() + 50;
+
+        // Update Max Hours on Y axes
+        _updateYAxisMax(maxHours);
+
+        // Update Bar Labers And Datasets
+        _barChartConfig.Data.Labels.Clear();
+        _barChartConfig.Data.Datasets.Clear();
+        labels.ForEach(_barChartConfig.Data.Labels.Add);
+        datasets.ForEach(_barChartConfig.Data.Datasets.Add);
 
         // Ensure datasets are added properly
         _barChartConfig.Data.Datasets.Reverse();
@@ -282,8 +310,8 @@ public partial class Reports
     #endregion
 
     #region Date Range Filter
-    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Now);
-    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Now.AddMonths(-1));
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("7-24-2024"));
+    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-24-2024"));
 
     public async Task OnDateSelect(DateRange range)
     {
@@ -295,7 +323,10 @@ public partial class Reports
 
     #region Data Table
     private string _filterString = string.Empty;
-    IQueryable<ReportProjectReturnModel>? FilteredItems => reportEntries?.AsQueryable().Where(x => x.Project.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ReportProjectReturnModel>? FilteredItems => reportEntries?.AsQueryable()
+        .Where(x => 
+        x.Project.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase)
+        && x.TotalWorkedTime.TotalHours > 0);
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
     private void HandleFilter(ChangeEventArgs args)
@@ -385,11 +416,27 @@ public partial class Reports
         return -1;
     }
 
+    //private (Color, Color) _getRandomColor()
+    //{
+    //    var r = _random.Next(256);
+    //    var g = _random.Next(256);
+    //    var b = _random.Next(256);
+
+    //    var bodyColor = Color.FromArgb(255, r, g, b);
+    //    var borderColor = Color.FromArgb(r, g, b);
+
+    //    return (bodyColor, borderColor);
+    //}
+
     private (Color, Color) _getRandomColor()
     {
-        var r = _random.Next(256);
-        var g = _random.Next(256);
-        var b = _random.Next(256);
+        const int minColorValue = 50;  // Minimum value to avoid too dark colors
+        const int maxColorValue = 205; // Maximum value to avoid too light colors
+
+        // Generate random colors within the specified range
+        var r = _random.Next(minColorValue, maxColorValue);
+        var g = _random.Next(minColorValue, maxColorValue);
+        var b = _random.Next(minColorValue, maxColorValue);
 
         var bodyColor = Color.FromArgb(255, r, g, b);
         var borderColor = Color.FromArgb(r, g, b);
