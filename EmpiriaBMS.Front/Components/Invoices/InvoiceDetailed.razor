@@ -11,198 +11,199 @@
 @inject MicrosoftTeams MicrosoftTeams
 @inject Logging.LoggerManager Logger
 
-<div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
-    <div class="col-12 card shadow" style="height: 85vh; overflow:auto;">
-        @if (Content != null)
-        {
-            <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
+<div class="card shadow">
 
-                @if (!string.IsNullOrEmpty(@Title))
-                {
-                    <div class="col-12 mb-2 mt-2">
-                        <h3>@Title</h3>
-                    </div>
-                }
+    @if (Content != null)
+    {
+        <div class="row m-2"
+             style="cursor: pointer; overflow: auto; margin: 0 auto;">
 
-                @if (DisplayProject)
-                {
-                    <div class="col-12 row gx-2 mt-1">
-                        <!-- Project -->
-                        <div class="col-xl-6 col-lg-6 col-md-12">
-                            <div>
-                                Project<span class="text-danger">*</span>
-                            </div>
-                            <div>
-                                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                                Placeholder="Select Project..."
-                                                Items="@_projects"
-                                                Height="200px"
-                                                Width="100%"
-                                                TOption="ProjectVM"
-                                                OptionText="@(c => c.Name)"
-                                                OptionValue="@(c => c.Id.ToString())"
-                                                Disabled="@(!IsWorkingMode)" />
-                            </div>
-                            @if (!validProject)
-                            {
-                                <div>
-                                    <span class="text-warning">Field is required!</span>
-                                </div>
-                            }
-                        </div>
-                        <!-- None -->
-                        <div class="col-xl-6 col-lg-6 col-md-12">
-                        </div>
-                    </div>
-                }
+            @if (!string.IsNullOrEmpty(@Title))
+            {
+                <div class="col-12 mb-2 mt-2">
+                    <h3>@Title</h3>
+                </div>
+            }
 
+            @if (DisplayProject)
+            {
                 <div class="col-12 row gx-2 mt-1">
-                    <!-- Type -->
+                    <!-- Project -->
                     <div class="col-xl-6 col-lg-6 col-md-12">
                         <div>
-                            Type<span class="text-danger">*</span>
+                            Project<span class="text-danger">*</span>
                         </div>
                         <div>
-                            <FluentCombobox @ref="_typeCompoment"
-                                            Autocomplete="ComboboxAutocomplete.Both"
-                                            Placeholder="Select Type..."
-                                            Items="@_types"
+                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                            Placeholder="Select Project..."
+                                            Items="@_projects"
                                             Height="200px"
                                             Width="100%"
-                                            TOption="InvoiceTypeVM"
+                                            TOption="ProjectVM"
                                             OptionText="@(c => c.Name)"
                                             OptionValue="@(c => c.Id.ToString())"
-                                            @bind-SelectedOption="@Type"
                                             Disabled="@(!IsWorkingMode)" />
                         </div>
-                        @if (!validType)
+                        @if (!validProject)
                         {
                             <div>
                                 <span class="text-warning">Field is required!</span>
                             </div>
                         }
                     </div>
-                    <!-- Mark -->
+                    <!-- None -->
                     <div class="col-xl-6 col-lg-6 col-md-12">
-                        <div>
-                            Mark
-                        </div>
-                        <FluentTextField Style="width:100%;"
-                                         @bind-Value="@Content.Mark"
-                                         Disabled="@(!IsWorkingMode)" />
-                        @if (!validMark)
-                        {
-                            <div class="col-12">
-                                <span class="text-warning">Field is required!</span>
-                            </div>
-                        }
                     </div>
                 </div>
+            }
 
-                <div class="col-12 row gx-2 mt-1">
-                    <!-- Vat -->
-                    <div class="col-xl-6 col-lg-6 col-md-12">
-                        <div>
-                            Vat
-                        </div>
-                        <div>
-                            <FluentCombobox @ref="_vatCompoment"
-                                            Autocomplete="ComboboxAutocomplete.Both"
-                                            Placeholder="Select Result..."
-                                            Items="_vats"
-                                            Height="200px"
-                                            Width="100%"
-                                            Class="float-end"
-                                            TOption="(string Value, string Text)"
-                                            OptionText="@(c => c.Text)"
-                                            OptionValue="@(c => c.Text)"
-                                            @bind-SelectedOption="SelectedVat"
-                                            Disabled="@(!IsWorkingMode)" />
-                        </div>
+            <div class="col-12 row gx-2 mt-1">
+                <!-- Type -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Type<span class="text-danger">*</span>
                     </div>
-                    <!-- Fee -->
-                    <div class="col-xl-6 col-lg-6 col-md-12">
-                        <FluentNumberField Style="width:100%;"
-                                           @bind-Value="@Content.Fee"
-                                           Min="0"
-                                           Disabled="@(!IsWorkingMode)">
-                            Fee
-                        </FluentNumberField>
+                    <div>
+                        <FluentCombobox @ref="_typeCompoment"
+                                        Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Type..."
+                                        Items="@_types"
+                                        Height="200px"
+                                        Width="100%"
+                                        TOption="InvoiceTypeVM"
+                                        OptionText="@(c => c.Name)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Type"
+                                        Disabled="@(!IsWorkingMode)" />
                     </div>
+                    @if (!validType)
+                    {
+                        <div>
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
                 </div>
-
-                <div class="col-12 row gx-2 mt-1">
-                    <!-- Number -->
-                    <div class="col-xl-6 col-lg-6 col-md-12">
-                        <div>
-                            Number
-                        </div>
-                        <FluentNumberField Style="width:100%;"
-                                           @bind-Value="@Content.Number"
-                                           Min="0"
-                                           Disabled="@(!IsWorkingMode)" />
+                <!-- Mark -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Mark
                     </div>
-                    <!-- Total -->
-                    <div class="col-xl-6 col-lg-6 col-md-12">
-                        <div>
-                            Total
-                        </div>
-                        <FluentNumberField Style="width:100%;"
-                                           @bind-Value="@Content.Total"
-                                           Min="0"
-                                           Disabled="@(!IsWorkingMode)" />
-                    </div>
-                </div>
-
-                <div class="col-12 row gx-3 mt-1">
-                    <!-- EstimatedDate -->
-                    <div class="col-xl-6 col-lg-6 col-md-12">
-                        <div>
-                            EstimatedDate
-                        </div>
-                        <FluentDatePicker Style="width:100%;"
-                                          @bind-Value="@Content.EstimatedDate"
-                                          Disabled="@(!IsWorkingMode)" />
-                    </div>
-                    <!-- PaymentDate -->
-                    <div class="col-xl-6 col-lg-6 col-md-12">
-                        <div>
-                            PaymentDate
-                        </div>
-                        <FluentDatePicker Style="width:100%;"
-                                          @bind-Value="@Content.PaymentDate"
-                                          Disabled="@(!IsWorkingMode)" />
-                    </div>
-                </div>
-
-                <div class="col-12 row gx-3 mt-1">
-                    <!-- Contract -->
-                    <div class="col-12 border rounded m-2 p-2 row">
+                    <FluentTextField Style="width:100%;"
+                                        @bind-Value="@Content.Mark"
+                                        Disabled="@(!IsWorkingMode)" />
+                    @if (!validMark)
+                    {
                         <div class="col-12">
-                            <h4>Contract</h4>
+                            <span class="text-warning">Field is required!</span>
                         </div>
-                        <div class="col-12">
-                            <!-- Contract Detailed -->
-                            <ContractDetailed @ref="@_contractDetailedRef"
-                                              Content="@Contract"
-                                              DisplayActions="false"
-                                              DisplayInvoice="false"
-                                              Editable="@IsWorkingMode"/>
-                        </div>
-                    </div>
+                    }
                 </div>
-
-                @if (DisplayAcions)
-                {
-                    <div class="col-12 mb-2 mt-1 d-flex justify-content-end">
-                        <FluentButton Disabled="@(!IsWorkingMode)"
-                                      Appearance="Appearance.Outline"
-                                      OnClick="@(async () => await Save())">Save</FluentButton>
-                    </div>
-                }
-
             </div>
-        }
 
-    </div>
+            <div class="col-12 row gx-2 mt-1">
+                <!-- Vat -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Vat
+                    </div>
+                    <div>
+                        <FluentCombobox @ref="_vatCompoment"
+                                        Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Result..."
+                                        Items="_vats"
+                                        Height="200px"
+                                        Width="100%"
+                                        Class="float-end"
+                                        TOption="(string Value, string Text)"
+                                        OptionText="@(c => c.Text)"
+                                        OptionValue="@(c => c.Text)"
+                                        @bind-SelectedOption="SelectedVat"
+                                        Disabled="@(!IsWorkingMode)" />
+                    </div>
+                </div>
+                <!-- Fee -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <FluentNumberField Style="width:100%;"
+                                        @bind-Value="@Content.Fee"
+                                        Min="0"
+                                        Disabled="@(!IsWorkingMode)">
+                        Fee
+                    </FluentNumberField>
+                </div>
+            </div>
+
+            <div class="col-12 row gx-2 mt-1">
+                <!-- Number -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Number
+                    </div>
+                    <FluentNumberField Style="width:100%;"
+                                        @bind-Value="@Content.Number"
+                                        Min="0"
+                                        Disabled="@(!IsWorkingMode)" />
+                </div>
+                <!-- Total -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Total
+                    </div>
+                    <FluentNumberField Style="width:100%;"
+                                        @bind-Value="@Content.Total"
+                                        Min="0"
+                                        Disabled="@(!IsWorkingMode)" />
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-1">
+                <!-- EstimatedDate -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        EstimatedDate
+                    </div>
+                    <FluentDatePicker Style="width:100%;"
+                                        @bind-Value="@Content.EstimatedDate"
+                                        Disabled="@(!IsWorkingMode)" />
+                </div>
+                <!-- PaymentDate -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        PaymentDate
+                    </div>
+                    <FluentDatePicker Style="width:100%;"
+                                        @bind-Value="@Content.PaymentDate"
+                                        Disabled="@(!IsWorkingMode)" />
+                </div>
+            </div>
+
+            <div class="col-12 row gx-3 mt-1">
+                <!-- Contract -->
+                <div class="col-12 border rounded m-2 p-2 row">
+                    <div class="col-12">
+                        <h4>Contract</h4>
+                    </div>
+                    <div class="col-12">
+                        <!-- Contract Detailed -->
+                        <ContractDetailed @ref="@_contractDetailedRef"
+                                            Content="@Contract"
+                                            DisplayActions="false"
+                                            DisplayInvoice="false"
+                                            Editable="@IsWorkingMode"/>
+                    </div>
+                </div>
+            </div>
+
+            @if (DisplayAcions)
+            {
+                <div class="col-12 mb-2 mt-1 d-flex justify-content-end">
+                    <FluentButton Disabled="@(!IsWorkingMode)"
+                                    Appearance="Appearance.Outline"
+                                    OnClick="@(async () => await Save())">Save</FluentButton>
+                </div>
+            }
+
+        </div>
+    }
+
+
 </div>

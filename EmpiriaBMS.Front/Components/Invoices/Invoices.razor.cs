@@ -44,6 +44,10 @@ public partial class Invoices : ComponentBase
     {
         SelectedRecord = row.Item as InvoiceVM;
         await OnSelect.InvokeAsync(SelectedRecord);
+        StateHasChanged();
+        // Yield control to ensure the UI is updated before proceeding
+        await Task.Yield();
+        await MicrosoftTeams.ScrollToElement("invoice-detailes");
     }
 
     private bool IsRowSelect(int rowId)

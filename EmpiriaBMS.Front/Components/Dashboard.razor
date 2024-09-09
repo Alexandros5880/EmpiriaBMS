@@ -814,36 +814,28 @@
                                Id="tab-invoices">
 
                         <div class="row justify-content-center mt-1 mb-1">
-                            <div class="col-auto" style="width: 100%; height: 100%;">
-                                <div class="m-1 row justify-content-center">
-                                    <div class="col-12 p-2 row g-2 mb-5" style="overflow-x:hidden; margin: 0 auto;">
-
-                                        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12">
-                                            <Invoices @ref="@_invoiceListRef"
-                                                      OnSelect="@(async (i) => await _onSelectedInvoice(i))"
-                                                      SelectedRecord="@_selectedInvoice"
-                                                      IsWorkingMode="@isWorkingMode" />
-                                        </div>
-
-                                        @if (_selectedInvoice != null && _selectedInvoice.Id != 0)
-                                        {
-                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                                <InvoiceDetailed @ref="@_invoiceDetailedRef"
-                                                                 Content="@_selectedInvoice"
-                                                                 Title="Invoice Details"
-                                                                 OnSave="@(async (i) => await _onSaveInvoice(i))"
-                                                                 IsWorkingMode="@isWorkingMode" />
-                                            </div>
-                                            <div class="col-12">
-                                                <Payments @ref="@_invoicePaymentsRef"
-                                                          Invoice="@_selectedInvoice"
-                                                          IsWorkingMode="@isWorkingMode" />
-                                            </div>
-                                        }
-
-                                    </div>
-                                </div>
+                            <div class="col-12">
+                                <Invoices @ref="@_invoiceListRef"
+                                          OnSelect="@(async (i) => await _onSelectedInvoice(i))"
+                                          SelectedRecord="@_selectedInvoice"
+                                          IsWorkingMode="@isWorkingMode" />
                             </div>
+                            @if (_selectedInvoice != null && _selectedInvoice.Id != 0)
+                            {
+                                <div id="invoice-detailes"
+                                     class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 mt-4">
+                                    <InvoiceDetailed @ref="@_invoiceDetailedRef"
+                                                     Content="@_selectedInvoice"
+                                                     Title="Invoice Details"
+                                                     OnSave="@(async (i) => await _onSaveInvoice(i))"
+                                                     IsWorkingMode="@isWorkingMode" />
+                                </div>
+                                <div class="col mt-4">
+                                    <Payments @ref="@_invoicePaymentsRef"
+                                              Invoice="@_selectedInvoice"
+                                              IsWorkingMode="@isWorkingMode" />
+                                </div>
+                            }
                         </div>
                     </FluentTab>
                 }

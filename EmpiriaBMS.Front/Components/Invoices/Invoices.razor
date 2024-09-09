@@ -9,11 +9,13 @@
 @inject MicrosoftTeams MicrosoftTeams
 @inject Logging.LoggerManager Logger
 
-<div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
-    <div class="col-12 card shadow" style="height: 85vh; cursor: pointer;">
+<div class="card shadow">
+
+    <div class="m-2"
+         style="cursor: pointer;">
         
         <div class="d-flex justify-content-between w-90 mt-2">
-            <div>
+            <div class="me-1">
                 <!-- Ttitle -->
                 <h3>Invoices</h3>
             </div>
@@ -27,12 +29,15 @@
             </div>
             <div class="d-flex justify-content-end">
                 <!-- Add -->
-                <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
+                <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Add"
+                                IconEnd="@(new Icons.Regular.Size16.Add())"
+                                OnClick="@(() => _add())">Add</FluentButton>
                 <!-- Export -->
-                <FluentButton class="ms-1" IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                              Appearance="Appearance.Outline"
-                              OnClick="@(async (e) => await _exportToCSV())"
-                              Disabled="@((FilteredItems?.Count() ?? 0) == 0)">
+                <FluentButton class="ms-1"
+                                IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                Appearance="Appearance.Outline"
+                                OnClick="@(async (e) => await _exportToCSV())"
+                                Disabled="@((FilteredItems?.Count() ?? 0) == 0)">
                     Export
                 </FluentButton>
             </div>
@@ -67,10 +72,10 @@
                     <ColumnOptions>
                         <div class="search-box">
                             <FluentSearch type="search"
-                                          Autofocus=true
-                                          @bind-Value="@_filterString"
-                                          Placeholder="Project..."
-                                          @oninput="@HandleFilter" />
+                                            Autofocus=true
+                                            @bind-Value="@_filterString"
+                                            Placeholder="Project..."
+                                            @oninput="@HandleFilter" />
                         </div>
                     </ColumnOptions>
                     <ChildContent>
@@ -125,5 +130,6 @@
                 </PaginationTextTemplate>
             </FluentPaginator>
         </div>
+
     </div>
 </div>

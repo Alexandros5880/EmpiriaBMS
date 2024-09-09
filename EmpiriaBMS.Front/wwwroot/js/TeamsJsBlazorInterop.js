@@ -99,6 +99,12 @@ export function getAspectRatio() {
     return width / height;
 }
 
+export function scrollToElement(id) {
+    var element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
 
 // Register MNouse Weel Event
 export function registerGlobalMouseWheelEvent(objRef, id) {

@@ -336,7 +336,7 @@ public partial class InvoiceDetailed
 
         }
 
-        if (_contractDetailedRef != null)
+        if (_contractDetailedRef != null && Contract != null)
         {
             Contract.Invoice = Content;
             Contract.InvoiceId = Content.Id;

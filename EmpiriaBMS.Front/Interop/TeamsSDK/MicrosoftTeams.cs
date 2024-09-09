@@ -65,6 +65,11 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeAsync<double>("getAspectRatio");
     }
 
+    public Task ScrollToElement(string id)
+    {
+        return InvokeVoidAsync("scrollToElement", id);
+    }
+
     #region Cookies
     public async Task SetCookie(string key, string value)
     {
