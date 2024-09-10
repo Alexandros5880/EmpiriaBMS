@@ -16,7 +16,7 @@
     @if (Content != null)
     {
         <div class="row m-2"
-             style="cursor: pointer; overflow: auto; margin: 0 auto;">
+             style="cursor: pointer; overflow: auto; margin: 0 auto; width:96%">
 
             @if (!string.IsNullOrEmpty(@Title))
             {
@@ -34,7 +34,8 @@
                             Project<span class="text-danger">*</span>
                         </div>
                         <div>
-                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                            <FluentCombobox @ref="_projectCompoment"
+                                            Autocomplete="ComboboxAutocomplete.Both"
                                             Placeholder="Select Project..."
                                             Items="@_projects"
                                             Height="200px"
@@ -42,6 +43,7 @@
                                             TOption="ProjectVM"
                                             OptionText="@(c => c.Name)"
                                             OptionValue="@(c => c.Id.ToString())"
+                                            @bind-SelectedOption="@Project"
                                             Disabled="@(!IsWorkingMode)" />
                         </div>
                         @if (!validProject)
@@ -52,8 +54,7 @@
                         }
                     </div>
                     <!-- None -->
-                    <div class="col-xl-6 col-lg-6 col-md-12">
-                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12" />
                 </div>
             }
 
@@ -65,7 +66,7 @@
                     </div>
                     <div>
                         <FluentCombobox @ref="_typeCompoment"
-                                        Autocomplete="ComboboxAutocomplete.Both"
+                                        Autocomplete="ComboboxAutocomplete.List"
                                         Placeholder="Select Type..."
                                         Items="@_types"
                                         Height="200px"
@@ -89,8 +90,8 @@
                         Mark
                     </div>
                     <FluentTextField Style="width:100%;"
-                                        @bind-Value="@Content.Mark"
-                                        Disabled="@(!IsWorkingMode)" />
+                                     @bind-Value="@Content.Mark"
+                                     Disabled="@(!IsWorkingMode)" />
                     @if (!validMark)
                     {
                         <div class="col-12">
@@ -124,9 +125,9 @@
                 <!-- Fee -->
                 <div class="col-xl-6 col-lg-6 col-md-12">
                     <FluentNumberField Style="width:100%;"
-                                        @bind-Value="@Content.Fee"
-                                        Min="0"
-                                        Disabled="@(!IsWorkingMode)">
+                                       @bind-Value="@Content.Fee"
+                                       Min="0"
+                                       Disabled="@(!IsWorkingMode)">
                         Fee
                     </FluentNumberField>
                 </div>
@@ -139,9 +140,9 @@
                         Number
                     </div>
                     <FluentNumberField Style="width:100%;"
-                                        @bind-Value="@Content.Number"
-                                        Min="0"
-                                        Disabled="@(!IsWorkingMode)" />
+                                       @bind-Value="@Content.Number"
+                                       Min="0"
+                                       Disabled="@(!IsWorkingMode)" />
                 </div>
                 <!-- Total -->
                 <div class="col-xl-6 col-lg-6 col-md-12">
@@ -149,9 +150,9 @@
                         Total
                     </div>
                     <FluentNumberField Style="width:100%;"
-                                        @bind-Value="@Content.Total"
-                                        Min="0"
-                                        Disabled="@(!IsWorkingMode)" />
+                                       @bind-Value="@Content.Total"
+                                       Min="0"
+                                       Disabled="@(!IsWorkingMode)" />
                 </div>
             </div>
 
@@ -162,8 +163,8 @@
                         EstimatedDate
                     </div>
                     <FluentDatePicker Style="width:100%;"
-                                        @bind-Value="@Content.EstimatedDate"
-                                        Disabled="@(!IsWorkingMode)" />
+                                      @bind-Value="@Content.EstimatedDate"
+                                      Disabled="@(!IsWorkingMode)" />
                 </div>
                 <!-- PaymentDate -->
                 <div class="col-xl-6 col-lg-6 col-md-12">
@@ -171,25 +172,23 @@
                         PaymentDate
                     </div>
                     <FluentDatePicker Style="width:100%;"
-                                        @bind-Value="@Content.PaymentDate"
-                                        Disabled="@(!IsWorkingMode)" />
+                                      @bind-Value="@Content.PaymentDate"
+                                      Disabled="@(!IsWorkingMode)" />
                 </div>
             </div>
 
+            <!-- Contract -->
             <div class="col-12 row gx-3 mt-1">
-                <!-- Contract -->
-                <div class="col-12 border rounded m-2 p-2 row">
-                    <div class="col-12">
-                        <h4>Contract</h4>
-                    </div>
-                    <div class="col-12">
-                        <!-- Contract Detailed -->
-                        <ContractDetailed @ref="@_contractDetailedRef"
-                                            Content="@Contract"
-                                            DisplayActions="false"
-                                            DisplayInvoice="false"
-                                            Editable="@IsWorkingMode"/>
-                    </div>
+                <div class="col-12">
+                    <h4>Contract</h4>
+                </div>
+                <div class="col-12">
+                    <!-- Contract Detailed -->
+                    <ContractDetailed @ref="@_contractDetailedRef"
+                                      Content="@Contract"
+                                      DisplayActions="false"
+                                      DisplayInvoice="false"
+                                      Editable="@IsWorkingMode" />
                 </div>
             </div>
 
@@ -197,13 +196,12 @@
             {
                 <div class="col-12 mb-2 mt-1 d-flex justify-content-end">
                     <FluentButton Disabled="@(!IsWorkingMode)"
-                                    Appearance="Appearance.Outline"
-                                    OnClick="@(async () => await Save())">Save</FluentButton>
+                                  Appearance="Appearance.Outline"
+                                  OnClick="@(async () => await Save())">Save</FluentButton>
                 </div>
             }
 
         </div>
     }
-
 
 </div>

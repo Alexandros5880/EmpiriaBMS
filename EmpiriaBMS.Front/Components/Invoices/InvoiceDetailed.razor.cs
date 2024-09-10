@@ -57,6 +57,7 @@ public partial class InvoiceDetailed
     [Parameter]
     public InvoiceCategory InvoiceCategory { get; set; } = InvoiceCategory.INCOMES;
 
+    private FluentCombobox<ProjectVM> _projectCompoment;
     private FluentCombobox<InvoiceTypeVM> _typeCompoment;
 
     private ContractDetailed _contractDetailedRef;
@@ -102,8 +103,12 @@ public partial class InvoiceDetailed
 
         if (Content.Project != null)
         {
-            var projectDto = _mapper.Map<ProjectDto>(Content.Project);
-            Project = _mapper.Map<ProjectVM>(projectDto);
+            Project = _projects.FirstOrDefault(t => t.Id == Content.ProjectId);
+            if (_projectCompoment != null)
+            {
+                _projectCompoment.SelectedOption = Project;
+                _projectCompoment.Value = Project.Name;
+            }
         }
 
         if (Content.TypeId != 0)
@@ -163,7 +168,7 @@ public partial class InvoiceDetailed
     #region Update Records
     private async Task<InvoiceVM?> _upsertInvoice(InvoiceVM i)
     {
-        if (i is not null && i.Project != null && i.ProjectId != 0)
+        if (i.ProjectId != 0)
         {
             var invoice = i.Clone() as InvoiceVM;
             invoice.ProjectId = _project.Id;
@@ -236,7 +241,7 @@ public partial class InvoiceDetailed
     {
         if (fieldname == null)
         {
-            validProject = !DisplayProject || Content.ProjectId != 0 && Content.ProjectId != null;
+            validProject = !DisplayProject || Project.Id != 0;
             validMark = !string.IsNullOrEmpty(Content.Mark);
             validType = Content.TypeId != 0;
 
@@ -252,7 +257,7 @@ public partial class InvoiceDetailed
             switch (fieldname)
             {
                 case "Project":
-                    validProject = !DisplayProject || Content.ProjectId != 0 && Content.ProjectId != null;
+                    validProject = !DisplayProject || Project.Id != 0;
                     return validProject;
                 case "Mark":
                     validMark = !string.IsNullOrEmpty(Content.Mark);

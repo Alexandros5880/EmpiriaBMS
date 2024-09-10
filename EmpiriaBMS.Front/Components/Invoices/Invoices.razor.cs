@@ -7,6 +7,8 @@ using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Front.Components.Admin.Invoices;
+using EmpiriaBMS.Front.Horizontal;
 
 namespace EmpiriaBMS.Front.Components.Invoices;
 
@@ -72,33 +74,36 @@ public partial class Invoices : ComponentBase
             EstimatedDate = DateTime.Now,
             PaymentDate = DateTime.Now,
             Category = InvoiceCategory,
+            Contract = new ContractVM()
         };
-        //StateHasChanged();
-        await OnSelect.InvokeAsync(SelectedRecord);
 
-        //DialogParameters parameters = new()
-        //{
-        //    Title = $"New Record",
-        //    PrimaryActionEnabled = true,
-        //    SecondaryActionEnabled = true,
-        //    PrimaryAction = "Save",
-        //    SecondaryAction = "Cancel",
-        //    TrapFocus = true,
-        //    Modal = true,
-        //    PreventScroll = true,
-        //    Width = "min(70%, 500px);"
-        //};
+        var title = InvoiceCategory == EmpiriaBMS.Models.Enum.InvoiceCategory.INCOMES ? "Income" : "Expense";
 
-        //IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(new InvoiceVM(), parameters);
-        //DialogResult? result = await dialog.Result;
+        // DisplayProject
 
-        //if (result.Data is not null)
-        //{
-        //    InvoiceVM vm = result.Data as InvoiceVM;
-        //    var dto = Mapper.Map<InvoiceDto>(vm);
-        //    await DataProvider.Invoices.Add(dto);
-        //    await _getRecords();
-        //}
+        MyDialogParameters parameters = new()
+        {
+            Title = $"New {title}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "auto",
+            Height = "auto",
+            DisplayProject = true,
+            IsWorkingMode = IsWorkingMode
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(SelectedRecord, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            await Refresh();
+        }
     }
 
     //private async Task _edit(InvoiceVM record)

@@ -3,6 +3,7 @@
 @using Color = Microsoft.Fast.Components.FluentUI.Color
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
+@using EmpiriaBMS.Front.Horizontal
 
 @implements IDialogContentComponent<InvoiceVM>
 
@@ -29,8 +30,16 @@
 </FluentDialogFooter>
 
 @* Body *@
-<FluentDialogBody>
+<FluentDialogBody Style="overflow-y: auto;">
 
-    <InvoiceDetailed @ref="@_compomentRef" Content="@Content" DisplayAcions="false"/>
+    @{
+        var parameters = Dialog.Instance.Parameters as MyDialogParameters;
+    }
+
+    <InvoiceDetailed @ref="@_compomentRef"
+                     Content="@Content"
+                     DisplayAcions="false"
+                     DisplayProject="@parameters.DisplayProject"
+                     IsWorkingMode="@parameters.IsWorkingMode" />
 
 </FluentDialogBody>

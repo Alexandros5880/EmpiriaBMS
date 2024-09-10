@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Admin.Contracts;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
@@ -25,7 +26,6 @@ public partial class InvoiceDetailed
     }
 
     private ContractVM _contract;
-    [Parameter]
     public ContractVM Contract
     {
         get => _contract;
@@ -49,7 +49,20 @@ public partial class InvoiceDetailed
     [Parameter]
     public bool DisplayProject { get; set; } = false;
 
+    [Parameter]
+    public EventCallback<InvoiceVM> OnSave { get; set; }
+
+    [Parameter]
+    public bool IsWorkingMode { get; set; } = false;
+
+    [Parameter]
+    public InvoiceCategory InvoiceCategory { get; set; } = InvoiceCategory.INCOMES;
+
+    private FluentCombobox<ProjectVM> _projectCompoment;
     private FluentCombobox<InvoiceTypeVM> _typeCompoment;
+
+    private ContractDetailed _contractDetailedRef;
+
     private FluentCombobox<(string Value, string Text)> _vatCompoment;
 
     private List<(string Value, string Text)> _vats = Enum.GetValues(typeof(Vat)).Cast<Vat>()
@@ -91,8 +104,12 @@ public partial class InvoiceDetailed
 
         if (Content.Project != null)
         {
-            var projectDto = _mapper.Map<ProjectDto>(Content.Project);
-            Project = _mapper.Map<ProjectVM>(projectDto);
+            Project = _projects.FirstOrDefault(t => t.Id == Content.ProjectId);
+            if (_projectCompoment != null)
+            {
+                _projectCompoment.SelectedOption = Project;
+                _projectCompoment.Value = Project.Name;
+            }
         }
 
         if (Content.TypeId != 0)
@@ -108,14 +125,21 @@ public partial class InvoiceDetailed
         SelectedVat = _vats.FirstOrDefault(r => r.Value == Content.Vat.ToString());
         _vatCompoment.Value = SelectedVat.Text;
 
+        if (invoice == null && !halfRefresh)
+            await _contractDetailedRef?.Prepair();
+        else
+            await _contractDetailedRef.Prepair(Contract, !halfRefresh);
+
         StateHasChanged();
     }
 
-    public async Task<InvoiceVM> Save()
+    public async Task Save()
     {
         var valid = Validate();
         if (!valid)
-            return null;
+            return;
+
+        Content.Category = InvoiceCategory;
 
         var i = await _upsertInvoice(_invoice.Clone() as InvoiceVM);
         _contract.Invoice = i;
@@ -125,14 +149,27 @@ public partial class InvoiceDetailed
         i.Contract = c;
         i.ContractId = c.Id;
 
-        StateHasChanged();
-        return i;
+        Contract = new ContractVM()
+        {
+            Date = DateTime.Now,
+        };
+        Content = new InvoiceVM()
+        {
+            EstimatedDate = DateTime.Now,
+            PaymentDate = DateTime.Now,
+            Contract = Contract,
+            ContractId = 0
+        };
+        Contract.Invoice = Content;
+        Contract.InvoiceId = 0;
+
+        await OnSave.InvokeAsync(i);
     }
 
     #region Update Records
     private async Task<InvoiceVM?> _upsertInvoice(InvoiceVM i)
     {
-        if (i is not null && i.Project != null && i.ProjectId != 0)
+        if (i.ProjectId != 0)
         {
             var invoice = i.Clone() as InvoiceVM;
             invoice.ProjectId = _project.Id;
@@ -205,7 +242,7 @@ public partial class InvoiceDetailed
     {
         if (fieldname == null)
         {
-            validProject = !DisplayProject || Content.ProjectId != 0 && Content.ProjectId != null;
+            validProject = !DisplayProject || Project.Id != 0;
             validMark = !string.IsNullOrEmpty(Content.Mark);
             validType = Content.TypeId != 0;
 
@@ -221,7 +258,7 @@ public partial class InvoiceDetailed
             switch (fieldname)
             {
                 case "Project":
-                    validProject = !DisplayProject || Content.ProjectId != 0 && Content.ProjectId != null;
+                    validProject = !DisplayProject || Project.Id != 0;
                     return validProject;
                 case "Mark":
                     validMark = !string.IsNullOrEmpty(Content.Mark);
@@ -296,7 +333,27 @@ public partial class InvoiceDetailed
             var contractDto = await _dataProvider.Invoices.GetContract(Content.Id);
             if (contractDto != null)
                 Contract = _mapper.Map<ContractVM>(contractDto);
+            else
+            {
+                Contract = new ContractVM()
+                {
+                    Date = DateTime.Now,
+                    Invoice = Content,
+                    InvoiceId = Content.Id,
+                };
+                Content.Contract = Contract;
+                Content.Id = Content.Id;
+            }
+
         }
+
+        if (_contractDetailedRef != null && Contract != null)
+        {
+            Contract.Invoice = Content;
+            Contract.InvoiceId = Content.Id;
+            await _contractDetailedRef.Prepair(Contract, false);
+        }
+
     }
     #endregion
 }
