@@ -6,6 +6,9 @@ namespace EmpiriaBMS.Models.Models;
 public class Invoice : Entity
 {
     [Required]
+    public InvoiceCategory Category { get; set; }
+
+    [Required]
     public int TypeId { get; set; }
     public InvoiceType? Type { get; set; }
 

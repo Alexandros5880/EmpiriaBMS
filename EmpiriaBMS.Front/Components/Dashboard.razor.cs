@@ -134,7 +134,8 @@ public partial class Dashboard : IDisposable
     private DeliverableVM _selectedDeliverable = new DeliverableVM();
     private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
     private int _selectedPmId;
-    private InvoiceVM _selectedInvoice = new InvoiceVM();
+    private InvoiceVM _selectedIncomeInvoice = new InvoiceVM();
+    private InvoiceVM _selectedExpenseInvoice = new InvoiceVM();
     #endregion
 
     #region Dialogs
@@ -1270,40 +1271,61 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Tab Actions
-    string? activeid = "tab-home";
-    FluentTab? changedto;
-
-    private void HandleOnTabChange(FluentTab tab)
-    {
-        changedto = tab;
-    }
+    private string? _activeid = "tab-home";
     #endregion
 
     #region Invoice
-    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceListRef;
-    private InvoiceDetailed _invoiceDetailedRef;
-    private Payments _invoicePaymentsRef;
+    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceIncomesListRef;
+    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceExpensesListRef;
+    private InvoiceDetailed _invoiceIncomeDetailedRef;
+    private InvoiceDetailed _invoiceExpenseDetailedRef;
+    private Payments _invoiceIncomePaymentsRef;
+    private Payments _invoiceExpensePaymentsRef;
 
-    private async Task _onSelectedInvoice(InvoiceVM invoice)
+    private async Task _onSelectedIncomeInvoice(InvoiceVM invoice)
     {
         if (invoice == null)
             return;
 
-        _selectedInvoice = invoice;
-        if (_invoiceDetailedRef != null)
+        _selectedIncomeInvoice = invoice;
+        if (_invoiceIncomeDetailedRef != null)
         {
-            await _invoiceDetailedRef.Prepair(_selectedInvoice, true);
-            await _invoicePaymentsRef.Prepair(_selectedInvoice.Id);
+            await _invoiceIncomeDetailedRef.Prepair(_selectedIncomeInvoice, true);
+            await _invoiceIncomePaymentsRef.Prepair(_selectedIncomeInvoice.Id);
         }
     }
 
-    private async Task _onSaveInvoice(InvoiceVM invoice)
+    private async Task _onSaveIncomeInvoice(InvoiceVM invoice)
     {
-        if (_invoiceListRef != null)
+        if (_invoiceIncomesListRef != null)
         {
-            await _invoiceListRef.Refresh();
-            await _invoiceDetailedRef.Prepair();
-            await _invoicePaymentsRef.Prepair(_selectedInvoice.Id);
+            await _invoiceIncomesListRef.Refresh();
+            await _invoiceIncomeDetailedRef.Prepair();
+            await _invoiceIncomePaymentsRef.Prepair(_selectedIncomeInvoice.Id);
+        }
+
+    }
+
+    private async Task _onSelectedExpenseInvoice(InvoiceVM invoice)
+    {
+        if (invoice == null)
+            return;
+
+        _selectedExpenseInvoice = invoice;
+        if (_invoiceExpenseDetailedRef != null)
+        {
+            await _invoiceExpenseDetailedRef.Prepair(_selectedExpenseInvoice, true);
+            await _invoiceExpensePaymentsRef.Prepair(_selectedExpenseInvoice.Id);
+        }
+    }
+
+    private async Task _onSaveExpenseInvoice(InvoiceVM invoice)
+    {
+        if (_invoiceExpensesListRef != null)
+        {
+            await _invoiceExpensesListRef.Refresh();
+            await _invoiceExpenseDetailedRef.Prepair();
+            await _invoiceExpensePaymentsRef.Prepair(_selectedExpenseInvoice.Id);
         }
 
     }

@@ -1,10 +1,14 @@
 ﻿using EmpiriaBMS.Core.Dtos.Base;
 using EmpiriaBMS.Models.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Core.Dtos;
 
 public class InvoiceDto : EntityDto
 {
+    [Required]
+    public InvoiceCategory Category { get; set; }
+
     public double? Total { get; set; }
 
     public Vat Vat { get; set; }

@@ -3,6 +3,7 @@ using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
+using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
@@ -16,6 +17,9 @@ public partial class Invoices : ComponentBase
 
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
+
+    [Parameter]
+    public InvoiceCategory InvoiceCategory { get; set; } = InvoiceCategory.INCOMES;
 
     #region Data Grid
     public List<InvoiceVM> _invoices { get; set; }
@@ -52,12 +56,12 @@ public partial class Invoices : ComponentBase
 
     private bool IsRowSelect(int rowId)
     {
-        return SelectedRecord.Id == rowId;
+        return SelectedRecord?.Id == rowId;
     }
 
     private async Task _getRecords()
     {
-        var dtosInv = await DataProvider.Invoices.GetAll();
+        var dtosInv = await DataProvider.Invoices.GetAll(InvoiceCategory);
         _invoices = Mapper.Map<List<InvoiceVM>>(dtosInv);
     }
 
@@ -67,8 +71,9 @@ public partial class Invoices : ComponentBase
         {
             EstimatedDate = DateTime.Now,
             PaymentDate = DateTime.Now,
+            Category = InvoiceCategory,
         };
-        StateHasChanged();
+        //StateHasChanged();
         await OnSelect.InvokeAsync(SelectedRecord);
 
         //DialogParameters parameters = new()

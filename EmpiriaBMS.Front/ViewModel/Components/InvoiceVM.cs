@@ -4,6 +4,19 @@ using EmpiriaBMS.Models.Enum;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
 {
+    private InvoiceCategory _category;
+    public InvoiceCategory Category
+    {
+        get => _category;
+        set
+        {
+            if (value == _category)
+                return;
+            _category = value;
+            NotifyPropertyChanged(nameof(Category));
+        }
+    }
+
     private double? _total;
     public double? Total
     {

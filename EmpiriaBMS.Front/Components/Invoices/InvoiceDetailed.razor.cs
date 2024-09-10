@@ -54,6 +54,9 @@ public partial class InvoiceDetailed
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
 
+    [Parameter]
+    public InvoiceCategory InvoiceCategory { get; set; } = InvoiceCategory.INCOMES;
+
     private FluentCombobox<InvoiceTypeVM> _typeCompoment;
 
     private ContractDetailed _contractDetailedRef;
@@ -129,6 +132,8 @@ public partial class InvoiceDetailed
         var valid = Validate();
         if (!valid)
             return;
+
+        Content.Category = InvoiceCategory;
 
         var i = await _upsertInvoice(_invoice.Clone() as InvoiceVM);
         _contract.Invoice = i;

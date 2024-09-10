@@ -15,7 +15,7 @@
          style="cursor: pointer;">
         
         <div class="d-flex justify-content-between w-90 mt-2">
-            <div class="me-1">
+            <div class="ms-2">
                 <!-- Ttitle -->
                 <h3>Invoices</h3>
             </div>
@@ -30,14 +30,14 @@
             <div class="d-flex justify-content-end">
                 <!-- Add -->
                 <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Add"
-                                IconEnd="@(new Icons.Regular.Size16.Add())"
-                                OnClick="@(() => _add())">Add</FluentButton>
+                              IconEnd="@(new Icons.Regular.Size16.Add())"
+                              OnClick="@(() => _add())">Add</FluentButton>
                 <!-- Export -->
                 <FluentButton class="ms-1"
-                                IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                Appearance="Appearance.Outline"
-                                OnClick="@(async (e) => await _exportToCSV())"
-                                Disabled="@((FilteredItems?.Count() ?? 0) == 0)">
+                              IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                              Appearance="Appearance.Outline"
+                              OnClick="@(async (e) => await _exportToCSV())"
+                              Disabled="@((FilteredItems?.Count() ?? 0) == 0)">
                     Export
                 </FluentButton>
             </div>

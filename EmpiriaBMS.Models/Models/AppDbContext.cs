@@ -3445,6 +3445,7 @@ public class AppDbContext : DbContext
                 Invoice invoice = new Invoice()
                 {
                     Id = invoiceId,
+                    Category = InvoiceCategory.INCOMES,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     PaymentDate = DateTime.Now,
@@ -3549,6 +3550,7 @@ public class AppDbContext : DbContext
                 Invoice invoice = new Invoice()
                 {
                     Id = invoiceId,
+                    Category = InvoiceCategory.INCOMES,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     PaymentDate = DateTime.Now,

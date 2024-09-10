@@ -3833,6 +3833,7 @@ public class SeedData
             Invoice invoice = new Invoice()
             {
                 Id = invoiceId,
+                Category = InvoiceCategory.INCOMES,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 EstimatedDate = DateTime.Now,
@@ -4037,6 +4038,7 @@ public class SeedData
             Invoice invoice = new Invoice()
             {
                 Id = invoiceId,
+                Category = InvoiceCategory.INCOMES,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 PaymentDate = DateTime.Now,

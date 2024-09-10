@@ -16,6 +16,7 @@
 @using EmpiriaBMS.Core.Services.DBManipulation;
 @using EmpiriaBMS.Front.Components.WorkingHours;
 @using EmpiriaBMS.Front.Components.Reports;
+@using EmpiriaBMS.Models.Enum;
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -51,7 +52,7 @@
         </div>
 
         <div class="col-12">
-            <FluentTabs @bind-ActiveTabId="@activeid" OnTabChange="HandleOnTabChange">
+            <FluentTabs @bind-ActiveTabId="@_activeid">
 
                 <!-- Dashboard -->
                 <FluentTab Class="my-fluent-tab mb-3"
@@ -804,40 +805,43 @@
                     </div>
                 </FluentTab>
 
-                <!-- Invoices -->
+                <!-- Incomes -->
                 @if (seeInvoices)
                 {
                     <FluentTab Class="my-fluent-tab"
                                LabelClass="my-fluent-tab-label"
-                               Label=" Invoices"
+                               Label=" Incomes"
                                Icon="@(new MyIcons.Size20.Invoices2())"
                                Id="tab-invoices">
 
                         <div class="row justify-content-center mt-1 mb-1">
                             <div class="col-12">
-                                <Invoices @ref="@_invoiceListRef"
-                                          OnSelect="@(async (i) => await _onSelectedInvoice(i))"
-                                          SelectedRecord="@_selectedInvoice"
-                                          IsWorkingMode="@isWorkingMode" />
+                                <Invoices @ref="@_invoiceIncomesListRef"
+                                            OnSelect="@(async (i) => await _onSelectedIncomeInvoice(i))"
+                                            SelectedRecord="@_selectedIncomeInvoice"
+                                            IsWorkingMode="@isWorkingMode"
+                                            InvoiceCategory="@InvoiceCategory.INCOMES" />
                             </div>
-                            @if (_selectedInvoice != null && _selectedInvoice.Id != 0)
+                            @if (_selectedIncomeInvoice != null && _selectedIncomeInvoice.Id != 0)
                             {
                                 <div id="invoice-detailes"
-                                     class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 mt-4"
-                                     style="min-height: 84vh;">
-                                    <InvoiceDetailed @ref="@_invoiceDetailedRef"
-                                                     Content="@_selectedInvoice"
-                                                     Title="Invoice Details"
-                                                     OnSave="@(async (i) => await _onSaveInvoice(i))"
-                                                     IsWorkingMode="@isWorkingMode" />
+                                        class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 mt-4"
+                                        style="min-height: 84vh;">
+                                    <InvoiceDetailed @ref="@_invoiceIncomeDetailedRef"
+                                                        Content="@_selectedIncomeInvoice"
+                                                        Title="Invoice Details"
+                                                        OnSave="@(async (i) => await _onSaveIncomeInvoice(i))"
+                                                        IsWorkingMode="@isWorkingMode"
+                                                        InvoiceCategory="@InvoiceCategory.INCOMES" />
                                 </div>
                                 <div class="col mt-4">
-                                    <Payments @ref="@_invoicePaymentsRef"
-                                              Invoice="@_selectedInvoice"
-                                              IsWorkingMode="@isWorkingMode" />
+                                    <Payments @ref="@_invoiceIncomePaymentsRef"
+                                                Invoice="@_selectedIncomeInvoice"
+                                                IsWorkingMode="@isWorkingMode" />
                                 </div>
                             }
                         </div>
+
                     </FluentTab>
                 }
 
@@ -851,16 +855,33 @@
                                Id="tab-excpences">
 
                         <div class="row justify-content-center mt-1 mb-1">
-                            <div class="col-auto" style="width: 100%; height: 100%;">
-                                <div class="m-1 row justify-content-center">
-                                    <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
-
-                                        <h3>Expenses</h3>
-
-                                    </div>
-                                </div>
+                            <div class="col-12">
+                                <Invoices @ref="@_invoiceExpensesListRef"
+                                OnSelect="@(async (i) => await _onSelectedExpenseInvoice(i))"
+                                SelectedRecord="@_selectedExpenseInvoice"
+                                IsWorkingMode="@isWorkingMode"
+                                InvoiceCategory="@InvoiceCategory.EXPENSES" />
                             </div>
+                            @if (_selectedExpenseInvoice != null && _selectedExpenseInvoice.Id != 0)
+                            {
+                                <div id="invoice-detailes"
+                                class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 mt-4"
+                                style="min-height: 84vh;">
+                                    <InvoiceDetailed @ref="@_invoiceExpenseDetailedRef"
+                                    Content="@_selectedExpenseInvoice"
+                                    Title="Invoice Details"
+                                    OnSave="@(async (i) => await _onSaveExpenseInvoice(i))"
+                                    IsWorkingMode="@isWorkingMode"
+                                    InvoiceCategory="@InvoiceCategory.EXPENSES" />
+                                </div>
+                                <div class="col mt-4">
+                                    <Payments @ref="@_invoiceExpensePaymentsRef"
+                                    Invoice="@_selectedExpenseInvoice"
+                                    IsWorkingMode="@isWorkingMode" />
+                                </div>
+                            }
                         </div>
+
                     </FluentTab>
                 }
 

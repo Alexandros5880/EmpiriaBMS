@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -97,7 +98,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public new async Task<ICollection<InvoiceDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public async Task<ICollection<InvoiceDto>> GetAll(InvoiceCategory category, int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -108,6 +109,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
             {
                 i = await _context.Set<Invoice>()
                                   .Where(r => !r.IsDeleted)
+                                  .Where(i => i.Category == category)
                                   .Include(i => i.Payments)
                                   .Include(i => i.Type)
                                   .Include(i => i.Project)
@@ -120,6 +122,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
 
             i = await _context.Set<Invoice>()
                               .Where(r => !r.IsDeleted)
+                              .Where(i => i.Category == category)
                               .Skip((pageIndex - 1) * pageSize)
                               .Take(pageSize)
                               .Include(i => i.Payments)
