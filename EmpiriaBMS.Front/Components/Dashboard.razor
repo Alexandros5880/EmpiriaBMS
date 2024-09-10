@@ -823,7 +823,8 @@
                             @if (_selectedInvoice != null && _selectedInvoice.Id != 0)
                             {
                                 <div id="invoice-detailes"
-                                     class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 mt-4">
+                                     class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 mt-4"
+                                     style="min-height: 84vh;">
                                     <InvoiceDetailed @ref="@_invoiceDetailedRef"
                                                      Content="@_selectedInvoice"
                                                      Title="Invoice Details"
