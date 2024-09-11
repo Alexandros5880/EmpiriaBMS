@@ -1,0 +1,19 @@
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using ChartJs.Blazor;
+@using System.Globalization
+@using EmpiriaBMS.Core.Services
+
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+@inject Logging.LoggerManager Logger
+
+<div class="row">
+    <div class="col-6" title="Paid Invoices Count" data-bs-toggle="tooltip" style="min-width: 100px;">
+        <strong>(PI): </strong><span>@paid  </span>
+    </div>
+    <div class="col-6" title="Unpaid Invoices Count" data-bs-toggle="tooltip" style="min-width: 100px;">
+        <strong>(UI): </strong><span>@unpaid  </span>
+    </div>
+</div>

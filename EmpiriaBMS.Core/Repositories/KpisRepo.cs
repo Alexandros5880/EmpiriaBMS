@@ -31,7 +31,7 @@ public class KpisRepo : IDisposable
         _logger = logger;
     }
 
-    #region Return A Number
+    #region Simple
     public async Task<double> GetNextYearNetIncome()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -58,6 +58,33 @@ public class KpisRepo : IDisposable
             double result = Convert.ToDouble(sumInvoicesFee) - Convert.ToDouble(sumPaymentsFee);
 
             return result;
+        }
+    }
+
+    public async Task<(int Paid, int Unpaid)> GetPaidUnpaidInvoiceCount()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var payments = await _context.Set<Payment>()
+                .Where(p => p.IsDeleted == false)
+                .Include(p => p.Invoice)
+                .ToListAsync();
+
+            var invoices = await _context.Set<Invoice>()
+                .Where(p => p.IsDeleted == false)
+                .ToListAsync();
+
+            var dict = invoices
+                .GroupBy(i => (i.Id, i.Fee))
+                .ToDictionary(
+                    g => g.Key.Fee,
+                    g => payments.Where(p => p.InvoiceId == g.Key.Id).Sum(p => p.Fee)
+                );
+
+            int paid = dict.Count(d => d.Key <= d.Value);
+            int unpaid = dict.Count(d => d.Key > d.Value);
+
+            return (paid, unpaid);
         }
     }
     #endregion
