@@ -20,7 +20,7 @@ public partial class RolesDetailedDialog : IDialogContentComponent<RoleVM>
     private List<PermissionVM> _records = new List<PermissionVM>();
     private string _filterString = string.Empty;
     IQueryable<PermissionVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
-    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
     private void HandleFilter(ChangeEventArgs args)
     {

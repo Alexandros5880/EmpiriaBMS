@@ -86,6 +86,7 @@ public partial class Roles
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
+            Height = "85vh;",
             PreventScroll = true
         };
 
@@ -101,6 +102,7 @@ public partial class Roles
 
             var permissionsIds = vm.RolesPermissions.Select(rp => rp.PermissionId).ToList();
             vm.RolesPermissions = null;
+            prevObj.RolesPermissions = null;
 
             var changed = ModelsHellper.IsChanged<RoleVM>(prevObj, vm);
 
