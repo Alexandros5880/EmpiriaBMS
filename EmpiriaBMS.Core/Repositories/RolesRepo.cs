@@ -401,34 +401,43 @@ public class RolesRepo : Repository<RoleDto, Role>
         if (permissionsIds == null)
             throw new ArgumentNullException(nameof(permissionsIds));
 
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            var permissions = await _context.Set<RolePermission>()
-                                            .Where(r => !r.IsDeleted)
-                                            .Where(rp => rp.RoleId == roleId)
-                                            .ToArrayAsync();
-
-            if (permissions != null)
+            using (var _context = _dbContextFactory.CreateDbContext())
             {
-                foreach (var permission in permissions)
+
+                // Delete Old Roles
+                var permissions = await _context.Set<RolePermission>()
+                                                .Where(r => !r.IsDeleted)
+                                                .Where(rp => rp.RoleId == roleId)
+                                                .ToArrayAsync();
+                if (permissions != null)
                 {
-                    await DeleteRolePermission(permission);
+                    foreach (var permission in permissions)
+                    {
+                        //await DeleteRolePermission(permission);
+                        _context.Set<RolePermission>().Remove(permission);
+                    }
+                    //_context.Set<RolePermission>().RemoveRange(permissions);
                 }
-                //_context.Set<RolePermission>().RemoveRange(permissions);
-            }
 
-            List<RolePermission> rps = new List<RolePermission>();
-            foreach (var id in permissionsIds)
-            {
-                rps.Add(new RolePermission()
+                // Add New
+                foreach (var id in permissionsIds)
                 {
-                    RoleId = roleId,
-                    PermissionId = id
-                });
-            }
+                    var role = new RolePermission()
+                    {
+                        RoleId = roleId,
+                        PermissionId = id
+                    };
+                    await _context.Set<RolePermission>().AddAsync(role);
+                }
 
-            await _context.Set<RolePermission>().AddRangeAsync(rps);
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On RolesRepo.UpdatePermissions(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 

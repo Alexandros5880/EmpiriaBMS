@@ -91,7 +91,8 @@ public partial class Roles
         };
 
         var prevObj = record.Clone() as RoleVM;
-        var prevPermissionsIds = new List<int>(record.RolesPermissions.Select(rp => rp.PermissionId));
+        var prevRolesPerm = await DataProvider.Roles.GetMyPermissions(prevObj.Id);
+        var prevPermissionsIds = prevRolesPerm.Select(rp => rp.Id);
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<RolesDetailedDialog>(record, parameters);
         DialogResult? result = await dialog.Result;
