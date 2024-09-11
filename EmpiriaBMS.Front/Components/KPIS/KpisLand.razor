@@ -3,6 +3,7 @@
 @using ChartJs.Blazor;
 @using EmpiriaBMS.Front.Components.KPIS;
 @using FluentUI = Microsoft.Fast.Components.FluentUI;
+@using EmpiriaBMS.Front.Components.KPIS.Symple;
 
 @inject IDataProvider _dataProvider
 @inject SharedAuthDataService _sharedAuthData
@@ -27,7 +28,14 @@
 
             <FluentSpacer />
 
-            @if (SeeNextYearIncome)
+            @if (SeeEstimatedInvoicing)
+            {
+                <EstimatedInvoicing />
+            }
+
+            <FluentSpacer />
+
+            @if (SeeUnpaidPaidInvoices)
             {
                 <EstimatedInvoicing />
             }

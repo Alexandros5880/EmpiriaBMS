@@ -17,6 +17,8 @@ public partial class KpisLand : ComponentBase
     bool SeeDelayedPaymentsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 26);
     bool SeePendingsPaymentsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 27);
     bool SeeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
+    bool SeeEstimatedInvoicing => _sharedAuthData.Permissions.Any(p => p.Ord == 41);
+    bool SeeUnpaidPaidInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 42);
     #endregion
 
 

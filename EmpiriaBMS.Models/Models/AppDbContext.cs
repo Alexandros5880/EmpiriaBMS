@@ -561,6 +561,30 @@ public class AppDbContext : DbContext
                 Ord = 40
             };
             builder.Entity<Permission>().HasData(per_40);
+
+            // See Estimated Invoicing
+            var per_41_id = random.Next(123456789, 999999999);
+            Permission per_41 = new Permission()
+            {
+                Id = per_41_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Estimated Invoicing",
+                Ord = 41
+            };
+            builder.Entity<Permission>().HasData(per_41);
+
+            // See Unpaid/Paid Invoices
+            var per_42_id = random.Next(123456789, 999999999);
+            Permission per_42 = new Permission()
+            {
+                Id = per_42_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Unpaid/Paid Invoices",
+                Ord = 42
+            };
+            builder.Entity<Permission>().HasData(per_42);
             #endregion
 
             #region Roles
@@ -1063,6 +1087,28 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_110);
 
+            // COO || See Estimated Invoicing
+            RolePermission rp_126 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_4_id,
+                PermissionId = per_41_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_126);
+
+            // COO || See Unpaid/Paid Invoices
+            RolePermission rp_127 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_4_id,
+                PermissionId = per_42_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_127);
+
 
             // CTO
             // CTO || See Dashboard Layout
@@ -1450,6 +1496,28 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_124);
 
+            // CTO || See Estimated Invoicing
+            RolePermission rp_128 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_41_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_128);
+
+            // CTO || See Unpaid/Paid Invoices
+            RolePermission rp_129 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_42_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_129);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -1825,6 +1893,28 @@ public class AppDbContext : DbContext
                 PermissionId = per_40_id
             };
             builder.Entity<RolePermission>().HasData(rp_125);
+
+            // CEO || See Estimated Invoicing
+            RolePermission rp_130 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_41_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_130);
+
+            // CEO || See Unpaid/Paid Invoices
+            RolePermission rp_131 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_42_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_131);
 
 
             // Guest

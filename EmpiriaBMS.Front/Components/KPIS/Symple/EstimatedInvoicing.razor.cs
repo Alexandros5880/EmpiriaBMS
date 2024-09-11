@@ -2,7 +2,7 @@
 using Microsoft.JSInterop;
 using System.Globalization;
 
-namespace EmpiriaBMS.Front.Components.KPIS;
+namespace EmpiriaBMS.Front.Components.KPIS.Symple;
 
 public partial class EstimatedInvoicing
 {
