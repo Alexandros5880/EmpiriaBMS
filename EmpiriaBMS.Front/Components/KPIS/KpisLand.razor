@@ -26,6 +26,15 @@
             }
 
             <FluentSpacer />
+
+            @if (SeeNextYearIncome)
+            {
+                <EstimatedInvoicing />
+            }
+
+            <FluentSpacer />
+
+            
             
             <FluentIcon Value="@(new Icons.Regular.Size32.Flowchart())" Color="FluentUI.Color.Fill"/>
 

@@ -1,13 +1,13 @@
 ﻿using EmpiriaBMS.Front.Interop.TeamsSDK;
-using Microsoft.Recognizers.Text;
+using Microsoft.JSInterop;
 using System.Globalization;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class NextYearNetIncomeKPI
+public partial class EstimatedInvoicing
 {
 
-    private double _nextYearNetIncome = 0;
+    private double _estimatedInvoicing = 0;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -15,7 +15,7 @@ public partial class NextYearNetIncomeKPI
 
         if (firstRender)
         {
-            _nextYearNetIncome = await _dataProvider.KPIS.GetNextYearNetIncome();
+            _estimatedInvoicing = await _dataProvider.KPIS.GetEstimatedInvoicing();
             StateHasChanged();
         }
     }

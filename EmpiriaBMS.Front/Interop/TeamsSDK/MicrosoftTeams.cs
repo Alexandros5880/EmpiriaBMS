@@ -3,6 +3,7 @@ using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.Interop.TeamsSDK;
 
