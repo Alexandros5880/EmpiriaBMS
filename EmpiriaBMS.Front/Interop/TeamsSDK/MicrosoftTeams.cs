@@ -70,6 +70,11 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("scrollToElement", id);
     }
 
+    public Task InitializeTooltips()
+    {
+        return InvokeVoidAsync("initializeTooltips");
+    }
+
     #region Cookies
     public async Task SetCookie(string key, string value)
     {

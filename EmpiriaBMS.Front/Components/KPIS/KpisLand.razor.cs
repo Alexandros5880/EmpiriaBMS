@@ -38,6 +38,7 @@ public partial class KpisLand : ComponentBase
         {
             tabs[0] = true;
             StateHasChanged();
+            await MicrosoftTeams.InitializeTooltips();
         }
     }
 

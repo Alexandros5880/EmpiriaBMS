@@ -8,13 +8,23 @@
 @inject SharedAuthDataService _sharedAuthData
 @inject IMapper _mapper
 @inject Logging.LoggerManager Logger
+@inject MicrosoftTeams MicrosoftTeams
 
 <div class="container-fluid m-2" style="max-width: 98% !important;">
 
     <FluentLayout Style="margin-top: 10px;">
 
         <FluentHeader>
+            
             <h3>Key Performance Indicators (KPIS)</h3>
+
+            <FluentSpacer />
+
+            @if (SeeNextYearIncome)
+            {
+                <NextYearNetIncomeKPI />
+            }
+
             <FluentSpacer />
             
             <FluentIcon Value="@(new Icons.Regular.Size32.Flowchart())" Color="FluentUI.Color.Fill"/>
@@ -69,12 +79,6 @@
                 {
                     <FluentNavLink OnClick="@((e) => TabMenuClick(e, 7))"
                                    Class="@((tabs[7] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
-                }
-
-                @if (SeeNextYearIncome)
-                {
-                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 8))"
-                                   Class="@((tabs[8] ? "active-nav-link" : ""))">Next Year Income</FluentNavLink>
                 }
                 
             </FluentNavMenu>
@@ -149,15 +153,6 @@
                     {
                         <div style="margin-top: 50px;">
                             <ProjectsMissedDeadlineKPI />
-                        </div>
-                    }
-                }
-                else if (tabs[8])
-                {
-                    @if (SeeNextYearIncome)
-                    {
-                        <div style="margin-top: 50px;">
-                            <NextYearNetIncomeKPI />
                         </div>
                     }
                 }

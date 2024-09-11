@@ -7,11 +7,6 @@
 @inject IMapper _mapper
 @inject Logging.LoggerManager Logger
 
-<div class="row" style="max-width: 30vw !important;">
-    <div class="col-11">
-        <h5>Next Year Net Income: </h5>
-    </div>
-    <div class="col-1">
-        <h6>@_nextYearNetIncome.ToString("N2")€</h6>
-    </div>
+<div title="Next Year Net Income" data-bs-toggle="tooltip">
+    <strong>(NYNI): </strong> <span>@_nextYearNetIncome.ToString("N2")€</span>
 </div>

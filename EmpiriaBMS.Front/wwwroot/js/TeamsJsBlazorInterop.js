@@ -38,6 +38,13 @@ export function navigateToTab(tabInstance) {
   return microsoftTeams.pages.tabs.navigateToTab(tabInstance);
 }
 
+export function initializeTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+}
+
 // Settings module
 export function registerOnSaveHandler(settings) {
   microsoftTeams.pages.config.registerOnSaveHandler((saveEvent) => {
