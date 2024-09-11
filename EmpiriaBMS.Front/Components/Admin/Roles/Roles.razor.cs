@@ -86,7 +86,7 @@ public partial class Roles
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            Height = "85vh;",
+            Height = "88vh;",
             PreventScroll = true
         };
 
