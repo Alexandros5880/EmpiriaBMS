@@ -32,14 +32,11 @@
 @* Body *@
 <FluentDialogBody Style="overflow-y: auto;">
 
-    @{
-        var parameters = Dialog.Instance.Parameters as MyDialogParameters;
-    }
-
     <InvoiceDetailed @ref="@_compomentRef"
                      Content="@Content"
                      DisplayAcions="false"
-                     DisplayProject="@parameters.DisplayProject"
-                     IsWorkingMode="@parameters.IsWorkingMode" />
+                     DisplayProject="@DisplayProject"
+                     IsWorkingMode="@IsWorkingMode"
+                     InvoiceCategory="@InvoiceCategory" />
 
 </FluentDialogBody>

@@ -21,7 +21,7 @@ public partial class Invoices : ComponentBase
     public bool IsWorkingMode { get; set; } = false;
 
     [Parameter]
-    public InvoiceCategory InvoiceCategory { get; set; } = InvoiceCategory.INCOMES;
+    public InvoiceCategory InvoiceCategory { get; set; }
 
     #region Data Grid
     public List<InvoiceVM> _invoices { get; set; }
@@ -91,10 +91,11 @@ public partial class Invoices : ComponentBase
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "auto",
-            Height = "auto",
+            Width = "50vw;",
+            Height = "85vh;",
             DisplayProject = true,
-            IsWorkingMode = IsWorkingMode
+            IsWorkingMode = IsWorkingMode,
+            InvoiceCategory = InvoiceCategory
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(SelectedRecord, parameters);

@@ -817,10 +817,10 @@
                         <div class="row justify-content-center mt-1 mb-1">
                             <div class="col-12">
                                 <Invoices @ref="@_invoiceIncomesListRef"
-                                            OnSelect="@(async (i) => await _onSelectedIncomeInvoice(i))"
-                                            SelectedRecord="@_selectedIncomeInvoice"
-                                            IsWorkingMode="@isWorkingMode"
-                                            InvoiceCategory="@InvoiceCategory.INCOMES" />
+                                          OnSelect="@(async (i) => await _onSelectedIncomeInvoice(i))"
+                                          SelectedRecord="@_selectedIncomeInvoice"
+                                          IsWorkingMode="@isWorkingMode"
+                                          InvoiceCategory="@InvoiceCategory.INCOMES" />
                             </div>
                             @if (_selectedIncomeInvoice != null && _selectedIncomeInvoice.Id != 0)
                             {
@@ -828,16 +828,16 @@
                                         class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 mt-4"
                                         style="min-height: 84vh;">
                                     <InvoiceDetailed @ref="@_invoiceIncomeDetailedRef"
-                                                        Content="@_selectedIncomeInvoice"
-                                                        Title="Invoice Details"
-                                                        OnSave="@(async (i) => await _onSaveIncomeInvoice(i))"
-                                                        IsWorkingMode="@isWorkingMode"
-                                                        InvoiceCategory="@InvoiceCategory.INCOMES" />
+                                                     Content="@_selectedIncomeInvoice"
+                                                     Title="Invoice Details"
+                                                     OnSave="@(async (i) => await _onSaveIncomeInvoice(i))"
+                                                     IsWorkingMode="@isWorkingMode"
+                                                     InvoiceCategory="@InvoiceCategory.INCOMES" />
                                 </div>
                                 <div class="col mt-4">
                                     <Payments @ref="@_invoiceIncomePaymentsRef"
-                                                Invoice="@_selectedIncomeInvoice"
-                                                IsWorkingMode="@isWorkingMode" />
+                                              Invoice="@_selectedIncomeInvoice"
+                                              IsWorkingMode="@isWorkingMode" />
                                 </div>
                             }
                         </div>
@@ -857,10 +857,10 @@
                         <div class="row justify-content-center mt-1 mb-1">
                             <div class="col-12">
                                 <Invoices @ref="@_invoiceExpensesListRef"
-                                OnSelect="@(async (i) => await _onSelectedExpenseInvoice(i))"
-                                SelectedRecord="@_selectedExpenseInvoice"
-                                IsWorkingMode="@isWorkingMode"
-                                InvoiceCategory="@InvoiceCategory.EXPENSES" />
+                                          OnSelect="@(async (i) => await _onSelectedExpenseInvoice(i))"
+                                          SelectedRecord="@_selectedExpenseInvoice"
+                                          IsWorkingMode="@isWorkingMode"
+                                          InvoiceCategory="@InvoiceCategory.EXPENSES" />
                             </div>
                             @if (_selectedExpenseInvoice != null && _selectedExpenseInvoice.Id != 0)
                             {
@@ -868,16 +868,16 @@
                                 class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 mt-4"
                                 style="min-height: 84vh;">
                                     <InvoiceDetailed @ref="@_invoiceExpenseDetailedRef"
-                                    Content="@_selectedExpenseInvoice"
-                                    Title="Invoice Details"
-                                    OnSave="@(async (i) => await _onSaveExpenseInvoice(i))"
-                                    IsWorkingMode="@isWorkingMode"
-                                    InvoiceCategory="@InvoiceCategory.EXPENSES" />
+                                                     Content="@_selectedExpenseInvoice"
+                                                     Title="Invoice Details"
+                                                     OnSave="@(async (i) => await _onSaveExpenseInvoice(i))"
+                                                     IsWorkingMode="@isWorkingMode"
+                                                     InvoiceCategory="@InvoiceCategory.EXPENSES" />
                                 </div>
                                 <div class="col mt-4">
                                     <Payments @ref="@_invoiceExpensePaymentsRef"
-                                    Invoice="@_selectedExpenseInvoice"
-                                    IsWorkingMode="@isWorkingMode" />
+                                              Invoice="@_selectedExpenseInvoice"
+                                              IsWorkingMode="@isWorkingMode" />
                                 </div>
                             }
                         </div>

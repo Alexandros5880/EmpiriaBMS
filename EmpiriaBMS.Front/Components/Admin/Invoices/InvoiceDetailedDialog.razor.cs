@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
@@ -18,6 +19,36 @@ public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
     public FluentDialog Dialog { get; set; } = default!;
 
     private InvoiceDetailed _compomentRef;
+
+    public bool DisplayProject
+    {
+        get
+        {
+            var parameters = Dialog.Instance.Parameters as MyDialogParameters;
+            var displayProject = parameters.DisplayProject;
+            return displayProject;
+        }
+    }
+
+    public bool IsWorkingMode
+    {
+        get
+        {
+            var parameters = Dialog.Instance.Parameters as MyDialogParameters;
+            var isWorkingMode = parameters.IsWorkingMode;
+            return isWorkingMode;
+        }
+    }
+
+    public InvoiceCategory InvoiceCategory
+    {
+        get
+        {
+            var parameters = Dialog.Instance.Parameters as MyDialogParameters;
+            var invoiceCategory = parameters.InvoiceCategory;
+            return invoiceCategory;
+        }
+    }
 
     private async Task SaveAsync()
     {

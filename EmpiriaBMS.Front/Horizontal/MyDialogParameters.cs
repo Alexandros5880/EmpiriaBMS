@@ -1,4 +1,5 @@
-﻿using Microsoft.Fast.Components.FluentUI;
+﻿using EmpiriaBMS.Models.Enum;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Horizontal;
 
@@ -6,6 +7,7 @@ public class MyDialogParameters : DialogParameters
 {
     public bool DisplayProject { get; set; } = false;
     public bool IsWorkingMode { get; set; } = false;
+    public InvoiceCategory InvoiceCategory { get; set; } = InvoiceCategory.INCOMES;
 }
 
 /// <summary>

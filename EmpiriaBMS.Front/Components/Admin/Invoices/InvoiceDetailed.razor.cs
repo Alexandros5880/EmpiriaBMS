@@ -55,8 +55,19 @@ public partial class InvoiceDetailed
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
 
+    private InvoiceCategory _invoiceCategory;
     [Parameter]
-    public InvoiceCategory InvoiceCategory { get; set; } = InvoiceCategory.INCOMES;
+    public InvoiceCategory InvoiceCategory
+    {
+        get => _invoiceCategory;
+        set
+        {
+            if (value == _invoiceCategory)
+                return;
+            _invoiceCategory = value;
+            Content.Category = value;
+        }
+    }
 
     private FluentCombobox<ProjectVM> _projectCompoment;
     private FluentCombobox<InvoiceTypeVM> _typeCompoment;
