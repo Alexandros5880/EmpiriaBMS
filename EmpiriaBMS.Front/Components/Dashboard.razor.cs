@@ -1282,24 +1282,25 @@ public partial class Dashboard : IDisposable
     #region Tab Actions
     private string? _activeid = "tab-home";
 
-    private async Task _onTabChange(FluentTab tab)
+    private void _onTabChange(FluentTab tab)
     {
+        Task task = null;
         switch(tab.Id)
         {
             case "tab-home":
                 //await Refresh();
                 break;
             case "tab-invoices":
-                await _invoiceIncomesListRef.Refresh();
+                task = _invoiceIncomesListRef.Refresh();
                 break;
             case "tab-excpences":
-                await _invoiceExpensesListRef.Refresh();
+                task = _invoiceExpensesListRef.Refresh();
                 break;
             case "tab-kpis":
-                await _kpiDashRef.Refresh();
+                task = _kpiDashRef.Refresh();
                 break;
             case "tab-reports":
-                await _reportsRef.Refresh();
+                task = _reportsRef.Refresh();
                 break;
         }
     }
