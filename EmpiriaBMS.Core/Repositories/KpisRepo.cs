@@ -144,7 +144,7 @@ public class KpisRepo : IDisposable
                                             .Include(ur => ur.User)
                                             .Select(ur => new
                                             {
-                                                UserName = $"{ur.User.LastName} {ur.User.MidName} {ur.User.LastName}",
+                                                UserName = $"{ur.User.FirstName} {ur.User.MidName} {ur.User.LastName}",
                                                 DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.TimeSpan.Hours)
                                             })
                                             .ToListAsync();
