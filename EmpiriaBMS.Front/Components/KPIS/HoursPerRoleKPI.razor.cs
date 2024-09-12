@@ -10,10 +10,11 @@ using EmpiriaBMS.Front.Components.General;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class HouresPerRoleUserKPI
+public partial class HoursPerRoleKPI
 {
+    private bool _startLoading = false;
+
     private Dictionary<string, long> _hoursPerRole = null;
-    private Dictionary<string, long> _hoursPerUser = null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -21,19 +22,16 @@ public partial class HouresPerRoleUserKPI
 
         if (firstRender)
         {
+            _startLoading = true;
             await _getHoursPerRole();
-            await _getHoursPerUser();
             _initilizeHoursPerRoleChart();
-            _initilizeHoursPerUserPieChart();
+            _startLoading = false;
             StateHasChanged();
         }
     }
 
     private async Task _getHoursPerRole() =>
         _hoursPerRole = await _dataProvider.KPIS.GetHoursPerRole();
-
-    private async Task _getHoursPerUser() =>
-        _hoursPerUser = await _dataProvider.KPIS.GetHoursPerUser();
 
     // Bar Chart
     private BarConfig _hoursPerRoleBarConfig;
@@ -95,44 +93,5 @@ public partial class HouresPerRoleUserKPI
         };
 
         _hoursPerRoleBarConfig.Data.Datasets.Add(dataset);
-    }
-
-    // Pie Chart
-    private PieConfig _hoursPerUserPieConfig;
-
-    private void _initilizeHoursPerUserPieChart()
-    {
-        _hoursPerUserPieConfig = new PieConfig()
-        {
-            Options = new PieOptions()
-            {
-                CutoutPercentage = 50, // 50 = Doughnut  ||  0 = Pie
-                Responsive = true,
-                Title = new OptionsTitle()
-                {
-                    Display = true,
-                    Text = "Hours Per User Pie Chart",
-                    Position = ChartEnums.Position.Top,
-                    FontSize = 24
-                }
-            }
-        };
-
-        foreach (string key in _hoursPerUser.Keys)
-            _hoursPerUserPieConfig.Data.Labels.Add(key);
-
-
-        PieDataset<long> dataset = new PieDataset<long>(_hoursPerUser.Values)
-        {
-            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerUser.Values.Count, 1),
-            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerUser.Values.Count, 550, 599, 1),
-            BorderWidth = 0,
-            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
-            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
-            HoverBorderWidth = 1,
-            BorderColor = ChartJsHelper.GetPreviusRgb(1),
-        };
-
-        _hoursPerUserPieConfig.Data.Datasets.Add(dataset);
     }
 }

@@ -11,6 +11,7 @@ namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class DelayedProjectsKPI
 {
+    private bool _startLoading = false;
 
     private List<ProjectVM> _delayedProjects = null;
     private BarConfig _delayedProjectsBarConfig;
@@ -21,8 +22,10 @@ public partial class DelayedProjectsKPI
 
         if (firstRender)
         {
+            _startLoading = true;
             await _getActiveDelayedProjects();
             _initilizeDelayedProjectsChart();
+            _startLoading = false;
             StateHasChanged();
         }
     }

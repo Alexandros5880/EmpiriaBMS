@@ -1,4 +1,4 @@
-﻿namespace EmpiriaBMS.Front.Components.KPIS.Symple;
+﻿namespace EmpiriaBMS.Front.Components.KPIS.Simple;
 
 public partial class PaidUnpaidInvoicesCount
 {

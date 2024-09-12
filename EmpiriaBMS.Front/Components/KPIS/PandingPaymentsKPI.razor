@@ -13,5 +13,10 @@
 }
 else
 {
-    <span class="text-warning ms-5">No Data!</span>
+    <!-- Loading -->
+    <FluentOverlay @bind-Visible="@_startLoading"
+                   Opacity="0.1"
+                   BackgroundColor="#444791">
+        <FluentProgressRing />
+    </FluentOverlay>
 }

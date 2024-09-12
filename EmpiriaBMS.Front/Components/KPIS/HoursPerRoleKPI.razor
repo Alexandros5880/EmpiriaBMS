@@ -15,17 +15,12 @@
         }
         else
         {
-            <span class="text-warning ms-5">No Data!</span>
-        }
-    </div>
-    <div class="col-12 mt-3">
-        @if (_hoursPerUserPieConfig != null)
-        {
-            <Chart Config="_hoursPerUserPieConfig"></Chart>
-        }
-        else
-        {
-            <span class="text-warning ms-5">No Data!</span>
+            <!-- Loading -->
+            <FluentOverlay @bind-Visible="@_startLoading"
+                           Opacity="0.1"
+                           BackgroundColor="#444791">
+                <FluentProgressRing />
+            </FluentOverlay>
         }
     </div>
 </div>
