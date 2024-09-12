@@ -4,7 +4,7 @@ namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class EmployeeTurnoverKPI
 {
-    private bool _startLoading = false;
+    private bool _startLoading = true;
 
     private Dictionary<string, long> _employeesTurnover = null;
 

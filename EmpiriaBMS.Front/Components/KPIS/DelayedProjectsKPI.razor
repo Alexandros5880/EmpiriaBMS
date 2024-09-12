@@ -13,10 +13,12 @@
 }
 else
 {
-    <!-- Loading -->
-    <FluentOverlay @bind-Visible="@_startLoading"
-                   Opacity="0.1"
-                   BackgroundColor="#444791">
-        <FluentProgressRing />
-    </FluentOverlay>
+    @if (_startLoading)
+    {
+        <FluentProgressRing Style="margin: 0 auto;" />
+    }
+    else
+    {
+        <span class="text-warning">No Data</span>
+    }
 }

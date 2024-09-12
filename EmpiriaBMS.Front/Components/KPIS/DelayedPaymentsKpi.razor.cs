@@ -11,7 +11,7 @@ namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class DelayedPaymentsKpi
 {
-    private bool _startLoading = false;
+    private bool _startLoading = true;
 
     private Dictionary<string, DelayedPayments> _delayedPaymentsPerProject = null;
     private BarConfig _delayedPaymentsPerProjectBarConfig;

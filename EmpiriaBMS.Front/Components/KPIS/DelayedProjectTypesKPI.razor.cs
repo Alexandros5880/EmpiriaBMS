@@ -10,7 +10,7 @@ namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class DelayedProjectTypesKPI
 {
-    private bool _startLoading = false;
+    private bool _startLoading = true;
 
     private Dictionary<string, int> _delayedProjectsTypesCountByType = null;
     private BarConfig _delayedProjectsTypesBarConfig;

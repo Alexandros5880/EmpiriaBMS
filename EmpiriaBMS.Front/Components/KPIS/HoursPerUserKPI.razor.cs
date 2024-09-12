@@ -12,7 +12,7 @@ namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class HoursPerUserKPI
 {
-    private bool _startLoading = false;
+    private bool _startLoading = true;
 
     private Dictionary<string, long> _hoursPerUser = null;
 

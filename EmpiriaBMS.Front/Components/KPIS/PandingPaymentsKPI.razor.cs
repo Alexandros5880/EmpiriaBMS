@@ -11,7 +11,7 @@ namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class PandingPaymentsKPI
 {
-    private bool _startLoading = false;
+    private bool _startLoading = true;
 
     private Dictionary<string, PendingPayments> _pendingPaymentsPerProject = null;
     private BarConfig _pendingPaymentsPerProjectBarConfig;

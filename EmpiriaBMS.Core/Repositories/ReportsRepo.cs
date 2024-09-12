@@ -37,6 +37,7 @@ public class ReportsRepo : IDisposable
             {
                 var projects = await _context.Set<Project>()
                 .Where(dt => !dt.IsDeleted)
+                .Where(p => p.CreatedDate >= start && p.CreatedDate <= end)
                 .Join(
                     _context.Set<Offer>(),
                     project => project.OfferId,

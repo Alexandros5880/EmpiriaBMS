@@ -179,7 +179,7 @@ public partial class Reports
             {
                 var startDate = weeklyDates[i];
                 var endDate = weeklyDates[i + 1];
-                if (createdDate >= startDate && createdDate < endDate)
+                if (createdDate >= startDate && createdDate <= endDate)
                 {
                     var hours = report.TotalWorkedTime.TotalHours;
                     totalHoursPerWeek[i] += hours;
@@ -355,8 +355,8 @@ public partial class Reports
     #endregion
 
     #region Date Range Filter
-    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("7-24-2024"));
-    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-24-2024"));
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2024"));
+    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
 
     public async Task OnDateSelect(DateRange range)
     {
