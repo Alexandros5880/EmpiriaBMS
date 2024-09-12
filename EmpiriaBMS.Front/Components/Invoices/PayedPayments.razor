@@ -1,11 +1,13 @@
 ﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Core.Services
+
 @inject IDataProvider DataProvider
+@inject Culture Culture
 
 @if (payedPayment != null)
 {
     <strong>Payed: </strong>
-    <span class="text-success">@payedPayment </span>
-    <strong>€</strong>
+    <span class="text-success">@Culture.GetNumberFromated((double)payedPayment)</span>
 }
 else
 {

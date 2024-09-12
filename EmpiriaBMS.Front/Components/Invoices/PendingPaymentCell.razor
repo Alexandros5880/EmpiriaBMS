@@ -1,10 +1,12 @@
 ﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Core.Services
+
 @inject IDataProvider DataProvider
+@inject Culture Culture
 
 @if (pendingPayment != null)
 {
-    <span class="text-danger">@pendingPayment</span>
-    <strong>€</strong>
+    <span class="text-danger">@Culture.GetNumberFromated((double)pendingPayment)</span>
 }
 else
 {
