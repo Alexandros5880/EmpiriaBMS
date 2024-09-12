@@ -1,4 +1,6 @@
-﻿namespace EmpiriaBMS.Front.Components.KPIS.Base;
+﻿using EmpiriaBMS.Front.Components.General;
+
+namespace EmpiriaBMS.Front.Components.KPIS.Base;
 
 public partial class KPIDashboard
 {
@@ -17,6 +19,8 @@ public partial class KPIDashboard
     bool SeeUnpaidPaidInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 42);
     #endregion
 
+    private bool _loading = false;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -24,15 +28,16 @@ public partial class KPIDashboard
         if (firstRender)
         {
             await MicrosoftTeams.InitializeTooltips();
-
-
         }
     }
 
-    // TODO: Fix this function
     public async Task Refresh()
     {
-        await Task.Delay(1);
+        _loading = true;
+        StateHasChanged();
+        await Task.Delay(500);
+        _loading = false;
+        StateHasChanged();
     }
 
 }
