@@ -441,12 +441,13 @@ public partial class Reports
             start = DateTime.Now.AddMonths(-1);
         }
 
-        DateTime current = start?.DateTime ?? DateTime.Now.AddMonths(-1);
+        DateTime current = ((DateTimeOffset)start).DateTime.AddDays(-4);
+        DateTime finished = ((DateTimeOffset)end).DateTime;
 
-        while (current <= end)
+        while (current <= finished.AddDays(4))
         {
             yield return current;
-            current = current.AddDays(7); // Move to the next week
+            current = current.AddDays(7);
         }
     }
 
