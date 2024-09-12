@@ -1287,7 +1287,7 @@ public partial class Dashboard : IDisposable
         switch(tab.Id)
         {
             case "tab-home":
-                await Refresh();
+                //await Refresh();
                 break;
             case "tab-invoices":
                 await _invoiceIncomesListRef.Refresh();
