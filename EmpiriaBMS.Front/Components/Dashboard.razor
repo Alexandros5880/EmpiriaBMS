@@ -885,29 +885,6 @@
                     </FluentTab>
                 }
 
-                <!-- Reports -->
-                @if (seeReports)
-                {
-                    <FluentTab Class="my-fluent-tab"
-                               LabelClass="my-fluent-tab-label"
-                               Label=" Reports"
-                               Icon="@(new Icons.Regular.Size48.ChartPerson())"
-                               Id="tab-reports">
-
-                        <div class="row justify-content-center mt-1 mb-1">
-                            <div class="col-auto" style="width: 100%; height: 100%;">
-                                <div class="m-1 row justify-content-center">
-                                    <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
-
-                                        <Reports />
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </FluentTab>
-                }
-
                 <!-- KPIS -->
                 @if (seeKpis)
                 {
@@ -923,6 +900,29 @@
                                     <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
 
                                         <EmpiriaBMS.Front.Components.KPIS.Base.KPIDashboard />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </FluentTab>
+                }
+
+                <!-- Reports -->
+                @if (seeReports)
+                {
+                    <FluentTab Class="my-fluent-tab"
+                               LabelClass="my-fluent-tab-label"
+                               Label=" Reports"
+                               Icon="@(new Icons.Regular.Size48.ChartPerson())"
+                               Id="tab-reports">
+
+                        <div class="row justify-content-center mt-1 mb-1">
+                            <div class="col-auto" style="width: 100%; height: 100%;">
+                                <div class="m-1 row justify-content-center">
+                                    <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
+
+                                        <Reports />
 
                                     </div>
                                 </div>
