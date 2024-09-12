@@ -37,7 +37,7 @@ public class ReportsRepo : IDisposable
             {
                 var projects = await _context.Set<Project>()
                 .Where(dt => !dt.IsDeleted)
-                .Where(p => p.CreatedDate >= start && p.CreatedDate <= end)
+                .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                 .Join(
                     _context.Set<Offer>(),
                     project => project.OfferId,
@@ -78,6 +78,9 @@ public class ReportsRepo : IDisposable
                         Category = leadOfferClientCatProject.category,
                         SubCategory = subCat
                     })
+                .Where(p => client == null || p.Client.Id == client.Id)
+                .Where(p => category == null || p.Category.Id == category.Id)
+                .Where(p => subCategory == null || p.SubCategory.Id == subCategory.Id)
                 .ToListAsync();
 
                 // Get Times
