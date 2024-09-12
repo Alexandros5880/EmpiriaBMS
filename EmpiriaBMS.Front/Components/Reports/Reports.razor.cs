@@ -18,11 +18,14 @@ using Microsoft.Kiota.Abstractions;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Color = System.Drawing.Color;
 using Fluent = Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Front.Components.General;
 
 namespace EmpiriaBMS.Front.Components.Reports;
 
 public partial class Reports
 {
+    private bool _loading = true;
+
     private static Random _random = new Random();
 
     private List<ReportProjectReturnModel> reportEntries = new();
@@ -49,8 +52,19 @@ public partial class Reports
             await _refreshData();
             await _getReportData();
             await RefreshChart();
+            _loading = false;
             StateHasChanged();
         }
+    }
+
+    public async Task Refresh()
+    {
+        _loading = true;
+        StateHasChanged();
+        await _getReportData();
+        await RefreshChart();
+        _loading = false;
+        StateHasChanged();
     }
 
     #region Initialize Chart
@@ -77,6 +91,7 @@ public partial class Reports
                             Ticks = new CategoryTicks
                             {
                                 FontColor = ColorUtil.FromDrawingColor(Color.FromArgb(255, 99, 132, 1)),
+                                Max = "100000"
                             }
                         }
                     },
@@ -179,7 +194,7 @@ public partial class Reports
             {
                 var startDate = weeklyDates[i];
                 var endDate = weeklyDates[i + 1];
-                if (createdDate >= startDate && createdDate < endDate)
+                if (createdDate >= startDate && createdDate <= endDate)
                 {
                     var hours = report.TotalWorkedTime.TotalHours;
                     totalHoursPerWeek[i] += hours;
@@ -281,13 +296,13 @@ public partial class Reports
     #region Client Filter
     private List<ClientVM> _clients = new List<ClientVM>();
 
-    private ClientVM _client = new ClientVM();
+    private ClientVM _client = null;
     public ClientVM Client
     {
         get => _client;
         set
         {
-            if (_client == value || value == null) return;
+            if (_client == value) return;
             _client = value;
         }
     }
@@ -295,23 +310,20 @@ public partial class Reports
     private async Task _onClientSelected(ClientVM obj)
     {
         Client = obj;
-
-        await _getReportData();
-        await RefreshChart();
-        StateHasChanged();
+        await Refresh();
     }
     #endregion
 
     #region Project Category Filter
     private List<ProjectCategoryVM> _projectCategories = new List<ProjectCategoryVM>();
 
-    private ProjectCategoryVM _projectCategoryVM = new ProjectCategoryVM();
+    private ProjectCategoryVM _projectCategoryVM = null;
     public ProjectCategoryVM ProjectCategory
     {
         get => _projectCategoryVM;
         set
         {
-            if (_projectCategoryVM == value || value == null) return;
+            if (_projectCategoryVM == value) return;
             _projectCategoryVM = value;
         }
     }
@@ -319,14 +331,22 @@ public partial class Reports
     private async Task _onCategorySelected(ProjectCategoryVM obj)
     {
         ProjectCategory = obj;
-        await _getProjectSubCategories();
-        var firstSubCategory = _projectSubCategories.FirstOrDefault();
-        subCategoryCombo.SelectedOption = firstSubCategory;
-        subCategoryCombo.Value = firstSubCategory.Name;
+        if (obj == null)
+        {
+            subCategoryCombo.SelectedOption = null;
+            subCategoryCombo.Value = string.Empty;
+            ProjectSubCategory = null;
+        }
+        else
+        {
+            await _getProjectSubCategories();
+            var firstSubCategory = _projectSubCategories.FirstOrDefault();
+            subCategoryCombo.SelectedOption = firstSubCategory;
+            subCategoryCombo.Value = firstSubCategory.Name;
+            ProjectSubCategory = firstSubCategory;
+        }
 
-        await _getReportData();
-        await RefreshChart();
-        StateHasChanged();
+        await Refresh();
     }
     #endregion
 
@@ -334,13 +354,13 @@ public partial class Reports
     private Fluent.FluentCombobox<ProjectSubCategoryVM> subCategoryCombo;
     private List<ProjectSubCategoryVM> _projectSubCategories = new List<ProjectSubCategoryVM>();
 
-    private ProjectSubCategoryVM _projectSubCategory = new ProjectSubCategoryVM();
+    private ProjectSubCategoryVM _projectSubCategory = null;
     public ProjectSubCategoryVM ProjectSubCategory
     {
         get => _projectSubCategory;
         set
         {
-            if (_projectSubCategory == value || value == null) return;
+            if (_projectSubCategory == value) return;
             _projectSubCategory = value;
         }
     }
@@ -348,23 +368,24 @@ public partial class Reports
     private async Task _onSubCategorySelected(ProjectSubCategoryVM obj)
     {
         ProjectSubCategory = obj;
-        await _getReportData();
-        await RefreshChart();
-        StateHasChanged();
+        await Refresh();
     }
     #endregion
 
     #region Date Range Filter
-    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("7-24-2024"));
-    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-24-2024"));
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2024"));
+    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
+
+    private string dateValidMsg = string.Empty;
 
     public async Task OnDateSelect(DateRange range)
     {
-        StartDate = range.Start;
-        EndDate = range.End;
-        await _getReportData();
-        await RefreshChart();
-        StateHasChanged();
+        if (StartDate.HasValue && EndDate.HasValue)
+        {
+            StartDate = range.Start;
+            EndDate = range.End;
+            await Refresh();
+        }
     }
     #endregion
 
@@ -441,12 +462,13 @@ public partial class Reports
             start = DateTime.Now.AddMonths(-1);
         }
 
-        DateTime current = start?.DateTime ?? DateTime.Now.AddMonths(-1);
+        DateTime current = ((DateTimeOffset)start).DateTime.AddDays(-4);
+        DateTime finished = ((DateTimeOffset)end).DateTime;
 
-        while (current <= end)
+        while (current <= finished.AddDays(4))
         {
             yield return current;
-            current = current.AddDays(7); // Move to the next week
+            current = current.AddDays(7);
         }
     }
 

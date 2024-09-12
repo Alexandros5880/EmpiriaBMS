@@ -4,6 +4,7 @@ using EmpiriaBMS.Core.Dtos.KPIS;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 
 
@@ -14,6 +15,8 @@ public class KpisRepo : IDisposable
     private bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
     protected readonly LeadRepo _ledRepo;
+    protected readonly InvoiceRepo _invoiceRepo;
+    protected readonly PaymentRepo _paymentRepo;
     protected readonly Logging.LoggerManager _logger;
 
     public KpisRepo(
@@ -23,9 +26,12 @@ public class KpisRepo : IDisposable
     {
         _dbContextFactory = dbFactory;
         _ledRepo = new LeadRepo(dbFactory, logger);
+        _invoiceRepo = new InvoiceRepo(dbFactory, logger);
+        _paymentRepo = new PaymentRepo(dbFactory, logger);
         _logger = logger;
     }
 
+    #region Simple
     public async Task<double> GetNextYearNetIncome()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -35,6 +41,53 @@ public class KpisRepo : IDisposable
             return icome;
         }
     }
+
+    public async Task<double> GetEstimatedInvoicing()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var sumInvoicesFee = await _context.Set<Invoice>()
+                .Where(i => i.IsDeleted == false)
+                .Where(i => i.Category == Models.Enum.InvoiceCategory.INCOMES)
+                .SumAsync(i => i.Fee);
+
+            var sumPaymentsFee = await _context.Set<Payment>()
+                .Where(i => i.IsDeleted == false)
+                .SumAsync(i => i.Fee);
+
+            double result = Convert.ToDouble(sumInvoicesFee) - Convert.ToDouble(sumPaymentsFee);
+
+            return result;
+        }
+    }
+
+    public async Task<(int Paid, int Unpaid)> GetPaidUnpaidInvoiceCount()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var payments = await _context.Set<Payment>()
+                .Where(p => p.IsDeleted == false)
+                .Include(p => p.Invoice)
+                .ToListAsync();
+
+            var invoices = await _context.Set<Invoice>()
+                .Where(p => p.IsDeleted == false)
+                .ToListAsync();
+
+            var dict = invoices
+                .GroupBy(i => (i.Id, i.Fee))
+                .ToDictionary(
+                    g => g.Key.Fee,
+                    g => payments.Where(p => p.InvoiceId == g.Key.Id).Sum(p => p.Fee)
+                );
+
+            int paid = dict.Count(d => d.Key <= d.Value);
+            int unpaid = dict.Count(d => d.Key > d.Value);
+
+            return (paid, unpaid);
+        }
+    }
+    #endregion
 
     public async Task<decimal> GetMissedDeadLineProjects()
     {
@@ -91,7 +144,7 @@ public class KpisRepo : IDisposable
                                             .Include(ur => ur.User)
                                             .Select(ur => new
                                             {
-                                                UserName = $"{ur.User.LastName} {ur.User.MidName} {ur.User.LastName}",
+                                                UserName = $"{ur.User.FirstName} {ur.User.MidName} {ur.User.LastName}",
                                                 DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.TimeSpan.Hours)
                                             })
                                             .ToListAsync();

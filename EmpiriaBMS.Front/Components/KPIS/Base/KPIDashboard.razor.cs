@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+﻿using EmpiriaBMS.Front.Components.General;
 
-namespace EmpiriaBMS.Front.Components.KPIS;
+namespace EmpiriaBMS.Front.Components.KPIS.Base;
 
-public partial class KpisLand : ComponentBase
+public partial class KPIDashboard
 {
-
     #region Authorization Properties
     bool SeeHoursPerRoleKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 18);
     bool SeeActiveDelayedProjectsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 19);
@@ -17,18 +15,11 @@ public partial class KpisLand : ComponentBase
     bool SeeDelayedPaymentsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 26);
     bool SeePendingsPaymentsKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 27);
     bool SeeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
+    bool SeeEstimatedInvoicing => _sharedAuthData.Permissions.Any(p => p.Ord == 41);
+    bool SeeUnpaidPaidInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 42);
     #endregion
 
-
-    #region Tab Actions
-    bool[] tabs = new bool[50];
-
-    private void TabMenuClick(MouseEventArgs e, int tabIndex)
-    {
-        for (int i = 0; i < tabs.Length; i++) { tabs[i] = false; }
-        tabs[tabIndex] = true;
-    }
-    #endregion
+    private bool _loading = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -36,9 +27,17 @@ public partial class KpisLand : ComponentBase
 
         if (firstRender)
         {
-            tabs[0] = true;
-            StateHasChanged();
+            await MicrosoftTeams.InitializeTooltips();
         }
+    }
+
+    public async Task Refresh()
+    {
+        _loading = true;
+        StateHasChanged();
+        await Task.Delay(500);
+        _loading = false;
+        StateHasChanged();
     }
 
 }

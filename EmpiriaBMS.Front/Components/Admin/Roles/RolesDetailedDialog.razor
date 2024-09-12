@@ -24,10 +24,15 @@
 </FluentDialogFooter>
 
 @* Body *@
-<FluentDialogBody>
-    <div class="row ms-2">
+<FluentDialogBody Style="overflow-y: auto;">
+    <div class="row ms-2"
+         style="margin: 0 auto !important; height: 480px !important;">
         <div class="col-12">
-            <FluentTextField Style="width:100%; margin-top:4px;" @bind-Value="@Content.Name" Disabled="@(!Content.IsEditable && !IsNew)">Name:</FluentTextField>
+            <FluentTextField Style="width:100%; margin-top:4px;"
+                             @bind-Value="@Content.Name"
+                             Disabled="@(!Content.IsEditable && !IsNew)">
+                Name:
+            </FluentTextField>
             @if (!validName)
             {
                 @if (string.IsNullOrEmpty(@Content.Name))
@@ -40,18 +45,26 @@
         </div>
         <div class="col-12">
             <div class="col-6">
-                <FluentCheckbox @bind-Value="@Content.IsEmployee" Style="margin-top: 4px;" Disabled="@(!Content.IsEditable && !IsNew)">Is Employee</FluentCheckbox>
+                <FluentCheckbox @bind-Value="@Content.IsEmployee"
+                                Style="margin-top: 4px;"
+                                Disabled="@(!Content.IsEditable && !IsNew)">
+                    Is Employee
+                </FluentCheckbox>
             </div>
             <div class="col-6">
-                <FluentCheckbox @bind-Value="@Content.IsEditable" Style="margin-top: 4px;" Disabled="@(!Content.IsEditable && !IsNew)">Is Editable</FluentCheckbox>
+                <FluentCheckbox @bind-Value="@Content.IsEditable"
+                                Style="margin-top: 4px;"
+                                Disabled="@(!Content.IsEditable && !IsNew)">
+                    Is Editable
+                </FluentCheckbox>
             </div>
             
         </div>
-        <div class="col-12" Style="margin-top: 4px;">
+        <div class="col-12" style="overflow-x: auto; margin: 0 auto;">
             <div>
                 <h4>Select Permissions:</h4>
             </div>
-            <div>
+            <div style="height: 226px !important; overflow-y:auto;">
                 <FluentDataGrid Items="@FilteredItems"
                                 ResizableColumns=true
                                 Pagination="@pagination"
@@ -61,8 +74,7 @@
                     <TemplateColumn Title="Selected">
                         <FluentCheckbox TValue="bool"
                                         ValueChanged="@((val) => _onSelectionChange(context.Id, val))"
-                                        Value="@context.IsSelected"
-                                        Disabled="@(!Content.IsEditable && !IsNew)" />
+                                        Value="@context.IsSelected"/> <!-- Disabled="@(!Content.IsEditable && !IsNew)" -->
                     </TemplateColumn>
 
                     <TemplateColumn Title="Name"

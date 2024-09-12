@@ -9,9 +9,10 @@
 @inject Logging.LoggerManager _logger
 @inject MicrosoftTeams MicrosoftTeams
 
+
 @if (_barChartConfig != null)
 {
-    <div class="row mb-1" >
+    <div class="row mb-1">
 
         <!-- Filters -->
         <div class="col-6">
@@ -21,13 +22,20 @@
                          VerticalAlignment="VerticalAlignment.Center">
 
                 <!-- Date Range -->
-                <DateRangePicker class="form-control"
-                                 title="Dates"
-                                 placeholder="Select dates..."
-                                 @bind-StartDate="StartDate"
-                                 @bind-EndDate="EndDate"
-                                 OnRangeSelect="@(async (e) => await OnDateSelect(e))"
-                                 style="width: 200px;" />
+                <div>
+                    <DateRangePicker class="form-control"
+                                     title="Dates"
+                                     placeholder="Select dates..."
+                                     @bind-StartDate="StartDate"
+                                     @bind-EndDate="EndDate"
+                                     OnRangeSelect="@(async (e) => await OnDateSelect(e))"
+                                     style="width: 200px;" />
+
+                    @if (!string.IsNullOrEmpty(dateValidMsg))
+                    {
+                        <span class="text-warning">@dateValidMsg</span>
+                    }
+                </div>
 
                 <!-- Client -->
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
@@ -64,7 +72,7 @@
         </div>
 
         <!-- Export to PDF -->
-        <div class="col-6">
+        <div class="col-6" style="visibility:@((_loading ? "hidden" : "visible"));">
             <FluentStack Orientation="Orientation.Horizontal"
                          HorizontalAlignment="HorizontalAlignment.End"
                          HorizontalGap="8"
@@ -80,12 +88,25 @@
 
         <!-- Chart -->
         <div class="col-12 container mt-1"
-             id="export-to-pdf-projects-report-chart">
+             id="export-to-pdf-projects-report-chart"
+             style="visibility:@((_loading ? "hidden" : "visible"));">
             <Chart @ref="@_chartInstance" Config="@_barChartConfig" />
         </div>
 
+        @if (_loading)
+        {
+            <!-- Loading -->
+            <FluentOverlay @bind-Visible="@_loading">
+                <FluentProgressRing />
+            </FluentOverlay>
+
+            @* <FluentProgressRing Style="margin: 0 auto;" /> *@
+        }
+
         <!-- Table -->
-        <div class="col-12 mt-2" id="export-to-pdf-projects-report-table">
+        <div class="col-12 mt-2"
+             id="export-to-pdf-projects-report-table"
+             style="visibility:@((_loading ? "hidden" : "visible"));">
 
             <div>
                 <FluentDataGrid Items="@FilteredItems"
@@ -143,6 +164,7 @@
         </div>
 
     </div>
+
 }
 else
 {

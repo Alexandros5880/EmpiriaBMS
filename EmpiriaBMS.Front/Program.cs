@@ -40,6 +40,8 @@ builder.Services.AddScoped<SeedData>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddScoped<DailyEmailSender>();
 
+builder.Services.AddScoped<Culture>();
+
 // AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
 {

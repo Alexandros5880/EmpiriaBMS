@@ -3,6 +3,7 @@ using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.DefaultComponents;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Globalization;
 
 namespace EmpiriaBMS.Front.Interop.TeamsSDK;
 
@@ -68,6 +69,11 @@ public class MicrosoftTeams : InteropModuleBase
     public Task ScrollToElement(string id)
     {
         return InvokeVoidAsync("scrollToElement", id);
+    }
+
+    public Task InitializeTooltips()
+    {
+        return InvokeVoidAsync("initializeTooltips");
     }
 
     #region Cookies

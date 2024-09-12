@@ -1,10 +1,13 @@
 ﻿@page "/payments"
 
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Core.Services
+
 @inject IDataProvider DataProvider
 @inject IMapper Mapper
 @inject IDialogService DialogService
 @inject Logging.LoggerManager Logger
+@inject Culture Culture
 
 <div class="row" style="width: 100%; overflow-x: auto; margin: 0 auto;">
     <div class="col-12 card shadow">
@@ -47,7 +50,7 @@
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.InvoiceTypeName)" Sortable="true" Title="Invoice Type" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Bank)" Sortable="true" Title="Bank" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Fee)" Sortable="true" Title="Fee" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => @Culture.GetNumberFromated((double)p.Fee))" Sortable="true" Title="Fee" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Payment Date" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">

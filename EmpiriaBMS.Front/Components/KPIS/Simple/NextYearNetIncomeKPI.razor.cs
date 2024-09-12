@@ -1,4 +1,8 @@
-﻿namespace EmpiriaBMS.Front.Components.KPIS;
+﻿using EmpiriaBMS.Front.Interop.TeamsSDK;
+using Microsoft.Recognizers.Text;
+using System.Globalization;
+
+namespace EmpiriaBMS.Front.Components.KPIS.Simple;
 
 public partial class NextYearNetIncomeKPI
 {
@@ -12,6 +16,7 @@ public partial class NextYearNetIncomeKPI
         if (firstRender)
         {
             _nextYearNetIncome = await _dataProvider.KPIS.GetNextYearNetIncome();
+            StateHasChanged();
         }
     }
 

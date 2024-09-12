@@ -2,20 +2,50 @@
 @using EmpiriaBMS.Front.Horizontal;
 @using ChartJs.Blazor;
 @using EmpiriaBMS.Front.Components.KPIS;
+@using FluentUI = Microsoft.Fast.Components.FluentUI;
+@using EmpiriaBMS.Front.Components.KPIS.Simple;
 
 @inject IDataProvider _dataProvider
 @inject SharedAuthDataService _sharedAuthData
 @inject IMapper _mapper
 @inject Logging.LoggerManager Logger
+@inject MicrosoftTeams MicrosoftTeams
 
 <div class="container-fluid m-2" style="max-width: 98% !important;">
 
     <FluentLayout Style="margin-top: 10px;">
 
         <FluentHeader>
+            
             <h3>Key Performance Indicators (KPIS)</h3>
+
             <FluentSpacer />
-            Aligned to the end
+
+            @if (SeeNextYearIncome)
+            {
+                <NextYearNetIncomeKPI />
+            }
+
+            <FluentSpacer />
+
+            @if (SeeEstimatedInvoicing)
+            {
+                <EstimatedInvoicing />
+            }
+
+            <FluentSpacer />
+
+            @if (SeeUnpaidPaidInvoices)
+            {
+                <PaidUnpaidInvoicesCount/>
+            }
+
+            <FluentSpacer />
+
+            
+            
+            <FluentIcon Value="@(new Icons.Regular.Size32.Flowchart())" Color="FluentUI.Color.Fill"/>
+
         </FluentHeader>
 
         <FluentStack Orientation="Orientation.Horizontal" Width="100%" HorizontalGap="33">
@@ -66,12 +96,6 @@
                 {
                     <FluentNavLink OnClick="@((e) => TabMenuClick(e, 7))"
                                    Class="@((tabs[7] ? "active-nav-link" : ""))">Projects Missed Deadline</FluentNavLink>
-                }
-
-                @if (SeeNextYearIncome)
-                {
-                    <FluentNavLink OnClick="@((e) => TabMenuClick(e, 8))"
-                                   Class="@((tabs[8] ? "active-nav-link" : ""))">Next Year Income</FluentNavLink>
                 }
                 
             </FluentNavMenu>
@@ -146,15 +170,6 @@
                     {
                         <div style="margin-top: 50px;">
                             <ProjectsMissedDeadlineKPI />
-                        </div>
-                    }
-                }
-                else if (tabs[8])
-                {
-                    @if (SeeNextYearIncome)
-                    {
-                        <div style="margin-top: 50px;">
-                            <NextYearNetIncomeKPI />
                         </div>
                     }
                 }

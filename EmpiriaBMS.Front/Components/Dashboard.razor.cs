@@ -2,6 +2,8 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Components.Invoices;
+using EmpiriaBMS.Front.Components.KPIS.Base;
+using ComReports = EmpiriaBMS.Front.Components.Reports;
 using EmpiriaBMS.Front.Components.WorkingHours;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -58,6 +60,13 @@ public partial class Dashboard : IDisposable
     bool _startLoading = true;
     bool _refreshLoading = true;
     private double _userTotalHoursThisMonth = 0;
+
+    #region Compoment Refrense
+    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceIncomesListRef;
+    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceExpensesListRef;
+    private KPIDashboard _kpiDashRef;
+    private ComReports.Reports _reportsRef;
+    #endregion
 
     #region Working Timer
     Timer timer;
@@ -1272,11 +1281,33 @@ public partial class Dashboard : IDisposable
 
     #region Tab Actions
     private string? _activeid = "tab-home";
+
+    private void _onTabChange(FluentTab tab)
+    {
+        Task task = null;
+        switch(tab.Id)
+        {
+            case "tab-home":
+                //await Refresh();
+                break;
+            case "tab-invoices":
+                task = _invoiceIncomesListRef.Refresh();
+                break;
+            case "tab-excpences":
+                task = _invoiceExpensesListRef.Refresh();
+                break;
+            case "tab-kpis":
+                task = _kpiDashRef.Refresh();
+                break;
+            case "tab-reports":
+                task = _reportsRef.Refresh();
+                break;
+        }
+    }
+
     #endregion
 
     #region Invoice
-    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceIncomesListRef;
-    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceExpensesListRef;
     private InvoiceDetailed _invoiceIncomeDetailedRef;
     private InvoiceDetailed _invoiceExpenseDetailedRef;
     private Payments _invoiceIncomePaymentsRef;
