@@ -77,6 +77,7 @@ public partial class Reports
                             Ticks = new CategoryTicks
                             {
                                 FontColor = ColorUtil.FromDrawingColor(Color.FromArgb(255, 99, 132, 1)),
+                                Max = "100000"
                             }
                         }
                     },
@@ -358,13 +359,20 @@ public partial class Reports
     DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2024"));
     DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
 
+    private string dateValidMsg = string.Empty;
+
     public async Task OnDateSelect(DateRange range)
     {
-        StartDate = range.Start;
-        EndDate = range.End;
-        await _getReportData();
-        await RefreshChart();
-        StateHasChanged();
+        if (StartDate.HasValue && EndDate.HasValue)
+        {
+            StartDate = range.Start;
+            EndDate = range.End;
+
+            // Search
+            await _getReportData();
+            await RefreshChart();
+            StateHasChanged();
+        }
     }
     #endregion
 
