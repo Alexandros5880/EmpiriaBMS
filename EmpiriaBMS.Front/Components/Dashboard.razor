@@ -52,7 +52,7 @@
         </div>
 
         <div class="col-12">
-            <FluentTabs @bind-ActiveTabId="@_activeid">
+            <FluentTabs @bind-ActiveTabId="@_activeid" OnTabChange="_onTabChange">
 
                 <!-- Dashboard -->
                 <FluentTab Class="my-fluent-tab mb-3"
@@ -899,7 +899,7 @@
                                 <div class="m-1 row justify-content-center">
                                     <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
 
-                                        <EmpiriaBMS.Front.Components.KPIS.Base.KPIDashboard />
+                                        <EmpiriaBMS.Front.Components.KPIS.Base.KPIDashboard @ref="_kpiDashRef" />
 
                                     </div>
                                 </div>
@@ -922,7 +922,7 @@
                                 <div class="m-1 row justify-content-center">
                                     <div class="col-12 p-2" style="overflow-x:hidden; margin: 0 auto;">
 
-                                        <Reports />
+                                        <Reports @ref="_reportsRef" />
 
                                     </div>
                                 </div>

@@ -29,4 +29,10 @@ public partial class KPIDashboard
         }
     }
 
+    // TODO: Fix this function
+    public async Task Refresh()
+    {
+        await Task.Delay(1);
+    }
+
 }

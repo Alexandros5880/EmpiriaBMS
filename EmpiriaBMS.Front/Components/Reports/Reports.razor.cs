@@ -57,9 +57,10 @@ public partial class Reports
         }
     }
 
-    protected async Task Refresh()
+    public async Task Refresh()
     {
         _loading = true;
+        StateHasChanged();
         await _getReportData();
         await RefreshChart();
         _loading = false;
