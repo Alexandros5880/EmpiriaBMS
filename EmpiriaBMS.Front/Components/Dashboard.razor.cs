@@ -270,6 +270,7 @@ public partial class Dashboard : IDisposable
         {
             await _offersComp.SetLeadFilter(lead);
             await _offersComp.SetResultFilter(OfferResult.WAITING);
+            await _offersComp.Search();
             await MicrosoftTeams.ScrollToElement("offers-table-dash");
         }
     }

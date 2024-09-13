@@ -19,94 +19,130 @@
 @inject SharedAuthDataService _sharedAuthData
 @inject Logging.LoggerManager Logger
 
-<div class="mt-2 ms-2 me-2">
-    <FluentStack HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
-
-        @if (IsWorkingMode)
-        {
-            <FluentButton IconStart="@(new Icons.Regular.Size16.Add())"
-                          Appearance="Appearance.Accent"
-                          OnClick="@(async (e) => await _add(e))">
-                Add Offer
-            </FluentButton>   
-        }
-
-        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                      Appearance="Appearance.Outline"
-                      OnClick="@(async (e) => await ExportToCSV())"
-                      Disabled="@(FilteredItems.Count() == 0)">
-            Export
-        </FluentButton>
-    </FluentStack>
-</div>
-
 <div class="row mt-2">
 
     <div class="col-12">
-        <!-- Filters -->
-        <FluentStack Orientation="Orientation.Horizontal" 
-                     HorizontalAlignment="HorizontalAlignment.Start"
-                     Style="margin-right: 10px; column-gap: 10px; row-gap: 5px;"
-                     class="m-2"
-                     Wrap="true">
+        <div class="row">
 
-            <FluentCombobox @ref="resultFilterCombo"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            Placeholder="Select Result..."
-                            Items="_offerResults"
-                            Height="400px"
-                            TOption="(string Value, string Text)"
-                            OptionText="@(c => c.Text)"
-                            OptionValue="@(c => c.Value)"
-                            @bind-Value="_selectedResultValue"
-                            SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))"
-                            Class="ms-1" />
+            <!-- Filters -->
+            <div class="col-9">
+                <FluentStack Orientation="Orientation.Horizontal"
+                             HorizontalAlignment="HorizontalAlignment.Start"
+                             Style="column-gap: 10px; row-gap: 5px;"
+                             Wrap="true">
 
-            <FluentCombobox @ref="leadFilterCombo"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            AriaLabel="Pre-selected option"
-                            Height="400px"
-                            Items="@_leads"
-                            TOption="LeadVM"
-                            OptionValue="@((t) => t.Id.ToString())"
-                            OptionText="@((t) => t.Name)"
-                            OptionSelected="@(i => i.Id == _selectedLead?.Id)"
-                            SelectedOptionChanged="@(async (o) => await _onLeadSelectionChanged(o))" />
+                    <div style="width: 160px;">
+                        <FluentCombobox @ref="resultFilterCombo"
+                                        Label="Result:"
+                                        Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Result..."
+                                        Items="_offerResults"
+                                        Height="400px"
+                                        Width="140px"
+                                        TOption="(string Value, string Text)"
+                                        OptionText="@(c => c.Text)"
+                                        OptionValue="@(c => c.Value)"
+                                        @bind-Value="_selectedResultValue"
+                                        SelectedOptionChanged="@((o) => _onResultSelectionChanged(o))" />
+                    </div>
 
-            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                            AriaLabel="Pre-selected option"
-                            Height="400px"
-                            Items="@_projects"
-                            TOption="ProjectVM"
-                            OptionValue="@((t) => t.Id.ToString())"
-                            OptionText="@((t) => t.Name)"
-                            OptionSelected="@(i => i.Id == _selectedProject?.Id)"
-                            SelectedOptionChanged="@(async (o) => await _onProjectSelectionChanged(o))"
-                            Class="ms-1"/>
+                    <div style="width: 160px;">
+                        <FluentCombobox @ref="leadFilterCombo"
+                                        Label="Lead:"
+                                        Autocomplete="ComboboxAutocomplete.Both"
+                                        AriaLabel="Pre-selected option"
+                                        Height="400px"
+                                        Width="140px"
+                                        Items="@_leads"
+                                        TOption="LeadVM"
+                                        OptionValue="@((t) => t.Id.ToString())"
+                                        OptionText="@((t) => t.Name)"
+                                        OptionSelected="@(i => i.Id == _selectedLead?.Id)"
+                                        SelectedOptionChanged="@((o) => _onLeadSelectionChanged(o))" />
+                    </div>
 
-            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                            AriaLabel="Pre-selected option"
-                            Height="400px"
-                            Items="@_offerStates"
-                            TOption="OfferStateVM"
-                            OptionValue="@((t) => t.Id.ToString())"
-                            OptionText="@((t) => t.Name)"
-                            OptionSelected="@(i => i.Id == _selectedOfferState?.Id)"
-                            SelectedOptionChanged="@(async (o) => await _onStateSelectionChanged(o))"
-                            Class="ms-1" />
 
-            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                            AriaLabel="Pre-selected option"
-                            Height="400px"
-                            Items="@_offerTypes"
-                            TOption="OfferTypeVM"
-                            OptionValue="@((t) => t.Id.ToString())"
-                            OptionText="@((t) => t.Name)"
-                            OptionSelected="@(i => i.Id == _selectedOfferType?.Id)"
-                            SelectedOptionChanged="@(async (o) => await _onTypeSelectionChanged(o))"
-                            Class="ms-1" />
-            
-        </FluentStack>
+                    <div style="width: 160px;">
+                        <FluentCombobox @ref="projectFilterCombo"
+                                        Label="Project:"
+                                        Autocomplete="ComboboxAutocomplete.Both"
+                                        AriaLabel="Pre-selected option"
+                                        Height="400px"
+                                        Width="140px"
+                                        Items="@_projects"
+                                        TOption="ProjectVM"
+                                        OptionValue="@((t) => t.Id.ToString())"
+                                        OptionText="@((t) => t.Name)"
+                                        OptionSelected="@(i => i.Id == _selectedProject?.Id)"
+                                        SelectedOptionChanged="@((o) => _onProjectSelectionChanged(o))" />
+                    </div>
+
+                    <div style="width: 160px;">
+                        <FluentCombobox @ref="stateFilterCombo"
+                                        Label="State:"
+                                        Autocomplete="ComboboxAutocomplete.Both"
+                                        AriaLabel="Pre-selected option"
+                                        Height="400px"
+                                        Width="140px"
+                                        Items="@_offerStates"
+                                        TOption="OfferStateVM"
+                                        OptionValue="@((t) => t.Id.ToString())"
+                                        OptionText="@((t) => t.Name)"
+                                        OptionSelected="@(i => i.Id == _selectedOfferState?.Id)"
+                                        SelectedOptionChanged="@((o) => _onStateSelectionChanged(o))" />
+                    </div>
+
+                    <div style="width: 160px;">
+                        <FluentCombobox @ref="typeFilterCombo"
+                                        Label="Type:"
+                                        Autocomplete="ComboboxAutocomplete.Both"
+                                        AriaLabel="Pre-selected option"
+                                        Height="400px"
+                                        Width="140px"
+                                        Items="@_offerTypes"
+                                        TOption="OfferTypeVM"
+                                        OptionValue="@((t) => t.Id.ToString())"
+                                        OptionText="@((t) => t.Name)"
+                                        OptionSelected="@(i => i.Id == _selectedOfferType?.Id)"
+                                        SelectedOptionChanged="@((o) => _onTypeSelectionChanged(o))" />
+                    </div>
+
+                    <div style="width: 100px; height: 100%; background-color: forestgreen;">
+                        <FluentStack Orientation="Orientation.Vertical"
+                                     VerticalAlignment="VerticalAlignment.Bottom">
+                            <FluentButton aria-label="Search"
+                                          IconEnd="@(new Icons.Regular.Size16.Search())"
+                                          OnClick="@(async () => await Search())" />
+                        </FluentStack>
+                    </div>
+
+                </FluentStack>
+            </div>
+
+            <!-- Add/Export Button -->
+            <div class="col-3">
+                <FluentStack HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+
+                    @if (IsWorkingMode)
+                    {
+                        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())"
+                                      Appearance="Appearance.Accent"
+                                      OnClick="@(async (e) => await _add(e))">
+                            Add Offer
+                        </FluentButton>
+                    }
+
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                  Appearance="Appearance.Outline"
+                                  OnClick="@(async (e) => await ExportToCSV())"
+                                  Disabled="@(FilteredItems.Count() == 0)">
+                        Export
+                    </FluentButton>
+
+                </FluentStack>
+            </div>
+
+        </div>
     </div>
 
     <!-- Offers Table -->
@@ -145,24 +181,6 @@
                 <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.Category.Name)" Sortable="true" Title="Category" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.SubCategory.Name)" Sortable="true" Title="SubCategory" Align="@Align.Start" />
-@* 
-                <TemplateColumn Title="Client"
-                                Sortable="true"
-                                Style="min-width: 160px;">
-                    <ColumnOptions>
-                        <div class="search-box">
-                            <FluentSearch type="search"
-                                          Autofocus=true
-                                          @bind-Value="@_clientNameFilter"
-                                          Placeholder="Client name..."
-                                          @oninput="@HandleClientNameFilter" />
-                        </div>
-                    </ColumnOptions>
-                    <ChildContent>
-                        @(context.Project?.Client?.LastName ?? "" + " " + context.Project?.Client?.FirstName ?? "")
-                    </ChildContent>
-                </TemplateColumn> *@
-
                 <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Style="min-width: 120px;" />
                 <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.PudgetPrice)" Sortable="true" Title="Pudget" Style="min-width: 100px;" />

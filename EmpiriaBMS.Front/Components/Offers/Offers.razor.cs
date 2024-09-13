@@ -21,8 +21,11 @@ public partial class Offers
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
 
-    private FluentCombobox<LeadVM> leadFilterCombo;
     private FluentCombobox<(string Value, string Text)> resultFilterCombo;
+    private FluentCombobox<LeadVM> leadFilterCombo;
+    private FluentCombobox<ProjectVM> projectFilterCombo;
+    private FluentCombobox<OfferStateVM> stateFilterCombo;
+    private FluentCombobox<OfferTypeVM> typeFilterCombo;
 
     private ObservableCollection<LeadVM> _leads = new ObservableCollection<LeadVM>();
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
@@ -49,32 +52,6 @@ public partial class Offers
     #region Data Grid
     IQueryable<OfferVM> FilteredItems => _offers?.AsQueryable();
     PaginationState pagination = new PaginationState { ItemsPerPage = 4 };
-    private string _projectNameFilter = string.Empty;
-    private string _clientNameFilter = string.Empty;
-
-    private void HandleProjectNameFilter(ChangeEventArgs args)
-    {
-        if (args.Value is string value)
-        {
-            _projectNameFilter = value;
-        }
-        else if (string.IsNullOrWhiteSpace(_projectNameFilter) || string.IsNullOrEmpty(_projectNameFilter))
-        {
-            _projectNameFilter = string.Empty;
-        }
-    }
-
-    private void HandleClientNameFilter(ChangeEventArgs args)
-    {
-        if (args.Value is string value)
-        {
-            _clientNameFilter = value;
-        }
-        else if (string.IsNullOrWhiteSpace(_clientNameFilter) || string.IsNullOrEmpty(_clientNameFilter))
-        {
-            _clientNameFilter = string.Empty;
-        }
-    }
 
     private async Task HandleResultChange(OfferVM context, ChangeEventArgs e)
     {
@@ -106,7 +83,6 @@ public partial class Offers
         var dtos = await _dataProvider.Leads.GetAll();
         var vms = Mapper.Map<List<LeadVM>>(dtos);
         _leads.Clear();
-        _leads.Add(new LeadVM { Id = 0, Name = "Select Lead..." });
         vms.ForEach(_leads.Add);
     }
 
@@ -115,7 +91,6 @@ public partial class Offers
         var dtos = await _dataProvider.OfferStates.GetAll();
         var vms = Mapper.Map<List<OfferStateVM>>(dtos);
         _offerStates.Clear();
-        _offerStates.Add(new OfferStateVM { Id = 0, Name = "Select State..." });
         vms.ForEach(_offerStates.Add);
     }
 
@@ -124,7 +99,6 @@ public partial class Offers
         var dtos = await _dataProvider.OfferTypes.GetAll();
         var vms = Mapper.Map<List<OfferTypeVM>>(dtos);
         _offerTypes.Clear();
-        _offerTypes.Add(new OfferTypeVM { Id = 0, Name = "Select Type..." });
         vms.ForEach(_offerTypes.Add);
     }
 
@@ -133,11 +107,10 @@ public partial class Offers
         var dtos = await _dataProvider.Projects.GetAll();
         var vms = Mapper.Map<List<ProjectVM>>(dtos);
         _projects.Clear();
-        _projects.Add(new ProjectVM { Id = 0, Name = "Select Project..." });
         vms.ForEach(_projects.Add);
     }
 
-    private async Task _getOffers(int projectId, int stateId = 0, int typeId = 0, int leadId = 0, OfferResult? result = null, bool refresh = false)
+    private async Task _getOffers(int? projectId, int? stateId = 0, int? typeId = 0, int? leadId = 0, OfferResult? result = null, bool refresh = false)
     {
         var dtos = await _dataProvider.Offers.GetAll(projectId: projectId, stateId: stateId, typeId: typeId, leadId: leadId, result: result);
         var vms = Mapper.Map<List<OfferVM>>(dtos);
@@ -154,18 +127,12 @@ public partial class Offers
         await _getAllProjects();
         await _getOfferStates();
         await _getOfferTypes();
-        _selectedProject = _projects.FirstOrDefault(o => o.Name.Equals("Select Project..."));
-        _selectedOfferState = _offerStates.FirstOrDefault(o => o.Name.Equals("Select State..."));
-        _selectedOfferType = _offerTypes.FirstOrDefault(o => o.Name.Equals("Select Type..."));
-
-        _selectedLead = _leads?.OrderByDescending(l => l.LastUpdatedDate).FirstOrDefault(o => o.Name.Equals("Select Lead..."));
-        leadFilterCombo.Value = _selectedLead.Name;
 
         _selectedOfferResult = OfferResult.SUCCESSFUL.ToTuple();
         SetSelectedOption(_selectedOfferResult.Value);
         OfferResult e;
         Enum.TryParse(_selectedOfferResult.Value, out e);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
+        await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedLead?.Id ?? 0, e, refresh: true);
 
         StateHasChanged();
     }
@@ -183,54 +150,8 @@ public partial class Offers
         _selectedOfferResult = result.ToTuple();
         OfferResult e;
         Enum.TryParse(_selectedOfferResult.Value, out e);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
+        await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedLead?.Id ?? 0, e, refresh: true);
         SetSelectedOption(_selectedOfferResult.Value);
-    }
-
-    #region On Filters Event Changed
-    private async Task _onLeadSelectionChanged(LeadVM lead)
-    {
-        if (lead == null) return;
-
-        OfferResult result;
-        Enum.TryParse(_selectedOfferResult.Value, out result);
-
-        _selectedLead = lead;
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead.Id, result, refresh: true);
-    }
-
-    private async Task _onProjectSelectionChanged(ProjectVM project)
-    {
-        if (project == null) return;
-
-        _selectedProject = project;
-        OfferResult result;
-        Enum.TryParse(_selectedOfferResult.Value, out result);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, result, refresh: true);
-    }
-
-    private async Task _onStateSelectionChanged(OfferStateVM state)
-    {
-        _selectedOfferState = state;
-        OfferResult result;
-        Enum.TryParse(_selectedOfferResult.Value, out result);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, result, refresh: true);
-    }
-
-    private async Task _onTypeSelectionChanged(OfferTypeVM type)
-    {
-        _selectedOfferType = type;
-        OfferResult result;
-        Enum.TryParse(_selectedOfferResult.Value, out result);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, result, refresh: true);
-    }
-
-    private async Task _onResultSelectionChanged((string Value, string Text) result)
-    {
-        _selectedOfferResult = result;
-        OfferResult e;
-        Enum.TryParse(result.Value, out e);
-        await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, e, refresh: true);
     }
 
     public void SetSelectedOption(string value)
@@ -240,6 +161,37 @@ public partial class Offers
         {
             _selectedResultValue = selectedOption.Value;
         }
+    }
+
+    #region On Filters Event Changed
+    private void _onLeadSelectionChanged(LeadVM lead)
+    {
+        _selectedLead = lead;
+    }  
+
+    private void _onProjectSelectionChanged(ProjectVM project)
+    {
+        _selectedProject = project;
+    }
+
+    private void _onStateSelectionChanged(OfferStateVM state)
+    {
+        _selectedOfferState = state;
+    }
+
+    private void _onTypeSelectionChanged(OfferTypeVM type)
+    {
+        _selectedOfferType = type;
+    }
+
+    private void _onResultSelectionChanged((string Value, string Text) result) =>
+        _selectedOfferResult = result;
+
+    public async Task Search()
+    {
+        OfferResult result;
+        Enum.TryParse(_selectedOfferResult.Value, out result);
+        await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedLead?.Id ?? 0, result, refresh: true);
     }
     #endregion
 
@@ -291,7 +243,7 @@ public partial class Offers
             var waitingResult = offerVMData.Result.ToTuple();
             SetSelectedOption(waitingResult.Value);
             StateHasChanged();
-            await _onResultSelectionChanged(waitingResult);
+            _onResultSelectionChanged(waitingResult);
 
             OfferResult offerResult;
             Enum.TryParse(_selectedOfferResult.Value, out offerResult);
@@ -336,7 +288,8 @@ public partial class Offers
             var waitingResult = vm.Result.ToTuple();
             SetSelectedOption(waitingResult.Value);
             StateHasChanged();
-            await _onResultSelectionChanged(waitingResult);
+            _onResultSelectionChanged(waitingResult);
+            await Search();
         }
     }
 

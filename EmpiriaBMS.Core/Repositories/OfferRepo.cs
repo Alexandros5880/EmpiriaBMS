@@ -117,7 +117,12 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    public async Task<ICollection<OfferDto>> GetAll(int projectId = 0, int stateId = 0, int typeId = 0, int leadId = 0, OfferResult? result = null)
+    public async Task<ICollection<OfferDto>> GetAll(
+        int? projectId = 0,
+        int? stateId = 0,
+        int? typeId = 0,
+        int? leadId = 0,
+        OfferResult? result = null)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -134,11 +139,11 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
                                        .Include(o => o.Project)
                                        .ThenInclude(p => p.Stage)
                                        .Where(o => !o.IsDeleted
-                                                    && (stateId == 0 || o.StateId == stateId)
-                                                    && (typeId == 0 || o.TypeId == typeId)
-                                                    && (result == null || o.Result == result)
-                                                    && (leadId == 0 || o.LeadId == leadId)
-                                                    && (projectId == 0 || o.ProjectId == projectId)
+                                                    && (stateId == null || stateId == 0 || o.StateId == stateId)
+                                                    && (typeId == null || typeId == 0 || o.TypeId == typeId)
+                                                    && (result == null || result == null || o.Result == result)
+                                                    && (leadId == null || leadId == 0 || o.LeadId == leadId)
+                                                    && (projectId == null || projectId == 0 || o.ProjectId == projectId)
                                        )
                                        .ToListAsync();
 
