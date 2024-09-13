@@ -1288,15 +1288,23 @@ public partial class Dashboard : IDisposable
             {
                 case nameof(_selectedProject):
                     await _dataProvider.Projects.Delete(_selectedProject.Id);
+                    _projects.Remove(_selectedProject);
+                    _selectedProject = null;
                     break;
                 case nameof(_selectedDiscipline):
                     await _dataProvider.Disciplines.Delete(_selectedDiscipline.Id);
+                    _disciplines.Remove(_selectedDiscipline);
+                    _selectedDiscipline = null;
                     break;
                 case nameof(_selectedDeliverable):
                     await _dataProvider.Deliverables.Delete(_selectedDeliverable.Id);
+                    _deliverables.Remove(_selectedDeliverable);
+                    _selectedDeliverable = null;
                     break;
                 case nameof(_selectedSupportiveWork):
                     await _dataProvider.SupportiveWorks.Delete(_selectedSupportiveWork.Id);
+                    _supportiveWork.Remove(_selectedSupportiveWork);
+                    _selectedSupportiveWork = null;
                     break;
             }
 
