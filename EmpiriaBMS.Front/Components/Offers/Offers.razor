@@ -144,7 +144,7 @@
                             ResizableColumns=true
                             Pagination="@pagination"
                             TGridItem="OfferVM"
-                            GridTemplateColumns="@((IsWorkingMode ? "3fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 2fr 100px" : "3fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 2fr 100px"))"
+                            GridTemplateColumns="@((IsWorkingMode ? "3fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 100px" : "3fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 100px"))"
                             style="height: 280px; overflow:auto;">
 
                 <!-- Result -->
@@ -176,7 +176,6 @@
                 <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.PudgetPrice)" Sortable="true" Title="Pudget" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.OfferPrice)" Sortable="true" Title="Price" Style="min-width: 100px;" />
-                <PropertyColumn Property="@(p => p.Description)" Sortable="true" Title="Description" Style="min-width: 160px;" />
 
                 @if (IsWorkingMode)
                 {

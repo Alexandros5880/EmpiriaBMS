@@ -51,7 +51,7 @@ public partial class Offers
 
     #region Data Grid
     IQueryable<OfferVM> FilteredItems => _offers?.AsQueryable();
-    PaginationState pagination = new PaginationState { ItemsPerPage = 4 };
+    PaginationState pagination = new PaginationState { ItemsPerPage = 6 };
 
     private async Task HandleResultChange(OfferVM context, ChangeEventArgs e)
     {

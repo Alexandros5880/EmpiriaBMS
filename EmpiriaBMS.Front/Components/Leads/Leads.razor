@@ -45,19 +45,20 @@
                      class="ms-2 me-2"
                      Wrap="true">
 
-            <FluentCombobox @ref="_resultFilterCombo"
-                            Label="Result"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            Multiple="false"
-                            Placeholder="Select Result..."
-                            Items="_leadResults"
-                            Width="200px"
-                            TOption="(string Value, string Text)"
-                            OptionText="@(c => c.Text)"
-                            OptionValue="@(c => c.Value)"
-                            @bind-Value="_selectedResultValue"
-                            SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))"
-                            Class="ms-1" />
+            <div style="width: 160px;">
+                <FluentCombobox @ref="_resultFilterCombo"
+                                Label="Result:"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                Multiple="false"
+                                Placeholder="Select Result..."
+                                Items="_leadResults"
+                                Width="200px"
+                                TOption="(string Value, string Text)"
+                                OptionText="@(c => c.Text)"
+                                OptionValue="@(c => c.Value)"
+                                @bind-Value="_selectedResultValue"
+                                SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))"/>
+            </div>
 
         </FluentStack>
     </div>
