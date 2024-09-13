@@ -92,6 +92,66 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
+    public async new Task<DisciplineDto> Add(DisciplineDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = Mapping.Mapper.Map<Discipline>(entity);
+                var result = await _context.Set<Discipline>().AddAsync(entry);
+                await _context.SaveChangesAsync();
+
+                var id = result.Entity?.Id;
+                if (id == null)
+                    throw new NullReferenceException(nameof(id));
+
+                var endry = await Get((int)id);
+
+                return Mapping.Mapper.Map<DisciplineDto>(endry);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On DisciplineRepo.Add(Discipline): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
+    public async new Task<DisciplineDto> Update(DisciplineDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await Get(entity.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Discipline>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                return Mapping.Mapper.Map<DisciplineDto>(entry);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On DisciplineRepo.Update(Discipline): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
     public async Task<List<DeliverableDto>> GetDraws(int id)
     {
         if (id == 0)

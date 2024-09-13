@@ -123,6 +123,66 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         }
     }
 
+    public async new Task<SupportiveWorkDto> Add(SupportiveWorkDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = Mapping.Mapper.Map<SupportiveWork>(entity);
+                var result = await _context.Set<SupportiveWork>().AddAsync(entry);
+                await _context.SaveChangesAsync();
+
+                var id = result.Entity?.Id;
+                if (id == null)
+                    throw new NullReferenceException(nameof(id));
+
+                var endry = await Get((int)id);
+
+                return Mapping.Mapper.Map<SupportiveWorkDto>(endry);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On SupportiveWorkRepo.Add(SupportiveWork): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
+    public async new Task<SupportiveWorkDto> Update(SupportiveWorkDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<SupportiveWork>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<SupportiveWork>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                return Mapping.Mapper.Map<SupportiveWorkDto>(entry);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On SupportiveWorkRepo.Update(SupportiveWork): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
     public async Task<long> GetMenHoursAsync(int otherId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())

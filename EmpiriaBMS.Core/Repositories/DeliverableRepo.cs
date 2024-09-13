@@ -118,6 +118,66 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
     }
 
+    public async new Task<DeliverableDto> Add(DeliverableDto entity, bool update = false)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = Mapping.Mapper.Map<Deliverable>(entity);
+                var result = await _context.Set<Deliverable>().AddAsync(entry);
+                await _context.SaveChangesAsync();
+
+                var id = result.Entity?.Id;
+                if (id == null)
+                    throw new NullReferenceException(nameof(id));
+
+                var endry = await Get((int)id);
+
+                return Mapping.Mapper.Map<DeliverableDto>(endry);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On DeliverableRepo.Add(Deliverable): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
+    public async new Task<DeliverableDto> Update(DeliverableDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await Get(entity.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Deliverable>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                return Mapping.Mapper.Map<DeliverableDto>(entry);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On DeliverableRepo.Update(Deliverable): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
+        }
+    }
+
     public async Task<long> GetMenHoursAsync(int drwaingId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
