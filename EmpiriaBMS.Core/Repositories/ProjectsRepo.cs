@@ -18,7 +18,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         _invoiceRepo = new InvoiceRepo(DbFactory, logger);
     }
 
-    public async Task<ProjectDto> Add(ProjectDto entity, bool update = false)
+    public async new Task<ProjectDto> Add(ProjectDto entity, bool update = false)
     {
         try
         {
@@ -46,7 +46,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ProjectDto> Update(ProjectDto entity)
+    public async new Task<ProjectDto> Update(ProjectDto entity)
     {
         try
         {
