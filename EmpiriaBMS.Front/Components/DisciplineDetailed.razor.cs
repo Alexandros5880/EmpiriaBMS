@@ -18,6 +18,8 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
     List<DisciplineTypeDto> _disciplineTypes = new List<DisciplineTypeDto>();
     private DisciplineVM _discipline = new DisciplineVM();
 
+    public DisciplineVM GetDiscipline() => _discipline;
+
     private async Task _getDisciplineTypes()
     {
         var types = await DataProvider.DisciplinesTypes.GetAll();

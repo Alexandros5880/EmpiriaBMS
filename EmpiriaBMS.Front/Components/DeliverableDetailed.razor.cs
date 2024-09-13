@@ -15,6 +15,8 @@ public partial class DeliverableDetailed : ComponentBase, IDisposable
     List<DeliverableTypeDto> _drawingTypes = new List<DeliverableTypeDto>();
     private DeliverableVM _drawing = new DeliverableVM();
 
+    public DeliverableVM GetDeliverable() => _drawing;
+
     private async Task _getDrawingTypes()
     {
         // TODO: Deliverables Types Get By Discipline Id

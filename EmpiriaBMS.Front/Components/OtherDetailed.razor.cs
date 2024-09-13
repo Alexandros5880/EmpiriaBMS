@@ -15,6 +15,8 @@ public partial class OtherDetailed : ComponentBase, IDisposable
     List<SupportiveWorkTypeDto> _otherTypes = new List<SupportiveWorkTypeDto>();
     private SupportiveWorkVM _other = new SupportiveWorkVM();
 
+    public SupportiveWorkVM GetSupportiveWork() => _other;
+
     private async Task _getOtherTypes()
     {
         // TODO: SupportiveWorks Types Get By Discipline Id

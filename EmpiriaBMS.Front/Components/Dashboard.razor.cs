@@ -19,6 +19,7 @@ using Microsoft.Fast.Components.FluentUI;
 using System;
 using System.Collections.ObjectModel;
 using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
+using EmpiriaBMS.Front.Components.Admin.Projects;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
@@ -1072,9 +1073,20 @@ public partial class Dashboard : IDisposable
         if (valid)
         {
             await projectCompoment.SaveAsync();
+
+            var newProject = projectCompoment.GetProject();
+            if (_projects.Any(p => p.Id == newProject.Id))
+                _projects.Remove(newProject);
+
+            // Order by DeaLine and add new one on top
+            var sortedProjects = _projects.OrderByDescending(p => p.DeadLine).ToList();
+            sortedProjects.Insert(0, newProject);
+            _projects = new ObservableCollection<ProjectVM>(sortedProjects);
+
             _addEditProjectDialog.Hide();
             _isAddEditProjectDialogOdepened = false;
-            await Refresh(); // TODO: Not refresh all page
+
+            StateHasChanged();
         }
     }
 
@@ -1112,9 +1124,18 @@ public partial class Dashboard : IDisposable
     public async Task _addEditDisciplineDialogAccept()
     {
         await disciplineCompoment.HandleValidSubmit();
+
+        var newDiscipline = disciplineCompoment.GetDiscipline();
+        if (_disciplines.Any(d => d.Id == newDiscipline.Id))
+            _disciplines.Remove(newDiscipline);
+
+        _disciplines.Insert(0, newDiscipline);
+        _disciplines = new ObservableCollection<DisciplineVM>(_disciplines);
+
         _addEditDisciplineDialog.Hide();
         _isAddEditDisciplineDialogOdepened = false;
-        await Refresh(); // TODO: Not refresh all page
+
+        StateHasChanged();
     }
 
     private void DeleteDiscipline()
@@ -1153,9 +1174,18 @@ public partial class Dashboard : IDisposable
     public async Task _addEditDeliverableDialogAccept()
     {
         await deliverableCompoment.HandleValidSubmit();
+
+        var newDeliverable = deliverableCompoment.GetDeliverable();
+        if (_deliverables.Any(d => d.Id == newDeliverable.Id))
+            _deliverables.Remove(newDeliverable);
+
+        _deliverables.Insert(0, newDeliverable);
+        _deliverables = new ObservableCollection<DeliverableVM>(_deliverables);
+
         _addEditDeliverableDialog.Hide();
         _isAddEditDeliverableDialogOdepened = false;
-        await Refresh(); // TODO: Not refresh all page
+
+        StateHasChanged();
     }
 
     private void DeleteDeliverable()
@@ -1194,9 +1224,18 @@ public partial class Dashboard : IDisposable
     public async Task _addEditSupportiveWorkDialogAccept()
     {
         await supportiveWorkrCompoment.HandleValidSubmit();
+
+        var newSupportiveWork = supportiveWorkrCompoment.GetSupportiveWork();
+        if (_supportiveWork.Any(d => d.Id == newSupportiveWork.Id))
+            _supportiveWork.Remove(newSupportiveWork);
+
+        _supportiveWork.Insert(0, newSupportiveWork);
+        _supportiveWork = new ObservableCollection<SupportiveWorkVM>(_supportiveWork);
+
         _addEditSupportiveWorkDialog.Hide();
         _isAddEditSupportiveWorkDialogOdepened = false;
-        await Refresh(); // TODO: Not refresh all page
+
+        StateHasChanged();
     }
 
     private void DeleteSupportiveWork()
@@ -1263,7 +1302,7 @@ public partial class Dashboard : IDisposable
             _deleteDialog.Hide();
             _isDeleteDialogOdepened = false;
 
-            await Refresh();
+            StateHasChanged();
         }
     }
 
