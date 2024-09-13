@@ -41,6 +41,7 @@ public partial class ProjectDetailed : ComponentBase
         {
             if (_offer == value || value == null) return;
             _offer = value;
+            Content.OfferId = _offer.Id;
         }
     }
 
