@@ -9,10 +9,18 @@
 @inject Logging.LoggerManager _logger
 @inject MicrosoftTeams MicrosoftTeams
 
+@if (_loading)
+{
+    <!-- Loading -->
+    <div class="loading_speen">
+        <FluentProgressRing @bind-Visible="@_loading" />
+    </div>
+}
 
 @if (_barChartConfig != null)
 {
-    <div class="row mb-1">
+    <div class="row mb-1"
+         style="visibility:@((_loading ? "hidden" : "visible"));">
 
         <!-- Filters -->
         <div class="col-6">
@@ -72,7 +80,7 @@
         </div>
 
         <!-- Export to PDF -->
-        <div class="col-6" style="visibility:@((_loading ? "hidden" : "visible"));">
+        <div class="col-6">
             <FluentStack Orientation="Orientation.Horizontal"
                          HorizontalAlignment="HorizontalAlignment.End"
                          HorizontalGap="8"
@@ -88,25 +96,13 @@
 
         <!-- Chart -->
         <div class="col-12 container mt-1"
-             id="export-to-pdf-projects-report-chart"
-             style="visibility:@((_loading ? "hidden" : "visible"));">
+             id="export-to-pdf-projects-report-chart">
             <Chart @ref="@_chartInstance" Config="@_barChartConfig" />
         </div>
 
-        @if (_loading)
-        {
-            <!-- Loading -->
-            <FluentOverlay @bind-Visible="@_loading">
-                <FluentProgressRing />
-            </FluentOverlay>
-
-            @* <FluentProgressRing Style="margin: 0 auto;" /> *@
-        }
-
         <!-- Table -->
         <div class="col-12 mt-2"
-             id="export-to-pdf-projects-report-table"
-             style="visibility:@((_loading ? "hidden" : "visible"));">
+             id="export-to-pdf-projects-report-table">
 
             <div>
                 <FluentDataGrid Items="@FilteredItems"
@@ -168,5 +164,8 @@
 }
 else
 {
-    <span class="text-warning ms-5">No Data!</span>
+    <span class="text-warning ms-5"
+          style="visibility:@((_loading ? "hidden" : "visible"));">
+        No Data!
+    </span>
 }

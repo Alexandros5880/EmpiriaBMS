@@ -1320,30 +1320,6 @@ public partial class Dashboard : IDisposable
 
     #region Tab Actions
     private string? _activeid = "tab-home";
-
-    private void _onTabChange(FluentTab tab)
-    {
-        Task task = null;
-        switch(tab.Id)
-        {
-            case "tab-home":
-                //await Refresh();
-                break;
-            case "tab-invoices":
-                task = _invoiceIncomesListRef.Refresh();
-                break;
-            case "tab-excpences":
-                task = _invoiceExpensesListRef.Refresh();
-                break;
-            case "tab-kpis":
-                task = _kpiDashRef.Refresh();
-                break;
-            case "tab-reports":
-                task = _reportsRef.Refresh();
-                break;
-        }
-    }
-
     #endregion
 
     #region Invoice
