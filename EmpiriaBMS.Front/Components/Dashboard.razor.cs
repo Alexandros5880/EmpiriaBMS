@@ -1074,7 +1074,7 @@ public partial class Dashboard : IDisposable
             await projectCompoment.SaveAsync();
             _addEditProjectDialog.Hide();
             _isAddEditProjectDialogOdepened = false;
-            await Refresh();
+            await Refresh(); // TODO: Not refresh all page
         }
     }
 
@@ -1114,7 +1114,7 @@ public partial class Dashboard : IDisposable
         await disciplineCompoment.HandleValidSubmit();
         _addEditDisciplineDialog.Hide();
         _isAddEditDisciplineDialogOdepened = false;
-        await Refresh();
+        await Refresh(); // TODO: Not refresh all page
     }
 
     private void DeleteDiscipline()
@@ -1155,7 +1155,7 @@ public partial class Dashboard : IDisposable
         await deliverableCompoment.HandleValidSubmit();
         _addEditDeliverableDialog.Hide();
         _isAddEditDeliverableDialogOdepened = false;
-        await Refresh();
+        await Refresh(); // TODO: Not refresh all page
     }
 
     private void DeleteDeliverable()
@@ -1196,7 +1196,7 @@ public partial class Dashboard : IDisposable
         await supportiveWorkrCompoment.HandleValidSubmit();
         _addEditSupportiveWorkDialog.Hide();
         _isAddEditSupportiveWorkDialogOdepened = false;
-        await Refresh();
+        await Refresh(); // TODO: Not refresh all page
     }
 
     private void DeleteSupportiveWork()

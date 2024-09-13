@@ -77,12 +77,12 @@ public class KpisRepo : IDisposable
             var dict = invoices
                 .GroupBy(i => (i.Id, i.Fee))
                 .ToDictionary(
-                    g => g.Key.Fee,
+                    g => (g.Key.Id, g.Key.Fee),
                     g => payments.Where(p => p.InvoiceId == g.Key.Id).Sum(p => p.Fee)
                 );
 
-            int paid = dict.Count(d => d.Key <= d.Value);
-            int unpaid = dict.Count(d => d.Key > d.Value);
+            int paid = dict.Count(d => d.Key.Fee <= d.Value);
+            int unpaid = dict.Count(d => d.Key.Fee > d.Value);
 
             return (paid, unpaid);
         }
