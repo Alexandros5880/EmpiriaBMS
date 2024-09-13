@@ -164,28 +164,35 @@ public partial class Offers
     }
 
     #region On Filters Event Changed
-    private void _onLeadSelectionChanged(LeadVM lead)
+    private async Task _onLeadSelectionChanged(LeadVM lead)
     {
         _selectedLead = lead;
+        await Search();
     }  
 
-    private void _onProjectSelectionChanged(ProjectVM project)
+    private async Task _onProjectSelectionChanged(ProjectVM project)
     {
         _selectedProject = project;
+        await Search();
     }
 
-    private void _onStateSelectionChanged(OfferStateVM state)
+    private async Task _onStateSelectionChanged(OfferStateVM state)
     {
         _selectedOfferState = state;
+        await Search();
     }
 
-    private void _onTypeSelectionChanged(OfferTypeVM type)
+    private async Task _onTypeSelectionChanged(OfferTypeVM type)
     {
         _selectedOfferType = type;
+        await Search();
     }
 
-    private void _onResultSelectionChanged((string Value, string Text) result) =>
+    private async Task _onResultSelectionChanged((string Value, string Text) result)
+    {
         _selectedOfferResult = result;
+        await Search();
+    }
 
     public async Task Search()
     {
@@ -204,7 +211,7 @@ public partial class Offers
         _selectedOffer = new OfferVM()
         {
             Lead = lead,
-            LeadId = lead.Id,
+            LeadId = lead?.Id,
             Result = OfferResult.WAITING
         };
 
@@ -229,28 +236,27 @@ public partial class Offers
 
         if (result.Data is not null)
         {
-            _selectedProject = _projects.FirstOrDefault(o => o.Name.Equals("Select Project..."));
-            _selectedOfferState = _offerStates.FirstOrDefault(o => o.Name.Equals("Select State..."));
-            _selectedOfferType = _offerTypes.FirstOrDefault(o => o.Name.Equals("Select Type..."));
+            _selectedProject = null;
+            _selectedOfferState = null;
+            _selectedOfferType = null;
 
-            await _getLeads();
             OfferVM offerVMData = result.Data as OfferVM;
-            _selectedLead = _leads?.FirstOrDefault(l => l.Id == offerVMData.LeadId);
+
+            // Update Lead Filter With New Offers Lead
+            var leadId = offerVMData.LeadId;
+            await _getLeads();
+            _selectedLead = _leads?.FirstOrDefault(l => l.Id == leadId);
             leadFilterCombo.Value = _selectedLead.Name;
-            StateHasChanged();
 
             // Update Result Filter To Waiting
-            var waitingResult = offerVMData.Result.ToTuple();
-            SetSelectedOption(waitingResult.Value);
-            StateHasChanged();
-            _onResultSelectionChanged(waitingResult);
+            await SetResultFilter(offerVMData.Result);
 
             OfferResult offerResult;
             Enum.TryParse(_selectedOfferResult.Value, out offerResult);
 
-            await _getOffers(_selectedProject.Id,
-                _selectedOfferState.Id, 
-                _selectedOfferType.Id, 
+            await _getOffers(_selectedProject?.Id,
+                _selectedOfferState?.Id, 
+                _selectedOfferType?.Id, 
                 _selectedLead?.Id ?? 0, 
                 offerResult, 
                 refresh: true);
@@ -306,7 +312,7 @@ public partial class Offers
             await _dataProvider.Offers.Delete(_selectedOffer.Id);
             OfferResult or;
             Enum.TryParse(_selectedOfferResult.Value, out or);
-            await _getOffers(_selectedProject.Id, _selectedOfferState.Id, _selectedOfferType.Id, _selectedLead?.Id ?? 0, or, true);
+            await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedLead?.Id ?? 0, or, true);
         }
 
         await dialog.CloseAsync();

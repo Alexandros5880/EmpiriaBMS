@@ -13,6 +13,7 @@ namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class OfferDetailed
 {
+    private FluentCombobox<LeadVM> _leadCombo;
     private FluentCombobox<(string Value, string Text)> _resultCombo;
     private FluentCombobox<ProjectCategoryVM> _catCombo;
     private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
@@ -51,6 +52,16 @@ public partial class OfferDetailed
 
         if (full)
             await _getRecords();
+
+        if (Content.Lead != null)
+        {
+            var leadDto = Mapping.Mapper.Map<LeadDto>(Content.Lead);
+            Lead = _mapper.Map<LeadVM>(leadDto);
+        }
+        else if (Content.LeadId != 0)
+        {
+            Lead = _leads.FirstOrDefault(c => c.Id == Content.LeadId);
+        }
 
         if (Content.Type != null)
         {
@@ -118,6 +129,7 @@ public partial class OfferDetailed
         var valid = Validate();
         if (!valid) return;
 
+        Content.LeadId = Lead.Id;
         Content.TypeId = Type.Id;
         Content.StateId = State.Id;
         Content.CategoryId = Category.Id;
@@ -156,6 +168,7 @@ public partial class OfferDetailed
 
     #region Validation
     private bool validCode = true;
+    private bool validLead = true;
     private bool validType = true;
     private bool validState = true;
     private bool validDate = true;
@@ -169,6 +182,7 @@ public partial class OfferDetailed
         if (fieldname == null)
         {
             validCode = !string.IsNullOrEmpty(Content.Code);
+            validLead = Lead != null && Lead.Id != 0;
             validType = Type != null && Type.Id != 0;
             validState = State != null && State.Id != 0;
             validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
@@ -177,11 +191,12 @@ public partial class OfferDetailed
             validCategory = Category != null && Category.Id != 0;
             validSubCategory = SubCategory != null && SubCategory.Id != 0;
 
-            return validCode && validType && validState && validDate && validPudgetPrice && validOfferPrice && validCategory && validSubCategory;
+            return validCode && validLead && validType && validState && validDate && validPudgetPrice && validOfferPrice && validCategory && validSubCategory;
         }
         else
         {
             validCode = true;
+            validLead = true;
             validType = true;
             validState = true;
             validDate = true;
@@ -194,6 +209,9 @@ public partial class OfferDetailed
                 case "Code":
                     validCode = !string.IsNullOrEmpty(Content.Code);
                     return validCode;
+                case "Lead":
+                    validLead = Lead != null && Lead.Id != 0;
+                    return validLead;
                 case "Type":
                     validType = Type != null && Type.Id != 0;
                     return validType;
@@ -224,6 +242,7 @@ public partial class OfferDetailed
     #endregion
 
     #region Get Related Records
+    ObservableCollection<LeadVM> _leads = new ObservableCollection<LeadVM>();
     ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
     ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
     ObservableCollection<ProjectCategoryVM> _categories = new ObservableCollection<ProjectCategoryVM>();
@@ -235,6 +254,17 @@ public partial class OfferDetailed
                                                                 .GetCustomAttribute<DisplayAttribute>()?
                                                                 .GetName() ?? e.ToString()))
                                                              .ToList();
+
+    public LeadVM _lead = new LeadVM();
+    public LeadVM Lead
+    {
+        get => _lead;
+        set
+        {
+            if (_lead == value || value == null) return;
+            _lead = value;
+        }
+    }
 
     private OfferTypeVM _type = new OfferTypeVM();
     public OfferTypeVM Type
@@ -299,11 +329,25 @@ public partial class OfferDetailed
         await _getSubCategories();
     }
 
+    private async Task _onLeadChanged(LeadVM lead)
+    {
+        Lead = lead;
+    }
+
     private async Task _getRecords()
     {
+        await _getLeads();
         await _getTypes();
         await _getStates();
         await _getCategories();
+    }
+
+    private async Task _getLeads()
+    {
+        var dtos = await _dataProvider.Leads.GetAll();
+        var vms = _mapper.Map<List<LeadVM>>(dtos);
+        _leads.Clear();
+        vms.ForEach(_leads.Add);
     }
 
     private async Task _getTypes()

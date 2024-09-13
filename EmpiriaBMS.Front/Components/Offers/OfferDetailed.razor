@@ -30,34 +30,46 @@
                 }
                 else
                 {
-                    <div class="col-xl-4 col-lg-4 col-md-12">
-                        <div>
-                            Result
-                        </div>
-                        <div>
-                            <FluentCombobox @ref="@_resultCombo"
-                                            Autocomplete="ComboboxAutocomplete.Both"
-                                            Placeholder="Select Result..."
-                                            Items="_results"
-                                            Height="200px"
-                                            Width="100%"
-                                            Class="float-end"
-                                            TOption="(string Value, string Text)"
-                                            OptionText="@(c => c.Text)"
-                                            OptionValue="@(c => c.Value)"
-                                            SelectedOptionChanged="@(async (e) => await _onResultChanged(e))" />
-                        </div>
+                    <div>
+                        Result
+                    </div>
+                    <div>
+                        <FluentCombobox @ref="@_resultCombo"
+                                        Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select Result..."
+                                        Items="_results"
+                                        Height="200px"
+                                        Width="100%"
+                                        Class="float-end"
+                                        TOption="(string Value, string Text)"
+                                        OptionText="@(c => c.Text)"
+                                        OptionValue="@(c => c.Value)"
+                                        SelectedOptionChanged="@(async (e) => await _onResultChanged(e))" />
                     </div>
                 }
             </div>
             <!-- Lead -->
             <div class="col-xl-6 col-lg-6 col-md-12">
                 <div class="col-12">
-                    Lead
+                    Lead<span class="text-danger">*</span>
                 </div>
                 <div class="col-12">
-                    @(Content.Lead.Name ?? "--")
+                    <FluentCombobox @ref="@_leadCombo"
+                                    Placeholder="Select Category..."
+                                    Items="@_leads"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="LeadVM"
+                                    OptionText="@(c => c.Name)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    SelectedOptionChanged="@(async (e) => await _onLeadChanged(e))" />
                 </div>
+                @if (!validLead)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
             </div>
         </div>
 

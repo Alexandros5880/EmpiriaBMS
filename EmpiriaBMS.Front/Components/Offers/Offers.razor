@@ -43,7 +43,7 @@
                                         OptionText="@(c => c.Text)"
                                         OptionValue="@(c => c.Value)"
                                         @bind-Value="_selectedResultValue"
-                                        SelectedOptionChanged="@((o) => _onResultSelectionChanged(o))" />
+                                        SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
                     </div>
 
                     <div style="width: 160px;">
@@ -58,9 +58,8 @@
                                         OptionValue="@((t) => t.Id.ToString())"
                                         OptionText="@((t) => t.Name)"
                                         OptionSelected="@(i => i.Id == _selectedLead?.Id)"
-                                        SelectedOptionChanged="@((o) => _onLeadSelectionChanged(o))" />
+                                        SelectedOptionChanged="@(async (o) => await _onLeadSelectionChanged(o))" />
                     </div>
-
 
                     <div style="width: 160px;">
                         <FluentCombobox @ref="projectFilterCombo"
@@ -74,7 +73,7 @@
                                         OptionValue="@((t) => t.Id.ToString())"
                                         OptionText="@((t) => t.Name)"
                                         OptionSelected="@(i => i.Id == _selectedProject?.Id)"
-                                        SelectedOptionChanged="@((o) => _onProjectSelectionChanged(o))" />
+                                        SelectedOptionChanged="@(async (o) => await _onProjectSelectionChanged(o))" />
                     </div>
 
                     <div style="width: 160px;">
@@ -89,7 +88,7 @@
                                         OptionValue="@((t) => t.Id.ToString())"
                                         OptionText="@((t) => t.Name)"
                                         OptionSelected="@(i => i.Id == _selectedOfferState?.Id)"
-                                        SelectedOptionChanged="@((o) => _onStateSelectionChanged(o))" />
+                                        SelectedOptionChanged="@(async (o) => await _onStateSelectionChanged(o))" />
                     </div>
 
                     <div style="width: 160px;">
@@ -104,16 +103,7 @@
                                         OptionValue="@((t) => t.Id.ToString())"
                                         OptionText="@((t) => t.Name)"
                                         OptionSelected="@(i => i.Id == _selectedOfferType?.Id)"
-                                        SelectedOptionChanged="@((o) => _onTypeSelectionChanged(o))" />
-                    </div>
-
-                    <div style="width: 100px; height: 100%; background-color: forestgreen;">
-                        <FluentStack Orientation="Orientation.Vertical"
-                                     VerticalAlignment="VerticalAlignment.Bottom">
-                            <FluentButton aria-label="Search"
-                                          IconEnd="@(new Icons.Regular.Size16.Search())"
-                                          OnClick="@(async () => await Search())" />
-                        </FluentStack>
+                                        SelectedOptionChanged="@(async (o) => await _onTypeSelectionChanged(o))" />
                     </div>
 
                 </FluentStack>
@@ -121,7 +111,8 @@
 
             <!-- Add/Export Button -->
             <div class="col-3">
-                <FluentStack HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                <FluentStack HorizontalAlignment="HorizontalAlignment.End"
+                             Style="margin-right: 10px; min-width: 300px;">
 
                     @if (IsWorkingMode)
                     {
