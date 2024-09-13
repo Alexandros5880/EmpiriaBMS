@@ -169,6 +169,8 @@ public partial class ProjectDetailed : ComponentBase
 
             var projectVm = Mapper.Map<ProjectVM>(saveProject);
 
+            Content = projectVm;
+
             return projectVm;
         }
         catch (NullReferenceException ex)

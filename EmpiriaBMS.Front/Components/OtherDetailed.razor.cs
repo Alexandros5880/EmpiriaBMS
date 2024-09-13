@@ -65,6 +65,8 @@ public partial class OtherDetailed : ComponentBase, IDisposable
             saveOther = await DataProvider.SupportiveWorks.Update(myOther);
         else
             saveOther = await DataProvider.SupportiveWorks.Add(myOther);
+
+        _other = Mapper.Map<SupportiveWorkVM>(saveOther);
     }
 
     protected virtual void Dispose(bool disposing)

@@ -1077,6 +1077,7 @@ public partial class Dashboard : IDisposable
             await projectCompoment.SaveAsync();
 
             var newProject = projectCompoment.GetProject();
+
             if (_projects.Any(p => p.Id == newProject.Id))
                 _projects.Remove(newProject);
 

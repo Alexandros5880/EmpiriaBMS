@@ -65,6 +65,8 @@ public partial class DeliverableDetailed : ComponentBase, IDisposable
             saveDrawing = await DataProvider.Deliverables.Update(myDrawing);
         else
             saveDrawing = await DataProvider.Deliverables.Add(myDrawing);
+
+        _drawing = Mapper.Map<DeliverableVM>(saveDrawing);
     }
 
     protected virtual void Dispose(bool disposing)

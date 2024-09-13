@@ -66,6 +66,8 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
             saveDiscipline = await DataProvider.Disciplines.Update(myDiscipline);
         else
             saveDiscipline = await DataProvider.Disciplines.Add(myDiscipline);
+
+        _discipline = Mapper.Map<DisciplineVM>(saveDiscipline);
     }
 
     protected virtual void Dispose(bool disposing)
