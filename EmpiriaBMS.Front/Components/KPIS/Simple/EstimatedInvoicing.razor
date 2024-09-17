@@ -11,6 +11,13 @@
 @inject Culture Culture
 @inject MicrosoftTeams MicrosoftTeams
 
-<div title="Estimated Invoicing" data-bs-toggle="tooltip">
-    <h4><strong>(EI): </strong> <span>@Culture.GetNumberFromated(_estimatedInvoicing)</span></h4>
-</div>
+@if (_startLoading)
+{
+    <FluentProgressRing Style="margin: 0 auto;" />
+}
+else
+{
+    <div title="Estimated Invoicing" data-bs-toggle="tooltip">
+        <h4><strong>(EI): </strong> <span>@Culture.GetNumberFromated(_estimatedInvoicing)</span></h4>
+    </div>
+}

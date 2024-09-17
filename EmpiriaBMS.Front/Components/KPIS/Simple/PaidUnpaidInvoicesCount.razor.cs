@@ -5,6 +5,8 @@ namespace EmpiriaBMS.Front.Components.KPIS.Simple;
 
 public partial class PaidUnpaidInvoicesCount
 {
+    private bool _startLoading = true;
+
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
 
@@ -24,6 +26,7 @@ public partial class PaidUnpaidInvoicesCount
             var tuple = await _dataProvider.KPIS.GetPaidUnpaidInvoiceCount(StartDate?.Date, EndDate?.Date);
             paid = tuple.Paid;
             unpaid = tuple.Unpaid;
+            _startLoading = false;
             StateHasChanged();
         }
     }

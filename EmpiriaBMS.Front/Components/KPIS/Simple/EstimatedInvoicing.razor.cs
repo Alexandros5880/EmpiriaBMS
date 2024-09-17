@@ -7,6 +7,8 @@ namespace EmpiriaBMS.Front.Components.KPIS.Simple;
 
 public partial class EstimatedInvoicing
 {
+    private bool _startLoading = true;
+
     private double _estimatedInvoicing = 0;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -17,6 +19,7 @@ public partial class EstimatedInvoicing
         {
             await MicrosoftTeams.InitializeTooltips();
             _estimatedInvoicing = await _dataProvider.KPIS.GetEstimatedInvoicing();
+            _startLoading = false;
             StateHasChanged();
         }
     }

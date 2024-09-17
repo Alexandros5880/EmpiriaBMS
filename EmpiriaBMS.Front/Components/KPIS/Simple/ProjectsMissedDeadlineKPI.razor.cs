@@ -5,6 +5,8 @@ namespace EmpiriaBMS.Front.Components.KPIS.Simple;
 
 public partial class ProjectsMissedDeadlineKPI
 {
+    private bool _startLoading = true;
+
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
 
@@ -21,6 +23,7 @@ public partial class ProjectsMissedDeadlineKPI
         {
             await MicrosoftTeams.InitializeTooltips();
             await _getMissedDeadLineProjects();
+            _startLoading = false;
             StateHasChanged();
         }
     }
