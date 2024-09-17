@@ -39,7 +39,7 @@ public partial class DelayedProjectsKPI
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Delayed Projects Bar Chart",
+                    Text = "Delayed Projects",
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -65,6 +65,10 @@ public partial class DelayedProjectsKPI
                             }
                         }
                     }
+                },
+                Legend = new Legend()
+                {
+                    Display = false
                 },
                 Responsive = true,
 

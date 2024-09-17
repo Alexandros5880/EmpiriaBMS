@@ -70,6 +70,10 @@ public partial class DelayedPaymentsKpi
                             }
                         }
                     },
+                    Legend = new Legend()
+                    {
+                        Display = false
+                    },
                     Responsive = true,
 
                 }

@@ -17,6 +17,7 @@ public partial class KPIDashboard
     bool SeeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
     bool SeeEstimatedInvoicing => _sharedAuthData.Permissions.Any(p => p.Ord == 41);
     bool SeeUnpaidPaidInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 42);
+    bool SeeProfitInEveryProject => _sharedAuthData.Permissions.Any(p => p.Ord == 43);
     #endregion
 
     private bool _loading = false;

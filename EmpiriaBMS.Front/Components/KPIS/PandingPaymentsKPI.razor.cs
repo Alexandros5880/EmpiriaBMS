@@ -24,13 +24,13 @@ public partial class PandingPaymentsKPI
         {
             _startLoading = true;
             await _getPendingPaymentsPerProject();
-            await _initilizePendingPaymentsPerProject();
+            _initilizePendingPaymentsPerProject();
             _startLoading = false;
             StateHasChanged();
         }
     }
 
-    private async Task _initilizePendingPaymentsPerProject()
+    private void _initilizePendingPaymentsPerProject()
     {
         if (_pendingPaymentsPerProject.Count > 0)
         {
@@ -48,25 +48,29 @@ public partial class PandingPaymentsKPI
                     Scales = new BarScales
                     {
                         XAxes = new List<CartesianAxis>
-                    {
-                        new BarCategoryAxis
                         {
-                            BarPercentage = 0.5,
-                            BarThickness = BarThickness.Flex
-                        }
-                    },
-                        YAxes = new List<CartesianAxis>
-                    {
-                        new BarLinearCartesianAxis
-                        {
-                            Ticks = new LinearCartesianTicks
+                            new BarCategoryAxis
                             {
-                                BeginAtZero = true,
-                                StepSize = 2,
-                                //SuggestedMax = 100
+                                BarPercentage = 0.5,
+                                BarThickness = BarThickness.Flex
+                            }
+                        },
+                        YAxes = new List<CartesianAxis>
+                        {
+                            new BarLinearCartesianAxis
+                            {
+                                Ticks = new LinearCartesianTicks
+                                {
+                                    BeginAtZero = true,
+                                    StepSize = 2,
+                                    //SuggestedMax = 100
+                                }
                             }
                         }
-                    }
+                    },
+                    Legend = new Legend()
+                    {
+                        Display = false
                     },
                     Responsive = true,
 

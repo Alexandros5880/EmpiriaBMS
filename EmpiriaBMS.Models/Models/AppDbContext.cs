@@ -585,6 +585,18 @@ public class AppDbContext : DbContext
                 Ord = 42
             };
             builder.Entity<Permission>().HasData(per_42);
+
+            // See Profit in every project
+            var per_43_id = random.Next(123456789, 999999999);
+            Permission per_43 = new Permission()
+            {
+                Id = per_43_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Profit in every project",
+                Ord = 43
+            };
+            builder.Entity<Permission>().HasData(per_43);
             #endregion
 
             #region Roles
@@ -1109,6 +1121,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_127);
 
+            // COO || See Profit in every project
+            RolePermission rp_132 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_4_id,
+                PermissionId = per_43_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_132);
+
 
             // CTO
             // CTO || See Dashboard Layout
@@ -1518,6 +1541,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_129);
 
+            // CTO || See Profit in every project
+            RolePermission rp_133 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_43_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_133);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -1916,6 +1950,17 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_131);
 
+            // CEO || See Profit in every project
+            RolePermission rp_134 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_43_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_134);
+
 
             // Guest
             // Guest || See Dashboard Layout
@@ -2031,6 +2076,17 @@ public class AppDbContext : DbContext
                 PermissionId = per_37_id
             };
             builder.Entity<RolePermission>().HasData(rp_121);
+
+            // Admin || See Profit in every project
+            RolePermission rp_135 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_43_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_135);
 
 
             // Secretariat 

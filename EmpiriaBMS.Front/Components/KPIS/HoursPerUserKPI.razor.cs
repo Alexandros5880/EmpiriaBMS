@@ -47,7 +47,7 @@ public partial class HoursPerUserKPI
                 Title = new OptionsTitle()
                 {
                     Display = true,
-                    Text = "Hours Per User Pie Chart",
+                    Text = "Hours Per User",
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },

@@ -65,6 +65,10 @@ public partial class DelayedProjectTypesKPI
                         }
                     }
                 },
+                Legend = new Legend()
+                {
+                    Display = false
+                },
                 Responsive = true,
 
             }

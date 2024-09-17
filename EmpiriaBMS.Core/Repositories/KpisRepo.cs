@@ -358,6 +358,113 @@ public class KpisRepo : IDisposable
         }
     }
 
+    public async Task<Dictionary<string, double>> GetProfitPerProject(int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            // Get User Roles
+            var roleIds = await _context.Set<UserRole>()
+                                        .Where(r => !r.IsDeleted)
+                                        .Where(r => r.UserId == userId)
+                                        .Select(r => r.RoleId)
+                                        .ToListAsync();
+
+            // Get Roles Permissions
+            var permissions = await _context.Set<RolePermission>()
+                                            .Where(r => !r.IsDeleted)
+                                            .Where(pr => roleIds.Contains(pr.RoleId))
+                                            .Include(pr => pr.Permission)
+                                            .Select(pr => pr.Permission)
+                                            .ToListAsync();
+
+            // Get Projects
+            List<Project> allProjects;
+            if (permissions.Any(p => p.Ord == 20))
+            {
+                allProjects = await _context.Set<Project>()
+                        .Where(r => !r.IsDeleted)
+                        .Include(r => r.Invoices)
+                        .Include(p => p.Stage)
+                        .Include(p => p.ProjectManager)
+                        .Include(p => p.ProjectsSubConstructors)
+                        .ToListAsync();
+            }
+            else
+            {
+                // Filter Projects
+                var myDrawingIds = await _context.Set<DeliverableEmployee>()
+                                                 .Where(r => !r.IsDeleted)
+                                                 .Where(de => de.EmployeeId == userId)
+                                                 .Select(e => e.DeliverableId)
+                                                 .ToListAsync();
+
+                var drawingsDisciplinesIds = await _context.Set<Deliverable>()
+                                                     .Where(r => !r.IsDeleted)
+                                                     .Where(dd => myDrawingIds.Contains(dd.Id))
+                                                     .Select(e => e.DisciplineId)
+                                                     .ToListAsync();
+
+                var engineerDisciplineIds = await _context.Set<DisciplineEngineer>()
+                                                          .Where(r => !r.IsDeleted)
+                                                          .Where(d => d.EngineerId == userId)
+                                                          .Select(e => e.DisciplineId)
+                                                          .ToListAsync();
+
+                var myDisciplinesIds = drawingsDisciplinesIds.Union(engineerDisciplineIds);
+
+                var projectsFromDisciplineIds = await _context.Set<Discipline>()
+                                                            .Where(r => !r.IsDeleted)
+                                                            .Where(d => myDisciplinesIds.Contains(d.Id))
+                                                            .Select(dp => dp.ProjectId)
+                                                            .ToArrayAsync();
+
+                allProjects = await _context.Set<Project>()
+                            .Where(r => !r.IsDeleted)
+                            .Where(p => projectsFromDisciplineIds.Contains(p.Id))
+                            .Include(r => r.Invoices)
+                            .Include(p => p.Stage)
+                            .Include(p => p.ProjectManager)
+                            .Include(p => p.ProjectsSubConstructors)
+                            .ToListAsync();
+            }
+
+            // Get All Invoices
+            var invoices = await _context.Set<Invoice>()
+                .Where(r => !r.IsDeleted)
+                .ToListAsync();
+
+            // Get All Payments
+            var payments = await _context.Set<Payment>()
+                .Where(r => !r.IsDeleted)
+                .ToListAsync();
+
+            // Build Dictionary
+            Dictionary<string, double> dict = new Dictionary<string, double>();
+
+            dict = allProjects.GroupBy(p => p)
+                .ToDictionary(
+                    g => g.Key.Name ?? "Uknown Project",
+                    g =>
+                    {
+                        // Income Sum
+                        var incomeInvoices = invoices.Where(i => i.Category == Models.Enum.InvoiceCategory.INCOMES && i.ProjectId == g.Key.Id);
+                        var incomePayments = payments.Where(p => incomeInvoices.Select(i => i.Id).Contains(p.Id)).ToList();
+                        var invoicesIncomeFeeSum = incomeInvoices.Sum(i => i.Fee);
+                        var paymentsIncomeFeeSum = incomePayments.Sum(p => p.Fee);
+
+                        // Expenses Sum
+                        var expenseInvoices = invoices.Where(i => i.Category == Models.Enum.InvoiceCategory.EXPENSES && i.ProjectId == g.Key.Id);
+                        var expensePayments = payments.Where(p => expenseInvoices.Select(i => i.Id).Contains(p.Id)).ToList();
+                        var paymentsExpenseFeeSum = expensePayments.Sum(p => p.Fee);
+
+                        return Convert.ToDouble(invoicesIncomeFeeSum) - paymentsExpenseFeeSum;
+                    }
+                );
+
+            return dict;
+        }
+    }
+
     public async Task<IQueryable<TenderDataDto>> GetTenderTable()
     {
         using (var _context = _dbContextFactory.CreateDbContext())

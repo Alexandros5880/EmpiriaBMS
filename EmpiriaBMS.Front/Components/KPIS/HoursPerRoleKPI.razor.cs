@@ -44,7 +44,7 @@ public partial class HoursPerRoleKPI
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Hours Per Role Bar Chart",
+                    Text = "Hours Per Role",
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -70,6 +70,10 @@ public partial class HoursPerRoleKPI
                             }
                         }
                     }
+                },
+                Legend = new Legend()
+                {
+                    Display = false
                 },
                 Responsive = true,
 
