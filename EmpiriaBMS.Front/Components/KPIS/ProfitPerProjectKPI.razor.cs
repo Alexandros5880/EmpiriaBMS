@@ -29,7 +29,6 @@ public partial class ProfitPerProjectKPI
 
         if (firstRender)
         {
-            _startLoading = true;
             await _getProfitPerProject();
             _initilizeChart();
             _startLoading = false;
@@ -92,13 +91,6 @@ public partial class ProfitPerProjectKPI
     private async Task _getProfitPerProject()
     {
         var userId = _sharedAuthData.LogedUser.Id;
-
         _data = await _dataProvider.KPIS.GetProfitPerProject(userId, StartDate?.Date, EndDate?.Date);
-
-        if (_data != null)
-        {
-            _initilizeChart();
-            StateHasChanged();
-        }
     }
 }
