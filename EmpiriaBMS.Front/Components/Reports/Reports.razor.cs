@@ -376,8 +376,6 @@ public partial class Reports
     DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2024"));
     DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
 
-    private string dateValidMsg = string.Empty;
-
     public async Task OnDateSelect(DateRange range)
     {
         if (StartDate.HasValue && EndDate.HasValue)

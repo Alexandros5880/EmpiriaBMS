@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.Components.General;
+﻿using BlazorDateRangePicker;
+using EmpiriaBMS.Front.Components.General;
 
 namespace EmpiriaBMS.Front.Components.KPIS.Base;
 
@@ -41,4 +42,17 @@ public partial class KPIDashboard
         StateHasChanged();
     }
 
+    #region Date Range Filter
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2024"));
+    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
+
+    public void OnDateSelect(DateRange range)
+    {
+        if (StartDate.HasValue && EndDate.HasValue)
+        {
+            StartDate = range.Start;
+            EndDate = range.End;
+        }
+    }
+    #endregion
 }

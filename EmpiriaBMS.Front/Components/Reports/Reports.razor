@@ -30,20 +30,13 @@
                          VerticalAlignment="VerticalAlignment.Center">
 
                 <!-- Date Range -->
-                <div>
-                    <DateRangePicker class="form-control"
-                                     title="Dates"
-                                     placeholder="Select dates..."
-                                     @bind-StartDate="StartDate"
-                                     @bind-EndDate="EndDate"
-                                     OnRangeSelect="@(async (e) => await OnDateSelect(e))"
-                                     style="width: 200px;" />
-
-                    @if (!string.IsNullOrEmpty(dateValidMsg))
-                    {
-                        <span class="text-warning">@dateValidMsg</span>
-                    }
-                </div>
+                <DateRangePicker class="form-control"
+                                 title="Dates"
+                                 placeholder="Select dates..."
+                                 @bind-StartDate="StartDate"
+                                 @bind-EndDate="EndDate"
+                                 OnRangeSelect="@(async (e) => await OnDateSelect(e))"
+                                 style="width: 200px;" />
 
                 <!-- Client -->
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
