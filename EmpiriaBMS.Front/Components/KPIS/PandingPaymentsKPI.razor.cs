@@ -6,15 +6,22 @@ using ChartJs.Blazor.Common.Axes.Ticks;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Horizontal;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
+using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class PandingPaymentsKPI
 {
+    [Parameter]
+    public DateTimeOffset? StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+
     private bool _startLoading = true;
 
-    private Dictionary<string, PendingPayments> _pendingPaymentsPerProject = null;
-    private BarConfig _pendingPaymentsPerProjectBarConfig;
+    private Dictionary<string, PendingPayments> _data = null;
+    private BarConfig _chartConfig;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -32,22 +39,26 @@ public partial class PandingPaymentsKPI
 
     private void _initilizePendingPaymentsPerProject()
     {
-        if (_pendingPaymentsPerProject.Count > 0)
+        if (!_data.Any() || _chartConfig != null)
         {
-            _pendingPaymentsPerProjectBarConfig = new BarConfig
+            _chartConfig = null;
+            return;
+        }
+
+        _chartConfig = new BarConfig
+        {
+            Options = new BarOptions
             {
-                Options = new BarOptions
+                Title = new OptionsTitle
                 {
-                    Title = new OptionsTitle
-                    {
-                        Display = true,
-                        Text = "Delayed Payments",
-                        Position = ChartEnums.Position.Top,
-                        FontSize = 24
-                    },
-                    Scales = new BarScales
-                    {
-                        XAxes = new List<CartesianAxis>
+                    Display = true,
+                    Text = "Delayed Payments",
+                    Position = ChartEnums.Position.Top,
+                    FontSize = 24
+                },
+                Scales = new BarScales
+                {
+                    XAxes = new List<CartesianAxis>
                         {
                             new BarCategoryAxis
                             {
@@ -55,7 +66,7 @@ public partial class PandingPaymentsKPI
                                 BarThickness = BarThickness.Flex
                             }
                         },
-                        YAxes = new List<CartesianAxis>
+                    YAxes = new List<CartesianAxis>
                         {
                             new BarLinearCartesianAxis
                             {
@@ -67,40 +78,39 @@ public partial class PandingPaymentsKPI
                                 }
                             }
                         }
-                    },
-                    Legend = new Legend()
-                    {
-                        Display = false
-                    },
-                    Responsive = true,
+                },
+                Legend = new Legend()
+                {
+                    Display = false
+                },
+                Responsive = true,
 
-                }
-            };
+            }
+        };
 
-            foreach (string key in _pendingPaymentsPerProject.Select(p => p.Key))
-                _pendingPaymentsPerProjectBarConfig.Data.Labels.Add(key);
+        foreach (string key in _data.Select(p => p.Key))
+            _chartConfig.Data.Labels.Add(key);
 
-            BarDataset<int> dataset = new BarDataset<int>(_pendingPaymentsPerProject.Values.Select(p => p.PendingPaymentsCount))
-            {
-                //Label = "Roles",
-                //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-                BackgroundColor = ChartJsHelper.GenerateColors(_pendingPaymentsPerProject.Count, 650, 699, 1),
-                BorderWidth = 0,
-                HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
-                HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
-                HoverBorderWidth = 1,
-                BorderColor = ChartJsHelper.GetPreviusRgb(1),
-                BarPercentage = 0.5,
+        BarDataset<int> dataset = new BarDataset<int>(_data.Values.Select(p => p.PendingPaymentsCount))
+        {
+            //Label = "Roles",
+            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_data.Count, 650, 699, 1),
+            BorderWidth = 0,
+            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
+            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
+            HoverBorderWidth = 1,
+            BorderColor = ChartJsHelper.GetPreviusRgb(1),
+            BarPercentage = 0.5,
 
-            };
+        };
 
-            _pendingPaymentsPerProjectBarConfig.Data.Datasets.Add(dataset);
-        }
+        _chartConfig.Data.Datasets.Add(dataset);
     }
 
     private async Task _getPendingPaymentsPerProject()
     {
-        _pendingPaymentsPerProject = await _dataProvider.KPIS.GetPendingPayments();
+        _data = await _dataProvider.KPIS.GetPendingPayments(StartDate?.Date, EndDate?.Date);
     }
 
 }

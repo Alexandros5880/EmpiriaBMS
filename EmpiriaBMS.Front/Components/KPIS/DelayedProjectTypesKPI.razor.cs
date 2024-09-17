@@ -5,15 +5,22 @@ using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common;
 using EmpiriaBMS.Front.Horizontal;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
+using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class DelayedProjectTypesKPI
 {
+    [Parameter]
+    public DateTimeOffset? StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+
     private bool _startLoading = true;
 
-    private Dictionary<string, int> _delayedProjectsTypesCountByType = null;
-    private BarConfig _delayedProjectsTypesBarConfig;
+    private Dictionary<string, int> _data = null;
+    private BarConfig _chartConfig;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -31,7 +38,13 @@ public partial class DelayedProjectTypesKPI
 
     private void _initilizeDelayedProjectsTypesChart()
     {
-        _delayedProjectsTypesBarConfig = new BarConfig
+        if (!_data.Any() || _chartConfig != null)
+        {
+            _chartConfig = null;
+            return;
+        }
+
+        _chartConfig = new BarConfig
         {
             Options = new BarOptions
             {
@@ -74,16 +87,16 @@ public partial class DelayedProjectTypesKPI
             }
         };
 
-        foreach (string key in _delayedProjectsTypesCountByType.Keys)
-            _delayedProjectsTypesBarConfig.Data.Labels.Add(key);
+        foreach (string key in _data.Keys)
+            _chartConfig.Data.Labels.Add(key);
 
         // Values Dataset
-        var values = _delayedProjectsTypesCountByType.Values;
+        var values = _data.Values;
         BarDataset<int> dataset = new BarDataset<int>(values, false)
         {
             //Label = "Project Type",
-            //BackgroundColor = ChartJsHelper.GenerateColors(_delayedProjectsTypesCountByType.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_delayedProjectsTypesCountByType.Values.Count, 685, 700, 1),
+            //BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 685, 700, 1),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -92,13 +105,13 @@ public partial class DelayedProjectTypesKPI
             BarPercentage = 0.5,
 
         };
-        _delayedProjectsTypesBarConfig.Data.Datasets.Add(dataset);
+        _chartConfig.Data.Datasets.Add(dataset);
 
     }
 
     private async Task _getActiveDelayedProjectsTypesCountByType()
     {
         var userId = _sharedAuthData.LogedUser.Id;
-        _delayedProjectsTypesCountByType = await _dataProvider.KPIS.GetActiveDelayedProjectTypesCountByType(userId);
+        _data = await _dataProvider.KPIS.GetActiveDelayedProjectTypesCountByType(userId, StartDate?.Date, EndDate?.Date);
     }
 }

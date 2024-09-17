@@ -6,8 +6,6 @@ using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-
-
 namespace EmpiriaBMS.Core.Repositories;
 
 public class KpisRepo : IDisposable
@@ -42,36 +40,39 @@ public class KpisRepo : IDisposable
         }
     }
 
-    public async Task<double> GetEstimatedInvoicing()
-    {
+    public async Task<double> GetEstimatedInvoicing() {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var sumInvoicesFee = await _context.Set<Invoice>()
-                .Where(i => i.IsDeleted == false)
+            var incomeInvoices = await _context.Set<Invoice>()
+                .Where(i => !i.IsDeleted)
                 .Where(i => i.Category == Models.Enum.InvoiceCategory.INCOMES)
-                .SumAsync(i => i.Fee);
-
-            var sumPaymentsFee = await _context.Set<Payment>()
-                .Where(i => i.IsDeleted == false)
-                .SumAsync(i => i.Fee);
-
-            double result = Convert.ToDouble(sumInvoicesFee) - Convert.ToDouble(sumPaymentsFee);
-
-            return result;
+                .ToListAsync();
+            var incomeInvoicesIds = incomeInvoices.Select(i => i.Id).ToList();
+            var incomePaymentsFee = await _context.Set<Payment>()
+                .Where(p => !p.IsDeleted)
+                .Where(p => incomeInvoicesIds.Contains(p.InvoiceId))
+                .SumAsync(p => p.Fee);
+            var incomeInvoicesFee = incomeInvoices.Sum(i => i.Fee);
+            var incomeUnpaidSum = Convert.ToDouble(incomeInvoicesFee) - Convert.ToDouble(incomePaymentsFee);
+            return incomeUnpaidSum;
         }
     }
 
-    public async Task<(int Paid, int Unpaid)> GetPaidUnpaidInvoiceCount()
-    {
+    public async Task<(int Paid, int Unpaid)> GetPaidUnpaidInvoiceCount(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var payments = await _context.Set<Payment>()
                 .Where(p => p.IsDeleted == false)
+                .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                 .Include(p => p.Invoice)
                 .ToListAsync();
 
             var invoices = await _context.Set<Invoice>()
                 .Where(p => p.IsDeleted == false)
+                .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                 .ToListAsync();
 
             var dict = invoices
@@ -89,18 +90,25 @@ public class KpisRepo : IDisposable
     }
     #endregion
 
-    public async Task<decimal> GetMissedDeadLineProjects()
-    {
+    public async Task<decimal> GetMissedDeadLineProjects(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var all = await _context.Set<Project>()
                                     .Where(r => !r.IsDeleted)
+                                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                     .CountAsync();
 
             var missedDeadline = await _context.Set<Project>()
                                                .Where(r => !r.IsDeleted)
+                                               .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                                .Where(p => p.DeadLine < DateTime.Now)
                                                .CountAsync();
+
+            if (missedDeadline == 0 || all == 0)
+                return Convert.ToDecimal(0);
 
             decimal division = Convert.ToDecimal(missedDeadline) / Convert.ToDecimal(all);
             decimal result = Convert.ToDecimal(division * 100);
@@ -108,12 +116,15 @@ public class KpisRepo : IDisposable
         }
     }
 
-    public async Task<Dictionary<string, long>> GetHoursPerRole()
-    {
+    public async Task<Dictionary<string, long>> GetHoursPerRole(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var userRolesWithDailyTimes = await _context.Set<UserRole>()
                                             .Where(r => !r.IsDeleted)
+                                            .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                             .Include(ur => ur.Role)
                                             .Include(ur => ur.User)
                                             .Select(ur => new
@@ -134,12 +145,15 @@ public class KpisRepo : IDisposable
         }
     }
 
-    public async Task<Dictionary<string, long>> GetHoursPerUser()
-    {
+    public async Task<Dictionary<string, long>> GetHoursPerUser(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var userRolesWithDailyTimes = await _context.Set<UserRole>()
                                             .Where(r => !r.IsDeleted)
+                                            .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                             .Include(ur => ur.Role)
                                             .Include(ur => ur.User)
                                             .Select(ur => new
@@ -160,8 +174,11 @@ public class KpisRepo : IDisposable
         }
     }
 
-    public async Task<List<ProjectDto>> GetActiveDelayedProjects(int userId)
-    {
+    public async Task<List<ProjectDto>> GetActiveDelayedProjects(
+        int userId,
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             // Get User Roles
@@ -183,6 +200,7 @@ public class KpisRepo : IDisposable
             {
                 var allProjects = await _context.Set<Project>()
                                                 .Where(r => !r.IsDeleted)
+                                                .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                                 .Include(r => r.Invoices)
                                                 .Include(p => p.Stage)
                                                 .Include(p => p.Offer)
@@ -234,6 +252,7 @@ public class KpisRepo : IDisposable
 
             var projects = await _context.Set<Project>()
                                          .Where(r => !r.IsDeleted)
+                                         .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                          .Include(r => r.Invoices)
                                          .Include(p => p.Stage)
                                          .Include(p => p.Offer)
@@ -259,8 +278,11 @@ public class KpisRepo : IDisposable
         }
     }
 
-    public async Task<Dictionary<string, int>> GetActiveDelayedProjectTypesCountByType(int userId)
-    {
+    public async Task<Dictionary<string, int>> GetActiveDelayedProjectTypesCountByType(
+        int userId,
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             // Get User Roles
@@ -293,6 +315,7 @@ public class KpisRepo : IDisposable
             {
                 allProjects = await _context.Set<Project>()
                         .Where(r => !r.IsDeleted)
+                        .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                         .Include(r => r.Invoices)
                         .Include(p => p.Stage)
                         .Include(p => p.ProjectManager)
@@ -330,6 +353,7 @@ public class KpisRepo : IDisposable
 
                 allProjects = await _context.Set<Project>()
                             .Where(r => !r.IsDeleted)
+                            .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                             .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                             .Include(r => r.Invoices)
                             .Include(p => p.Stage)
@@ -358,8 +382,11 @@ public class KpisRepo : IDisposable
         }
     }
 
-    public async Task<Dictionary<string, double>> GetProfitPerProject(int userId)
-    {
+    public async Task<Dictionary<string, double>> GetProfitPerProject(
+        int userId,
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             // Get User Roles
@@ -383,6 +410,7 @@ public class KpisRepo : IDisposable
             {
                 allProjects = await _context.Set<Project>()
                         .Where(r => !r.IsDeleted)
+                        .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                         .Include(r => r.Invoices)
                         .Include(p => p.Stage)
                         .Include(p => p.ProjectManager)
@@ -420,6 +448,7 @@ public class KpisRepo : IDisposable
 
                 allProjects = await _context.Set<Project>()
                             .Where(r => !r.IsDeleted)
+                            .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                             .Where(p => projectsFromDisciplineIds.Contains(p.Id))
                             .Include(r => r.Invoices)
                             .Include(p => p.Stage)
@@ -465,12 +494,15 @@ public class KpisRepo : IDisposable
         }
     }
 
-    public async Task<IQueryable<TenderDataDto>> GetTenderTable()
-    {
+    public async Task<IQueryable<TenderDataDto>> GetTenderTable(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             List<Project> projects = await _context.Set<Project>()
                                                    .Where(r => !r.IsDeleted)
+                                                   .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                                    .Include(r => r.Invoices)
                                                     .Include(p => p.Stage)
                                                     .Include(p => p.Offer)
@@ -497,6 +529,7 @@ public class KpisRepo : IDisposable
             {
                 var projectOffer = await _context.Set<Offer>()
                                                  .Where(o => !o.IsDeleted)
+                                                 .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                                  .Include(o => o.Lead)
                                                  .ThenInclude(l => l.Client)
                                                  .FirstOrDefaultAsync(o => o.Id == project.OfferId);
@@ -504,6 +537,7 @@ public class KpisRepo : IDisposable
                 // Get All Offers
                 var offers = await _context.Set<Offer>()
                                        .Where(o => !o.IsDeleted)
+                                       .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                        .Include(o => o.Lead)
                                        .Include(o => o.State)
                                        .Include(o => o.Type)
@@ -541,12 +575,15 @@ public class KpisRepo : IDisposable
         }
     }
 
-    public async Task<Dictionary<string, DelayedPayments>> GetDelayedPayments()
-    {
+    public async Task<Dictionary<string, DelayedPayments>> GetDelayedPayments(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var payments = await _context.Set<Payment>()
                                        .Where(r => !r.IsDeleted)
+                                       .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                        .Include(p => p.Invoice)
                                        .Include(p => p.Invoice.Project)
                                        .Where(p => p.Invoice.PaymentDate < p.PaymentDate)
@@ -566,12 +603,15 @@ public class KpisRepo : IDisposable
         }
     }
 
-    public async Task<Dictionary<string, PendingPayments>> GetPendingPayments()
-    {
+    public async Task<Dictionary<string, PendingPayments>> GetPendingPayments(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var payments = await _context.Set<Payment>()
                                        .Where(r => !r.IsDeleted)
+                                       .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                        .Include(p => p.Invoice)
                                        .ThenInclude(i => i.Project)
                                        .ToListAsync();
@@ -598,6 +638,8 @@ public class KpisRepo : IDisposable
             if (disposing)
             {
                 _ledRepo.Dispose();
+                _invoiceRepo.Dispose();
+                _paymentRepo.Dispose();
             }
             disposedValue = true;
         }

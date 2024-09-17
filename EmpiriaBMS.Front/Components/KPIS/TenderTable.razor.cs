@@ -6,6 +6,12 @@ namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class TenderTable
 {
+    [Parameter]
+    public DateTimeOffset? StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+
     private IQueryable<TenderDataDto> _data;
     IQueryable<TenderDataDto>? FilteredItems => _data?.Where(x => x.ProjectName.Contains(_nameFilter, StringComparison.CurrentCultureIgnoreCase));
 
@@ -27,7 +33,7 @@ public partial class TenderTable
 
     private async Task _getData()
     {
-        _data = await _dataProvider.KPIS.GetTenderTable();
+        _data = await _dataProvider.KPIS.GetTenderTable(StartDate?.Date, EndDate?.Date);
     }
 
     private void HandleFilter(ChangeEventArgs args)

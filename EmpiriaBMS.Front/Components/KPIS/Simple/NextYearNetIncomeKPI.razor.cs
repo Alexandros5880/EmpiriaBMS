@@ -15,6 +15,7 @@ public partial class NextYearNetIncomeKPI
 
         if (firstRender)
         {
+            await MicrosoftTeams.InitializeTooltips();
             _nextYearNetIncome = await _dataProvider.KPIS.GetNextYearNetIncome();
             StateHasChanged();
         }

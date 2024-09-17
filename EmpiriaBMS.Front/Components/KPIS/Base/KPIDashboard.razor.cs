@@ -43,15 +43,16 @@ public partial class KPIDashboard
     }
 
     #region Date Range Filter
-    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2024"));
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2023"));
     DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
 
-    public void OnDateSelect(DateRange range)
+    public async Task OnDateSelect(DateRange range)
     {
         if (StartDate.HasValue && EndDate.HasValue)
         {
             StartDate = range.Start;
             EndDate = range.End;
+            await Refresh();
         }
     }
     #endregion

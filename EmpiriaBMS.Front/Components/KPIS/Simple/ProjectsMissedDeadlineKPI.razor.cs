@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.KPIS.Simple;
 
-public partial class PaidUnpaidInvoicesCount
+public partial class ProjectsMissedDeadlineKPI
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
@@ -11,8 +11,7 @@ public partial class PaidUnpaidInvoicesCount
     [Parameter]
     public DateTimeOffset? EndDate { get; set; }
 
-    private int paid = 0;
-    private int unpaid = 0;
+    private decimal _missedDeadLineProject = 0;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -21,11 +20,14 @@ public partial class PaidUnpaidInvoicesCount
         if (firstRender)
         {
             await MicrosoftTeams.InitializeTooltips();
-            var tuple = await _dataProvider.KPIS.GetPaidUnpaidInvoiceCount(StartDate?.Date, EndDate?.Date);
-            paid = tuple.Paid;
-            unpaid = tuple.Unpaid;
+            await _getMissedDeadLineProjects();
             StateHasChanged();
         }
+    }
+
+    private async Task _getMissedDeadLineProjects()
+    {
+        _missedDeadLineProject = await _dataProvider.KPIS.GetMissedDeadLineProjects(StartDate?.Date, EndDate?.Date);
     }
 
 }

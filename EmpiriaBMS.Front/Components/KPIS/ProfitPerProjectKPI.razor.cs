@@ -6,15 +6,22 @@ using ChartJs.Blazor.PieChart;
 using ChartJs.Blazor.Common;
 using EmpiriaBMS.Front.Horizontal;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
+using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class ProfitPerProjectKPI
 {
+    [Parameter]
+    public DateTimeOffset? StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+
     private bool _startLoading = true;
 
-    private Dictionary<string, double> data = null;
-    private PieConfig chartConfig;
+    private Dictionary<string, double> _data = null;
+    private PieConfig _chartConfig;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -32,7 +39,13 @@ public partial class ProfitPerProjectKPI
 
     private void _initilizeChart()
     {
-        chartConfig = new PieConfig
+        if (!_data.Any() || _chartConfig != null)
+        {
+            _chartConfig = null;
+            return;
+        }
+
+        _chartConfig = new PieConfig
         {
             Options = new PieOptions()
             {
@@ -53,17 +66,17 @@ public partial class ProfitPerProjectKPI
         };
 
         // Check if data is available
-        if (data != null && data.Count > 0)
+        if (_data != null && _data.Count > 0)
         {
             // Add labels to the Y-axis (categories)
-            foreach (string key in data.Keys)
-                chartConfig.Data.Labels.Add(key);
+            foreach (string key in _data.Keys)
+                _chartConfig.Data.Labels.Add(key);
 
             // Add the values to the dataset
-            var values = data.Values;
+            var values = _data.Values;
             PieDataset<double> dataset = new PieDataset<double>(values, false)
             {
-                BackgroundColor = ChartJsHelper.GenerateColors(data.Values.Count),
+                BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count),
                 BorderWidth = 0,
                 HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
                 HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -72,7 +85,7 @@ public partial class ProfitPerProjectKPI
             };
 
             // Add dataset to the chart
-            chartConfig.Data.Datasets.Add(dataset);
+            _chartConfig.Data.Datasets.Add(dataset);
         }
     }
 
@@ -80,9 +93,9 @@ public partial class ProfitPerProjectKPI
     {
         var userId = _sharedAuthData.LogedUser.Id;
 
-        data = await _dataProvider.KPIS.GetProfitPerProject(userId);
+        _data = await _dataProvider.KPIS.GetProfitPerProject(userId, StartDate?.Date, EndDate?.Date);
 
-        if (data != null)
+        if (_data != null)
         {
             _initilizeChart();
             StateHasChanged();

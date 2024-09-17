@@ -7,14 +7,21 @@ using ChartJs.Blazor.PieChart;
 using EmpiriaBMS.Front.Horizontal;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using EmpiriaBMS.Front.Components.General;
+using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class HoursPerUserKPI
 {
+    [Parameter]
+    public DateTimeOffset? StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+
     private bool _startLoading = true;
 
-    private Dictionary<string, long> _hoursPerUser = null;
+    private Dictionary<string, long> _data = null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -31,14 +38,20 @@ public partial class HoursPerUserKPI
     }
 
     private async Task _getHoursPerUser() =>
-        _hoursPerUser = await _dataProvider.KPIS.GetHoursPerUser();
+        _data = await _dataProvider.KPIS.GetHoursPerUser(StartDate?.Date, EndDate?.Date);
 
     // Pie Chart
-    private PieConfig _hoursPerUserPieConfig;
+    private PieConfig _chartConfig;
 
     private void _initilizeHoursPerUserPieChart()
     {
-        _hoursPerUserPieConfig = new PieConfig()
+        if (!_data.Any() || _chartConfig != null)
+        {
+            _chartConfig = null;
+            return;
+        }
+
+        _chartConfig = new PieConfig()
         {
             Options = new PieOptions()
             {
@@ -58,14 +71,14 @@ public partial class HoursPerUserKPI
             }
         };
 
-        foreach (string key in _hoursPerUser.Keys)
-            _hoursPerUserPieConfig.Data.Labels.Add(key);
+        foreach (string key in _data.Keys)
+            _chartConfig.Data.Labels.Add(key);
 
 
-        PieDataset<long> dataset = new PieDataset<long>(_hoursPerUser.Values)
+        PieDataset<long> dataset = new PieDataset<long>(_data.Values)
         {
-            BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerUser.Values.Count, 1),
-            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerUser.Values.Count, 550, 599, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 1),
+            //BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 550, 599, 1),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -73,6 +86,6 @@ public partial class HoursPerUserKPI
             BorderColor = ChartJsHelper.GetPreviusRgb(1),
         };
 
-        _hoursPerUserPieConfig.Data.Datasets.Add(dataset);
+        _chartConfig.Data.Datasets.Add(dataset);
     }
 }

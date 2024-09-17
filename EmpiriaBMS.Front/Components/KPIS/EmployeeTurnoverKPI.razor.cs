@@ -1,9 +1,16 @@
 ﻿using EmpiriaBMS.Front.Components.General;
+using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class EmployeeTurnoverKPI
 {
+    [Parameter]
+    public DateTimeOffset? StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+
     private bool _startLoading = true;
 
     private Dictionary<string, long> _employeesTurnover = null;
@@ -25,6 +32,6 @@ public partial class EmployeeTurnoverKPI
         await Task.Delay(1000);
 
         // TODO: _getEmployeesTurnover()
-        // _employeesTurnover = await _dataProvider.KPIS.GetEmployeesTurnover();
+        // _employeesTurnover = await _dataProvider.KPIS.GetEmployeesTurnover(StartDate?.Date, EndDate?.Date);
     }
 }

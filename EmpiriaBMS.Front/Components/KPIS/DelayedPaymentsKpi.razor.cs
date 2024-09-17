@@ -5,16 +5,23 @@ using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common.Axes.Ticks;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Horizontal;
+using Microsoft.AspNetCore.Components;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class DelayedPaymentsKpi
 {
+    [Parameter]
+    public DateTimeOffset? StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+
     private bool _startLoading = true;
 
-    private Dictionary<string, DelayedPayments> _delayedPaymentsPerProject = null;
-    private BarConfig _delayedPaymentsPerProjectBarConfig;
+    private Dictionary<string, DelayedPayments> _data = null;
+    private BarConfig _chartConfig;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -34,9 +41,15 @@ public partial class DelayedPaymentsKpi
     {
         await _getDelayedPaymentsPerProject();
 
-        if (_delayedPaymentsPerProject.Count > 0)
+        if (!_data.Any() || _chartConfig != null)
         {
-            _delayedPaymentsPerProjectBarConfig = new BarConfig
+            _chartConfig = null;
+            return;
+        }
+
+        if (_data.Count > 0)
+        {
+            _chartConfig = new BarConfig
             {
                 Options = new BarOptions
                 {
@@ -79,14 +92,14 @@ public partial class DelayedPaymentsKpi
                 }
             };
 
-            foreach (string key in _delayedPaymentsPerProject.Select(p => p.Key))
-                _delayedPaymentsPerProjectBarConfig.Data.Labels.Add(key);
+            foreach (string key in _data.Select(p => p.Key))
+                _chartConfig.Data.Labels.Add(key);
 
-            BarDataset<int> dataset = new BarDataset<int>(_delayedPaymentsPerProject.Values.Select(p => p.DelayedPaymentsCount))
+            BarDataset<int> dataset = new BarDataset<int>(_data.Values.Select(p => p.DelayedPaymentsCount))
             {
                 //Label = "Roles",
                 //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-                BackgroundColor = ChartJsHelper.GenerateColors(_delayedPaymentsPerProject.Count, 650, 699, 1),
+                BackgroundColor = ChartJsHelper.GenerateColors(_data.Count, 650, 699, 1),
                 BorderWidth = 0,
                 HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
                 HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -96,13 +109,13 @@ public partial class DelayedPaymentsKpi
 
             };
 
-            _delayedPaymentsPerProjectBarConfig.Data.Datasets.Add(dataset);
+            _chartConfig.Data.Datasets.Add(dataset);
         }
     }
 
     private async Task _getDelayedPaymentsPerProject()
     {
-        _delayedPaymentsPerProject = await _dataProvider.KPIS.GetDelayedPayments();
+        _data = await _dataProvider.KPIS.GetDelayedPayments(StartDate?.Date, EndDate?.Date);
     }
 
 }

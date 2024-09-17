@@ -13,6 +13,7 @@
 
 @if (!_loading)
 {
+
     <FluentGrid Spacing="3">
 
         <!-- Left -->
@@ -55,7 +56,7 @@
                         {
                             <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
                                 <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                                    <HoursPerRoleKPI />
+                                    <HoursPerRoleKPI StartDate="@StartDate" EndDate="@EndDate" />
                                 </div>
                             </FluentGridItem>
                         }
@@ -65,7 +66,7 @@
                         {
                             <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
                                 <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                                    <DelayedProjectsKPI />
+                                    <DelayedProjectsKPI StartDate="@StartDate" EndDate="@EndDate" />
                                 </div>
                             </FluentGridItem>
                         }
@@ -75,7 +76,7 @@
                         {
                             <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
                                 <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                                    <DelayedProjectTypesKPI />
+                                    <DelayedProjectTypesKPI StartDate="@StartDate" EndDate="@EndDate" />
                                 </div>
                             </FluentGridItem>
                         }
@@ -85,7 +86,7 @@
                         {
                             <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
                                 <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                                    <PandingPaymentsKPI />
+                                    <PandingPaymentsKPI StartDate="@StartDate" EndDate="@EndDate" />
                                 </div>
                             </FluentGridItem>
                         }
@@ -99,7 +100,7 @@
                 {
                     <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
                         <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <TenderTable />
+                            <TenderTable StartDate="@StartDate" EndDate="@EndDate" />
                         </div>
                     </FluentGridItem>
                 }
@@ -123,15 +124,6 @@
                     </FluentGridItem>
                 }
 
-                @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
-                {
-                    <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                        <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <ProjectsMissedDeadlineKPI />
-                        </div>
-                    </FluentGridItem>
-                }
-
                 @if (SeeEstimatedInvoicing)
                 {
                     <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
@@ -141,11 +133,20 @@
                     </FluentGridItem>
                 }
 
+                @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
+                {
+                    <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                        <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                            <ProjectsMissedDeadlineKPI StartDate="@StartDate" EndDate="@EndDate" />
+                        </div>
+                    </FluentGridItem>
+                }
+
                 @if (SeeUnpaidPaidInvoices)
                 {
                     <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
                         <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <PaidUnpaidInvoicesCount />
+                            <PaidUnpaidInvoicesCount StartDate="@StartDate" EndDate="@EndDate" />
                         </div>
                     </FluentGridItem>
                 }
@@ -154,7 +155,7 @@
                 {
                     <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
                         <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <EmployeeTurnoverKPI />
+                            <EmployeeTurnoverKPI StartDate="@StartDate" EndDate="@EndDate" />
                         </div>
                     </FluentGridItem>
                 }
@@ -163,7 +164,7 @@
                 {
                     <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
                         <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                            <HoursPerUserKPI />
+                            <HoursPerUserKPI StartDate="@StartDate" EndDate="@EndDate" />
                         </div>
                     </FluentGridItem>
                 }
@@ -172,7 +173,7 @@
                 {
                     <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
                         <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <ProfitPerProjectKPI />
+                            <ProfitPerProjectKPI StartDate="@StartDate" EndDate="@EndDate" />
                         </div>
                     </FluentGridItem>
                 }

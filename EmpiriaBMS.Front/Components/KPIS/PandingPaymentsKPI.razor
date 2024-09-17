@@ -7,9 +7,9 @@
 @inject IMapper _mapper
 @inject Logging.LoggerManager Logger
 
-@if (_pendingPaymentsPerProject != null && _pendingPaymentsPerProjectBarConfig != null)
+@if (_data != null && _chartConfig != null)
 {
-    <Chart Config="_pendingPaymentsPerProjectBarConfig"></Chart>
+    <Chart Config="_chartConfig"></Chart>
 }
 else
 {
