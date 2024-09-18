@@ -472,14 +472,6 @@ public partial class Reports
             yield return current;
             current = current.AddDays(7);
         }
-
-        //List<DateTime> weeks = new List<DateTime>();
-        //while (current <= finished)
-        //{
-        //    weeks.Add(current);
-        //    current = current.AddDays(7);
-        //}
-        //return weeks;
     }
 
     // Find the index (possition) of a date in date array span
