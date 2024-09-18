@@ -768,7 +768,7 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Drawings Assign Actions (Deliverable Assign)
+    #region Designers Assign Actions (Deliverable Assign)
     private async Task OnDeliverableAssignClick(DeliverableVM draw)
     {
         if (!isWorkingMode) return;
@@ -791,8 +791,6 @@ public partial class Dashboard : IDisposable
         _addDesignerDialog.Hide();
         _isAddDesignerDialogOdepened = false;
 
-        _startLoading = true;
-
         var forDeleteIds = _designers.Where(d => d.IsSelected == null || d.IsSelected == false)
                                      .Select(d => d.Id)
                                      .ToList();
@@ -801,8 +799,6 @@ public partial class Dashboard : IDisposable
         var forAdd = _designers.Where(d => d.IsSelected == true).ToList();
         var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
         await _dataProvider.Deliverables.AddDesigners(_selectedDeliverable.Id, forAddDto);
-
-        _startLoading = false;
     }
 
     public void _addDesignerDialogCansel()
@@ -835,8 +831,6 @@ public partial class Dashboard : IDisposable
         _addEngineerDialog.Hide();
         _isAddEngineerDialogOdepened = false;
 
-        _startLoading = true;
-
         var forDeleteIds = _engineers.Where(d => d.IsSelected == null || d.IsSelected == false)
                                      .Select(d => d.Id)
                                      .ToList();
@@ -845,8 +839,6 @@ public partial class Dashboard : IDisposable
         var forAdd = _engineers.Where(d => d.IsSelected == true).ToList();
         var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
         await _dataProvider.Disciplines.AddEngineers(_selectedDiscipline.Id, forAddDto);
-
-        _startLoading = false;
     }
 
     public void _addEngineerDialogCansel()
@@ -884,14 +876,31 @@ public partial class Dashboard : IDisposable
         _addPMDialog.Hide();
         _isAddPMDialogOdepened = false;
 
-        _startLoading = true;
+        try
+        {
+            var pmDto = await _dataProvider.Users.Get(_selectedPmId);
 
-        _selectedProject.ProjectManagerId = _selectedPmId;
-        await _dataProvider.Projects.Update(Mapper.Map<ProjectDto>(_selectedProject));
+            if (pmDto == null)
+                return;
 
-        _startLoading = false;
+            var pm = Mapping.Mapper.Map<User>(pmDto);
 
-        await Refresh();
+            _selectedProject.ProjectManagerId = _selectedPmId;
+            await _dataProvider.Projects.Update(Mapper.Map<ProjectDto>(_selectedProject));
+
+            _selectedProject.ProjectManager = pm;
+
+            var projectToUpdate = _projects.FirstOrDefault(p => p.Id == _selectedProject.Id);
+            if (projectToUpdate != null)
+            {
+                var index = _projects.IndexOf(projectToUpdate);
+                _projects[index] = _selectedProject;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Exception Dashboard._addPMDialogAccept(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+        }
     }
 
     public void _addPMDialogCansel()
