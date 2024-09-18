@@ -588,9 +588,9 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
-    private async Task OnSelectProject(int projectId)
+    private async Task OnSelectProject(int projectId, bool force = false)
     {
-        if (projectId == 0 || projectId == _selectedProject?.Id) return;
+        if (projectId == 0 || projectId == _selectedProject?.Id && !force) return;
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
         _deliverables.Clear();
@@ -862,6 +862,7 @@ public partial class Dashboard : IDisposable
         {
             _selectedProject = project;
             await _getProjectManagers();
+            await OnSelectProject(_selectedProject.Id, true);
             StateHasChanged();
             _addPMDialog.Show();
             _isAddPMDialogOdepened = true;
@@ -874,34 +875,31 @@ public partial class Dashboard : IDisposable
 
     public async Task _addPMDialogAccept()
     {
-        _addPMDialog.Hide();
-        _isAddPMDialogOdepened = false;
-
         try
         {
+            var updated = _selectedProject.Clone() as ProjectVM;
+
+            var projectIndex = _projects.IndexOf(_selectedProject);
+
             var pmDto = await _dataProvider.Users.Get(_selectedPmId);
 
             if (pmDto == null)
                 return;
 
             var pm = Mapping.Mapper.Map<User>(pmDto);
+            updated.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
+            updated.ProjectManagerId = _selectedPmId;
+            await _dataProvider.Projects.Update(Mapper.Map<ProjectDto>(updated));
+            updated.ProjectManager = pm;
 
-            _selectedProject.ProjectManagerId = _selectedPmId;
-            await _dataProvider.Projects.Update(Mapper.Map<ProjectDto>(_selectedProject));
+            var forDelete = _projects.FirstOrDefault(p => p.Id == updated.Id);
+            if (forDelete != null)
+                _projects.Remove(forDelete);
 
-            _selectedProject.ProjectManager = pm;
+            _projects.Insert(projectIndex, updated);
 
-            var projectToUpdate = _projects.FirstOrDefault(p => p.Id == _selectedProject.Id);
-            if (projectToUpdate != null)
-            {
-                projectToUpdate.ProjectManagerId = _selectedProject.ProjectManagerId;
-                projectToUpdate.ProjectManager = _selectedProject.ProjectManager;
-            }
-
-            // TODO: Update Observable Colection
-            await Refresh();
-            //var projects_back = new List<ProjectVM>(_projects);
-            //_projects = new ObservableCollection<ProjectVM>(projects_back);
+            _addPMDialog.Hide();
+            _isAddPMDialogOdepened = false;
         }
         catch (Exception ex)
         {
