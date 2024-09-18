@@ -22,10 +22,10 @@ public partial class KPIDashboard
     bool SeeProfitInEveryProject => _sharedAuthData.Permissions.Any(p => p.Ord == 43);
     bool SeeIssuesPerTimePeriodKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 44);
     // NEW
-    bool TurnoverPerProjectsCategoryKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 45);
-    bool TurnoverPerProjectsSubCategoryKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 46);
-    bool TurnoverPerProjectManagersKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 47);
-    bool HoursPerUserInSpecificTimePeriodKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 48);
+    bool SeeTurnoverPerProjectsCategoryKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 45);
+    bool SeeTurnoverPerProjectsSubCategoryKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 46);
+    bool SeeTurnoverPerProjectManagersKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 47);
+    bool SeeHoursPerUserInSpecificTimePeriodKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 48);
     #endregion
 
     private bool _loading = false;

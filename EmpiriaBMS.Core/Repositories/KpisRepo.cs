@@ -735,12 +735,15 @@ public class KpisRepo : IDisposable
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var dict = await _context.Set<Issue>()
+                var issues = await _context.Set<Issue>()
                     .Where(i => !i.IsDeleted)
                     .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                     .Include(i => i.Project)
+                    .ToListAsync();
+
+                var dict = issues
                     .GroupBy(i => i.Project)
-                    .ToDictionaryAsync(
+                    .ToDictionary(
                         g => g.Key?.Name ?? "--",
                         g => g.Count()
                     );
@@ -763,12 +766,15 @@ public class KpisRepo : IDisposable
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var dict = await _context.Set<Issue>()
+                var issues = await _context.Set<Issue>()
                     .Where(i => !i.IsDeleted)
                     .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                     .Include(i => i.Creator)
+                    .ToListAsync();
+
+                var dict = issues
                     .GroupBy(i => i.Creator)
-                    .ToDictionaryAsync(
+                    .ToDictionary(
                         g => g.Key?.FullName ?? "--",
                         g => g.Count()
                     );

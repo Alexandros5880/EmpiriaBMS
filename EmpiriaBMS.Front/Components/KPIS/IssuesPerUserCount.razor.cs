@@ -99,7 +99,7 @@ public partial class IssuesPerUserCount
             {
                 //Label = "Roles",
                 //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-                BackgroundColor = ChartJsHelper.GenerateColors(_data.Count, 650, 699, 1),
+                BackgroundColor = ChartJsHelper.GenerateColors(_data.Count),
                 BorderWidth = 0,
                 HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
                 HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),

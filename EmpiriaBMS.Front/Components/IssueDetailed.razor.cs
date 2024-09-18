@@ -83,19 +83,23 @@ public partial class IssueDetailed : ComponentBase, IDisposable
 
     public async Task HandleValidSubmit()
     {
-        var parentRole = _sharedAuthData.LoggedUserParentRole;
-        _issue.DisplayedRoleId = parentRole.Id;
-        _issue.VerificatorSignature = verificatorSignature != null ? await verificatorSignature.GetImageData() : null;
-        _issue.PMSignature = pMSignature != null ? await pMSignature.GetImageData() : null;
-        _issue.ProjectId = _project.Id;
-        _issue.CreatorId = _sharedAuthData.LogedUser.Id;
-        _issue.IsClose = false;
-
         try
         {
+            var parentRole = _sharedAuthData.LoggedUserParentRole;
+            _issue.DisplayedRoleId = parentRole.Id;
+            _issue.VerificatorSignature = verificatorSignature != null ? await verificatorSignature.GetImageData() : null;
+            _issue.PMSignature = pMSignature != null ? await pMSignature.GetImageData() : null;
+            _issue.ProjectId = _project.Id;
+            _issue.CreatorId = _sharedAuthData.LogedUser.Id;
+            _issue.IsClose = false;
+        
             var dto = Mapper.Map<IssueDto>(_issue);
             var documentsDtos = Mapper.Map<List<DocumentDto>>(_documents);
             await DataProvider.Issues.Add(dto, documentsDtos);
+        }
+        catch (System.NullReferenceException nex)
+        {
+            Logger.LogError($"Exception IssueDetailed.HandleValidSubmit(): {nex.Message}, \n Inner Exception: {nex.InnerException}");
         }
         catch (Exception ex)
         {
