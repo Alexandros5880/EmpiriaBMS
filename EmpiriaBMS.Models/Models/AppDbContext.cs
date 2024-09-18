@@ -79,7 +79,7 @@ public class AppDbContext : DbContext
         Random random = new Random();
         var createdDate = DateTime.Now;
 
-        if (false)
+        if (true)
         {
             #region Permissions
             // See Dashboard Layout
@@ -593,10 +593,70 @@ public class AppDbContext : DbContext
                 Id = per_43_id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "See Profit in every project",
+                Name = "See Profit in every project KPI",
                 Ord = 43
             };
             builder.Entity<Permission>().HasData(per_43);
+
+            // See Profit in every project
+            var per_44_id = random.Next(123456789, 999999999);
+            Permission per_44 = new Permission()
+            {
+                Id = per_44_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "See Issues per time period KPI",
+                Ord = 44
+            };
+            builder.Entity<Permission>().HasData(per_44);
+
+            // Turnover per projects category
+            var per_45_id = random.Next(123456789, 999999999);
+            Permission per_45 = new Permission()
+            {
+                Id = per_45_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Turnover per projects category KPI",
+                Ord = 45
+            };
+            builder.Entity<Permission>().HasData(per_45);
+
+            // Turnover per projects sub category KPI
+            var per_46_id = random.Next(123456789, 999999999);
+            Permission per_46 = new Permission()
+            {
+                Id = per_46_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Turnover per projects sub category KPI",
+                Ord = 46
+            };
+            builder.Entity<Permission>().HasData(per_46);
+
+            // Turnover per project managers KPI
+            var per_47_id = random.Next(123456789, 999999999);
+            Permission per_47 = new Permission()
+            {
+                Id = per_47_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Turnover per project managers KPI",
+                Ord = 47
+            };
+            builder.Entity<Permission>().HasData(per_47);
+
+            // Hours per user in specific time period KPI
+            var per_48_id = random.Next(123456789, 999999999);
+            Permission per_48 = new Permission()
+            {
+                Id = per_48_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = "Hours per user in specific time period KPI",
+                Ord = 48
+            };
+            builder.Entity<Permission>().HasData(per_48);
             #endregion
 
             #region Roles
@@ -1132,6 +1192,61 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_132);
 
+            // COO || See Issues per time period KPI
+            RolePermission rp_135 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_4_id,
+                PermissionId = per_44_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_135);
+
+            // COO || Turnover per projects category KPI
+            RolePermission rp_136 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_4_id,
+                PermissionId = per_45_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_136);
+
+            // COO || Turnover per projects sub category KPI
+            RolePermission rp_137 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_4_id,
+                PermissionId = per_46_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_137);
+
+            // COO || Turnover per project managers KPI
+            RolePermission rp_138 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_4_id,
+                PermissionId = per_47_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_138);
+
+            // COO || Hours per user in specific time period KPI
+            RolePermission rp_139 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_4_id,
+                PermissionId = per_48_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_139);
+
 
             // CTO
             // CTO || See Dashboard Layout
@@ -1552,6 +1667,61 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_133);
 
+            // CTO || See Issues per time period KPI
+            RolePermission rp_140 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_44_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_140);
+
+            // CTO || Turnover per projects category KPI
+            RolePermission rp_141 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_45_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_141);
+
+            // CTO || Turnover per projects sub category KPI
+            RolePermission rp_142 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_46_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_142);
+
+            // CTO || Turnover per project managers KPI
+            RolePermission rp_143 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_47_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_143);
+
+            // CTO || Hours per user in specific time period KPI
+            RolePermission rp_144 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_5_id,
+                PermissionId = per_48_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_144);
+
 
             // CEO
             // CEO || See Dashboard Layout
@@ -1961,6 +2131,61 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_134);
 
+            // CEO || See Issues per time period KPI
+            RolePermission rp_145 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_44_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_145);
+
+            // CEO || Turnover per projects category KPI
+            RolePermission rp_146 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_45_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_146);
+
+            // CEO || Turnover per projects sub category KPI
+            RolePermission rp_147 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_46_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_147);
+
+            // CEO || Turnover per project managers KPI
+            RolePermission rp_148 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_47_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_148);
+
+            // CEO || Hours per user in specific time period KPI
+            RolePermission rp_149 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_6_id,
+                PermissionId = per_48_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_149);
+
 
             // Guest
             // Guest || See Dashboard Layout
@@ -2078,7 +2303,7 @@ public class AppDbContext : DbContext
             builder.Entity<RolePermission>().HasData(rp_121);
 
             // Admin || See Profit in every project
-            RolePermission rp_135 = new RolePermission()
+            RolePermission rp_150 = new RolePermission()
             {
                 Id = random.Next(123456789, 999999999) * 9,
                 CreatedDate = DateTime.Now,
@@ -2086,7 +2311,62 @@ public class AppDbContext : DbContext
                 RoleId = role_9_id,
                 PermissionId = per_43_id
             };
-            builder.Entity<RolePermission>().HasData(rp_135);
+            builder.Entity<RolePermission>().HasData(rp_150);
+
+            // Admin || See Issues per time period KPI
+            RolePermission rp_151 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_44_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_151);
+
+            // Admin || Turnover per projects category KPI
+            RolePermission rp_152 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_45_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_152);
+
+            // Admin || Turnover per projects sub category KPI
+            RolePermission rp_153 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_46_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_153);
+
+            // Admin || Turnover per project managers KPI
+            RolePermission rp_154 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_47_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_154);
+
+            // Admin || Hours per user in specific time period KPI
+            RolePermission rp_155 = new RolePermission()
+            {
+                Id = random.Next(123456789, 999999999) * 9,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleId = role_9_id,
+                PermissionId = per_48_id
+            };
+            builder.Entity<RolePermission>().HasData(rp_155);
 
 
             // Secretariat 
