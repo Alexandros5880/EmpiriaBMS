@@ -263,79 +263,76 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
 
     public async Task AddDesigners(int drawingId, ICollection<UserDto> designers)
     {
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            foreach (var d in designers)
+            using (var _context = _dbContextFactory.CreateDbContext())
             {
-                DeliverableEmployee de = new DeliverableEmployee()
+                foreach (var d in designers)
                 {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    DeliverableId = drawingId,
-                    EmployeeId = d.Id
-                };
+                    DeliverableEmployee de = new DeliverableEmployee()
+                    {
+                        CreatedDate = DateTime.Now,
+                        LastUpdatedDate = DateTime.Now,
+                        DeliverableId = drawingId,
+                        EmployeeId = d.Id
+                    };
 
-                // Check If Exists
-                var exists = await _context.Set<DeliverableEmployee>()
-                    .Where(r => !r.IsDeleted)
-                    .AnyAsync(de => de.DeliverableId == drawingId && de.EmployeeId == d.Id);
-                if (exists) continue;
+                    // Check If Exists
+                    var exists = await _context.Set<DeliverableEmployee>()
+                        .AnyAsync(de => de.DeliverableId == drawingId && de.EmployeeId == d.Id);
+                    
+                    if (exists)
+                    {
+                        var deliverable = await _context.Set<DeliverableEmployee>()
+                            .FirstOrDefaultAsync(de => de.DeliverableId == drawingId && de.EmployeeId == d.Id);
 
-                await _context.Set<DeliverableEmployee>().AddAsync(de);
-                await _context.SaveChangesAsync();
+                        if (deliverable?.IsDeleted ?? false)
+                        {
+                            deliverable.IsDeleted = false;
+                            await _context.SaveChangesAsync();
+                        }
+
+                        continue;
+                    }
+
+                    await _context.Set<DeliverableEmployee>().AddAsync(de);
+                    await _context.SaveChangesAsync();
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On DrawingRepo.AddDesigners(int drawingId, ICollection<UserDto> designers): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
     public async Task RemoveDesigners(int drawingId, ICollection<int> designersIds)
     {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            var designers = await _context.Set<DeliverableEmployee>()
-                                          .Where(r => !r.IsDeleted)
-                                          .Where(d => designersIds.Contains(d.EmployeeId)
-                                                                        && d.DeliverableId == drawingId)
-                                          .ToListAsync();
-
-            if (designers == null)
-                throw new NullReferenceException(nameof(designers));
-
-            foreach (var designer in designers)
-            {
-                designer.IsDeleted = true;
-                await DeleteDrawingEmployee(designer);
-                //_context.Set<DrawingEmployee>().Remove(designer);
-            }
-
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task<DeliverableEmployee> DeleteDrawingEmployee(DeliverableEmployee entity)
-    {
         try
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
-
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var entry = await _context.Set<DeliverableEmployee>().FirstOrDefaultAsync(x => x.Id == entity.Id);
-                if (entry != null)
+                var designers = await _context.Set<DeliverableEmployee>()
+                                              .Where(r => !r.IsDeleted)
+                                              .Where(d => designersIds.Contains(d.EmployeeId)
+                                                                            && d.DeliverableId == drawingId)
+                                              .ToListAsync();
+
+                if (designers == null)
+                    throw new NullReferenceException(nameof(designers));
+
+                foreach (var designer in designers)
                 {
-                    entry.IsDeleted = true;
-                    await _context.SaveChangesAsync();
+                    designer.IsDeleted = true;
+                    //_context.Set<DrawingEmployee>().Remove(designer);
                 }
 
-                return entry;
+                await _context.SaveChangesAsync();
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On DrawingRepo.DeleteDrawingEmployee({Mapping.Mapper.Map<DeliverableEmployee>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            _logger.LogError($"Exception On DrawingRepo.RemoveDesigners(int drawingId, ICollection<int> designersIds): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 }

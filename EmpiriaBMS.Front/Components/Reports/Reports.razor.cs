@@ -19,6 +19,7 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Color = System.Drawing.Color;
 using Fluent = Microsoft.Fast.Components.FluentUI;
 using EmpiriaBMS.Front.Components.General;
+using System;
 
 namespace EmpiriaBMS.Front.Components.Reports;
 
@@ -162,27 +163,26 @@ public partial class Reports
         _datasets.Clear();
 
         // Labels (Dates for start date to end date per 1 week)
-        var weeklyDates = _getWeeklyDates(StartDate?.DateTime, EndDate).ToList();
+        var weeklyDates = _getWeeklyDates(StartDate, EndDate).ToList();
 
         if (weeklyDates == null || !weeklyDates.Any())
-        {
             return;
-        }
 
         // Set X-axis Labels
-        for (int i = 0; i < weeklyDates.Count - 1; i++)
+        foreach(var week in weeklyDates)
         {
-            var date = weeklyDates[i];
-            _labels.Add(date.ToEuropeFormat());
+            var startDate = week.Start.DateTime;
+            var endDate = week.End.DateTime;
+            _labels.Add($"{startDate.ToEuropeFormat()}-{endDate.ToEuropeFormat()}");
         }
 
-        var totalHoursPerWeek = new double[weeklyDates.Count - 1];
+        var totalHoursPerWeek = new double[weeklyDates.Count];
 
         // Initialize datasets for each project
         foreach (var report in reportEntries)
         {
             var color = _getRandomColor();
-            var dataset = new BarDataset<double>(new double[weeklyDates.Count - 1])
+            var dataset = new BarDataset<double>(new double[weeklyDates.Count])
             {
                 Label = $"Name: {report.Project.Name}   Date: {report.Project.CreatedDate.ToEuropeFormat()}   Hours",
                 BackgroundColor = new IndexableOption<string>(color.Item1.ToHexaString()),
@@ -190,18 +190,24 @@ public partial class Reports
             };
 
             var createdDate = report.Project.CreatedDate;
-            for (int i = 0; i < weeklyDates.Count - 1; i++)
+            var weekCounter = 0;
+            foreach (var week in weeklyDates)
             {
-                var startDate = weeklyDates[i];
-                var endDate = weeklyDates[i + 1];
-                if (createdDate >= startDate && createdDate <= endDate)
+                var startDate = week.Start.DateTime;
+                var endDate = week.End.DateTime;
+
+                int startDateResult = DateTime.Compare(createdDate, startDate);
+                int endDateResult = DateTime.Compare(createdDate, endDate);
+
+                if (startDateResult >= 0 && endDateResult <= 0)
                 {
                     var hours = report.TotalWorkedTime.TotalHours;
-                    totalHoursPerWeek[i] += hours;
-                    // Correctly place the bar in the corresponding week
-                    dataset.AddValue(i, hours);
-                    break; // Exit loop once the correct week is found
+                    totalHoursPerWeek[weekCounter] += hours;
+                    dataset.AddValue(weekCounter, hours);
+                    break;
                 }
+
+                weekCounter++;
             }
 
             _datasets.Add(dataset);
@@ -373,10 +379,8 @@ public partial class Reports
     #endregion
 
     #region Date Range Filter
-    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2024"));
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("7-1-2024"));
     DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
-
-    private string dateValidMsg = string.Empty;
 
     public async Task OnDateSelect(DateRange range)
     {
@@ -446,29 +450,37 @@ public partial class Reports
     #endregion
 
     // Divide Timespan to weeks and return list of weeks
-    public static IEnumerable<DateTime> _getWeeklyDates(DateTimeOffset? start, DateTimeOffset? end)
+    public static IEnumerable<DateRange> _getWeeklyDates(DateTimeOffset? start, DateTimeOffset? end)
     {
-        if (start != null || end == null)
+        if (start != null && end == null)
         {
             end = DateTime.Now;
         }
-        else if (start == null || end != null)
+        else if (start == null && end != null)
         {
             start = DateTime.Now.AddMonths(-1);
         }
-        else
+        else if (start == null && end == null)
         {
             end = DateTime.Now;
             start = DateTime.Now.AddMonths(-1);
         }
 
-        DateTime current = ((DateTimeOffset)start).DateTime.AddDays(-4);
-        DateTime finished = ((DateTimeOffset)end).DateTime;
+        DateTime current = ((DateTimeOffset)start).Date;
+        DateTime finished = ((DateTimeOffset)end).Date;
+        int dayesToAppend = 7;
 
-        while (current <= finished.AddDays(4))
+        while (current <= finished && dayesToAppend != 0)
         {
-            yield return current;
-            current = current.AddDays(7);
+            int remaining = (finished - current).Days;
+            dayesToAppend = remaining >= 7 ? 7 : remaining;
+            DateRange range = new DateRange()
+            {
+                Start = current == ((DateTimeOffset)start).Date ? current : current.AddDays(1),
+                End = current.AddDays(dayesToAppend),
+            };
+            yield return range;
+            current = current.AddDays(dayesToAppend);
         }
     }
 

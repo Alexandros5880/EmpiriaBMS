@@ -23,6 +23,11 @@
     max-height: 50vh !important;
 }
 
+/* Change color when checked */
+input[type="checkbox"]:checked {
+    background-color: var(--primary-accent-color);
+    border-color: var(--primary-accent-color);
+}
 
 
 /* Remove Arrows */

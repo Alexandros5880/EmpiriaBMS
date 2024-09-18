@@ -13,148 +13,207 @@
 
 @if (!_loading)
 {
-    <FluentGrid Spacing="3">
+    <div class="kpi-container">
+        <FluentGrid Spacing="3">
 
-        <!-- Left -->
-        <FluentGridItem xl="9" lg="9" md="12" sm="12" xs="12">
+            <!-- Left -->
+            <FluentGridItem xl="9" lg="9" md="12" sm="12" xs="12">
 
-            <!-- Grid -->
-            <FluentGrid Spacing="3">
+                <!-- Grid -->
+                <FluentGrid Spacing="3">
 
-                <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                    <div class="p-3 rounded-3"
-                         style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                        <h3>Key Performance Indicators (KPIS)</h3>
-                    </div>
-                </FluentGridItem>
-
-                <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-
-                    <!-- Grid -->
-                    <FluentGrid Spacing="3">
-
-                        <!-- Left-->
-                        @if (SeeHoursPerRoleKPI)
-                        {
-                            <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
-                                <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                                    <HoursPerRoleKPI />
-                                </div>
-                            </FluentGridItem>
-                        }
-
-                        <!-- Right-->
-                        @if (SeeActiveDelayedProjectsKPI)
-                        {
-                            <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
-                                <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                                    <DelayedProjectsKPI />
-                                </div>
-                            </FluentGridItem>
-                        }
-
-                        <!-- Left-->
-                        @if (SeeActiveDelayedProjectsTypesCounterKPI)
-                        {
-                            <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
-                                <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                                    <DelayedProjectTypesKPI />
-                                </div>
-                            </FluentGridItem>
-                        }
-
-                        <!-- Right-->
-                        @if (SeePendingsPaymentsKPI)
-                        {
-                            <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
-                                <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                                    <PandingPaymentsKPI />
-                                </div>
-                            </FluentGridItem>
-                        }
-
-                    </FluentGrid>
-
-                </FluentGridItem>
-
-                <!-- Full -->
-                @if (SeeTenderTableKPI)
-                {
+                    <!-- Head -->
                     <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                        <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <TenderTable />
+                        <div class="p-3 rounded-3 row"
+                             style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                        
+                             <!-- Header -->
+                             <div class="col-8">
+                                <h3>Key Performance Indicators (KPIS)</h3>
+                             </div>
+
+                            <!-- Date Range Filter -->
+                            <div class="col-4">
+                                <DateRangePicker class="form-control"
+                                                 title="Dates"
+                                                 placeholder="Select dates..."
+                                                 @bind-StartDate="StartDate"
+                                                 @bind-EndDate="EndDate"
+                                                 OnRangeSelect="@OnDateSelect"
+                                                 style="width: 220px;"
+                                                 DateFormat="dd/MM/yyyy" />
+                            </div>
+
                         </div>
                     </FluentGridItem>
-                }
 
-            </FluentGrid>
-
-        </FluentGridItem>
-
-        <!-- Right -->
-        <FluentGridItem xl="3" lg="3" md="12" sm="12" xs="12">
-
-            <!-- Grid -->
-            <FluentGrid Spacing="3">
-
-                @if (SeeNextYearIncome)
-                {
                     <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                        <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <NextYearNetIncomeKPI />
-                        </div>
+
+                        <!-- Grid -->
+                        <FluentGrid Spacing="3">
+
+                            <!-- Left-->
+                            @if (SeeHoursPerRoleKPI)
+                            {
+                                <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
+                                    <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
+                                        <HoursPerRoleKPI StartDate="@StartDate" EndDate="@EndDate" />
+                                    </div>
+                                </FluentGridItem>
+                            }
+
+                            <!-- Right-->
+                            @if (SeeActiveDelayedProjectsKPI)
+                            {
+                                <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
+                                    <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
+                                        <DelayedProjectsKPI StartDate="@StartDate" EndDate="@EndDate" />
+                                    </div>
+                                </FluentGridItem>
+                            }
+
+                            <!-- Left-->
+                            @if (SeeActiveDelayedProjectsTypesCounterKPI)
+                            {
+                                <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
+                                    <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
+                                        <DelayedProjectTypesKPI StartDate="@StartDate" EndDate="@EndDate" />
+                                    </div>
+                                </FluentGridItem>
+                            }
+
+                            <!-- Right-->
+                            @if (SeePendingsPaymentsKPI)
+                            {
+                                <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
+                                    <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
+                                        <PandingPaymentsKPI StartDate="@StartDate" EndDate="@EndDate" />
+                                    </div>
+                                </FluentGridItem>
+                            }
+
+                            <!-- Left -->
+                            @if (SeeHoursPerRoleKPI)
+                            {
+                                <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
+                                    <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
+                                        <HoursPerUserKPI StartDate="@StartDate" EndDate="@EndDate" />
+                                    </div>
+                                </FluentGridItem>
+                            }
+
+                            <!-- Right-->
+                            @if (SeeIssuesPerTimePeriodKPI)
+                            {
+                                <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
+                                    <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
+                                        <HoursPerRoleKPI StartDate="@StartDate" EndDate="@EndDate" />
+                                    </div>
+                                </FluentGridItem>
+                            }
+
+                            <!-- Left -->
+                            @if (SeeIssuesPerTimePeriodKPI)
+                            {
+                                <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
+                                    <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
+                                        <IssuesPerProjectCountKPI StartDate="@StartDate" EndDate="@EndDate" />
+                                    </div>
+                                </FluentGridItem>
+                            }
+
+                            <!-- Right -->
+                            @if (SeeProfitInEveryProject)
+                            {
+                                <FluentGridItem xl="3" lg="6" md="12" sm="12" xs="12">
+                                    <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                        <IssuesPerUserCount StartDate="@StartDate" EndDate="@EndDate" />
+                                    </div>
+                                </FluentGridItem>
+                            }
+
+                        </FluentGrid>
+
                     </FluentGridItem>
-                }
 
-                @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
-                {
-                    <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                        <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <ProjectsMissedDeadlineKPI />
-                        </div>
-                    </FluentGridItem>
-                }
+                    <!-- Full -->
+                    @if (SeeTenderTableKPI)
+                    {
+                        <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                            <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                <TenderTable StartDate="@StartDate" EndDate="@EndDate" />
+                            </div>
+                        </FluentGridItem>
+                    }
 
-                @if (SeeEstimatedInvoicing)
-                {
-                    <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                        <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <EstimatedInvoicing />
-                        </div>
-                    </FluentGridItem>
-                }
+                </FluentGrid>
 
-                @if (SeeUnpaidPaidInvoices)
-                {
-                    <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                        <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <PaidUnpaidInvoicesCount />
-                        </div>
-                    </FluentGridItem>
-                }
+            </FluentGridItem>
 
-                @if (SeeEmployeeTurnoverKPI)
-                {
-                    <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                        <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                            <EmployeeTurnoverKPI />
-                        </div>
-                    </FluentGridItem>
-                }
+            <!-- Right -->
+            <FluentGridItem xl="3" lg="3" md="12" sm="12" xs="12">
 
-                <!-- Full -->
-                @if (SeeHoursPerRoleKPI)
-                {
-                    <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                        <div class="p-3 rounded-3" style="background-color: #bfc1d7;">
-                            <HoursPerUserKPI />
-                        </div>
-                    </FluentGridItem>
-                }
+                <!-- Grid -->
+                <FluentGrid Spacing="3">
 
-            </FluentGrid>
+                    @if (SeeNextYearIncome)
+                    {
+                        <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                            <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                <NextYearNetIncomeKPI />
+                            </div>
+                        </FluentGridItem>
+                    }
 
-        </FluentGridItem>
+                    @if (SeeEstimatedInvoicing)
+                    {
+                        <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                            <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                <EstimatedInvoicing />
+                            </div>
+                        </FluentGridItem>
+                    }
 
-    </FluentGrid>
+                    @if (SeeAllProjectsMissedDeadLineKPI || SeeMyProjectsMissedDeadLineKPI)
+                    {
+                        <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                            <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                <ProjectsMissedDeadlineKPI StartDate="@StartDate" EndDate="@EndDate" />
+                            </div>
+                        </FluentGridItem>
+                    }
+
+                    @if (SeeUnpaidPaidInvoices)
+                    {
+                        <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                            <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                <PaidUnpaidInvoicesCount StartDate="@StartDate" EndDate="@EndDate" />
+                            </div>
+                        </FluentGridItem>
+                    }
+
+                    @if (SeeProfitInEveryProject)
+                    {
+                        <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                            <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                <ProfitPerProjectTableKPI StartDate="@StartDate" EndDate="@EndDate" />
+                            </div>
+                        </FluentGridItem>
+                    }
+
+                    @if (SeeEmployeeTurnoverKPI)
+                    {
+                        <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                            <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                <EmployeeTurnoverKPI StartDate="@StartDate" EndDate="@EndDate" />
+                            </div>
+                        </FluentGridItem>
+                    }
+
+                </FluentGrid>
+
+            </FluentGridItem>
+
+        </FluentGrid>
+    </div>
 }

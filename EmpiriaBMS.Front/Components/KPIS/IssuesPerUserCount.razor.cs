@@ -10,7 +10,7 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class DelayedPaymentsKpi
+public partial class IssuesPerUserCount
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
@@ -20,7 +20,7 @@ public partial class DelayedPaymentsKpi
 
     private bool _startLoading = true;
 
-    private Dictionary<string, DelayedPayments> _data = null;
+    private Dictionary<string, int> _data = null;
     private BarConfig _chartConfig;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -30,16 +30,16 @@ public partial class DelayedPaymentsKpi
         if (firstRender)
         {
             _startLoading = true;
-            await _initilizeDelayedPaymentsPerProject();
+            await _initilizeChart();
             _startLoading = false;
 
             StateHasChanged();
         }
     }
 
-    private async Task _initilizeDelayedPaymentsPerProject()
+    private async Task _initilizeChart()
     {
-        await _getDelayedPaymentsPerProject();
+        await _getRecords();
 
         if (!_data.Any() || _chartConfig != null)
         {
@@ -56,7 +56,7 @@ public partial class DelayedPaymentsKpi
                     Title = new OptionsTitle
                     {
                         Display = true,
-                        Text = "Delayed Payments",
+                        Text = "Count Issues per User",
                         Position = ChartEnums.Position.Top,
                         FontSize = 24
                     },
@@ -95,7 +95,7 @@ public partial class DelayedPaymentsKpi
             foreach (string key in _data.Select(p => p.Key))
                 _chartConfig.Data.Labels.Add(key);
 
-            BarDataset<int> dataset = new BarDataset<int>(_data.Values.Select(p => p.DelayedPaymentsCount))
+            BarDataset<int> dataset = new BarDataset<int>(_data.Values)
             {
                 //Label = "Roles",
                 //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
@@ -113,9 +113,8 @@ public partial class DelayedPaymentsKpi
         }
     }
 
-    private async Task _getDelayedPaymentsPerProject()
+    private async Task _getRecords()
     {
-        _data = await _dataProvider.KPIS.GetDelayedPayments(StartDate?.Date, EndDate?.Date);
+        _data = await _dataProvider.KPIS.GetIssuesPerUserCount(StartDate?.Date, EndDate?.Date);
     }
-
 }

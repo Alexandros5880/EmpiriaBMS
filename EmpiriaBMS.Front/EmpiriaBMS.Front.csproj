@@ -98,7 +98,7 @@
     <Content Update="Components\KPIS\Base\KpisLand.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-    <Content Update="Components\KPIS\ProjectsMissedDeadlineKPI.razor">
+    <Content Update="Components\KPIS\Simple\ProjectsMissedDeadlineKPI.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
     <Content Update="Components\KPIS\TenderTable.razor">

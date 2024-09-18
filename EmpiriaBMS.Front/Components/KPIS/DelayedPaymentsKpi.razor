@@ -7,9 +7,9 @@
 @inject IMapper _mapper
 @inject Logging.LoggerManager Logger
 
-@if (_delayedPaymentsPerProjectBarConfig != null)
+@if (_chartConfig != null)
 {
-    <Chart Config="_delayedPaymentsPerProjectBarConfig"></Chart>
+    <Chart Config="_chartConfig"></Chart>
 } else {
     @if (_startLoading)
     {
@@ -17,6 +17,9 @@
     }
     else
     {
+        <h5 style="color: var(--kpi-text-color);">
+            <strong>Delayed Payments</strong>
+        </h5>
         <span class="text-warning">No Data</span>
     }
 }

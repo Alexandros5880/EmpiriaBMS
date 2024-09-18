@@ -9,9 +9,9 @@
 
 <div class="row">
     <div class="col-12">
-        @if (_hoursPerRoleBarConfig != null)
+        @if (_chartConfig != null)
         {
-            <Chart Config="_hoursPerRoleBarConfig"></Chart>
+            <Chart Config="_chartConfig"></Chart>
         }
         else
         {
@@ -21,6 +21,9 @@
             }
             else
             {
+                <h5 style="color: var(--kpi-text-color);">
+                    <strong>Hours Per Role</strong>
+                </h5>
                 <span class="text-warning">No Data</span>
             }
         }

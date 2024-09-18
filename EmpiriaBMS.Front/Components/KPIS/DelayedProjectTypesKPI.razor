@@ -7,9 +7,9 @@
 @inject IMapper _mapper
 @inject Logging.LoggerManager Logger
 
-@if (_delayedProjectsTypesBarConfig != null)
+@if (_chartConfig != null)
 {
-    <Chart Config="_delayedProjectsTypesBarConfig"></Chart>
+    <Chart Config="_chartConfig"></Chart>
 }
 else
 {
@@ -19,6 +19,9 @@ else
     }
     else
     {
+        <h5 style="color: var(--kpi-text-color);">
+            <strong>Count Delayed Projects By Type</strong>
+        </h5>
         <span class="text-warning">No Data</span>
     }
 }

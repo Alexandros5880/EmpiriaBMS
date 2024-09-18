@@ -6,15 +6,22 @@ using ChartJs.Blazor.Common;
 using EmpiriaBMS.Front.ViewModel.Components;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using EmpiriaBMS.Front.Components.General;
+using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
 public partial class DelayedProjectsKPI
 {
+    [Parameter]
+    public DateTimeOffset? StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+
     private bool _startLoading = true;
 
-    private List<ProjectVM> _delayedProjects = null;
-    private BarConfig _delayedProjectsBarConfig;
+    private List<ProjectVM> _data = null;
+    private BarConfig _chartConfig;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -32,14 +39,20 @@ public partial class DelayedProjectsKPI
 
     private void _initilizeDelayedProjectsChart()
     {
-        _delayedProjectsBarConfig = new BarConfig
+        if (!_data.Any() || _chartConfig != null)
+        {
+            _chartConfig = null;
+            return;
+        }
+
+        _chartConfig = new BarConfig
         {
             Options = new BarOptions
             {
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Delayed Projects Bar Chart",
+                    Text = "Delayed Projects",
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -66,18 +79,22 @@ public partial class DelayedProjectsKPI
                         }
                     }
                 },
+                Legend = new Legend()
+                {
+                    Display = false
+                },
                 Responsive = true,
 
             }
         };
 
-        var names = _delayedProjects.Select(p => p.Name).ToList();
+        var names = _data.Select(p => p.Name).ToList();
 
         foreach (string key in names)
-            _delayedProjectsBarConfig.Data.Labels.Add(key);
+            _chartConfig.Data.Labels.Add(key);
 
         // Dayes Dataset
-        var days = _delayedProjects.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Days).ToList();
+        var days = _data.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Days).ToList();
         BarDataset<int> dayesDataSet = new BarDataset<int>(days, false)
         {
             Label = "Days Dealied",
@@ -90,10 +107,10 @@ public partial class DelayedProjectsKPI
             BarPercentage = 0.5,
 
         };
-        _delayedProjectsBarConfig.Data.Datasets.Add(dayesDataSet);
+        _chartConfig.Data.Datasets.Add(dayesDataSet);
 
         // Hours Dataset
-        var hours = _delayedProjects.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Hours).ToList();
+        var hours = _data.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Hours).ToList();
         BarDataset<int> hoursDataSet = new BarDataset<int>(hours, false)
         {
             Label = "Hours Dealied",
@@ -106,10 +123,10 @@ public partial class DelayedProjectsKPI
             BarPercentage = 0.5,
 
         };
-        _delayedProjectsBarConfig.Data.Datasets.Add(hoursDataSet);
+        _chartConfig.Data.Datasets.Add(hoursDataSet);
 
         // Minutes Dataset
-        var minutes = _delayedProjects.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Minutes).ToList();
+        var minutes = _data.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Minutes).ToList();
         BarDataset<int> minutesDataSet = new BarDataset<int>(minutes, false)
         {
             Label = "Minutes Dealied",
@@ -122,14 +139,14 @@ public partial class DelayedProjectsKPI
             BarPercentage = 0.5,
 
         };
-        _delayedProjectsBarConfig.Data.Datasets.Add(minutesDataSet);
+        _chartConfig.Data.Datasets.Add(minutesDataSet);
     }
 
     private async Task _getActiveDelayedProjects()
     {
         var userId = _sharedAuthData.LogedUser.Id;
-        var dtos = await _dataProvider.KPIS.GetActiveDelayedProjects(userId);
-        _delayedProjects = _mapper.Map<List<ProjectVM>>(dtos);
+        var dtos = await _dataProvider.KPIS.GetActiveDelayedProjects(userId, StartDate?.Date, EndDate?.Date);
+        _data = _mapper.Map<List<ProjectVM>>(dtos);
     }
 
     #region Hellper Methods

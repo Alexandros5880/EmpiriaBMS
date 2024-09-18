@@ -1,10 +1,13 @@
-﻿using EmpiriaBMS.Core.Dtos.KPIS;
+﻿using ChartJs.Blazor.Common;
+using ChartJs.Blazor.PieChart;
+using EmpiriaBMS.Core.Dtos.KPIS;
+using EmpiriaBMS.Front.Horizontal;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class TenderTable
+public partial class ProfitPerProjectTableKPI
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
@@ -12,13 +15,12 @@ public partial class TenderTable
     [Parameter]
     public DateTimeOffset? EndDate { get; set; }
 
-    private IQueryable<TenderDataDto> _data;
-    IQueryable<TenderDataDto>? FilteredItems => _data?.Where(x => x.ProjectName.Contains(_nameFilter, StringComparison.CurrentCultureIgnoreCase));
+    private IQueryable<TenderDataDto> _data = null;
+    
+    IQueryable<TenderDataDto>? FilteredItems => 
+        _data?.Where(x => x.ProjectName.Contains(_nameFilter, StringComparison.CurrentCultureIgnoreCase));
 
-    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     private string _nameFilter = string.Empty;
-
-    private bool _showClient = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -33,7 +35,14 @@ public partial class TenderTable
 
     private async Task _getData()
     {
-        _data = await _dataProvider.KPIS.GetTenderTable(StartDate?.Date, EndDate?.Date);
+        var userId = _sharedAuthData.LogedUser.Id;
+        var data = await _dataProvider.KPIS.GetProfitPerProject(userId, StartDate?.Date, EndDate?.Date);
+
+        _data = data.Select(d => new TenderDataDto()
+        {
+            ProjectName = d.Key,
+            Profit = d.Value
+        }).AsQueryable();
     }
 
     private void HandleFilter(ChangeEventArgs args)
@@ -48,9 +57,10 @@ public partial class TenderTable
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<TenderDataDto> row)
+    public class TenderDataDto
     {
-        //Console.WriteLine($"Row focused: {row.Item?.ProjectStage}");
+        public string ProjectName { get; set; }
+        public double Profit { get; set; } // Profit field
     }
 
 }

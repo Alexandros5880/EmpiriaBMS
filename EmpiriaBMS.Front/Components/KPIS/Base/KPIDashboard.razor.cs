@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Front.Components.General;
+﻿using BlazorDateRangePicker;
+using EmpiriaBMS.Front.Components.General;
+using Microsoft.Kiota.Abstractions;
 
 namespace EmpiriaBMS.Front.Components.KPIS.Base;
 
@@ -17,6 +19,13 @@ public partial class KPIDashboard
     bool SeeNextYearIncome => _sharedAuthData.Permissions.Any(p => p.Ord == 34);
     bool SeeEstimatedInvoicing => _sharedAuthData.Permissions.Any(p => p.Ord == 41);
     bool SeeUnpaidPaidInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 42);
+    bool SeeProfitInEveryProject => _sharedAuthData.Permissions.Any(p => p.Ord == 43);
+    bool SeeIssuesPerTimePeriodKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 44);
+    // NEW
+    bool TurnoverPerProjectsCategoryKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 45);
+    bool TurnoverPerProjectsSubCategoryKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 46);
+    bool TurnoverPerProjectManagersKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 47);
+    bool HoursPerUserInSpecificTimePeriodKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 48);
     #endregion
 
     private bool _loading = false;
@@ -40,4 +49,18 @@ public partial class KPIDashboard
         StateHasChanged();
     }
 
+    #region Date Range Filter
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2023"));
+    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
+
+    public async Task OnDateSelect(DateRange range)
+    {
+        if (StartDate.HasValue && EndDate.HasValue)
+        {
+            StartDate = range.Start;
+            EndDate = range.End;
+            await Refresh();
+        }
+    }
+    #endregion
 }

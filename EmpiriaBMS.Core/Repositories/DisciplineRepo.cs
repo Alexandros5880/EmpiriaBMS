@@ -318,49 +318,75 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 
     public async Task AddEngineers(int disciplineId, ICollection<UserDto> engineers)
     {
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            foreach (var e in engineers)
+            using (var _context = _dbContextFactory.CreateDbContext())
             {
-                DisciplineEngineer de = new DisciplineEngineer()
+                foreach (var e in engineers)
                 {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    DisciplineId = disciplineId,
-                    EngineerId = e.Id
-                };
+                    DisciplineEngineer de = new DisciplineEngineer()
+                    {
+                        CreatedDate = DateTime.Now,
+                        LastUpdatedDate = DateTime.Now,
+                        DisciplineId = disciplineId,
+                        EngineerId = e.Id
+                    };
 
-                // Check If Exists
-                var exists = await _context.Set<DisciplineEngineer>().Where(r => !r.IsDeleted)
-                                           .AnyAsync(de => de.DisciplineId == disciplineId && de.EngineerId == e.Id);
-                if (exists) continue;
+                    // Check If Exists
+                    var exists = await _context.Set<DisciplineEngineer>()
+                        .AnyAsync(de => de.DisciplineId == disciplineId && de.EngineerId == e.Id);
+                    if (exists)
+                    {
+                        var discEng = await _context.Set<DisciplineEngineer>()
+                            .FirstOrDefaultAsync(de => de.DisciplineId == disciplineId && de.EngineerId == e.Id);
 
-                await _context.Set<DisciplineEngineer>().AddAsync(de);
-                await _context.SaveChangesAsync();
+                        if (discEng?.IsDeleted ?? false)
+                        {
+                            discEng.IsDeleted = false;
+                            await _context.SaveChangesAsync();
+                        }
+
+                        continue;
+                    }
+
+                    await _context.Set<DisciplineEngineer>().AddAsync(de);
+                    await _context.SaveChangesAsync();
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On DisciplineRepo.AddEngineers(int disciplineId, ICollection<UserDto> engineers): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
     public async Task RemoveEngineers(int disciplineId, ICollection<int> engineersIds)
     {
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            var engineers = await _context.Set<DisciplineEngineer>()
-                                          .Where(r => !r.IsDeleted)
-                                          .Where(d => engineersIds.Contains(d.EngineerId)
-                                                                && d.DisciplineId == disciplineId)
-                                          .ToListAsync();
-
-            if (engineers == null)
-                throw new NullReferenceException(nameof(engineers));
-
-            foreach (var engineer in engineers)
+            using (var _context = _dbContextFactory.CreateDbContext())
             {
-                await DeleteDisciplineEngineer(engineer);
-                //_context.Set<DisciplineEngineer>().Remove(engineer);
-            }
+                var engineers = await _context.Set<DisciplineEngineer>()
+                                              .Where(r => !r.IsDeleted)
+                                              .Where(d => engineersIds.Contains(d.EngineerId)
+                                                                    && d.DisciplineId == disciplineId)
+                                              .ToListAsync();
 
-            await _context.SaveChangesAsync();
+                if (engineers == null)
+                    throw new NullReferenceException(nameof(engineers));
+
+                foreach (var engineer in engineers)
+                {
+                    await DeleteDisciplineEngineer(engineer);
+                    //_context.Set<DisciplineEngineer>().Remove(engineer);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On DisciplineRepo.RemoveEngineers(int disciplineId, ICollection<int> engineersIds): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 

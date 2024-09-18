@@ -7,22 +7,21 @@
 @inject IMapper _mapper
 @inject Logging.LoggerManager Logger
 
-<div class="row">
-    <div class="col-12 mt-3">
-        @if (_hoursPerUserPieConfig != null)
-        {
-            <Chart Config="_hoursPerUserPieConfig"></Chart>
-        }
-        else
-        {
-            @if (_startLoading)
-            {
-                <FluentProgressRing Style="margin: 0 auto;" />
-            }
-            else
-            {
-                <span class="text-warning">No Data</span>
-            }
-        }
-    </div>
-</div>
+@if (_chartConfig != null)
+{
+    <Chart Config="_chartConfig"></Chart>
+}
+else
+{
+    @if (_startLoading)
+    {
+        <FluentProgressRing Style="margin: 0 auto;" />
+    }
+    else
+    {
+        <h5 style="color: var(--kpi-text-color);">
+            <strong>Hours Per User</strong>
+        </h5>
+        <span class="text-warning">No Data</span>
+    }
+}

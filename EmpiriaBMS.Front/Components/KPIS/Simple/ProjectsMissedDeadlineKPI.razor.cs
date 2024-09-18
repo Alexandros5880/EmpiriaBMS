@@ -1,15 +1,19 @@
 ﻿using EmpiriaBMS.Front.Interop.TeamsSDK;
-using Microsoft.JSInterop;
-using System.Globalization;
 using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.KPIS.Simple;
 
-public partial class EstimatedInvoicing
+public partial class ProjectsMissedDeadlineKPI
 {
     private bool _startLoading = true;
 
-    private double _estimatedInvoicing = 0;
+    [Parameter]
+    public DateTimeOffset? StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+
+    private decimal _missedDeadLineProject = 0;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -18,10 +22,15 @@ public partial class EstimatedInvoicing
         if (firstRender)
         {
             await MicrosoftTeams.InitializeTooltips();
-            _estimatedInvoicing = await _dataProvider.KPIS.GetEstimatedInvoicing();
+            await _getMissedDeadLineProjects();
             _startLoading = false;
             StateHasChanged();
         }
+    }
+
+    private async Task _getMissedDeadLineProjects()
+    {
+        _missedDeadLineProject = await _dataProvider.KPIS.GetMissedDeadLineProjects(StartDate?.Date, EndDate?.Date);
     }
 
 }

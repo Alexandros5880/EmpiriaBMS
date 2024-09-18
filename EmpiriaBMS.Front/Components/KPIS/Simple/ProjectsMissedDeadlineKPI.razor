@@ -1,14 +1,11 @@
 ﻿@using EmpiriaBMS.Front.Services
 @using EmpiriaBMS.Front.Horizontal
 @using ChartJs.Blazor;
-@using System.Globalization
-@using EmpiriaBMS.Core.Services
 
 @inject IDataProvider _dataProvider
 @inject SharedAuthDataService _sharedAuthData
 @inject IMapper _mapper
 @inject Logging.LoggerManager Logger
-@inject Culture Culture
 @inject MicrosoftTeams MicrosoftTeams
 
 @if (_startLoading)
@@ -17,7 +14,7 @@
 }
 else
 {
-    <div title="Estimated Invoicing" data-bs-toggle="tooltip">
-        <h4><strong>(EI): </strong> <span>@Culture.GetNumberFromated(_estimatedInvoicing)</span></h4>
+    <div title="Projects missed deadline" data-bs-toggle="tooltip">
+        <h4><strong>(PMD): </strong> <span>@_missedDeadLineProject.ToString("N2")%</span></h4>
     </div>
 }

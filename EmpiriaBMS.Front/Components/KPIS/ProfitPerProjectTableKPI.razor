@@ -1,0 +1,52 @@
+﻿@using EmpiriaBMS.Core.Dtos.KPIS;
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using ChartJs.Blazor;
+
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+@inject Logging.LoggerManager Logger
+
+<div class="row">
+    <div class="col-12">
+        <FluentHeader Class="rounded">
+            Profit Per Project
+        </FluentHeader>
+    </div>
+    <div class="col-12" style="margin: 0 auto;">
+        <FluentDataGrid Items="@FilteredItems"
+                        ResizableColumns=true
+                        TGridItem="TenderDataDto"
+                        style="height: 405px; overflow:auto;">
+
+            <!-- Project Name Column -->
+            <TemplateColumn Title="Project"
+                            Sortable="true"
+                            InitialSortDirection=SortDirection.Descending
+                            IsDefaultSortColumn=true>
+                <ColumnOptions>
+                    <div class="search-box">
+                        <FluentSearch type="search"
+                                      Autofocus=true
+                                      @bind-Value="@_nameFilter"
+                                      Placeholder="Project name..."
+                                      @oninput="@HandleFilter" />
+                    </div>
+                </ColumnOptions>
+                <ChildContent>
+                    @(context.ProjectName)
+                </ChildContent>
+            </TemplateColumn>
+
+            <!-- Project Profit Column -->
+            <TemplateColumn Title="Profit"
+                            Sortable="true">
+                <ChildContent>
+                    @(context.Profit.ToString("C"))
+                </ChildContent>
+            </TemplateColumn>
+
+        </FluentDataGrid>
+    </div>
+</div>

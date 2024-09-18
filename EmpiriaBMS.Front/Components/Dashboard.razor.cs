@@ -20,6 +20,7 @@ using System;
 using System.Collections.ObjectModel;
 using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
 using EmpiriaBMS.Front.Components.Admin.Projects;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
@@ -587,9 +588,9 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
-    private async Task OnSelectProject(int projectId)
+    private async Task OnSelectProject(int projectId, bool force = false)
     {
-        if (projectId == 0 || projectId == _selectedProject?.Id) return;
+        if (projectId == 0 || projectId == _selectedProject?.Id && !force) return;
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
         _deliverables.Clear();
@@ -768,7 +769,7 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Drawings Assign Actions (Deliverable Assign)
+    #region Designers Assign Actions (Deliverable Assign)
     private async Task OnDeliverableAssignClick(DeliverableVM draw)
     {
         if (!isWorkingMode) return;
@@ -791,8 +792,6 @@ public partial class Dashboard : IDisposable
         _addDesignerDialog.Hide();
         _isAddDesignerDialogOdepened = false;
 
-        _startLoading = true;
-
         var forDeleteIds = _designers.Where(d => d.IsSelected == null || d.IsSelected == false)
                                      .Select(d => d.Id)
                                      .ToList();
@@ -801,8 +800,6 @@ public partial class Dashboard : IDisposable
         var forAdd = _designers.Where(d => d.IsSelected == true).ToList();
         var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
         await _dataProvider.Deliverables.AddDesigners(_selectedDeliverable.Id, forAddDto);
-
-        _startLoading = false;
     }
 
     public void _addDesignerDialogCansel()
@@ -835,8 +832,6 @@ public partial class Dashboard : IDisposable
         _addEngineerDialog.Hide();
         _isAddEngineerDialogOdepened = false;
 
-        _startLoading = true;
-
         var forDeleteIds = _engineers.Where(d => d.IsSelected == null || d.IsSelected == false)
                                      .Select(d => d.Id)
                                      .ToList();
@@ -845,8 +840,6 @@ public partial class Dashboard : IDisposable
         var forAdd = _engineers.Where(d => d.IsSelected == true).ToList();
         var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
         await _dataProvider.Disciplines.AddEngineers(_selectedDiscipline.Id, forAddDto);
-
-        _startLoading = false;
     }
 
     public void _addEngineerDialogCansel()
@@ -869,6 +862,7 @@ public partial class Dashboard : IDisposable
         {
             _selectedProject = project;
             await _getProjectManagers();
+            await OnSelectProject(_selectedProject.Id, true);
             StateHasChanged();
             _addPMDialog.Show();
             _isAddPMDialogOdepened = true;
@@ -881,17 +875,36 @@ public partial class Dashboard : IDisposable
 
     public async Task _addPMDialogAccept()
     {
-        _addPMDialog.Hide();
-        _isAddPMDialogOdepened = false;
+        try
+        {
+            var updated = _selectedProject.Clone() as ProjectVM;
 
-        _startLoading = true;
+            var projectIndex = _projects.IndexOf(_selectedProject);
 
-        _selectedProject.ProjectManagerId = _selectedPmId;
-        await _dataProvider.Projects.Update(Mapper.Map<ProjectDto>(_selectedProject));
+            var pmDto = await _dataProvider.Users.Get(_selectedPmId);
 
-        _startLoading = false;
+            if (pmDto == null)
+                return;
 
-        await Refresh();
+            var pm = Mapping.Mapper.Map<User>(pmDto);
+            updated.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
+            updated.ProjectManagerId = _selectedPmId;
+            await _dataProvider.Projects.Update(Mapper.Map<ProjectDto>(updated));
+            updated.ProjectManager = pm;
+
+            var forDelete = _projects.FirstOrDefault(p => p.Id == updated.Id);
+            if (forDelete != null)
+                _projects.Remove(forDelete);
+
+            _projects.Insert(projectIndex, updated);
+
+            _addPMDialog.Hide();
+            _isAddPMDialogOdepened = false;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Exception Dashboard._addPMDialogAccept(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+        }
     }
 
     public void _addPMDialogCansel()
