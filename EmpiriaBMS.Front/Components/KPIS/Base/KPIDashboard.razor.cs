@@ -20,8 +20,8 @@ public partial class KPIDashboard
     bool SeeEstimatedInvoicing => _sharedAuthData.Permissions.Any(p => p.Ord == 41);
     bool SeeUnpaidPaidInvoices => _sharedAuthData.Permissions.Any(p => p.Ord == 42);
     bool SeeProfitInEveryProject => _sharedAuthData.Permissions.Any(p => p.Ord == 43);
-    // NEW
     bool SeeIssuesPerTimePeriodKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 44);
+    // NEW
     bool TurnoverPerProjectsCategoryKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 45);
     bool TurnoverPerProjectsSubCategoryKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 46);
     bool TurnoverPerProjectManagersKPI => _sharedAuthData.Permissions.Any(p => p.Ord == 47);
