@@ -36,7 +36,8 @@
                                  @bind-StartDate="StartDate"
                                  @bind-EndDate="EndDate"
                                  OnRangeSelect="@(async (e) => await OnDateSelect(e))"
-                                 style="width: 200px;" />
+                                 style="width: 220px;"
+                                 DateFormat="dd/MM/yyyy" />
 
                 <!-- Client -->
                 <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
