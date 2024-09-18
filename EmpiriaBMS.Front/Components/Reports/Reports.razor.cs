@@ -19,6 +19,7 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Color = System.Drawing.Color;
 using Fluent = Microsoft.Fast.Components.FluentUI;
 using EmpiriaBMS.Front.Components.General;
+using System;
 
 namespace EmpiriaBMS.Front.Components.Reports;
 
@@ -194,7 +195,10 @@ public partial class Reports
             {
                 var startDate = weeklyDates[i];
                 var endDate = weeklyDates[i + 1];
-                if (createdDate >= startDate && createdDate <= endDate)
+                int startDateResult = DateTime.Compare(createdDate, startDate.AddDays(-6));
+                int endDateResult = DateTime.Compare(createdDate, endDate.AddDays(6));
+
+                if (startDateResult >= 0 && endDateResult <= 0)
                 {
                     var hours = report.TotalWorkedTime.TotalHours;
                     totalHoursPerWeek[i] += hours;
@@ -373,7 +377,7 @@ public partial class Reports
     #endregion
 
     #region Date Range Filter
-    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2024"));
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("7-1-2024"));
     DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
 
     public async Task OnDateSelect(DateRange range)
@@ -460,14 +464,22 @@ public partial class Reports
             start = DateTime.Now.AddMonths(-1);
         }
 
-        DateTime current = ((DateTimeOffset)start).DateTime.AddDays(-4);
+        DateTime current = ((DateTimeOffset)start).DateTime;
         DateTime finished = ((DateTimeOffset)end).DateTime;
 
-        while (current <= finished.AddDays(4))
+        while (current <= finished)
         {
             yield return current;
             current = current.AddDays(7);
         }
+
+        //List<DateTime> weeks = new List<DateTime>();
+        //while (current <= finished)
+        //{
+        //    weeks.Add(current);
+        //    current = current.AddDays(7);
+        //}
+        //return weeks;
     }
 
     // Find the index (possition) of a date in date array span
