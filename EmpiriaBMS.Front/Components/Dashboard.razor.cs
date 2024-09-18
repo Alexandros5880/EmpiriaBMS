@@ -20,6 +20,7 @@ using System;
 using System.Collections.ObjectModel;
 using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
 using EmpiriaBMS.Front.Components.Admin.Projects;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
@@ -893,9 +894,14 @@ public partial class Dashboard : IDisposable
             var projectToUpdate = _projects.FirstOrDefault(p => p.Id == _selectedProject.Id);
             if (projectToUpdate != null)
             {
-                var index = _projects.IndexOf(projectToUpdate);
-                _projects[index] = _selectedProject;
+                projectToUpdate.ProjectManagerId = _selectedProject.ProjectManagerId;
+                projectToUpdate.ProjectManager = _selectedProject.ProjectManager;
             }
+
+            // TODO: Update Observable Colection
+            await Refresh();
+            //var projects_back = new List<ProjectVM>(_projects);
+            //_projects = new ObservableCollection<ProjectVM>(projects_back);
         }
         catch (Exception ex)
         {
