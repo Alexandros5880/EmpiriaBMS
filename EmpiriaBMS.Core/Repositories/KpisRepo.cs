@@ -852,14 +852,14 @@ public class KpisRepo : IDisposable
                 var dictIncomes = catPayesIncomes
                     .GroupBy(cp => cp.CategoryName)
                     .ToDictionary(
-                        g => g.Key,
+                        g => g.Key ?? "--",
                         g => g.Sum(cp => cp.PaymentFee)
                     );
 
                 var dictExpenses = catPayesExpenses
                     .GroupBy(cp => cp.CategoryName)
                     .ToDictionary(
-                        g => g.Key,
+                        g => g.Key ?? "--",
                         g => g.Sum(cp => cp.PaymentFee)
                     );
 
