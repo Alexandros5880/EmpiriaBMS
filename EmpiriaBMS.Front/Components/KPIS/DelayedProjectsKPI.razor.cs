@@ -7,6 +7,8 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
+using ChartJs.Blazor.PieChart;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -30,22 +32,29 @@ public partial class DelayedProjectsKPI
         if (firstRender)
         {
             _startLoading = true;
-            await _getActiveDelayedProjects();
-            _initilizeDelayedProjectsChart();
+            await _getData();
+            _initilizeChart(out _chartConfig);
             _startLoading = false;
             StateHasChanged();
         }
     }
 
-    private void _initilizeDelayedProjectsChart()
+    private async Task _getData()
     {
-        if (!_data.Any() || _chartConfig != null)
+        var userId = _sharedAuthData.LogedUser.Id;
+        var dtos = await _dataProvider.KPIS.GetActiveDelayedProjects(userId, StartDate?.Date, EndDate?.Date);
+        _data = _mapper.Map<List<ProjectVM>>(dtos);
+    }
+
+    private void _initilizeChart(out BarConfig chart, bool displayLegend = false)
+    {
+        if (_data == null || !_data.Any())
         {
-            _chartConfig = null;
+            chart = null;
             return;
         }
 
-        _chartConfig = new BarConfig
+        chart = new BarConfig
         {
             Options = new BarOptions
             {
@@ -81,7 +90,7 @@ public partial class DelayedProjectsKPI
                 },
                 Legend = new Legend()
                 {
-                    Display = false
+                    Display = displayLegend
                 },
                 Responsive = true,
 
@@ -91,7 +100,7 @@ public partial class DelayedProjectsKPI
         var names = _data.Select(p => p.Name).ToList();
 
         foreach (string key in names)
-            _chartConfig.Data.Labels.Add(key);
+            chart.Data.Labels.Add(key);
 
         // Dayes Dataset
         var days = _data.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Days).ToList();
@@ -107,7 +116,7 @@ public partial class DelayedProjectsKPI
             BarPercentage = 0.5,
 
         };
-        _chartConfig.Data.Datasets.Add(dayesDataSet);
+        chart.Data.Datasets.Add(dayesDataSet);
 
         // Hours Dataset
         var hours = _data.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Hours).ToList();
@@ -123,7 +132,7 @@ public partial class DelayedProjectsKPI
             BarPercentage = 0.5,
 
         };
-        _chartConfig.Data.Datasets.Add(hoursDataSet);
+        chart.Data.Datasets.Add(hoursDataSet);
 
         // Minutes Dataset
         var minutes = _data.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Minutes).ToList();
@@ -139,15 +148,8 @@ public partial class DelayedProjectsKPI
             BarPercentage = 0.5,
 
         };
-        _chartConfig.Data.Datasets.Add(minutesDataSet);
-    }
-
-    private async Task _getActiveDelayedProjects()
-    {
-        var userId = _sharedAuthData.LogedUser.Id;
-        var dtos = await _dataProvider.KPIS.GetActiveDelayedProjects(userId, StartDate?.Date, EndDate?.Date);
-        _data = _mapper.Map<List<ProjectVM>>(dtos);
-    }
+        chart.Data.Datasets.Add(minutesDataSet);
+    }  
 
     #region Hellper Methods
     private string _displayTimeMissedStr(DateTime date)
@@ -157,5 +159,36 @@ public partial class DelayedProjectsKPI
     }
 
     private TimeSpan _displayTimeMissed(DateTime? date) => (TimeSpan)(DateTime.Now - date);
+    #endregion
+
+    #region Dialog FullScreen
+    private bool _isDialogVisible = false;
+    FluentDialog _dialog;
+    // Dialog Chart
+    private BarConfig _chartDialogConfig;
+
+    private void ShowFullscreenDialog()
+    {
+        _dialog.Show();
+        _isDialogVisible = true;
+        if (_chartDialogConfig == null)
+        {
+            _chartConfig = null;
+            _initilizeChart(out _chartDialogConfig, true);
+            StateHasChanged();
+        }
+    }
+
+    private void HideFullscreenDialog()
+    {
+        if (_isDialogVisible == true)
+        {
+            _dialog.Hide();
+            _isDialogVisible = false;
+            _chartDialogConfig = null;
+            _initilizeChart(out _chartConfig, false);
+            StateHasChanged();
+        }
+    }
     #endregion
 }

@@ -92,9 +92,6 @@
     <Content Update="Components\KPIS\DelayedProjectTypesKPI.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-    <Content Update="Components\KPIS\EmployeeTurnoverKPI.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
     <Content Update="Components\KPIS\Base\KpisLand.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

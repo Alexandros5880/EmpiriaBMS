@@ -9,10 +9,11 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class HoursPerRoleKPI
+public partial class TurnoverPerProjectSubCategoryKPI
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
@@ -22,7 +23,7 @@ public partial class HoursPerRoleKPI
 
     private bool _startLoading = true;
 
-    private Dictionary<string, long> _data = null;
+    private Dictionary<string, double> _data = null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -39,12 +40,12 @@ public partial class HoursPerRoleKPI
     }
 
     private async Task _getData() =>
-        _data = await _dataProvider.KPIS.GetHoursPerRole(StartDate?.Date, EndDate?.Date);
+        _data = await _dataProvider.KPIS.GetTurnoverPerProjectSubCategory(StartDate?.Date, EndDate?.Date);
 
-    // Bar Chart
-    private BarConfig _chartConfig;
-    
-    private void _initilizeChart(out BarConfig chart, bool displayLegend = false)
+    // Main Chart
+    private PieConfig _chartConfig;
+
+    private void _initilizeChart(out PieConfig chart, bool displayLegend = false)
     {
         if (_data == null || !_data.Any())
         {
@@ -52,63 +53,39 @@ public partial class HoursPerRoleKPI
             return;
         }
 
-        chart = new BarConfig
+        chart = new PieConfig()
         {
-            Options = new BarOptions
+            Options = new PieOptions()
             {
-                Title = new OptionsTitle
+                CutoutPercentage = 50, // 50 = Doughnut  ||  0 = Pie
+                Responsive = true,
+                Title = new OptionsTitle()
                 {
                     Display = true,
-                    Text = "Hours Per Role",
+                    Text = "Turnover per Project Sub Category",
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
-                },
-                Scales = new BarScales
-                {
-                    XAxes = new List<CartesianAxis>
-                    {
-                        new BarCategoryAxis
-                        {
-                            BarPercentage = 0.5,
-                            BarThickness = BarThickness.Flex
-                        }
-                    },
-                    YAxes = new List<CartesianAxis>
-                    {
-                        new BarLinearCartesianAxis
-                        {
-                            Ticks = new LinearCartesianTicks
-                            {
-                                BeginAtZero = true,
-                                StepSize = 2,
-                                //SuggestedMax = 100
-                            }
-                        }
-                    }
                 },
                 Legend = new Legend()
                 {
                     Display = displayLegend
-                },
-                Responsive = true,
-
+                }
             }
         };
 
         foreach (string key in _data.Keys)
             chart.Data.Labels.Add(key);
 
-        BarDataset<long> dataset = new BarDataset<long>(_data.Values)
+
+        PieDataset<double> dataset = new PieDataset<double>(_data.Values)
         {
-            //Label = "Roles",
-            //BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 650, 699, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 1),
+            //BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 550, 599, 1),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
             HoverBorderWidth = 1,
             BorderColor = ChartJsHelper.GetPreviusRgb(1),
-            BarPercentage = 0.5,
         };
 
         chart.Data.Datasets.Add(dataset);
@@ -118,7 +95,7 @@ public partial class HoursPerRoleKPI
     private bool _isDialogVisible = false;
     FluentDialog _dialog;
     // Dialog Chart
-    private BarConfig _chartDialogConfig;
+    private PieConfig _chartDialogConfig;
 
     private void ShowFullscreenDialog()
     {
@@ -127,9 +104,9 @@ public partial class HoursPerRoleKPI
         if (_chartDialogConfig == null)
         {
             _chartConfig = null;
-            _initilizeChart(out _chartDialogConfig, false);
+            _initilizeChart(out _chartDialogConfig, true);
             StateHasChanged();
-        }
+        }   
     }
 
     private void HideFullscreenDialog()
@@ -144,5 +121,4 @@ public partial class HoursPerRoleKPI
         }
     }
     #endregion
-
 }

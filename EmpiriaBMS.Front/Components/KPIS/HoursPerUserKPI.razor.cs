@@ -8,6 +8,7 @@ using EmpiriaBMS.Front.Horizontal;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -30,28 +31,28 @@ public partial class HoursPerUserKPI
         if (firstRender)
         {
             _startLoading = true;
-            await _getHoursPerUser();
-            _initilizeHoursPerUserPieChart();
+            await _getData();
+            _initilizeChart(out _chartConfig);
             _startLoading = false;
             StateHasChanged();
         }
     }
 
-    private async Task _getHoursPerUser() =>
+    private async Task _getData() =>
         _data = await _dataProvider.KPIS.GetHoursPerUser(StartDate?.Date, EndDate?.Date);
 
     // Pie Chart
     private PieConfig _chartConfig;
 
-    private void _initilizeHoursPerUserPieChart()
+    private void _initilizeChart(out PieConfig chart, bool displayLegend = false)
     {
-        if (!_data.Any() || _chartConfig != null)
+        if (_data == null || !_data.Any())
         {
-            _chartConfig = null;
+            chart = null;
             return;
         }
 
-        _chartConfig = new PieConfig()
+        chart = new PieConfig()
         {
             Options = new PieOptions()
             {
@@ -66,13 +67,13 @@ public partial class HoursPerUserKPI
                 },
                 Legend = new Legend()
                 {
-                    Display = false
+                    Display = displayLegend
                 }
             }
         };
 
         foreach (string key in _data.Keys)
-            _chartConfig.Data.Labels.Add(key);
+            chart.Data.Labels.Add(key);
 
 
         PieDataset<long> dataset = new PieDataset<long>(_data.Values)
@@ -86,6 +87,37 @@ public partial class HoursPerUserKPI
             BorderColor = ChartJsHelper.GetPreviusRgb(1),
         };
 
-        _chartConfig.Data.Datasets.Add(dataset);
+        chart.Data.Datasets.Add(dataset);
     }
+
+    #region Dialog FullScreen
+    private bool _isDialogVisible = false;
+    FluentDialog _dialog;
+    // Dialog Chart
+    private PieConfig _chartDialogConfig;
+
+    private void ShowFullscreenDialog()
+    {
+        _dialog.Show();
+        _isDialogVisible = true;
+        if (_chartDialogConfig == null)
+        {
+            _chartConfig = null;
+            _initilizeChart(out _chartDialogConfig, true);
+            StateHasChanged();
+        }
+    }
+
+    private void HideFullscreenDialog()
+    {
+        if (_isDialogVisible == true)
+        {
+            _dialog.Hide();
+            _isDialogVisible = false;
+            _chartDialogConfig = null;
+            _initilizeChart(out _chartConfig, false);
+            StateHasChanged();
+        }
+    }
+    #endregion
 }

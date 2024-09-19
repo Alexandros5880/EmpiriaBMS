@@ -7,6 +7,7 @@ using ChartJs.Blazor.Common;
 using EmpiriaBMS.Front.Horizontal;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -29,22 +30,23 @@ public partial class ProfitPerProjectKPI
 
         if (firstRender)
         {
-            await _getProfitPerProject();
-            _initilizeChart();
+            _startLoading = true;
+            await _getData();
+            _initilizeChart(out _chartConfig);
             _startLoading = false;
             StateHasChanged();
         }
     }
 
-    private void _initilizeChart()
+    private void _initilizeChart(out PieConfig chart, bool displayLegend = false)
     {
-        if (!_data.Any() || _chartConfig != null)
+        if (_data == null || !_data.Any())
         {
-            _chartConfig = null;
+            chart = null;
             return;
         }
 
-        _chartConfig = new PieConfig
+        chart = new PieConfig
         {
             Options = new PieOptions()
             {
@@ -59,38 +61,65 @@ public partial class ProfitPerProjectKPI
                 },
                 Legend = new Legend()
                 {
-                    Display = false
+                    Display = displayLegend
                 }
             }
         };
 
-        // Check if data is available
-        if (_data != null && _data.Count > 0)
+        // Add labels to the Y-axis (categories)
+        foreach (string key in _data.Keys)
+            chart.Data.Labels.Add(key);
+
+        // Add the values to the dataset
+        var values = _data.Values;
+        PieDataset<double> dataset = new PieDataset<double>(values, false)
         {
-            // Add labels to the Y-axis (categories)
-            foreach (string key in _data.Keys)
-                _chartConfig.Data.Labels.Add(key);
+            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count),
+            BorderWidth = 0,
+            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
+            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
+            HoverBorderWidth = 1,
+            BorderColor = ChartJsHelper.GetPreviusRgb(1)
+        };
 
-            // Add the values to the dataset
-            var values = _data.Values;
-            PieDataset<double> dataset = new PieDataset<double>(values, false)
-            {
-                BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count),
-                BorderWidth = 0,
-                HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
-                HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
-                HoverBorderWidth = 1,
-                BorderColor = ChartJsHelper.GetPreviusRgb(1)
-            };
-
-            // Add dataset to the chart
-            _chartConfig.Data.Datasets.Add(dataset);
-        }
+        // Add dataset to the chart
+        chart.Data.Datasets.Add(dataset);
     }
 
-    private async Task _getProfitPerProject()
+    private async Task _getData()
     {
         var userId = _sharedAuthData.LogedUser.Id;
         _data = await _dataProvider.KPIS.GetProfitPerProject(userId, StartDate?.Date, EndDate?.Date);
     }
+
+    #region Dialog FullScreen
+    private bool _isDialogVisible = false;
+    FluentDialog _dialog;
+    // Dialog Chart
+    private PieConfig _chartDialogConfig;
+
+    private void ShowFullscreenDialog()
+    {
+        _dialog.Show();
+        _isDialogVisible = true;
+        if (_chartDialogConfig == null)
+        {
+            _chartConfig = null;
+            _initilizeChart(out _chartDialogConfig, true);
+            StateHasChanged();
+        }
+    }
+
+    private void HideFullscreenDialog()
+    {
+        if (_isDialogVisible == true)
+        {
+            _dialog.Hide();
+            _isDialogVisible = false;
+            _chartDialogConfig = null;
+            _initilizeChart(out _chartConfig, false);
+            StateHasChanged();
+        }
+    }
+    #endregion
 }

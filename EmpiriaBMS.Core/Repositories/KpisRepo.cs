@@ -789,6 +789,540 @@ public class KpisRepo : IDisposable
         }
     }
 
+    public async Task<Dictionary<string, double>> GetTurnoverPerProjectCategory(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var catPayesIncomes = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Set<Invoice>(),
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => !result.invoice.IsDeleted && result.invoice.Category == Models.Enum.InvoiceCategory.INCOMES)
+                    .Join(_context.Set<Project>(),
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Set<Offer>(),
+                          paymentInvoiceProject => paymentInvoiceProject.project.OfferId,
+                          offer => offer.Id,
+                          (result, offer) => new { result.payment, result.invoice, result.project, offer })
+                    .Join(_context.Set<ProjectCategory>(),
+                          paymentInvoiceProjectOffer => paymentInvoiceProjectOffer.offer.CategoryId,
+                          category => category.Id,
+                          (result, category) => new
+                          {
+                              PaymentFee = result.payment.Fee,
+                              CategoryName = category.Name
+                          })
+                    .ToListAsync();
+
+                var catPayesExpenses = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Set<Invoice>(),
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => !result.invoice.IsDeleted && result.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Set<Project>(),
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Set<Offer>(),
+                          paymentInvoiceProject => paymentInvoiceProject.project.OfferId,
+                          offer => offer.Id,
+                          (result, offer) => new { result.payment, result.invoice, result.project, offer })
+                    .Join(_context.Set<ProjectCategory>(),
+                          paymentInvoiceProjectOffer => paymentInvoiceProjectOffer.offer.CategoryId,
+                          category => category.Id,
+                          (result, category) => new
+                          {
+                              PaymentFee = result.payment.Fee,
+                              CategoryName = category.Name
+                          })
+                    .ToListAsync();
+
+                var dictIncomes = catPayesIncomes
+                    .GroupBy(cp => cp.CategoryName)
+                    .ToDictionary(
+                        g => g.Key ?? "--",
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var dictExpenses = catPayesExpenses
+                    .GroupBy(cp => cp.CategoryName)
+                    .ToDictionary(
+                        g => g.Key ?? "--",
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var resultDict = _concutDicts(dictIncomes, dictExpenses);
+
+                return resultDict;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On KpisRepo.GetTurnoverPerProjectCategory(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return new Dictionary<string, double>();
+        }
+    }
+
+    public async Task<Dictionary<string, double>> GetTurnoverPerProjectSubCategory(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var catPayesIncomes = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Set<Invoice>(),
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => !result.invoice.IsDeleted && result.invoice.Category == Models.Enum.InvoiceCategory.INCOMES)
+                    .Join(_context.Set<Project>(),
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Set<Offer>(),
+                          paymentInvoiceProject => paymentInvoiceProject.project.OfferId,
+                          offer => offer.Id,
+                          (result, offer) => new { result.payment, result.invoice, result.project, offer })
+                    .Join(_context.Set<ProjectSubCategory>(),
+                          paymentInvoiceProjectOffer => paymentInvoiceProjectOffer.offer.SubCategoryId,
+                          category => category.Id,
+                          (result, category) => new
+                          {
+                              PaymentFee = result.payment.Fee,
+                              SubCategoryName = category.Name
+                          })
+                    .ToListAsync();
+
+                var catPayesExpenses = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Set<Invoice>(),
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => !result.invoice.IsDeleted && result.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Set<Project>(),
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Set<Offer>(),
+                          paymentInvoiceProject => paymentInvoiceProject.project.OfferId,
+                          offer => offer.Id,
+                          (result, offer) => new { result.payment, result.invoice, result.project, offer })
+                    .Join(_context.Set<ProjectSubCategory>(),
+                          paymentInvoiceProjectOffer => paymentInvoiceProjectOffer.offer.SubCategoryId,
+                          category => category.Id,
+                          (result, category) => new
+                          {
+                              PaymentFee = result.payment.Fee,
+                              SubCategoryName = category.Name
+                          })
+                    .ToListAsync();
+
+                var dictIncomes = catPayesIncomes
+                    .GroupBy(cp => cp.SubCategoryName)
+                    .ToDictionary(
+                        g => g.Key ?? "--",
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var dictExpenses = catPayesExpenses
+                    .GroupBy(cp => cp.SubCategoryName)
+                    .ToDictionary(
+                        g => g.Key ?? "--",
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var resultDict = _concutDicts(dictIncomes, dictExpenses);
+
+                return resultDict;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On KpisRepo.GetTurnoverPerProjectSubCategory(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return new Dictionary<string, double>();
+        }
+    }
+
+    public async Task<Dictionary<string, double>> GetTurnoverPerProjectManager(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var catPayesIncomes = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Set<Invoice>(),
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => !result.invoice.IsDeleted && result.invoice.Category == Models.Enum.InvoiceCategory.INCOMES)
+                    .Join(_context.Set<Project>(),
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Set<User>(),
+                          paymentInvoiceProject => paymentInvoiceProject.project.ProjectManagerId,
+                          pm => pm.Id,
+                          (result, pm) => new { 
+                              ProjectManager = pm.FullName,
+                              PaymentFee = result.payment.Fee,
+                          })
+                    .ToListAsync();
+
+                var catPayesExpenses = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Set<Invoice>(),
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => !result.invoice.IsDeleted && result.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Set<Project>(),
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Set<User>(),
+                          paymentInvoiceProject => paymentInvoiceProject.project.ProjectManagerId,
+                          pm => pm.Id,
+                          (result, pm) => new {
+                              ProjectManager = pm.FullName,
+                              PaymentFee = result.payment.Fee,
+                          })
+                    .ToListAsync();
+
+                var dictIncomes = catPayesIncomes
+                    .GroupBy(cp => cp.ProjectManager)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var dictExpenses = catPayesExpenses
+                    .GroupBy(cp => cp.ProjectManager)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var resultDict = _concutDicts(dictIncomes, dictExpenses);
+
+                return resultDict;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On KpisRepo.GetTurnoverPerProjectManager(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return new Dictionary<string, double>();
+        }
+    }
+
+    public async Task<Dictionary<string, double>> GetTurnoverPerEmployee(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                #region DeliverableEmployee Incomes/Expenses
+                var empDelIncomes = await _context.Set<DeliverableEmployee>()
+                    .Where(de => !de.IsDeleted)
+                    .Where(de => (start == null || de.CreatedDate >= start) && (end == null || de.CreatedDate <= end))
+                    .Join(_context.Set<User>(),
+                          de => de.EmployeeId,
+                          u => u.Id,
+                          (de, user) => new { de, user })
+                    .Where(r => !r.user.IsDeleted)
+                    .Join(_context.Set<Deliverable>(),
+                          r => r.de.DeliverableId,
+                          d => d.Id,
+                          (r, deliverable) => new { deliverable, r.user })
+                    .Join(_context.Set<Discipline>(),
+                          r => r.deliverable.DisciplineId,
+                          d => d.Id,
+                          (r, discipline) => new { r.user, discipline })
+                    .Join(_context.Set<Project>(),
+                          r => r.discipline.ProjectId,
+                          p => p.Id,
+                          (r, project) => new { r.user, project })
+                    .Join(_context.Set<Invoice>(),
+                          r => r.project.Id,
+                          i => i.ProjectId,
+                          (r, invoice) => new { r.user, invoice })
+                    .Where(r => !r.invoice.IsDeleted && r.invoice.Category == Models.Enum.InvoiceCategory.INCOMES)
+                    .Join(_context.Set<Payment>(),
+                          r => r.invoice.Id,
+                          p => p.InvoiceId,
+                          (r, payment) => new { Employee = r.user.FullName, Fee = payment.Fee })
+                    .ToListAsync();
+
+                var dictEmpDelIncomes = empDelIncomes
+                    .GroupBy(cp => cp.Employee)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.Fee)
+                    );
+
+                var empDelExpenses = await _context.Set<DeliverableEmployee>()
+                    .Where(de => !de.IsDeleted)
+                    .Where(de => (start == null || de.CreatedDate >= start) && (end == null || de.CreatedDate <= end))
+                    .Join(_context.Set<User>(),
+                          de => de.EmployeeId,
+                          u => u.Id,
+                          (de, user) => new { de, user })
+                    .Where(r => !r.user.IsDeleted)
+                    .Join(_context.Set<Deliverable>(),
+                          r => r.de.DeliverableId,
+                          d => d.Id,
+                          (r, deliverable) => new { deliverable, r.user })
+                    .Join(_context.Set<Discipline>(),
+                          r => r.deliverable.DisciplineId,
+                          d => d.Id,
+                          (r, discipline) => new { r.user, discipline })
+                    .Join(_context.Set<Project>(),
+                          r => r.discipline.ProjectId,
+                          p => p.Id,
+                          (r, project) => new { r.user, project })
+                    .Join(_context.Set<Invoice>(),
+                          r => r.project.Id,
+                          i => i.ProjectId,
+                          (r, invoice) => new { r.user, invoice })
+                    .Where(r => !r.invoice.IsDeleted && r.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Set<Payment>(),
+                          r => r.invoice.Id,
+                          p => p.InvoiceId,
+                          (r, payment) => new { Employee = r.user.FullName, Fee = payment.Fee })
+                    .ToListAsync();
+
+                var dictEmpDelExpenses = empDelIncomes
+                    .GroupBy(cp => cp.Employee)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.Fee)
+                    );
+                #endregion
+
+                #region SupportiveWorkEmployee Incomes/Expenses
+                var empSuppIncomes = await _context.Set<SupportiveWorkEmployee>()
+                    .Where(de => !de.IsDeleted)
+                    .Where(de => (start == null || de.CreatedDate >= start) && (end == null || de.CreatedDate <= end))
+                    .Join(_context.Set<User>(),
+                          de => de.EmployeeId,
+                          u => u.Id,
+                          (de, user) => new { de, user })
+                    .Where(r => !r.user.IsDeleted)
+                    .Join(_context.Set<SupportiveWork>(),
+                          r => r.de.SupportiveWorkId,
+                          d => d.Id,
+                          (r, supp) => new { supp, r.user })
+                    .Join(_context.Set<Discipline>(),
+                          r => r.supp.DisciplineId,
+                          d => d.Id,
+                          (r, discipline) => new { r.user, discipline })
+                    .Join(_context.Set<Project>(),
+                          r => r.discipline.ProjectId,
+                          p => p.Id,
+                          (r, project) => new { r.user, project })
+                    .Join(_context.Set<Invoice>(),
+                          r => r.project.Id,
+                          i => i.ProjectId,
+                          (r, invoice) => new { r.user, invoice })
+                    .Where(r => !r.invoice.IsDeleted && r.invoice.Category == Models.Enum.InvoiceCategory.INCOMES)
+                    .Join(_context.Set<Payment>(),
+                          r => r.invoice.Id,
+                          p => p.InvoiceId,
+                          (r, payment) => new { Employee = r.user.FullName, Fee = payment.Fee })
+                    .ToListAsync();
+
+                var dictEmpSuppIncomes = empDelIncomes
+                    .GroupBy(cp => cp.Employee)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.Fee)
+                    );
+
+                var empSuppExpenses = await _context.Set<SupportiveWorkEmployee>()
+                    .Where(de => !de.IsDeleted)
+                    .Where(de => (start == null || de.CreatedDate >= start) && (end == null || de.CreatedDate <= end))
+                    .Join(_context.Set<User>(),
+                          de => de.EmployeeId,
+                          u => u.Id,
+                          (de, user) => new { de, user })
+                    .Where(r => !r.user.IsDeleted)
+                    .Join(_context.Set<SupportiveWork>(),
+                          r => r.de.SupportiveWorkId,
+                          d => d.Id,
+                          (r, supp) => new { supp, r.user })
+                    .Join(_context.Set<Discipline>(),
+                          r => r.supp.DisciplineId,
+                          d => d.Id,
+                          (r, discipline) => new { r.user, discipline })
+                    .Join(_context.Set<Project>(),
+                          r => r.discipline.ProjectId,
+                          p => p.Id,
+                          (r, project) => new { r.user, project })
+                    .Join(_context.Set<Invoice>(),
+                          r => r.project.Id,
+                          i => i.ProjectId,
+                          (r, invoice) => new { r.user, invoice })
+                    .Where(r => !r.invoice.IsDeleted && r.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Set<Payment>(),
+                          r => r.invoice.Id,
+                          p => p.InvoiceId,
+                          (r, payment) => new { Employee = r.user.FullName, Fee = payment.Fee })
+                    .ToListAsync();
+
+                var dictEmpSuppExpenses = empDelIncomes
+                    .GroupBy(cp => cp.Employee)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.Fee)
+                    );
+                #endregion
+
+                #region Discipline Incomes/Expenses
+                var empDiscIncomes = await _context.Set<DisciplineEngineer>()
+                    .Where(de => !de.IsDeleted)
+                    .Where(de => (start == null || de.CreatedDate >= start) && (end == null || de.CreatedDate <= end))
+                    .Join(_context.Set<User>(),
+                          de => de.EngineerId,
+                          u => u.Id,
+                          (de, user) => new { de, user })
+                    .Where(r => !r.user.IsDeleted)
+                    .Join(_context.Set<Discipline>(),
+                          r => r.de.DisciplineId,
+                          d => d.Id,
+                          (r, discipline) => new { r.user, discipline })
+                    .Join(_context.Set<Project>(),
+                          r => r.discipline.ProjectId,
+                          p => p.Id,
+                          (r, project) => new { r.user, project })
+                    .Join(_context.Set<Invoice>(),
+                          r => r.project.Id,
+                          i => i.ProjectId,
+                          (r, invoice) => new { r.user, invoice })
+                    .Where(r => !r.invoice.IsDeleted && r.invoice.Category == Models.Enum.InvoiceCategory.INCOMES)
+                    .Join(_context.Set<Payment>(),
+                          r => r.invoice.Id,
+                          p => p.InvoiceId,
+                          (r, payment) => new { Employee = r.user.FullName, Fee = payment.Fee })
+                    .ToListAsync();
+
+                var dictEmpDiscIncomes = empDelIncomes
+                    .GroupBy(cp => cp.Employee)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.Fee)
+                    );
+
+                var empDiscExpenses = await _context.Set<DisciplineEngineer>()
+                    .Where(de => !de.IsDeleted)
+                    .Where(de => (start == null || de.CreatedDate >= start) && (end == null || de.CreatedDate <= end))
+                    .Join(_context.Set<User>(),
+                          de => de.EngineerId,
+                          u => u.Id,
+                          (de, user) => new { de, user })
+                    .Where(r => !r.user.IsDeleted)
+                    .Join(_context.Set<Discipline>(),
+                          r => r.de.DisciplineId,
+                          d => d.Id,
+                          (r, discipline) => new { r.user, discipline })
+                    .Join(_context.Set<Project>(),
+                          r => r.discipline.ProjectId,
+                          p => p.Id,
+                          (r, project) => new { r.user, project })
+                    .Join(_context.Set<Invoice>(),
+                          r => r.project.Id,
+                          i => i.ProjectId,
+                          (r, invoice) => new { r.user, invoice })
+                    .Where(r => !r.invoice.IsDeleted && r.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Set<Payment>(),
+                          r => r.invoice.Id,
+                          p => p.InvoiceId,
+                          (r, payment) => new { Employee = r.user.FullName, Fee = payment.Fee })
+                    .ToListAsync();
+
+                var dictEmpDiscExpenses = empDelIncomes
+                    .GroupBy(cp => cp.Employee)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.Fee)
+                    );
+                #endregion
+
+                var resultDictEmpDeliverables = _concutDicts(dictEmpDelIncomes, dictEmpDelExpenses);
+                var resultDictEmpSupportiveWorks = _concutDicts(dictEmpSuppIncomes, dictEmpSuppExpenses);
+                var resultDictEmpDisciplines = _concutDicts(dictEmpDiscIncomes, dictEmpDiscExpenses);
+
+                // Get PM Net Profit
+                var pmIncomeDict = await GetTurnoverPerProjectManager(start, end);
+
+                var concut1 = _concutDicts(resultDictEmpDeliverables, resultDictEmpSupportiveWorks);
+                var concut2 = _concutDicts(concut1, resultDictEmpDisciplines);
+                var concut3 = _concutDicts(concut2, pmIncomeDict);
+
+                return concut3;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On KpisRepo.GetTurnoverPerEmployee(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return new Dictionary<string, double>();
+        }
+    }
+
+    protected Dictionary<string, double> _concutDicts(
+        Dictionary<string, double> dict1,
+        Dictionary<string, double> dict2
+    ) {
+        var concutDicts = dict1
+            .Concat(dict2)
+            .GroupBy(pair => pair.Key)
+            .ToDictionary(
+                group => group.Key,
+                group => group.Sum(pair => pair.Key == group.Key ? pair.Value : -pair.Value)
+            );
+
+        foreach (var category in dict1.Keys)
+        {
+            if (!concutDicts.ContainsKey(category))
+            {
+                concutDicts[category] = -dict1[category];
+            }
+        }
+
+        foreach (var category in dict2.Keys)
+        {
+            if (!concutDicts.ContainsKey(category))
+            {
+                concutDicts[category] = dict2[category];
+            }
+        }
+
+        return concutDicts;
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposedValue)
