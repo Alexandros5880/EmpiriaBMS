@@ -797,7 +797,7 @@ public class KpisRepo : IDisposable
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var catPayes = await _context.Set<Payment>()
+                var catPayesIncomes = await _context.Set<Payment>()
                     .Where(payment => !payment.IsDeleted)
                     .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                     .Join(_context.Invoices,
@@ -823,14 +823,71 @@ public class KpisRepo : IDisposable
                           })
                     .ToListAsync();
 
-                var dict = catPayes
+                var catPayesExpenses = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Invoices,
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => result.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Projects,
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Offers,
+                          paymentInvoiceProject => paymentInvoiceProject.project.OfferId,
+                          offer => offer.Id,
+                          (result, offer) => new { result.payment, result.invoice, result.project, offer })
+                    .Join(_context.ProjectsCategories,
+                          paymentInvoiceProjectOffer => paymentInvoiceProjectOffer.offer.CategoryId,
+                          category => category.Id,
+                          (result, category) => new
+                          {
+                              PaymentFee = result.payment.Fee,
+                              CategoryName = category.Name
+                          })
+                    .ToListAsync();
+
+                var dictIncomes = catPayesIncomes
                     .GroupBy(cp => cp.CategoryName)
                     .ToDictionary(
                         g => g.Key,
                         g => g.Sum(cp => cp.PaymentFee)
                     );
 
-                return dict;
+                var dictExpenses = catPayesExpenses
+                    .GroupBy(cp => cp.CategoryName)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var resultDict = dictIncomes
+                    .Concat(dictExpenses)
+                    .GroupBy(pair => pair.Key)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Sum(pair => pair.Key == group.Key ? pair.Value : -pair.Value)
+                    );
+
+                foreach (var category in dictExpenses.Keys)
+                {
+                    if (!resultDict.ContainsKey(category))
+                    {
+                        resultDict[category] = -dictExpenses[category];
+                    }
+                }
+
+                foreach (var category in dictIncomes.Keys)
+                {
+                    if (!resultDict.ContainsKey(category))
+                    {
+                        resultDict[category] = dictIncomes[category];
+                    }
+                }
+
+                return resultDict;
             }
         }
         catch (Exception ex)
@@ -848,7 +905,7 @@ public class KpisRepo : IDisposable
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var catPayes = await _context.Set<Payment>()
+                var catPayesIncomes = await _context.Set<Payment>()
                     .Where(payment => !payment.IsDeleted)
                     .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                     .Join(_context.Invoices,
@@ -866,22 +923,79 @@ public class KpisRepo : IDisposable
                           (result, offer) => new { result.payment, result.invoice, result.project, offer })
                     .Join(_context.ProjectsSubCategories,
                           paymentInvoiceProjectOffer => paymentInvoiceProjectOffer.offer.SubCategoryId,
-                          subCategory => subCategory.Id,
-                          (result, sunCategory) => new
+                          category => category.Id,
+                          (result, category) => new
                           {
                               PaymentFee = result.payment.Fee,
-                              SubCategoryName = sunCategory.Name
+                              SubCategoryName = category.Name
                           })
                     .ToListAsync();
 
-                var dict = catPayes
+                var catPayesExpenses = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Invoices,
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => result.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Projects,
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Offers,
+                          paymentInvoiceProject => paymentInvoiceProject.project.OfferId,
+                          offer => offer.Id,
+                          (result, offer) => new { result.payment, result.invoice, result.project, offer })
+                    .Join(_context.ProjectsSubCategories,
+                          paymentInvoiceProjectOffer => paymentInvoiceProjectOffer.offer.SubCategoryId,
+                          category => category.Id,
+                          (result, category) => new
+                          {
+                              PaymentFee = result.payment.Fee,
+                              SubCategoryName = category.Name
+                          })
+                    .ToListAsync();
+
+                var dictIncomes = catPayesIncomes
                     .GroupBy(cp => cp.SubCategoryName)
                     .ToDictionary(
                         g => g.Key,
                         g => g.Sum(cp => cp.PaymentFee)
                     );
 
-                return dict;
+                var dictExpenses = catPayesExpenses
+                    .GroupBy(cp => cp.SubCategoryName)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var resultDict = dictIncomes
+                    .Concat(dictExpenses)
+                    .GroupBy(pair => pair.Key)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Sum(pair => pair.Key == group.Key ? pair.Value : -pair.Value)
+                    );
+
+                foreach (var category in dictExpenses.Keys)
+                {
+                    if (!resultDict.ContainsKey(category))
+                    {
+                        resultDict[category] = -dictExpenses[category];
+                    }
+                }
+
+                foreach (var category in dictIncomes.Keys)
+                {
+                    if (!resultDict.ContainsKey(category))
+                    {
+                        resultDict[category] = dictIncomes[category];
+                    }
+                }
+
+                return resultDict;
             }
         }
         catch (Exception ex)
