@@ -33,7 +33,7 @@ public partial class TurnoverPerEmployeeKPI
         {
             _startLoading = true;
             await _getData();
-            _initilizeChart();
+            _initilizeChart(out _chartConfig);
             _startLoading = false;
             StateHasChanged();
         }
@@ -45,15 +45,15 @@ public partial class TurnoverPerEmployeeKPI
     // Pie Chart
     private PieConfig _chartConfig;
 
-    private void _initilizeChart()
+    private void _initilizeChart(out PieConfig chart, bool displayLegend = false)
     {
-        if (!_data.Any() || _chartConfig != null)
+        if (_data == null || !_data.Any())
         {
-            _chartConfig = null;
+            chart = null;
             return;
         }
 
-        _chartConfig = new PieConfig()
+        chart = new PieConfig()
         {
             Options = new PieOptions()
             {
@@ -68,13 +68,13 @@ public partial class TurnoverPerEmployeeKPI
                 },
                 Legend = new Legend()
                 {
-                    Display = false
+                    Display = displayLegend
                 }
             }
         };
 
         foreach (string key in _data.Keys)
-            _chartConfig.Data.Labels.Add(key);
+            chart.Data.Labels.Add(key);
 
 
         PieDataset<double> dataset = new PieDataset<double>(_data.Values)
@@ -88,6 +88,38 @@ public partial class TurnoverPerEmployeeKPI
             BorderColor = ChartJsHelper.GetPreviusRgb(1),
         };
 
-        _chartConfig.Data.Datasets.Add(dataset);
+        chart.Data.Datasets.Add(dataset);
     }
+
+    #region Dialog FullScreen
+    private bool _isDialogVisible = false;
+    FluentDialog _dialog;
+    // Dialog Chart
+    private PieConfig _chartDialogConfig;
+
+    private void ShowFullscreenDialog()
+    {
+        _dialog.Show();
+        _isDialogVisible = true;
+        if (_chartDialogConfig == null)
+        {
+            _chartConfig = null;
+            _initilizeChart(out _chartDialogConfig, true);
+            StateHasChanged();
+        }
+    }
+
+    private void HideFullscreenDialog()
+    {
+        if (_isDialogVisible == true)
+        {
+            _dialog.Hide();
+            _isDialogVisible = false;
+            _chartDialogConfig = null;
+            _initilizeChart(out _chartConfig, false);
+            StateHasChanged();
+        }
+    }
+    #endregion
+
 }

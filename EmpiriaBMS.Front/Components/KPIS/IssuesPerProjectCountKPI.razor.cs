@@ -3,9 +3,11 @@ using ChartJs.Blazor.BarChart.Axes;
 using ChartJs.Blazor.Common;
 using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common.Axes.Ticks;
+using ChartJs.Blazor.PieChart;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Horizontal;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Fast.Components.FluentUI;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
@@ -30,39 +32,35 @@ public partial class IssuesPerProjectCountKPI
         if (firstRender)
         {
             _startLoading = true;
-            await _initilizeChart();
+            await _getData();
+            _initilizeChart(out _chartConfig);
             _startLoading = false;
-
             StateHasChanged();
         }
     }
 
-    private async Task _initilizeChart()
+    private void _initilizeChart(out BarConfig chart, bool displayLegend = false)
     {
-        await _getRecords();
-
-        if (!_data.Any() || _chartConfig != null)
+        if (_data == null || !_data.Any())
         {
-            _chartConfig = null;
+            chart = null;
             return;
         }
 
-        if (_data.Count > 0)
+        chart = new BarConfig
         {
-            _chartConfig = new BarConfig
+            Options = new BarOptions
             {
-                Options = new BarOptions
+                Title = new OptionsTitle
                 {
-                    Title = new OptionsTitle
-                    {
-                        Display = true,
-                        Text = "Count Issues per Project",
-                        Position = ChartEnums.Position.Top,
-                        FontSize = 24
-                    },
-                    Scales = new BarScales
-                    {
-                        XAxes = new List<CartesianAxis>
+                    Display = true,
+                    Text = "Count Issues per Project",
+                    Position = ChartEnums.Position.Top,
+                    FontSize = 24
+                },
+                Scales = new BarScales
+                {
+                    XAxes = new List<CartesianAxis>
                         {
                             new BarCategoryAxis
                             {
@@ -70,7 +68,7 @@ public partial class IssuesPerProjectCountKPI
                                 BarThickness = BarThickness.Flex
                             }
                         },
-                        YAxes = new List<CartesianAxis>
+                    YAxes = new List<CartesianAxis>
                         {
                             new BarLinearCartesianAxis
                             {
@@ -82,39 +80,69 @@ public partial class IssuesPerProjectCountKPI
                                 }
                             }
                         }
-                    },
-                    Legend = new Legend()
-                    {
-                        Display = false
-                    },
-                    Responsive = true,
+                },
+                Legend = new Legend()
+                {
+                    Display = displayLegend
+                },
+                Responsive = true,
 
-                }
-            };
+            }
+        };
 
-            foreach (string key in _data.Select(p => p.Key))
-                _chartConfig.Data.Labels.Add(key);
+        foreach (string key in _data.Select(p => p.Key))
+            chart.Data.Labels.Add(key);
 
-            BarDataset<int> dataset = new BarDataset<int>(_data.Values)
-            {
-                //Label = "Roles",
-                //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-                BackgroundColor = ChartJsHelper.GenerateColors(_data.Count),
-                BorderWidth = 0,
-                HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
-                HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
-                HoverBorderWidth = 1,
-                BorderColor = ChartJsHelper.GetPreviusRgb(1),
-                BarPercentage = 0.5,
+        BarDataset<int> dataset = new BarDataset<int>(_data.Values)
+        {
+            //Label = "Roles",
+            //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(_data.Count),
+            BorderWidth = 0,
+            HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
+            HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
+            HoverBorderWidth = 1,
+            BorderColor = ChartJsHelper.GetPreviusRgb(1),
+            BarPercentage = 0.5,
 
-            };
+        };
 
-            _chartConfig.Data.Datasets.Add(dataset);
-        }
+        chart.Data.Datasets.Add(dataset);
     }
 
-    private async Task _getRecords()
+    private async Task _getData()
     {
         _data = await _dataProvider.KPIS.GetIssuesPerProjectCount(StartDate?.Date, EndDate?.Date);
     }
+
+    #region Dialog FullScreen
+    private bool _isDialogVisible = false;
+    FluentDialog _dialog;
+    // Dialog Chart
+    private BarConfig _chartDialogConfig;
+
+    private void ShowFullscreenDialog()
+    {
+        _dialog.Show();
+        _isDialogVisible = true;
+        if (_chartDialogConfig == null)
+        {
+            _chartConfig = null;
+            _initilizeChart(out _chartDialogConfig, false);
+            StateHasChanged();
+        }
+    }
+
+    private void HideFullscreenDialog()
+    {
+        if (_isDialogVisible == true)
+        {
+            _dialog.Hide();
+            _isDialogVisible = false;
+            _chartDialogConfig = null;
+            _initilizeChart(out _chartConfig, false);
+            StateHasChanged();
+        }
+    }
+    #endregion
 }

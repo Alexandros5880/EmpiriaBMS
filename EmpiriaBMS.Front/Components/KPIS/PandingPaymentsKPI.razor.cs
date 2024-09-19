@@ -7,6 +7,8 @@ using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Horizontal;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Microsoft.AspNetCore.Components;
+using ChartJs.Blazor.PieChart;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -30,22 +32,22 @@ public partial class PandingPaymentsKPI
         if (firstRender)
         {
             _startLoading = true;
-            await _getPendingPaymentsPerProject();
-            _initilizePendingPaymentsPerProject();
+            await _getData();
+            _initilizeChart(out _chartConfig);
             _startLoading = false;
             StateHasChanged();
         }
     }
 
-    private void _initilizePendingPaymentsPerProject()
+    private void _initilizeChart(out BarConfig chart, bool displayLegend = false)
     {
-        if (!_data.Any() || _chartConfig != null)
+        if (_data == null || !_data.Any())
         {
-            _chartConfig = null;
+            chart = null;
             return;
         }
 
-        _chartConfig = new BarConfig
+        chart = new BarConfig
         {
             Options = new BarOptions
             {
@@ -81,7 +83,7 @@ public partial class PandingPaymentsKPI
                 },
                 Legend = new Legend()
                 {
-                    Display = false
+                    Display = displayLegend
                 },
                 Responsive = true,
 
@@ -89,7 +91,7 @@ public partial class PandingPaymentsKPI
         };
 
         foreach (string key in _data.Select(p => p.Key))
-            _chartConfig.Data.Labels.Add(key);
+            chart.Data.Labels.Add(key);
 
         BarDataset<int> dataset = new BarDataset<int>(_data.Values.Select(p => p.PendingPaymentsCount))
         {
@@ -105,12 +107,43 @@ public partial class PandingPaymentsKPI
 
         };
 
-        _chartConfig.Data.Datasets.Add(dataset);
+        chart.Data.Datasets.Add(dataset);
     }
 
-    private async Task _getPendingPaymentsPerProject()
+    private async Task _getData()
     {
         _data = await _dataProvider.KPIS.GetPendingPayments(StartDate?.Date, EndDate?.Date);
     }
+
+    #region Dialog FullScreen
+    private bool _isDialogVisible = false;
+    FluentDialog _dialog;
+    // Dialog Chart
+    private BarConfig _chartDialogConfig;
+
+    private void ShowFullscreenDialog()
+    {
+        _dialog.Show();
+        _isDialogVisible = true;
+        if (_chartDialogConfig == null)
+        {
+            _chartConfig = null;
+            _initilizeChart(out _chartDialogConfig, false);
+            StateHasChanged();
+        }
+    }
+
+    private void HideFullscreenDialog()
+    {
+        if (_isDialogVisible == true)
+        {
+            _dialog.Hide();
+            _isDialogVisible = false;
+            _chartDialogConfig = null;
+            _initilizeChart(out _chartConfig, false);
+            StateHasChanged();
+        }
+    }
+    #endregion
 
 }

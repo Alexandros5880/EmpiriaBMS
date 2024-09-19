@@ -9,6 +9,7 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
 using ChartJs.Blazor.PolarAreaChart;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -32,7 +33,7 @@ public partial class TurnoverPerProjectManagerKPI
         {
             _startLoading = true;
             await _getData();
-            _initilizeChart();
+            _initilizeChart(out _chartConfig);
             _startLoading = false;
             StateHasChanged();
         }
@@ -43,15 +44,15 @@ public partial class TurnoverPerProjectManagerKPI
 
     private PolarAreaConfig _chartConfig;
 
-    private void _initilizeChart()
+    private void _initilizeChart(out PolarAreaConfig chart, bool displayLegend = false)
     {
-        if (!_data.Any() || _chartConfig != null)
+        if (_data == null || !_data.Any())
         {
-            _chartConfig = null;
+            chart = null;
             return;
         }
 
-        _chartConfig = new PolarAreaConfig()
+        chart = new PolarAreaConfig()
         {
             Options = new PolarAreaOptions()
             {
@@ -65,13 +66,13 @@ public partial class TurnoverPerProjectManagerKPI
                 },
                 Legend = new Legend()
                 {
-                    Display = false
+                    Display = displayLegend
                 }
             }
         };
 
         foreach (string key in _data.Keys)
-            _chartConfig.Data.Labels.Add(key);
+            chart.Data.Labels.Add(key);
 
         var dataset = new PolarAreaDataset<double>(_data.Values)
         {
@@ -83,7 +84,38 @@ public partial class TurnoverPerProjectManagerKPI
             BorderColor = ChartJsHelper.GetPreviusRgb(1),
         };
 
-        _chartConfig.Data.Datasets.Add(dataset);
+        chart.Data.Datasets.Add(dataset);
     }
+
+    #region Dialog FullScreen
+    private bool _isDialogVisible = false;
+    FluentDialog _dialog;
+    // Dialog Chart
+    private PolarAreaConfig _chartDialogConfig;
+
+    private void ShowFullscreenDialog()
+    {
+        _dialog.Show();
+        _isDialogVisible = true;
+        if (_chartDialogConfig == null)
+        {
+            _chartConfig = null;
+            _initilizeChart(out _chartDialogConfig, true);
+            StateHasChanged();
+        }
+    }
+
+    private void HideFullscreenDialog()
+    {
+        if (_isDialogVisible == true)
+        {
+            _dialog.Hide();
+            _isDialogVisible = false;
+            _chartDialogConfig = null;
+            _initilizeChart(out _chartConfig, false);
+            StateHasChanged();
+        }
+    }
+    #endregion
 
 }

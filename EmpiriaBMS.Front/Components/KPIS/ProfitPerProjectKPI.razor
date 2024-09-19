@@ -9,6 +9,12 @@
 
 @if (_chartConfig != null)
 {
+    <FluentStack Orientation="Orientation.Horizontal"
+                 HorizontalAlignment="HorizontalAlignment.End">
+        <FluentIcon Value="@(new Icons.Regular.Size24.FullScreenMaximize())"
+                    OnClick="@ShowFullscreenDialog" />
+    </FluentStack>
+
     <Chart Config="_chartConfig"></Chart>
 }
 else
@@ -25,3 +31,31 @@ else
         <span class="text-warning">No Data</span>
     }
 }
+
+<FluentDialog @ref="_dialog"
+              Hidden="@(!_isDialogVisible || _startLoading)"
+              Modal="true"
+              DialogType=@DialogType.Panel
+              style="--dialog-width: 100% !important;
+                     --dialog-height: 100% !important;">
+
+    <div class="modal-body mb-1">
+
+        <div class="dialog-header">
+            <FluentStack Orientation="Orientation.Horizontal"
+                         HorizontalAlignment="HorizontalAlignment.End">
+                <FluentIcon Value="@(new Icons.Regular.Size24.FullScreenMinimize())"
+                            OnClick="@HideFullscreenDialog" />
+            </FluentStack>
+        </div>
+
+        <div style="max-width: 80vw !important; margin: 0 auto;">
+            @if (_chartDialogConfig != null)
+            {
+                <Chart Config="_chartDialogConfig"></Chart>
+            }
+        </div>
+
+    </div>
+
+</FluentDialog>
