@@ -24,26 +24,9 @@
 
                     <!-- Head -->
                     <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
-                        <div class="p-3 rounded-3 row"
+                        <div class="p-3 rounded-3"
                              style="background-color: #bfc1d7; color: var(--kpi-text-color);">
-                        
-                             <!-- Header -->
-                             <div class="col-8">
-                                <h3>Key Performance Indicators (KPIS)</h3>
-                             </div>
-
-                            <!-- Date Range Filter -->
-                            <div class="col-4">
-                                <DateRangePicker class="form-control"
-                                                 title="Dates"
-                                                 placeholder="Select dates..."
-                                                 @bind-StartDate="StartDate"
-                                                 @bind-EndDate="EndDate"
-                                                 OnRangeSelect="@OnDateSelect"
-                                                 style="width: 220px;"
-                                                 DateFormat="dd/MM/yyyy" />
-                            </div>
-
+                            <h3>Key Performance Indicators (KPIS)</h3>
                         </div>
                     </FluentGridItem>
 
@@ -155,6 +138,25 @@
 
                 <!-- Grid -->
                 <FluentGrid Spacing="3">
+
+                    <!-- Date Range Filter -->
+                    <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                        <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                            <div>
+                                <h5>Filter Date:</h5>
+                            </div>
+                            <div>
+                                <DateRangePicker class="form-control"
+                                                 title="Dates"
+                                                 placeholder="Select dates..."
+                                                 @bind-StartDate="StartDate"
+                                                 @bind-EndDate="EndDate"
+                                                 OnRangeSelect="@OnDateSelect"
+                                                 style="width: 220px;"
+                                                 DateFormat="dd/MM/yyyy" />
+                            </div>
+                        </div>
+                    </FluentGridItem>
 
                     @if (SeeNextYearIncome)
                     {
