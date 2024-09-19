@@ -1201,24 +1201,88 @@ public class KpisRepo : IDisposable
                     );
                 #endregion
 
+                #region Discipline Incomes/Expenses
+                var empDiscIncomes = await _context.Set<DisciplineEngineer>()
+                    .Where(de => !de.IsDeleted)
+                    .Where(de => (start == null || de.CreatedDate >= start) && (end == null || de.CreatedDate <= end))
+                    .Join(_context.Set<User>(),
+                          de => de.EngineerId,
+                          u => u.Id,
+                          (de, user) => new { de, user })
+                    .Where(r => !r.user.IsDeleted)
+                    .Join(_context.Set<Discipline>(),
+                          r => r.de.DisciplineId,
+                          d => d.Id,
+                          (r, discipline) => new { r.user, discipline })
+                    .Join(_context.Set<Project>(),
+                          r => r.discipline.ProjectId,
+                          p => p.Id,
+                          (r, project) => new { r.user, project })
+                    .Join(_context.Set<Invoice>(),
+                          r => r.project.Id,
+                          i => i.ProjectId,
+                          (r, invoice) => new { r.user, invoice })
+                    .Where(r => !r.invoice.IsDeleted && r.invoice.Category == Models.Enum.InvoiceCategory.INCOMES)
+                    .Join(_context.Set<Payment>(),
+                          r => r.invoice.Id,
+                          p => p.InvoiceId,
+                          (r, payment) => new { Employee = r.user.FullName, Fee = payment.Fee })
+                    .ToListAsync();
 
+                var dictEmpDiscIncomes = empDelIncomes
+                    .GroupBy(cp => cp.Employee)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.Fee)
+                    );
 
+                var empDiscExpenses = await _context.Set<DisciplineEngineer>()
+                    .Where(de => !de.IsDeleted)
+                    .Where(de => (start == null || de.CreatedDate >= start) && (end == null || de.CreatedDate <= end))
+                    .Join(_context.Set<User>(),
+                          de => de.EngineerId,
+                          u => u.Id,
+                          (de, user) => new { de, user })
+                    .Where(r => !r.user.IsDeleted)
+                    .Join(_context.Set<Discipline>(),
+                          r => r.de.DisciplineId,
+                          d => d.Id,
+                          (r, discipline) => new { r.user, discipline })
+                    .Join(_context.Set<Project>(),
+                          r => r.discipline.ProjectId,
+                          p => p.Id,
+                          (r, project) => new { r.user, project })
+                    .Join(_context.Set<Invoice>(),
+                          r => r.project.Id,
+                          i => i.ProjectId,
+                          (r, invoice) => new { r.user, invoice })
+                    .Where(r => !r.invoice.IsDeleted && r.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Set<Payment>(),
+                          r => r.invoice.Id,
+                          p => p.InvoiceId,
+                          (r, payment) => new { Employee = r.user.FullName, Fee = payment.Fee })
+                    .ToListAsync();
+
+                var dictEmpDiscExpenses = empDelIncomes
+                    .GroupBy(cp => cp.Employee)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.Fee)
+                    );
+                #endregion
 
                 var resultDictEmpDeliverables = _concutDicts(dictEmpDelIncomes, dictEmpDelExpenses);
                 var resultDictEmpSupportiveWorks = _concutDicts(dictEmpSuppIncomes, dictEmpSuppExpenses);
-
-
-
-
-
-
+                var resultDictEmpDisciplines = _concutDicts(dictEmpDiscIncomes, dictEmpDiscExpenses);
 
                 // Get PM Net Profit
-                //var pmIncomeDict = await GetTurnoverPerProjectManager(start, end);
+                var pmIncomeDict = await GetTurnoverPerProjectManager(start, end);
 
-                //var resultDict = _concutDicts(dictIncomes, dictExpenses);
+                var concut1 = _concutDicts(resultDictEmpDeliverables, resultDictEmpSupportiveWorks);
+                var concut2 = _concutDicts(concut1, resultDictEmpDisciplines);
+                var concut3 = _concutDicts(concut2, pmIncomeDict);
 
-                return new Dictionary<string, double>();
+                return concut3;
             }
         }
         catch (Exception ex)
