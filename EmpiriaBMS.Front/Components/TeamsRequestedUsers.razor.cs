@@ -69,7 +69,7 @@ public partial class TeamsRequestedUsers : ComponentBase
         await OnSave.InvokeAsync(user);
     }
 
-    public async Task OnCreateUserCancel()
+    public void OnCreateUserCancel()
     {
         _selectedRecord = null;
         _selectedUser = null;

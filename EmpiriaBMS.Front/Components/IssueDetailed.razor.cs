@@ -49,7 +49,7 @@ public partial class IssueDetailed : ComponentBase, IDisposable
         StateHasChanged();
     }
 
-    private void _issuePropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void _issuePropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {

@@ -17,7 +17,7 @@ public partial class ProfitPerProjectTableKPI
 
     private IQueryable<TenderDataDto> _data = null;
     
-    IQueryable<TenderDataDto>? FilteredItems => 
+    IQueryable<TenderDataDto> FilteredItems => 
         _data?.Where(x => x.ProjectName.Contains(_nameFilter, StringComparison.CurrentCultureIgnoreCase));
 
     private string _nameFilter = string.Empty;

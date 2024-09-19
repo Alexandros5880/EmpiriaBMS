@@ -13,7 +13,7 @@ public partial class TenderTable
     public DateTimeOffset? EndDate { get; set; }
 
     private IQueryable<TenderDataDto> _data;
-    IQueryable<TenderDataDto>? FilteredItems => _data?.Where(x => x.ProjectName.Contains(_nameFilter, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<TenderDataDto> FilteredItems => _data?.Where(x => x.ProjectName.Contains(_nameFilter, StringComparison.CurrentCultureIgnoreCase));
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     private string _nameFilter = string.Empty;

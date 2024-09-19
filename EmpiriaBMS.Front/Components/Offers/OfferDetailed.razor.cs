@@ -329,7 +329,7 @@ public partial class OfferDetailed
         await _getSubCategories();
     }
 
-    private async Task _onLeadChanged(LeadVM lead)
+    private void _onLeadChanged(LeadVM lead)
     {
         Lead = lead;
     }

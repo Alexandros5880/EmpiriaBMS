@@ -14,7 +14,7 @@ public partial class Offers
     #region Data Grid
     private List<OfferVM> _records = new List<OfferVM>();
     private string _filterString = string.Empty;
-    IQueryable<OfferVM>? FilteredItems => _records?.AsQueryable();//.Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<OfferVM> FilteredItems => _records?.AsQueryable();//.Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private OfferVM _selectedRecord = new OfferVM();

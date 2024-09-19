@@ -15,7 +15,7 @@ public partial class DeliverableTypes
     #region Data Grid
     private List<DeliverableTypeVM> _records = new List<DeliverableTypeVM>();
     private string _filterString = string.Empty;
-    IQueryable<DeliverableTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<DeliverableTypeVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private DeliverableTypeVM _selectedRecord = new DeliverableTypeVM();

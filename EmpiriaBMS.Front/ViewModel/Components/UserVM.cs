@@ -96,8 +96,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private string? _teamsObjectId;
-    public string? TeamsObjectId
+    private string _teamsObjectId;
+    public string TeamsObjectId
     {
         get => _teamsObjectId;
         set

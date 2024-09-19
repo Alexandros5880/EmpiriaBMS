@@ -13,7 +13,7 @@ public partial class Permissions
     #region Data Grid
     private List<PermissionVM> _records = new List<PermissionVM>();
     private string _filterString = string.Empty;
-    IQueryable<PermissionVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<PermissionVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 15 };
 
     private PermissionVM _selectedRecord = new PermissionVM();

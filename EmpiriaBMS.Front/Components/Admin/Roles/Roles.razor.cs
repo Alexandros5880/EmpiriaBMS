@@ -13,7 +13,7 @@ public partial class Roles
     #region Data Grid
     private List<RoleVM> _records = new List<RoleVM>();
     private string _filterString = string.Empty;
-    IQueryable<RoleVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<RoleVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private RoleVM _selectedRecord = new RoleVM();

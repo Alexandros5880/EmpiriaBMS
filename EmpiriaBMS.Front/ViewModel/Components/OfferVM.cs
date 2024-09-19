@@ -137,8 +137,8 @@ public class OfferVM : BaseVM
     public string ProjectSubCategoryName => SubCategory != null ? SubCategory.Name : "";
 
     // Led
-    private int? _leadId;
-    public int? LeadId
+    private int _leadId;
+    public int LeadId
     {
         get => _leadId;
         set
@@ -150,8 +150,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private Lead? _lead;
-    public Lead? Lead
+    private Lead _lead;
+    public Lead Lead
     {
         get => _lead;
         set

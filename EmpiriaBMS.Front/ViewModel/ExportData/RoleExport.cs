@@ -5,7 +5,7 @@ namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
 public class RoleExport : IInport<RoleVM>
 {
-    public string? Name { get; set; }
+    public string Name { get; set; }
 
     public bool IsEmployee { get; set; }
 

@@ -99,7 +99,7 @@ public partial class Users
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UsersDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

@@ -6,8 +6,8 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class SupportiveWorkTypeVM : BaseVM, ITypeVM
 {
-    private string? _name;
-    public string? Name
+    private string _name;
+    public string Name
     {
         get => _name;
         set
@@ -19,8 +19,8 @@ public class SupportiveWorkTypeVM : BaseVM, ITypeVM
         }
     }
 
-    private string? _description;
-    public string? Description
+    private string _description;
+    public string Description
     {
         get => _description;
         set

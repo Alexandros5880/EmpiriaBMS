@@ -395,7 +395,7 @@ public partial class Reports
 
     #region Data Table
     private string _filterString = string.Empty;
-    IQueryable<ReportProjectReturnModel>? FilteredItems => reportEntries?.AsQueryable()
+    IQueryable<ReportProjectReturnModel> FilteredItems => reportEntries?.AsQueryable()
         .Where(x => 
         x.Project.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase)
         && x.TotalWorkedTime.TotalHours > 0);

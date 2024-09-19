@@ -14,7 +14,7 @@ public partial class Stages
     #region Data Grid
     private List<ProjectStageVM> _records = new List<ProjectStageVM>();
     private string _filterString = string.Empty;
-    IQueryable<ProjectStageVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ProjectStageVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private ProjectStageVM _selectedRecord = new ProjectStageVM();

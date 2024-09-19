@@ -26,7 +26,7 @@ public partial class Invoices : ComponentBase
     #region Data Grid
     public List<InvoiceVM> _invoices { get; set; }
     private string _filterString = string.Empty;
-    IQueryable<InvoiceVM>? FilteredItems => _invoices?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<InvoiceVM> FilteredItems => _invoices?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     [Parameter]

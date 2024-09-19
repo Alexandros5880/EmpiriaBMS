@@ -13,7 +13,7 @@ public partial class ProjectCategories
     #region Data Grid
     private List<ProjectCategoryVM> _records = new List<ProjectCategoryVM>();
     private string _filterString = string.Empty;
-    IQueryable<ProjectCategoryVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ProjectCategoryVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private ProjectCategoryVM _selectedRecord = new ProjectCategoryVM();

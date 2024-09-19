@@ -14,7 +14,7 @@ public partial class Disciplines
     #region Data Grid
     private List<DisciplineVM> _records = new List<DisciplineVM>();
     private string _filterString = string.Empty;
-    IQueryable<DisciplineVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<DisciplineVM> FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private DisciplineVM _selectedRecord = new DisciplineVM();

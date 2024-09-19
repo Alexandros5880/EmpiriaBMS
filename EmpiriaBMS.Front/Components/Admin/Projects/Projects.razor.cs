@@ -21,7 +21,7 @@ public partial class Projects
     public List<ProjectVM> Source { get; set; } = new List<ProjectVM>();
 
     private string _filterString = string.Empty;
-    IQueryable<ProjectVM>? FilteredItems => Source?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ProjectVM> FilteredItems => Source?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     [Parameter]

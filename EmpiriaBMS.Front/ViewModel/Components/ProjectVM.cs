@@ -19,8 +19,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _name;
-    public string? Name
+    private string _name;
+    public string Name
     {
         get => _name;
         set
@@ -32,8 +32,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _description;
-    public string? Description
+    private string _description;
+    public string Description
     {
         get => _description;
         set
@@ -45,8 +45,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _code;
-    public string? Code
+    private string _code;
+    public string Code
     {
         get => _code;
         set
@@ -84,8 +84,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _stageId;
-    public int? StageId
+    private int _stageId;
+    public int StageId
     {
         get => _stageId;
         set

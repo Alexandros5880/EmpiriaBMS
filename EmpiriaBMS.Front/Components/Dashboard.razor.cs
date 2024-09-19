@@ -82,7 +82,7 @@ public partial class Dashboard : IDisposable
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
     #region Projects Filter
-    IQueryable<ProjectVM>? _filteredProjects => _projects?.AsQueryable()
+    IQueryable<ProjectVM> _filteredProjects => _projects?.AsQueryable()
         .Where(p => _filterProjects(p));
 
     private string _projectNameFilter = string.Empty;
@@ -1275,7 +1275,7 @@ public partial class Dashboard : IDisposable
         _isCorrectHoursDialogOdepened = true;
     }
 
-    private async Task _onCorrectHoursClose()
+    private void _onCorrectHoursClose()
     {
         if (_isCorrectHoursDialogOdepened)
         {

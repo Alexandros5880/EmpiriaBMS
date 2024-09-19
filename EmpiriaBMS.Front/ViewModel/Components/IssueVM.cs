@@ -31,8 +31,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private Project? _project;
-    public Project? Project
+    private Project _project;
+    public Project Project
     {
         get => _project;
         set

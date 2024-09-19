@@ -178,7 +178,7 @@ public partial class InvoiceDetailed
     }
 
     #region Update Records
-    private async Task<InvoiceVM?> _upsertInvoice(InvoiceVM i)
+    private async Task<InvoiceVM> _upsertInvoice(InvoiceVM i)
     {
         if (i.ProjectId != 0)
         {

@@ -90,7 +90,7 @@ public partial class Issues
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<IssuesDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

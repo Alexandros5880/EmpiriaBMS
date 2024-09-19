@@ -85,7 +85,7 @@ public partial class Deliverables
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<DeliverableDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

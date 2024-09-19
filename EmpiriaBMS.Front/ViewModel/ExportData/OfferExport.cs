@@ -55,7 +55,7 @@ public class OfferExport : IInport<OfferVM>
         CategoryName = model.Category?.Name ?? "";
         SubCategoryId = model.SubCategoryId ?? 0;
         SubCategoryName = model.SubCategory?.Name ?? "";
-        LedId = model.LeadId ?? 0;
+        LedId = model.LeadId;
         LedName = model.Lead?.Name ?? "";
         Result = Convert.ToString(model.Result);
         Code = model.Code;

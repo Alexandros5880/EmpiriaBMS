@@ -62,7 +62,7 @@
                                     TOption="LeadVM"
                                     OptionText="@(c => c.Name)"
                                     OptionValue="@(c => c.Id.ToString())"
-                                    SelectedOptionChanged="@(async (e) => await _onLeadChanged(e))" />
+                                    SelectedOptionChanged="@_onLeadChanged" />
                 </div>
                 @if (!validLead)
                 {

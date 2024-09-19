@@ -74,7 +74,7 @@ public static class Data
         return csvBuilder.ToString();
     }
 
-    public static Type GetListItemType(List<object> dataList)
+    public static Type? GetListItemType(List<object> dataList)
     {
         foreach (var item in dataList)
         {

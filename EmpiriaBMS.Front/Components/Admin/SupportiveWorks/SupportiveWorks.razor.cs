@@ -13,7 +13,7 @@ public partial class SupportiveWorks
     #region Data Grid
     private List<SupportiveWorkVM> _records = new List<SupportiveWorkVM>();
     private string _filterString = string.Empty;
-    IQueryable<SupportiveWorkVM>? FilteredItems => _records?.AsQueryable().Where(x => x.TypeName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<SupportiveWorkVM> FilteredItems => _records?.AsQueryable().Where(x => x.TypeName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private SupportiveWorkVM _selectedRecord = new SupportiveWorkVM();

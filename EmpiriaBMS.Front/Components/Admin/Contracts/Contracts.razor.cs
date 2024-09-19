@@ -68,7 +68,7 @@ public partial class Contracts
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ContractDetailedDialog>(new ContractVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

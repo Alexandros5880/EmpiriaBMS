@@ -82,8 +82,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private string? _mark;
-    public string? Mark
+    private string _mark;
+    public string Mark
     {
         get => _mark;
         set

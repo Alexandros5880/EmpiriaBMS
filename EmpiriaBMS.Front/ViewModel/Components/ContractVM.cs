@@ -58,8 +58,8 @@ public class ContractVM : BaseVM
         }
     }
 
-    private byte[]? _pMSignature { get; set; }
-    public byte[]? PMSignature
+    private byte[] _pMSignature { get; set; }
+    public byte[] PMSignature
     {
         get => _pMSignature;
         set

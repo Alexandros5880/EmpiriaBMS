@@ -14,7 +14,7 @@ public partial class PaymentTypes
     #region Data Grid
     private List<PaymentTypeVM> _records = new List<PaymentTypeVM>();
     private string _filterString = string.Empty;
-    IQueryable<PaymentTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<PaymentTypeVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private PaymentTypeVM _selectedRecord = new PaymentTypeVM();

@@ -56,7 +56,7 @@ public partial class ProjectSubCategories
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectSubCategoryDetailed>(new ProjectSubCategoryVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

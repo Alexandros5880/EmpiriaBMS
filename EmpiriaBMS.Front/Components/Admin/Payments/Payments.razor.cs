@@ -13,7 +13,7 @@ public partial class Payments
     #region Data Grid
     private List<PaymentVM> _records = new List<PaymentVM>();
     private string _filterString = string.Empty;
-    IQueryable<PaymentVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<PaymentVM> FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private PaymentVM _selectedRecord = new PaymentVM();

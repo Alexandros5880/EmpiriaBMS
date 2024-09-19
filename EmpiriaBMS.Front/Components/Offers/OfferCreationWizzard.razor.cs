@@ -200,7 +200,7 @@ public partial class OfferCreationWizzard
         };
     }
 
-    private async Task _onProjectSelect(ProjectVM project)
+    private void _onProjectSelect(ProjectVM project)
     {
         _project = project;
         //await _projectCompoment.Prepair(project, true);

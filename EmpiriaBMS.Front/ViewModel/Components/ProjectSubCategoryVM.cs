@@ -6,8 +6,8 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class ProjectSubCategoryVM : BaseVM
 {
-    private string? _name;
-    public string? Name
+    private string _name;
+    public string Name
     {
         get => _name;
         set

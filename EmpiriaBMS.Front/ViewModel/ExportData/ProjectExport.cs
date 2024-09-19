@@ -54,7 +54,7 @@ public class ProjectExport : IInport<ProjectVM>
         Code = model.Code ?? "";
         EstimatedMandays = model.EstimatedMandays;
         EstimatedHours = model.EstimatedHours;
-        StageId = model.StageId ?? 0;
+        StageId = model.StageId;
         StageName = model.Stage?.Name ?? "";
         Active = model.Active;
         StartDate = model.StartDate?.ToEuropeFormat() ?? "";
