@@ -9,6 +9,7 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
 using ChartJs.Blazor.PolarAreaChart;
+using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -41,7 +42,8 @@ public partial class TurnoverPerEmployeeKPI
     private async Task _getData() =>
         _data = await _dataProvider.KPIS.GetTurnoverPerEmployee(StartDate?.Date, EndDate?.Date);
 
-    private PolarAreaConfig _chartConfig;
+    // Pie Chart
+    private PieConfig _chartConfig;
 
     private void _initilizeChart()
     {
@@ -51,10 +53,11 @@ public partial class TurnoverPerEmployeeKPI
             return;
         }
 
-        _chartConfig = new PolarAreaConfig()
+        _chartConfig = new PieConfig()
         {
-            Options = new PolarAreaOptions()
+            Options = new PieOptions()
             {
+                CutoutPercentage = 50, // 50 = Doughnut  ||  0 = Pie
                 Responsive = true,
                 Title = new OptionsTitle()
                 {
@@ -73,9 +76,11 @@ public partial class TurnoverPerEmployeeKPI
         foreach (string key in _data.Keys)
             _chartConfig.Data.Labels.Add(key);
 
-        var dataset = new PolarAreaDataset<double>(_data.Values)
+
+        PieDataset<double> dataset = new PieDataset<double>(_data.Values)
         {
             BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 1),
+            //BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 550, 599, 1),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
