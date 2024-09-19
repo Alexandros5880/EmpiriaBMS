@@ -230,6 +230,15 @@
                         </FluentGridItem>
                     }
 
+                    @if (SeeTurnoverPerProjectManagersKPI)
+                    {
+                        <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
+                            <div class="p-3 rounded-3" style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                <TurnoverPerProjectManagerKPI StartDate="@StartDate" EndDate="@EndDate" />
+                            </div>
+                        </FluentGridItem>
+                    }
+
                 </FluentGrid>
 
             </FluentGridItem>

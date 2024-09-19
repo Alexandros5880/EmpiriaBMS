@@ -645,18 +645,6 @@ public class AppDbContext : DbContext
                 Ord = 47
             };
             builder.Entity<Permission>().HasData(per_47);
-
-            // Hours per user in specific time period KPI
-            var per_48_id = random.Next(123456789, 999999999);
-            Permission per_48 = new Permission()
-            {
-                Id = per_48_id,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = "Hours per user in specific time period KPI",
-                Ord = 48
-            };
-            builder.Entity<Permission>().HasData(per_48);
             #endregion
 
             #region Roles
@@ -1236,17 +1224,6 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_138);
 
-            // COO || Hours per user in specific time period KPI
-            RolePermission rp_139 = new RolePermission()
-            {
-                Id = random.Next(123456789, 999999999) * 9,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                RoleId = role_4_id,
-                PermissionId = per_48_id
-            };
-            builder.Entity<RolePermission>().HasData(rp_139);
-
 
             // CTO
             // CTO || See Dashboard Layout
@@ -1711,17 +1688,6 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_143);
 
-            // CTO || Hours per user in specific time period KPI
-            RolePermission rp_144 = new RolePermission()
-            {
-                Id = random.Next(123456789, 999999999) * 9,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                RoleId = role_5_id,
-                PermissionId = per_48_id
-            };
-            builder.Entity<RolePermission>().HasData(rp_144);
-
 
             // CEO
             // CEO || See Dashboard Layout
@@ -2175,17 +2141,6 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_148);
 
-            // CEO || Hours per user in specific time period KPI
-            RolePermission rp_149 = new RolePermission()
-            {
-                Id = random.Next(123456789, 999999999) * 9,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                RoleId = role_6_id,
-                PermissionId = per_48_id
-            };
-            builder.Entity<RolePermission>().HasData(rp_149);
-
 
             // Guest
             // Guest || See Dashboard Layout
@@ -2356,17 +2311,6 @@ public class AppDbContext : DbContext
                 PermissionId = per_47_id
             };
             builder.Entity<RolePermission>().HasData(rp_154);
-
-            // Admin || Hours per user in specific time period KPI
-            RolePermission rp_155 = new RolePermission()
-            {
-                Id = random.Next(123456789, 999999999) * 9,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                RoleId = role_9_id,
-                PermissionId = per_48_id
-            };
-            builder.Entity<RolePermission>().HasData(rp_155);
 
 
             // Secretariat 

@@ -1005,6 +1005,104 @@ public class KpisRepo : IDisposable
         }
     }
 
+    public async Task<Dictionary<string, double>> GetTurnoverPerProjectManager(
+        DateTime? start = null,
+        DateTime? end = null
+    ) {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var catPayesIncomes = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Invoices,
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => result.invoice.Category == Models.Enum.InvoiceCategory.INCOMES)
+                    .Join(_context.Projects,
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Users,
+                          paymentInvoiceProject => paymentInvoiceProject.project.ProjectManagerId,
+                          pm => pm.Id,
+                          (result, pm) => new { 
+                              ProjectManager = pm.FullName,
+                              PaymentFee = result.payment.Fee,
+                          })
+                    .ToListAsync();
+
+                var catPayesExpenses = await _context.Set<Payment>()
+                    .Where(payment => !payment.IsDeleted)
+                    .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
+                    .Join(_context.Invoices,
+                          payment => payment.InvoiceId,
+                          invoice => invoice.Id,
+                          (payment, invoice) => new { payment, invoice })
+                    .Where(result => result.invoice.Category == Models.Enum.InvoiceCategory.EXPENSES)
+                    .Join(_context.Projects,
+                          paymentInvoice => paymentInvoice.invoice.ProjectId,
+                          project => project.Id,
+                          (result, project) => new { result.payment, result.invoice, project })
+                    .Join(_context.Users,
+                          paymentInvoiceProject => paymentInvoiceProject.project.ProjectManagerId,
+                          pm => pm.Id,
+                          (result, pm) => new {
+                              ProjectManager = pm.FullName,
+                              PaymentFee = result.payment.Fee,
+                          })
+                    .ToListAsync();
+
+                var dictIncomes = catPayesIncomes
+                    .GroupBy(cp => cp.ProjectManager)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var dictExpenses = catPayesExpenses
+                    .GroupBy(cp => cp.ProjectManager)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(cp => cp.PaymentFee)
+                    );
+
+                var resultDict = dictIncomes
+                    .Concat(dictExpenses)
+                    .GroupBy(pair => pair.Key)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Sum(pair => pair.Key == group.Key ? pair.Value : -pair.Value)
+                    );
+
+                foreach (var category in dictExpenses.Keys)
+                {
+                    if (!resultDict.ContainsKey(category))
+                    {
+                        resultDict[category] = -dictExpenses[category];
+                    }
+                }
+
+                foreach (var category in dictIncomes.Keys)
+                {
+                    if (!resultDict.ContainsKey(category))
+                    {
+                        resultDict[category] = dictIncomes[category];
+                    }
+                }
+
+                return resultDict;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On KpisRepo.GetTurnoverPerProjectManager(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return new Dictionary<string, double>();
+        }
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposedValue)

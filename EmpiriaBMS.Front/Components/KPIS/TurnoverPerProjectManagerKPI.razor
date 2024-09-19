@@ -1,0 +1,27 @@
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using ChartJs.Blazor;
+
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+@inject Logging.LoggerManager Logger
+
+@if (_chartConfig != null)
+{
+    <Chart Config="_chartConfig"></Chart>
+}
+else
+{
+    @if (_startLoading)
+    {
+        <FluentProgressRing Style="margin: 0 auto;" />
+    }
+    else
+    {
+        <h5 style="color: var(--kpi-text-color);">
+            <strong>Turnover per Project Sub Category</strong>
+        </h5>
+        <span class="text-warning">No Data</span>
+    }
+}
