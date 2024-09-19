@@ -60,7 +60,7 @@ public partial class TurnoverPerProjectManagerKPI
                 Title = new OptionsTitle()
                 {
                     Display = true,
-                    Text = "Turnover per Project Sub Category",
+                    Text = "Turnover per Project Manager",
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
