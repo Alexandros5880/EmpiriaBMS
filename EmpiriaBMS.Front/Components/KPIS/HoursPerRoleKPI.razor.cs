@@ -9,6 +9,10 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Front.ViewModel.Helper;
+using ChartJs.Blazor;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -22,7 +26,9 @@ public partial class HoursPerRoleKPI
 
     private bool _startLoading = true;
 
-    private Dictionary<string, long> _data = null;
+    private IQueryable<DictRow> _data;
+
+    private string _title = "Hours Per Role";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -38,10 +44,13 @@ public partial class HoursPerRoleKPI
         }
     }
 
-    private async Task _getData() =>
-        _data = await _dataProvider.KPIS.GetHoursPerRole(StartDate?.Date, EndDate?.Date);
+    private async Task _getData()
+    {
+        var dict = await _dataProvider.KPIS.GetHoursPerRole(StartDate?.Date, EndDate?.Date);
+        _data = dict.Select(d => new DictRow() { Key = d.Key, Value = d.Value }).AsQueryable();
+    }
 
-    // Bar Chart
+    #region Initialize Chart
     private BarConfig _chartConfig;
     
     private void _initilizeChart(out BarConfig chart, bool displayLegend = false)
@@ -59,7 +68,7 @@ public partial class HoursPerRoleKPI
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Hours Per Role",
+                    Text = _title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -95,14 +104,16 @@ public partial class HoursPerRoleKPI
             }
         };
 
-        foreach (string key in _data.Keys)
-            chart.Data.Labels.Add(key);
+        foreach (var d in _data)
+            chart.Data.Labels.Add(d.Key);
 
-        BarDataset<long> dataset = new BarDataset<long>(_data.Values)
+        var values = _data.Select(d => d.Value);
+
+        BarDataset<long> dataset = new BarDataset<long>(values)
         {
             //Label = "Roles",
             //BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 650, 699, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count(), 650, 699, 1),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -113,6 +124,7 @@ public partial class HoursPerRoleKPI
 
         chart.Data.Datasets.Add(dataset);
     }
+    #endregion
 
     #region Dialog FullScreen
     private bool _isDialogVisible = false;
@@ -142,6 +154,37 @@ public partial class HoursPerRoleKPI
             _initilizeChart(out _chartConfig, false);
             StateHasChanged();
         }
+    }
+    #endregion
+
+    #region Data Table
+    private DictRow _selectedRecord = new DictRow();
+    
+    private void HandleRowFocus(FluentDataGridRow<DictRow> row)
+    {
+        _selectedRecord = row.Item as DictRow;
+    }
+    #endregion
+
+    #region Export As Pdf
+    private bool exporting = false;
+
+    private async Task _exportToPdf()
+    {
+        exporting = true;
+        StateHasChanged();
+
+        await Task.Delay(1000);
+
+        string[] divsIds = new string[] { "export-to-pdf-chart", "export-to-pdf-table" };
+        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+
+        await _microsoftTeams.ExportPdfContent(divsIds, fileName);
+
+        await Task.Delay(1000);
+
+        exporting = false;
+        StateHasChanged();
     }
     #endregion
 

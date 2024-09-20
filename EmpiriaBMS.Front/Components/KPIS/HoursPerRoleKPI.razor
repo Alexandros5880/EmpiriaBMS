@@ -1,11 +1,14 @@
-﻿@using EmpiriaBMS.Front.Services
-@using EmpiriaBMS.Front.Horizontal
+﻿@using EmpiriaBMS.Front.Services;
+@using EmpiriaBMS.Front.Horizontal;
 @using ChartJs.Blazor;
+@using EmpiriaBMS.Front.ViewModel.Helper;
+@using Color = Microsoft.Fast.Components.FluentUI.Color;
 
 @inject IDataProvider _dataProvider
 @inject SharedAuthDataService _sharedAuthData
 @inject IMapper _mapper
-@inject Logging.LoggerManager Logger
+@inject Logging.LoggerManager _logger
+@inject MicrosoftTeams _microsoftTeams
 
 @if (_chartConfig != null)
 {
@@ -44,6 +47,15 @@ else
         <div class="dialog-header">
             <FluentStack Orientation="Orientation.Horizontal"
                          HorizontalAlignment="HorizontalAlignment.End">
+
+                <FluentButton Appearance="Appearance.Outline"
+                              Loading="@exporting"
+                              OnClick="@_exportToPdf">
+                    Export
+                    <FluentIcon Value="@(new Icons.Regular.Size32.DocumentPdf())" Color="Color.Error" Slot="start" />
+                </FluentButton>
+
+                <!-- Exit Fullscreen -->
                 <FluentIcon Value="@(new Icons.Regular.Size24.FullScreenMinimize())"
                             OnClick="@HideFullscreenDialog" />
             </FluentStack>
@@ -52,7 +64,28 @@ else
         <div style="max-width: 80vw !important; margin: 0 auto;">
             @if (_chartDialogConfig != null)
             {
-                <Chart Config="_chartDialogConfig"></Chart>
+                <div class="row">
+                    <div class="col-12">
+                        <div style="width: 50%; margin: 0 auto;"
+                             id="export-to-pdf-chart">
+                            <Chart Config="_chartDialogConfig"></Chart>
+                        </div>
+                    </div>
+                    <!-- Table -->
+                    <div class="col-12 mt-2"
+                         id="export-to-pdf-table">
+                        <div>
+                            <FluentDataGrid Items="@_data"
+                                            ResizableColumns=true
+                                            TGridItem="DictRow"
+                                            OnRowFocus="HandleRowFocus"
+                                            style="height: 40vh; overflow:auto;">
+                                <PropertyColumn Property="@(d => d.Key)" Sortable="true" Title="Role" Align="@Align.Start" />
+                                <PropertyColumn Property="@(p => p.Value)" Sortable="true" Title="Hours" Align="@Align.Start" />
+                            </FluentDataGrid>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
 
