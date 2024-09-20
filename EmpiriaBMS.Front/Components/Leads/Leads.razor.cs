@@ -89,13 +89,10 @@ public partial class Leads
 
         if (result.Data is not null)
         {
-            // Update Record
             LeadVM vm = result.Data as LeadVM;
-            var dto = Mapper.Map<LeadDto>(vm);
-            await DataProvider.Leads.Add(dto);
 
             // Update Result Filter To Waiting
-            var waitingResult = dto.Result.ToTuple();
+            var waitingResult = vm.Result.ToTuple();
             SetSelectedOption(waitingResult.Value);
             StateHasChanged();
             await _onResultSelectionChanged(waitingResult);
@@ -125,11 +122,8 @@ public partial class Leads
         {
             // Update Record
             LeadVM vm = result.Data as LeadVM;
-            var dto = Mapper.Map<LeadDto>(vm);
-            await DataProvider.Leads.Update(dto);
-
             // Update Result Filter To Waiting
-            var waitingResult = dto.Result.ToTuple();
+            var waitingResult = vm.Result.ToTuple();
             SetSelectedOption(waitingResult.Value);
             StateHasChanged();
             await _onResultSelectionChanged(waitingResult);

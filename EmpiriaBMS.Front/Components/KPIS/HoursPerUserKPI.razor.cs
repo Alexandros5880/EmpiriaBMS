@@ -9,6 +9,7 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Front.ViewModel.Helper;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -22,7 +23,8 @@ public partial class HoursPerUserKPI
 
     private bool _startLoading = true;
 
-    private Dictionary<string, long> _data = null;
+    private IQueryable<DictRow<long>> _data;
+    private string _title = "Hours Per User";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -38,8 +40,11 @@ public partial class HoursPerUserKPI
         }
     }
 
-    private async Task _getData() =>
-        _data = await _dataProvider.KPIS.GetHoursPerUser(StartDate?.Date, EndDate?.Date);
+    private async Task _getData()
+    {
+        var dict = await _dataProvider.KPIS.GetHoursPerUser(StartDate?.Date, EndDate?.Date);
+        _data = dict.Select(d => new DictRow<long>() { Key = d.Key, Value = d.Value }).AsQueryable();
+    }
 
     // Pie Chart
     private PieConfig _chartConfig;
@@ -61,7 +66,7 @@ public partial class HoursPerUserKPI
                 Title = new OptionsTitle()
                 {
                     Display = true,
-                    Text = "Hours Per User",
+                    Text = _title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -72,13 +77,14 @@ public partial class HoursPerUserKPI
             }
         };
 
-        foreach (string key in _data.Keys)
-            chart.Data.Labels.Add(key);
+        foreach (var d in _data)
+            chart.Data.Labels.Add(d.Key);
 
+        var values = _data.Select(d => d.Value);
 
-        PieDataset<long> dataset = new PieDataset<long>(_data.Values)
+        PieDataset<long> dataset = new PieDataset<long>(values)
         {
-            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count(), 0.5),
             //BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 550, 599, 1),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
@@ -118,6 +124,37 @@ public partial class HoursPerUserKPI
             _initilizeChart(out _chartConfig, false);
             StateHasChanged();
         }
+    }
+    #endregion
+
+    #region Data Table
+    private DictRow<long> _selectedRecord = new DictRow<long>();
+
+    private void HandleRowFocus(FluentDataGridRow<DictRow<long>> row)
+    {
+        _selectedRecord = row.Item as DictRow<long>;
+    }
+    #endregion
+
+    #region Export As Pdf
+    private bool exporting = false;
+
+    private async Task _exportToPdf()
+    {
+        exporting = true;
+        StateHasChanged();
+
+        await Task.Delay(1000);
+
+        string[] divsIds = new string[] { "export-to-pdf" };
+        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+
+        await _microsoftTeams.ExportPdfContent(divsIds, fileName);
+
+        await Task.Delay(1000);
+
+        exporting = false;
+        StateHasChanged();
     }
     #endregion
 }

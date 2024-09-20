@@ -10,6 +10,7 @@ using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
 using ChartJs.Blazor.PolarAreaChart;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Front.ViewModel.Helper;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -23,7 +24,9 @@ public partial class TurnoverPerProjectManagerKPI
 
     private bool _startLoading = true;
 
-    private Dictionary<string, double> _data = null;
+    private IQueryable<DictRow<double>> _data;
+
+    private string _title = "Turnover per Project Manager";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -39,8 +42,11 @@ public partial class TurnoverPerProjectManagerKPI
         }
     }
 
-    private async Task _getData() =>
-        _data = await _dataProvider.KPIS.GetTurnoverPerProjectManager(StartDate?.Date, EndDate?.Date);
+    private async Task _getData()
+    {
+        var dict = await _dataProvider.KPIS.GetTurnoverPerProjectManager(StartDate?.Date, EndDate?.Date);
+        _data = dict.Select(d => new DictRow<double>() { Key = d.Key, Value = d.Value }).AsQueryable();
+    }
 
     private PolarAreaConfig _chartConfig;
 
@@ -60,7 +66,7 @@ public partial class TurnoverPerProjectManagerKPI
                 Title = new OptionsTitle()
                 {
                     Display = true,
-                    Text = "Turnover per Project Manager",
+                    Text = _title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -71,12 +77,14 @@ public partial class TurnoverPerProjectManagerKPI
             }
         };
 
-        foreach (string key in _data.Keys)
-            chart.Data.Labels.Add(key);
+        foreach (var d in _data)
+            chart.Data.Labels.Add(d.Key);
 
-        var dataset = new PolarAreaDataset<double>(_data.Values)
+        var values = _data.Select(d => d.Value);
+
+        var dataset = new PolarAreaDataset<double>(values)
         {
-            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count(), 0.5),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -115,6 +123,37 @@ public partial class TurnoverPerProjectManagerKPI
             _initilizeChart(out _chartConfig, false);
             StateHasChanged();
         }
+    }
+    #endregion
+
+    #region Data Table
+    private DictRow<double> _selectedRecord = new DictRow<double>();
+
+    private void HandleRowFocus(FluentDataGridRow<DictRow<double>> row)
+    {
+        _selectedRecord = row.Item as DictRow<double>;
+    }
+    #endregion
+
+    #region Export As Pdf
+    private bool exporting = false;
+
+    private async Task _exportToPdf()
+    {
+        exporting = true;
+        StateHasChanged();
+
+        await Task.Delay(1000);
+
+        string[] divsIds = new string[] { "export-to-pdf" };
+        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+
+        await _microsoftTeams.ExportPdfContent(divsIds, fileName);
+
+        await Task.Delay(1000);
+
+        exporting = false;
+        StateHasChanged();
     }
     #endregion
 

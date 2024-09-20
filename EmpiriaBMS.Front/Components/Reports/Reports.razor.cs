@@ -20,6 +20,8 @@ using Color = System.Drawing.Color;
 using Fluent = Microsoft.Fast.Components.FluentUI;
 using EmpiriaBMS.Front.Components.General;
 using System;
+using System.Drawing;
+using EmpiriaBMS.Front.Horizontal;
 
 namespace EmpiriaBMS.Front.Components.Reports;
 
@@ -178,10 +180,18 @@ public partial class Reports
 
         var totalHoursPerWeek = new double[weeklyDates.Count];
 
+        var colors = ChartJsHelper.GetPreferedRandomColors(reportEntries.Count(), 0.5);
+        
+        if (colors == null)
+            return;
+
         // Initialize datasets for each project
+        var index = 0;
         foreach (var report in reportEntries)
         {
-            var color = _getRandomColor();
+            var color = colors[index];
+            index++;
+
             var dataset = new BarDataset<double>(new double[weeklyDates.Count])
             {
                 Label = $"Name: {report.Project.Name}   Date: {report.Project.CreatedDate.ToEuropeFormat()}   Hours",
@@ -495,22 +505,6 @@ public partial class Reports
             }
         }
         return -1;
-    }
-
-    private (Color, Color) _getRandomColor()
-    {
-        const int minColorValue = 50;  // Minimum value to avoid too dark colors
-        const int maxColorValue = 205; // Maximum value to avoid too light colors
-
-        // Generate random colors within the specified range
-        var r = _random.Next(minColorValue, maxColorValue);
-        var g = _random.Next(minColorValue, maxColorValue);
-        var b = _random.Next(minColorValue, maxColorValue);
-
-        var bodyColor = Color.FromArgb(255, r, g, b);
-        var borderColor = Color.FromArgb(r, g, b);
-
-        return (bodyColor, borderColor);
     }
 
     private async Task _getAspectRatio()
