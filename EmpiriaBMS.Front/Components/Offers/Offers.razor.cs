@@ -211,7 +211,7 @@ public partial class Offers
         _selectedOffer = new OfferVM()
         {
             Lead = lead,
-            LeadId = lead.Id,
+            LeadId = lead == null ? 0 : lead.Id,
             Result = OfferResult.WAITING
         };
 
@@ -229,7 +229,7 @@ public partial class Offers
             Height = "min(80%, 1000px);"
         };
 
-        _selectedOffer.LeadId = _selectedLead.Id;
+        _selectedOffer.LeadId = _selectedLead == null ? 0 : _selectedLead.Id;
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);
         DialogResult result = await dialog.Result;
