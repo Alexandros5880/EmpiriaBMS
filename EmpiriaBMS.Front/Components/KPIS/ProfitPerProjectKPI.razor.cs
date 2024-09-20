@@ -8,6 +8,7 @@ using EmpiriaBMS.Front.Horizontal;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Front.ViewModel.Helper;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -21,7 +22,9 @@ public partial class ProfitPerProjectKPI
 
     private bool _startLoading = true;
 
-    private Dictionary<string, double> _data = null;
+    private IQueryable<DictRow<double>> _data;
+
+    private string _title = "Profit Per Project";
     private PieConfig _chartConfig;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -55,7 +58,7 @@ public partial class ProfitPerProjectKPI
                 Title = new OptionsTitle()
                 {
                     Display = true,
-                    Text = "Profit Per Project",
+                    Text = _title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -67,14 +70,15 @@ public partial class ProfitPerProjectKPI
         };
 
         // Add labels to the Y-axis (categories)
-        foreach (string key in _data.Keys)
-            chart.Data.Labels.Add(key);
+        foreach (var d in _data)
+            chart.Data.Labels.Add(d.Key);
+
+        var values = _data.Select(d => d.Value);
 
         // Add the values to the dataset
-        var values = _data.Values;
         PieDataset<double> dataset = new PieDataset<double>(values, false)
         {
-            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count()),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -89,7 +93,8 @@ public partial class ProfitPerProjectKPI
     private async Task _getData()
     {
         var userId = _sharedAuthData.LogedUser.Id;
-        _data = await _dataProvider.KPIS.GetProfitPerProject(userId, StartDate?.Date, EndDate?.Date);
+        var dict = await _dataProvider.KPIS.GetProfitPerProject(userId, StartDate?.Date, EndDate?.Date);
+        _data = dict.Select(d => new DictRow<double>() { Key = d.Key, Value = d.Value }).AsQueryable();
     }
 
     #region Dialog FullScreen
@@ -120,6 +125,37 @@ public partial class ProfitPerProjectKPI
             _initilizeChart(out _chartConfig, false);
             StateHasChanged();
         }
+    }
+    #endregion
+
+    #region Data Table
+    private DictRow<double> _selectedRecord = new DictRow<double>();
+
+    private void HandleRowFocus(FluentDataGridRow<DictRow<double>> row)
+    {
+        _selectedRecord = row.Item as DictRow<double>;
+    }
+    #endregion
+
+    #region Export As Pdf
+    private bool exporting = false;
+
+    private async Task _exportToPdf()
+    {
+        exporting = true;
+        StateHasChanged();
+
+        await Task.Delay(1000);
+
+        string[] divsIds = new string[] { "export-to-pdf" };
+        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+
+        await _microsoftTeams.ExportPdfContent(divsIds, fileName);
+
+        await Task.Delay(1000);
+
+        exporting = false;
+        StateHasChanged();
     }
     #endregion
 }
