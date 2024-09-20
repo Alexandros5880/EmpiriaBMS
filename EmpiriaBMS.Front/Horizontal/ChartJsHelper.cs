@@ -10,15 +10,12 @@ namespace EmpiriaBMS.Front.Horizontal
 
         private static Rgb[] _previusColors;
 
-        public static List<(Color, Color)> GetPreferedRandomColors(int colorCount = 0, double transparency = 1)
+        public static List<(Color, Color)> GetPreferedRandomColors(int count = 0, double transparency = 1)
         {
-            if (colorCount == 0)
+            if (count == 0)
                 return null;
 
-            const int startHue = 0;
-            const int endHue = 360;
-
-            var colors = GenerateColors(colorCount, startHue, endHue, transparency);
+            var colors = GenerateColors(count, transparency);
 
             List<(Color, Color)> returnColors = new List<(Color, Color)>();
 
@@ -45,39 +42,41 @@ namespace EmpiriaBMS.Front.Horizontal
             string[] colors = new string[count];
             _previusColors = new Rgb[count];
             Random random = new Random();
+
             for (int i = 0; i < count; i++)
             {
-                int r = random.Next(0, 256);
-                int g = random.Next(0, 256);
-                int b = random.Next(0, 256);
+                int r, g, b;
+                do
+                {
+                    r = random.Next(0, 256);
+                    g = random.Next(0, 256);
+                    b = random.Next(0, 256);
+                }
+                // Avoid colors close to light gray and white by ensuring RGB values aren't close to each other and too high
+                while ((r > 200 && g > 200 && b > 200) ||
+                       (Math.Abs(r - g) < 30 && Math.Abs(g - b) < 30 && Math.Abs(r - b) < 30));
+
                 _previusColors[i] = new Rgb(r, g, b);
                 colors[i] = _previusColors[i].GetRgb(transparency);
             }
+
             return colors;
         }
 
-        public static string[] GenerateColors(int count, int startHue = 0, int endHue = 360, double transparency = 1)
-        {
-            if (count <= 0 || startHue < 0 || startHue > 360 || endHue < 0 || endHue > 360)
-                throw new ArgumentException("Invalid arguments");
 
+        public static string[] GenerateColors(int count, int startHue, int endHue, double transparency = 1)
+        {
+            if (count <= 0 || startHue < 380 || startHue > 700 || endHue < 380 || endHue > 700)
+                throw new ArgumentException("Invalid arguments");
             string[] colors = new string[count];
             _previusColors = new Rgb[count];
             double step = (endHue - startHue) / (double)count;
-            Random random = new Random();
-
             for (int i = 0; i < count; i++)
             {
                 double hue = startHue + step * i;
-
-                // Ensure saturation and brightness avoid dark/light
-                double saturation = 0.6 + (random.NextDouble() * 0.4);  // Between 0.6 and 1.0
-                double brightness = 0.5 + (random.NextDouble() * 0.3);  // Between 0.5 and 0.8
-
-                _previusColors[i] = new Rgb(hue, saturation, brightness);  // Hue, saturation, brightness
+                _previusColors[i] = new Rgb(hue, 1.0, 1.0);
                 colors[i] = _previusColors[i].GetRgb(transparency);
             }
-
             return colors;
         }
 
