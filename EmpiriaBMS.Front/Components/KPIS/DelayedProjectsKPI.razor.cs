@@ -9,6 +9,7 @@ using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
 using ChartJs.Blazor.PieChart;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Front.ViewModel.Helper;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -22,8 +23,9 @@ public partial class DelayedProjectsKPI
 
     private bool _startLoading = true;
 
-    private List<ProjectVM> _data = null;
+    private IQueryable<DictRowDelayProject> _data = null;
     private BarConfig _chartConfig;
+    private string _title = "Delayed Projects";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -43,7 +45,14 @@ public partial class DelayedProjectsKPI
     {
         var userId = _sharedAuthData.LogedUser.Id;
         var dtos = await _dataProvider.KPIS.GetActiveDelayedProjects(userId, StartDate?.Date, EndDate?.Date);
-        _data = _mapper.Map<List<ProjectVM>>(dtos);
+
+        _data = dtos.Select(p => new DictRowDelayProject()
+        {
+            Name = p.Name,
+            Days = _displayTimeMissed((DateTime)p.DeadLine).Days,
+            Hours = _displayTimeMissed((DateTime)p.DeadLine).Hours,
+            Minutes = _displayTimeMissed((DateTime)p.DeadLine).Hours
+        }).AsQueryable();
     }
 
     private void _initilizeChart(out BarConfig chart, bool displayLegend = false)
@@ -97,14 +106,11 @@ public partial class DelayedProjectsKPI
             }
         };
 
-        var names = _data.Select(p => p.Name).ToList();
-
-        foreach (string key in names)
+        foreach (string key in _data.Select(d => d.Name))
             chart.Data.Labels.Add(key);
 
         // Dayes Dataset
-        var days = _data.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Days).ToList();
-        BarDataset<int> dayesDataSet = new BarDataset<int>(days, false)
+        BarDataset<int> dayesDataSet = new BarDataset<int>(_data.Select(d => d.Days), false)
         {
             Label = "Days Dealied",
             BackgroundColor = "rgba(0,94,160, 1)",
@@ -119,8 +125,7 @@ public partial class DelayedProjectsKPI
         chart.Data.Datasets.Add(dayesDataSet);
 
         // Hours Dataset
-        var hours = _data.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Hours).ToList();
-        BarDataset<int> hoursDataSet = new BarDataset<int>(hours, false)
+        BarDataset<int> hoursDataSet = new BarDataset<int>(_data.Select(d => d.Hours), false)
         {
             Label = "Hours Dealied",
             BackgroundColor = "rgba(49,83,0, 1)",
@@ -135,8 +140,7 @@ public partial class DelayedProjectsKPI
         chart.Data.Datasets.Add(hoursDataSet);
 
         // Minutes Dataset
-        var minutes = _data.Select(p => _displayTimeMissed((DateTime)p.DeadLine).Minutes).ToList();
-        BarDataset<int> minutesDataSet = new BarDataset<int>(minutes, false)
+        BarDataset<int> minutesDataSet = new BarDataset<int>(_data.Select(d => d.Minutes), false)
         {
             Label = "Minutes Dealied",
             BackgroundColor = "rgba(0,83,75, 1)",
@@ -191,4 +195,43 @@ public partial class DelayedProjectsKPI
         }
     }
     #endregion
+
+    #region Data Table
+    private DictRowDelayProject _selectedRecord = new DictRowDelayProject();
+
+    private void HandleRowFocus(FluentDataGridRow<DictRowDelayProject> row)
+    {
+        _selectedRecord = row.Item as DictRowDelayProject;
+    }
+    #endregion
+
+    #region Export As Pdf
+    private bool exporting = false;
+
+    private async Task _exportToPdf()
+    {
+        exporting = true;
+        StateHasChanged();
+
+        await Task.Delay(1000);
+
+        string[] divsIds = new string[] { "export-to-pdf" };
+        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+
+        await _microsoftTeams.ExportPdfContent(divsIds, fileName);
+
+        await Task.Delay(1000);
+
+        exporting = false;
+        StateHasChanged();
+    }
+    #endregion
+
+    private sealed class DictRowDelayProject
+    {
+        public string Name { get; set; }
+        public int Days { get; set; }
+        public int Hours { get; set; }
+        public int Minutes { get; set; }
+    }
 }
