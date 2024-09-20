@@ -1,5 +1,7 @@
 ﻿using MessagePack.Formatters;
 using Microsoft.Recognizers.Text.Number.Italian;
+using System;
+using Color = System.Drawing.Color;
 
 namespace EmpiriaBMS.Front.Horizontal
 {
@@ -7,6 +9,36 @@ namespace EmpiriaBMS.Front.Horizontal
     {
 
         private static Rgb[] _previusColors;
+
+        public static List<(Color, Color)> GetPreferedRandomColors(int colorCount = 0, double transparency = 1)
+        {
+            if (colorCount == 0)
+                return null;
+
+            const int startHue = 0;
+            const int endHue = 360;
+
+            var colors = GenerateColors(colorCount, startHue, endHue, transparency);
+
+            List<(Color, Color)> returnColors = new List<(Color, Color)>();
+
+            foreach (var color in colors)
+            {
+                // Convert the hex color to a Color object
+                Color bodyColor = RgbaStringToColor(color);
+
+                // Create a slightly darker or lighter border color based on body color's brightness
+                int darkerR = Math.Max(bodyColor.R - 20, 0); // Darker Red
+                int darkerG = Math.Max(bodyColor.G - 20, 0); // Darker Green
+                int darkerB = Math.Max(bodyColor.B - 20, 0); // Darker Blue
+
+                Color borderColor = Color.FromArgb(darkerR, darkerG, darkerB); // Slightly darker border color
+
+                returnColors.Add((bodyColor, borderColor));
+            }
+
+            return returnColors;
+        }
 
         public static string[] GenerateColors(int count, double transparency = 1)
         {
@@ -24,19 +56,25 @@ namespace EmpiriaBMS.Front.Horizontal
             return colors;
         }
 
-        public static string[] GenerateColors(int count, int startHue, int endHue, double transparency = 1)
+        public static string[] GenerateColors(int count, int startHue = 0, int endHue = 360, double transparency = 1)
         {
-            if (count <= 0 || startHue < 380 || startHue > 700 || endHue < 380 || endHue > 700)
-                    throw new ArgumentException("Invalid arguments");
+            if (count <= 0 || startHue < 0 || startHue > 360 || endHue < 0 || endHue > 360)
+                throw new ArgumentException("Invalid arguments");
 
             string[] colors = new string[count];
             _previusColors = new Rgb[count];
             double step = (endHue - startHue) / (double)count;
+            Random random = new Random();
 
             for (int i = 0; i < count; i++)
             {
                 double hue = startHue + step * i;
-                _previusColors[i] = new Rgb(hue, 1.0, 1.0);
+
+                // Ensure saturation and brightness avoid dark/light
+                double saturation = 0.6 + (random.NextDouble() * 0.4);  // Between 0.6 and 1.0
+                double brightness = 0.5 + (random.NextDouble() * 0.3);  // Between 0.5 and 0.8
+
+                _previusColors[i] = new Rgb(hue, saturation, brightness);  // Hue, saturation, brightness
                 colors[i] = _previusColors[i].GetRgb(transparency);
             }
 
@@ -53,6 +91,26 @@ namespace EmpiriaBMS.Front.Horizontal
             return colors;
         }
 
+        public static Color RgbaStringToColor(string rgbaString)
+        {
+            // Remove "rgba(" and ")" and split the string into components
+            var rgbaValues = rgbaString
+                .Replace("rgba(", "")
+                .Replace(")", "")
+                .Split(',');
+
+            // Parse the values
+            int r = int.Parse(rgbaValues[0].Trim());
+            int g = int.Parse(rgbaValues[1].Trim());
+            int b = int.Parse(rgbaValues[2].Trim());
+            float alpha = float.Parse(rgbaValues[3].Trim()); // Alpha is a float from 0 to 1
+
+            // Convert alpha to an integer value from 0 to 255
+            int a = (int)(alpha * 255);
+
+            // Return the color
+            return Color.FromArgb(a, r, g, b);
+        }
     }
 
     public class Rgb
