@@ -81,7 +81,7 @@ else
                                             TGridItem="DictRow<int>"
                                             GridTemplateColumns="2fr 1fr"
                                             OnRowFocus="HandleRowFocus"
-                                            style="height: 100%; overflow:auto;">
+                                            style="max-height: 70vh; overflow:auto;">
                                 <PropertyColumn Property="@(d => d.Key)" Sortable="true" Title="Type" Align="@Align.Start" />
                                 <PropertyColumn Property="@(p => p.Value)" Sortable="true" Title="Hours" Align="@Align.Start" />
                             </FluentDataGrid>
