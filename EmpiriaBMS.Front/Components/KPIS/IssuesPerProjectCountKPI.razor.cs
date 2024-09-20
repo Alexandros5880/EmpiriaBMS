@@ -6,6 +6,7 @@ using ChartJs.Blazor.Common.Axes.Ticks;
 using ChartJs.Blazor.PieChart;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.Horizontal;
+using EmpiriaBMS.Front.ViewModel.Helper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using ChartEnums = ChartJs.Blazor.Common.Enums;
@@ -22,7 +23,9 @@ public partial class IssuesPerProjectCountKPI
 
     private bool _startLoading = true;
 
-    private Dictionary<string, int> _data = null;
+    private IQueryable<DictRow<long>> _data;
+
+    private string _title = "Count Issues per Project";
     private BarConfig _chartConfig;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -54,7 +57,7 @@ public partial class IssuesPerProjectCountKPI
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Count Issues per Project",
+                    Text = _title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -90,14 +93,16 @@ public partial class IssuesPerProjectCountKPI
             }
         };
 
-        foreach (string key in _data.Select(p => p.Key))
-            chart.Data.Labels.Add(key);
+        foreach (var d in _data)
+            chart.Data.Labels.Add(d.Key);
 
-        BarDataset<int> dataset = new BarDataset<int>(_data.Values)
+        var values = _data.Select(d => d.Value);
+
+        BarDataset<long> dataset = new BarDataset<long>(values)
         {
             //Label = "Roles",
             //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_data.Count),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count()),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -112,7 +117,8 @@ public partial class IssuesPerProjectCountKPI
 
     private async Task _getData()
     {
-        _data = await _dataProvider.KPIS.GetIssuesPerProjectCount(StartDate?.Date, EndDate?.Date);
+        var dict = await _dataProvider.KPIS.GetIssuesPerProjectCount(StartDate?.Date, EndDate?.Date);
+        _data = dict.Select(d => new DictRow<long>() { Key = d.Key, Value = d.Value }).AsQueryable();
     }
 
     #region Dialog FullScreen
@@ -143,6 +149,37 @@ public partial class IssuesPerProjectCountKPI
             _initilizeChart(out _chartConfig, false);
             StateHasChanged();
         }
+    }
+    #endregion
+
+    #region Data Table
+    private DictRow<long> _selectedRecord = new DictRow<long>();
+
+    private void HandleRowFocus(FluentDataGridRow<DictRow<long>> row)
+    {
+        _selectedRecord = row.Item as DictRow<long>;
+    }
+    #endregion
+
+    #region Export As Pdf
+    private bool exporting = false;
+
+    private async Task _exportToPdf()
+    {
+        exporting = true;
+        StateHasChanged();
+
+        await Task.Delay(1000);
+
+        string[] divsIds = new string[] { "export-to-pdf" };
+        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+
+        await _microsoftTeams.ExportPdfContent(divsIds, fileName);
+
+        await Task.Delay(1000);
+
+        exporting = false;
+        StateHasChanged();
     }
     #endregion
 }
