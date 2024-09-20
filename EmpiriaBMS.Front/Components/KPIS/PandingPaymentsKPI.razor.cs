@@ -107,7 +107,7 @@ public partial class PandingPaymentsKPI
         {
             //Label = "Roles",
             //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(values.Count()),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count(), 0.5),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),

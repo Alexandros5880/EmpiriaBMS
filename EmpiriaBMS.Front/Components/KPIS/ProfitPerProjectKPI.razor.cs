@@ -78,7 +78,7 @@ public partial class ProfitPerProjectKPI
         // Add the values to the dataset
         PieDataset<double> dataset = new PieDataset<double>(values, false)
         {
-            BackgroundColor = ChartJsHelper.GenerateColors(values.Count()),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count(), 0.5),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),

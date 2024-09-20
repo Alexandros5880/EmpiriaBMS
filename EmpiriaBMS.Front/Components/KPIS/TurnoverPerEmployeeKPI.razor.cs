@@ -86,7 +86,7 @@ public partial class TurnoverPerEmployeeKPI
 
         PieDataset<double> dataset = new PieDataset<double>(values)
         {
-            BackgroundColor = ChartJsHelper.GenerateColors(values.Count(), 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count(), 0.5),
             //BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 550, 599, 1),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),

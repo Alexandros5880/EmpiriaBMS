@@ -113,12 +113,12 @@ public partial class DelayedProjectsKPI
         BarDataset<int> dayesDataSet = new BarDataset<int>(_data.Select(d => d.Days), false)
         {
             Label = "Days Dealied",
-            BackgroundColor = "rgba(0,94,160, 1)",
+            BackgroundColor = "rgba(0,94,160, 0.8)",
             BorderWidth = 0,
             HoverBackgroundColor = "rgba(0,94,160, 0.5)",
-            HoverBorderColor = "rgba(0,94,160, 1)",
+            HoverBorderColor = "rgba(0,94,160, 0.8)",
             HoverBorderWidth = 1,
-            BorderColor = "rgba(0,94,160, 1)",
+            BorderColor = "rgba(0,94,160, 0.8)",
             BarPercentage = 0.5,
 
         };
@@ -128,12 +128,12 @@ public partial class DelayedProjectsKPI
         BarDataset<int> hoursDataSet = new BarDataset<int>(_data.Select(d => d.Hours), false)
         {
             Label = "Hours Dealied",
-            BackgroundColor = "rgba(49,83,0, 1)",
+            BackgroundColor = "rgba(49,83,0, 0.8)",
             BorderWidth = 0,
             HoverBackgroundColor = "rgba(49,83,0, 0.5)",
-            HoverBorderColor = "rgba(49,83,0, 1)",
+            HoverBorderColor = "rgba(49,83,0, 0.8)",
             HoverBorderWidth = 1,
-            BorderColor = "rgba(49,83,0, 1)",
+            BorderColor = "rgba(49,83,0, 0.8)",
             BarPercentage = 0.5,
 
         };
@@ -143,12 +143,12 @@ public partial class DelayedProjectsKPI
         BarDataset<int> minutesDataSet = new BarDataset<int>(_data.Select(d => d.Minutes), false)
         {
             Label = "Minutes Dealied",
-            BackgroundColor = "rgba(0,83,75, 1)",
+            BackgroundColor = "rgba(0,83,75, 0.8)",
             BorderWidth = 0,
             HoverBackgroundColor = "rgba(0,83,75, 0.5)",
-            HoverBorderColor = "rgba(0,83,75, 1)",
+            HoverBorderColor = "rgba(0,83,75, 0.8)",
             HoverBorderWidth = 1,
-            BorderColor = "rgba(0,83,75, 1)",
+            BorderColor = "rgba(0,83,75, 0.8)",
             BarPercentage = 0.5,
 
         };
