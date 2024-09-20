@@ -78,7 +78,7 @@ else
                         <div>
                             <FluentDataGrid Items="@_data"
                                             ResizableColumns=true
-                                            TGridItem="DictRow"
+                                            TGridItem="DictRow<long>"
                                             OnRowFocus="HandleRowFocus"
                                             style="height: 100%; overflow:auto;">
                                 <PropertyColumn Property="@(d => d.Key)" Sortable="true" Title="Role" Align="@Align.Start" />

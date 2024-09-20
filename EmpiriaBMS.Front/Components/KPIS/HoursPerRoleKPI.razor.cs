@@ -26,7 +26,7 @@ public partial class HoursPerRoleKPI
 
     private bool _startLoading = true;
 
-    private IQueryable<DictRow> _data;
+    private IQueryable<DictRow<long>> _data;
 
     private string _title = "Hours Per Role";
 
@@ -47,7 +47,7 @@ public partial class HoursPerRoleKPI
     private async Task _getData()
     {
         var dict = await _dataProvider.KPIS.GetHoursPerRole(StartDate?.Date, EndDate?.Date);
-        _data = dict.Select(d => new DictRow() { Key = d.Key, Value = d.Value }).AsQueryable();
+        _data = dict.Select(d => new DictRow<long>() { Key = d.Key, Value = d.Value }).AsQueryable();
     }
 
     #region Initialize Chart
@@ -158,11 +158,11 @@ public partial class HoursPerRoleKPI
     #endregion
 
     #region Data Table
-    private DictRow _selectedRecord = new DictRow();
+    private DictRow<long> _selectedRecord = new DictRow<long>();
     
-    private void HandleRowFocus(FluentDataGridRow<DictRow> row)
+    private void HandleRowFocus(FluentDataGridRow<DictRow<long>> row)
     {
-        _selectedRecord = row.Item as DictRow;
+        _selectedRecord = row.Item as DictRow<long>;
     }
     #endregion
 
