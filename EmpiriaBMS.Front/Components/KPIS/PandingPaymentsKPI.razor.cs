@@ -9,6 +9,7 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Microsoft.AspNetCore.Components;
 using ChartJs.Blazor.PieChart;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Front.ViewModel.Helper;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -22,8 +23,9 @@ public partial class PandingPaymentsKPI
 
     private bool _startLoading = true;
 
-    private Dictionary<string, PendingPayments> _data = null;
+    private IQueryable<DictRow<PendingPayments>> _data;
     private BarConfig _chartConfig;
+    private string _title = "Delayed Payments";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -37,6 +39,12 @@ public partial class PandingPaymentsKPI
             _startLoading = false;
             StateHasChanged();
         }
+    }
+
+    private async Task _getData()
+    {
+        var dict = await _dataProvider.KPIS.GetPendingPayments(StartDate?.Date, EndDate?.Date);
+        _data = dict.Select(d => new DictRow<PendingPayments>() { Key = d.Key, Value = d.Value }).AsQueryable();
     }
 
     private void _initilizeChart(out BarConfig chart, bool displayLegend = false)
@@ -54,7 +62,7 @@ public partial class PandingPaymentsKPI
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Delayed Payments",
+                    Text = _title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -93,11 +101,13 @@ public partial class PandingPaymentsKPI
         foreach (string key in _data.Select(p => p.Key))
             chart.Data.Labels.Add(key);
 
-        BarDataset<int> dataset = new BarDataset<int>(_data.Values.Select(p => p.PendingPaymentsCount))
+        var values = _data.Select(d => d.Value);
+
+        BarDataset<int> dataset = new BarDataset<int>(values.Select(p => p.PendingPaymentsCount))
         {
             //Label = "Roles",
             //BackgroundColor = ChartJsHelper.GenerateColors(_hoursPerRole.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_data.Count, 650, 699, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count()),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -108,11 +118,6 @@ public partial class PandingPaymentsKPI
         };
 
         chart.Data.Datasets.Add(dataset);
-    }
-
-    private async Task _getData()
-    {
-        _data = await _dataProvider.KPIS.GetPendingPayments(StartDate?.Date, EndDate?.Date);
     }
 
     #region Dialog FullScreen
@@ -143,6 +148,37 @@ public partial class PandingPaymentsKPI
             _initilizeChart(out _chartConfig, false);
             StateHasChanged();
         }
+    }
+    #endregion
+
+    #region Data Table
+    private DictRow<PendingPayments> _selectedRecord = new DictRow<PendingPayments>();
+
+    private void HandleRowFocus(FluentDataGridRow<DictRow<PendingPayments>> row)
+    {
+        _selectedRecord = row.Item as DictRow<PendingPayments>;
+    }
+    #endregion
+
+    #region Export As Pdf
+    private bool exporting = false;
+
+    private async Task _exportToPdf()
+    {
+        exporting = true;
+        StateHasChanged();
+
+        await Task.Delay(1000);
+
+        string[] divsIds = new string[] { "export-to-pdf" };
+        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+
+        await _microsoftTeams.ExportPdfContent(divsIds, fileName);
+
+        await Task.Delay(1000);
+
+        exporting = false;
+        StateHasChanged();
     }
     #endregion
 
