@@ -64,22 +64,23 @@ else
         <div style="max-width: 80vw !important; margin: 0 auto;">
             @if (_chartDialogConfig != null)
             {
-                <div class="row">
-                    <div class="col-12">
-                        <div style="width: 50%; margin: 0 auto;"
-                             id="export-to-pdf-chart">
+                <div class="row" id="export-to-pdf">
+                    <div style="color: var(--kpi-text-color);">
+                        <h5>Embiria BMS</h5>
+                    </div>
+                    <div class="col-9">
+                        <div>
                             <Chart Config="_chartDialogConfig"></Chart>
                         </div>
                     </div>
                     <!-- Table -->
-                    <div class="col-12 mt-2"
-                         id="export-to-pdf-table">
+                    <div class="col-3 mt-2">
                         <div>
                             <FluentDataGrid Items="@_data"
                                             ResizableColumns=true
                                             TGridItem="DictRow"
                                             OnRowFocus="HandleRowFocus"
-                                            style="height: 40vh; overflow:auto;">
+                                            style="height: 100%; overflow:auto;">
                                 <PropertyColumn Property="@(d => d.Key)" Sortable="true" Title="Role" Align="@Align.Start" />
                                 <PropertyColumn Property="@(p => p.Value)" Sortable="true" Title="Hours" Align="@Align.Start" />
                             </FluentDataGrid>

@@ -176,7 +176,7 @@ public partial class HoursPerRoleKPI
 
         await Task.Delay(1000);
 
-        string[] divsIds = new string[] { "export-to-pdf-chart", "export-to-pdf-table" };
+        string[] divsIds = new string[] { "export-to-pdf" };
         string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
 
         await _microsoftTeams.ExportPdfContent(divsIds, fileName);
