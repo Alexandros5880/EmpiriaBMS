@@ -292,6 +292,9 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
 
                 foreach (var id in allLeadsIds)
                 {
+                    if (id == 0)
+                        continue;
+
                     var isClosed = await IsClosed(id);
                     if (!isClosed)
                     {
@@ -331,6 +334,9 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
 
                 foreach (var id in allLeadsIds)
                 {
+                    if (id == 0)
+                        continue;
+
                     var isClosed = await IsClosed(id);
                     if (!isClosed)
                     {
@@ -411,7 +417,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
                     .FirstOrDefaultAsync();
 
                 if (offerId == 0)
-                    throw new ArgumentNullException(nameof(offerId));
+                    return 0;
 
                 projectIds = await _context
                                 .Set<Project>()
@@ -427,7 +433,8 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
 
             foreach (var projectId in projectIds)
             {
-                sum += await _projectRep.GetSumOfPotencialFee(projectId);
+                if (projectId != 0)
+                    sum += await _projectRep.GetSumOfPotencialFee(projectId);
             }
 
             return sum;
@@ -456,7 +463,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
                     .FirstOrDefaultAsync();
 
                 if (offerId == 0)
-                    throw new ArgumentNullException(nameof(offerId));
+                    return false;
 
                 projectIds = await _context
                                 .Set<Project>()
