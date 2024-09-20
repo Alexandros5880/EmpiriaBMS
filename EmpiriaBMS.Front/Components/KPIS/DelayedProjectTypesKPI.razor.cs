@@ -8,6 +8,7 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 using Microsoft.AspNetCore.Components;
 using ChartJs.Blazor.PieChart;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Front.ViewModel.Helper;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
@@ -21,8 +22,9 @@ public partial class DelayedProjectTypesKPI
 
     private bool _startLoading = true;
 
-    private Dictionary<string, int> _data = null;
+    private IQueryable<DictRow<int>> _data;
     private BarConfig _chartConfig;
+    private string _title = "Count Delayed Projects By Type";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -53,7 +55,7 @@ public partial class DelayedProjectTypesKPI
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Count Delayed Projects By Type",
+                    Text = _title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -89,16 +91,16 @@ public partial class DelayedProjectTypesKPI
             }
         };
 
-        foreach (string key in _data.Keys)
-            chart.Data.Labels.Add(key);
+        foreach (var d in _data)
+            chart.Data.Labels.Add(d.Key);
 
         // Values Dataset
-        var values = _data.Values;
+        var values = _data.Select(d => d.Value);
         BarDataset<int> dataset = new BarDataset<int>(values, false)
         {
             //Label = "Project Type",
             //BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 1),
-            BackgroundColor = ChartJsHelper.GenerateColors(_data.Values.Count, 685, 700, 1),
+            BackgroundColor = ChartJsHelper.GenerateColors(values.Count()),
             BorderWidth = 0,
             HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
             HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
@@ -114,7 +116,8 @@ public partial class DelayedProjectTypesKPI
     private async Task _getData()
     {
         var userId = _sharedAuthData.LogedUser.Id;
-        _data = await _dataProvider.KPIS.GetActiveDelayedProjectTypesCountByType(userId, StartDate?.Date, EndDate?.Date);
+        var dict = await _dataProvider.KPIS.GetActiveDelayedProjectTypesCountByType(userId, StartDate?.Date, EndDate?.Date);
+        _data = dict.Select(d => new DictRow<int>() { Key = d.Key, Value = d.Value }).AsQueryable();
     }
 
     #region Dialog FullScreen
@@ -145,6 +148,37 @@ public partial class DelayedProjectTypesKPI
             _initilizeChart(out _chartConfig, false);
             StateHasChanged();
         }
+    }
+    #endregion
+
+    #region Data Table
+    private DictRow<int> _selectedRecord = new DictRow<int>();
+
+    private void HandleRowFocus(FluentDataGridRow<DictRow<int>> row)
+    {
+        _selectedRecord = row.Item as DictRow<int>;
+    }
+    #endregion
+
+    #region Export As Pdf
+    private bool exporting = false;
+
+    private async Task _exportToPdf()
+    {
+        exporting = true;
+        StateHasChanged();
+
+        await Task.Delay(1000);
+
+        string[] divsIds = new string[] { "export-to-pdf" };
+        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+
+        await _microsoftTeams.ExportPdfContent(divsIds, fileName);
+
+        await Task.Delay(1000);
+
+        exporting = false;
+        StateHasChanged();
     }
     #endregion
 }
