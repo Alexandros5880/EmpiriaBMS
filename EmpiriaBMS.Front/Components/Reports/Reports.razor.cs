@@ -22,6 +22,7 @@ using EmpiriaBMS.Front.Components.General;
 using System;
 using System.Drawing;
 using EmpiriaBMS.Front.Horizontal;
+using Newtonsoft.Json.Linq;
 
 namespace EmpiriaBMS.Front.Components.Reports;
 
@@ -180,23 +181,19 @@ public partial class Reports
 
         var totalHoursPerWeek = new double[weeklyDates.Count];
 
-        var colors = ChartJsHelper.GetPreferedRandomColors(reportEntries.Count(), 0.5);
-        
-        if (colors == null)
-            return;
-
         // Initialize datasets for each project
-        var index = 0;
         foreach (var report in reportEntries)
         {
-            var color = colors[index];
-            index++;
-
             var dataset = new BarDataset<double>(new double[weeklyDates.Count])
             {
                 Label = $"Name: {report.Project.Name}   Date: {report.Project.CreatedDate.ToEuropeFormat()}   Hours",
-                BackgroundColor = new IndexableOption<string>(color.Item1.ToHexaString()),
-                BorderColor = new IndexableOption<string>(color.Item2.ToHexaString()),
+                BackgroundColor = ChartJsHelper.GenerateColors(reportEntries.Count(), 0.5),
+                BorderWidth = 0,
+                HoverBackgroundColor = ChartJsHelper.GetPreviusRgb(0.7),
+                HoverBorderColor = ChartJsHelper.GetPreviusRgb(1),
+                HoverBorderWidth = 1,
+                BorderColor = ChartJsHelper.GetPreviusRgb(1),
+                BarPercentage = 0.5,
             };
 
             var createdDate = report.Project.CreatedDate;
