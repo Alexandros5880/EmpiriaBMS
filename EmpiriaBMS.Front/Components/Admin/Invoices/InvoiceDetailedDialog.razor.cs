@@ -24,7 +24,14 @@ public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
     {
         get
         {
+            if (Dialog == null || Dialog.Instance == null || Dialog.Instance.Parameters == null)
+                return false;
+
             var parameters = Dialog.Instance.Parameters as MyDialogParameters;
+
+            if (parameters == null)
+                return false;
+
             var displayProject = parameters.DisplayProject;
             return displayProject;
         }
@@ -34,7 +41,14 @@ public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
     {
         get
         {
+            if (Dialog == null || Dialog.Instance == null || Dialog.Instance.Parameters == null)
+                return false;
+
             var parameters = Dialog.Instance.Parameters as MyDialogParameters;
+
+            if (parameters == null)
+                return false;
+
             var isWorkingMode = parameters.IsWorkingMode;
             return isWorkingMode;
         }
@@ -44,7 +58,14 @@ public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
     {
         get
         {
+            if (Dialog == null || Dialog.Instance == null || Dialog.Instance.Parameters == null)
+                return InvoiceCategory.EXPENSES;
+
             var parameters = Dialog.Instance.Parameters as MyDialogParameters;
+
+            if (parameters == null)
+                return InvoiceCategory.EXPENSES;
+
             var invoiceCategory = parameters.InvoiceCategory;
             return invoiceCategory;
         }

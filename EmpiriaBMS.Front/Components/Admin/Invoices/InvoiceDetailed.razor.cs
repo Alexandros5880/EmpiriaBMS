@@ -118,8 +118,9 @@ public partial class InvoiceDetailed
             Project = _projects.FirstOrDefault(t => t.Id == Content.ProjectId);
             if (_projectCompoment != null)
             {
-                _projectCompoment.SelectedOption = Project;
-                _projectCompoment.Value = Project.Name;
+                //_projectCompoment.SelectedOption = Project;
+                //_projectCompoment.Value = Project.Name;
+                await _projectCompoment.SelectedOptionChanged.InvokeAsync(Project);
             }
         }
 
@@ -128,8 +129,9 @@ public partial class InvoiceDetailed
             Type = _types.FirstOrDefault(t => t.Id == Content.TypeId);
             if (_typeCompoment != null)
             {
-                _typeCompoment.SelectedOption = Type;
-                _typeCompoment.Value = Type.Name;
+                //_typeCompoment.SelectedOption = Type;
+                //_typeCompoment.Value = Type.Name;
+                await _typeCompoment.SelectedOptionChanged.InvokeAsync(Type);
             }
         }
 

@@ -96,7 +96,7 @@ public partial class InvoicesTable
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(70%, 500px);"
+            Width = "min(70%, 500px);",
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(record, parameters);
