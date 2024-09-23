@@ -28,9 +28,8 @@ public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
                 return false;
 
             var parameters = Dialog.Instance.Parameters as MyDialogParameters;
-
             if (parameters == null)
-                return false;
+                return true;
 
             var displayProject = parameters.DisplayProject;
             return displayProject;
@@ -45,16 +44,15 @@ public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
                 return false;
 
             var parameters = Dialog.Instance.Parameters as MyDialogParameters;
-
             if (parameters == null)
-                return false;
+                return true;
 
             var isWorkingMode = parameters.IsWorkingMode;
             return isWorkingMode;
         }
     }
 
-    public InvoiceCategory InvoiceCategory
+    public InvoiceCategory? InvoiceCategory
     {
         get
         {
@@ -62,9 +60,8 @@ public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
                 return InvoiceCategory.EXPENSES;
 
             var parameters = Dialog.Instance.Parameters as MyDialogParameters;
-
             if (parameters == null)
-                return InvoiceCategory.EXPENSES;
+                return null;
 
             var invoiceCategory = parameters.InvoiceCategory;
             return invoiceCategory;

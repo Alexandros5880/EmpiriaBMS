@@ -11,11 +11,11 @@
 @inject MicrosoftTeams MicrosoftTeams
 @inject Logging.LoggerManager Logger
 
-<div class="card shadow">
+<div>
 
     @if (Content != null)
     {
-        <div class="row m-2 d-flex justify-content-center"
+        <div class="row m-2 d-flex justify-content-center card rounded"
              style="cursor: pointer; overflow: auto; margin: 0 auto;">
 
             @if (!string.IsNullOrEmpty(@Title))
@@ -25,16 +25,16 @@
                 </div>
             }
 
-            @if (DisplayProject)
-            {
-                <div class="col-12 row gx-2 mt-1">
-                    <!-- Project -->
-                    <div class="col-xl-6 col-lg-6 col-md-12">
+            <div class="col-12 row gx-2 mt-1">
+                <!-- Project -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    @if (DisplayProject)
+                    {
                         <div>
                             Project<span class="text-danger">*</span>
                         </div>
                         <div>
-                            <FluentCombobox @ref="_projectCompoment"
+                            <FluentCombobox @ref="_projectCombo"
                                             Autocomplete="ComboboxAutocomplete.Both"
                                             Placeholder="Select Project..."
                                             Items="@_projects"
@@ -43,7 +43,7 @@
                                             TOption="ProjectVM"
                                             OptionText="@(c => c.Name)"
                                             OptionValue="@(c => c.Id.ToString())"
-                                            @bind-SelectedOption="@Project"
+                                            @bind-SelectedOption="@SelectedProject"
                                             Disabled="@(!IsWorkingMode)" />
                         </div>
                         @if (!validProject)
@@ -52,13 +52,45 @@
                                 <span class="text-warning">Field is required!</span>
                             </div>
                         }
+                    }
+                    else
+                    {
+                        <div>
+                            Project<span class="text-danger">*</span>
+                        </div>
+                        <div>
+                            <strong>@SelectedProject.Name</strong>
+                        </div>
+                    }
+                </div>
+                <!-- Category -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Category
                     </div>
-                    <!-- None -->
-                    <div class="col-xl-6 col-lg-6 col-md-12">
-                        
+                    <div>
+                        @if (InvoiceCategory == null)
+                        {
+                            <FluentCombobox @ref="@_categoryCombo"
+                                            Autocomplete="ComboboxAutocomplete.Both"
+                                            Placeholder="Select Result..."
+                                            Items="_categories"
+                                            Height="200px"
+                                            Width="100%"
+                                            Class="float-end"
+                                            TOption="(string Value, string Text)"
+                                            OptionText="@(c => c.Text)"
+                                            OptionValue="@(c => c.Value)"
+                                            @bind-SelectedOption="SelectedCategory"
+                                            Disabled="@(!IsWorkingMode)" />
+                        }
+                        else
+                        {
+                            <strong>@SelectedCategory.Text</strong>
+                        }
                     </div>
                 </div>
-            }
+            </div>
 
             <div class="col-12 row gx-2 mt-1">
                 <!-- Type -->
@@ -67,7 +99,7 @@
                         Type<span class="text-danger">*</span>
                     </div>
                     <div>
-                        <FluentCombobox @ref="_typeCompoment"
+                        <FluentCombobox @ref="_typeCombo"
                                         Autocomplete="ComboboxAutocomplete.List"
                                         Placeholder="Select Type..."
                                         Items="@_types"
@@ -76,7 +108,7 @@
                                         TOption="InvoiceTypeVM"
                                         OptionText="@(c => c.Name)"
                                         OptionValue="@(c => c.Id.ToString())"
-                                        @bind-SelectedOption="@Type"
+                                        @bind-SelectedOption="@SelectedType"
                                         Disabled="@(!IsWorkingMode)" />
                     </div>
                     @if (!validType)
@@ -110,7 +142,7 @@
                         Vat
                     </div>
                     <div>
-                        <FluentCombobox @ref="_vatCompoment"
+                        <FluentCombobox @ref="_vatCombo"
                                         Autocomplete="ComboboxAutocomplete.Both"
                                         Placeholder="Select Result..."
                                         Items="_vats"
