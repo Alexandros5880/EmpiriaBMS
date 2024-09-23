@@ -139,7 +139,6 @@ public partial class Dashboard : IDisposable
     #region Selected Models
     private LeadVM _selectedLed = new LeadVM();
     private OfferVM _selectedOffer = new OfferVM();
-    private ProjectVM _prevSelectedProject = new ProjectVM();
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DeliverableVM _selectedDeliverable = new DeliverableVM();
@@ -1028,7 +1027,6 @@ public partial class Dashboard : IDisposable
 
     private async Task AddProject()
     {
-        _prevSelectedProject = _selectedProject;
         _selectedProject = null;
         _selectedDiscipline = null;
         _selectedDeliverable = null;
@@ -1069,8 +1067,6 @@ public partial class Dashboard : IDisposable
         {
             _addEditProjectDialog.Hide();
             _isAddEditProjectDialogOdepened = false;
-            _selectedProject = _prevSelectedProject != null || _prevSelectedProject?.Id == 0 ? null : _prevSelectedProject;
-            _prevSelectedProject = null;
         }
     }
 
