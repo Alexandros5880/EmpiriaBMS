@@ -57,7 +57,7 @@ public partial class InvoiceDetailedDialog : IDialogContentComponent<InvoiceVM>
         get
         {
             if (Dialog == null || Dialog.Instance == null || Dialog.Instance.Parameters == null)
-                return InvoiceCategory.EXPENSES;
+                return EmpiriaBMS.Models.Enum.InvoiceCategory.EXPENSES;
 
             var parameters = Dialog.Instance.Parameters as MyDialogParameters;
             if (parameters == null)
