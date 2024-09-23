@@ -5,6 +5,8 @@ using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace EmpiriaBMS.Front.Components.Admin.Invoices;
 
@@ -55,30 +57,69 @@ public partial class InvoiceDetailed
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
 
-    private InvoiceCategory _invoiceCategory;
+    private InvoiceCategory? _invoiceCategory;
     [Parameter]
-    public InvoiceCategory InvoiceCategory
+    public InvoiceCategory? InvoiceCategory
     {
         get => _invoiceCategory;
         set
         {
-            if (value == _invoiceCategory)
-                return;
-            _invoiceCategory = value;
-            Content.Category = value;
+            if (value != null && value != _invoiceCategory)
+            {
+                _invoiceCategory = value;
+                SelectedCategory = _categories.FirstOrDefault(r => r.Value == _invoiceCategory.ToString());
+                _categoryCombo.Value = SelectedCategory.Text;
+            }
         }
     }
 
-    private FluentCombobox<ProjectVM> _projectCompoment;
-    private FluentCombobox<InvoiceTypeVM> _typeCompoment;
+    #region Fluent Combo Ref
+    private FluentCombobox<ProjectVM> _projectCombo;
+    private FluentCombobox<InvoiceTypeVM> _typeCombo;
+    private FluentCombobox<(string Value, string Text)> _categoryCombo;
 
     private ContractDetailed _contractDetailedRef;
 
-    private FluentCombobox<(string Value, string Text)> _vatCompoment;
+    private FluentCombobox<(string Value, string Text)> _vatCombo;
+    #endregion
 
+    #region Relaited Records Lists
+    ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
+    ObservableCollection<InvoiceTypeVM> _types = new ObservableCollection<InvoiceTypeVM>();
     private List<(string Value, string Text)> _vats = Enum.GetValues(typeof(Vat)).Cast<Vat>()
                                                           .Select(e => e.ToTuple())
                                                           .ToList();
+
+    private List<(string Value, string Text)> _categories = Enum.GetValues(typeof(InvoiceCategory))
+                                                                .Cast<InvoiceCategory>()
+                                                                .Select(e => e.ToTuple())
+                                                                .ToList();
+    #endregion
+
+    #region Selected Relaited Records
+    private ProjectVM _selectedProject = new ProjectVM();
+    public ProjectVM SelectedProject
+    {
+        get => _selectedProject;
+        set
+        {
+            if (_selectedProject == value || value == null) return;
+            _selectedProject = value;
+            Content.ProjectId = _selectedProject.Id;
+        }
+    }
+
+    private InvoiceTypeVM _selectedType = new InvoiceTypeVM();
+    public InvoiceTypeVM SelectedType
+    {
+        get => _selectedType;
+        set
+        {
+            if (_selectedType == value || value == null) return;
+            _selectedType = value;
+            Content.TypeId = _selectedType.Id;
+        }
+    }
 
     private (string Value, string Text) _selectedVat;
     public (string Value, string Text) SelectedVat
@@ -86,11 +127,31 @@ public partial class InvoiceDetailed
         get => _selectedVat;
         set
         {
+            if (value == (null, null))
+                return;
+
             _selectedVat = value;
             Vat vat = (Vat)Enum.Parse(typeof(Vat), value.Value);
             Content.Vat = vat;
         }
     }
+
+    private (string Value, string Text) _selectedCategory;
+    public (string Value, string Text) SelectedCategory
+    {
+        get => _selectedCategory;
+        set
+        {
+            if (value == (null, null))
+                return;
+
+            _selectedCategory = value;
+            InvoiceCategory category = (InvoiceCategory)Enum.Parse(typeof(InvoiceCategory), value.Value);
+            Content.Category = category;
+        }
+    }
+    #endregion
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -115,26 +176,21 @@ public partial class InvoiceDetailed
 
         if (Content.Project != null)
         {
-            Project = _projects.FirstOrDefault(t => t.Id == Content.ProjectId);
-            if (_projectCompoment != null)
-            {
-                _projectCompoment.SelectedOption = Project;
-                _projectCompoment.Value = Project.Name;
-            }
+            SelectedProject = _projects.FirstOrDefault(t => t.Id == Content.ProjectId);
+            _projectCombo.Value = SelectedProject.Name;
         }
 
         if (Content.TypeId != 0)
         {
-            Type = _types.FirstOrDefault(t => t.Id == Content.TypeId);
-            if (_typeCompoment != null)
-            {
-                _typeCompoment.SelectedOption = Type;
-                _typeCompoment.Value = Type.Name;
-            }
+            SelectedType = _types.FirstOrDefault(t => t.Id == Content.TypeId);
+            _typeCombo.Value = SelectedType.Name;
         }
 
         SelectedVat = _vats.FirstOrDefault(r => r.Value == Content.Vat.ToString());
-        _vatCompoment.Value = SelectedVat.Text;
+        _vatCombo.Value = SelectedVat.Text;
+
+        SelectedCategory = _categories.FirstOrDefault(r => r.Value == Content.Category.ToString());
+        _categoryCombo.Value = SelectedCategory.Text;
 
         if (invoice == null && !halfRefresh)
             await _contractDetailedRef?.Prepair();
@@ -149,8 +205,6 @@ public partial class InvoiceDetailed
         var valid = Validate();
         if (!valid)
             return;
-
-        Content.Category = InvoiceCategory;
 
         var i = await _upsertInvoice(_invoice.Clone() as InvoiceVM);
         _contract.Invoice = i;
@@ -183,7 +237,7 @@ public partial class InvoiceDetailed
         if (i.ProjectId != 0)
         {
             var invoice = i.Clone() as InvoiceVM;
-            invoice.ProjectId = _project.Id;
+            invoice.ProjectId = SelectedProject.Id;
             invoice.Type = null;
             invoice.Contract = null;
             invoice.ContractId = null;
@@ -253,7 +307,7 @@ public partial class InvoiceDetailed
     {
         if (fieldname == null)
         {
-            validProject = !DisplayProject || Project.Id != 0;
+            validProject = !DisplayProject || SelectedProject.Id != 0;
             validMark = !string.IsNullOrEmpty(Content.Mark);
             validType = Content.TypeId != 0;
 
@@ -269,7 +323,7 @@ public partial class InvoiceDetailed
             switch (fieldname)
             {
                 case "Project":
-                    validProject = !DisplayProject || Project.Id != 0;
+                    validProject = !DisplayProject || SelectedProject.Id != 0;
                     return validProject;
                 case "Mark":
                     validMark = !string.IsNullOrEmpty(Content.Mark);
@@ -287,33 +341,6 @@ public partial class InvoiceDetailed
     #endregion
 
     #region Get Related Records
-    ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
-    ObservableCollection<InvoiceTypeVM> _types = new ObservableCollection<InvoiceTypeVM>();
-
-    private ProjectVM _project = new ProjectVM();
-    public ProjectVM Project
-    {
-        get => _project;
-        set
-        {
-            if (_project == value || value == null) return;
-            _project = value;
-            Content.ProjectId = _project.Id;
-        }
-    }
-
-    private InvoiceTypeVM _type = new InvoiceTypeVM();
-    public InvoiceTypeVM Type
-    {
-        get => _type;
-        set
-        {
-            if (_type == value || value == null) return;
-            _type = value;
-            Content.TypeId = _type.Id;
-        }
-    }
-
     private async Task _getRecords()
     {
         await _getProjects();

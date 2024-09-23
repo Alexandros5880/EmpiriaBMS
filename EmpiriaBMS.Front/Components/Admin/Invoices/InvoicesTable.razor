@@ -60,6 +60,7 @@
                     </ChildContent>
                 </TemplateColumn>
 
+                <PropertyColumn Property="@(p => p.Category.GetDisplayName())" Sortable="true" Title="Category" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
