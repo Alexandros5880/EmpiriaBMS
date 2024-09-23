@@ -124,23 +124,25 @@ public partial class ProjectDetailed : ComponentBase
         }
 
         // ProjectManager
-        if (Content.ProjectManager != null)
+        if (_pmCombo != null)
         {
-            var pmDto = Mapping.Mapper.Map<UserDto>(Content.ProjectManager);
-            Pm = Mapper.Map<UserVM>(pmDto);
-            _pmCombo.Value = Pm.FullName;
+            if (Content.ProjectManager != null)
+            {
+                var pmDto = Mapping.Mapper.Map<UserDto>(Content.ProjectManager);
+                Pm = Mapper.Map<UserVM>(pmDto);
+                _pmCombo.Value = Pm.FullName;
+            }
+            else if (Content.ProjectManagerId != 0 && Content.ProjectManagerId != null)
+            {
+                Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId);
+                _pmCombo.Value = Pm.FullName;
+            }
+            else
+            {
+                Pm = new UserVM();
+                _pmCombo.Value = string.Empty;
+            }
         }
-        else if (Content.ProjectManagerId != 0 && Content.ProjectManagerId != null)
-        {
-            Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId);
-            _pmCombo.Value = Pm.FullName;
-        }
-        else
-        {
-            Pm = new UserVM();
-            _pmCombo.Value = string.Empty;
-        }
-
 
         StateHasChanged();
     }
