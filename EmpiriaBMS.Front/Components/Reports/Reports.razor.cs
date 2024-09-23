@@ -138,7 +138,7 @@ public partial class Reports
             {
                 yAxis.Ticks.Max = _maxYValue;
                 // Reassign the updated config to the chart
-                _chartInstance.Config = _barChartConfig;
+                //_chartInstance.Config = _barChartConfig;
                 _chartInstance.Update();  // Refresh the chart
             }
         }
@@ -154,7 +154,7 @@ public partial class Reports
             {
                 options.AspectRatio = _chartAspectRatio;
                 // Reassign the updated config to the chart
-                _chartInstance.Config = _barChartConfig;
+                //_chartInstance.Config = _barChartConfig;
                 _chartInstance.Update();  // Refresh the chart
             }
         }
