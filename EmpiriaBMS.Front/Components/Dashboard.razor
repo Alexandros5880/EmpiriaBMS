@@ -386,7 +386,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="table-responsive p-1 table-container"
+                                                    <div class="table-responsive mt-2 p-1 table-container"
                                                          style="overflow-x: auto !important;">
                                                         <table class="table table-hover table-success text-center">
                                                             <thead>
@@ -507,8 +507,12 @@
                                                                                     {
                                                                                         <span class="clarity--assign-user-line"
                                                                                               @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                                              Add PM
                                                                                         </span>
                                                                                     }
+                                                                                } else
+                                                                                {
+                                                                                    <span class="text-warning">Cant Assign PM</span>
                                                                                 }
                                                                             </td>
                                                                         }
@@ -562,7 +566,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="table-responsive p-1 table-container"
+                                                        <div class="table-responsive mt-2 p-1 table-container"
                                                              style="overflow-x: auto !important;">
                                                             <table class="table table-hover table-danger text-center">
                                                                 <thead>
@@ -661,7 +665,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="table-responsive p-1 table-container"
+                                                        <div class="table-responsive mt-2 p-1 table-container"
                                                                 style="overflow-x: auto !important;">
                                                             <table class="table table-hover table-primary text-center">
                                                                 <thead>
@@ -761,7 +765,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="table-responsive p-1 table-container mb-3"
+                                                        <div class="table-responsive mt-2 p-1 table-container mb-3"
                                                                 style="overflow-x: auto !important; height: 25vh;">
                                                             <table class="table table-hover table-warning text-center">
                                                                 <thead>
@@ -1499,7 +1503,7 @@
 
             <div class="col-12 dialog-header">
                 <span class="carbon--close-outline float-end"
-                      @onclick="@(async () => await _onCorrectHoursClose())"></span>
+                      @onclick="@_onCorrectHoursClose"></span>
             </div>
 
             <div class="col-12 justify-content-center">

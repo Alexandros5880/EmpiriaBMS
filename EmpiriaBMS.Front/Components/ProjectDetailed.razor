@@ -9,9 +9,9 @@
 @inject Logging.LoggerManager Logger
 
 <div class="w-96 m-2"
-     style="overflow-x: hidden; overflow-y: hidden; height: 440px;">
+     style="overflow-x: hidden; overflow-y: auto; height: auto; max-height: 70vh;">
 
-    <h3 class="mt-1 mb-1 ms-3">Project</h3>
+    <h3 class="mb-2">Project</h3>
 
     <!-- Offer -->
     <div class="col-12 row gx-2">
@@ -152,7 +152,7 @@
 
     <div class="col-12 row gx-2">
         <!-- Project Manager -->
-        <div class="col-lg-6 col-md-12">
+        <div class="col-lg-6 col-md-12 mb-2">
             <div class="col-12">
                 Project Manager<span class="text-danger">*</span>
             </div>
@@ -178,7 +178,7 @@
     </div>
 
     <!-- Description -->
-    <div class="col-12">
+    <div class="col-12 mb-5">
         <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="2" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
     </div>
 
