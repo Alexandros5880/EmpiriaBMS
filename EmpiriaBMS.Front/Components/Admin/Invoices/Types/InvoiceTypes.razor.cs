@@ -15,7 +15,7 @@ public partial class InvoiceTypes
     #region Data Grid
     private List<InvoiceTypeVM> _records = new List<InvoiceTypeVM>();
     private string _filterString = string.Empty;
-    IQueryable<InvoiceTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<InvoiceTypeVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private InvoiceTypeVM _selectedRecord = new InvoiceTypeVM();
@@ -58,7 +58,7 @@ public partial class InvoiceTypes
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new InvoiceTypeVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

@@ -146,7 +146,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On DeliverableRepo.Add(Deliverable): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DeliverableDto)!;
         }
     }
 
@@ -174,7 +174,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On DeliverableRepo.Update(Deliverable): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DeliverableDto)!;
         }
     }
 

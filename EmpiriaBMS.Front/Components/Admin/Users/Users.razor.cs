@@ -15,7 +15,7 @@ public partial class Users
     #region Data Grid
     private List<UserVM> _records = new List<UserVM>();
     private string _filterString = string.Empty;
-    IQueryable<UserVM>? FilteredItems => _records?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<UserVM> FilteredItems => _records?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private UserVM _selectedRecord = new UserVM();
@@ -60,7 +60,7 @@ public partial class Users
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UsersDetailedDialog>(new UserVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

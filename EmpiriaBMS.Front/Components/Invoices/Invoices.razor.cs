@@ -99,7 +99,7 @@ public partial class Invoices : ComponentBase
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(SelectedRecord, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

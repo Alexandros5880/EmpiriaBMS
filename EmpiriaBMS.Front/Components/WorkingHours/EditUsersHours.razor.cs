@@ -35,8 +35,6 @@ public partial class EditUsersHours
     bool workOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
     #endregion
 
-    bool _startLoading = true;
-
     private UserTimes _editLogedUserTimes = new UserTimes()
     {
         DailyTime = TimeSpan.Zero,
@@ -650,8 +648,6 @@ public partial class EditUsersHours
         {
             await OnSelectUser(User.Id);
         }
-
-        _startLoading = false;
     }
 
     private async Task _sendRequest()
@@ -729,7 +725,6 @@ public partial class EditUsersHours
             }
 
             // Update Db
-            _startLoading = true;
 
             var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
 

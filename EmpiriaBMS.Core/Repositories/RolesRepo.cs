@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -94,7 +95,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<RoleDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public async new Task<ICollection<RoleDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -125,7 +126,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<RoleDto>> GetAll(
+    public async new Task<ICollection<RoleDto>> GetAll(
         Expression<Func<Role, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
@@ -369,7 +370,7 @@ public class RolesRepo : Repository<RoleDto, Role>
                                             .Distinct()
                                             .ToListAsync();
 
-            var hasSet = new HashSet<Permission>(permissions);
+            var hasSet = new HashSet<Permission>(permissions!);
 
             return Mapping.Mapper.Map<List<PermissionDto>>(hasSet.ToList());
         }
@@ -387,7 +388,7 @@ public class RolesRepo : Repository<RoleDto, Role>
                                             .Distinct()
                                             .ToListAsync();
 
-            var hasSet = new HashSet<Permission>(permissions);
+            var hasSet = new HashSet<Permission>(permissions!);
 
             return Mapping.Mapper.Map<List<PermissionDto>>(hasSet.ToList());
         }
@@ -459,13 +460,13 @@ public class RolesRepo : Repository<RoleDto, Role>
                     await _context.SaveChangesAsync();
                 }
 
-                return entry;
+                return entry!;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception On RolesRepo.DeleteRolePermission({Mapping.Mapper.Map<RolePermission>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(RolePermission)!;
         }
     }
 }

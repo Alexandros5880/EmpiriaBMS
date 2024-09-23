@@ -81,25 +81,12 @@ public partial class LeadDetailed
             Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
         }
 
-        if (Content.Result != null)
+        SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+        if (_resultCombo != null)
         {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
-            if (_resultCombo != null)
-            {
-                var value = SelectedResult.Value;
-                _resultCombo.Value = SelectedResult.Value;
-                _resultCombo.SelectedOption = SelectedResult;
-            }
-        }
-        else
-        {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LeadResult.UNSUCCESSFUL.ToString());
-            if (_resultCombo != null)
-            {
-                var value = SelectedResult.Value;
-                _resultCombo.Value = SelectedResult.Value;
-                _resultCombo.SelectedOption = SelectedResult;
-            }
+            var value = SelectedResult.Value;
+            _resultCombo.Value = SelectedResult.Value;
+            _resultCombo.SelectedOption = SelectedResult;
         }
 
         await RefreshMap();

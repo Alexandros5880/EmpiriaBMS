@@ -47,6 +47,6 @@ public class ClientVM : UserVM
 
     public string AddressFormated => Address != null ? Address.FormattedAddress : "";
 
-    public string FullName => $"{LastName} {MidName} {FirstName}";
+    public new string FullName => $"{LastName} {MidName} {FirstName}";
 
 }

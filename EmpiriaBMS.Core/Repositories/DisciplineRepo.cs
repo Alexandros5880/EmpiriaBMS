@@ -120,7 +120,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On DisciplineRepo.Add(Discipline): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DisciplineDto)!;
         }
     }
 
@@ -148,7 +148,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On DisciplineRepo.Update(Discipline): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DisciplineDto)!;
         }
     }
 
@@ -408,13 +408,13 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
                     await _context.SaveChangesAsync();
                 }
 
-                return entry;
+                return entry!;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception On DisciplineRepo.DeleteDisciplineEngineer({Mapping.Mapper.Map<DisciplineEngineerDto>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DisciplineEngineer)!;
         }
     }
 }

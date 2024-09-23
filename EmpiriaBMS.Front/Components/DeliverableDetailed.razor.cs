@@ -7,7 +7,6 @@ namespace EmpiriaBMS.Front.Components;
 public partial class DeliverableDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
-    private bool isNew = false;
 
     [Parameter]
     public int DisciplineId { get; set; }
@@ -27,7 +26,6 @@ public partial class DeliverableDetailed : ComponentBase, IDisposable
 
     public async void PrepairForNew()
     {
-        isNew = true;
         _drawingTypes.Clear();
         await _getDrawingTypes();
         _drawing = new DeliverableVM();
@@ -38,7 +36,6 @@ public partial class DeliverableDetailed : ComponentBase, IDisposable
 
     public async void PrepairForEdit(DeliverableVM drawing)
     {
-        isNew = false;
         _drawingTypes.Clear();
         await _getDrawingTypes();
         _drawing = drawing;

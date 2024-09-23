@@ -15,7 +15,7 @@ public partial class Contracts
     private List<InvoiceVM> _invoices = new List<InvoiceVM>();
     private List<ContractVM> _records = new List<ContractVM>();
     private string _filterString = string.Empty;
-    IQueryable<ContractVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Description.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ContractVM> FilteredItems => _records?.AsQueryable().Where(x => x.Description.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private ContractVM _selectedRecord = new ContractVM();
@@ -96,7 +96,7 @@ public partial class Contracts
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ContractDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

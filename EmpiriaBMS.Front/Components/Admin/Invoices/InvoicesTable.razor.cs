@@ -27,7 +27,7 @@ public partial class InvoicesTable
     public bool DisplayActions { get; set; } = true;
 
     private string _filterString = string.Empty;
-    IQueryable<InvoiceVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<InvoiceVM> FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     [Parameter]
@@ -100,7 +100,7 @@ public partial class InvoicesTable
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<InvoiceDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

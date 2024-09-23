@@ -294,7 +294,7 @@ public partial class Offers
             var waitingResult = vm.Result.ToTuple();
             SetSelectedOption(waitingResult.Value);
             StateHasChanged();
-            _onResultSelectionChanged(waitingResult);
+            await _onResultSelectionChanged(waitingResult);
             await Search();
         }
     }

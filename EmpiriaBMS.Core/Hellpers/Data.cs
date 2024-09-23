@@ -229,18 +229,19 @@ public static class Data
     {
         try
         {
-            T result;
             if (item != null && !appDbContext.Set<T>().Any(o => o.Id == item.Id))
             {
-                result = (await appDbContext.Set<T>().AddAsync(item))?.Entity;
+                var result = (await appDbContext.Set<T>().AddAsync(item))?.Entity;
+                return result != null;
             }
             else
             {
-                result = await appDbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == item.Id);
-                if (result != null)
-                    appDbContext.Entry(item).CurrentValues.SetValues(Mapping.Mapper.Map<T>(item));
+                var result = await appDbContext.Set<T>().FirstOrDefaultAsync(x => item != null && x.Id == item.Id);
+                if (result != null && item != null)
+                    appDbContext.Entry<T>(item).CurrentValues.SetValues(Mapping.Mapper.Map<T>(item));
+                return result != null;
             }
-            return result != null;
+            
         }
         catch (Exception ex)
         {
@@ -303,7 +304,7 @@ public static class Data
         {
             _logger.LogError($"Exception Data.ImportFromCsv(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
-            return null;
+            return new List<T>();
         }
     }
 

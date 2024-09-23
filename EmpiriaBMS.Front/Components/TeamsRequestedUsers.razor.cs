@@ -15,7 +15,7 @@ public partial class TeamsRequestedUsers : ComponentBase
 
     #region Data Grid
     private string _filterString = string.Empty;
-    IQueryable<TeamsRequestedUserVM>? FilteredItems => Source?.AsQueryable().Where(x => x.DisplayName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<TeamsRequestedUserVM> FilteredItems => Source?.AsQueryable().Where(x => x.DisplayName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
     private TeamsRequestedUserVM _selectedRecord = null;

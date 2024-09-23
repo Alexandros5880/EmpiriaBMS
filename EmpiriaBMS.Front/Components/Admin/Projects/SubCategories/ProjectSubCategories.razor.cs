@@ -13,7 +13,7 @@ public partial class ProjectSubCategories
     #region Data Grid
     private List<ProjectSubCategoryVM> _records = new List<ProjectSubCategoryVM>();
     private string _filterString = string.Empty;
-    IQueryable<ProjectSubCategoryVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ProjectSubCategoryVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private ProjectSubCategoryVM _selectedRecord = new ProjectSubCategoryVM();
@@ -82,7 +82,7 @@ public partial class ProjectSubCategories
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectSubCategoryDetailed>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

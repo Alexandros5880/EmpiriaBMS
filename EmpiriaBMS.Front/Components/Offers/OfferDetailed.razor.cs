@@ -83,23 +83,11 @@ public partial class OfferDetailed
             State = _states.FirstOrDefault(c => c.Id == Content.StateId);
         }
 
-        if (Content.Result != null)
+        SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+        if (_resultCombo != null)
         {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
-            if (_resultCombo != null)
-            {
-                _resultCombo.Value = SelectedResult.Value;
-                _resultCombo.SelectedOption = SelectedResult;
-            }
-        }
-        else
-        {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LeadResult.UNSUCCESSFUL.ToString());
-            if (_resultCombo != null)
-            {
-                _resultCombo.Value = SelectedResult.Value;
-                _resultCombo.SelectedOption = SelectedResult;
-            }
+            _resultCombo.Value = SelectedResult.Value;
+            _resultCombo.SelectedOption = SelectedResult;
         }
 
         // Category

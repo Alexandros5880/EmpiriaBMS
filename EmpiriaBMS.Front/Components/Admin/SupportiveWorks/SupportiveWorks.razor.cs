@@ -57,7 +57,7 @@ public partial class SupportiveWorks
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<SupportiveWorkDetailedDialog>(new SupportiveWorkVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
@@ -84,7 +84,7 @@ public partial class SupportiveWorks
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<SupportiveWorkDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

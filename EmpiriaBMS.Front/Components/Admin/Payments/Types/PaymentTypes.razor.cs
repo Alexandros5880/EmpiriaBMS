@@ -57,7 +57,7 @@ public partial class PaymentTypes
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new PaymentTypeVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
@@ -83,7 +83,7 @@ public partial class PaymentTypes
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

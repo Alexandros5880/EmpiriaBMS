@@ -168,5 +168,5 @@ public class UserVM : BaseVM
     public List<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
 
     [NotMapped]
-    public ICollection<int>? MyRolesIds { get; set; }
+    public ICollection<int> MyRolesIds { get; set; }
 }

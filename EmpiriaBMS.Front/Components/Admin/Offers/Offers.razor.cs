@@ -59,7 +59,7 @@ public partial class Offers
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferDetailedDialog>(new OfferVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
@@ -87,7 +87,7 @@ public partial class Offers
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

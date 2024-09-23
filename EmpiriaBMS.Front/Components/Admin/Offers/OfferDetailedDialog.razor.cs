@@ -42,12 +42,9 @@ public partial class OfferDetailedDialog : IDialogContentComponent<OfferVM>
                 State = _mapper.Map<OfferStateVM>(stateDto);
             }
 
-            if (Content.Result != null)
-            {
-                SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
-                _resultCombo.Value = SelectedResult.Value;
-                _resultCombo.SelectedOption = SelectedResult;
-            }
+            SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+            _resultCombo.Value = SelectedResult.Value;
+            _resultCombo.SelectedOption = SelectedResult;
 
             // Category
             ProjectCategoryVM category = null;

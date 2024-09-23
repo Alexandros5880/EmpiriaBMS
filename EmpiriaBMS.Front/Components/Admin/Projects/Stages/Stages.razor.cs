@@ -57,7 +57,7 @@ public partial class Stages
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new ProjectStageVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
@@ -83,7 +83,7 @@ public partial class Stages
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

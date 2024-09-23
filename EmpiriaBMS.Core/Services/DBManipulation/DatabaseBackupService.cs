@@ -28,7 +28,7 @@ public class DatabaseBackupService : IDisposable
         _logger = logger;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            ConnectionString = Environment.GetEnvironmentVariable("ConnectionString");
+            ConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? default(string)!;
             if (!string.IsNullOrEmpty(ConnectionString))
                 DatabaseName = GetDbName();
         }
@@ -45,7 +45,7 @@ public class DatabaseBackupService : IDisposable
                     continue;
 
                 Type type = Data.GetListItemType(items);
-                var tableName = GetTableName(_context, type);
+                var tableName = GetTableName(_context, type!);
                 await SetDbIdentityInsert(_context, _logger, tableName, true);
                 foreach (var item in items)
                 {
@@ -171,7 +171,7 @@ public class DatabaseBackupService : IDisposable
                 if (convertMethod == null)
                     continue;
                 // Constructing the generic method _convertCsvToDataAsync<T> based on 'type'
-                var genericConvertMethod = convertMethod.MakeGenericMethod(type);
+                var genericConvertMethod = convertMethod.MakeGenericMethod(type!);
                 if (genericConvertMethod == null)
                     continue;
                 // Invoking the generic method dynamically
@@ -272,21 +272,30 @@ public class DatabaseBackupService : IDisposable
                     .ToList();
 
                 await transaction.CommitAsync();
-                return tablesWithIdentityColumns;
+                return tablesWithIdentityColumns!;
             }
             catch (Exception ex)
             {
                 logger.LogError($"Exception DatabaseBackupService._getDBTablesNames(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
 
                 await transaction.RollbackAsync();
-                return null;
+                return default(List<string>)!;
             }
         }
     }
 
     public string GetTableName(AppDbContext context, Type type)
     {
-        return context.Model.FindEntityType(type).GetTableName();
+        var model = context.Model;
+        if (model != null)
+        {
+            var entityType = model.FindEntityType(type);
+            if (entityType != null)
+            {
+                return entityType.GetTableName()!;
+            }
+        }
+        return default(string)!;
     }
 
     private string GetDbName()

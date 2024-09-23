@@ -107,13 +107,16 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
                                            .ThenInclude(p => p.Stage)
                                            .FirstOrDefaultAsync(o => o.Id == id);
 
-                return Mapping.Mapper.Map<Offer, OfferDto>(offer);
+                if (offer == null)
+                    return default(OfferDto)!;
+
+                return Mapping.Mapper.Map<Offer, OfferDto>(offer!);
             }
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception On Repository.Get(Offer.Id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(OfferDto)!;
         }
     }
 
@@ -284,7 +287,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    protected virtual void Dispose(bool disposing)
+    protected virtual new void Dispose(bool disposing)
     {
         if (!disposedValue)
         {
@@ -296,7 +299,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    public void Dispose()
+    public new void Dispose()
     {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);

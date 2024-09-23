@@ -14,7 +14,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<PaymentDto> Add(PaymentDto entity, bool update = false)
+    public async new Task<PaymentDto> Add(PaymentDto entity, bool update = false)
     {
         try
         {
@@ -42,7 +42,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On PaymentRepo.Add(Payment): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(PaymentDto)!;
         }
     }
 
@@ -143,7 +143,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         }
     }
 
-    public new async Task<ICollection<PaymentDto>> GetAllByInvoice(int invoiceId)
+    public async Task<ICollection<PaymentDto>> GetAllByInvoice(int invoiceId)
     {
         if (invoiceId == 0)
             throw new ArgumentNullException(nameof(invoiceId));
@@ -164,7 +164,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         }
     }
 
-    public new async Task<ICollection<PaymentDto>> GetAllByInvoices(int[] invoiceIds)
+    public async Task<ICollection<PaymentDto>> GetAllByInvoices(int[] invoiceIds)
     {
         if (invoiceIds.Length == 0)
             throw new ArgumentException(nameof(invoiceIds));

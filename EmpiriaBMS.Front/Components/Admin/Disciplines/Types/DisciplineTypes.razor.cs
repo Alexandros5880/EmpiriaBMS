@@ -14,7 +14,7 @@ public partial class DisciplineTypes
     #region Data Grid
     private List<DisciplineTypeVM> _records = new List<DisciplineTypeVM>();
     private string _filterString = string.Empty;
-    IQueryable<DisciplineTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<DisciplineTypeVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private DisciplineTypeVM _selectedRecord = new DisciplineTypeVM();
@@ -83,7 +83,7 @@ public partial class DisciplineTypes
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

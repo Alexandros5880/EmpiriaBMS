@@ -519,18 +519,21 @@ public class UsersRepo : Repository<UserDto, User>
                 {
                     entry.IsDeleted = true;
 
+                    if (_context.UsersRoles == null)
+                        throw new NullReferenceException(nameof(_context.UsersRoles));
+
                     _context.UsersRoles.Remove(entry);
 
                     await _context.SaveChangesAsync();
                 }
 
-                return entry;
+                return entry!;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception On UsersRepo.DeleteUserRole({Mapping.Mapper.Map<UserRole>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(UserRole)!;
         }
     }
 }

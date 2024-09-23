@@ -15,7 +15,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<InvoiceDto> Add(InvoiceDto entity, bool update = false)
+    public async new Task<InvoiceDto> Add(InvoiceDto entity, bool update = false)
     {
         try
         {
@@ -41,11 +41,11 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On Repository.Add({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(InvoiceDto)!;
         }
     }
 
-    public async Task<InvoiceDto> Update(InvoiceDto entity)
+    public async new Task<InvoiceDto> Update(InvoiceDto entity)
     {
         try
         {
@@ -74,7 +74,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On Repository.Update({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(InvoiceDto)!;
         }
     }
 
@@ -228,7 +228,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public new async Task<ContractDto> GetContract(int invoiceId)
+    public async Task<ContractDto> GetContract(int invoiceId)
     {
         if (invoiceId == 0)
             throw new ArgumentNullException(nameof(invoiceId));
@@ -281,9 +281,6 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                                 .Set<Payment>()
                                 .Where(r => !r.IsDeleted && r.InvoiceId == invoiceId)
                                 .SumAsync(p => p.Fee);
-
-                if (paymentSum == null)
-                    throw new NullReferenceException(nameof(paymentSum));
 
                 var invoice = await _context.Set<Invoice>()
                     .FirstOrDefaultAsync(i => i.Id == invoiceId);

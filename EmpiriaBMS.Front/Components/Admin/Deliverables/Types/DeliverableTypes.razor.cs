@@ -58,7 +58,7 @@ public partial class DeliverableTypes
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new DeliverableTypeVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
@@ -84,7 +84,7 @@ public partial class DeliverableTypes
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

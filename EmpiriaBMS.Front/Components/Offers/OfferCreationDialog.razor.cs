@@ -15,7 +15,6 @@ public partial class OfferCreationDialog : IDialogContentComponent<OfferVM>
 
     private OfferDetailed _offerCompoment;
     private bool _isNew => Content?.Id == 0;
-    private bool _loading = false;
 
     private async Task SaveAsync()
     {

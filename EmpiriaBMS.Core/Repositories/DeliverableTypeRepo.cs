@@ -58,7 +58,7 @@ public class DeliverableTypeRepo : Repository<DeliverableTypeDto, DeliverableTyp
             catch (Exception ex)
             {
                 _logger.LogError($"Exception On DeliverableTypeRepo.GetDrawingTypesSelections(int disciplineId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                return null;
+                return default(List<DeliverableTypeDto>)!;
             }
         }
     }

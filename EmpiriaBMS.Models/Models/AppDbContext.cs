@@ -57,7 +57,7 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        Enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        Enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
         SelectedConnectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? migrationsDB;
 
         optionsBuilder.UseSqlServer(SelectedConnectionString);

@@ -95,7 +95,7 @@ public partial class Roles
         var prevPermissionsIds = prevRolesPerm.Select(rp => rp.Id);
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<RolesDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

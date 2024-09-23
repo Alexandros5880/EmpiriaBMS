@@ -14,7 +14,7 @@ public partial class SupportiveWorkTypes
     #region Data Grid
     private List<SupportiveWorkTypeVM> _records = new List<SupportiveWorkTypeVM>();
     private string _filterString = string.Empty;
-    IQueryable<SupportiveWorkTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<SupportiveWorkTypeVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private SupportiveWorkTypeVM _selectedRecord = new SupportiveWorkTypeVM();
@@ -83,7 +83,7 @@ public partial class SupportiveWorkTypes
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

@@ -16,7 +16,7 @@ public class TeamsRequestedUserVM : UserVM
     }
 
     private string _proxyAddress;
-    public string ProxyAddress
+    public new string ProxyAddress
     {
         get => _proxyAddress;
         set

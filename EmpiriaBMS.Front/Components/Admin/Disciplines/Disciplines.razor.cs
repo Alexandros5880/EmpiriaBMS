@@ -57,7 +57,7 @@ public partial class Disciplines
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<DisciplineDetailedDialog>(new DisciplineVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
@@ -83,7 +83,7 @@ public partial class Disciplines
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<DisciplineDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

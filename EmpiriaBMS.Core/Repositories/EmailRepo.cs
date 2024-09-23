@@ -59,13 +59,13 @@ public class EmailRepo : Repository<EmailDto, Email>
                     await _context.SaveChangesAsync();
                 }
 
-                return entry;
+                return entry!;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception On EmailRepo.DeleteEmail({Mapping.Mapper.Map<Email>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(Email)!;
         }
     }
 }

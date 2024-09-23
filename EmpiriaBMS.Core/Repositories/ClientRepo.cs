@@ -13,7 +13,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<ClientDto> Add(ClientDto entity, bool update = false)
+    public async new Task<ClientDto> Add(ClientDto entity, bool update = false)
     {
         try
         {
@@ -41,11 +41,11 @@ public class ClientRepo : Repository<ClientDto, Client>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ClientRepo.Add(Client): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(ClientDto)!;
         }
     }
 
-    public async Task<ClientDto?> Get(int id)
+    public async new Task<ClientDto?> Get(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -62,7 +62,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task<ICollection<ClientDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public async new Task<ICollection<ClientDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {

@@ -188,8 +188,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private User? _projectManager;
-    public User? ProjectManager
+    private User _projectManager;
+    public User ProjectManager
     {
         get => _projectManager;
         set
@@ -214,8 +214,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private Offer? _offer;
-    public Offer? Offer
+    private Offer _offer;
+    public Offer Offer
     {
         get => _offer;
         set
@@ -252,9 +252,9 @@ public class ProjectVM : BaseVM
     }
 
     // Extra Hellping Properties
-    private string? _pmName;
+    private string _pmName;
     [NotMapped]
-    public string? PmName
+    public string PmName
     {
         get => _pmName;
         set

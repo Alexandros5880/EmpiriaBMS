@@ -4,7 +4,7 @@ namespace EmpiriaBMS.Core.Services.GooglePlaces.ViewModels;
 public class BNotifyPropertyChanged : INotifyPropertyChanged
 {
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     protected void NotifyPropertyChanged(string propertyName)
     {
         var handler = PropertyChanged;

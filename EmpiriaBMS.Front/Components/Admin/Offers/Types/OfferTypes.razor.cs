@@ -14,7 +14,7 @@ public partial class OfferTypes
     #region Data Grid
     private List<OfferTypeVM> _records = new List<OfferTypeVM>();
     private string _filterString = string.Empty;
-    IQueryable<OfferTypeVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<OfferTypeVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private OfferTypeVM _selectedRecord = new OfferTypeVM();
@@ -57,7 +57,7 @@ public partial class OfferTypes
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<UniqueTypeForm>(new OfferTypeVM(), parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

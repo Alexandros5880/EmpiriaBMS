@@ -16,7 +16,7 @@ public class GooglePlaceDetailsResult
     public string Status { get; set; }
 
     [JsonProperty("geometry")]
-    public GooglePlaceGeometry Geometry { get; set; }
+    public GooglePlaceGeometry? Geometry { get; set; }
 
-    public string FormattedAddress => Result?.FormattedAddress;
+    public string FormattedAddress => Result != null ? Result.FormattedAddress : default(string)!;
 }

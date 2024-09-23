@@ -18,7 +18,7 @@ public partial class Payments : ComponentBase
     #region Data Grid
     private List<PaymentVM> _records = new List<PaymentVM>();
     private string _filterString = string.Empty;
-    IQueryable<PaymentVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<PaymentVM> FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private PaymentVM _selectedRecord = new PaymentVM();
@@ -104,7 +104,7 @@ public partial class Payments : ComponentBase
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<PaymentDetailedDialog>(param, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

@@ -179,8 +179,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private Project? _project;
-    public Project? Project
+    private Project _project;
+    public Project Project
     {
         get => _project;
         set
@@ -264,8 +264,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private string? _observations;
-    public string? Observations
+    private string _observations;
+    public string Observations
     {
         get => _observations;
         set
@@ -277,8 +277,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private string? _teamText;
-    public string? TeamText
+    private string _teamText;
+    public string TeamText
     {
         get => _teamText;
         set
@@ -290,8 +290,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private string? _comments;
-    public string? Comments
+    private string _comments;
+    public string Comments
     {
         get => _comments;
         set

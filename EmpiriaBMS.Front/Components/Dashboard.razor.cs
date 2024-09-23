@@ -1339,7 +1339,7 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Tab Actions
-    private string? _activeid = "tab-home";
+    private string _activeid = "tab-home";
     #endregion
 
     #region Invoice

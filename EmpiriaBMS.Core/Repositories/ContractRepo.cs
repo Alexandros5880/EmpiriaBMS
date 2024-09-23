@@ -13,7 +13,7 @@ public class ContractRepo : Repository<ContractDto, Contract>
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<ContractDto> Add(ContractDto entity, bool update = false)
+    public async new Task<ContractDto> Add(ContractDto entity, bool update = false)
     {
         try
         {
@@ -42,11 +42,11 @@ public class ContractRepo : Repository<ContractDto, Contract>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On Repository.Add({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(ContractDto)!;
         }
     }
 
-    public async Task<ContractDto> Update(ContractDto entity)
+    public async new Task<ContractDto> Update(ContractDto entity)
     {
         try
         {
@@ -75,11 +75,11 @@ public class ContractRepo : Repository<ContractDto, Contract>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On Repository.Update({typeof(Contract)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(ContractDto)!;
         }
     }
 
-    public async Task<ContractDto?> Get(int id)
+    public async new Task<ContractDto?> Get(int id)
     {
         try
         {
@@ -108,7 +108,7 @@ public class ContractRepo : Repository<ContractDto, Contract>
         }
     }
 
-    public async Task<ICollection<ContractDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public async new Task<ICollection<ContractDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {

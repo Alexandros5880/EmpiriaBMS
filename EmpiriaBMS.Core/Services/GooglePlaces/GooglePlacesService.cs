@@ -58,13 +58,12 @@ public class GooglePlacesService
                 }
             }
 
-            return null; // TODO: Google Address ->  Handle error cases
+            return default(Address)!;
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception GooglePlacesService.GetPlaceDetailsByAddressAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-
-            return null;
+            return default(Address)!;
         }
     }
 
@@ -103,13 +102,12 @@ public class GooglePlacesService
                 };
             }
 
-            return null; // TODO: Google Address ->  Handle error cases
+            return default(Address)!;
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception GooglePlacesService.GetPlaceDetailsByPlaceIdAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-
-            return null; // TODO: Google Address ->  Handle error cases
+            return default(Address)!;
         }
     }
 }

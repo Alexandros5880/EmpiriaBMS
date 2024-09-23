@@ -163,8 +163,9 @@ public class KpisRepo : IDisposable
                                                 .Include(ur => ur.User)
                                                 .Select(ur => new
                                                 {
-                                                    RoleName = ur.Role.Name,
-                                                    DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.TimeSpan.Hours)
+                                                    RoleName = ur.Role != null ? ur.Role.Name : "--",
+                                                    DailyTimeHours = ur.User != null && ur.User.DailyTime != null 
+                                                        ? ur.User.DailyTime.Sum(dt => dt.TimeSpan != null ? dt.TimeSpan.Hours : 0) : 0
                                                 })
                                                 .ToListAsync();
 
@@ -181,7 +182,7 @@ public class KpisRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On KpisRepo.GetHoursPerRole(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(Dictionary<string, long>)!;
         }
     }
 
@@ -218,7 +219,7 @@ public class KpisRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On KpisRepo.GetHoursPerUser(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(Dictionary<string, long>)!;
         }
     }
 
@@ -330,7 +331,7 @@ public class KpisRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On KpisRepo.GetActiveDelayedProjects(int userId, DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(List<ProjectDto>)!;
         }
     }
 
@@ -442,7 +443,7 @@ public class KpisRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On KpisRepo.GetActiveDelayedProjectTypesCountByType(int userId, DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(Dictionary<string, int>)!;
         }
     }
 
@@ -562,7 +563,7 @@ public class KpisRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On KpisRepo.GetProfitPerProject(int userId, DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(Dictionary<string, double>)!;
         }
     }
 
@@ -651,7 +652,7 @@ public class KpisRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On KpisRepo.GetTenderTable(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(IQueryable<TenderDataDto>)!;
         }
     }
 
@@ -687,7 +688,7 @@ public class KpisRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On KpisRepo.GetDelayedPayments(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(Dictionary<string, DelayedPayments>)!;
         }
     }
 
@@ -723,7 +724,7 @@ public class KpisRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On KpisRepo.GetPendingPayments(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(Dictionary<string, PendingPayments>)!;
         }
     }
 

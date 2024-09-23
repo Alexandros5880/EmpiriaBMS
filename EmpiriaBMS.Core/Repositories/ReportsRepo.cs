@@ -108,7 +108,7 @@ public class ReportsRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ReportsRepo.GetProjectPerEmployeeReport: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(List<ReportProjectReturnModel>)!;
         }
     }
 

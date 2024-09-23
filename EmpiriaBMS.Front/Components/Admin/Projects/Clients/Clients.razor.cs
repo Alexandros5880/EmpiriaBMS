@@ -14,7 +14,7 @@ public partial class Clients
     #region Data Grid
     private List<ClientVM> _records = new List<ClientVM>();
     private string _filterString = string.Empty;
-    IQueryable<ClientVM>? FilteredItems => _records?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ClientVM> FilteredItems => _records?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private ClientVM _selectedRecord = new ClientVM();
@@ -109,7 +109,7 @@ public partial class Clients
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

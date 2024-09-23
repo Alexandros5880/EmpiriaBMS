@@ -112,7 +112,7 @@ public partial class ProjectDetailed : ComponentBase
             Stage = Mapper.Map<ProjectStageVM>(stageDto);
             _stageCombo.Value = Stage.Name;
         }
-        else if (Content.StageId != 0 && Content.StageId != null)
+        else if (Content.StageId != 0)
         {
             Stage = _stages.FirstOrDefault(c => c.Id == Content.StageId);
             _stageCombo.Value = Stage.Name;

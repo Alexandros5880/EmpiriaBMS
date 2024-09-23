@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +55,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On LeadRepo.Add(Lead): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(LeadDto)!;
         }
     }
 
@@ -82,11 +83,11 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On LeadRepo.Update(Lead): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(LeadDto)!;
         }
     }
 
-    public async Task<LeadDto> Delete(int id)
+    public async new Task<LeadDto> Delete(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -143,7 +144,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         return ledDto;
     }
 
-    public new async Task<OfferDto?> GetOffer(int id)
+    public async Task<OfferDto?> GetOffer(int id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -213,7 +214,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
     }
 
-    public new async Task<ICollection<LeadDto>> GetByResult(LeadResult result = LeadResult.WAITING)
+    public async Task<ICollection<LeadDto>> GetByResult(LeadResult result = LeadResult.WAITING)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -228,7 +229,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
     }
 
-    public new async Task<ICollection<LeadDto>> GetWaitingLeads()
+    public async Task<ICollection<LeadDto>> GetWaitingLeads()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -243,7 +244,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
     }
 
-    public new async Task<ICollection<LeadDto>> GetSuccessfuleLeads()
+    public async Task<ICollection<LeadDto>> GetSuccessfuleLeads()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -258,7 +259,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
     }
 
-    public new async Task<ICollection<LeadDto>> GetUnsuccessfuleLeads()
+    public async Task<ICollection<LeadDto>> GetUnsuccessfuleLeads()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -493,7 +494,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
     }
     #endregion
 
-    protected virtual void Dispose(bool disposing)
+    protected virtual new void Dispose(bool disposing)
     {
         if (!disposedValue)
         {
@@ -508,7 +509,7 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         }
     }
 
-    public void Dispose()
+    public new void Dispose()
     {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);

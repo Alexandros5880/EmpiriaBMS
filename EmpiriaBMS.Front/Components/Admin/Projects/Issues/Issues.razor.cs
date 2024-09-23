@@ -14,7 +14,7 @@ public partial class Issues
     #region Data Grid
     private List<IssueVM> _records = new List<IssueVM>();
     private string _filterString = string.Empty;
-    IQueryable<IssueVM>? FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<IssueVM> FilteredItems => _records?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private IssueVM _selectedRecord = new IssueVM();
@@ -63,7 +63,7 @@ public partial class Issues
             DisplayedRole = new Role(),
             Creator = new User()
         }, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

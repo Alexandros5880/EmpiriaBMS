@@ -11,7 +11,7 @@ namespace EmpiriaBMS.Core.Services.GooglePlaces.ViewModels;
 public class AddressVM : BNotifyPropertyChanged
 {
     private string? _formattedAddress;
-    public string FormattedAddress
+    public string? FormattedAddress
     {
         get => _formattedAddress;
         set
@@ -24,7 +24,7 @@ public class AddressVM : BNotifyPropertyChanged
     }
 
     private string? _street;
-    public string Street
+    public string? Street
     {
         get => _street;
         set
@@ -37,7 +37,7 @@ public class AddressVM : BNotifyPropertyChanged
     }
 
     private string? _city;
-    public string City
+    public string? City
     {
         get => _city;
         set
@@ -50,7 +50,7 @@ public class AddressVM : BNotifyPropertyChanged
     }
 
     private string? _state;
-    public string State
+    public string? State
     {
         get => _state;
         set
@@ -63,7 +63,7 @@ public class AddressVM : BNotifyPropertyChanged
     }
 
     private string? _postalCode;
-    public string PostalCode
+    public string? PostalCode
     {
         get => _postalCode;
         set
@@ -76,7 +76,7 @@ public class AddressVM : BNotifyPropertyChanged
     }
 
     private string? _country;
-    public string Country
+    public string? Country
     {
         get => _country;
         set
@@ -89,7 +89,7 @@ public class AddressVM : BNotifyPropertyChanged
     }
 
     private string? _placeId;
-    public string PlaceId
+    public string? PlaceId
     {
         get => _placeId;
         set

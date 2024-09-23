@@ -379,7 +379,7 @@ public class WorkingTime : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On WorkingTime.UpdateDailyTimeRequest({request.GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DailyTimeRequest)!;
         }
     }
 
@@ -476,7 +476,7 @@ public class WorkingTime : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On WorkingTime.AddDailyTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DailyTime)!;
         }
     }
 
@@ -586,7 +586,7 @@ public class WorkingTime : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On WorkingTime.AddPersonalTime(: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DailyTime)!;
         }
     }
 
@@ -696,7 +696,7 @@ public class WorkingTime : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On WorkingTime.AddTraningTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DailyTime)!;
         }
     }
 
@@ -806,7 +806,7 @@ public class WorkingTime : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On WorkingTime.AddCorporateEventTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DailyTime)!;
         }
     }
 

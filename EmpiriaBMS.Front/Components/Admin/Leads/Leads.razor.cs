@@ -61,7 +61,7 @@ public partial class Leads
             ExpectedDurationDate = DateTime.Now,
             Result = Models.Enum.LeadResult.UNSUCCESSFUL
         }, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {
@@ -88,7 +88,7 @@ public partial class Leads
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<LeadDetailedDialog>(record, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
 
         if (result.Data is not null)
         {

@@ -7,7 +7,6 @@ namespace EmpiriaBMS.Front.Components;
 public partial class OtherDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
-    private bool isNew = false;
 
     [Parameter]
     public int DisciplineId { get; set; }
@@ -27,7 +26,6 @@ public partial class OtherDetailed : ComponentBase, IDisposable
 
     public async void PrepairForNew()
     {
-        isNew = true;
         _otherTypes.Clear();
         await _getOtherTypes();
         _other = new SupportiveWorkVM();
@@ -38,7 +36,6 @@ public partial class OtherDetailed : ComponentBase, IDisposable
 
     public async void PrepairForEdit(SupportiveWorkVM other)
     {
-        isNew = false;
         _otherTypes.Clear();
         await _getOtherTypes();
         _other = other;

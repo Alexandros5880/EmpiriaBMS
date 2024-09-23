@@ -36,13 +36,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 var project = result.Entity as Project;
                 var dto = await Get(project.Id);
 
-                return dto;
+                return dto!;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ProjectsRepo.Add(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(ProjectDto)!;
         }
     }
 
@@ -66,13 +66,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
                 var dto = await Get(project.Id);
 
-                return dto;
+                return dto!;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ProjectsRepo.Update(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(ProjectDto)!;
         }
     }
 

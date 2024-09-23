@@ -151,7 +151,7 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         catch (Exception ex)
         {
             _logger.LogError($"Exception On SupportiveWorkRepo.Add(SupportiveWork): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(SupportiveWorkDto)!;
         }
     }
 
@@ -179,7 +179,7 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         catch (Exception ex)
         {
             _logger.LogError($"Exception On SupportiveWorkRepo.Update(SupportiveWork): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(SupportiveWorkDto)!;
         }
     }
 

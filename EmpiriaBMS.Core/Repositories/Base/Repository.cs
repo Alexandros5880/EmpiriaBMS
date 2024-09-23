@@ -52,7 +52,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On Repository.Add({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(T)!;
         }
     }
 
@@ -102,7 +102,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(T)!;
         }
     }
 

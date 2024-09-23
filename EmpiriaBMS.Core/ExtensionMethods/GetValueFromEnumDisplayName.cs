@@ -14,12 +14,11 @@ public static class GetValueFromEnumDisplayName
 
         foreach (var field in type.GetFields())
         {
-            var attribute = Attribute.GetCustomAttribute(field,
-                typeof(DisplayAttribute)) as DisplayAttribute;
+            var attribute = Attribute.GetCustomAttribute(field, typeof(DisplayAttribute)) as DisplayAttribute;
 
             if (attribute != null && attribute.Name == displayName)
             {
-                return (T)field.GetValue(null);
+                return (T)field.GetValue(null)!;
             }
         }
 

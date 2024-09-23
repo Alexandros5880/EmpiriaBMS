@@ -10,7 +10,6 @@ namespace EmpiriaBMS.Front.Components;
 public partial class DisciplineDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
-    private bool isNew = false;
 
     [Parameter]
     public int ProjectId { get; set; }
@@ -28,7 +27,6 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
 
     public async Task PrepairForNew()
     {
-        isNew = true;
         _disciplineTypes.Clear();
         await _getDisciplineTypes();
         _discipline = new DisciplineVM();
@@ -39,7 +37,6 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
 
     public async Task PrepairForEdit(DisciplineVM discipline)
     {
-        isNew = false;
         _disciplineTypes.Clear();
         await _getDisciplineTypes();
         _discipline = discipline;
