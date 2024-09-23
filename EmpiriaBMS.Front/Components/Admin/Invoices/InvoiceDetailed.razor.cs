@@ -68,7 +68,8 @@ public partial class InvoiceDetailed
             {
                 _invoiceCategory = value;
                 SelectedCategory = _categories.FirstOrDefault(r => r.Value == _invoiceCategory.ToString());
-                _categoryCombo.Value = SelectedCategory.Text;
+                if (_categoryCombo != null)
+                    _categoryCombo.Value = SelectedCategory.Text;
             }
         }
     }
@@ -177,20 +178,24 @@ public partial class InvoiceDetailed
         if (Content.Project != null)
         {
             SelectedProject = _projects.FirstOrDefault(t => t.Id == Content.ProjectId);
-            _projectCombo.Value = SelectedProject.Name;
+            if (_projectCombo != null)
+                _projectCombo.Value = SelectedProject.Name;
         }
 
         if (Content.TypeId != 0)
         {
             SelectedType = _types.FirstOrDefault(t => t.Id == Content.TypeId);
-            _typeCombo.Value = SelectedType.Name;
+            if (_typeCombo != null)
+                _typeCombo.Value = SelectedType.Name;
         }
 
         SelectedVat = _vats.FirstOrDefault(r => r.Value == Content.Vat.ToString());
-        _vatCombo.Value = SelectedVat.Text;
+        if (_vatCombo != null)
+            _vatCombo.Value = SelectedVat.Text;
 
         SelectedCategory = _categories.FirstOrDefault(r => r.Value == Content.Category.ToString());
-        _categoryCombo.Value = SelectedCategory.Text;
+        if (_categoryCombo != null)
+            _categoryCombo.Value = SelectedCategory.Text;
 
         if (invoice == null && !halfRefresh)
             await _contractDetailedRef?.Prepair();

@@ -43,7 +43,7 @@
                             TOption="ProjectVM"
                             OptionText="@(c => c.Name)"
                             OptionValue="@(c => c.Id.ToString())"
-                                            @bind-SelectedOption="@SelectedProject"
+                            @bind-SelectedOption="@SelectedProject"
                             Disabled="@(!IsWorkingMode)" />
                         </div>
                         @if (!validProject)
@@ -52,6 +52,14 @@
                                 <span class="text-warning">Field is required!</span>
                             </div>
                         }
+                    } else
+                    {
+                        <div>
+                            Project<span class="text-danger">*</span>
+                        </div>
+                        <div>
+                            <strong>@SelectedProject.Name</strong>
+                        </div>
                     }
                 </div>
                 <!-- Category -->
@@ -60,17 +68,25 @@
                         Category
                     </div>
                     <div>
-                        <FluentCombobox @ref="@_categoryCombo"
-                                        Autocomplete="ComboboxAutocomplete.Both"
-                                        Placeholder="Select Result..."
-                                        Items="_categories"
-                                        Height="200px"
-                                        Width="100%"
-                                        Class="float-end"
-                                        TOption="(string Value, string Text)"
-                                        OptionText="@(c => c.Text)"
-                                        OptionValue="@(c => c.Value)"
-                                        @bind-SelectedOption="SelectedCategory" />
+                        @if(InvoiceCategory == null)
+                        {
+                            <FluentCombobox @ref="@_categoryCombo"
+                                            Autocomplete="ComboboxAutocomplete.Both"
+                                            Placeholder="Select Result..."
+                                            Items="_categories"
+                                            Height="200px"
+                                            Width="100%"
+                                            Class="float-end"
+                                            TOption="(string Value, string Text)"
+                                            OptionText="@(c => c.Text)"
+                                            OptionValue="@(c => c.Value)"
+                                            @bind-SelectedOption="SelectedCategory"
+                            Disabled="@(!IsWorkingMode)" />
+                        }
+                        else
+                        {
+                            <strong>@SelectedCategory.Text</strong>
+                        }
                     </div>
                 </div>
             </div>
