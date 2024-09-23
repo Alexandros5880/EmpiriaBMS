@@ -113,6 +113,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         List<Project> projects;
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var offers = await _context.Set<Offer>()
+                    .Include(o => o.Category)
+                    .Include(o => o.SubCategory)
+                    .Include(o => o.Lead)
+                    .ThenInclude(l => l.Address)
+                    .Where(r => !r.IsDeleted)
+                    .ToListAsync();
+
             projects = await _context.Set<Project>()
                                      .Where(r => !r.IsDeleted)
                                      .Include(r => r.Invoices)
@@ -132,6 +140,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                      .OrderBy(e => !e.Active)
                                      .ThenByDescending(e => e.DeadLine)
                                      .ToListAsync();
+
+            // Perform the projection after the data is loaded
+            projects = projects.Select(p =>
+            {
+                p.Offer = offers.FirstOrDefault(o => o.Id == p.OfferId);
+                return p;
+            }).ToList();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }
@@ -179,7 +194,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                     .Where(r => !r.IsDeleted)
                     .ToListAsync();
 
-                var offersIds = offers.Select(o => o.Id).ToList();
+                //var offersIds = offers.Select(o => o.Id).ToList();
 
                 List<Project> allProjects;
 

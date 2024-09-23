@@ -137,22 +137,29 @@
                 <div class="col-12">
                     Project Manager<span class="text-danger">*</span>
                 </div>
-                <div class="col-12">
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                    Placeholder="Select PM..."
-                                    Items="@_pms"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="UserVM"
-                                    OptionText="@(c => c.FullName)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Pm"/>
-                </div>
-                @if (!validPm)
+                @if (Content?.Offer?.SubCategory?.CanAssignePM ?? false)
                 {
                     <div class="col-12">
-                        <span class="text-warning">Field is required!</span>
+                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select PM..."
+                                        Items="@_pms"
+                                        Height="200px"
+                                        Width="100%"
+                                        TOption="UserVM"
+                                        OptionText="@(c => c.FullName)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Pm" />
                     </div>
+                    @if (!validPm)
+                    {
+                        <div class="col-12">
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <span class="text-warning">Can't Assign'</span>
                 }
             </div>
         </div>

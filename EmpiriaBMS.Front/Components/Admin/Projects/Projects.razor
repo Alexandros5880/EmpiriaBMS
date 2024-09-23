@@ -69,7 +69,23 @@
                 <PropertyColumn Property="@(p => p.Active)" Sortable="true" Title="Active" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.StartDate)" Sortable="true" Title="StartDate" Format="dd-mm-yyyy" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.DeadLine)" Sortable="true" Title="DeadLine" Format="dd-mm-yyyy" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.PMFullName)" Sortable="true" Title="ProjectManager" Align="@Align.Start" />
+                
+                <TemplateColumn Title="PM"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=false>
+                    <ChildContent>
+                        @if (context?.Offer?.SubCategory?.CanAssignePM ?? false)
+                        {
+                            <span>@(context.PMFullName)</span>
+
+                        } else
+                        {
+                            <span>--</span>
+                        }
+                    </ChildContent>
+                </TemplateColumn>
+
                 <PropertyColumn Property="@(p => p.ClientFullName)" Sortable="true" Title="Client" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
