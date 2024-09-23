@@ -199,11 +199,7 @@ public class KpisRepo : IDisposable
                                                 .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                                 .Include(ur => ur.Role)
                                                 .Include(ur => ur.User)
-                                                .Select(ur => new
-                                                {
-                                                    UserName = $"{ur.User.FirstName} {ur.User.MidName} {ur.User.LastName}",
-                                                    DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.TimeSpan.Hours)
-                                                })
+                                                .Select(ur => _getUserNameAndHours(ur))
                                                 .ToListAsync();
 
                 var userTimes = userRolesWithDailyTimes
@@ -221,6 +217,19 @@ public class KpisRepo : IDisposable
             _logger.LogError($"Exception On KpisRepo.GetHoursPerUser(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return default(Dictionary<string, long>)!;
         }
+    }
+
+    private (string UserName, long DailyTimeHours) _getUserNameAndHours(UserRole ur)
+    {
+        var firstName = ur.User != null ? ur.User.FirstName : default(string);
+        var midName = ur.User != null ? ur.User.MidName : default(string);
+        var lastName = ur.User != null ? ur.User.LastName : default(string);
+        var userName = $"{firstName} {midName} {lastName}";
+        long dailyTimeHours = (ur.User != null && ur.User.DailyTime != null)
+            ? ur.User.DailyTime.Sum(dt => (dt.TimeSpan != null ? dt.TimeSpan.Hours : 0))
+            : 0;
+
+        return (userName, dailyTimeHours);
     }
 
     public async Task<List<ProjectDto>> GetActiveDelayedProjects(
