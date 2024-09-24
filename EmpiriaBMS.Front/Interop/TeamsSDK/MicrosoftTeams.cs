@@ -76,6 +76,26 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("initializeTooltips");
     }
 
+    public Task<string> GetElementStyle(string elementId)
+    {
+        return InvokeAsync<string>("getElementStyle", elementId);
+    }
+
+    public Task SetElementStyle(string elementId, string style)
+    {
+        return InvokeVoidAsync("setElementStyle", elementId, style);
+    }
+
+    public Task CloneElementContent(string sourceId, string targetId)
+    {
+        return InvokeVoidAsync("cloneElementContent", sourceId, targetId);
+    }
+
+    public Task ClearElementContent(string elementId)
+    {
+        return InvokeVoidAsync("clearElementContent", elementId);
+    }
+
     #region Cookies
     public async Task SetCookie(string key, string value)
     {
@@ -176,6 +196,11 @@ public class MicrosoftTeams : InteropModuleBase
     public async Task ExportPdfContent(string[] elementsIds, string filename)
     {
         await InvokeAsync<string>("exportPdfContent", elementsIds, filename);
+    }
+
+    public async Task ExportChartTableToPdf(string headerId, string chartId, string tableId, string filename)
+    {
+        await InvokeAsync<string>("exportChartTableToPdf", headerId, chartId, tableId, filename);
     }
     #endregion
 }

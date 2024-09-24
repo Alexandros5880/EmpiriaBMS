@@ -113,6 +113,34 @@ export function scrollToElement(id) {
     }
 }
 
+export function getElementStyle(elementId) {
+    const element = document.getElementById(elementId);
+    return element ? element.getAttribute("style") : "";
+};
+
+export function setElementStyle(elementId, style) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.setAttribute("style", style);
+    }
+};
+
+export function cloneElementContent(sourceId, targetId) {
+    const sourceElement = document.getElementById(sourceId);
+    const targetElement = document.getElementById(targetId);
+    if (sourceElement && targetElement) {
+        targetElement.innerHTML = sourceElement.innerHTML;
+    }
+};
+
+export function clearElementContent(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = "";
+    }
+};
+
+
 // Register MNouse Weel Event
 export function registerGlobalMouseWheelEvent(objRef, id) {
     $('[data-id="' + id + '"]').on('wheel', function (e) {
@@ -356,6 +384,7 @@ export async function pickBakFilePath() {
 }
 // - Pick Folder/File Path
 
+
 // Download CSV
 export function downloadCsvFile(filename, content) {
     var blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
@@ -419,6 +448,7 @@ export function triggerFileInputClick(element) {
 };
 // - Element Click
 
+
 // PDF
 export async function exportPdfContent(elementIds, fileName) {
     try {
@@ -430,38 +460,178 @@ export async function exportPdfContent(elementIds, fileName) {
         });
 
         const padding = 20;
+        const pageHeight = doc.internal.pageSize.getHeight();
+        let currentY = padding;
 
-        for (let i = 0; i < elementIds.length; i += 2) {
-            // Add a new page for every pair of elements
-            if (i > 0) {
-                doc.addPage();
-            }
+        for (let i = 0; i < elementIds.length; i++) {
+            const elementId = elementIds[i];
+            if (elementId) {
+                const elementHTML = document.getElementById(elementId);
+                if (elementHTML) {
+                    // Use html2canvas to capture the element
+                    const canvas = await html2canvas(elementHTML, {
+                        scale: 2,
+                        logging: true,
+                        useCORS: true,
+                    });
+                    const imgData = canvas.toDataURL('image/png');
 
-            for (let j = 0; j < 2; j++) {
-                const elementId = elementIds[i + j];
-                if (elementId) {
-                    const elementHTML = document.getElementById(elementId);
-                    if (elementHTML) {
-                        // Use html2canvas to capture the element
-                        const canvas = await html2canvas(elementHTML, { scale: 1 });
-                        const imgData = canvas.toDataURL('image/png');
-
-                        // Calculate the width and height of the PDF page
-                        const pdfWidth = doc.internal.pageSize.getWidth() - 2 * padding;
-                        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-                        // Position the first element at the top and the second element below it
-                        const yOffset = padding + j * (pdfHeight + 2 * padding);
-
-                        // Add the image to the PDF
-                        doc.addImage(imgData, 'PNG', padding, yOffset, pdfWidth, pdfHeight);
-                    } else {
-                        console.warn(`Element with ID ${elementId} not found.`);
+                    // DEBUG
+                    console.log(`Captured image[${i + 1}] data:`, imgData);
+                    if (!imgData || imgData === "data:,") {
+                        console.error(`Captured image[${i + 1}] data is invalid.`);
+                        continue; // Skip to the next iteration
                     }
+
+                    // Calculate the width and height of the PDF page
+                    const pdfWidth = doc.internal.pageSize.getWidth() - 2 * padding;
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+                    // If adding the next image exceeds the page height, add a new page
+                    if (currentY + pdfHeight > pageHeight - padding) {
+                        doc.addPage();
+                        currentY = padding; // Reset yOffset for the new page
+                    }
+
+                    // Add the image to the PDF
+                    doc.addImage(imgData, 'PNG', padding, currentY, pdfWidth, pdfHeight);
+                    currentY += pdfHeight + 2 * padding; // Increment for next element
+                } else {
+                    console.warn(`Element with ID ${elementId} not found.`);
                 }
             }
         }
 
+        doc.save(fileName);
+    } catch (error) {
+        console.error('Error exporting elements to PDF:', error);
+    }
+}
+
+export async function exportChartTableToPdf(headerId, chartId, tableId, fileName) {
+    console.log("\n\n\n\n");
+
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        const padding = 20;
+        const pdfWidth = doc.internal.pageSize.getWidth() - 2 * padding;
+
+        // Capture the header
+        const headerHTML = document.getElementById(headerId);
+        if (headerHTML) {
+            const headerCanvas = await html2canvas(headerHTML, {
+                scale: 2,
+                logging: true,
+                useCORS: true,
+            });
+            const headerImgData = headerCanvas.toDataURL('image/png');
+
+            // DEBUG
+            console.log('Captured header data:', headerImgData);
+            if (!headerImgData || headerImgData === "data:,") {
+                console.error('Captured header data is invalid.');
+                return;
+            }
+
+            const chartWidth = pdfWidth * 1;
+            const chartHeight = (headerCanvas.height * chartWidth) / headerCanvas.width;
+
+            // Add the chart page in landscape
+            //doc.addPage();
+            doc.addImage(headerImgData, 'PNG', padding, 4, chartWidth, chartHeight);
+        } else {
+            console.warn(`Element with ID ${chartId} not found.`);
+            return; // Exit if chart not found
+        }
+
+        // Capture the chart
+        const chartHTML = document.getElementById(chartId);
+        if (chartHTML) {
+            const chartCanvas = await html2canvas(chartHTML, {
+                scale: 2,
+                logging: true,
+                useCORS: true,
+            });
+            const chartImgData = chartCanvas.toDataURL('image/png');
+
+            // DEBUG
+            console.log('Captured chart data:', chartImgData);
+            if (!chartImgData || chartImgData === "data:,") {
+                console.error('Captured chart data is invalid.');
+                return;
+            }
+
+            const chartWidth = pdfWidth * 1;
+            const chartHeight = (chartCanvas.height * chartWidth) / chartCanvas.width;
+
+            // Add the chart page in landscape
+            //doc.addPage();
+            doc.addImage(chartImgData, 'PNG', padding, 30, chartWidth, chartHeight);
+        } else {
+            console.warn(`Element with ID ${chartId} not found.`);
+            return; // Exit if chart not found
+        }
+
+        doc.addPage();
+
+        // Capture the table
+        const tableHTML = document.getElementById(tableId);
+        if (tableHTML) {
+            // Get Number Of Rows
+            const rows = tableHTML.getElementsByTagName('tr');
+            const rowsCount = rows.length;
+
+            const tableCanvas = await html2canvas(tableHTML, {
+                scale: 2,
+                logging: true,
+                useCORS: true,
+            });
+            const tableImgData = tableCanvas.toDataURL('image/png');
+
+            // DEBUG
+            console.log('Captured table data:', tableImgData);
+            if (!tableImgData || tableImgData === "data:,") {
+                console.error('Captured table data is invalid.');
+                return; // Exit if invalid
+            }
+
+            const tableWidth = doc.internal.pageSize.getWidth() * 0.9; // 90% for the table
+            const rowHeight = tableCanvas.height / rowsCount;
+            const tableHeight = (tableCanvas.height * tableWidth) / tableCanvas.width;
+            const availableHeight = doc.internal.pageSize.getHeight() - padding; 
+
+            // Check if the height exceeds page size
+            if (tableCanvas.height > availableHeight) {
+
+                const maxRowsPerPage = Math.floor(availableHeight / (rowHeight + padding));
+                const numpages = Math.ceil(rowsCount / maxRowsPerPage);
+
+                for (let i = 0; i < numpages; i++) {
+                    if (i > 0) {
+                        doc.addPage();
+                    }
+
+                    const startRow = i * maxRowsPerPage;
+                    const rowPossition = (padding + (rowHeight + padding) * (startRow % maxRowsPerPage)) * i;
+                    const offset = ((rowPossition * 10) + (10 * i) - (i / 2.85)) - 2;
+
+                    doc.addImage(tableImgData, 'PNG', padding, -offset, tableWidth, tableHeight);
+                }
+            } else {
+                doc.addPage();
+                doc.addImage(tableImgData, 'PNG', padding, padding, tableWidth, tableHeight);
+            }
+        } else {
+            console.warn(`Element with ID ${tableId} not found.`);
+        }
+
+        // Save the combined PDF
         doc.save(fileName);
     } catch (error) {
         console.error('Error exporting elements to PDF:', error);

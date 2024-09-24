@@ -64,7 +64,14 @@ public partial class ProfitPerProjectKPI
                 },
                 Legend = new Legend()
                 {
-                    Display = displayLegend
+                    Display = displayLegend,
+                    FullWidth = false,
+                    Position = ChartEnums.Position.Left, // Place legend on the right
+                    Labels = new LegendLabels()
+                    {
+                        BoxWidth = 10,  // Size of the box in the legend
+                        UsePointStyle = true,  // Use a custom style for the legend
+                    }
                 }
             }
         };
@@ -145,12 +152,14 @@ public partial class ProfitPerProjectKPI
         exporting = true;
         StateHasChanged();
 
-        await Task.Delay(1000);
+        await Task.Delay(2000);
 
-        string[] divsIds = new string[] { "export-to-pdf" };
-        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+        var filtersId = "filters-to-pdf";
+        var chartId = "chart-to-pdf";
+        var tableId = "table-to-pdf";
 
-        await _microsoftTeams.ExportPdfContent(divsIds, fileName);
+        string fileName = $"EmbiriaBMS {_title} {DateTime.Now.ToEuropeFormat()}.pdf";
+        await _microsoftTeams.ExportChartTableToPdf(filtersId, chartId, tableId, fileName);
 
         await Task.Delay(1000);
 
