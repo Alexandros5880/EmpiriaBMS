@@ -11,11 +11,11 @@
 @inject MicrosoftTeams MicrosoftTeams
 @inject Logging.LoggerManager Logger
 
-<div>
+<div class="card rounded">
 
     @if (Content != null)
     {
-        <div class="row m-2 d-flex justify-content-center card rounded"
+        <div class="row m-2 d-flex justify-content-center"
              style="cursor: pointer; overflow: auto; margin: 0 auto;">
 
             @if (!string.IsNullOrEmpty(@Title))
