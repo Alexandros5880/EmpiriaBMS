@@ -3,7 +3,6 @@
 @using Color = Microsoft.Fast.Components.FluentUI.Color
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
-@using EmpiriaBMS.Front.Components.Admin.Contracts
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
@@ -201,21 +200,6 @@
                     <FluentDatePicker Style="width:100%;"
                                       @bind-Value="@Content.ActualPayment"
                                       Disabled="@(!IsWorkingMode)" />
-                </div>
-            </div>
-
-            <!-- Contract -->
-            <div class="col-12 row mt-1">
-                <div class="col-12">
-                    <h4>Contract</h4>
-                </div>
-                <div class="col-12 border rounded mb-2 pb-3">
-                    <!-- Contract Detailed -->
-                    <ContractDetailed @ref="@_contractDetailedRef"
-                                      Content="@Contract"
-                                      DisplayActions="false"
-                                      DisplayInvoice="false"
-                                      Editable="@IsWorkingMode" />
                 </div>
             </div>
 

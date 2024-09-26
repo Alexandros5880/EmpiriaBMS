@@ -78,20 +78,6 @@ public static class ModelRelations
                .WithMany(de => de.DisciplinesEngineers)
                .HasForeignKey(de => de.DisciplineId);
 
-        // Invoice Contract (OneToOne)
-        builder.Entity<Invoice>()
-               .HasOne(a => a.Contract)
-               .WithOne(b => b.Invoice)
-               .HasForeignKey<Contract>(b => b.InvoiceId)
-               .IsRequired(false)
-               .OnDelete(DeleteBehavior.Cascade);
-        builder.Entity<Contract>()
-               .HasOne(b => b.Invoice)
-               .WithOne(a => a.Contract)
-               .HasForeignKey<Invoice>(a => a.ContractId)
-               .IsRequired(false)
-               .OnDelete(DeleteBehavior.Cascade);
-
         // Offer Project (OneToOne)
         builder.Entity<Offer>()
                .HasOne(a => a.Project)

@@ -62,8 +62,7 @@ public partial class Invoices : ComponentBase
         {
             EstimatedPayment = DateTime.Now,
             ActualPayment = DateTime.Now,
-            Category = InvoiceCategory,
-            Contract = new ContractVM()
+            Category = InvoiceCategory
         };
 
         var title = InvoiceCategory == EmpiriaBMS.Models.Enum.InvoiceCategory.INCOMES ? "Income" : "Expense";
@@ -198,8 +197,6 @@ public partial class Invoices : ComponentBase
     private async Task _exportToCSV()
     {
         var date = DateTime.Today;
-
-        var invoice = FilteredItems.FirstOrDefault(i => i.Contract != null);
 
         // Export Invoices
         var invoicesFileName = $"Invoices-{date.ToEuropeFormat()}.csv";

@@ -29,7 +29,6 @@ public class AppDbContext : DbContext
     public DbSet<SupportiveWorkEmployee>? SupportiveWorkEmployees { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
     public DbSet<InvoiceType>? InvoicesTypes { get; set; }
-    public DbSet<Contract>? Contracts { get; set; }
     public DbSet<Timespan>? TimeSpans { get; set; }
     public DbSet<DailyTimeRequest>? DailyTimeRequests { get; set; }
     public DbSet<DailyTime>? DailyTime { get; set; }
@@ -4114,7 +4113,6 @@ public class AppDbContext : DbContext
         allEntities.Add("SupportiveWorkEmployees", await SupportiveWorkEmployees.Cast<object>().ToListAsync());
         allEntities.Add("Invoices", await Invoices.Cast<object>().ToListAsync());
         allEntities.Add("InvoicesTypes", await InvoicesTypes.Cast<object>().ToListAsync());
-        allEntities.Add("Contracts", await Contracts.Cast<object>().ToListAsync());
         allEntities.Add("TimeSpans", await TimeSpans.Cast<object>().ToListAsync());
         allEntities.Add("DailyTime", await DailyTime.Cast<object>().ToListAsync());
         allEntities.Add("ParsonalTime", await ParsonalTime.Cast<object>().ToListAsync());

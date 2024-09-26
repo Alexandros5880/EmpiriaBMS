@@ -1,5 +1,4 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Contracts;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
@@ -22,22 +21,6 @@ public partial class InvoiceDetailed
             if (value != _invoice && value != null)
             {
                 _invoice = value;
-                Contract = value.Contract;
-            }
-        }
-    }
-
-    private ContractVM _contract;
-    public ContractVM Contract
-    {
-        get => _contract;
-        set
-        {
-            if (value != _contract && value != null)
-            {
-                _contract = value;
-                Content.Contract = value;
-                Content.ContractId = value?.Id;
             }
         }
     }
@@ -78,8 +61,6 @@ public partial class InvoiceDetailed
     private FluentCombobox<ProjectVM> _projectCombo;
     private FluentCombobox<InvoiceTypeVM> _typeCombo;
     private FluentCombobox<(string Value, string Text)> _categoryCombo;
-
-    private ContractDetailed _contractDetailedRef;
     #endregion
 
     #region Relaited Records Lists
@@ -152,9 +133,6 @@ public partial class InvoiceDetailed
         if (invoice != null)
             Content = invoice;
 
-        if (halfRefresh)
-            await _getRelatedContract();
-
         if (Content.Project != null)
         {
             SelectedProject = _projects.FirstOrDefault(t => t.Id == Content.ProjectId);
@@ -173,11 +151,6 @@ public partial class InvoiceDetailed
         if (_categoryCombo != null)
             _categoryCombo.Value = SelectedCategory.Text;
 
-        if (invoice == null && !halfRefresh)
-            await _contractDetailedRef?.Prepair();
-        else
-            await _contractDetailedRef.Prepair(Contract, !halfRefresh);
-
         StateHasChanged();
     }
 
@@ -188,26 +161,12 @@ public partial class InvoiceDetailed
             return;
 
         var i = await _upsertInvoice(_invoice.Clone() as InvoiceVM);
-        _contract.Invoice = i;
-        _contract.InvoiceId = i.Id;
-        var c = await _upsertContract(_contract.Clone() as ContractVM);
 
-        i.Contract = c;
-        i.ContractId = c.Id;
-
-        Contract = new ContractVM()
-        {
-            Date = DateTime.Now,
-        };
         Content = new InvoiceVM()
         {
             EstimatedPayment = DateTime.Now,
             ActualPayment = DateTime.Now,
-            Contract = Contract,
-            ContractId = 0
         };
-        Contract.Invoice = Content;
-        Contract.InvoiceId = 0;
 
         await OnSave.InvokeAsync(i);
     }
@@ -220,8 +179,6 @@ public partial class InvoiceDetailed
             var invoice = i.Clone() as InvoiceVM;
             invoice.ProjectId = SelectedProject.Id;
             invoice.Type = null;
-            invoice.Contract = null;
-            invoice.ContractId = null;
             invoice.Project = null;
 
             var dto = _mapper.Map<InvoiceDto>(invoice);
@@ -244,35 +201,6 @@ public partial class InvoiceDetailed
                     return null;
             }
 
-        }
-        else
-            return null;
-    }
-
-    private async Task<ContractVM> _upsertContract(ContractVM contract)
-    {
-        if (contract is not null && contract.Invoice != null && contract.InvoiceId != 0)
-        {
-            contract.Invoice = null;
-
-            var dto = _mapper.Map<ContractDto>(contract);
-            // Save Contract
-            if (await _dataProvider.Contracts.Any(p => p.Id == contract.Id))
-            {
-                ContractDto updated = await _dataProvider.Contracts.Update(dto);
-                if (updated != null)
-                    return _mapper.Map<ContractVM>(updated);
-                else
-                    return null;
-            }
-            else
-            {
-                ContractDto updated = await _dataProvider.Contracts.Add(dto);
-                if (updated != null)
-                    return _mapper.Map<ContractVM>(updated);
-                else
-                    return null;
-            }
         }
         else
             return null;
@@ -325,7 +253,6 @@ public partial class InvoiceDetailed
     {
         await _getProjects();
         await _getTypes();
-        await _getRelatedContract();
     }
 
     private async Task _getProjects()
@@ -342,36 +269,6 @@ public partial class InvoiceDetailed
         var vms = _mapper.Map<List<InvoiceTypeVM>>(dtos);
         _types.Clear();
         vms.ForEach(_types.Add);
-    }
-
-    private async Task _getRelatedContract()
-    {
-        if (Content.Id != 0)
-        {
-            var contractDto = await _dataProvider.Invoices.GetContract(Content.Id);
-            if (contractDto != null)
-                Contract = _mapper.Map<ContractVM>(contractDto);
-            else
-            {
-                Contract = new ContractVM()
-                {
-                    Date = DateTime.Now,
-                    Invoice = Content,
-                    InvoiceId = Content.Id,
-                };
-                Content.Contract = Contract;
-                Content.Id = Content.Id;
-            }
-
-        }
-
-        if (_contractDetailedRef != null && Contract != null)
-        {
-            Contract.Invoice = Content;
-            Contract.InvoiceId = Content.Id;
-            await _contractDetailedRef.Prepair(Contract, false);
-        }
-
     }
     #endregion
 }
