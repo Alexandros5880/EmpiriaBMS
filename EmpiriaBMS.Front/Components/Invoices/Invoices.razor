@@ -59,7 +59,7 @@
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
-                            GridTemplateColumns="50px 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="50px 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 100%; overflow:auto;">
 
                 <!-- CheckBox -->
@@ -112,12 +112,6 @@
                     </ChildContent>
                 </TemplateColumn>
 
-                <!-- Expenses Type -->
-                @if (InvoiceCategory == Models.Enum.InvoiceCategory.EXPENSES)
-                {
-                    <PropertyColumn Property="@(p => p.ExpensesType.Name)" Sortable="true" Title="Expsenses Type" Align="@Align.Start" />
-                }
-
                 <!-- Estimate Date -->
                 <PropertyColumn Property="@(p => p.EstimatedPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Estimated Payment" Align="@Align.Start" />
 
@@ -137,6 +131,12 @@
                         <PendingPaymentCell Item="context" />
                     </ChildContent>
                 </TemplateColumn>
+
+                <!-- Expenses Type -->
+                @if (InvoiceCategory == Models.Enum.InvoiceCategory.EXPENSES)
+                {
+                    <PropertyColumn Property="@(p => p.ExpensesType.Name)" Sortable="true" Title="Expsenses Type" Align="@Align.Start" />
+                }
 
                 <!-- Actions -->
                 <TemplateColumn Title="Actions" Align="@Align.End">
