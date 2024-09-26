@@ -23,6 +23,9 @@ public partial class Invoices : ComponentBase
     [Parameter]
     public InvoiceCategory InvoiceCategory { get; set; }
 
+    [Parameter]
+    public bool DisplayTitle { get; set; } = false;
+
     #region Data Grid
     public List<InvoiceVM> _invoices { get; set; }
     private string _filterString = string.Empty;

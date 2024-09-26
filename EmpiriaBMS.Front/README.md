@@ -2,26 +2,37 @@
 1. When push tag ****-staging*** deploy to azure staging server
 2. When push tag ****-prod*** deploy to azure production server
 
+***
+
 ### You can open the app oustide of teams:
 `https://localhost:44302/login`
 
 ### MicrosoftTeams User:
 `using MicrosoftUser = Microsoft.Graph.Models.User;`
 
+***
+
 ### Run Seed Data Ceator:
 ``dotnet run --project  EmpiriaBMS.EF.CLI/EmpiriaBMS.EF.CLI.csproj -- seed``
 
+***
+
 ### Run CI GitHub WorkFlow:
 ``make ci -i``
+
+***
 
 ### Microsoft 365 Admin User:
 1. Create an admin user.
 2. Add licences and apps -> Microsoft 365 Business Basc -> Apps Select All.
 3. Add licences and apps -> Microsoft Power Automate Free.
 
+***
+
 ### MicrosoftTeams Admin Center:
 1. Teams apps -> Permission policies -> Add **Allow-All-Apps**
 
+***
 
 ### Create SSL Certificate:
 1. Open PowerShell With Admin Permissions.
@@ -48,6 +59,8 @@
 14. In Encryption, select TripleDESH-SHA1, click Next.
 15. Select where you want to export your certificate, next and Finish.
 
+***
+
 ### Uploading the Certificate to Azure:
 1. Go to your Azure App Service.
 2. Go to TLS / SSL settings.
@@ -57,11 +70,15 @@
 6. Insert the password that we used in the previous section.
 7. Click on Upload.
 
+***
+
 ### Create an app int MicrosoftTeams Dev Portal:
 1. Ceate an app example EmbiriaBMS-Production.
 2. Downlowd manifest.json.
 3. Rename to manifest.prod.json.
 4. Update Imfo like azure portal Application (Client Id) et cetera.
+
+***
 
 ### Ord -> Permisions:
 ***1*** -> ***See Dashboard Layout***
@@ -132,3 +149,19 @@
 ***Role[ Admin ]*** -------------> ***[ 7, 9, 10, 11, 28, 35, 36, 37, 43, 44, 45, 46, 47 ]***
 
 ***Role[ Engineer SUB ]*** -------------> ***[  ]***
+
+
+
+
+***
+
+## Quirks of the code:
+
+### Invoices Properties Names:
+
+Number == InvoiceNumber.
+
+EstimateDate == EstimatedPayment.
+
+PaymentDate == ActualPayment.
+***
