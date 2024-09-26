@@ -1,5 +1,4 @@
 ﻿using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Front.Components.Admin.Contracts;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
@@ -19,22 +18,6 @@ public partial class InvoiceDetailed
             if (value != _invoice && value != null)
             {
                 _invoice = value;
-                Contract = value.Contract;
-            }
-        }
-    }
-
-    private ContractVM _contract;
-    public ContractVM Contract
-    {
-        get => _contract;
-        set
-        {
-            if (value != _contract && value != null)
-            {
-                _contract = value;
-                Content.Contract = value;
-                Content.ContractId = value?.Id;
             }
         }
     }
@@ -44,9 +27,6 @@ public partial class InvoiceDetailed
 
     [Parameter]
     public bool DisplayAcions { get; set; } = true;
-
-    [Parameter]
-    public bool DisplayProject { get; set; } = false;
 
     [Parameter]
     public EventCallback<InvoiceVM> OnSave { get; set; }
@@ -73,20 +53,15 @@ public partial class InvoiceDetailed
 
     #region Fluent Combo Ref
     private FluentCombobox<ProjectVM> _projectCombo;
+    private FluentCombobox<ExpensesTypeVM> _expenseTypeCombo;
     private FluentCombobox<InvoiceTypeVM> _typeCombo;
     private FluentCombobox<(string Value, string Text)> _categoryCombo;
-
-    private ContractDetailed _contractDetailedRef;
-
-    private FluentCombobox<(string Value, string Text)> _vatCombo;
     #endregion
 
     #region Relaited Records Lists
     ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
+    ObservableCollection<ExpensesTypeVM> _expensesTypes = new ObservableCollection<ExpensesTypeVM>();
     ObservableCollection<InvoiceTypeVM> _types = new ObservableCollection<InvoiceTypeVM>();
-    private List<(string Value, string Text)> _vats = Enum.GetValues(typeof(Vat)).Cast<Vat>()
-                                                          .Select(e => e.ToTuple())
-                                                          .ToList();
 
     private List<(string Value, string Text)> _categories = Enum.GetValues(typeof(InvoiceCategory))
                                                                 .Cast<InvoiceCategory>()
@@ -107,6 +82,18 @@ public partial class InvoiceDetailed
         }
     }
 
+    private ExpensesTypeVM _selectedExpType = new ExpensesTypeVM();
+    public ExpensesTypeVM SelectedExpType
+    {
+        get => _selectedExpType;
+        set
+        {
+            if (_selectedExpType == value || value == null) return;
+            _selectedExpType = value;
+            Content.ExpensesTypeId = _selectedExpType.Id;
+        }
+    }
+
     private InvoiceTypeVM _selectedType = new InvoiceTypeVM();
     public InvoiceTypeVM SelectedType
     {
@@ -116,21 +103,6 @@ public partial class InvoiceDetailed
             if (_selectedType == value || value == null) return;
             _selectedType = value;
             Content.TypeId = _selectedType.Id;
-        }
-    }
-
-    private (string Value, string Text) _selectedVat;
-    public (string Value, string Text) SelectedVat
-    {
-        get => _selectedVat;
-        set
-        {
-            if (value == (null, null))
-                return;
-
-            _selectedVat = value;
-            Vat vat = (Vat)Enum.Parse(typeof(Vat), value.Value);
-            Content.Vat = vat;
         }
     }
 
@@ -169,9 +141,6 @@ public partial class InvoiceDetailed
         if (invoice != null)
             Content = invoice;
 
-        if (halfRefresh)
-            await _getRelatedContract();
-
         if (Content.Project != null)
         {
             SelectedProject = _projects.FirstOrDefault(t => t.Id == Content.ProjectId);
@@ -186,18 +155,9 @@ public partial class InvoiceDetailed
                 _typeCombo.Value = SelectedType.Name;
         }
 
-        SelectedVat = _vats.FirstOrDefault(r => r.Value == Content.Vat.ToString());
-        if (_vatCombo != null)
-            _vatCombo.Value = SelectedVat.Text;
-
         SelectedCategory = _categories.FirstOrDefault(r => r.Value == Content.Category.ToString());
         if (_categoryCombo != null)
             _categoryCombo.Value = SelectedCategory.Text;
-
-        if (invoice == null && !halfRefresh)
-            await _contractDetailedRef?.Prepair();
-        else
-            await _contractDetailedRef.Prepair(Contract, !halfRefresh);
 
         StateHasChanged();
     }
@@ -209,26 +169,15 @@ public partial class InvoiceDetailed
             return;
 
         var i = await _upsertInvoice(_invoice.Clone() as InvoiceVM);
-        _contract.Invoice = i;
-        _contract.InvoiceId = i.Id;
-        var c = await _upsertContract(_contract.Clone() as ContractVM);
 
-        i.Contract = c;
-        i.ContractId = c.Id;
+        if (i == null)
+            return;
 
-        Contract = new ContractVM()
-        {
-            Date = DateTime.Now,
-        };
         Content = new InvoiceVM()
         {
-            EstimatedDate = DateTime.Now,
-            PaymentDate = DateTime.Now,
-            Contract = Contract,
-            ContractId = 0
+            EstimatedPayment = DateTime.Now,
+            ActualPayment = DateTime.Now
         };
-        Contract.Invoice = Content;
-        Contract.InvoiceId = 0;
 
         await OnSave.InvokeAsync(i);
     }
@@ -239,10 +188,8 @@ public partial class InvoiceDetailed
         if (i.ProjectId != 0)
         {
             var invoice = i.Clone() as InvoiceVM;
-            invoice.ProjectId = SelectedProject.Id;
+            invoice.Project = null;
             invoice.Type = null;
-            invoice.Contract = null;
-            invoice.ContractId = null;
             invoice.Project = null;
 
             var dto = _mapper.Map<InvoiceDto>(invoice);
@@ -269,35 +216,6 @@ public partial class InvoiceDetailed
         else
             return null;
     }
-
-    private async Task<ContractVM> _upsertContract(ContractVM contract)
-    {
-        if (contract is not null && contract.Invoice != null && contract.InvoiceId != 0)
-        {
-            contract.Invoice = null;
-
-            var dto = _mapper.Map<ContractDto>(contract);
-            // Save Contract
-            if (await _dataProvider.Contracts.Any(p => p.Id == contract.Id))
-            {
-                ContractDto updated = await _dataProvider.Contracts.Update(dto);
-                if (updated != null)
-                    return _mapper.Map<ContractVM>(updated);
-                else
-                    return null;
-            }
-            else
-            {
-                ContractDto updated = await _dataProvider.Contracts.Add(dto);
-                if (updated != null)
-                    return _mapper.Map<ContractVM>(updated);
-                else
-                    return null;
-            }
-        }
-        else
-            return null;
-    }
     #endregion
 
     #region Validation
@@ -309,7 +227,7 @@ public partial class InvoiceDetailed
     {
         if (fieldname == null)
         {
-            validProject = !DisplayProject || SelectedProject.Id != 0;
+            validProject = SelectedProject.Id != 0;
             validMark = !string.IsNullOrEmpty(Content.Mark);
             validType = Content.TypeId != 0;
 
@@ -325,7 +243,7 @@ public partial class InvoiceDetailed
             switch (fieldname)
             {
                 case "Project":
-                    validProject = !DisplayProject || SelectedProject.Id != 0;
+                    validProject = SelectedProject.Id != 0;
                     return validProject;
                 case "Mark":
                     validMark = !string.IsNullOrEmpty(Content.Mark);
@@ -346,8 +264,8 @@ public partial class InvoiceDetailed
     private async Task _getRecords()
     {
         await _getProjects();
+        await _getExpTypes();
         await _getTypes();
-        await _getRelatedContract();
     }
 
     private async Task _getProjects()
@@ -366,34 +284,12 @@ public partial class InvoiceDetailed
         vms.ForEach(_types.Add);
     }
 
-    private async Task _getRelatedContract()
+    private async Task _getExpTypes()
     {
-        if (Content.Id != 0)
-        {
-            var contractDto = await _dataProvider.Invoices.GetContract(Content.Id);
-            if (contractDto != null)
-                Contract = _mapper.Map<ContractVM>(contractDto);
-            else
-            {
-                Contract = new ContractVM()
-                {
-                    Date = DateTime.Now,
-                    Invoice = Content,
-                    InvoiceId = Content.Id,
-                };
-                Content.Contract = Contract;
-                Content.Id = Content.Id;
-            }
-
-        }
-
-        if (_contractDetailedRef != null && Contract != null)
-        {
-            Contract.Invoice = Content;
-            Contract.InvoiceId = Content.Id;
-            await _contractDetailedRef.Prepair(Contract, false);
-        }
-
+        var dtos = await _dataProvider.ExpensesTypes.GetAll();
+        var vms = _mapper.Map<List<ExpensesTypeVM>>(dtos);
+        _expensesTypes.Clear();
+        vms.ForEach(_expensesTypes.Add);
     }
     #endregion
 }

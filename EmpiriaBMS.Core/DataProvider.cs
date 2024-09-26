@@ -32,11 +32,11 @@ public class DataProvider : IDataProvider, IDisposable
     public OfferRepo Offers { get; set; }
     public EmailRepo Emails { get; set; }
     public TeamsRequestedUserRepo TeamsRequestedUsers { get; set; }
-    public ContractRepo Contracts { get; set; }
     public LeadRepo Leads { get; set; }
     public KpisRepo KPIS { get; set; }
     public WorkingTime WorkingTime { get; set; }
     public ReportsRepo Reports { get; set; }
+    public ExpensesTypeRepo ExpensesTypes { get; set; }
 
     public DataProvider(
         IDbContextFactory<AppDbContext> dbFactory,
@@ -68,11 +68,11 @@ public class DataProvider : IDataProvider, IDisposable
         Offers = new OfferRepo(dbFactory, logger);
         Emails = new EmailRepo(dbFactory, logger);
         TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory, logger);
-        Contracts = new ContractRepo(dbFactory, logger);
         Leads = new LeadRepo(dbFactory, logger);
         KPIS = new KpisRepo(dbFactory, logger);
         WorkingTime = new WorkingTime(dbFactory, logger);
         Reports = new ReportsRepo(dbFactory, logger);
+        ExpensesTypes = new ExpensesTypeRepo(dbFactory,logger);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -106,11 +106,11 @@ public class DataProvider : IDataProvider, IDisposable
                 Offers.Dispose();
                 Emails.Dispose();
                 TeamsRequestedUsers.Dispose();
-                Contracts.Dispose();
                 Leads.Dispose();
                 KPIS.Dispose();
                 WorkingTime.Dispose();
                 Reports.Dispose();
+                ExpensesTypes.Dispose();
             }
             disposedValue = true;
         }

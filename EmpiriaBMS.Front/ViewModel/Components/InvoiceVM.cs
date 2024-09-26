@@ -1,5 +1,7 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Enum;
+using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
@@ -17,21 +19,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private double? _total;
-    public double? Total
-    {
-        get => _total;
-        set
-        {
-            if (value == _total)
-                return;
-            _total = value;
-            NotifyPropertyChanged(nameof(Total));
-        }
-    }
-
-    private Vat _vat;
-    public Vat Vat
+    private int _vat;
+    public int Vat
     {
         get => _vat;
         set
@@ -43,8 +32,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private double? _fee;
-    public double? Fee
+    private double _fee;
+    public double Fee
     {
         get => _fee;
         set
@@ -56,34 +45,45 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private DateTime? _estimatedDate;
-    public DateTime? EstimatedDate
+    [NotMapped]
+    public double Total
     {
-        get => _estimatedDate;
-        set
+        get
         {
-            if (value == _estimatedDate)
-                return;
-            _estimatedDate = value;
-            NotifyPropertyChanged(nameof(EstimatedDate));
+            var vatDivition = Convert.ToDouble(Vat) / 100.0;
+            var actualVat = vatDivition * Fee;
+            return actualVat + Fee;
         }
     }
 
-    private int? _number;
-    public int? Number
+    private DateTime? _estimatedPayment;
+    public DateTime? EstimatedPayment
     {
-        get => _number;
+        get => _estimatedPayment;
         set
         {
-            if (value == _number)
+            if (value == _estimatedPayment)
                 return;
-            _number = value;
-            NotifyPropertyChanged(nameof(Number));
+            _estimatedPayment = value;
+            NotifyPropertyChanged(nameof(EstimatedPayment));
         }
     }
 
-    private string? _mark;
-    public string? Mark
+    private int? _invoiceNumber;
+    public int? InvoiceNumber
+    {
+        get => _invoiceNumber;
+        set
+        {
+            if (value == _invoiceNumber)
+                return;
+            _invoiceNumber = value;
+            NotifyPropertyChanged(nameof(InvoiceNumber));
+        }
+    }
+
+    private string _mark;
+    public string Mark
     {
         get => _mark;
         set
@@ -95,16 +95,16 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private DateTime? _paymentDate;
-    public DateTime? PaymentDate
+    private DateTime? _actualPayment;
+    public DateTime? ActualPayment
     {
-        get => _paymentDate;
+        get => _actualPayment;
         set
         {
-            if (value == _paymentDate)
+            if (value == _actualPayment)
                 return;
-            _paymentDate = value;
-            NotifyPropertyChanged(nameof(PaymentDate));
+            _actualPayment = value;
+            NotifyPropertyChanged(nameof(ActualPayment));
         }
     }
 
@@ -134,33 +134,33 @@ public class InvoiceVM : BaseVM
         }
     }
 
+    private int? _expensesTypeId { get; set; }
+    public int? ExpensesTypeId
+    {
+        get => _expensesTypeId;
+        set
+        {
+            if (value == _expensesTypeId)
+                return;
+            _expensesTypeId = value;
+            NotifyPropertyChanged(nameof(ExpensesTypeId));
+        }
+    }
+
+    private ExpensesType _expensesType { get; set; }
+    public ExpensesType ExpensesType
+    {
+        get => _expensesType;
+        set
+        {
+            if (value == _expensesType)
+                return;
+            _expensesType = value;
+            NotifyPropertyChanged(nameof(ExpensesType));
+        }
+    }
+
     public string TypeName => Type != null ? Type.Name : "";
-
-    private int? _contractId { get; set; }
-    public int? ContractId
-    {
-        get => _contractId;
-        set
-        {
-            if (value == _contractId)
-                return;
-            _contractId = value;
-            NotifyPropertyChanged(nameof(ContractId));
-        }
-    }
-
-    private ContractVM _contract { get; set; }
-    public ContractVM Contract
-    {
-        get => _contract;
-        set
-        {
-            if (value == _contract)
-                return;
-            _contract = value;
-            NotifyPropertyChanged(nameof(Contract));
-        }
-    }
 
     private int _projectId { get; set; }
     public int ProjectId
@@ -194,20 +194,21 @@ public class InvoiceVM : BaseVM
 
     public InvoiceVM()
     {
-        PaymentDate = DateTime.Now;
+        ActualPayment = DateTime.Now;
     }
 
     public InvoiceVM(InvoiceVM invoice)
     {
-        Total = invoice.Total;
         Vat = invoice.Vat;
         Fee = invoice.Fee;
-        Number = invoice.Number;
+        InvoiceNumber = invoice.InvoiceNumber;
         Mark = invoice.Mark;
-        EstimatedDate = invoice.EstimatedDate;
-        PaymentDate = invoice.PaymentDate;
+        EstimatedPayment = invoice.EstimatedPayment;
+        ActualPayment = invoice.ActualPayment;
         TypeId = invoice.TypeId;
         Type = null;
+        ExpensesTypeId = invoice.ExpensesTypeId;
+        ExpensesType = invoice.ExpensesType;
         ProjectId = invoice.ProjectId;
         Project = null;
         Payments = invoice.Payments;

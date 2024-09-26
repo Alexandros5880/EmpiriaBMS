@@ -26,8 +26,12 @@ using Newtonsoft.Json.Linq;
 
 namespace EmpiriaBMS.Front.Components.Reports;
 
-public partial class Reports
+public partial class TimeMGMT
 {
+    #region Authorization Properties
+    bool canChangeEverybodyHours => _sharedAuthData.Permissions.Any(p => p.Ord == 37);
+    #endregion
+
     private bool _loading = true;
 
     private static Random _random = new Random();

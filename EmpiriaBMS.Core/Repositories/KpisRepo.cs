@@ -668,7 +668,7 @@ public class KpisRepo : IDisposable
                                            .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                            .Include(p => p.Invoice)
                                            .Include(p => p.Invoice.Project)
-                                           .Where(p => p.Invoice.PaymentDate < p.PaymentDate)
+                                           .Where(p => p.Invoice.ActualPayment < p.PaymentDate)
                                            .ToListAsync();
 
                 var result = payments.GroupBy(p => p.Invoice.Project)

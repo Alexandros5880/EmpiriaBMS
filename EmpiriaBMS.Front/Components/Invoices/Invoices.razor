@@ -13,20 +13,29 @@
 
     <div class="m-2"
          style="cursor: pointer;">
-        
-        <div class="d-flex justify-content-between w-90 mt-2">
-            <div class="ms-2">
-                <!-- Ttitle -->
-                <h3>Invoices</h3>
-            </div>
-            <div>
-                <!-- Pending Payments -->
-                <PendingPayments Items="@FilteredItems" />
-            </div>
-            <div>
-                <!-- Payed Payments -->
-                <PayedPayments Items="@FilteredItems" />
-            </div>
+
+        <div class="d-flex justify-content-between w-90 mt-2 ms-2 me-2">
+         
+            <FluentStack Orientation="Orientation.Horizontal"
+                         HorizontalAlignment="HorizontalAlignment.Start"
+                         HorizontalGap="10">
+                @if (DisplayTitle)
+                {
+                    <div class="ms-2">
+                        <!-- Ttitle -->
+                        <h3>Invoices</h3>
+                    </div>
+                }
+                <div>
+                    <!-- Pending Payments -->
+                    <PendingPayments Items="@FilteredItems" />
+                </div>
+                <div>
+                    <!-- Payed Payments -->
+                    <PayedPayments Items="@FilteredItems" />
+                </div>
+            </FluentStack>
+
             <div class="d-flex justify-content-end">
                 <!-- Add -->
                 <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Add"
@@ -41,6 +50,7 @@
                     Export
                 </FluentButton>
             </div>
+
         </div>
 
         <div>
@@ -49,7 +59,7 @@
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
-                            GridTemplateColumns="1fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="50px 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 100%; overflow:auto;">
 
                 <!-- CheckBox -->
@@ -63,6 +73,25 @@
                         </div>
                     </ChildContent>
                 </TemplateColumn>
+
+                <!-- Invoice Number -->
+                <TemplateColumn Title="Invoice Number"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                            Autofocus=true
+                                          @bind-Value="@_filterNumberString"
+                                          Placeholder="InvoiceNumber..."
+                                          @oninput="@HandleNumberFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.InvoiceNumber)
+                    </ChildContent>
+                </TemplateColumn>
                 
                 <!-- Project Name -->
                 <TemplateColumn Title="Project"
@@ -73,9 +102,9 @@
                         <div class="search-box">
                             <FluentSearch type="search"
                                             Autofocus=true
-                                            @bind-Value="@_filterString"
+                                          @bind-Value="@_filterProjectString"
                                             Placeholder="Project..."
-                                            @oninput="@HandleFilter" />
+                                          @oninput="@HandleProjectFilter" />
                         </div>
                     </ColumnOptions>
                     <ChildContent>
@@ -83,15 +112,19 @@
                     </ChildContent>
                 </TemplateColumn>
 
-                <!-- Type Name -->
-                <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
-
                 <!-- Estimate Date -->
-                <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="EstimatedDate" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.EstimatedPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Estimated Payment" Align="@Align.Start" />
 
                 <!-- Payment Date -->
-                <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="PaymentDate" Align="@Align.Start" />
-                
+                <PropertyColumn Property="@(p => p.ActualPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Actual Payment" Align="@Align.Start" />
+
+                <!-- Actual Paid -->
+                <TemplateColumn Title="Actual Paid" Sortable="true">
+                    <ChildContent>
+                        <PayedPaymentCell Item="context" />
+                    </ChildContent>
+                </TemplateColumn>
+
                 <!-- Pending Paiments -->
                 <TemplateColumn Title="Pending" Sortable="true">
                     <ChildContent>
@@ -99,18 +132,11 @@
                     </ChildContent>
                 </TemplateColumn>
 
-                <!-- Payed Paiments -->
-                <TemplateColumn Title="Payed" Sortable="true">
-                    <ChildContent>
-                        <PayedPaymentCell Item="context" />
-                    </ChildContent>
-                </TemplateColumn>
-
-                <!-- Mark -->
-                <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
-
-                <!-- Number -->
-                <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
+                <!-- Expenses Type -->
+                @if (InvoiceCategory == Models.Enum.InvoiceCategory.EXPENSES)
+                {
+                    <PropertyColumn Property="@(p => p.ExpensesType.Name)" Sortable="true" Title="Expsenses Type" Align="@Align.Start" />
+                }
 
                 <!-- Actions -->
                 <TemplateColumn Title="Actions" Align="@Align.End">

@@ -15,8 +15,6 @@ public class PaymentExport : IInport<PaymentVM>
     public int InvoiceId { get; set; }
     public string InvoiceMark { get; set; }
     public string InvoiceType { get; set; }
-    public double InvoiceContractFee { get; set; }
-    public string InvoiceContractDate { get; set; }
     public int ProjectId { get; set; }
     public string ProjectCode { get; set; }
     public string ProjectName { get; set; }
@@ -33,8 +31,6 @@ public class PaymentExport : IInport<PaymentVM>
         InvoiceId = model.InvoiceId;
         InvoiceMark = model.Invoice.Mark ?? "";
         InvoiceType = model.Invoice.Type.Name;
-        InvoiceContractFee = model.Invoice.Contract?.ContractualFee ?? 0;
-        InvoiceContractDate = model.Invoice.Contract?.Date.ToEuropeFormat() ?? "";
         ProjectId = model.Invoice.ProjectId;
         ProjectCode = model.Invoice.Project.Code ?? "";
         ProjectName = model.Invoice.Project.Name ?? "";

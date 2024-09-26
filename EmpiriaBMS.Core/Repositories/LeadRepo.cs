@@ -14,7 +14,6 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
     private readonly OfferRepo _offerRepo;
     private readonly ProjectsRepo _projectRep;
     private readonly InvoiceRepo _invoiceRepo;
-    private readonly ContractRepo _contractRepo;
 
     public LeadRepo(
         IDbContextFactory<AppDbContext> DbFactory,
@@ -24,7 +23,6 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
         _projectRep = new ProjectsRepo(DbFactory, logger);
         _offerRepo = new OfferRepo(DbFactory, logger);
         _invoiceRepo = new InvoiceRepo(DbFactory, logger);
-        _contractRepo = new ContractRepo(DbFactory, logger);
     }
 
     public new async Task<LeadDto> Add(LeadDto entity, bool update = false)
@@ -113,21 +111,10 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
                         await _projectRep.Delete(project.Id);
 
                         // Delete Invoices
-                        var invoices = await _context.Set<Invoice>().Where(p => !p.IsDeleted && p.ProjectId == project.Id).Include(i => i.Contract).ToListAsync();
+                        var invoices = await _context.Set<Invoice>().Where(p => !p.IsDeleted && p.ProjectId == project.Id).ToListAsync();
                         if (invoices.Count > 0)
-                        {
                             foreach (var invoice in invoices)
-                            {
                                 await _invoiceRepo.Delete(invoice.Id);
-
-                                // Delete Contract
-                                if (invoice != null && invoice.ContractId != null && invoice.ContractId != 0)
-                                {
-                                    await _contractRepo.Delete((int)invoice.ContractId);
-                                }
-                            }
-                        }
-
                     }
                 }
             }
@@ -502,7 +489,6 @@ public class LeadRepo : Repository<LeadDto, Lead>, IDisposable
                 _offerRepo.Dispose();
                 _projectRep.Dispose();
                 _invoiceRepo.Dispose();
-                _contractRepo.Dispose();
             }
             disposedValue = true;
         }
