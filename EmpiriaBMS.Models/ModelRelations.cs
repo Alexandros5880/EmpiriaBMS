@@ -113,6 +113,13 @@ public static class ModelRelations
                .HasForeignKey(c => c.TypeId)
                .OnDelete(DeleteBehavior.Cascade);
 
+        // ExpensesType Invoices
+        builder.Entity<ExpensesType>()
+               .HasMany(p => p.Invoices)
+               .WithOne(c => c.ExpensesType)
+               .HasForeignKey(c => c.ExpensesTypeId)
+               .OnDelete(DeleteBehavior.SetNull);
+
         // Payments Invoice
         builder.Entity<Payment>()
                .HasOne(p => p.Invoice)

@@ -36,6 +36,7 @@ public class DataProvider : IDataProvider, IDisposable
     public KpisRepo KPIS { get; set; }
     public WorkingTime WorkingTime { get; set; }
     public ReportsRepo Reports { get; set; }
+    public ExpensesTypeRepo ExpensesTypes { get; set; }
 
     public DataProvider(
         IDbContextFactory<AppDbContext> dbFactory,
@@ -71,6 +72,7 @@ public class DataProvider : IDataProvider, IDisposable
         KPIS = new KpisRepo(dbFactory, logger);
         WorkingTime = new WorkingTime(dbFactory, logger);
         Reports = new ReportsRepo(dbFactory, logger);
+        ExpensesTypes = new ExpensesTypeRepo(dbFactory,logger);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -108,6 +110,7 @@ public class DataProvider : IDataProvider, IDisposable
                 KPIS.Dispose();
                 WorkingTime.Dispose();
                 Reports.Dispose();
+                ExpensesTypes.Dispose();
             }
             disposedValue = true;
         }

@@ -122,6 +122,32 @@ public class InvoiceVM : BaseVM
         }
     }
 
+    private int? _expensesTypeId { get; set; }
+    public int? ExpensesTypeId
+    {
+        get => _expensesTypeId;
+        set
+        {
+            if (value == _expensesTypeId)
+                return;
+            _expensesTypeId = value;
+            NotifyPropertyChanged(nameof(ExpensesTypeId));
+        }
+    }
+
+    private InvoiceTypeVM _expensesType { get; set; }
+    public InvoiceTypeVM ExpensesType
+    {
+        get => _expensesType;
+        set
+        {
+            if (value == _expensesType)
+                return;
+            _expensesType = value;
+            NotifyPropertyChanged(nameof(ExpensesType));
+        }
+    }
+
     public string TypeName => Type != null ? Type.Name : "";
 
     private int _projectId { get; set; }

@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Core.Dtos.Base;
 using EmpiriaBMS.Models.Enum;
+using EmpiriaBMS.Models.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace EmpiriaBMS.Core.Dtos;
@@ -22,11 +23,12 @@ public class InvoiceDto : EntityDto
     public string? Mark { get; set; }
 
     public int TypeId { get; set; }
-
     public InvoiceTypeDto? Type { get; set; }
 
-    public int ProjectId { get; set; }
+    public int? ExpensesTypeId { get; set; }
+    public ExpensesType? ExpensesType { get; set; }
 
+    public int ProjectId { get; set; }
     public ProjectDto? Project { get; set; }
 
     public ICollection<PaymentDto>? Payments { get; set; }

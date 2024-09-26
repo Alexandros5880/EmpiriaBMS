@@ -43,6 +43,7 @@ public class AppDbContext : DbContext
     public DbSet<Offer>? Offers { get; set; }
     public DbSet<OfferState>? OffesStates { get; set; }
     public DbSet<OfferType>? OffersTypes { get; set; }
+    public DbSet<ExpensesType>? ExpensesTypes { get; set; }
     public DbSet<Payment>? Payments { get; set; }
     public DbSet<PaymentType>? PaymentsTypes { get; set; }
     public DbSet<Permission>? Permissions { get; set; }
@@ -2700,7 +2701,7 @@ public class AppDbContext : DbContext
             builder.Entity<InvoiceType>().HasData(it_3);
             #endregion
 
-            #region Create 5 PaymentTypes
+            #region Create PaymentTypes
             // BANK
             var pmt_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
             PaymentType pmt_1 = new PaymentType()
@@ -2744,6 +2745,52 @@ public class AppDbContext : DbContext
                 Name = $"CHECK"
             };
             builder.Entity<PaymentType>().HasData(pmt_4);
+            #endregion
+
+            #region Create Expenses Types
+            // Office Εquipment
+            var exty_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+            ExpensesType exty_1 = new ExpensesType()
+            {
+                Id = exty_1_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Office Εquipment"
+            };
+            builder.Entity<ExpensesType>().HasData(exty_1);
+
+            // Transportation Expenses
+            var exty_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+            ExpensesType exty_2 = new ExpensesType()
+            {
+                Id = exty_2_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Transportation Expenses"
+            };
+            builder.Entity<ExpensesType>().HasData(exty_2);
+
+            // Salaries of Employees
+            var exty_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+            ExpensesType exty_3 = new ExpensesType()
+            {
+                Id = exty_3_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Salaries of Employees"
+            };
+            builder.Entity<ExpensesType>().HasData(exty_3);
+
+            // Taxes
+            var exty_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+            ExpensesType exty_4 = new ExpensesType()
+            {
+                Id = exty_4_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Taxes"
+            };
+            builder.Entity<ExpensesType>().HasData(exty_4);
             #endregion
 
             #region Create OfferTypes
@@ -4135,6 +4182,7 @@ public class AppDbContext : DbContext
         allEntities.Add("ProjectsSubConstructors", await ProjectsSubConstructors.Cast<object>().ToListAsync());
         allEntities.Add("TeamsRequestedUser", await TeamsRequestedUser.Cast<object>().ToListAsync());
         allEntities.Add("DisciplinesEngineers", await DisciplinesEngineers.Cast<object>().ToListAsync());
+        allEntities.Add("ExpensesTypes", await ExpensesTypes.Cast<object>().ToListAsync());
 
         return allEntities;
     }

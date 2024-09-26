@@ -2,12 +2,17 @@
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class InvoiceTypeRepo : Repository<InvoiceTypeDto, InvoiceType>
+public class ExpensesTypeRepo : Repository<ExpensesTypeDto, ExpensesType>
 {
-    public InvoiceTypeRepo(
+    public ExpensesTypeRepo(
         IDbContextFactory<AppDbContext> DbFactory,
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }

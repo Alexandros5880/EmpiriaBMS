@@ -12,6 +12,9 @@ public class Invoice : Entity
     public int TypeId { get; set; }
     public InvoiceType? Type { get; set; }
 
+    public int? ExpensesTypeId { get; set; }
+    public ExpensesType? ExpensesType { get; set; }
+
     public int Vat { get; set; }
 
     public double Fee { get; set; }
