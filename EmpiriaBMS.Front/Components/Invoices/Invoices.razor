@@ -112,6 +112,11 @@
                     </ChildContent>
                 </TemplateColumn>
 
+                <!-- Expenses Type -->
+                @if (InvoiceCategory == Models.Enum.InvoiceCategory.EXPENSES)
+                {
+                    <PropertyColumn Property="@(p => p.ExpensesType.Name)" Sortable="true" Title="Expsenses Type" Align="@Align.Start" />
+                }
 
                 <!-- Estimate Date -->
                 <PropertyColumn Property="@(p => p.EstimatedPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Estimated Payment" Align="@Align.Start" />
