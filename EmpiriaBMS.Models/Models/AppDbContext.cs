@@ -29,7 +29,6 @@ public class AppDbContext : DbContext
     public DbSet<SupportiveWorkEmployee>? SupportiveWorkEmployees { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
     public DbSet<InvoiceType>? InvoicesTypes { get; set; }
-    public DbSet<Contract>? Contracts { get; set; }
     public DbSet<Timespan>? TimeSpans { get; set; }
     public DbSet<DailyTimeRequest>? DailyTimeRequests { get; set; }
     public DbSet<DailyTime>? DailyTime { get; set; }
@@ -44,6 +43,7 @@ public class AppDbContext : DbContext
     public DbSet<Offer>? Offers { get; set; }
     public DbSet<OfferState>? OffesStates { get; set; }
     public DbSet<OfferType>? OffersTypes { get; set; }
+    public DbSet<ExpensesType>? ExpensesTypes { get; set; }
     public DbSet<Payment>? Payments { get; set; }
     public DbSet<PaymentType>? PaymentsTypes { get; set; }
     public DbSet<Permission>? Permissions { get; set; }
@@ -79,7 +79,7 @@ public class AppDbContext : DbContext
         Random random = new Random();
         var createdDate = DateTime.Now;
 
-        if (true)
+        if (false)
         {
             #region Permissions
             // See Dashboard Layout
@@ -2701,7 +2701,7 @@ public class AppDbContext : DbContext
             builder.Entity<InvoiceType>().HasData(it_3);
             #endregion
 
-            #region Create 5 PaymentTypes
+            #region Create PaymentTypes
             // BANK
             var pmt_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
             PaymentType pmt_1 = new PaymentType()
@@ -2745,6 +2745,52 @@ public class AppDbContext : DbContext
                 Name = $"CHECK"
             };
             builder.Entity<PaymentType>().HasData(pmt_4);
+            #endregion
+
+            #region Create Expenses Types
+            // Office Εquipment
+            var exty_1_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+            ExpensesType exty_1 = new ExpensesType()
+            {
+                Id = exty_1_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Office Εquipment"
+            };
+            builder.Entity<ExpensesType>().HasData(exty_1);
+
+            // Transportation Expenses
+            var exty_2_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+            ExpensesType exty_2 = new ExpensesType()
+            {
+                Id = exty_2_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Transportation Expenses"
+            };
+            builder.Entity<ExpensesType>().HasData(exty_2);
+
+            // Salaries of Employees
+            var exty_3_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+            ExpensesType exty_3 = new ExpensesType()
+            {
+                Id = exty_3_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Salaries of Employees"
+            };
+            builder.Entity<ExpensesType>().HasData(exty_3);
+
+            // Taxes
+            var exty_4_id = random.Next(123456789, 999999999) + random.Next(0, 333) + 55;
+            ExpensesType exty_4 = new ExpensesType()
+            {
+                Id = exty_4_id,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                Name = $"Taxes"
+            };
+            builder.Entity<ExpensesType>().HasData(exty_4);
             #endregion
 
             #region Create OfferTypes
@@ -3818,12 +3864,11 @@ public class AppDbContext : DbContext
                     Category = InvoiceCategory.INCOMES,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    PaymentDate = DateTime.Now,
-                    EstimatedDate = DateTime.Now,
-                    Total = i * Math.Pow(1, 3),
-                    Vat = i % 2 == 0 ? Vat.TwentyFour : Vat.Seventeen,
+                    ActualPayment = DateTime.Now,
+                    EstimatedPayment = DateTime.Now,
+                    Vat = 17,
                     Fee = 1000 * i,
-                    Number = random.Next(10000, 90000),
+                    InvoiceNumber = random.Next(10000, 90000),
                     Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
                     ProjectId = projectId,
                     TypeId = it_1_id
@@ -3923,12 +3968,11 @@ public class AppDbContext : DbContext
                     Category = InvoiceCategory.INCOMES,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    PaymentDate = DateTime.Now,
-                    EstimatedDate = DateTime.Now,
-                    Total = i * Math.Pow(1, 3),
-                    Vat = i % 2 == 0 ? Vat.TwentyFour : Vat.Seventeen,
+                    ActualPayment = DateTime.Now,
+                    EstimatedPayment = DateTime.Now,
+                    Vat = 17,
                     Fee = 1100 * i,
-                    Number = random.Next(10000, 90000),
+                    InvoiceNumber = random.Next(10000, 90000),
                     Mark = "Signature 14234" + Convert.ToString(i * random.Next(1, 7)),
                     ProjectId = projectId,
                     TypeId = it_1_id
@@ -4116,7 +4160,6 @@ public class AppDbContext : DbContext
         allEntities.Add("SupportiveWorkEmployees", await SupportiveWorkEmployees.Cast<object>().ToListAsync());
         allEntities.Add("Invoices", await Invoices.Cast<object>().ToListAsync());
         allEntities.Add("InvoicesTypes", await InvoicesTypes.Cast<object>().ToListAsync());
-        allEntities.Add("Contracts", await Contracts.Cast<object>().ToListAsync());
         allEntities.Add("TimeSpans", await TimeSpans.Cast<object>().ToListAsync());
         allEntities.Add("DailyTime", await DailyTime.Cast<object>().ToListAsync());
         allEntities.Add("ParsonalTime", await ParsonalTime.Cast<object>().ToListAsync());
@@ -4139,6 +4182,7 @@ public class AppDbContext : DbContext
         allEntities.Add("ProjectsSubConstructors", await ProjectsSubConstructors.Cast<object>().ToListAsync());
         allEntities.Add("TeamsRequestedUser", await TeamsRequestedUser.Cast<object>().ToListAsync());
         allEntities.Add("DisciplinesEngineers", await DisciplinesEngineers.Cast<object>().ToListAsync());
+        allEntities.Add("ExpensesTypes", await ExpensesTypes.Cast<object>().ToListAsync());
 
         return allEntities;
     }
