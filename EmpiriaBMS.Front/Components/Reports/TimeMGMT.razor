@@ -3,11 +3,14 @@
 @using ChartJs.Blazor;
 @using EmpiriaBMS.Core.ReturnModels;
 @using Color = Microsoft.Fast.Components.FluentUI.Color;
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.WorkingHours;
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
 @inject Logging.LoggerManager _logger
 @inject MicrosoftTeams MicrosoftTeams
+@inject SharedAuthDataService _sharedAuthData
 
 @if (_loading)
 {
@@ -97,7 +100,6 @@
         <!-- Table -->
         <div class="col-12 mt-2"
              id="export-to-pdf-projects-report-table">
-
             <div>
                 <FluentDataGrid Items="@FilteredItems"
                                 ResizableColumns=true
@@ -152,6 +154,30 @@
                 </FluentPaginator>
             </div>
         </div>
+
+        <!-- Change Everybody Hours -->
+        @if (canChangeEverybodyHours)
+        {
+            <div class="col-12 mt-2 mb-2">
+                <FluentAccordion>
+                    <FluentAccordionItem Expanded="true">
+                        <HeadingTemplate>
+                            <div class="accordion-header">
+                                <FluentStack Orientation="Orientation.Horizontal"
+                                             HorizontalAlignment="HorizontalAlignment.Start"
+                                             HorizontalGap="20">
+                                    <FluentIcon Value="@(new Icons.Regular.Size48.Clock())" />
+                                    <h3>Edit Hours</h3>
+                                </FluentStack>
+                            </div>
+                        </HeadingTemplate>
+                        <ChildContent>
+                            <EditUsersHours />
+                        </ChildContent>
+                    </FluentAccordionItem>
+                </FluentAccordion>
+            </div>
+        }
 
     </div>
 
