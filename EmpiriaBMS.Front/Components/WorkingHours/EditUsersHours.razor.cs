@@ -15,6 +15,9 @@ public partial class EditUsersHours
     public bool SendRequest { get; set; } = false;
 
     [Parameter]
+    public bool DisplayTitle { get; set; } = true;
+
+    [Parameter]
     public TimeSpan RemainingTime { get; set; }
 
     [Parameter]
