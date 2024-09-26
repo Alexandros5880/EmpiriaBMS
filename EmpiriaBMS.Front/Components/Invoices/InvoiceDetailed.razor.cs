@@ -53,12 +53,14 @@ public partial class InvoiceDetailed
 
     #region Fluent Combo Ref
     private FluentCombobox<ProjectVM> _projectCombo;
+    private FluentCombobox<ExpensesTypeVM> _expenseTypeCombo;
     private FluentCombobox<InvoiceTypeVM> _typeCombo;
     private FluentCombobox<(string Value, string Text)> _categoryCombo;
     #endregion
 
     #region Relaited Records Lists
     ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
+    ObservableCollection<ExpensesTypeVM> _expensesTypes = new ObservableCollection<ExpensesTypeVM>();
     ObservableCollection<InvoiceTypeVM> _types = new ObservableCollection<InvoiceTypeVM>();
 
     private List<(string Value, string Text)> _categories = Enum.GetValues(typeof(InvoiceCategory))
@@ -77,6 +79,18 @@ public partial class InvoiceDetailed
             if (_selectedProject == value || value == null) return;
             _selectedProject = value;
             Content.ProjectId = _selectedProject.Id;
+        }
+    }
+
+    private ExpensesTypeVM _selectedExpType = new ExpensesTypeVM();
+    public ExpensesTypeVM SelectedExpType
+    {
+        get => _selectedExpType;
+        set
+        {
+            if (_selectedExpType == value || value == null) return;
+            _selectedExpType = value;
+            Content.ExpensesTypeId = _selectedExpType.Id;
         }
     }
 
@@ -247,6 +261,7 @@ public partial class InvoiceDetailed
     private async Task _getRecords()
     {
         await _getProjects();
+        await _getExpTypes();
         await _getTypes();
     }
 
@@ -264,6 +279,14 @@ public partial class InvoiceDetailed
         var vms = _mapper.Map<List<InvoiceTypeVM>>(dtos);
         _types.Clear();
         vms.ForEach(_types.Add);
+    }
+
+    private async Task _getExpTypes()
+    {
+        var dtos = await _dataProvider.ExpensesTypes.GetAll();
+        var vms = _mapper.Map<List<ExpensesTypeVM>>(dtos);
+        _expensesTypes.Clear();
+        vms.ForEach(_expensesTypes.Add);
     }
     #endregion
 }
