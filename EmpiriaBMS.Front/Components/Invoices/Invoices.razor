@@ -98,13 +98,13 @@
 
 
                 <!-- Estimate Date -->
-                <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="EstimatedPayment" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="Estimated Payment" Align="@Align.Start" />
 
                 <!-- Payment Date -->
-                <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="ActualPayment" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Actual Payment" Align="@Align.Start" />
 
                 <!-- Actual Paid -->
-                <TemplateColumn Title="ActualPaid" Sortable="true">
+                <TemplateColumn Title="Actual Paid" Sortable="true">
                     <ChildContent>
                         <PayedPaymentCell Item="context" />
                     </ChildContent>
