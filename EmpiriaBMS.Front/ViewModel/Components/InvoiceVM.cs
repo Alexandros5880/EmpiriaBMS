@@ -45,6 +45,16 @@ public class InvoiceVM : BaseVM
         }
     }
 
+    public double Total
+    {
+        get
+        {
+            var vatDivition = Convert.ToDouble(Vat / 100);
+            var actualVat = vatDivition * Fee;
+            return actualVat + Fee;
+        }
+    }
+
     private DateTime? _estimatedPayment;
     public DateTime? EstimatedPayment
     {

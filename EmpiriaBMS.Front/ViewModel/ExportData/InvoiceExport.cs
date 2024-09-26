@@ -24,7 +24,7 @@ public class InvoiceExport : IInport<InvoiceVM>
     {
         TypeId = model.TypeId;
         TypeName = model.Type?.Name ?? "";
-        Total = ((model.Vat / 100) * model.Fee) + model.Fee;
+        Total = model.Total;
         Vat = Convert.ToInt32(model.Vat);
         Fee = model.Fee;
         EstimatedDate = model.EstimatedPayment?.ToEuropeFormat() ?? "";
