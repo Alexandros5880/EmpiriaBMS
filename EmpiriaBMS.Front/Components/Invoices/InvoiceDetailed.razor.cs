@@ -170,6 +170,9 @@ public partial class InvoiceDetailed
 
         var i = await _upsertInvoice(_invoice.Clone() as InvoiceVM);
 
+        if (i == null)
+            return;
+
         Content = new InvoiceVM()
         {
             EstimatedPayment = DateTime.Now,
@@ -185,7 +188,7 @@ public partial class InvoiceDetailed
         if (i.ProjectId != 0)
         {
             var invoice = i.Clone() as InvoiceVM;
-            invoice.ProjectId = SelectedProject.Id;
+            invoice.Project = null;
             invoice.Type = null;
             invoice.Project = null;
 

@@ -1,5 +1,7 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Enum;
+using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class InvoiceVM : BaseVM
@@ -16,7 +18,6 @@ public class InvoiceVM : BaseVM
             NotifyPropertyChanged(nameof(Category));
         }
     }
-    public double Total => (Fee * (1 + Vat / 100)) + Fee;
 
     private int _vat;
     public int Vat
@@ -70,8 +71,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private string? _mark;
-    public string? Mark
+    private string _mark;
+    public string Mark
     {
         get => _mark;
         set
@@ -135,8 +136,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private InvoiceTypeVM _expensesType { get; set; }
-    public InvoiceTypeVM ExpensesType
+    private ExpensesType _expensesType { get; set; }
+    public ExpensesType ExpensesType
     {
         get => _expensesType;
         set
@@ -195,6 +196,8 @@ public class InvoiceVM : BaseVM
         ActualPayment = invoice.ActualPayment;
         TypeId = invoice.TypeId;
         Type = null;
+        ExpensesTypeId = invoice.ExpensesTypeId;
+        ExpensesType = invoice.ExpensesType;
         ProjectId = invoice.ProjectId;
         Project = null;
         Payments = invoice.Payments;

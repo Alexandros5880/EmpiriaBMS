@@ -90,6 +90,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                              .Include(i => i.Payments)
                              .Include(i => i.Type)
                              .Include(i => i.Project)
+                             .Include(i => i.ExpensesType)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             return Mapping.Mapper.Map<InvoiceDto>(i);
@@ -111,6 +112,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                                   .Include(i => i.Type)
                                   .Include(i => i.Project)
                                   .ThenInclude(p => p.ProjectManager)
+                                  .Include(i => i.ExpensesType)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -125,6 +127,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .Include(i => i.Type)
                               .Include(i => i.Project)
                               .ThenInclude(p => p.ProjectManager)
+                              .Include(i => i.ExpensesType)
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -142,6 +145,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                                  .Include(i => i.Type)
                                  .Include(i => i.Project)
                                  .ThenInclude(p => p.ProjectManager)
+                                 .Include(i => i.ExpensesType)
                                  .ToListAsync();
 
 
@@ -168,6 +172,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                                   .Include(i => i.Type)
                                   .Include(i => i.Project)
                                   .ThenInclude(p => p.ProjectManager)
+                                  .Include(i => i.ExpensesType)
                                   .ToListAsync();
 
                 return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);
@@ -182,6 +187,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
                               .Include(i => i.Type)
                               .Include(i => i.Project)
                               .ThenInclude(p => p.ProjectManager)
+                              .Include(i => i.ExpensesType)
                               .ToListAsync();
 
             return Mapping.Mapper.Map<List<Invoice>, List<InvoiceDto>>(i);

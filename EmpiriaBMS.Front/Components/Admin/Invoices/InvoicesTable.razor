@@ -67,7 +67,7 @@
                 <PropertyColumn Property="@(p => p.InvoiceNumber)" Sortable="true" Title="InvoiceNumber" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => @Culture.GetNumberFromated((double)p.Fee))" Sortable="true" Title="Fee" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.Vat)" Sortable="true" Title="Vat" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => @Culture.GetNumberFromated((double)p.Total))" Sortable="true" Title="Total" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => @Culture.GetNumberFromated((double)((p.Vat / 100) * p.Fee) + p.Fee))" Sortable="true" Title="Total" Align="@Align.Start" />
 
                 @if (DisplayActions)
                 {

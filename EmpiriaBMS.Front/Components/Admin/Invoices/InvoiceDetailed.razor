@@ -3,12 +3,14 @@
 @using Color = Microsoft.Fast.Components.FluentUI.Color
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
+@using EmpiriaBMS.Core.Services
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
 @inject IDialogService DialogService
 @inject MicrosoftTeams MicrosoftTeams
 @inject Logging.LoggerManager Logger
+@inject Culture Culture
 
 <div>
 
@@ -223,7 +225,7 @@
                         Total
                     </div>
                     <div>
-                        @Content.Total
+                        @Culture.GetNumberFromated((double)((Content.Vat / 100) * Content.Fee) + Content.Fee)
                     </div>
                 </div>
             </div>

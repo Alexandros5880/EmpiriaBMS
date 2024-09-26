@@ -3,12 +3,14 @@
 @using Color = Microsoft.Fast.Components.FluentUI.Color
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
 @using EmpiriaBMS.Core.Hellpers
+@using EmpiriaBMS.Core.Services
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
 @inject IDialogService DialogService
 @inject MicrosoftTeams MicrosoftTeams
 @inject Logging.LoggerManager Logger
+@inject Culture Culture
 
 <div class="card rounded">
 
@@ -167,6 +169,18 @@
                     </div>
                     <div>
                         <PendingPaymentCell Item="Content" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 row gx-2 mt-1">
+                <!-- Total -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div>
+                        Total
+                    </div>
+                    <div>
+                        @Culture.GetNumberFromated((double)((Content.Vat / 100) * Content.Fee) + Content.Fee)
                     </div>
                 </div>
             </div>
