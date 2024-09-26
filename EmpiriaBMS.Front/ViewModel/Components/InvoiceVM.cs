@@ -45,11 +45,12 @@ public class InvoiceVM : BaseVM
         }
     }
 
+    [NotMapped]
     public double Total
     {
         get
         {
-            var vatDivition = Convert.ToDouble(Vat / 100);
+            var vatDivition = Convert.ToDouble(Vat) / 100.0;
             var actualVat = vatDivition * Fee;
             return actualVat + Fee;
         }
