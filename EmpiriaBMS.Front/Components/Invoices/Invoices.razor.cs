@@ -28,24 +28,10 @@ public partial class Invoices : ComponentBase
 
     #region Data Grid
     public List<InvoiceVM> _invoices { get; set; }
-    private string _filterString = string.Empty;
-    IQueryable<InvoiceVM>? FilteredItems => _invoices?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     [Parameter]
     public InvoiceVM SelectedRecord { get; set; } = new InvoiceVM();
-
-    private void HandleFilter(ChangeEventArgs args)
-    {
-        if (args.Value is string value)
-        {
-            _filterString = value;
-        }
-        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
-        {
-            _filterString = string.Empty;
-        }
-    }
 
     public async Task Refresh() => await _getRecords();
 
@@ -150,6 +136,48 @@ public partial class Invoices : ComponentBase
 
         await dialog.CloseAsync();
         await _getRecords();
+    }
+    #endregion
+
+    #region Filters
+    private string _filterProjectString = string.Empty;
+    private string _filterNumberString = string.Empty;
+    IQueryable<InvoiceVM>? FilteredItems => 
+        _invoices?.AsQueryable().Where(i => _filterOnQuery(i));
+
+    private void HandleProjectFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterProjectString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterProjectString) || string.IsNullOrEmpty(_filterProjectString))
+        {
+            _filterProjectString = string.Empty;
+        }
+    }
+
+    private void HandleNumberFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterNumberString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterNumberString) || string.IsNullOrEmpty(_filterNumberString))
+        {
+            _filterNumberString = string.Empty;
+        }
+    }
+    
+    private bool _filterOnQuery(InvoiceVM invoice)
+    {
+        var projectFilter = invoice.ProjectName
+                .Contains(_filterProjectString, StringComparison.CurrentCultureIgnoreCase);
+
+        var numberFilter = string.IsNullOrEmpty(_filterNumberString)
+            || invoice.Number == Convert.ToInt32(_filterNumberString);
+
+        return projectFilter && numberFilter;
     }
     #endregion
 

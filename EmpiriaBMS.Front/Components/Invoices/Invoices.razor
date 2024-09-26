@@ -59,7 +59,7 @@
                             Pagination="@pagination"
                             TGridItem="InvoiceVM"
                             OnRowFocus="@(async (i) => await HandleRowFocus(i))"
-                            GridTemplateColumns="100px 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                            GridTemplateColumns="50px 2fr 2fr 2fr 2fr 2fr 2fr 100px"
                             style="height: 100%; overflow:auto;">
 
                 <!-- CheckBox -->
@@ -75,7 +75,23 @@
                 </TemplateColumn>
 
                 <!-- Invoice Number -->
-                <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Invoice Number" Align="@Align.Start" />
+                <TemplateColumn Title="Invoice Number"
+                                Sortable="true"
+                                InitialSortDirection=SortDirection.Descending
+                                IsDefaultSortColumn=true>
+                    <ColumnOptions>
+                        <div class="search-box">
+                            <FluentSearch type="search"
+                                            Autofocus=true
+                                          @bind-Value="@_filterNumberString"
+                                            Placeholder="Number..."
+                                          @oninput="@HandleNumberFilter" />
+                        </div>
+                    </ColumnOptions>
+                    <ChildContent>
+                        @(context.Number)
+                    </ChildContent>
+                </TemplateColumn>
                 
                 <!-- Project Name -->
                 <TemplateColumn Title="Project"
@@ -86,9 +102,9 @@
                         <div class="search-box">
                             <FluentSearch type="search"
                                             Autofocus=true
-                                            @bind-Value="@_filterString"
+                                          @bind-Value="@_filterProjectString"
                                             Placeholder="Project..."
-                                            @oninput="@HandleFilter" />
+                                          @oninput="@HandleProjectFilter" />
                         </div>
                     </ColumnOptions>
                     <ChildContent>
