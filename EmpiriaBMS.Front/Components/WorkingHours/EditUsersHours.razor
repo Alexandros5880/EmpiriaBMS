@@ -8,7 +8,11 @@
 
 <!-- Headder -->
 <div class="d-flex justify-content-between">
-    <h3>Work Hours Update</h3>
+
+    @if (DisplayTitle)
+    {
+        <h3>Work Hours Update</h3>
+    }
 
     @if (IsFromDashboard)
     {
