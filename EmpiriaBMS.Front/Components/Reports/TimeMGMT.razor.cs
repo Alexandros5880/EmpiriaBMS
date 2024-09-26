@@ -348,20 +348,12 @@ public partial class TimeMGMT
     private async Task _onCategorySelected(ProjectCategoryVM obj)
     {
         ProjectCategory = obj;
-        if (obj == null)
-        {
-            subCategoryCombo.SelectedOption = null;
-            subCategoryCombo.Value = string.Empty;
-            ProjectSubCategory = null;
-        }
-        else
-        {
+        if (obj != null)
             await _getProjectSubCategories();
-            var firstSubCategory = _projectSubCategories.FirstOrDefault();
-            subCategoryCombo.SelectedOption = firstSubCategory;
-            subCategoryCombo.Value = firstSubCategory.Name;
-            ProjectSubCategory = firstSubCategory;
-        }
+
+        subCategoryCombo.SelectedOption = null;
+        subCategoryCombo.Value = string.Empty;
+        ProjectSubCategory = null;
 
         await Refresh();
     }
