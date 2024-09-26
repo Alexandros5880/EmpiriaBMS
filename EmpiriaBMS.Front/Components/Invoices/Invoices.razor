@@ -84,12 +84,12 @@
                             <FluentSearch type="search"
                                             Autofocus=true
                                           @bind-Value="@_filterNumberString"
-                                            Placeholder="Number..."
+                                          Placeholder="InvoiceNumber..."
                                           @oninput="@HandleNumberFilter" />
                         </div>
                     </ColumnOptions>
                     <ChildContent>
-                        @(context.Number)
+                        @(context.InvoiceNumber)
                     </ChildContent>
                 </TemplateColumn>
                 
@@ -114,10 +114,10 @@
 
 
                 <!-- Estimate Date -->
-                <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="Estimated Payment" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.EstimatedPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Estimated Payment" Align="@Align.Start" />
 
                 <!-- Payment Date -->
-                <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Actual Payment" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.ActualPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Actual Payment" Align="@Align.Start" />
 
                 <!-- Actual Paid -->
                 <TemplateColumn Title="Actual Paid" Sortable="true">

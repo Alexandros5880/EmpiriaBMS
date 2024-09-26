@@ -62,16 +62,11 @@
 
                 <PropertyColumn Property="@(p => p.Category.GetDisplayName())" Sortable="true" Title="Category" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.EstimatedDate)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Date" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Mark)" Sortable="true" Title="Mark" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Number)" Sortable="true" Title="Number" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.EstimatedPayment)" Format="dd-mm-yyyy" Sortable="true" Title="EstimatedPayment" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.ActualPayment)" Format="dd-mm-yyyy" Sortable="true" Title="ActualPayment" Align="@Align.Start" />
+                <PropertyColumn Property="@(p => p.InvoiceNumber)" Sortable="true" Title="InvoiceNumber" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => @Culture.GetNumberFromated((double)p.Fee))" Sortable="true" Title="Fee" Align="@Align.Start" />
-                <TemplateColumn Title="Vat" Sortable="true" Align="@Align.Start">
-                    <ChildContent>
-                        @(context.Vat.GetDisplayName())
-                    </ChildContent>
-                </TemplateColumn>
+                <PropertyColumn Property="@(p => p.Vat)" Sortable="true" Title="Vat" Align="@Align.Start" />
                 <PropertyColumn Property="@(p => @Culture.GetNumberFromated((double)p.Total))" Sortable="true" Title="Total" Align="@Align.Start" />
 
                 @if (DisplayActions)

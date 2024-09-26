@@ -150,18 +150,6 @@
 
 ***Role[ Engineer SUB ]*** -------------> ***[  ]***
 
-
-
-
 ***
 
-## Quirks of the code:
 
-### Invoices Properties Names:
-
-Number == InvoiceNumber.
-
-EstimateDate == EstimatedPayment.
-
-PaymentDate == ActualPayment.
-***

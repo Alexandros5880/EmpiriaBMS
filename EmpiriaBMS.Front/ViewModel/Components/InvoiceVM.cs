@@ -16,22 +16,10 @@ public class InvoiceVM : BaseVM
             NotifyPropertyChanged(nameof(Category));
         }
     }
+    public double Total => (Fee * (1 + Vat / 100)) + Fee;
 
-    private double? _total;
-    public double? Total
-    {
-        get => _total;
-        set
-        {
-            if (value == _total)
-                return;
-            _total = value;
-            NotifyPropertyChanged(nameof(Total));
-        }
-    }
-
-    private Vat _vat;
-    public Vat Vat
+    private int _vat;
+    public int Vat
     {
         get => _vat;
         set
@@ -43,8 +31,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private double? _fee;
-    public double? Fee
+    private double _fee;
+    public double Fee
     {
         get => _fee;
         set
@@ -56,29 +44,29 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private DateTime? _estimatedDate;
-    public DateTime? EstimatedDate
+    private DateTime? _estimatedPayment;
+    public DateTime? EstimatedPayment
     {
-        get => _estimatedDate;
+        get => _estimatedPayment;
         set
         {
-            if (value == _estimatedDate)
+            if (value == _estimatedPayment)
                 return;
-            _estimatedDate = value;
-            NotifyPropertyChanged(nameof(EstimatedDate));
+            _estimatedPayment = value;
+            NotifyPropertyChanged(nameof(EstimatedPayment));
         }
     }
 
-    private int? _number;
-    public int? Number
+    private int? _invoiceNumber;
+    public int? InvoiceNumber
     {
-        get => _number;
+        get => _invoiceNumber;
         set
         {
-            if (value == _number)
+            if (value == _invoiceNumber)
                 return;
-            _number = value;
-            NotifyPropertyChanged(nameof(Number));
+            _invoiceNumber = value;
+            NotifyPropertyChanged(nameof(InvoiceNumber));
         }
     }
 
@@ -95,16 +83,16 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private DateTime? _paymentDate;
-    public DateTime? PaymentDate
+    private DateTime? _actualPayment;
+    public DateTime? ActualPayment
     {
-        get => _paymentDate;
+        get => _actualPayment;
         set
         {
-            if (value == _paymentDate)
+            if (value == _actualPayment)
                 return;
-            _paymentDate = value;
-            NotifyPropertyChanged(nameof(PaymentDate));
+            _actualPayment = value;
+            NotifyPropertyChanged(nameof(ActualPayment));
         }
     }
 
@@ -194,18 +182,17 @@ public class InvoiceVM : BaseVM
 
     public InvoiceVM()
     {
-        PaymentDate = DateTime.Now;
+        ActualPayment = DateTime.Now;
     }
 
     public InvoiceVM(InvoiceVM invoice)
     {
-        Total = invoice.Total;
         Vat = invoice.Vat;
         Fee = invoice.Fee;
-        Number = invoice.Number;
+        InvoiceNumber = invoice.InvoiceNumber;
         Mark = invoice.Mark;
-        EstimatedDate = invoice.EstimatedDate;
-        PaymentDate = invoice.PaymentDate;
+        EstimatedPayment = invoice.EstimatedPayment;
+        ActualPayment = invoice.ActualPayment;
         TypeId = invoice.TypeId;
         Type = null;
         ProjectId = invoice.ProjectId;

@@ -46,9 +46,6 @@ public partial class InvoiceDetailed
     public bool DisplayAcions { get; set; } = true;
 
     [Parameter]
-    public bool DisplayProject { get; set; } = false;
-
-    [Parameter]
     public EventCallback<InvoiceVM> OnSave { get; set; }
 
     [Parameter]
@@ -77,16 +74,11 @@ public partial class InvoiceDetailed
     private FluentCombobox<(string Value, string Text)> _categoryCombo;
 
     private ContractDetailed _contractDetailedRef;
-
-    private FluentCombobox<(string Value, string Text)> _vatCombo;
     #endregion
 
     #region Relaited Records Lists
     ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     ObservableCollection<InvoiceTypeVM> _types = new ObservableCollection<InvoiceTypeVM>();
-    private List<(string Value, string Text)> _vats = Enum.GetValues(typeof(Vat)).Cast<Vat>()
-                                                          .Select(e => e.ToTuple())
-                                                          .ToList();
 
     private List<(string Value, string Text)> _categories = Enum.GetValues(typeof(InvoiceCategory))
                                                                 .Cast<InvoiceCategory>()
@@ -116,21 +108,6 @@ public partial class InvoiceDetailed
             if (_selectedType == value || value == null) return;
             _selectedType = value;
             Content.TypeId = _selectedType.Id;
-        }
-    }
-
-    private (string Value, string Text) _selectedVat;
-    public (string Value, string Text) SelectedVat
-    {
-        get => _selectedVat;
-        set
-        {
-            if (value == (null, null))
-                return;
-
-            _selectedVat = value;
-            Vat vat = (Vat)Enum.Parse(typeof(Vat), value.Value);
-            Content.Vat = vat;
         }
     }
 
@@ -186,10 +163,6 @@ public partial class InvoiceDetailed
                 _typeCombo.Value = SelectedType.Name;
         }
 
-        SelectedVat = _vats.FirstOrDefault(r => r.Value == Content.Vat.ToString());
-        if (_vatCombo != null)
-            _vatCombo.Value = SelectedVat.Text;
-
         SelectedCategory = _categories.FirstOrDefault(r => r.Value == Content.Category.ToString());
         if (_categoryCombo != null)
             _categoryCombo.Value = SelectedCategory.Text;
@@ -222,8 +195,8 @@ public partial class InvoiceDetailed
         };
         Content = new InvoiceVM()
         {
-            EstimatedDate = DateTime.Now,
-            PaymentDate = DateTime.Now,
+            EstimatedPayment = DateTime.Now,
+            ActualPayment = DateTime.Now,
             Contract = Contract,
             ContractId = 0
         };
@@ -309,7 +282,7 @@ public partial class InvoiceDetailed
     {
         if (fieldname == null)
         {
-            validProject = !DisplayProject || SelectedProject.Id != 0;
+            validProject = SelectedProject.Id != 0;
             validMark = !string.IsNullOrEmpty(Content.Mark);
             validType = Content.TypeId != 0;
 
@@ -325,7 +298,7 @@ public partial class InvoiceDetailed
             switch (fieldname)
             {
                 case "Project":
-                    validProject = !DisplayProject || SelectedProject.Id != 0;
+                    validProject = SelectedProject.Id != 0;
                     return validProject;
                 case "Mark":
                     validMark = !string.IsNullOrEmpty(Content.Mark);

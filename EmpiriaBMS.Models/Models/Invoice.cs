@@ -12,21 +12,19 @@ public class Invoice : Entity
     public int TypeId { get; set; }
     public InvoiceType? Type { get; set; }
 
-    public double? Total { get; set; }
+    public int Vat { get; set; }
 
-    public Vat Vat { get; set; }
-
-    public double? Fee { get; set; }
+    public double Fee { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
-    public DateTime? EstimatedDate { get; set; }
+    public DateTime? EstimatedPayment { get; set; }
 
     [DataType(DataType.DateTime)]
     [Column(TypeName = "datetime2")]
-    public DateTime PaymentDate { get; set; }
+    public DateTime ActualPayment { get; set; }
 
-    public int? Number { get; set; }
+    public int? InvoiceNumber { get; set; }
 
     public string? Mark { get; set; }
 

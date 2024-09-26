@@ -9,17 +9,15 @@ public class InvoiceDto : EntityDto
     [Required]
     public InvoiceCategory Category { get; set; }
 
-    public double? Total { get; set; }
+    public int Vat { get; set; }
 
-    public Vat Vat { get; set; }
+    public double Fee { get; set; }
 
-    public double? Fee { get; set; }
+    public DateTime? EstimatedPayment { get; set; }
 
-    public DateTime? EstimatedDate { get; set; }
+    public DateTime ActualPayment { get; set; }
 
-    public DateTime PaymentDate { get; set; }
-
-    public int? Number { get; set; }
+    public int? InvoiceNumber { get; set; }
 
     public string? Mark { get; set; }
 

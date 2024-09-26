@@ -60,8 +60,8 @@ public partial class Invoices : ComponentBase
     {
         SelectedRecord = new InvoiceVM()
         {
-            EstimatedDate = DateTime.Now,
-            PaymentDate = DateTime.Now,
+            EstimatedPayment = DateTime.Now,
+            ActualPayment = DateTime.Now,
             Category = InvoiceCategory,
             Contract = new ContractVM()
         };
@@ -175,7 +175,7 @@ public partial class Invoices : ComponentBase
                 .Contains(_filterProjectString, StringComparison.CurrentCultureIgnoreCase);
 
         var numberFilter = string.IsNullOrEmpty(_filterNumberString)
-            || invoice.Number == Convert.ToInt32(_filterNumberString);
+            || invoice.InvoiceNumber == Convert.ToInt32(_filterNumberString);
 
         return projectFilter && numberFilter;
     }
