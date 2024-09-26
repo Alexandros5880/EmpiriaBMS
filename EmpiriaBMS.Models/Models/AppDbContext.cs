@@ -550,14 +550,14 @@ public class AppDbContext : DbContext
             };
             builder.Entity<Permission>().HasData(per_39);
 
-            // See Reports
+            // See TimeMGMT
             var per_40_id = random.Next(123456789, 999999999);
             Permission per_40 = new Permission()
             {
                 Id = per_40_id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "See Reports",
+                Name = "See TimeMGMT",
                 Ord = 40
             };
             builder.Entity<Permission>().HasData(per_40);
@@ -1600,7 +1600,7 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_119);
 
-            // CTO || See Reports
+            // CTO || See TimeMGMT
             RolePermission rp_124 = new RolePermission()
             {
                 Id = random.Next(123456789, 999999999) * 9,
@@ -2053,7 +2053,7 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_120);
 
-            // CEO || See Reports
+            // CEO || See TimeMGMT
             RolePermission rp_125 = new RolePermission()
             {
                 Id = random.Next(123456789, 999999999) * 9,

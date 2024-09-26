@@ -26,7 +26,7 @@ using Newtonsoft.Json.Linq;
 
 namespace EmpiriaBMS.Front.Components.Reports;
 
-public partial class Reports
+public partial class TimeMGMT
 {
     private bool _loading = true;
 
