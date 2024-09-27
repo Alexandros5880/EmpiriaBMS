@@ -25,11 +25,13 @@
         <div class="row">
 
             <!-- Filters -->
-            <div class="col-9">
-                <FluentStack Orientation="Orientation.Horizontal"
-                             HorizontalAlignment="HorizontalAlignment.Start"
-                             Style="column-gap: 10px; row-gap: 5px;"
-                             Wrap="true">
+            <div class="col-xxl-9 col-xl-9 col-12">
+                <div class="d-flex flex-wrap
+                            justify-content-xxl-start
+                            justify-content-xl-start
+                            justify-content-lg-start
+                            justify-content-center"
+                     style="column-gap: 10px; row-gap: 5px;">
 
                     <div style="width: 160px;">
                         <FluentCombobox @ref="resultFilterCombo"
@@ -46,17 +48,17 @@
                                         SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
                     </div>
 
-                    <div style="width: 160px;">
+                    <div style="width: 320px;">
                         <FluentCombobox @ref="clientFilterCombo"
                                         Label="Client:"
                                         Autocomplete="ComboboxAutocomplete.Both"
                                         AriaLabel="Pre-selected option"
                                         Height="400px"
-                                        Width="140px"
+                                        Width="300px"
                                         Items="@_clients"
                                         TOption="ClientVM"
                                         OptionValue="@((t) => t.Id.ToString())"
-                                        OptionText="@((t) => t.Name)"
+                                        OptionText="@(c => $"{c.CompanyName} - {c.FullName}")"
                                         OptionSelected="@(i => i.Id == _selectedClient?.Id)"
                                         SelectedOptionChanged="@(async (o) => await _onClientSelectionChanged(o))" />
                     </div>
@@ -106,11 +108,11 @@
                                         SelectedOptionChanged="@(async (o) => await _onTypeSelectionChanged(o))" />
                     </div>
 
-                </FluentStack>
+                </div>
             </div>
 
             <!-- Add/Export Button -->
-            <div class="col-3">
+            <div class="col-xxl-3 col-xl-3 col-12 mt-xxl-0 mt-xl-0 mt-2">
                 <FluentStack HorizontalAlignment="HorizontalAlignment.End"
                              Style="margin-right: 10px; min-width: 300px;">
 

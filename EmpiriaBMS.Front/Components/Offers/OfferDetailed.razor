@@ -15,7 +15,7 @@
     }
 
     <div class="col-12 row" style="height: 440px; overflow-y: auto;">
-        
+
         <div class="col-12 row gx-2 mt-2">
             <!-- Result -->
             <div class="col-xl-6 col-lg-6 col-md-12">
@@ -51,7 +51,7 @@
             <!-- Client -->
             <div class="col-xl-6 col-lg-6 col-md-12">
                 <div class="col-12">
-                    Lead<span class="text-danger">*</span>
+                    Client<span class="text-danger">*</span>
                 </div>
                 <div class="col-12">
                     <FluentCombobox @ref="@_clientCombo"
@@ -60,7 +60,7 @@
                                     Height="200px"
                                     Width="100%"
                                     TOption="ClientVM"
-                                    OptionText="@(c => c.Name)"
+                                    OptionText="@(c => $"{c.CompanyName} - {c.FullName}")"
                                     OptionValue="@(c => c.Id.ToString())"
                                     SelectedOptionChanged="@(async (e) => await _onClientChanged(e))" />
                 </div>
@@ -80,7 +80,8 @@
                     Type<span class="text-danger">*</span>
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                    <FluentCombobox @ref="@_typeCombo"
+                                    Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Type..."
                                     Items="@_types"
                                     Height="200px"
@@ -103,7 +104,8 @@
                     State<span class="text-danger">*</span>
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                    <FluentCombobox @ref="@_stateCombo"
+                                    Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select State..."
                                     Items="_states"
                                     Height="200px"

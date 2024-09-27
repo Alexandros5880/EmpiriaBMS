@@ -9,58 +9,70 @@
 @inject IDialogService DialogService
 @inject Logging.LoggerManager Logger
 
-<div class="mt-1 ms-2 me-2 d-flex justify-content-between">
+<div class="mt-1 ms-2 me-2 row">
 
     <!-- Filters -->
-    <FluentStack Orientation="Orientation.Horizontal"
-                 HorizontalAlignment="HorizontalAlignment.Start"
-                 HorizontalGap="10">
+    <div class="col-xxl-9 col-xl-9 col-12">
+        <div class="d-flex flex-wrap
+                    justify-content-xxl-start
+                    justify-content-xl-start
+                    justify-content-lg-start
+                    justify-content-md-start
+                    justify-content-sm-start
+                    justify-content-center"
+             style="column-gap: 10px; row-gap: 5px;">
 
-        <div style="width: 160px;">
-            <FluentCombobox @ref="_resultFilterCombo"
-                            Label="Result:"
-                            Autocomplete="ComboboxAutocomplete.Both"
-                            Multiple="false"
-                            Placeholder="Select Result..."
-                            Items="_clientsResults"
-                            Width="200px"
-                            TOption="(string Value, string Text)"
-                            OptionText="@(c => c.Text)"
-                            OptionValue="@(c => c.Value)"
-                            @bind-Value="_selectedResultValue"
-                            SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
+            <div style="width: 160px;">
+                <FluentCombobox @ref="_resultFilterCombo"
+                                Label="Result:"
+                                Autocomplete="ComboboxAutocomplete.Both"
+                                Multiple="false"
+                                Placeholder="Select Result..."
+                                Items="_clientsResults"
+                                Width="200px"
+                                TOption="(string Value, string Text)"
+                                OptionText="@(c => c.Text)"
+                                OptionValue="@(c => c.Value)"
+                                @bind-Value="_selectedResultValue"
+                                SelectedOptionChanged="@(async (o) => await _onResultSelectionChanged(o))" />
+            </div>
+
         </div>
+    </div>
 
-    </FluentStack>
+    <!-- Add/Export Button -->
+    <div class="col-xxl-3 col-xl-3 col-12 mt-xxl-0 mt-xl-0 mt-2">
+        <FluentStack HorizontalAlignment="HorizontalAlignment.End"
+                     Style="margin-right: 10px; min-width: 300px;">
 
-    <!-- Add / import / Export -->
-    <FluentStack HorizontalAlignment="HorizontalAlignment.End" HorizontalGap="10">
-        <!-- Add -->
-        @if (IsWorkingMode)
-        {
-            <FluentButton IconStart="@(new Icons.Regular.Size16.Add())"
-                          Appearance="Appearance.Accent"
-                          OnClick="@_add">
-                Add Client
+            <!-- Add -->
+            @if (IsWorkingMode)
+            {
+                <FluentButton IconStart="@(new Icons.Regular.Size16.Add())"
+                              Appearance="Appearance.Accent"
+                              OnClick="@_add">
+                    Add Client
+                </FluentButton>
+            }
+
+            <!-- Import -->
+            <InputFile @ref="@fileInput" OnChange="ImportFromCSV" style="display: none;" />
+            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
+                          Appearance="Appearance.Outline"
+                          OnClick="@(async () => await TriggerFileInput())">
+                Import
             </FluentButton>
-        }
 
-        <!-- Import -->
-        <InputFile @ref="@fileInput" OnChange="ImportFromCSV" style="display: none;" />
-        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
-                      Appearance="Appearance.Outline"
-                      OnClick="@(async () => await TriggerFileInput())">
-            Import
-        </FluentButton>
+            <!-- Export -->
+            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                          Appearance="Appearance.Outline"
+                          OnClick="@(async (e) => await ExportToCSV())"
+                          Disabled="@(FilteredItems?.Count() == 0)">
+                Export
+            </FluentButton>
 
-        <!-- Export -->
-        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                      Appearance="Appearance.Outline"
-                      OnClick="@(async (e) => await ExportToCSV())"
-                      Disabled="@(FilteredItems?.Count() == 0)">
-            Export
-        </FluentButton>
-    </FluentStack>
+        </FluentStack>
+    </div>
 
 </div>
 

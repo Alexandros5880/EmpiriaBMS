@@ -10,6 +10,7 @@ using Humanizer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.JSInterop;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
@@ -225,8 +226,8 @@ public partial class Offers
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(80%, 1000px);",
-            Height = "min(80%, 1000px);"
+            Width = "min(max(50vw, 500px), 1000px)",
+            Height = "min(max(80vh, 500px), 1000px)"
         };
 
         _selectedOffer.ClientId = _selectedClient?.Id;
@@ -279,8 +280,8 @@ public partial class Offers
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(80%, 1000px);",
-            Height = "min(80%, 1000px);"
+            Width = "min(max(50vw, 500px), 1000px)",
+            Height = "min(max(80vh, 500px), 1000px)"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);

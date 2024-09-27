@@ -5,6 +5,7 @@ using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Humanizer;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,8 @@ namespace EmpiriaBMS.Front.Components.Offers;
 public partial class OfferDetailed
 {
     private FluentCombobox<ClientVM> _clientCombo;
+    private FluentCombobox<OfferTypeVM> _typeCombo;
+    private FluentCombobox<OfferStateVM> _stateCombo;
     private FluentCombobox<(string Value, string Text)> _resultCombo;
     private FluentCombobox<ProjectCategoryVM> _catCombo;
     private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
@@ -58,30 +61,42 @@ public partial class OfferDetailed
         {
             var clientDto = Mapping.Mapper.Map<ClientDto>(Content.Client);
             Client = _mapper.Map<ClientVM>(clientDto);
+            _clientCombo.Value = $"{Client.CompanyName} - {Client.FullName}";
+            _clientCombo.SelectedOption = Client;
         }
         else if (Content.ClientId != 0)
         {
             Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
+            _clientCombo.Value = $"{Client.CompanyName} - {Client.FullName}";
+            _clientCombo.SelectedOption = Client;
         }
 
         if (Content.Type != null)
         {
             var typeDto = Mapping.Mapper.Map<OfferTypeDto>(Content.Type);
             Type = _mapper.Map<OfferTypeVM>(typeDto);
+            _typeCombo.Value = Type.Name;
+            _typeCombo.SelectedOption = Type;
         }
         else if (Content.TypeId != 0)
         {
             Type = _types.FirstOrDefault(c => c.Id == Content.TypeId);
+            _typeCombo.Value = Type.Name;
+            _typeCombo.SelectedOption = Type;
         }
 
         if (Content.State != null)
         {
             var stateDto = Mapping.Mapper.Map<OfferStateDto>(Content.State);
             State = _mapper.Map<OfferStateVM>(stateDto);
+            _stateCombo.Value = State.Name;
+            _stateCombo.SelectedOption = State;
         }
         else if (Content.StateId != 0)
         {
             State = _states.FirstOrDefault(c => c.Id == Content.StateId);
+            _stateCombo.Value = State.Name;
+            _stateCombo.SelectedOption = State;
         }
 
         if (Content.Result != null)
