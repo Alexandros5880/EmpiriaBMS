@@ -28,13 +28,6 @@
                 </FluentNavLink>
             </FluentNavGroup>
 
-            <!-- Leds -->
-            <FluentNavLink Icon="@(new MyIcons.Size24.Result())"
-                           OnClick="@(() => TabMenuClick(23))"
-                           Class="@((tabs[23] ? "active-nav-link" : ""))">
-                Leds
-            </FluentNavLink>
-
             <!--  Offers -->
             <FluentNavGroup Title="Offers" Icon="@(new MyIcons.Size24.Offers1())">
                 <FluentNavLink Icon="@(new MyIcons.Size24.Offers2())"
@@ -303,12 +296,6 @@
         {
             <div style="padding: 10px;">
                 <EmpiriaBMS.Front.Components.Admin.SupportiveWorks.Types.SupportiveWorkTypes />
-            </div>
-        }
-        else if (tabs[23])
-        {
-            <div style="padding: 10px;">
-                <EmpiriaBMS.Front.Components.Admin.Leads.Leads />
             </div>
         }
 

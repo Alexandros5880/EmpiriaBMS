@@ -47,18 +47,18 @@
                     </div>
 
                     <div style="width: 160px;">
-                        <FluentCombobox @ref="leadFilterCombo"
-                                        Label="Lead:"
+                        <FluentCombobox @ref="clientFilterCombo"
+                                        Label="Client:"
                                         Autocomplete="ComboboxAutocomplete.Both"
                                         AriaLabel="Pre-selected option"
                                         Height="400px"
                                         Width="140px"
-                                        Items="@_leads"
-                                        TOption="LeadVM"
+                                        Items="@_clients"
+                                        TOption="ClientVM"
                                         OptionValue="@((t) => t.Id.ToString())"
                                         OptionText="@((t) => t.Name)"
-                                        OptionSelected="@(i => i.Id == _selectedLead?.Id)"
-                                        SelectedOptionChanged="@(async (o) => await _onLeadSelectionChanged(o))" />
+                                        OptionSelected="@(i => i.Id == _selectedClient?.Id)"
+                                        SelectedOptionChanged="@(async (o) => await _onClientSelectionChanged(o))" />
                     </div>
 
                     <div style="width: 160px;">

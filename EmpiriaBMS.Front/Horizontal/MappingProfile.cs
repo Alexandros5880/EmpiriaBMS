@@ -33,7 +33,6 @@ public class MappingProfile : Profile
         CreateMap<OfferStateDto, OfferStateVM>().ReverseMap();
         CreateMap<OfferDto, OfferVM>().ReverseMap();
         CreateMap<TeamsRequestedUserDto, TeamsRequestedUserVM>().ReverseMap();
-        CreateMap<LeadDto, LeadVM>().ReverseMap();
         CreateMap<ExpensesTypeDto, ExpensesTypeVM>().ReverseMap();
     }
 }

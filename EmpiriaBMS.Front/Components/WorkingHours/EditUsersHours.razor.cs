@@ -54,7 +54,7 @@ public partial class EditUsersHours
 
     #region Selections Lists
     private ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
-    private ObservableCollection<LeadVM> _leds = new ObservableCollection<LeadVM>();
+    private ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
@@ -64,7 +64,7 @@ public partial class EditUsersHours
 
     #region Selected Models
     private UserVM _selectedUser = new UserVM();
-    private LeadVM _selectedLed = new LeadVM();
+    private ClientVM _selectedClient = new ClientVM();
     private OfferVM _selectedOffer = new OfferVM();
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
@@ -73,7 +73,7 @@ public partial class EditUsersHours
     #endregion
 
     #region Changed Records Lists
-    private List<LeadVM> _ledsChanged = new List<LeadVM>();
+    private List<ClientVM> _clientsChanged = new List<ClientVM>();
     private List<OfferVM> _offersChanged = new List<OfferVM>();
     private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
     private List<DisciplineVM> _disciplinesChanged = new List<DisciplineVM>();
@@ -111,7 +111,7 @@ public partial class EditUsersHours
         _description = string.Empty;
 
         _users.Clear();
-        _leds.Clear();
+        _clients.Clear();
         _offers.Clear();
         _projects.Clear();
         _supportiveWork.Clear();
@@ -122,7 +122,7 @@ public partial class EditUsersHours
             await _getUsers();
 
         if (workOnLeds || seeAdmin)
-            await _getLeds();
+            await _getClients();
 
         if (workOnOffers || seeAdmin)
             await _getOffers();
@@ -131,7 +131,7 @@ public partial class EditUsersHours
             await _getProjects(active: true);
 
         _selectedUser = new UserVM() { Id = 0 };
-        _selectedLed = new LeadVM() { Id = 0 };
+        _selectedClient = new ClientVM() { Id = 0 };
         _selectedOffer = new OfferVM() { Id = 0 };
         _selectedProject = new ProjectVM() { Id = 0 };
         _selectedDiscipline = new DisciplineVM() { Id = 0 };
@@ -145,13 +145,13 @@ public partial class EditUsersHours
     public async Task _getUsers()
     {
         _selectedUser = null;
-        _selectedLed = null;
+        _selectedClient = null;
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
         _selectedDeliverable = null;
         _selectedSupportiveWork = null;
-        _leds.Clear();
+        _clients.Clear();
         _disciplines.Clear();
         _deliverables.Clear();
         _supportiveWork.Clear();
@@ -169,9 +169,9 @@ public partial class EditUsersHours
         }
     }
 
-    public async Task _getLeds()
+    public async Task _getClients()
     {
-        _selectedLed = null;
+        _selectedClient = null;
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
@@ -183,14 +183,14 @@ public partial class EditUsersHours
 
         try
         {
-            var dtos = await _dataProvider.Leads.GetAll();
-            var vms = Mapper.Map<List<LeadVM>>(dtos);
-            _leds.Clear();
-            vms.ForEach(_leds.Add);
+            var dtos = await _dataProvider.Clients.GetAll();
+            var vms = Mapper.Map<List<ClientVM>>(dtos);
+            _clients.Clear();
+            vms.ForEach(_clients.Add);
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception EditUsersHours._getLeds(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception EditUsersHours._getClients(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -207,7 +207,7 @@ public partial class EditUsersHours
 
         try
         {
-            var dtos = await _dataProvider.Offers.GetAllByLead(_selectedLed?.Id ?? 0);
+            var dtos = await _dataProvider.Offers.GetAllByLead(_selectedClient?.Id ?? 0);
             var vms = Mapper.Map<List<OfferVM>>(dtos);
             _offers.Clear();
             vms.ForEach(_offers.Add);
@@ -271,23 +271,23 @@ public partial class EditUsersHours
     #endregion
 
     #region On Time Changed
-    private async Task _onLedTimeChanged(LeadVM led, TimeSpan newTimeSpan)
+    private async Task _onLedTimeChanged(ClientVM client, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
-        var previusTime = led.Time;
+        var previusTime = client.Time;
         var updatedTime = newTimeSpan - previusTime;
         RemainingTime += (-updatedTime);
 
-        led.Time = newTimeSpan;
+        client.Time = newTimeSpan;
 
-        if (_ledsChanged.Any(d => d.Id == led.Id))
+        if (_clientsChanged.Any(d => d.Id == client.Id))
         {
-            var d = _ledsChanged.FirstOrDefault(d => d.Id == led.Id);
-            d.Time = led.Time;
+            var d = _clientsChanged.FirstOrDefault(d => d.Id == client.Id);
+            d.Time = client.Time;
         }
         else
-            _ledsChanged.Add(led);
+            _clientsChanged.Add(client);
 
         _hasChanged = true;
 
@@ -499,7 +499,7 @@ public partial class EditUsersHours
 
         var user = _users.FirstOrDefault(p => p.Id == userId);
 
-        _leds.Clear();
+        _clients.Clear();
         _offers.Clear();
         _projects.Clear();
         _supportiveWork.Clear();
@@ -507,9 +507,9 @@ public partial class EditUsersHours
         _disciplines.Clear();
         _selectedUser = user;
 
-        await _getLeds();
+        await _getClients();
 
-        _selectedLed = new LeadVM() { Id = 0 };
+        _selectedClient = new ClientVM() { Id = 0 };
         _selectedOffer = new OfferVM() { Id = 0 };
         _selectedProject = new ProjectVM() { Id = 0 };
         _selectedDiscipline = new DisciplineVM() { Id = 0 };
@@ -521,16 +521,16 @@ public partial class EditUsersHours
 
     private async Task OnSelectLed(int ledId)
     {
-        if (ledId == 0 || ledId == _selectedLed?.Id) return;
+        if (ledId == 0 || ledId == _selectedClient?.Id) return;
 
-        var led = _leds.FirstOrDefault(p => p.Id == ledId);
+        var led = _clients.FirstOrDefault(p => p.Id == ledId);
         _offers.Clear();
         _projects.Clear();
         _deliverables.Clear();
         _supportiveWork.Clear();
         _disciplines.Clear();
 
-        _selectedLed = led ?? new LeadVM { Id = 0 };
+        _selectedClient = led ?? new ClientVM { Id = 0 };
 
         await _getOffers();
 
@@ -664,12 +664,12 @@ public partial class EditUsersHours
             var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
 
             // Update Leds
-            foreach (var led in _ledsChanged)
+            foreach (var led in _clientsChanged)
             {
-                await _dataProvider.WorkingTime.LeadAddTimeRequest(userId, led.Id, led.Time, _description);
+                await _dataProvider.WorkingTime.ClientAddTimeRequest(userId, led.Id, led.Time, _description);
             }
-            _ledsChanged.Clear();
-            _selectedLed = null;
+            _clientsChanged.Clear();
+            _selectedClient = null;
 
             // Update Offers
             foreach (var offer in _offersChanged)
@@ -738,12 +738,12 @@ public partial class EditUsersHours
 
 
             // Update Leds
-            foreach (var led in _ledsChanged)
+            foreach (var led in _clientsChanged)
             {
-                await _dataProvider.WorkingTime.LeadAddTime(userId, led.Id, led.Time);
+                await _dataProvider.WorkingTime.ClientAddTime(userId, led.Id, led.Time);
             }
-            _ledsChanged.Clear();
-            _selectedLed = null;
+            _clientsChanged.Clear();
+            _selectedClient = null;
 
             // Update Offers
             foreach (var offer in _offersChanged)

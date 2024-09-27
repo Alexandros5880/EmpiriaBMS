@@ -92,11 +92,11 @@ public static class ModelRelations
                .IsRequired(false)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // Offers Lead
+        // Offers Client
         builder.Entity<Offer>()
-               .HasOne(i => i.Lead)
+               .HasOne(i => i.Client)
                .WithMany(p => p.Offers)
-               .HasForeignKey(i => i.LeadId)
+               .HasForeignKey(i => i.ClientId)
                .OnDelete(DeleteBehavior.Cascade);
 
         // Invoices Project
@@ -197,13 +197,6 @@ public static class ModelRelations
                .HasForeignKey(c => c.ProjectManagerId)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-        // Leds Client
-        builder.Entity<Client>()
-               .HasMany(p => p.Leds)
-               .WithOne(c => c.Client)
-               .HasForeignKey(c => c.ClientId)
-               .OnDelete(DeleteBehavior.ClientSetNull);
-
         // Client Address
         builder.Entity<Address>()
                .HasMany(p => p.Clients)
@@ -267,11 +260,11 @@ public static class ModelRelations
                .HasForeignKey(d => d.CorporateUserId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // Led DailyTime
-        builder.Entity<Lead>()
-               .HasMany(p => p.DailyTime)
-               .WithOne(c => c.Lead)
-               .HasForeignKey(c => c.LeadId)
+        // Client DailyTime
+        builder.Entity<Client>()
+               .HasMany(p => p.ClientDailyTime)
+               .WithOne(c => c.Client)
+               .HasForeignKey(c => c.ClientId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // Offer DailyTime
@@ -331,13 +324,6 @@ public static class ModelRelations
                .WithMany()
                .HasForeignKey(psc => psc.CategoryId)
                .IsRequired(false)
-               .OnDelete(DeleteBehavior.NoAction);
-
-        // Leds Address
-        builder.Entity<Address>()
-               .HasMany(p => p.Leds)
-               .WithOne(c => c.Address)
-               .HasForeignKey(c => c.AddressId)
                .OnDelete(DeleteBehavior.NoAction);
 
         // Projects ProjectStage

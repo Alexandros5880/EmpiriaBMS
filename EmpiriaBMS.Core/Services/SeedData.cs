@@ -3720,7 +3720,6 @@ public class SeedData
         projects.Clear();
 
         List<Client> clients = new List<Client>();
-        List<Lead> leds = new List<Lead>();
         List<Offer> offers = new List<Offer>();
         List<Invoice> invoices = new List<Invoice>();
 
@@ -3745,23 +3744,13 @@ public class SeedData
                 LastName = "LastName",
                 ProxyAddress = "alexandrosplatanios15@gmail.com",
                 Phone1 = "6949277783",
-                CompanyName = "Embiria BMS"
+                CompanyName = "Embiria BMS",
+                Name = $"Alex Plat {i}",
+                PotencialFee = random.Next(1000, 3000) + Math.Pow(i, 3),
+                ExpectedDurationDate = DateTime.Now.AddMonths(i),
+                Result = ClientResult.SUCCESSFUL
             };
             clients.Add(client);
-
-            // Led
-            var ledId = random.Next(123456789, 999999999) + i * 3;
-            Lead led = new Lead()
-            {
-                Id = ledId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = $"Led-{i}",
-                ClientId = clientId,
-                PotencialFee = random.Next(i, i * 3),
-                Result = LeadResult.SUCCESSFUL
-            };
-            leds.Add(led);
 
             // Offers
             var offerId = random.Next(123456789, 999999999) + i * 3;
@@ -3779,7 +3768,7 @@ public class SeedData
                 OfferPrice = 1000 * i * 2,
                 CategoryId = projectCategories[categoriesIndex].Id,
                 SubCategoryId = projectSubCategories[i - 1].Id,
-                LeadId = ledId,
+                ClientId = clientId,
             };
             offers.Add(offer);
 
@@ -3855,21 +3844,6 @@ public class SeedData
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", false);
 
-            // Leds
-            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Leds", true);
-            foreach (var item in leds)
-            {
-                try
-                {
-                    await SeedIfNotExists<Lead>(context, _logger, item);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Exception SeedData.CreateProjects() Leds: {ex.Message}, \n Inner Exception: {ex.InnerException}");
-                }
-            }
-            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Leds", false);
-
             // Offers
             await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Offers", true);
             foreach (var item in offers)
@@ -3924,7 +3898,6 @@ public class SeedData
         msprojects.Clear();
 
         List<Client> clients = new List<Client>();
-        List<Lead> leds = new List<Lead>();
         List<Offer> offers = new List<Offer>();
         List<Invoice> invoices = new List<Invoice>();
 
@@ -3945,27 +3918,17 @@ public class SeedData
                 Id = clientId,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                FirstName = $"Client-Led-M-{i}",
+                FirstName = $"Client-Led-{i}",
                 LastName = "LastName",
                 ProxyAddress = "alexandrosplatanios15@gmail.com",
                 Phone1 = "6949277783",
-                CompanyName = "Embiria BMS"
+                CompanyName = "Embiria BMS",
+                Name = $"Alex Plat {i}",
+                PotencialFee = random.Next(1000, 3000) + Math.Pow(i, 3),
+                ExpectedDurationDate = DateTime.Now.AddMonths(i),
+                Result = ClientResult.SUCCESSFUL
             };
             clients.Add(client);
-
-            // Led
-            var ledId = random.Next(123456789, 999999999) + i * 3 + 13245;
-            Lead led = new Lead()
-            {
-                Id = ledId,
-                CreatedDate = DateTime.Now,
-                LastUpdatedDate = DateTime.Now,
-                Name = $"Led-M-{i}",
-                ClientId = clientId,
-                PotencialFee = random.Next(i, i * 3),
-                Result = LeadResult.SUCCESSFUL
-            };
-            leds.Add(led);
 
             // Offers
             var offerId = random.Next(123456789, 999999999) + i * 3 + 3246;
@@ -3983,7 +3946,7 @@ public class SeedData
                 OfferPrice = 1000 * i * 2,
                 CategoryId = projectCategories[categoriesIndex].Id,
                 SubCategoryId = projectSubCategories[i - 1].Id,
-                LeadId = ledId,
+                ClientId = clientId,
             };
             offers.Add(offer);
 
@@ -4058,21 +4021,6 @@ public class SeedData
                 }
             }
             await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Users", false);
-
-            // Leds
-            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Leds", true);
-            foreach (var item in leds)
-            {
-                try
-                {
-                    await SeedIfNotExists<Lead>(context, _logger, item);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Exception SeedData.CreateMissedDeadLineProjects() Leds: {ex.Message}, \n Inner Exception: {ex.InnerException}");
-                }
-            }
-            await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Leds", false);
 
             // Offers
             await DatabaseBackupService.SetDbIdentityInsert(context, _logger, "Offers", true);

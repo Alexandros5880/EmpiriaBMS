@@ -48,23 +48,23 @@
                     </div>
                 }
             </div>
-            <!-- Lead -->
+            <!-- Client -->
             <div class="col-xl-6 col-lg-6 col-md-12">
                 <div class="col-12">
                     Lead<span class="text-danger">*</span>
                 </div>
                 <div class="col-12">
-                    <FluentCombobox @ref="@_leadCombo"
-                                    Placeholder="Select Category..."
-                                    Items="@_leads"
+                    <FluentCombobox @ref="@_clientCombo"
+                                    Placeholder="Select Client..."
+                                    Items="@_clients"
                                     Height="200px"
                                     Width="100%"
-                                    TOption="LeadVM"
+                                    TOption="ClientVM"
                                     OptionText="@(c => c.Name)"
                                     OptionValue="@(c => c.Id.ToString())"
-                                    SelectedOptionChanged="@(async (e) => await _onLeadChanged(e))" />
+                                    SelectedOptionChanged="@(async (e) => await _onClientChanged(e))" />
                 </div>
-                @if (!validLead)
+                @if (!validClient)
                 {
                     <div class="col-12">
                         <span class="text-warning">Field is required!</span>

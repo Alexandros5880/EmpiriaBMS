@@ -1,8 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Models.Enum;
 
-public enum LeadResult
+public enum ClientResult
 {
     [Display(Name = "SUCCESSFUL")]
     SUCCESSFUL = 0,

@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
+using EmpiriaBMS.Models.Models;
 using Humanizer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
@@ -13,7 +14,7 @@ namespace EmpiriaBMS.Front.Components.Offers;
 
 public partial class OfferDetailed
 {
-    private FluentCombobox<LeadVM> _leadCombo;
+    private FluentCombobox<ClientVM> _clientCombo;
     private FluentCombobox<(string Value, string Text)> _resultCombo;
     private FluentCombobox<ProjectCategoryVM> _catCombo;
     private FluentCombobox<ProjectSubCategoryVM> _subCatCombo;
@@ -53,14 +54,14 @@ public partial class OfferDetailed
         if (full)
             await _getRecords();
 
-        if (Content.Lead != null)
+        if (Content.Client != null)
         {
-            var leadDto = Mapping.Mapper.Map<LeadDto>(Content.Lead);
-            Lead = _mapper.Map<LeadVM>(leadDto);
+            var clientDto = Mapping.Mapper.Map<ClientDto>(Content.Client);
+            Client = _mapper.Map<ClientVM>(clientDto);
         }
-        else if (Content.LeadId != 0)
+        else if (Content.ClientId != 0)
         {
-            Lead = _leads.FirstOrDefault(c => c.Id == Content.LeadId);
+            Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
         }
 
         if (Content.Type != null)
@@ -94,7 +95,7 @@ public partial class OfferDetailed
         }
         else
         {
-            SelectedResult = _results.FirstOrDefault(r => r.Value == LeadResult.UNSUCCESSFUL.ToString());
+            SelectedResult = _results.FirstOrDefault(r => r.Value == ClientResult.UNSUCCESSFUL.ToString());
             if (_resultCombo != null)
             {
                 _resultCombo.Value = SelectedResult.Value;
@@ -129,14 +130,14 @@ public partial class OfferDetailed
         var valid = Validate();
         if (!valid) return;
 
-        Content.LeadId = Lead.Id;
+        Content.ClientId = Client.Id;
         Content.TypeId = Type.Id;
         Content.StateId = State.Id;
         Content.CategoryId = Category.Id;
         Content.SubCategoryId = SubCategory.Id;
 
         var dto = _mapper.Map<OfferDto>(Content);
-        dto.Lead = null;
+        dto.Client = null;
         OfferDto updated;
 
         if (_isNew)
@@ -168,7 +169,7 @@ public partial class OfferDetailed
 
     #region Validation
     private bool validCode = true;
-    private bool validLead = true;
+    private bool validClient = true;
     private bool validType = true;
     private bool validState = true;
     private bool validDate = true;
@@ -182,7 +183,7 @@ public partial class OfferDetailed
         if (fieldname == null)
         {
             validCode = !string.IsNullOrEmpty(Content.Code);
-            validLead = Lead != null && Lead.Id != 0;
+            validClient = Client != null && Client.Id != 0;
             validType = Type != null && Type.Id != 0;
             validState = State != null && State.Id != 0;
             validDate = Content.Date == null ? false : ((DateTime)Content.Date) >= DateTime.Now;
@@ -191,12 +192,12 @@ public partial class OfferDetailed
             validCategory = Category != null && Category.Id != 0;
             validSubCategory = SubCategory != null && SubCategory.Id != 0;
 
-            return validCode && validLead && validType && validState && validDate && validPudgetPrice && validOfferPrice && validCategory && validSubCategory;
+            return validCode && validClient && validType && validState && validDate && validPudgetPrice && validOfferPrice && validCategory && validSubCategory;
         }
         else
         {
             validCode = true;
-            validLead = true;
+            validClient = true;
             validType = true;
             validState = true;
             validDate = true;
@@ -210,8 +211,8 @@ public partial class OfferDetailed
                     validCode = !string.IsNullOrEmpty(Content.Code);
                     return validCode;
                 case "Lead":
-                    validLead = Lead != null && Lead.Id != 0;
-                    return validLead;
+                    validClient = Client != null && Client.Id != 0;
+                    return validClient;
                 case "Type":
                     validType = Type != null && Type.Id != 0;
                     return validType;
@@ -242,7 +243,7 @@ public partial class OfferDetailed
     #endregion
 
     #region Get Related Records
-    ObservableCollection<LeadVM> _leads = new ObservableCollection<LeadVM>();
+    ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
     ObservableCollection<OfferTypeVM> _types = new ObservableCollection<OfferTypeVM>();
     ObservableCollection<OfferStateVM> _states = new ObservableCollection<OfferStateVM>();
     ObservableCollection<ProjectCategoryVM> _categories = new ObservableCollection<ProjectCategoryVM>();
@@ -255,14 +256,14 @@ public partial class OfferDetailed
                                                                 .GetName() ?? e.ToString()))
                                                              .ToList();
 
-    public LeadVM _lead = new LeadVM();
-    public LeadVM Lead
+    public ClientVM _client = new ClientVM();
+    public ClientVM Client
     {
-        get => _lead;
+        get => _client;
         set
         {
-            if (_lead == value || value == null) return;
-            _lead = value;
+            if (_client == value || value == null) return;
+            _client = value;
         }
     }
 
@@ -329,25 +330,25 @@ public partial class OfferDetailed
         await _getSubCategories();
     }
 
-    private async Task _onLeadChanged(LeadVM lead)
+    private async Task _onClientChanged(ClientVM client)
     {
-        Lead = lead;
+        Client = client;
     }
 
     private async Task _getRecords()
     {
-        await _getLeads();
+        await _getClients();
         await _getTypes();
         await _getStates();
         await _getCategories();
     }
 
-    private async Task _getLeads()
+    private async Task _getClients()
     {
-        var dtos = await _dataProvider.Leads.GetAll();
-        var vms = _mapper.Map<List<LeadVM>>(dtos);
-        _leads.Clear();
-        vms.ForEach(_leads.Add);
+        var dtos = await _dataProvider.Clients.GetAll();
+        var vms = _mapper.Map<List<ClientVM>>(dtos);
+        _clients.Clear();
+        vms.ForEach(_clients.Add);
     }
 
     private async Task _getTypes()

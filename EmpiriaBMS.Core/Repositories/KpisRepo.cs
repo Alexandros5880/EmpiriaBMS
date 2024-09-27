@@ -12,7 +12,7 @@ public class KpisRepo : IDisposable
 {
     private bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
-    protected readonly LeadRepo _ledRepo;
+    protected readonly ClientRepo _clientRepo;
     protected readonly InvoiceRepo _invoiceRepo;
     protected readonly PaymentRepo _paymentRepo;
     protected readonly Logging.LoggerManager _logger;
@@ -23,7 +23,7 @@ public class KpisRepo : IDisposable
     )
     {
         _dbContextFactory = dbFactory;
-        _ledRepo = new LeadRepo(dbFactory, logger);
+        _clientRepo = new ClientRepo(dbFactory, logger);
         _invoiceRepo = new InvoiceRepo(dbFactory, logger);
         _paymentRepo = new PaymentRepo(dbFactory, logger);
         _logger = logger;
@@ -36,7 +36,7 @@ public class KpisRepo : IDisposable
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var icome = await _ledRepo.GetSumOfAllOppenLeadsPotencialFee();
+                var icome = await _clientRepo.GetSumOfAllOppenClientsPotencialFee();
 
                 return icome;
             }
@@ -258,10 +258,9 @@ public class KpisRepo : IDisposable
                                                     .Include(p => p.Offer)
                                                     .ThenInclude(o => o.SubCategory)
                                                     .Include(p => p.Offer)
-                                                    .ThenInclude(o => o.Lead)
+                                                    .ThenInclude(o => o.Client)
                                                     .ThenInclude(l => l.Address)
                                                     .Include(p => p.Offer)
-                                                    .ThenInclude(o => o.Lead)
                                                     .ThenInclude(l => l.Client)
                                                     .Include(p => p.ProjectManager)
                                                     .Include(p => p.ProjectsSubConstructors)
@@ -310,10 +309,9 @@ public class KpisRepo : IDisposable
                                              .Include(p => p.Offer)
                                              .ThenInclude(o => o.SubCategory)
                                              .Include(p => p.Offer)
-                                             .ThenInclude(o => o.Lead)
+                                             .ThenInclude(o => o.Client)
                                              .ThenInclude(l => l.Address)
                                              .Include(p => p.Offer)
-                                             .ThenInclude(o => o.Lead)
                                              .ThenInclude(l => l.Client)
                                              .Include(p => p.ProjectManager)
                                              .Include(p => p.ProjectsSubConstructors)
@@ -578,20 +576,18 @@ public class KpisRepo : IDisposable
                                                        .Where(r => !r.IsDeleted)
                                                        .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
                                                        .Include(r => r.Invoices)
-                                                        .Include(p => p.Stage)
-                                                        .Include(p => p.Offer)
-                                                        .ThenInclude(o => o.Category)
-                                                        .Include(p => p.Offer)
-                                                        .ThenInclude(o => o.SubCategory)
-                                                        .Include(p => p.Offer)
-                                                        .ThenInclude(o => o.Lead)
-                                                        .ThenInclude(l => l.Address)
-                                                        .Include(p => p.Offer)
-                                                        .ThenInclude(o => o.Lead)
-                                                        .ThenInclude(l => l.Client)
-                                                        .Include(p => p.Offer)
-                                                        .Include(p => p.ProjectManager)
-                                                        .Include(p => p.ProjectsSubConstructors)
+                                                       .Include(p => p.Stage)
+                                                       .Include(p => p.Offer)
+                                                       .ThenInclude(o => o.Category)
+                                                       .Include(p => p.Offer)
+                                                       .ThenInclude(o => o.SubCategory)
+                                                       .Include(p => p.Offer)
+                                                       .ThenInclude(o => o.Client)
+                                                       .ThenInclude(l => l.Address)
+                                                       .Include(p => p.Offer)
+                                                       .ThenInclude(l => l.Client)
+                                                       .Include(p => p.ProjectManager)
+                                                       .Include(p => p.ProjectsSubConstructors)
                                                        .Where(p => p.DeadLine < DateTime.Now)
                                                        .OrderBy(e => !e.Active)
                                                        .ThenBy(e => e.DeadLine)
@@ -604,20 +600,17 @@ public class KpisRepo : IDisposable
                     var projectOffer = await _context.Set<Offer>()
                                                      .Where(o => !o.IsDeleted)
                                                      .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
-                                                     .Include(o => o.Lead)
-                                                     .ThenInclude(l => l.Client)
+                                                     .Include(o => o.Client)
                                                      .FirstOrDefaultAsync(o => o.Id == project.OfferId);
 
                     // Get All Offers
                     var offers = await _context.Set<Offer>()
                                            .Where(o => !o.IsDeleted)
                                            .Where(p => (start == null || p.CreatedDate >= start) && (end == null || p.CreatedDate <= end))
-                                           .Include(o => o.Lead)
+                                           .Include(o => o.Client)
                                            .Include(o => o.State)
                                            .Include(o => o.Type)
-                                           .Include(o => o.Lead)
-                                           .ThenInclude(p => p.Client)
-                                           .Include(o => o.Lead)
+                                           .Include(o => o.Client)
                                            .ThenInclude(l => l.Address)
                                            .Include(o => o.SubCategory)
                                            .Include(o => o.Category)
@@ -625,7 +618,7 @@ public class KpisRepo : IDisposable
                                            .ThenInclude(p => p.Stage)
                                            .ToListAsync();
 
-                    var client = projectOffer?.Lead?.Client;
+                    var client = projectOffer?.Client;
 
                     var data = new TenderDataDto()
                     {
@@ -635,7 +628,7 @@ public class KpisRepo : IDisposable
                         ProjectSubCategory = projectOffer?.SubCategory?.Name ?? "",
                         ProjectPrice = offers.Sum(o => o.OfferPrice) ?? 0,
                         ProjectPudgedPrice = offers.Sum(o => o.PudgetPrice) ?? 0,
-                        ClientCompanyName = projectOffer?.Lead?.Client?.CompanyName ?? "",
+                        ClientCompanyName = projectOffer?.Client?.CompanyName ?? "",
                         ClientFullName = client?.FullName ?? "",
                         ClientPhone = client?.Phone1 ?? client?.Phone2 ?? client?.Phone3 ?? "",
                         ClientEmail = client?.Emails?.FirstOrDefault()?.Address ?? ""
@@ -1329,8 +1322,8 @@ public class KpisRepo : IDisposable
         {
             if (disposing)
             {
-                _ledRepo.Dispose();
                 _invoiceRepo.Dispose();
+                _clientRepo.Dispose();
                 _paymentRepo.Dispose();
             }
             disposedValue = true;

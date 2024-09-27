@@ -22,12 +22,12 @@ public partial class Offers
     public bool IsWorkingMode { get; set; } = false;
 
     private FluentCombobox<(string Value, string Text)> resultFilterCombo;
-    private FluentCombobox<LeadVM> leadFilterCombo;
+    private FluentCombobox<ClientVM> clientFilterCombo;
     private FluentCombobox<ProjectVM> projectFilterCombo;
     private FluentCombobox<OfferStateVM> stateFilterCombo;
     private FluentCombobox<OfferTypeVM> typeFilterCombo;
 
-    private ObservableCollection<LeadVM> _leads = new ObservableCollection<LeadVM>();
+    private ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<OfferStateVM> _offerStates = new ObservableCollection<OfferStateVM>();
     private ObservableCollection<OfferTypeVM> _offerTypes = new ObservableCollection<OfferTypeVM>();
@@ -41,7 +41,7 @@ public partial class Offers
                                                                       .GetName() ?? e.ToString()))
                                                                   .ToList();
 
-    private LeadVM _selectedLead;
+    private ClientVM _selectedClient;
     private OfferStateVM _selectedOfferState;
     private OfferTypeVM _selectedOfferType;
     private (string Value, string Text) _selectedOfferResult;
@@ -78,12 +78,12 @@ public partial class Offers
     }
 
     #region Get Records
-    private async Task _getLeads()
+    private async Task _getClients()
     {
-        var dtos = await _dataProvider.Leads.GetAll();
-        var vms = Mapper.Map<List<LeadVM>>(dtos);
-        _leads.Clear();
-        vms.ForEach(_leads.Add);
+        var dtos = await _dataProvider.Clients.GetAll();
+        var vms = Mapper.Map<List<ClientVM>>(dtos);
+        _clients.Clear();
+        vms.ForEach(_clients.Add);
     }
 
     private async Task _getOfferStates()
@@ -110,9 +110,9 @@ public partial class Offers
         vms.ForEach(_projects.Add);
     }
 
-    private async Task _getOffers(int? projectId, int? stateId = 0, int? typeId = 0, int? leadId = 0, OfferResult? result = null, bool refresh = false)
+    private async Task _getOffers(int? projectId, int? stateId = 0, int? typeId = 0, int? clientId = 0, OfferResult? result = null, bool refresh = false)
     {
-        var dtos = await _dataProvider.Offers.GetAll(projectId: projectId, stateId: stateId, typeId: typeId, leadId: leadId, result: result);
+        var dtos = await _dataProvider.Offers.GetAll(projectId: projectId, stateId: stateId, typeId: typeId, clientId: clientId, result: result);
         var vms = Mapper.Map<List<OfferVM>>(dtos);
         _offers.Clear();
         vms.ForEach(_offers.Add);
@@ -123,7 +123,7 @@ public partial class Offers
 
     public async Task Refresh()
     {
-        await _getLeads();
+        await _getClients();
         await _getAllProjects();
         await _getOfferStates();
         await _getOfferTypes();
@@ -132,16 +132,16 @@ public partial class Offers
         SetSelectedOption(_selectedOfferResult.Value);
         OfferResult e;
         Enum.TryParse(_selectedOfferResult.Value, out e);
-        await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedLead?.Id ?? 0, e, refresh: true);
+        await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedClient?.Id ?? 0, e, refresh: true);
 
         StateHasChanged();
     }
 
-    public async Task SetLeadFilter(LeadVM lead)
+    public async Task SetClientFilter(ClientVM client)
     {
-        await _getLeads();
-        _selectedLead = _leads?.FirstOrDefault(l => l.Id == lead.Id);
-        leadFilterCombo.Value = _selectedLead.Name;
+        await _getClients();
+        _selectedClient = _clients?.FirstOrDefault(l => l.Id == client.Id);
+        clientFilterCombo.Value = _selectedClient.Name;
         StateHasChanged();
     }
 
@@ -150,7 +150,7 @@ public partial class Offers
         _selectedOfferResult = result.ToTuple();
         OfferResult e;
         Enum.TryParse(_selectedOfferResult.Value, out e);
-        await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedLead?.Id ?? 0, e, refresh: true);
+        await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedClient?.Id ?? 0, e, refresh: true);
         SetSelectedOption(_selectedOfferResult.Value);
     }
 
@@ -164,9 +164,9 @@ public partial class Offers
     }
 
     #region On Filters Event Changed
-    private async Task _onLeadSelectionChanged(LeadVM lead)
+    private async Task _onClientSelectionChanged(ClientVM client)
     {
-        _selectedLead = lead;
+        _selectedClient = client;
         await Search();
     }  
 
@@ -198,20 +198,20 @@ public partial class Offers
     {
         OfferResult result;
         Enum.TryParse(_selectedOfferResult.Value, out result);
-        await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedLead?.Id ?? 0, result, refresh: true);
+        await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedClient?.Id ?? 0, result, refresh: true);
     }
     #endregion
 
     #region Dialogs Functions
     private async Task _add(MouseEventArgs e)
     {
-        var leadDto = Mapper.Map<LeadDto>(_selectedLead);
-        var lead = Mapping.Mapper.Map<Lead>(leadDto);
+        var clientDto = Mapper.Map<ClientDto>(_selectedClient);
+        var client = Mapping.Mapper.Map<Client>(clientDto);
 
         _selectedOffer = new OfferVM()
         {
-            Lead = lead,
-            LeadId = lead?.Id,
+            Client = client,
+            ClientId = client?.Id,
             Result = OfferResult.WAITING
         };
 
@@ -229,7 +229,7 @@ public partial class Offers
             Height = "min(80%, 1000px);"
         };
 
-        _selectedOffer.LeadId = _selectedLead?.Id;
+        _selectedOffer.ClientId = _selectedClient?.Id;
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<OfferCreationDialog>(_selectedOffer, parameters);
         DialogResult result = await dialog.Result;
@@ -242,11 +242,11 @@ public partial class Offers
 
             OfferVM offerVMData = result.Data as OfferVM;
 
-            // Update Lead Filter With New Offers Lead
-            var leadId = offerVMData.LeadId;
-            await _getLeads();
-            _selectedLead = _leads?.FirstOrDefault(l => l.Id == leadId);
-            leadFilterCombo.Value = _selectedLead.Name;
+            // Update Client Filter With New Offers Client
+            var clientId = offerVMData.ClientId;
+            await _getClients();
+            _selectedClient = _clients?.FirstOrDefault(l => l.Id == clientId);
+            clientFilterCombo.Value = _selectedClient.Name;
 
             // Update Result Filter To Waiting
             await SetResultFilter(offerVMData.Result);
@@ -257,7 +257,7 @@ public partial class Offers
             await _getOffers(_selectedProject?.Id,
                 _selectedOfferState?.Id, 
                 _selectedOfferType?.Id, 
-                _selectedLead?.Id ?? 0, 
+                _selectedClient?.Id ?? 0, 
                 offerResult, 
                 refresh: true);
 
@@ -312,7 +312,7 @@ public partial class Offers
             await _dataProvider.Offers.Delete(_selectedOffer.Id);
             OfferResult or;
             Enum.TryParse(_selectedOfferResult.Value, out or);
-            await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedLead?.Id ?? 0, or, true);
+            await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedClient?.Id ?? 0, or, true);
         }
 
         await dialog.CloseAsync();

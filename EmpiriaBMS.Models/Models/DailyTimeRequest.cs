@@ -39,8 +39,8 @@ public class DailyTimeRequest : Entity
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }
 
-    public int? LeadId { get; set; }
-    public Lead? Lead { get; set; }
+    public int? ClientId { get; set; }
+    public Client? Client { get; set; }
 
     public int? OfferId { get; set; }
     public Offer? Offer { get; set; }
@@ -70,8 +70,8 @@ public class DailyTimeRequest : Entity
             Discipline = Discipline,
             ProjectId = ProjectId,
             Project = Project,
-            LeadId = LeadId,
-            Lead = Lead,
+            ClientId = ClientId,
+            Client = Client,
             OfferId = OfferId,
             Offer = Offer
         };
