@@ -72,10 +72,12 @@
                                         <div class="mt-2 shadow p-2">
                                             @if (_sharedAuthData.LogedUser != null)
                                             {
-                                                <FluentStack Orientation="Orientation.Horizontal"
-                                                             HorizontalAlignment="HorizontalAlignment.Left"
-                                                             Class="d-flex justify-content-between m-1"
-                                                             Wrap="true">
+                                                <div class="m-2 d-flex flex-wrap
+                                                            align-items-center
+                                                            justify-content-xxl-between
+                                                            justify-content-xl-between
+                                                            justify-content-center"
+                                                     style="column-gap: 10px; row-gap: 5px;">
 
                                                     <!-- User Name + Roles + Current Date -->
                                                     <div class="row me-4">
@@ -276,7 +278,7 @@
 
                                                     </FluentStack>
 
-                                                </FluentStack>
+                                                </div>
                                             }
                                         </div>
 
