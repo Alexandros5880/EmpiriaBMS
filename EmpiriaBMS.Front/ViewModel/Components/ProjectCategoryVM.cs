@@ -31,19 +31,6 @@ public class ProjectCategoryVM : BaseVM
         }
     }
 
-    private bool _canAssignePM;
-    public bool CanAssignePM
-    {
-        get => _canAssignePM;
-        set
-        {
-            if (value == _canAssignePM)
-                return;
-            _canAssignePM = value;
-            NotifyPropertyChanged(nameof(CanAssignePM));
-        }
-    }
-
     public ICollection<ProjectSubCategory> SubCategories { get; set; }
 
     public ICollection<Offer> Offers { get; set; }

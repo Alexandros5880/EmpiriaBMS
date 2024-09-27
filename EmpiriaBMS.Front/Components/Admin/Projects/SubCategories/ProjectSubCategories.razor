@@ -54,7 +54,6 @@
                 </TemplateColumn>
 
                 <PropertyColumn Property="@(p => p.ParentCategoryName)" Sortable="true" Title="Parent Category" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.CanAssignePM)" Sortable="true" Title="Can Assigne PM" Align="@Align.Start" />
 
                 <TemplateColumn Title="Actions" Align="@Align.End">
                     <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />

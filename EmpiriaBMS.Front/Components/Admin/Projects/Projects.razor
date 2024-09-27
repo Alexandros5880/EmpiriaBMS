@@ -75,14 +75,7 @@
                                 InitialSortDirection=SortDirection.Descending
                                 IsDefaultSortColumn=false>
                     <ChildContent>
-                        @if (context?.Offer?.SubCategory?.CanAssignePM ?? false)
-                        {
-                            <span>@(context.PMFullName)</span>
-
-                        } else
-                        {
-                            <span>--</span>
-                        }
+                        <span>@(context.PMFullName)</span>
                     </ChildContent>
                 </TemplateColumn>
 

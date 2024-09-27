@@ -2427,8 +2427,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = "BUILDINGS",
-                Description = "Buildings Description",
-                CanAssignePM = true
+                Description = "Buildings Description"
             };
             builder.Entity<ProjectCategory>().HasData(project_category_1);
             projectCategories.Add(project_category_1);
@@ -2440,8 +2439,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = "INFRASTRUCTURE",
-                Description = "Infrastructure Description",
-                CanAssignePM = true
+                Description = "Infrastructure Description"
             };
             builder.Entity<ProjectCategory>().HasData(project_category_2);
             projectCategories.Add(project_category_2);
@@ -2453,8 +2451,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = "ENERGY",
-                Description = "Energy Description",
-                CanAssignePM = true
+                Description = "Energy Description"
             };
             builder.Entity<ProjectCategory>().HasData(project_category_3);
             projectCategories.Add(project_category_3);
@@ -2466,8 +2463,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = "CONSULTING",
-                Description = "Consulting Description",
-                CanAssignePM = true
+                Description = "Consulting Description"
             };
             builder.Entity<ProjectCategory>().HasData(project_category_4);
             projectCategories.Add(project_category_4);
@@ -2479,8 +2475,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = "PRODUCTION MANAGMENT",
-                Description = "Production Management Description",
-                CanAssignePM = false
+                Description = "Production Management Description"
             };
             builder.Entity<ProjectCategory>().HasData(project_category_5);
             projectCategories.Add(project_category_5);
@@ -2492,8 +2487,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = "TRANSPORT",
-                Description = "Transport Description",
-                CanAssignePM = false
+                Description = "Transport Description"
             };
             builder.Entity<ProjectCategory>().HasData(project_category_6);
             projectCategories.Add(project_category_6);
@@ -2505,8 +2499,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = "ENVIRONMENT",
-                Description = "Environment Description",
-                CanAssignePM = false
+                Description = "Environment Description"
             };
             builder.Entity<ProjectCategory>().HasData(project_category_7);
             projectCategories.Add(project_category_7);
@@ -2518,8 +2511,7 @@ public class AppDbContext : DbContext
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = "ENVIRONMENT CONSULTING",
-                Description = "Environment Consulting Description",
-                CanAssignePM = false
+                Description = "Environment Consulting Description"
             };
             builder.Entity<ProjectCategory>().HasData(project_category_8);
             projectCategories.Add(project_category_8);
@@ -2590,7 +2582,6 @@ public class AppDbContext : DbContext
             {
                 string subCatName = item.Key;
                 int catId = item.Value.Id;
-                var canAssignePM = item.Value.CanAssignePM;
 
                 var project_sub_category_id = random.Next(123456789, 999999999) + 33;
                 ProjectSubCategory project_sub_category = new ProjectSubCategory()
@@ -2599,8 +2590,7 @@ public class AppDbContext : DbContext
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     Name = subCatName,
-                    CategoryId = catId,
-                    CanAssignePM = canAssignePM
+                    CategoryId = catId
                 };
                 builder.Entity<ProjectSubCategory>().HasData(project_sub_category);
                 projectSubCategories.Add(project_sub_category);

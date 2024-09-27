@@ -859,10 +859,18 @@ public partial class Dashboard : IDisposable
         if (!isWorkingMode) return;
         try
         {
-            _selectedProject = project;
+            bool neaSelected = _selectedProject.Id != project.Id;
+
+            if (neaSelected)
+                _selectedProject = project;
+
             await _getProjectManagers();
-            await OnSelectProject(_selectedProject.Id, true);
-            StateHasChanged();
+            if (neaSelected)
+            {
+                await OnSelectProject(_selectedProject.Id, true);
+                StateHasChanged();
+            }
+                
             _addPMDialog.Show();
             _isAddPMDialogOdepened = true;
         }

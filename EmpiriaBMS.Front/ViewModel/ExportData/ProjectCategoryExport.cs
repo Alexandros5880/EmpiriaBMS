@@ -9,13 +9,10 @@ public class ProjectCategoryExport : IInport<ProjectCategoryVM>
 
     public string Description { get; set; }
 
-    public bool CanAssignePM { get; set; }
-
     public ProjectCategoryExport(ProjectCategoryVM model)
     {
         Name = model.Name ?? "";
         Description = model.Description ?? "";
-        CanAssignePM = model.CanAssignePM;
     }
 
     public ProjectCategoryExport()
@@ -26,7 +23,6 @@ public class ProjectCategoryExport : IInport<ProjectCategoryVM>
     public ProjectCategoryVM Get() => new ProjectCategoryVM()
     {
         Name = Name,
-        Description = Description,
-        CanAssignePM = CanAssignePM
+        Description = Description
     };
 }
