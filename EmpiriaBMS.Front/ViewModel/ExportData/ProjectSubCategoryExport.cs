@@ -19,7 +19,6 @@ public class ProjectSubCategoryExport : IInport<ProjectSubCategoryVM>
     {
         Name = model.Name ?? "";
         Description = model.Description ?? "";
-        CanAssignePM = model.CanAssignePM;
         CategoryId = model.CategoryId ?? 0;
         CategoryName = model.Category?.Name ?? "";
     }
@@ -32,7 +31,6 @@ public class ProjectSubCategoryExport : IInport<ProjectSubCategoryVM>
     {
         Name = Name,
         Description = Description,
-        CanAssignePM = CanAssignePM,
         CategoryId = CategoryId
     };
 }

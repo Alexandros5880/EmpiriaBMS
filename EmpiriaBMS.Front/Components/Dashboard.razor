@@ -494,25 +494,19 @@
                                                                         @((_selectedProject == null ||
                                                                                 !_selectedProject.Id.Equals(project.Id)
                                                                                                 ? "" : "selected_table_projects_row"))">
-                                                                                @if (project?.Offer?.SubCategory?.CanAssignePM ?? false)
+                                                                                @if (!string.IsNullOrEmpty(project.PmName))
                                                                                 {
-                                                                                    @if (!string.IsNullOrEmpty(project.PmName))
-                                                                                    {
-                                                                                        <button type="button" class="btn btn-outline-info default-color"
-                                                                                                @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                                            @project.PmName
-                                                                                        </button>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <span class="clarity--assign-user-line"
-                                                                                              @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                                                                              Add PM
-                                                                                        </span>
-                                                                                    }
-                                                                                } else
+                                                                                    <button type="button" class="btn btn-outline-info default-color"
+                                                                                            @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                                        @project.PmName
+                                                                                    </button>
+                                                                                }
+                                                                                else
                                                                                 {
-                                                                                    <span class="text-warning">Cant Assign PM</span>
+                                                                                    <span class="clarity--assign-user-line"
+                                                                                          @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                                                                        Add PM
+                                                                                    </span>
                                                                                 }
                                                                             </td>
                                                                         }
@@ -1142,7 +1136,7 @@
 
     </FluentDialog>
 
-    <!-- On "Add Project Managers" Button Dialog -->
+    <!-- On "Change PM" Button Dialog -->
     <FluentDialog @ref="_addPMDialog"
                   Hidden="@(!_isAddPMDialogOdepened || _startLoading)"
                   Modal="false"
@@ -1151,7 +1145,7 @@
                          --dialog-height: auto !important;">
 
         <div class="badge text-dark text-wrap fs-3">
-            Add Project Managers
+            Change PM
         </div>
 
         <div class="modal-body row">

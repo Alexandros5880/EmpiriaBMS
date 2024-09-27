@@ -19,19 +19,6 @@ public class ProjectSubCategoryVM : BaseVM
         }
     }
 
-    private bool _canAssignePM;
-    public bool CanAssignePM
-    {
-        get => _canAssignePM;
-        set
-        {
-            if (value == _canAssignePM)
-                return;
-            _canAssignePM = value;
-            NotifyPropertyChanged(nameof(CanAssignePM));
-        }
-    }
-
     private string? _description;
     public string? Description
     {

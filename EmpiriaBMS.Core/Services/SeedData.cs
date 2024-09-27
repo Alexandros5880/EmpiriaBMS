@@ -2189,8 +2189,7 @@ public class SeedData
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "BUILDINGS",
-            Description = "Buildings Description",
-            CanAssignePM = true
+            Description = "Buildings Description"
         };
         projectCategories.Add(project_category_1);
 
@@ -2201,8 +2200,7 @@ public class SeedData
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "INFRASTRUCTURE",
-            Description = "Infrastructure Description",
-            CanAssignePM = true
+            Description = "Infrastructure Description"
         };
         projectCategories.Add(project_category_2);
 
@@ -2213,8 +2211,7 @@ public class SeedData
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "ENERGY",
-            Description = "Energy Description",
-            CanAssignePM = true
+            Description = "Energy Description"
         };
         projectCategories.Add(project_category_3);
 
@@ -2225,8 +2222,7 @@ public class SeedData
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "CONSULTING",
-            Description = "Consulting Description",
-            CanAssignePM = true
+            Description = "Consulting Description"
         };
         projectCategories.Add(project_category_4);
 
@@ -2237,8 +2233,7 @@ public class SeedData
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "PRODUCTION MANAGMENT",
-            Description = "Production Management Description",
-            CanAssignePM = false
+            Description = "Production Management Description"
         };
         projectCategories.Add(project_category_5);
 
@@ -2249,8 +2244,7 @@ public class SeedData
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "TRANSPORT",
-            Description = "Transport Description",
-            CanAssignePM = false
+            Description = "Transport Description"
         };
         projectCategories.Add(project_category_6);
 
@@ -2261,8 +2255,7 @@ public class SeedData
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "ENVIRONMENT",
-            Description = "Environment Description",
-            CanAssignePM = false
+            Description = "Environment Description"
         };
         projectCategories.Add(project_category_7);
 
@@ -2273,8 +2266,7 @@ public class SeedData
             CreatedDate = DateTime.Now,
             LastUpdatedDate = DateTime.Now,
             Name = "ENVIRONMENT CONSULTING",
-            Description = "Environment Consulting Description",
-            CanAssignePM = false
+            Description = "Environment Consulting Description"
         };
         projectCategories.Add(project_category_8);
 
@@ -2363,7 +2355,6 @@ public class SeedData
         {
             string subCatName = item.Key;
             int catId = item.Value.Id;
-            var canAssignePM = item.Value.CanAssignePM;
 
             var project_sub_category_id = 57 + counter;
             ProjectSubCategory project_sub_category = new ProjectSubCategory()
@@ -2372,8 +2363,7 @@ public class SeedData
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 Name = subCatName,
-                CategoryId = catId,
-                CanAssignePM = canAssignePM
+                CategoryId = catId
             };
             projectSubCategories.Add(project_sub_category);
 
