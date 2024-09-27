@@ -64,7 +64,8 @@ public partial class Clients
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(80%, 700px);"
+            Width = "min(max(50vw, 500px), 1000px)",
+            Height = "min(max(80vh, 500px), 1000px)"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(new ClientVM()
