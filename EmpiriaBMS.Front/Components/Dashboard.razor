@@ -324,8 +324,9 @@
                                         <div class="mt-2 row">
 
                                             <!-- Table Projects -->
-                                            <div class="col-xxl col-xl col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-3"
-                                                 style="min-width: @(isWorkingMode ? "660px" : "500px"); width: 100%">
+                                            <div class="col mt-3"
+                                                 style="min-width: @(isWorkingMode ? "660px" : "500px");
+                                                        max-width: min(max(20vw, 800px), @(isWorkingMode ? "660px" : "500px"));">
                                                 <!-- Actions -->
                                                 <div style="height: 74px;">
                                                     <div class="text-start row me-2">
@@ -521,8 +522,9 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-xxl col-xl col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-3"
-                                                 style="min-width: @(isWorkingMode ? "660px" : "500px"); width: 100%">
+                                            <div class="col mt-3"
+                                                 style="min-width: @(isWorkingMode ? "660px" : "500px");
+                                                        max-width: min(max(20vw, 800px), @(isWorkingMode ? "660px" : "500px"));">
                                                 <!-- Table Disciplines -->
                                                 @if (_selectedProject != null)
                                                 {
@@ -619,8 +621,9 @@
                                                 }
                                             </div>
 
-                                            <div class="col-xxl col-xl col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-3"
-                                                 style="min-width: @(isWorkingMode ? "660px" : "500px"); width: 100%">
+                                            <div class="col mt-3"
+                                                 style="min-width: @(isWorkingMode ? "660px" : "500px");
+                                                        max-width: min(max(20vw, 800px), @(isWorkingMode ? "660px" : "500px"));">
                                                 <!-- Table Deliverables -->
                                                 @if (_selectedDiscipline != null)
                                                 {
@@ -723,8 +726,9 @@
                                             </div>
 
                                             <!-- Table Others -->
-                                            <div class="col-xxl col-xl col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-3"
-                                                 style="min-width: @(isWorkingMode ? "660px" : "500px"); width: 100%">
+                                            <div class="col mt-3"
+                                                 style="min-width: @(isWorkingMode ? "660px" : "500px");
+                                                        max-width: min(max(20vw, 800px), @(isWorkingMode ? "660px" : "500px"));">
                                                 @if (_selectedDiscipline != null)
                                                 {
                                                     <!-- Actions -->
