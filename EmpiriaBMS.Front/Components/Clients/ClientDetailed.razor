@@ -6,13 +6,15 @@
 @inject IMapper _mapper
 @inject IDialogService _dialogService
 @inject Logging.LoggerManager Logger
+@inject MicrosoftTeams MicrosoftTeams
 
 <div class="row" style="margin: 0 auto; overflow-y: auto; height: 100%;">
     
-    @if (DisplayTitle)
-    {
-        @* Header *@
-        <div class="col-12">
+    
+    @* Header *@
+    <div class="col-12" id="client-detailed-header">
+        @if (DisplayTitle)
+        {
             <FluentLabel Typo="Typography.PaneHeader">
                 @if (Content.Id == 0)
                 {
@@ -23,8 +25,8 @@
                     <h3>Edit Client</h3>
                 }
             </FluentLabel>
-        </div>
-    }
+        }
+    </div>
 
     @* Body *@
     <div class="col-12 row" style="margin: 0 auto;">

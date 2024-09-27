@@ -38,7 +38,11 @@
         <!-- Add -->
         @if (IsWorkingMode)
         {
-            <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@_add">Add</FluentButton>
+            <FluentButton IconStart="@(new Icons.Regular.Size16.Add())"
+                          Appearance="Appearance.Accent"
+                          OnClick="@_add">
+                Add Client
+            </FluentButton>
         }
 
         <!-- Import -->

@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
@@ -69,6 +70,8 @@ public partial class ClientDetailed
             await RefreshMap();
 
             StateHasChanged();
+
+            await MicrosoftTeams.ScrollToElement("client-detailed-header");
         }
     }
 
@@ -131,6 +134,8 @@ public partial class ClientDetailed
             var address = await _dataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
             dto.AddressId = address.Id;
         }
+
+        dto.Address = null;
 
         if (Content.Id == 0)
         {
