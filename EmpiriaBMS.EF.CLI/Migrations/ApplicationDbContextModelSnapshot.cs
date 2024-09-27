@@ -1081,9 +1081,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool>("CanAssignePM")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -1140,9 +1137,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("CanAssignePM")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");

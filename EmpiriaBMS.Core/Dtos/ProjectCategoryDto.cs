@@ -9,8 +9,6 @@ public class ProjectCategoryDto : EntityDto
 
     public string? Description { get; set; }
 
-    public bool CanAssignePM { get; set; }
-
     public List<ProjectSubCategory> SubCategories { get; set; }
 
     public List<Offer> Offers { get; set; }
