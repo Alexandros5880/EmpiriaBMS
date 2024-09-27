@@ -3,9 +3,12 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 
 namespace EmpiriaBMS.Front.Components.Clients;
@@ -27,6 +30,32 @@ public partial class ClientDetailed
     [Parameter]
     public bool DisplayActions { get; set; } = true;
 
+    private FluentCombobox<(string Value, string Text)> _resultCombo;
+
+    // Result Selection
+    private List<(string Value, string Text)> _results = Enum.GetValues(typeof(ClientResult))
+                                                             .Cast<ClientResult>()
+                                                             .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
+                                                                .First()
+                                                                .GetCustomAttribute<DisplayAttribute>()?
+                                                                .GetName() ?? e.ToString()))
+                                                             .ToList();
+
+    private (string Value, string Text) _selectedResult;
+    public (string Value, string Text) SelectedResult
+    {
+        get => _selectedResult;
+        set
+        {
+            _selectedResult = value;
+            ClientResult result = (ClientResult)Enum.Parse(typeof(ClientResult), value.Value);
+            Content.Result = result;
+        }
+    }
+
+    [Parameter]
+    public EventCallback<(string Value, string Text)> OnResultChanged { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -41,6 +70,40 @@ public partial class ClientDetailed
 
             StateHasChanged();
         }
+    }
+
+    public async Task Prepair(ClientVM record = null, bool full = true)
+    {
+        if (record != null)
+            Content = record;
+
+        if (full)
+            await _getRecords();
+
+        if (Content.Result != null)
+        {
+            SelectedResult = _results.FirstOrDefault(r => r.Value == Content.Result.ToString());
+            if (_resultCombo != null)
+            {
+                var value = SelectedResult.Value;
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
+        }
+        else
+        {
+            SelectedResult = _results.FirstOrDefault(r => r.Value == ClientResult.UNSUCCESSFUL.ToString());
+            if (_resultCombo != null)
+            {
+                var value = SelectedResult.Value;
+                _resultCombo.Value = SelectedResult.Value;
+                _resultCombo.SelectedOption = SelectedResult;
+            }
+        }
+
+        await RefreshMap();
+
+        StateHasChanged();
     }
 
     public async Task SaveAsync()

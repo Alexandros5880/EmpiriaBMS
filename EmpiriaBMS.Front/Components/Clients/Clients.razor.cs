@@ -67,7 +67,11 @@ public partial class Clients
             Width = "min(80%, 700px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(new ClientVM(), parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(new ClientVM()
+        {
+            ExpectedDurationDate = DateTime.Now,
+            Result = Models.Enum.ClientResult.WAITING
+        }, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)

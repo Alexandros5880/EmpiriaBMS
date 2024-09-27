@@ -16,10 +16,22 @@ public partial class ClientDetailedDialog : IDialogContentComponent<ClientVM>
 
     private ClientDetailed _compoment;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await _compoment.Prepair(Content);
+        }
+    }
+
     private async Task SaveAsync()
     {
         var valid = _compoment.Validate();
         if (!valid) return;
+
+        await _compoment.SaveAsync();
 
         await Dialog.CloseAsync(Content);
     }
