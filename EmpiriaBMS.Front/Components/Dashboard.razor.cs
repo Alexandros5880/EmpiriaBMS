@@ -176,8 +176,49 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
+    #region Offers Table Compoment
+    private OffersComp _offersComp;
+    #endregion
+
+    #region Clients Table Compoment
+    private async Task _onClientResultChanged(ClientVM client)
+    {
+        if (client.Result == ClientResult.SUCCESSFUL)
+        {
+            await MicrosoftTeams.ScrollToElement("offers-table-dash");
+        }
+    }
+    #endregion
+
     #region Projects Table Compoment
     private projComp.Projects _projectsComp;
+
+    private async Task OnSelectProject(int projectId)
+    {
+        if (projectId == 0)
+            return;
+
+        _clearRecordsDisciplines();
+        _clearRecordsDeliverables();
+        _clearRecordsSupportiveWoprk();
+
+        _resetSelectedDisciplines(); ;
+        _resetSelectedDeliverable();
+        _resetSelectedSupportiveWoprk();
+
+        await _getRecordsDisciplines(projectId);
+
+        await _checkIfHasAnySelections();
+
+        StateHasChanged();
+    }
+
+    private void OnEditProject()
+    {
+        _resetSelectedDisciplines(); ;
+        _resetSelectedDeliverable();
+        _resetSelectedSupportiveWoprk();
+    }
 
     private async Task _getRecordsProjects(int offerId, bool active = false)
     {
@@ -206,6 +247,15 @@ public partial class Dashboard : IDisposable
 
     #region Disciplines Table Compoment
     private DiscComp.Disciplines _disciplinesComp;
+
+    private async void OnSelectDiscipline(int disciplineId)
+    {
+        if (disciplineId == 0)
+            return;
+
+        await _getRecordsDeliverables(disciplineId);
+        await _getRecordsSupportiveWorks(disciplineId);
+    }
 
     private async Task _getRecordsDisciplines(int projectId)
     {
@@ -288,17 +338,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Create Offer WorkFlow
-    private OffersComp _offersComp;
-    private async Task _onClientResultChanged(ClientVM client)
-    {
-        if (client.Result == ClientResult.SUCCESSFUL)
-        {
-            await MicrosoftTeams.ScrollToElement("offers-table-dash");
-        }
-    }
-    #endregion
-
 
 
     #region Get Records
@@ -357,43 +396,7 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region On Select Project/Discipline, On Edit Project
-    private async Task OnSelectProject(int projectId)
-    {
-        if (projectId == 0)
-            return;
-
-        _clearRecordsDisciplines();
-        _clearRecordsDeliverables();
-        _clearRecordsSupportiveWoprk();
-        
-        _resetSelectedDisciplines();;
-        _resetSelectedDeliverable();
-        _resetSelectedSupportiveWoprk();
-
-        await _getRecordsDisciplines(projectId);
-
-        await _checkIfHasAnySelections();
-
-        StateHasChanged();
-    }
-
-    private void OnEditProject()
-    {
-        _resetSelectedDisciplines(); ;
-        _resetSelectedDeliverable();
-        _resetSelectedSupportiveWoprk();
-    }
-
-    private async void OnSelectDiscipline(int disciplineId)
-    {
-        if (disciplineId == 0)
-            return;
-
-        await _getRecordsDeliverables(disciplineId);
-        await _getRecordsSupportiveWorks(disciplineId);
-    }
-    #endregion
+    
 
     #region Timer
     private void UpdateElapsedTime()

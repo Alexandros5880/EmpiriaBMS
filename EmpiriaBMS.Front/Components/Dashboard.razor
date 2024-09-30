@@ -329,7 +329,7 @@
                             <!-- Tables (Projects/Disciplines/Deliverables/SupportiveWorks) -->
                             <FluentGrid Spacing="4" Class="mt-5">
 
-                                <FluentGridItem>
+                                <FluentGridItem xxl="3" xl="@((!isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
                                     <!-- Table Projects -->
                                     <Projects @ref="_projectsComp"
                                               Loading="@_startLoading"
@@ -338,22 +338,22 @@
                                               OnEdit="OnEditProject" />
                                 </FluentGridItem>
 
-                                <FluentGridItem>
+                                <FluentGridItem xxl="3" xl="@((!isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
                                     <!-- Table Disciplines -->
                                     <Disciplines @ref="_disciplinesComp"
                                                  Loading="@_startLoading"
                                                  IsWorkingMode="@isWorkingMode"
                                                  OnSelect="OnSelectDiscipline" />
-                                </FluentGridItem>
+                                </FluentGridItem xxl="3" xl="6" lg="6" md="12" xs="12">
 
-                                <FluentGridItem>
+                                <FluentGridItem xxl="3" xl="@((!isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
                                     <!-- Table Deliverables -->
                                     <Deliverables @ref="_deliverablesComp"
                                                   Loading="@_startLoading"
                                                   IsWorkingMode="@isWorkingMode" />
                                 </FluentGridItem>
 
-                                <FluentGridItem>
+                                <FluentGridItem xxl="3" xl="@((!isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
                                     <!-- Table Supportive Works -->
                                     <SupportiveWorks @ref="_supportiveWorksComp"
                                                      Loading="@_startLoading"
