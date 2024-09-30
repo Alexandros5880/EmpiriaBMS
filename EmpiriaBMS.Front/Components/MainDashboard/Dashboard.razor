@@ -521,121 +521,26 @@
 
                                 <FluentGridItem Style="background-color: blue;">
                                     <!-- Table Disciplines -->
-                                    <div style="min-width: 500px; max-width: 660px; width: min(max(20vw, 500px), 660px);">
-                                        @if (_selectedProject != null)
-                                        {
-                                            <!-- Actions -->
-                                            <div style="height: 74px;">
-                                                <div class="text-start row me-2">
-                                                    <h3 class="@((isWorkingMode ? "col-8" : "col-11"))">Disciplines</h3>
-                                                </div>
-                                                <div class="text-center row me-2">
-                                                    <div class="col-6">
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <FluentStack HorizontalAlignment="HorizontalAlignment.End">
-                                                            @if (isWorkingMode && editDiscipline)
-                                                            {
-                                                                @if (_selectedDiscipline != null)
-                                                                {
-                                                                    <span class="fluent--delete-28-regular"
-                                                                          @onclick="@(() => DeleteDiscipline())" />
-                                                                    <span class="material-symbols--edit-outline"
-                                                                          @onclick="@(async () => await EditDiscipline())" />
-                                                                }
-                                                                @if (_hasDisciplinesSelections)
-                                                                {
-                                                                    <span class="grommet-icons--add"
-                                                                          @onclick="@(async () => await AddDiscipline())" />
-                                                                }
-                                                            }
-
-                                                            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                                                          Appearance="Appearance.Outline"
-                                                                          OnClick="@(async (e) => await ExportDisciplinesToCSV())"
-                                                                          Disabled="@(_disciplines.Count() == 0)">
-                                                                Export
-                                                            </FluentButton>
-                                                        </FluentStack>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Table -->
-                                            <div class="table-responsive mt-2 p-1 table-container"
-                                                 style="overflow-x: auto !important;">
-                                                <table class="table table-hover table-danger text-center">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Discipline</th>
-                                                            <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Estimated Discipline Hours</th>
-                                                            @if (isWorkingMode && assignEngineer)
-                                                            {
-                                                                <th scope="col"></th>
-                                                            }
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach (var discipline in _disciplines)
-                                                        {
-                                                            <tr class="align-middle
-                                                                                    @(( @GetDisciplineMenHours(discipline.Id) > discipline.EstimatedHours ? "table-danger" : ""))"
-                                                                @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
-
-                                                                <td class="align-middle
-                                                                                @(((_selectedDiscipline == null
-                                                                                    || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                                        ? "" : "selected_table_disciplines_row"))"
-                                                                    style="word-wrap: break-word; max-width: 100px;">
-                                                                    <labe>@discipline.Type.Name</labe>
-                                                                </td>
-
-                                                                <td class="align-middle text-center
-                                                                                @(((_selectedDiscipline == null
-                                                                                    || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                                        ? "" : "selected_table_disciplines_row"))"
-                                                                    style="word-wrap: break-word; max-width: 100px;">
-                                                                    <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
-                                                                </td>
-
-                                                                @if (isWorkingMode && assignEngineer)
-                                                                {
-                                                                    <td class="align-middle
-                                                                                    @((_selectedDiscipline == null ||
-                                                                                            !_selectedDiscipline.Id.Equals(discipline.Id)
-                                                                                                            ? "" : "selected_table_disciplines_row"))">
-                                                                        <span class="clarity--assign-user-line"
-                                                                              @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
-                                                                        </span>
-                                                                    </td>
-                                                                }
-
-                                                            </tr>
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        }
-                                    </div>
+                                    <Disciplines @ref="_disciplinesComp"
+                                                 Loading="@_startLoading"
+                                                 IsWorkingMode="@isWorkingMode"
+                                                 OnSelect="OnSelectDiscipline" />
                                 </FluentGridItem>
 
                                 <FluentGridItem Gap="8" Style="background-color: peru;">
 
                                     <FluentGridItem Style="background-color: orange;">
-                                        <!-- Table Deliverables Works -->
+                                        <!-- Table Deliverables -->
                                         <Deliverables @ref="_deliverablesComp"
                                                       Loading="@_startLoading"
-                                                      IsWorkingMode="@isWorkingMode"
-                                                      SelectedProject="@_selectedProject"
-                                                      SelectedDiscipline="@_selectedDiscipline"/>
+                                                      IsWorkingMode="@isWorkingMode"/>
                                     </FluentGridItem>
 
                                     <FluentGridItem Style="background-color: red;">
                                         <!-- Table Supportive Works -->
                                         <SupportiveWorks @ref="_supportiveWorksComp"
                                                          Loading="@_startLoading"
-                                                         IsWorkingMode="@isWorkingMode"
-                                                         SelectedProject="@_selectedProject"
-                                                         SelectedDiscipline="@_selectedDiscipline"/>
+                                                         IsWorkingMode="@isWorkingMode"/>
                                     </FluentGridItem>
 
                                 </FluentGridItem>
@@ -850,68 +755,6 @@
 
     </FluentDialog>
 
-    <!-- On "Add Engineers" Button Dialog -->
-    <FluentDialog @ref="_addEngineerDialog"
-                  Hidden="@(!_isAddEngineerDialogOdepened || _startLoading)"
-                  Modal="false"
-                  DialogType=@DialogType.Panel
-                  style="--dialog-width: 400px !important;
-                         --dialog-height: auto !important;">
-
-        <div class="badge text-dark text-wrap fs-3">
-            Add Engineers
-        </div>
-
-        <div class="modal-body row">
-            <div class="m-1 row justify-content-center">
-
-                <div class="col-12 p-2">
-
-                    <div class="mt-1 p-2 modal-content">
-                        <div class="d-flex justify-content-around">
-                            <div class="table-responsive p-1 w-100 h-100"
-                                 style="max-height: 300px !important; overflow-y: auto;">
-                                <table class="bg-transparent">
-                                    <tbody>
-                                        @foreach (var engineer in _engineers)
-                                        {
-                                            <tr clss="align-middle d-flex">
-                                                <td class="align-middle">
-                                                    <input class="form-check-input big-checkbox mt-2"
-                                                           type="checkbox"
-                                                           id="isSelectedDesigner"
-                                                           @bind=@engineer.IsSelected>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <div class="ms-3 mt-2">
-                                                        @engineer.LastName &nbsp; @engineer.FirstName
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-
-        <div class="row">
-            <FluentButton class="col-6"
-                          OnClick="@(async () => await _addEngineerDialogAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => _addEngineerDialogCansel())">
-                Cancel
-            </FluentButton>
-        </div>
-
-    </FluentDialog>
-
     <!-- On "Change PM" Button Dialog -->
     <FluentDialog @ref="_addPMDialog"
                   Hidden="@(!_isAddPMDialogOdepened || _startLoading)"
@@ -1076,45 +919,6 @@
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => CloseAddProjectClick())">
-                Cancel
-            </FluentButton>
-        </div>
-
-    </FluentDialog>
-
-    <!-- On Add/Edit Discipline Dialog -->
-    <FluentDialog @ref="_addEditDisciplineDialog"
-                  Hidden="@(!_isAddEditDisciplineDialogOdepened || _startLoading)"
-                  Modal="true"
-                  DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
-                         --dialog-width: auto !important;">
-
-        <div class="modal-body row mb-1">
-
-            <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseAddDisciplineClick"></span>
-            </div>
-
-            <div class="col-12 justify-content-center">
-                @if (_selectedProject != null)
-                {
-                    <DisciplineDetailed @ref="@disciplineCompoment" ProjectId="@_selectedProject.Id" />
-                }
-                else
-                {
-                    <h3 class="warning">No Project Selected!</h3>
-                }
-            </div>
-
-        </div>
-
-        <div class="row">
-            <FluentButton class="col-6"
-                          OnClick="@(async () => await _addEditDisciplineDialogAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => CloseAddDisciplineClick())">
                 Cancel
             </FluentButton>
         </div>

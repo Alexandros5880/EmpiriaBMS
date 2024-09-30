@@ -35,12 +35,12 @@
 @inject Logging.LoggerManager Logger
 
 <div style="min-width: 500px; max-width: 660px; width: min(max(20vw, 500px), 660px);">
-    @if (SelectedDiscipline != null)
+    @if (_disciplineId != 0)
     {
         <!-- Actions -->
         <div style="height: 74px;">
             <div class="text-start row me-2">
-                <h3 class="@((SelectedProject != null ? "col-9" : "col-11"))">Supportive Works</h3>
+                <h3>Supportive Works</h3>
             </div>
             <div class="text-center row me-2">
                 <div class="col-6">
@@ -130,9 +130,9 @@
             </div>
 
             <div class="col-12 justify-content-center">
-                @if (SelectedDiscipline != null)
+                @if (_disciplineId != 0)
                 {
-                    <SupportiveWorksDetailed @ref="@supportiveWorkrCompoment" DisciplineId="@SelectedDiscipline.Id" />
+                    <SupportiveWorksDetailed @ref="@supportiveWorkrCompoment" DisciplineId="@_disciplineId" />
                 }
                 else
                 {

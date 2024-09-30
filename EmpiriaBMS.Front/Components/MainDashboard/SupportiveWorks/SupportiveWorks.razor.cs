@@ -18,11 +18,7 @@ public partial class SupportiveWorks
     [Parameter]
     public bool IsWorkingMode { get; set; }
 
-    [Parameter]
-    public ProjectVM SelectedProject { get; set; }
-
-    [Parameter]
-    public DisciplineVM SelectedDiscipline { get; set; }
+    private int _disciplineId { get; set; }
 
     private ObservableCollection<SupportiveWorkVM> _data = new ObservableCollection<SupportiveWorkVM>();
 
@@ -34,10 +30,10 @@ public partial class SupportiveWorks
 
     public async Task CheckIfHasSelections()
     {
-        if (SelectedDiscipline != null)
+        if (_disciplineId != 0)
         {
             _hasSapportiveWorksSelections = await _dataProvider.SupportiveWorksTypes
-                .HasOtherTypesSelections(SelectedDiscipline.Id);
+                .HasOtherTypesSelections(_disciplineId);
         }
     }
 
@@ -51,19 +47,20 @@ public partial class SupportiveWorks
         _selectedSupportiveWork = selected;
     }
 
-    public async Task GetRecords(DisciplineVM discipline = null)
+    public async Task GetRecords(int discId)
     {
-        if (discipline != null)
-            SelectedDiscipline = discipline;
-
-        if (SelectedDiscipline == null)
+        if (discId == 0)
             return;
 
-        var others = await _dataProvider.Disciplines.GetOthers(SelectedDiscipline.Id, _sharedAuthData.LogedUser.Id, true);
+        _disciplineId = discId;
+
+        var others = await _dataProvider.Disciplines.GetOthers(discId, _sharedAuthData.LogedUser.Id, true);
 
         _data.Clear();
         foreach (var di in others)
             _data.Add(Mapper.Map<SupportiveWorkVM>(di));
+
+        StateHasChanged();
     }
 
     public void ClearRecords() => _data.Clear();

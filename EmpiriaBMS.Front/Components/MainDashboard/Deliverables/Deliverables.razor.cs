@@ -49,11 +49,7 @@ public partial class Deliverables
     [Parameter]
     public bool IsWorkingMode { get; set; }
 
-    [Parameter]
-    public ProjectVM SelectedProject { get; set; }
-
-    [Parameter]
-    public DisciplineVM SelectedDiscipline { get; set; }
+    private int _disciplineId { get; set; }
 
     private ObservableCollection<DeliverableVM> _data = new ObservableCollection<DeliverableVM>();
 
@@ -67,10 +63,10 @@ public partial class Deliverables
 
     public async Task CheckIfHasSelections()
     {
-        if (SelectedDiscipline != null)
+        if (_disciplineId != 0)
         {
             _hasDeliverablessSelections = await _dataProvider.DeliverablesTypes
-                .HasDeliverableTypesSelections(SelectedDiscipline.Id);
+                .HasDeliverableTypesSelections(_disciplineId);
         }
     }
 
@@ -91,19 +87,20 @@ public partial class Deliverables
         StateHasChanged();
     }
 
-    public async Task GetRecords(DisciplineVM discipline = null)
+    public async Task GetRecords(int discId)
     {
-        if (discipline != null)
-            SelectedDiscipline = discipline;
-
-        if (SelectedDiscipline == null)
+        if (discId == 0)
             return;
 
-        var draws = await _dataProvider.Disciplines.GetDraws(SelectedDiscipline.Id, _sharedAuthData.LogedUser.Id, getAllDeliverables);
+        _disciplineId = discId;
+
+        var draws = await _dataProvider.Disciplines.GetDraws(discId, _sharedAuthData.LogedUser.Id, getAllDeliverables);
 
         _data.Clear();
         foreach (var di in draws)
             _data.Add(Mapper.Map<DeliverableVM>(di));
+
+        StateHasChanged();
     }
 
     public void ClearRecords() => _data.Clear();

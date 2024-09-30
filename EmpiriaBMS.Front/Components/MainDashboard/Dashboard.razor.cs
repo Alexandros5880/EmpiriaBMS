@@ -24,7 +24,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using EmpiriaBMS.Front.Components.MainDashboard.Projects;
 using EmpiriaBMS.Front.Components.MainDashboard.Issues;
 using DevComp = EmpiriaBMS.Front.Components.MainDashboard.Deliverables;
-using EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
+using DiscComp = EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
 using SWComp = EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
 
 namespace EmpiriaBMS.Front.Components.MainDashboard;
@@ -124,11 +124,9 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
-    private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private List<ClientVM> _clientsChanged = new List<ClientVM>();
     private List<OfferVM> _offersChanged = new List<OfferVM>();
     private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
-    private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
     private ObservableCollection<TeamsRequestedUserVM> _teamsRequestedUsers = new ObservableCollection<TeamsRequestedUserVM>();
@@ -139,7 +137,6 @@ public partial class Dashboard : IDisposable
     private ClientVM _selectedClient = new ClientVM();
     private OfferVM _selectedOffer = new OfferVM();
     private ProjectVM _selectedProject = new ProjectVM();
-    private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private int _selectedPmId;
     private InvoiceVM _selectedIncomeInvoice = new InvoiceVM();
     private InvoiceVM _selectedExpenseInvoice = new InvoiceVM();
@@ -150,10 +147,6 @@ public partial class Dashboard : IDisposable
     private FluentDialog _endWorkDialog;
     private bool _isEndWorkDialogOdepened = false;
     private bool _isEndWorkAcceptDialogDisabled => remainingTime.Hours != 0 || remainingTime.Minutes != 0;
-
-    // Add Engineer Dialog
-    private FluentDialog _addEngineerDialog;
-    private bool _isAddEngineerDialogOdepened = false;
 
     // Add ProjectManager Dialog
     private FluentDialog _addPMDialog;
@@ -181,11 +174,6 @@ public partial class Dashboard : IDisposable
     private bool _isAddEditProjectDialogOdepened = false;
     private ProjectDetailed projectCompoment;
 
-    // On Add/Edit Discipline Dialog
-    private FluentDialog _addEditDisciplineDialog;
-    private bool _isAddEditDisciplineDialogOdepened = false;
-    private DisciplineDetailed disciplineCompoment;
-
     // On Delete Dialog
     private FluentDialog _deleteDialog;
     private bool _isDeleteDialogOdepened = false;
@@ -195,10 +183,6 @@ public partial class Dashboard : IDisposable
     // On Corrext Hours
     private FluentDialog _correctHoursDialog;
     private bool _isCorrectHoursDialogOdepened = false;
-    #endregion
-
-    #region Has Selections
-    private bool _hasDisciplinesSelections = true;
     #endregion
 
 
@@ -248,6 +232,28 @@ public partial class Dashboard : IDisposable
         StateHasChanged();
     }
 
+    #region Disciplines Table Compoment
+    private DiscComp.Disciplines _disciplinesComp;
+
+    private void _resetSelectedDisciplines()
+    {
+        if (_disciplinesComp != null)
+            _disciplinesComp.ResetSelection();
+    }
+
+    private void _clearRecordsDisciplines()
+    {
+        if (_disciplinesComp != null)
+            _disciplinesComp.ClearRecords();
+    }
+
+    private void _resetChangesDisciplines()
+    {
+        if (_disciplinesComp != null)
+            _disciplinesComp.ResetChanges();
+    }
+    #endregion
+
     #region Deliverables Table Compoment
     private DevComp.Deliverables _deliverablesComp;
 
@@ -291,8 +297,6 @@ public partial class Dashboard : IDisposable
             _supportiveWorksComp.ResetChanges();
     }
     #endregion
-
-
 
 
 
@@ -352,13 +356,9 @@ public partial class Dashboard : IDisposable
 
     private async Task _checkIfHasAnySelections()
     {
-        if (_selectedProject != null)
-            _hasDisciplinesSelections = await _dataProvider.DisciplinesTypes.HasDisciplineTypesSelections(_selectedProject.Id);
-        if (_selectedDiscipline != null)
-        {
-            await _deliverablesComp.CheckIfHasSelections();
-            await _supportiveWorksComp.CheckIfHasSelections();
-        }
+        await _disciplinesComp.CheckIfHasSelections();
+        await _deliverablesComp.CheckIfHasSelections();
+        await _supportiveWorksComp.CheckIfHasSelections();
     }
 
     private async Task _getUserTotalHoursThisMonth()
@@ -371,10 +371,10 @@ public partial class Dashboard : IDisposable
         _selectedClient = null;
         _selectedOffer = null;
         _selectedProject = null;
-        _selectedDiscipline = null;
+        _resetSelectedDisciplines();;
         _resetSelectedDeliverable();
         _resetSelectedSupportiveWoprk();
-        _disciplines.Clear();
+        _clearRecordsDisciplines();
         _clearRecordsDeliverables();
         _clearRecordsSupportiveWoprk();
 
@@ -398,10 +398,10 @@ public partial class Dashboard : IDisposable
         {
             _selectedOffer = null;
             _selectedProject = null;
-            _selectedDiscipline = null;
+            _resetSelectedDisciplines();;
             _resetSelectedDeliverable();
             _resetSelectedSupportiveWoprk();
-            _disciplines.Clear();
+            _clearRecordsDisciplines();
             _clearRecordsDeliverables();
             _clearRecordsSupportiveWoprk();
         }
@@ -423,10 +423,10 @@ public partial class Dashboard : IDisposable
     public async Task _getProjects(bool? active = null)
     {
         _selectedProject = null;
-        _selectedDiscipline = null;
+        _resetSelectedDisciplines();;
         _resetSelectedDeliverable();
         _resetSelectedSupportiveWoprk();
-        _disciplines.Clear();
+        _clearRecordsDisciplines();
         _clearRecordsDeliverables();
         _clearRecordsSupportiveWoprk();
 
@@ -456,35 +456,6 @@ public partial class Dashboard : IDisposable
             Logger.LogError($"Exception Dashboard._getProjects(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
         _startLoading = false;
-    }
-
-    private async Task _getEngineers()
-    {
-        try
-        {
-            var defaultRoleId = await GetRoleId("Engineer");
-            if (defaultRoleId == 0)
-                throw new Exception("Exception `Engineer` role not exists!");
-
-            var engineers = await _dataProvider.Roles.GetUsers(defaultRoleId);
-
-            if (engineers == null)
-                throw new NullReferenceException(nameof(engineers));
-
-            var myEngineersIds = (await _dataProvider.Disciplines.GetEngineers(_selectedDiscipline.Id)).Select(d => d.Id);
-
-            var engineersVM = Mapper.Map<List<UserVM>>(engineers);
-            _engineers.Clear();
-            engineersVM.ForEach(d =>
-            {
-                d.IsSelected = myEngineersIds.Contains(d.Id);
-                _engineers.Add(d);
-            });
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Dashboard._getEngineers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
     }
 
     private async Task _getProjectManagers()
@@ -535,9 +506,6 @@ public partial class Dashboard : IDisposable
 
     private long GetProjectMenHours(int projecId) =>
         _dataProvider.Projects.GetMenHours(projecId);
-
-    private long GetDisciplineMenHours(int disciplineId) =>
-        _dataProvider.Disciplines.GetMenHours(disciplineId);
     #endregion
 
     #region When Row Selected Update Data
@@ -550,11 +518,11 @@ public partial class Dashboard : IDisposable
         _projects.Clear();
         _clearRecordsDeliverables();
         _clearRecordsSupportiveWoprk();
-        _disciplines.Clear();
+        _clearRecordsDisciplines();
         _selectedClient = client;
         _selectedOffer = null;
         _selectedProject = null;
-        _selectedDiscipline = null;
+        _resetSelectedDisciplines();;
         _resetSelectedDeliverable();
         _resetSelectedSupportiveWoprk();
 
@@ -571,10 +539,10 @@ public partial class Dashboard : IDisposable
         _projects.Clear();
         _clearRecordsDeliverables();
         _clearRecordsSupportiveWoprk();
-        _disciplines.Clear();
+        _clearRecordsDisciplines();
         _selectedOffer = offer;
         _selectedProject = null;
-        _selectedDiscipline = null;
+        _resetSelectedDisciplines();;
         _resetSelectedDeliverable();
         _resetSelectedSupportiveWoprk();
 
@@ -590,36 +558,28 @@ public partial class Dashboard : IDisposable
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
         _clearRecordsDeliverables();
         _clearRecordsSupportiveWoprk();
-        _disciplines.Clear();
+        _clearRecordsDisciplines();
         _selectedProject = project;
-        _selectedDiscipline = null;
+        _resetSelectedDisciplines();;
         _resetSelectedDeliverable();
         _resetSelectedSupportiveWoprk();
 
-        var disciplines = await _dataProvider.Projects.GetDisciplines(project.Id, _sharedAuthData.LogedUser.Id, getAllDisciplines);
 
-        _disciplines.Clear();
-        foreach (var di in disciplines)
-            _disciplines.Add(Mapper.Map<DisciplineVM>(di));
+        await _disciplinesComp.GetRecords(_selectedProject.Id);
+        
 
         await _checkIfHasAnySelections();
 
         StateHasChanged();
     }
 
-    private async Task OnSelectDiscipline(int disciplineId)
+    private async void OnSelectDiscipline(int disciplineId)
     {
-        if (disciplineId == 0 || disciplineId == _selectedDiscipline?.Id) return;
+        if (disciplineId == 0)
+            return;
 
-        _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
-
-
-        await _deliverablesComp.GetRecords(_selectedDiscipline);
-        await _supportiveWorksComp.GetRecords(_selectedDiscipline);
-
-        await _checkIfHasAnySelections();
-
-        StateHasChanged();
+        await _deliverablesComp.GetRecords(disciplineId);
+        await _supportiveWorksComp.GetRecords(disciplineId);
     }
     #endregion
 
@@ -733,53 +693,13 @@ public partial class Dashboard : IDisposable
         _selectedClient = null;
         _selectedOffer = null;
         //_selectedProject = null;
-        //_selectedDiscipline = null;
+        //_resetSelectedDisciplines();;
         //_resetSelectedDeliverable();
         //_resetSelectedSupportiveWoprk();
 
         StartWorkClick();
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
-    }
-    #endregion
-
-    #region Engineers Assign Actions (Discipline Assign)
-    private async Task OnDesciplineAssignClick(DisciplineVM discipline)
-    {
-        if (!isWorkingMode) return;
-        try
-        {
-            _selectedDiscipline = discipline;
-            await _getEngineers();
-            StateHasChanged();
-            _addEngineerDialog.Show();
-            _isAddEngineerDialogOdepened = true;
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Dashboard.OnDesciplineAssignClick(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
-    }
-
-    public async Task _addEngineerDialogAccept()
-    {
-        _addEngineerDialog.Hide();
-        _isAddEngineerDialogOdepened = false;
-
-        var forDeleteIds = _engineers.Where(d => d.IsSelected == null || d.IsSelected == false)
-                                     .Select(d => d.Id)
-                                     .ToList();
-        await _dataProvider.Disciplines.RemoveEngineers(_selectedDiscipline.Id, forDeleteIds);
-
-        var forAdd = _engineers.Where(d => d.IsSelected == true).ToList();
-        var forAddDto = Mapper.Map<List<UserDto>>(forAdd);
-        await _dataProvider.Disciplines.AddEngineers(_selectedDiscipline.Id, forAddDto);
-    }
-
-    public void _addEngineerDialogCansel()
-    {
-        _addEngineerDialog.Hide();
-        _isAddEngineerDialogOdepened = false;
     }
     #endregion
 
@@ -971,7 +891,7 @@ public partial class Dashboard : IDisposable
     private async Task AddProject()
     {
         _selectedProject = null;
-        _selectedDiscipline = null;
+        _resetSelectedDisciplines();;
         _resetSelectedDeliverable();
         _resetSelectedSupportiveWoprk();
         _addEditProjectDialog.Show();
@@ -996,7 +916,7 @@ public partial class Dashboard : IDisposable
 
     private async Task EditProject()
     {
-        _selectedDiscipline = null;
+        _resetSelectedDisciplines();;
         _resetSelectedDeliverable();
         _resetSelectedSupportiveWoprk();
         _addEditProjectDialog.Show();
@@ -1052,56 +972,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Add/Edit/Delete Discipline Actions
-    private async Task AddDiscipline()
-    {
-        await disciplineCompoment.PrepairForNew();
-        _addEditDisciplineDialog.Show();
-        _isAddEditDisciplineDialogOdepened = true;
-    }
-
-    private async Task EditDiscipline()
-    {
-        await disciplineCompoment.PrepairForEdit(_selectedDiscipline);
-        _addEditDisciplineDialog.Show();
-        _isAddEditDisciplineDialogOdepened = true;
-    }
-
-    private void CloseAddDisciplineClick()
-    {
-        if (_isAddEditDisciplineDialogOdepened)
-        {
-            _addEditDisciplineDialog.Hide();
-            _isAddEditDisciplineDialogOdepened = false;
-        }
-    }
-
-    public async Task _addEditDisciplineDialogAccept()
-    {
-        await disciplineCompoment.HandleValidSubmit();
-
-        var newDiscipline = disciplineCompoment.GetDiscipline();
-        if (_disciplines.Any(d => d.Id == newDiscipline.Id))
-            _disciplines.Remove(newDiscipline);
-
-        _disciplines.Insert(0, newDiscipline);
-        _disciplines = new ObservableCollection<DisciplineVM>(_disciplines);
-
-        _addEditDisciplineDialog.Hide();
-        _isAddEditDisciplineDialogOdepened = false;
-
-        StateHasChanged();
-    }
-
-    private void DeleteDiscipline()
-    {
-        _deleteDialogMsg = $"Are you sure you want delete {_selectedDiscipline.Type.Name}";
-        _deleteObj = nameof(_selectedDiscipline);
-        _deleteDialog.Show();
-        _isDeleteDialogOdepened = true;
-    }
-    #endregion
-
     #region Correct Hours Dialog
     private async Task _correctHours()
     {
@@ -1146,7 +1016,7 @@ public partial class Dashboard : IDisposable
             //    case nameof(_selectedDiscipline):
             //        await _dataProvider.Disciplines.Delete(_selectedDiscipline.Id);
             //        _disciplines.Remove(_selectedDiscipline);
-            //        _selectedDiscipline = null;
+            //        _resetSelectedDisciplines();;
             //        break;
             //    case nameof(_selectedDeliverable):
             //        await _dataProvider.Deliverables.Delete(_selectedDeliverable.Id);
@@ -1240,7 +1110,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Export Data
     private async Task ExportProjectsToCSV()
     {
         var date = DateTime.Today;
@@ -1251,20 +1120,7 @@ public partial class Dashboard : IDisposable
             string csvContent = Data.GetCsvContent(_projects);
             await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
         }
-    }
-
-    private async Task ExportDisciplinesToCSV()
-    {
-        var date = DateTime.Today;
-        var fileName = $"Disciplines-{date.ToEuropeFormat()}.csv";
-        var data = _disciplines.ToList();
-        if (_disciplines.Count > 0)
-        {
-            string csvContent = Data.GetCsvContent(_disciplines);
-            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
-        }
-    }
-    #endregion
+    } 
 
     #region Database Manipulation
     bool _backUpLoading = false;
