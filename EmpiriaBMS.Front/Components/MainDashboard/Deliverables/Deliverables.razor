@@ -1,0 +1,278 @@
+﻿@using EmpiriaBMS.Front.Components.Invoices
+@using Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Front.Components.General
+@using EmpiriaBMS.Front.Components
+@using EmpiriaBMS.Front.Components.Offers
+@using EmpiriaBMS.Front.Components.KPIS
+@using EmpiriaBMS.Front.Horizontal
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Admin
+@using Color = Microsoft.Fast.Components.FluentUI.Color
+@using EmpiriaBMS.Core.Services.DBManipulation
+@using EmpiriaBMS.Front.Components.WorkingHours
+@using EmpiriaBMS.Front.Components.Reports
+@using EmpiriaBMS.Models.Enum
+@using EmpiriaBMS.Front.Components.Clients
+@using EmpiriaBMS.Front.Components.MainDashboard.Deliverables
+@using EmpiriaBMS.Front.Components.MainDashboard.Disciplines
+@using EmpiriaBMS.Front.Components.MainDashboard.Issues
+@using EmpiriaBMS.Front.Components.MainDashboard.Projects
+@using EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks
+
+@inject TeamsFx teamsfx
+@inject TeamsUserCredential teamsUserCredential
+@inject MicrosoftTeams MicrosoftTeams
+@inject IWebHostEnvironment HostEnvironment
+@inject IConfiguration Configuration
+@inject NavigationManager MyNavigationManager
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+@inject TimerService TimerService
+@inject AuthorizeServices authorizeServices
+@inject SharedAuthDataService _sharedAuthData
+@inject IDialogService DialogService
+@inject DatabaseBackupService DatabaseBackupService
+@inject Logging.LoggerManager Logger
+
+
+
+<!-- Table Deliverables -->
+<div style="min-width: 500px; max-width: 660px; width: min(max(20vw, 500px), 660px);">
+    @if (SelectedDiscipline != null)
+    {
+        <!-- Actions -->
+        <div style="height: 74px;">
+            <div class="text-start row me-2">
+                <h3 class="@((SelectedProject != null ? "col-9" : "col-11"))">Deliverables</h3>
+            </div>
+            <div class="text-center row me-2">
+                <div class="col-6">
+                </div>
+                <div class="col-6">
+                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                        @if (IsWorkingMode && editDeliverable)
+                        {
+                            @if (_selectedDeliverable != null)
+                            {
+                                <span class="fluent--delete-28-regular"
+                                      @onclick="@(() => DeleteDeliverable())" />
+                                @if (_hasDeliverablessSelections)
+                                {
+                                    <span class="material-symbols--edit-outline"
+                                          @onclick="@(() => EditDeliverable())" />
+                                }
+                            }
+                            <span class="grommet-icons--add"
+                                  @onclick="@(() => AddDeliverable())" />
+                        }
+
+                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                      Appearance="Appearance.Outline"
+                                      OnClick="@(async (e) => await ExportDeliverablesToCSV())"
+                                      Disabled="@(_data.Count() == 0)">
+                            Export
+                        </FluentButton>
+                    </FluentStack>
+                </div>
+            </div>
+        </div>
+        <!-- Table -->
+        <div class="table-responsive mt-2 p-1 table-container"
+             style="overflow-x: auto !important;">
+            <table class="table table-hover table-primary text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="sticky-header">Deliverable</th>
+                        <th scope="col" class="sticky-header">Total Hours</th>
+                        <th scope="col" class="sticky-header">Declared Completion</th>
+                        @if (IsWorkingMode && assignDesigner)
+                        {
+                            <th scope="col"></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var deliverable in _data)
+                    {
+                        <tr class="align-middle"
+                            @onclick="@(() => OnSelect(deliverable))">
+
+                            <td class="align-middle
+                                    @(((_selectedDeliverable == null ||
+                                            !_selectedDeliverable.Id.Equals(deliverable.Id))
+                                                ? "" : "selected_table_row"))">
+                                <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
+                            </td>
+
+                            <td class="align-middle
+                                    @(((_selectedDeliverable == null ||
+                                            !_selectedDeliverable.Id.Equals(deliverable.Id))
+                                                ? "" : "selected_table_row"))">
+                                <label>@GetMenHours(deliverable.Id) h</label>
+                            </td>
+
+                            <td class="align-middle
+                                    @(((_selectedDeliverable == null ||
+                                        !_selectedDeliverable.Id.Equals(deliverable.Id))
+                                            ? "" : "selected_table_row"))">
+                                <label>@deliverable.CompletionEstimation %</label>
+                            </td>
+
+                            @if (IsWorkingMode && assignDesigner)
+                            {
+                                <td class="align-middle
+                                        @((_selectedDeliverable == null ||
+                                                !_selectedDeliverable.Id.Equals(deliverable?.Id)
+                                                                ? "" : "selected_table_row"))">
+                                    <span class="clarity--assign-user-line"
+                                          @onclick="@(async (x) => await OnDeliverableAssignClick(deliverable))">
+                                    </span>
+                                </td>
+                            }
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@if (!Loading)
+{
+    <!-- On "Add Designers" Button Dialog -->
+    <FluentDialog @ref="_addDesignerDialog"
+                  Hidden="@(!_isAddDesignerDialogOdepened || Loading)"
+                  Modal="false"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: 400px !important;
+                         --dialog-height: auto !important;">
+
+        <div class="badge text-dark text-wrap fs-3">
+            Add Designers
+        </div>
+
+        <div class="modal-body row">
+            <div class="m-1 row justify-content-center">
+
+                <div class="col-12 p-2">
+
+                    <div class="mt-1 p-2 modal-content">
+                        <div class="d-flex justify-content-around">
+                            <div class="table-responsive p-1 w-100 h-100"
+                                 style="max-height: 300px !important; overflow-y: auto;">
+                                <table class="bg-transparent">
+                                    <tbody>
+                                        @foreach (var designer in _designers)
+                                        {
+                                            <tr clss="align-middle d-flex">
+                                                <td class="align-middle">
+                                                    <input class="form-check-input big-checkbox mt-2"
+                                                           type="checkbox"
+                                                           id="isSelectedDesigner"
+                                                           @bind=@designer.IsSelected>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <div class="ms-3 mt-2">
+                                                        @designer.LastName &nbsp; @designer.FirstName
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addDesignerDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addDesignerDialogCansel())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Deliverable Dialog -->
+    <FluentDialog @ref="_addEditDeliverableDialog"
+                  Hidden="@(!_isAddEditDeliverableDialogOdepened || Loading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddDeliverableClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                @if (SelectedDiscipline != null)
+                {
+                    <DeliverableDetailed @ref="@deliverableCompoment" DisciplineId="@SelectedDiscipline.Id" />
+                }
+                else
+                {
+                    <h3 class="warning">No Discipline Selected!</h3>
+                }
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditDeliverableDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddDeliverableClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Delete Dialog -->
+    <FluentDialog @ref="_deleteDialog"
+                  Hidden="@(!_isDeleteDialogOdepened || Loading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header row">
+                <div class="col-10">
+                    <h3>Delete Record</h3>
+                </div>
+                <span class="col-2 carbon--close-outline float-end" @onclick="OnDeleteClose"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <p>@_deleteDialogMsg</p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await OnDeleteAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+}

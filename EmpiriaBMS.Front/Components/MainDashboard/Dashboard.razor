@@ -426,7 +426,7 @@
                                                             <td class="align-middle
                                                                                 @((_selectedProject == null ||
                                                                                         !_selectedProject.Id.Equals(project.Id)
-                                                                                                        ? "" : "selected_table_projects_row"))"
+                                                                                                        ? "" : "selected_table_row"))"
                                                                 style="word-wrap: break-word; max-width: 110px;"
                                                                 @onclick="@(async () => await OnSelectProject(project.Id))">
 
@@ -591,7 +591,7 @@
                                                                 <td class="align-middle
                                                                                 @(((_selectedDiscipline == null
                                                                                     || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                                        ? "" : "selected_table_disciplines_row"))"
+                                                                                        ? "" : "selected_table_row"))"
                                                                     style="word-wrap: break-word; max-width: 100px;">
                                                                     <labe>@discipline.Type.Name</labe>
                                                                 </td>
@@ -599,7 +599,7 @@
                                                                 <td class="align-middle text-center
                                                                                 @(((_selectedDiscipline == null
                                                                                     || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                                                        ? "" : "selected_table_disciplines_row"))"
+                                                                                        ? "" : "selected_table_row"))"
                                                                     style="word-wrap: break-word; max-width: 100px;">
                                                                     <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
                                                                 </td>
@@ -609,7 +609,7 @@
                                                                     <td class="align-middle
                                                                                     @((_selectedDiscipline == null ||
                                                                                             !_selectedDiscipline.Id.Equals(discipline.Id)
-                                                                                                            ? "" : "selected_table_disciplines_row"))">
+                                                                                                            ? "" : "selected_table_row"))">
                                                                         <span class="clarity--assign-user-line"
                                                                               @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
                                                                         </span>
@@ -628,119 +628,21 @@
                                 <FluentGridItem Gap="8" Style="background-color: peru;">
 
                                     <FluentGridItem Style="background-color: orange;">
-                                        <!-- Table Deliverables -->
-                                        <div style="min-width: 500px; max-width: 660px; width: min(max(20vw, 500px), 660px);">
-                                            @if (_selectedDiscipline != null)
-                                            {
-                                                <!-- Actions -->
-                                                <div style="height: 74px;">
-                                                    <div class="text-start row me-2">
-                                                        <h3 class="@((_selectedProject != null ? "col-9" : "col-11"))">Deliverables</h3>
-                                                    </div>
-                                                    <div class="text-center row me-2">
-                                                        <div class="col-6">
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <FluentStack HorizontalAlignment="HorizontalAlignment.End">
-                                                                @if (isWorkingMode && editDeliverable)
-                                                                {
-                                                                    @if (_selectedDeliverable != null)
-                                                                    {
-                                                                        <span class="fluent--delete-28-regular"
-                                                                              @onclick="@(() => DeleteDeliverable())" />
-                                                                        @if (_hasDeliverablessSelections)
-                                                                        {
-                                                                            <span class="material-symbols--edit-outline"
-                                                                                  @onclick="@(() => EditDeliverable())" />
-                                                                        }
-                                                                    }
-                                                                    <span class="grommet-icons--add"
-                                                                          @onclick="@(() => AddDeliverable())" />
-                                                                }
-
-                                                                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                                                              Appearance="Appearance.Outline"
-                                                                              OnClick="@(async (e) => await ExportDeliverablesToCSV())"
-                                                                              Disabled="@(_deliverables.Count() == 0)">
-                                                                    Export
-                                                                </FluentButton>
-                                                            </FluentStack>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Table -->
-                                                <div class="table-responsive mt-2 p-1 table-container"
-                                                     style="overflow-x: auto !important;">
-                                                    <table class="table table-hover table-primary text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col" class="sticky-header">Deliverable</th>
-                                                                <th scope="col" class="sticky-header">Total Hours</th>
-                                                                <th scope="col" class="sticky-header">Declared Completion</th>
-                                                                @if (isWorkingMode && assignDesigner)
-                                                                {
-                                                                    <th scope="col"></th>
-                                                                }
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach (var deliverable in _deliverables)
-                                                            {
-                                                                <tr class="align-middle"
-                                                                    @onclick="@(() => OnSelectDeliverable(deliverable))">
-
-                                                                    <td class="align-middle
-                                                                        @(((_selectedDeliverable == null ||
-                                                                                !_selectedDeliverable.Id.Equals(deliverable.Id))
-                                                                                    ? "" : "selected_table_deliverables_row"))">
-                                                                        <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
-                                                                    </td>
-
-                                                                    <td class="align-middle
-                                                                        @(((_selectedDeliverable == null ||
-                                                                                !_selectedDeliverable.Id.Equals(deliverable.Id))
-                                                                                    ? "" : "selected_table_deliverables_row"))">
-                                                                        <label>@GetDeliverableMenHours(deliverable.Id) h</label>
-                                                                    </td>
-
-                                                                    <td class="align-middle
-                                                                        @(((_selectedDeliverable == null ||
-                                                                            !_selectedDeliverable.Id.Equals(deliverable.Id))
-                                                                                ? "" : "selected_table_deliverables_row"))">
-                                                                        <label>@deliverable.CompletionEstimation %</label>
-                                                                    </td>
-
-                                                                    @if (isWorkingMode && assignDesigner)
-                                                                    {
-                                                                        <td class="align-middle
-                                                                            @((_selectedDeliverable == null ||
-                                                                                    !_selectedDeliverable.Id.Equals(deliverable?.Id)
-                                                                                                    ? "" : "selected_table_deliverables_row"))">
-                                                                            <span class="clarity--assign-user-line"
-                                                                                  @onclick="@(async (x) => await OnDeliverableAssignClick(deliverable))">
-                                                                            </span>
-                                                                        </td>
-                                                                    }
-
-                                                                </tr>
-                                                            }
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            }
-                                        </div>
+                                        <!-- Table Deliverables Works -->
+                                        <Deliverables @ref="_deliverablesComp"
+                                                      Loading="@_startLoading"
+                                                      IsWorkingMode="@isWorkingMode"
+                                                      SelectedProject="@_selectedProject"
+                                                      SelectedDiscipline="@_selectedDiscipline"/>
                                     </FluentGridItem>
 
                                     <FluentGridItem Style="background-color: red;">
                                         <!-- Table Supportive Works -->
-                                        <SupportiveWorks Loading="@_startLoading"
+                                        <SupportiveWorks @ref="_supportiveWorksComp"
+                                                         Loading="@_startLoading"
                                                          IsWorkingMode="@isWorkingMode"
                                                          SelectedProject="@_selectedProject"
-                                                         SelectedDiscipline="@_selectedDiscipline"
-                                                         SelectedSupportiveWork="@_selectedSupportiveWork"
-                                                         HasSapportiveWorksSelections="@_hasSapportiveWorksSelections"
-                                                         Source="@_supportiveWorks"
-                                                         SourceChanged="@_supportiveWorksChanged"/>
+                                                         SelectedDiscipline="@_selectedDiscipline"/>
                                     </FluentGridItem>
 
                                 </FluentGridItem>
@@ -949,68 +851,6 @@
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => _endWorkDialogCansel())">
-                Cancel
-            </FluentButton>
-        </div>
-
-    </FluentDialog>
-
-    <!-- On "Add Designers" Button Dialog -->
-    <FluentDialog @ref="_addDesignerDialog"
-                  Hidden="@(!_isAddDesignerDialogOdepened || _startLoading)"
-                  Modal="false"
-                  DialogType=@DialogType.Panel
-                  style="--dialog-width: 400px !important;
-                         --dialog-height: auto !important;">
-
-        <div class="badge text-dark text-wrap fs-3">
-            Add Designers
-        </div>
-
-        <div class="modal-body row">
-            <div class="m-1 row justify-content-center">
-
-                <div class="col-12 p-2">
-
-                    <div class="mt-1 p-2 modal-content">
-                        <div class="d-flex justify-content-around">
-                            <div class="table-responsive p-1 w-100 h-100"
-                                 style="max-height: 300px !important; overflow-y: auto;">
-                                 <table class="bg-transparent">
-                                    <tbody>
-                                        @foreach (var designer in _designers)
-                                        {
-                                            <tr clss="align-middle d-flex">
-                                                <td class="align-middle">
-                                                    <input class="form-check-input big-checkbox mt-2"
-                                                           type="checkbox"
-                                                           id="isSelectedDesigner"
-                                                           @bind=@designer.IsSelected>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <div class="ms-3 mt-2">
-                                                        @designer.LastName &nbsp; @designer.FirstName
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-
-        <div class="row">
-            <FluentButton class="col-6"
-                          OnClick="@(async () => await _addDesignerDialogAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => _addDesignerDialogCansel())">
                 Cancel
             </FluentButton>
         </div>
@@ -1282,45 +1122,6 @@
                 Ok
             </FluentButton>
             <FluentButton class="col-6" OnClick="@(() => CloseAddDisciplineClick())">
-                Cancel
-            </FluentButton>
-        </div>
-
-    </FluentDialog>
-
-    <!-- On Add/Edit Deliverable Dialog -->
-    <FluentDialog @ref="_addEditDeliverableDialog"
-                  Hidden="@(!_isAddEditDeliverableDialogOdepened || _startLoading)"
-                  Modal="true"
-                  DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
-                         --dialog-width: auto !important;">
-
-        <div class="modal-body row mb-1">
-
-            <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseAddDeliverableClick"></span>
-            </div>
-
-            <div class="col-12 justify-content-center">
-                @if(_selectedDiscipline != null)
-                {
-                    <DeliverableDetailed @ref="@deliverableCompoment" DisciplineId="@_selectedDiscipline.Id" />
-                } 
-                else
-                {
-                    <h3 class="warning">No Discipline Selected!</h3>
-                }
-            </div>
-
-        </div>
-
-        <div class="row">
-            <FluentButton class="col-6"
-                          OnClick="@(async () => await _addEditDeliverableDialogAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => CloseAddDeliverableClick())">
                 Cancel
             </FluentButton>
         </div>

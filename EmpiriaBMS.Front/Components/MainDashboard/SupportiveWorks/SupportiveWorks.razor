@@ -49,11 +49,11 @@
                     <FluentStack HorizontalAlignment="HorizontalAlignment.End">
                         @if (IsWorkingMode && editSupportiveWork)
                         {
-                            @if (SelectedSupportiveWork != null)
+                            @if (_selectedSupportiveWork != null)
                             {
                                 <span class="fluent--delete-28-regular col-1"
                                       @onclick="@(() => DeleteSupportiveWork())" />
-                                @if (HasSapportiveWorksSelections)
+                                @if (_hasSapportiveWorksSelections)
                                 {
                                     <span class="material-symbols--edit-outline col-1"
                                           @onclick="@(() => EditSupportiveWork())" />
@@ -66,7 +66,7 @@
                         <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
                                       Appearance="Appearance.Outline"
                                       OnClick="@(async (e) => await ExportSupportiveWorksToCSV())"
-                                      Disabled="@(Source.Count() == 0)">
+                                      Disabled="@(_data.Count() == 0)">
                             Export
                         </FluentButton>
                     </FluentStack>
@@ -84,24 +84,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var _supportiveWorks in Source)
+                    @foreach (var _supportiveWork in _data)
                     {
-                        <tr class="align-middle" @onclick="@(() => OnSelect(_supportiveWorks))">
+                        <tr class="align-middle" @onclick="@(() => OnSelect(_supportiveWork))">
 
                             <td class="align-middle
-                                                                        @(((SelectedSupportiveWork == null ||
-                                                                                !SelectedSupportiveWork.Id.Equals(_supportiveWorks.Id))
-                                                                                    ? "" : "selected_table_supportiveworks_row"))"
+                                    @(((_selectedSupportiveWork == null ||
+                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
+                                                ? "" : "selected_table_row"))"
                                 style="min-width: 110px;">
-                                <div class="align-middle h-100"><labe>@_supportiveWorks.Type.Name</labe></div>
+                                <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
                             </td>
 
                             <td class="align-middle
-                                                                        @(((SelectedSupportiveWork == null ||
-                                                                                !SelectedSupportiveWork.Id.Equals(_supportiveWorks.Id))
-                                                                                    ? "" : "selected_table_supportiveworks_row"))"
+                                    @(((_selectedSupportiveWork == null ||
+                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
+                                                ? "" : "selected_table_row"))"
                                 style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                <label>@GetMenHours(_supportiveWorks.Id) h</label>
+                                <label>@GetMenHours(_supportiveWork.Id) h</label>
                             </td>
 
                         </tr>

@@ -24,17 +24,51 @@ public partial class SupportiveWorks
     [Parameter]
     public DisciplineVM SelectedDiscipline { get; set; }
 
-    [Parameter]
-    public SupportiveWorkVM SelectedSupportiveWork { get; set; }
+    private ObservableCollection<SupportiveWorkVM> _data = new ObservableCollection<SupportiveWorkVM>();
 
-    [Parameter]
-    public bool HasSapportiveWorksSelections { get; set; }
+    private List<SupportiveWorkVM> _dataChanged = new List<SupportiveWorkVM>();
 
-    [Parameter]
-    public ObservableCollection<SupportiveWorkVM> Source { get; set; }
+    private bool _hasSapportiveWorksSelections = false;
 
-    [Parameter]
-    public List<SupportiveWorkVM> SourceChanged { get; set; }
+    private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
+
+    public async Task CheckIfHasSelections()
+    {
+        if (SelectedDiscipline != null)
+        {
+            _hasSapportiveWorksSelections = await _dataProvider.SupportiveWorksTypes
+                .HasOtherTypesSelections(SelectedDiscipline.Id);
+        }
+    }
+
+    public void ResetSelection() =>
+        _selectedSupportiveWork = null;
+
+    public void SetSelected(SupportiveWorkVM selected)
+    {
+        if (selected == null || selected.Id == _selectedSupportiveWork?.Id)
+            return;
+        _selectedSupportiveWork = selected;
+    }
+
+    public async Task GetRecords(DisciplineVM discipline = null)
+    {
+        if (discipline != null)
+            SelectedDiscipline = discipline;
+
+        if (SelectedDiscipline == null)
+            return;
+
+        var others = await _dataProvider.Disciplines.GetOthers(SelectedDiscipline.Id, _sharedAuthData.LogedUser.Id, true);
+
+        _data.Clear();
+        foreach (var di in others)
+            _data.Add(Mapper.Map<SupportiveWorkVM>(di));
+    }
+
+    public void ClearRecords() => _data.Clear();
+
+    public void ResetChanges() => _dataChanged.Clear();
 
     #region Add/Edit/Delete Dialog
     // On Add/Edit Other Dialog
@@ -45,8 +79,8 @@ public partial class SupportiveWorks
 
     private void OnSelect(SupportiveWorkVM doc)
     {
-        if (doc == null || doc.Id == SelectedSupportiveWork?.Id) return;
-        SelectedSupportiveWork = doc;
+        if (doc == null || doc.Id == _selectedSupportiveWork?.Id) return;
+        _selectedSupportiveWork = doc;
         StateHasChanged();
     }
     
@@ -65,9 +99,9 @@ public partial class SupportiveWorks
     {
         if (_isDeleteDialogOdepened)
         {
-            await _dataProvider.SupportiveWorks.Delete(SelectedSupportiveWork.Id);
-            Source.Remove(SelectedSupportiveWork);
-            SelectedSupportiveWork = null;
+            await _dataProvider.SupportiveWorks.Delete(_selectedSupportiveWork.Id);
+            _data.Remove(_selectedSupportiveWork);
+            _selectedSupportiveWork = null;
 
             _deleteDialogMsg = "";
             _deleteDialog.Hide();
@@ -98,7 +132,7 @@ public partial class SupportiveWorks
 
     private void EditSupportiveWork()
     {
-        supportiveWorkrCompoment.PrepairForEdit(SelectedSupportiveWork);
+        supportiveWorkrCompoment.PrepairForEdit(_selectedSupportiveWork);
         _addEditSupportiveWorkDialog.Show();
         _isAddEditSupportiveWorkDialogOdepened = true;
     }
@@ -117,11 +151,11 @@ public partial class SupportiveWorks
         await supportiveWorkrCompoment.HandleValidSubmit();
 
         var newSupportiveWork = supportiveWorkrCompoment.GetSupportiveWork();
-        if (Source.Any(d => d.Id == newSupportiveWork.Id))
-            Source.Remove(newSupportiveWork);
+        if (_data.Any(d => d.Id == newSupportiveWork.Id))
+            _data.Remove(newSupportiveWork);
 
-        Source.Insert(0, newSupportiveWork);
-        Source = new ObservableCollection<SupportiveWorkVM>(Source);
+        _data.Insert(0, newSupportiveWork);
+        _data = new ObservableCollection<SupportiveWorkVM>(_data);
 
         _addEditSupportiveWorkDialog.Hide();
         _isAddEditSupportiveWorkDialogOdepened = false;
@@ -131,7 +165,7 @@ public partial class SupportiveWorks
 
     private void DeleteSupportiveWork()
     {
-        _deleteDialogMsg = $"Are you sure you want delete {SelectedSupportiveWork.Type.Name}";
+        _deleteDialogMsg = $"Are you sure you want delete {_selectedSupportiveWork.Type.Name}";
         _deleteDialog.Show();
         _isDeleteDialogOdepened = true;
     }
@@ -142,10 +176,10 @@ public partial class SupportiveWorks
     {
         var date = DateTime.Today;
         var fileName = $"SupportiveWorks-{date.ToEuropeFormat()}.csv";
-        var data = Source.ToList();
-        if (Source.Count > 0)
+        var data = _data.ToList();
+        if (_data.Count > 0)
         {
-            string csvContent = Data.GetCsvContent(Source);
+            string csvContent = Data.GetCsvContent(_data);
             await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
         }
     }
