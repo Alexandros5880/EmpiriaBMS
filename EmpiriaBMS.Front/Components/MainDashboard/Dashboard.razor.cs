@@ -127,12 +127,12 @@ public partial class Dashboard : IDisposable
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DeliverableVM> _deliverables = new ObservableCollection<DeliverableVM>();
-    private ObservableCollection<SupportiveWorkVM> _supportiveWork = new ObservableCollection<SupportiveWorkVM>();
+    private ObservableCollection<SupportiveWorkVM> _supportiveWorks = new ObservableCollection<SupportiveWorkVM>();
     private List<ClientVM> _clientsChanged = new List<ClientVM>();
     private List<OfferVM> _offersChanged = new List<OfferVM>();
     private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
     private List<DeliverableVM> _deliverablesChanged = new List<DeliverableVM>();
-    private List<SupportiveWorkVM> _supportiveWorkChanged = new List<SupportiveWorkVM>();
+    private List<SupportiveWorkVM> _supportiveWorksChanged = new List<SupportiveWorkVM>();
     private ObservableCollection<UserVM> _designers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
     private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
@@ -197,19 +197,11 @@ public partial class Dashboard : IDisposable
     private FluentDialog _addEditDisciplineDialog;
     private bool _isAddEditDisciplineDialogOdepened = false;
     private DisciplineDetailed disciplineCompoment;
-    private bool _hasDisciplinesSelections = true;
 
     // On Add/Edit Deliverable Dialog
     private FluentDialog _addEditDeliverableDialog;
     private bool _isAddEditDeliverableDialogOdepened = false;
     private DeliverableDetailed deliverableCompoment;
-    private bool _hasDeliverablessSelections = true;
-
-    // On Add/Edit Other Dialog
-    private FluentDialog _addEditSupportiveWorkDialog;
-    private bool _isAddEditSupportiveWorkDialogOdepened = false;
-    private OtherDetailed supportiveWorkrCompoment;
-    private bool _hasSapportiveWorksSelections = true;
 
     // On Delete Dialog
     private FluentDialog _deleteDialog;
@@ -220,6 +212,12 @@ public partial class Dashboard : IDisposable
     // On Corrext Hours
     private FluentDialog _correctHoursDialog;
     private bool _isCorrectHoursDialogOdepened = false;
+    #endregion
+
+    #region Has Selections
+    private bool _hasDisciplinesSelections = true;
+    private bool _hasDeliverablessSelections = true;
+    private bool _hasSapportiveWorksSelections = true;
     #endregion
 
     protected override void OnInitialized()
@@ -347,7 +345,7 @@ public partial class Dashboard : IDisposable
         _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
-        _supportiveWork.Clear();
+        _supportiveWorks.Clear();
 
         try
         {
@@ -374,7 +372,7 @@ public partial class Dashboard : IDisposable
             _selectedSupportiveWork = null;
             _disciplines.Clear();
             _deliverables.Clear();
-            _supportiveWork.Clear();
+            _supportiveWorks.Clear();
         }
 
         try
@@ -399,7 +397,7 @@ public partial class Dashboard : IDisposable
         _selectedSupportiveWork = null;
         _disciplines.Clear();
         _deliverables.Clear();
-        _supportiveWork.Clear();
+        _supportiveWorks.Clear();
 
         try
         {
@@ -541,9 +539,6 @@ public partial class Dashboard : IDisposable
 
     private long GetDeliverableMenHours(int drawingId) =>
         _dataProvider.Deliverables.GetMenHours(drawingId);
-
-    private long GetOtherMenHours(int otherId) =>
-        _dataProvider.SupportiveWorks.GetMenHours(otherId);
     #endregion
 
     #region When Row Selected Update Data
@@ -555,7 +550,7 @@ public partial class Dashboard : IDisposable
         _offers.Clear();
         _projects.Clear();
         _deliverables.Clear();
-        _supportiveWork.Clear();
+        _supportiveWorks.Clear();
         _disciplines.Clear();
         _selectedClient = client;
         _selectedOffer = null;
@@ -576,7 +571,7 @@ public partial class Dashboard : IDisposable
         var offer = _offers.FirstOrDefault(p => p.Id == offerId);
         _projects.Clear();
         _deliverables.Clear();
-        _supportiveWork.Clear();
+        _supportiveWorks.Clear();
         _disciplines.Clear();
         _selectedOffer = offer;
         _selectedProject = null;
@@ -595,7 +590,7 @@ public partial class Dashboard : IDisposable
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
         _deliverables.Clear();
-        _supportiveWork.Clear();
+        _supportiveWorks.Clear();
         _disciplines.Clear();
         _selectedProject = project;
         _selectedDiscipline = null;
@@ -626,9 +621,9 @@ public partial class Dashboard : IDisposable
         foreach (var di in draws)
             _deliverables.Add(Mapper.Map<DeliverableVM>(di));
 
-        _supportiveWork.Clear();
+        _supportiveWorks.Clear();
         foreach (var di in others)
-            _supportiveWork.Add(Mapper.Map<SupportiveWorkVM>(di));
+            _supportiveWorks.Add(Mapper.Map<SupportiveWorkVM>(di));
 
         await _checkIfHasAnySelections();
 
@@ -639,13 +634,6 @@ public partial class Dashboard : IDisposable
     {
         if (draw == null || draw.Id == _selectedDeliverable?.Id) return;
         _selectedDeliverable = draw;
-        StateHasChanged();
-    }
-
-    private void OnSelectDoc(SupportiveWorkVM doc)
-    {
-        if (doc == null || doc.Id == _selectedSupportiveWork?.Id) return;
-        _selectedSupportiveWork = doc;
         StateHasChanged();
     }
     #endregion
@@ -730,7 +718,7 @@ public partial class Dashboard : IDisposable
             await _editHoursCompoment.Save();
 
             _deliverablesChanged.Clear();
-            _supportiveWorkChanged.Clear();
+            _supportiveWorksChanged.Clear();
 
             await _getProjects();
 
@@ -755,7 +743,7 @@ public partial class Dashboard : IDisposable
         _offersChanged.Clear();
         _projectsChanged.Clear();
         _deliverablesChanged.Clear();
-        _supportiveWorkChanged.Clear();
+        _supportiveWorksChanged.Clear();
 
         _selectedClient = null;
         _selectedOffer = null;
@@ -1219,56 +1207,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Add/Edit/Delete Other Actions
-    private void AddSupportiveWork()
-    {
-        supportiveWorkrCompoment.PrepairForNew();
-        _addEditSupportiveWorkDialog.Show();
-        _isAddEditSupportiveWorkDialogOdepened = true;
-    }
-
-    private void EditSupportiveWork()
-    {
-        supportiveWorkrCompoment.PrepairForEdit(_selectedSupportiveWork);
-        _addEditSupportiveWorkDialog.Show();
-        _isAddEditSupportiveWorkDialogOdepened = true;
-    }
-
-    private void CloseAddSupportiveWorkClick()
-    {
-        if (_isAddEditSupportiveWorkDialogOdepened)
-        {
-            _addEditSupportiveWorkDialog.Hide();
-            _isAddEditSupportiveWorkDialogOdepened = false;
-        }
-    }
-
-    public async Task _addEditSupportiveWorkDialogAccept()
-    {
-        await supportiveWorkrCompoment.HandleValidSubmit();
-
-        var newSupportiveWork = supportiveWorkrCompoment.GetSupportiveWork();
-        if (_supportiveWork.Any(d => d.Id == newSupportiveWork.Id))
-            _supportiveWork.Remove(newSupportiveWork);
-
-        _supportiveWork.Insert(0, newSupportiveWork);
-        _supportiveWork = new ObservableCollection<SupportiveWorkVM>(_supportiveWork);
-
-        _addEditSupportiveWorkDialog.Hide();
-        _isAddEditSupportiveWorkDialogOdepened = false;
-
-        StateHasChanged();
-    }
-
-    private void DeleteSupportiveWork()
-    {
-        _deleteDialogMsg = $"Are you sure you want delete {_selectedSupportiveWork.Type.Name}";
-        _deleteObj = nameof(_selectedSupportiveWork);
-        _deleteDialog.Show();
-        _isDeleteDialogOdepened = true;
-    }
-    #endregion
-
     #region Correct Hours Dialog
     private async Task _correctHours()
     {
@@ -1322,7 +1260,7 @@ public partial class Dashboard : IDisposable
                     break;
                 case nameof(_selectedSupportiveWork):
                     await _dataProvider.SupportiveWorks.Delete(_selectedSupportiveWork.Id);
-                    _supportiveWork.Remove(_selectedSupportiveWork);
+                    _supportiveWorks.Remove(_selectedSupportiveWork);
                     _selectedSupportiveWork = null;
                     break;
             }
@@ -1440,18 +1378,6 @@ public partial class Dashboard : IDisposable
         if (_deliverables.Count > 0)
         {
             string csvContent = Data.GetCsvContent(_deliverables);
-            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
-        }
-    }
-
-    private async Task ExportSupportiveWorksToCSV()
-    {
-        var date = DateTime.Today;
-        var fileName = $"SupportiveWorks-{date.ToEuropeFormat()}.csv";
-        var data = _supportiveWork.ToList();
-        if (_supportiveWork.Count > 0)
-        {
-            string csvContent = Data.GetCsvContent(_supportiveWork);
             await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
         }
     }

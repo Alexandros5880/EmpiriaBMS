@@ -1,0 +1,191 @@
+﻿@using EmpiriaBMS.Front.Components.Invoices
+@using Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Front.Components.General
+@using EmpiriaBMS.Front.Components
+@using EmpiriaBMS.Front.Components.Offers
+@using EmpiriaBMS.Front.Components.KPIS
+@using EmpiriaBMS.Front.Horizontal
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Admin
+@using Color = Microsoft.Fast.Components.FluentUI.Color
+@using EmpiriaBMS.Core.Services.DBManipulation
+@using EmpiriaBMS.Front.Components.WorkingHours
+@using EmpiriaBMS.Front.Components.Reports
+@using EmpiriaBMS.Models.Enum
+@using EmpiriaBMS.Front.Components.Clients
+@using EmpiriaBMS.Front.Components.MainDashboard.Deliverables
+@using EmpiriaBMS.Front.Components.MainDashboard.Disciplines
+@using EmpiriaBMS.Front.Components.MainDashboard.Issues
+@using EmpiriaBMS.Front.Components.MainDashboard.Projects
+@using EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks
+
+@inject TeamsFx teamsfx
+@inject TeamsUserCredential teamsUserCredential
+@inject MicrosoftTeams MicrosoftTeams
+@inject IWebHostEnvironment HostEnvironment
+@inject IConfiguration Configuration
+@inject NavigationManager MyNavigationManager
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+@inject TimerService TimerService
+@inject AuthorizeServices authorizeServices
+@inject SharedAuthDataService _sharedAuthData
+@inject IDialogService DialogService
+@inject DatabaseBackupService DatabaseBackupService
+@inject Logging.LoggerManager Logger
+
+<div style="min-width: 500px; max-width: 660px; width: min(max(20vw, 500px), 660px);">
+    @if (SelectedDiscipline != null)
+    {
+        <!-- Actions -->
+        <div style="height: 74px;">
+            <div class="text-start row me-2">
+                <h3 class="@((SelectedProject != null ? "col-9" : "col-11"))">Supportive Works</h3>
+            </div>
+            <div class="text-center row me-2">
+                <div class="col-6">
+                </div>
+                <div class="col-6">
+                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                        @if (IsWorkingMode && editSupportiveWork)
+                        {
+                            @if (SelectedSupportiveWork != null)
+                            {
+                                <span class="fluent--delete-28-regular col-1"
+                                      @onclick="@(() => DeleteSupportiveWork())" />
+                                @if (HasSapportiveWorksSelections)
+                                {
+                                    <span class="material-symbols--edit-outline col-1"
+                                          @onclick="@(() => EditSupportiveWork())" />
+                                }
+                            }
+                            <span class="grommet-icons--add col-1"
+                                  @onclick="@(() => AddSupportiveWork())" />
+                        }
+
+                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                      Appearance="Appearance.Outline"
+                                      OnClick="@(async (e) => await ExportSupportiveWorksToCSV())"
+                                      Disabled="@(Source.Count() == 0)">
+                            Export
+                        </FluentButton>
+                    </FluentStack>
+                </div>
+            </div>
+        </div>
+        <!-- Table -->
+        <div class="table-responsive mt-2 p-1 table-container"
+             style="overflow-x: auto !important;">
+            <table class="table table-hover table-warning text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="sticky-header">Supportive Work</th>
+                        <th scope="col" class="sticky-header">Total Hours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var _supportiveWorks in Source)
+                    {
+                        <tr class="align-middle" @onclick="@(() => OnSelect(_supportiveWorks))">
+
+                            <td class="align-middle
+                                                                        @(((SelectedSupportiveWork == null ||
+                                                                                !SelectedSupportiveWork.Id.Equals(_supportiveWorks.Id))
+                                                                                    ? "" : "selected_table_supportiveworks_row"))"
+                                style="min-width: 110px;">
+                                <div class="align-middle h-100"><labe>@_supportiveWorks.Type.Name</labe></div>
+                            </td>
+
+                            <td class="align-middle
+                                                                        @(((SelectedSupportiveWork == null ||
+                                                                                !SelectedSupportiveWork.Id.Equals(_supportiveWorks.Id))
+                                                                                    ? "" : "selected_table_supportiveworks_row"))"
+                                style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                <label>@GetMenHours(_supportiveWorks.Id) h</label>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+@if (!Loading)
+{
+    <!-- On Add/Edit SupportiveWorks Dialog -->
+    <FluentDialog @ref="_addEditSupportiveWorkDialog"
+                  Hidden="@(!_isAddEditSupportiveWorkDialogOdepened || Loading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddSupportiveWorkClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                @if (SelectedDiscipline != null)
+                {
+                    <SupportiveWorksDetailed @ref="@supportiveWorkrCompoment" DisciplineId="@SelectedDiscipline.Id" />
+                }
+                else
+                {
+                    <h3 class="warning">No Discipline Selected!</h3>
+                }
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditSupportiveWorkDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddSupportiveWorkClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Delete Dialog -->
+    <FluentDialog @ref="_deleteDialog"
+                  Hidden="@(!_isDeleteDialogOdepened || Loading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header row">
+                <div class="col-10">
+                    <h3>Delete Record</h3>
+                </div>
+                <span class="col-2 carbon--close-outline float-end" @onclick="OnDeleteClose"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <p>@_deleteDialogMsg</p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await OnDeleteAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+}

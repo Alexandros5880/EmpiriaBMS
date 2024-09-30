@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
 
-public partial class OtherDetailed : ComponentBase, IDisposable
+public partial class SupportiveWorksDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
     private bool isNew = false;
