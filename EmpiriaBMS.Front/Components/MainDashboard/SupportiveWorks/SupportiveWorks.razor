@@ -91,7 +91,7 @@
                             <td class="align-middle
                                     @(((_selectedSupportiveWork == null ||
                                             !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
-                                                ? "" : "selected_table_row"))"
+                                                ? "" : "selected_table_supportiveworks_row"))"
                                 style="min-width: 110px;">
                                 <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
                             </td>
@@ -99,7 +99,7 @@
                             <td class="align-middle
                                     @(((_selectedSupportiveWork == null ||
                                             !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
-                                                ? "" : "selected_table_row"))"
+                                                ? "" : "selected_table_supportiveworks_row"))"
                                 style="min-width: 90px;max-width: 90px; margin: 0 auto;">
                                 <label>@GetMenHours(_supportiveWork.Id) h</label>
                             </td>

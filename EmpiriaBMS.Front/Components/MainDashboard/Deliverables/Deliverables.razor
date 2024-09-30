@@ -100,21 +100,21 @@
                             <td class="align-middle
                                     @(((_selectedDeliverable == null ||
                                             !_selectedDeliverable.Id.Equals(deliverable.Id))
-                                                ? "" : "selected_table_row"))">
+                                                ? "" : "selected_table_deliverables_row"))">
                                 <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
                             </td>
 
                             <td class="align-middle
                                     @(((_selectedDeliverable == null ||
                                             !_selectedDeliverable.Id.Equals(deliverable.Id))
-                                                ? "" : "selected_table_row"))">
+                                                ? "" : "selected_table_deliverables_row"))">
                                 <label>@GetMenHours(deliverable.Id) h</label>
                             </td>
 
                             <td class="align-middle
                                     @(((_selectedDeliverable == null ||
                                         !_selectedDeliverable.Id.Equals(deliverable.Id))
-                                            ? "" : "selected_table_row"))">
+                                            ? "" : "selected_table_deliverables_row"))">
                                 <label>@deliverable.CompletionEstimation %</label>
                             </td>
 
@@ -123,7 +123,7 @@
                                 <td class="align-middle
                                         @((_selectedDeliverable == null ||
                                                 !_selectedDeliverable.Id.Equals(deliverable?.Id)
-                                                                ? "" : "selected_table_row"))">
+                                                                ? "" : "selected_table_deliverables_row"))">
                                     <span class="clarity--assign-user-line"
                                           @onclick="@(async (x) => await OnDeliverableAssignClick(deliverable))">
                                     </span>
