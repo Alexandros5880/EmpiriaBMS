@@ -9,7 +9,7 @@
 @inject Logging.LoggerManager Logger
 
 <div class="w-96 m-2"
-     style="overflow-x: hidden; overflow-y: auto; height: auto; max-height: 70vh;">
+        style="overflow-x: hidden; overflow-y: auto; height: auto; max-height: 70vh;">
 
     <h3 class="mb-2">Project</h3>
 
@@ -188,9 +188,9 @@
         <div class="row mt-3 mb-3">
             <div class="col-12">
                 <FluentButton IconStart="@(new Icons.Regular.Size16.Save())"
-                              OnClick="@(async () => await SaveAsync())"
-                              Style="float: right;"
-                              Disabled=false>
+                                OnClick="@(async () => await SaveAsync())"
+                                Style="float: right;"
+                                Disabled=false>
                     @(_isNew ? "Add" : "Update")
                 </FluentButton>
             </div>

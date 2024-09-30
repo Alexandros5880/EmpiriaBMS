@@ -5,7 +5,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using EmpiriaBMS.Models.Models;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
+namespace EmpiriaBMS.Front.Components.Home.Disciplines;
 
 public partial class DisciplineDetailed : ComponentBase, IDisposable
 {

@@ -21,15 +21,15 @@ using System.Collections.ObjectModel;
 using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
 using EmpiriaBMS.Front.Components.Admin.Projects;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using EmpiriaBMS.Front.Components.MainDashboard.Projects;
-using EmpiriaBMS.Front.Components.MainDashboard.Issues;
-using DevComp = EmpiriaBMS.Front.Components.MainDashboard.Deliverables;
-using DiscComp = EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
-using SWComp = EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
-using projComp = EmpiriaBMS.Front.Components.MainDashboard.Projects;
+using EmpiriaBMS.Front.Components.Home.Projects;
+using EmpiriaBMS.Front.Components.Home.Issues;
+using DevComp = EmpiriaBMS.Front.Components.Home.Deliverables;
+using DiscComp = EmpiriaBMS.Front.Components.Home.Disciplines;
+using SWComp = EmpiriaBMS.Front.Components.Home.SupportiveWorks;
+using projComp = EmpiriaBMS.Front.Components.Home.Projects;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard;
+namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard : IDisposable
 {
     #region Authorization Properties
@@ -130,8 +130,6 @@ public partial class Dashboard : IDisposable
     private FluentDialog _correctHoursDialog;
     private bool _isCorrectHoursDialogOdepened = false;
     #endregion
-
-
 
     protected override void OnInitialized()
     {
@@ -359,18 +357,16 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region When Row Selected Update Data
-
-
-
+    #region On Select Project/Discipline, On Edit Project
     private async Task OnSelectProject(int projectId)
     {
         if (projectId == 0)
             return;
 
+        _clearRecordsDisciplines();
         _clearRecordsDeliverables();
         _clearRecordsSupportiveWoprk();
-        _clearRecordsDisciplines();
+        
         _resetSelectedDisciplines();;
         _resetSelectedDeliverable();
         _resetSelectedSupportiveWoprk();

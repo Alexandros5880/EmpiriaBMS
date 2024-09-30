@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
-using DevComp = EmpiriaBMS.Front.Components.MainDashboard.Deliverables;
-using DiscComp = EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
-using SWComp = EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
+using DevComp = EmpiriaBMS.Front.Components.Home.Deliverables;
+using DiscComp = EmpiriaBMS.Front.Components.Home.Disciplines;
+using SWComp = EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
+namespace EmpiriaBMS.Front.Components.Home.Disciplines;
 
 public partial class Disciplines
 {
@@ -92,7 +92,11 @@ public partial class Disciplines
         StateHasChanged();
     }
 
-    public void ClearRecords() => _data.Clear();
+    public void ClearRecords()
+    {
+        _data.Clear();
+        StateHasChanged();
+    }
 
     public void ResetChanges() => _dataChanged.Clear();
 

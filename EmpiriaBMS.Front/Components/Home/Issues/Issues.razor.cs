@@ -3,7 +3,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard.Issues;
+namespace EmpiriaBMS.Front.Components.Home.Issues;
 
 public partial class Issues : ComponentBase
 {

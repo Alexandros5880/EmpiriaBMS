@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
+namespace EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 
 public partial class SupportiveWorks
 {
@@ -63,7 +63,12 @@ public partial class SupportiveWorks
         StateHasChanged();
     }
 
-    public void ClearRecords() => _data.Clear();
+    public void ClearRecords()
+    {
+        _data.Clear();
+        _disciplineId = 0;
+        StateHasChanged();
+    }
 
     public void ResetChanges() => _dataChanged.Clear();
 

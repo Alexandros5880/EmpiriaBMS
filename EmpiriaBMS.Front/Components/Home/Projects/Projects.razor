@@ -9,11 +9,11 @@
 @using EmpiriaBMS.Front.Components.Reports
 @using EmpiriaBMS.Models.Enum
 @using EmpiriaBMS.Front.Components.Clients
-@using EmpiriaBMS.Front.Components.MainDashboard.Deliverables
-@using EmpiriaBMS.Front.Components.MainDashboard.Disciplines
-@using EmpiriaBMS.Front.Components.MainDashboard.Issues
-@using EmpiriaBMS.Front.Components.MainDashboard.Projects
-@using EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks
+@using EmpiriaBMS.Front.Components.Home.Deliverables
+@using EmpiriaBMS.Front.Components.Home.Disciplines
+@using EmpiriaBMS.Front.Components.Home.Issues
+@using EmpiriaBMS.Front.Components.Home.Projects
+@using EmpiriaBMS.Front.Components.Home.SupportiveWorks
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -196,7 +196,7 @@
                             <td class="align-middle @((_selectedProject == null ||
                                     !_selectedProject.Id.Equals(project.Id)
                                                     ? "" : "selected_table_projects_row"))">
-                                @if (!string.IsNullOrEmpty(project.PmName))
+                                @if (!string.IsNullOrEmpty(project.PMFullName))
                                 {
                                     <button type="button" class="btn btn-outline-info default-color"
                                             @onclick="@(async (x) => await OnProjectAssignClick(project))">
@@ -308,7 +308,9 @@
             </div>
 
             <div class="col-12 justify-content-center" style="max-height: 640px; overflow-y: hidden;">
-                <ProjectDetailed @ref="@projectCompoment" Content="@_selectedProject" DisplayActions="false" />
+                <ProjectDetailed @ref="@projectCompoment"
+                                 DisplayActions="false"
+                                 Content="@_selectedProject"/>
             </div>
 
         </div>

@@ -1,18 +1,18 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
-using EmpiriaBMS.Front.Components.MainDashboard.Issues;
+using EmpiriaBMS.Front.Components.Home.Issues;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
-using DevComp = EmpiriaBMS.Front.Components.MainDashboard.Deliverables;
-using DiscComp = EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
-using SWComp = EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
+using DevComp = EmpiriaBMS.Front.Components.Home.Deliverables;
+using DiscComp = EmpiriaBMS.Front.Components.Home.Disciplines;
+using SWComp = EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard.Projects;
+namespace EmpiriaBMS.Front.Components.Home.Projects;
 
 public partial class Projects
 {
@@ -197,26 +197,19 @@ public partial class Projects
     private async Task AddProject()
     {
         _selectedProject = null;
-        
 
-        Offer offer = null;
-        if (!string.IsNullOrEmpty(selectedOfferFilterId))
-        {
-            var offerId = Convert.ToInt32(selectedOfferFilterId);
-            var dto = await _dataProvider.Offers.Get(offerId);
-            offer = Mapping.Mapper.Map<Offer>(dto);
-        }
+        //Offer offer = null;
+        //if (!string.IsNullOrEmpty(selectedOfferFilterId))
+        //{
+        //    var offerId = Convert.ToInt32(selectedOfferFilterId);
+        //    var dto = await _dataProvider.Offers.Get(offerId);
+        //    offer = Mapping.Mapper.Map<Offer>(dto);
+        //}
 
         _addEditProjectDialog.Show();
         _isAddEditProjectDialogOdepened = true;
 
-        await projectCompoment.Prepair(new ProjectVM()
-        {
-            Stage = null,
-            StageId = 0,
-            Offer = offer,
-            OfferId = offer != null ? offer.Id : 0,
-        });
+        await projectCompoment.Prepair();
     }
 
     private async Task EditProject()

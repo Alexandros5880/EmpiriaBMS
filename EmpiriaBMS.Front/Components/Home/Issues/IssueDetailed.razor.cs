@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.ComponentModel;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard.Issues;
+namespace EmpiriaBMS.Front.Components.Home.Issues;
 
 public partial class IssueDetailed : ComponentBase, IDisposable
 {

@@ -2,7 +2,7 @@
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard.Deliverables;
+namespace EmpiriaBMS.Front.Components.Home.Deliverables;
 
 public partial class DeliverableDetailed : ComponentBase, IDisposable
 {

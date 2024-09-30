@@ -2,7 +2,7 @@
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
+namespace EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 
 public partial class SupportiveWorksDetailed : ComponentBase, IDisposable
 {

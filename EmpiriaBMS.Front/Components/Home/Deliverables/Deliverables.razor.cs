@@ -1,4 +1,4 @@
-﻿using EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
+﻿using EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
@@ -26,14 +26,14 @@ using System.Collections.ObjectModel;
 using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
 using EmpiriaBMS.Front.Components.Admin.Projects;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using EmpiriaBMS.Front.Components.MainDashboard.Projects;
-using EmpiriaBMS.Front.Components.MainDashboard.Issues;
-using EmpiriaBMS.Front.Components.MainDashboard.Deliverables;
-using EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
-using EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
+using EmpiriaBMS.Front.Components.Home.Projects;
+using EmpiriaBMS.Front.Components.Home.Issues;
+using EmpiriaBMS.Front.Components.Home.Deliverables;
+using EmpiriaBMS.Front.Components.Home.Disciplines;
+using EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 using System.ComponentModel.Design;
 
-namespace EmpiriaBMS.Front.Components.MainDashboard.Deliverables;
+namespace EmpiriaBMS.Front.Components.Home.Deliverables;
 
 public partial class Deliverables
 {
@@ -103,7 +103,12 @@ public partial class Deliverables
         StateHasChanged();
     }
 
-    public void ClearRecords() => _data.Clear();
+    public void ClearRecords()
+    {
+        _data.Clear();
+        _disciplineId = 0;
+        StateHasChanged();
+    }
 
     public void ResetChanges() => _dataChanged.Clear();
 
