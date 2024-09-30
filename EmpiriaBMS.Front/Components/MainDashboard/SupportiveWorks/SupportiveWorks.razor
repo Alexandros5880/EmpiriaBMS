@@ -34,7 +34,7 @@
 @inject DatabaseBackupService DatabaseBackupService
 @inject Logging.LoggerManager Logger
 
-<div style="min-width: 500px; max-width: 660px; width: min(max(20vw, 500px), 660px);">
+<div style="min-width: @((IsWorkingMode ? "660px" : "500px")); width: 100%;">
     @if (_disciplineId != 0)
     {
         <!-- Actions -->

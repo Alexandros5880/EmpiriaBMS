@@ -26,6 +26,8 @@ using EmpiriaBMS.Front.Components.MainDashboard.Issues;
 using DevComp = EmpiriaBMS.Front.Components.MainDashboard.Deliverables;
 using DiscComp = EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
 using SWComp = EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
+using projComp = EmpiriaBMS.Front.Components.MainDashboard.Projects;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace EmpiriaBMS.Front.Components.MainDashboard;
 public partial class Dashboard : IDisposable
@@ -85,49 +87,9 @@ public partial class Dashboard : IDisposable
 
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
-    #region Projects Filter
-    IQueryable<ProjectVM> _filteredProjects => _projects?.AsQueryable()
-        .Where(p => _filterProjects(p));
+    
 
-    private string _projectNameFilter = string.Empty;
-    private string selectedOfferFilterId = string.Empty;
-
-    private void HandleProjectNameFilter(ChangeEventArgs args)
-    {
-        if (args.Value is string value)
-        {
-            _projectNameFilter = value;
-        }
-        else if (string.IsNullOrWhiteSpace(_projectNameFilter) || string.IsNullOrEmpty(_projectNameFilter))
-        {
-            _projectNameFilter = string.Empty;
-        }
-    }
-
-    private void _onOfferFilterChanged(OfferVM offer)
-    {
-        if (offer != null && offer.Id != 0)
-            selectedOfferFilterId = offer.Id.ToString();
-        else
-            selectedOfferFilterId = string.Empty;
-    }
-
-    private bool _filterProjects(ProjectVM project)
-    {
-        return project.Name.Contains(_projectNameFilter, StringComparison.CurrentCultureIgnoreCase)
-                &&
-               (string.IsNullOrEmpty(selectedOfferFilterId) || Convert.ToString(project.OfferId) == selectedOfferFilterId);
-    }
-    #endregion
-
-    #region Lists
-    private ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
-    private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
-    private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
-    private List<ClientVM> _clientsChanged = new List<ClientVM>();
-    private List<OfferVM> _offersChanged = new List<OfferVM>();
-    private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
-    private ObservableCollection<UserVM> _projectManagers = new ObservableCollection<UserVM>();
+    #region Lists    
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
     private ObservableCollection<TeamsRequestedUserVM> _teamsRequestedUsers = new ObservableCollection<TeamsRequestedUserVM>();
     private Dictionary<DailyTimeTypes, List<DailyTimeRequest>> _dailyTimeRequest = new Dictionary<DailyTimeTypes, List<DailyTimeRequest>>();
@@ -136,8 +98,6 @@ public partial class Dashboard : IDisposable
     #region Selected Models
     private ClientVM _selectedClient = new ClientVM();
     private OfferVM _selectedOffer = new OfferVM();
-    private ProjectVM _selectedProject = new ProjectVM();
-    private int _selectedPmId;
     private InvoiceVM _selectedIncomeInvoice = new InvoiceVM();
     private InvoiceVM _selectedExpenseInvoice = new InvoiceVM();
     #endregion
@@ -147,15 +107,6 @@ public partial class Dashboard : IDisposable
     private FluentDialog _endWorkDialog;
     private bool _isEndWorkDialogOdepened = false;
     private bool _isEndWorkAcceptDialogDisabled => remainingTime.Hours != 0 || remainingTime.Minutes != 0;
-
-    // Add ProjectManager Dialog
-    private FluentDialog _addPMDialog;
-    private bool _isAddPMDialogOdepened = false;
-
-    // On Add Issue Dialog
-    private FluentDialog _addIssueDialog;
-    private bool _isAddIssueDialogOdepened = false;
-    private IssueDetailed issueCompoment;
 
     // On Add/Edit Issues Dialog
     private FluentDialog _displayIssuesDialog;
@@ -168,11 +119,6 @@ public partial class Dashboard : IDisposable
     // On Add/Edit Hours Correction rEQUESTS Dialog
     private FluentDialog _displayHoursCorrectionRequestsDialog;
     private bool _isDisplayHoursCorrectionRequestsDialogOdepened = false;
-
-    // On Add Project Dialog
-    private FluentDialog _addEditProjectDialog;
-    private bool _isAddEditProjectDialogOdepened = false;
-    private ProjectDetailed projectCompoment;
 
     // On Delete Dialog
     private FluentDialog _deleteDialog;
@@ -212,6 +158,7 @@ public partial class Dashboard : IDisposable
             _runInTeams = await MicrosoftTeams.IsInTeams();
             await Refresh();
             _startLoading = false;
+            StateHasChanged();
         }
     }
 
@@ -221,19 +168,52 @@ public partial class Dashboard : IDisposable
         await _getTeamsRequestedUsers();
         await _getUserTotalHoursThisMonth();
         await _getIssues();
-        await _getProjects();
+        await _getRecordsProjects(_selectedOffer?.Id ?? 0, true);
         if (canApproveTimeRequests)
         {
             await _getHoursCorrectionsRequests();
             await _getHoursCorrectionRequestsCount();
         }
-        await _getOffers(false);
         _refreshLoading = false;
         StateHasChanged();
     }
 
+    #region Projects Table Compoment
+    private projComp.Projects _projectsComp;
+
+    private async Task _getRecordsProjects(int offerId, bool active = false)
+    {
+        if (_projectsComp != null)
+            await _projectsComp.GetRecords(offerId, active);
+    } 
+
+    private void _resetSelectedProjects()
+    {
+        if (_projectsComp != null)
+            _projectsComp.ResetSelection();
+    }
+
+    private void _clearRecordsProjects()
+    {
+        if (_projectsComp != null)
+            _projectsComp.ClearRecords();
+    }
+
+    private void _resetChangesProjects()
+    {
+        if (_projectsComp != null)
+            _projectsComp.ResetChanges();
+    }
+    #endregion
+
     #region Disciplines Table Compoment
     private DiscComp.Disciplines _disciplinesComp;
+
+    private async Task _getRecordsDisciplines(int projectId)
+    {
+        if (_disciplinesComp != null)
+            await _disciplinesComp.GetRecords(projectId);
+    }
 
     private void _resetSelectedDisciplines()
     {
@@ -257,6 +237,12 @@ public partial class Dashboard : IDisposable
     #region Deliverables Table Compoment
     private DevComp.Deliverables _deliverablesComp;
 
+    private async Task _getRecordsDeliverables(int disciplineId)
+    {
+        if (_deliverablesComp != null)
+            await _deliverablesComp.GetRecords(disciplineId);
+    }
+
     private void _resetSelectedDeliverable()
     {
         if (_deliverablesComp != null)
@@ -279,6 +265,12 @@ public partial class Dashboard : IDisposable
     #region Supportive Works Table Compoment
     private SWComp.SupportiveWorks _supportiveWorksComp;
 
+    private async Task _getRecordsSupportiveWorks(int disciplineId)
+    {
+        if (_supportiveWorksComp != null)
+            await _supportiveWorksComp.GetRecords(disciplineId);
+    }
+
     private void _resetSelectedSupportiveWoprk()
     {
         if (_supportiveWorksComp != null)
@@ -298,8 +290,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-
-
     #region On Create Offer WorkFlow
     private OffersComp _offersComp;
     private async Task _onClientResultChanged(ClientVM client)
@@ -310,6 +300,8 @@ public partial class Dashboard : IDisposable
         }
     }
     #endregion
+
+
 
     #region Get Records
     private async Task _getHoursCorrectionsRequests()
@@ -365,212 +357,36 @@ public partial class Dashboard : IDisposable
     {
         _userTotalHoursThisMonth = await _dataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
     }
-
-    public async Task _getClients()
-    {
-        _selectedClient = null;
-        _selectedOffer = null;
-        _selectedProject = null;
-        _resetSelectedDisciplines();;
-        _resetSelectedDeliverable();
-        _resetSelectedSupportiveWoprk();
-        _clearRecordsDisciplines();
-        _clearRecordsDeliverables();
-        _clearRecordsSupportiveWoprk();
-
-        try
-        {
-            var dtos = await _dataProvider.Clients.GetAll();
-            var vms = Mapper.Map<List<ClientVM>>(dtos);
-            _clients.Clear();
-            vms.ForEach(_clients.Add);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Dashboard._getClients(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
-        _startLoading = false;
-    }
-
-    public async Task _getOffers(bool reset = true)
-    {
-        if (reset)
-        {
-            _selectedOffer = null;
-            _selectedProject = null;
-            _resetSelectedDisciplines();;
-            _resetSelectedDeliverable();
-            _resetSelectedSupportiveWoprk();
-            _clearRecordsDisciplines();
-            _clearRecordsDeliverables();
-            _clearRecordsSupportiveWoprk();
-        }
-
-        try
-        {
-            var dtos = await _dataProvider.Offers.GetAllByLead(_selectedClient?.Id ?? 0);
-            var vms = Mapper.Map<List<OfferVM>>(dtos);
-            _offers.Clear();
-            vms.ForEach(_offers.Add);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Dashboard._getOffers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
-        _startLoading = false;
-    }
-
-    public async Task _getProjects(bool? active = null)
-    {
-        _selectedProject = null;
-        _resetSelectedDisciplines();;
-        _resetSelectedDeliverable();
-        _resetSelectedSupportiveWoprk();
-        _clearRecordsDisciplines();
-        _clearRecordsDeliverables();
-        _clearRecordsSupportiveWoprk();
-
-        try
-        {
-            // Get Projects of last month
-            List<ProjectDto> projectsDto =
-                (await _dataProvider.Projects
-                    .GetProjectsWithFallback(
-                        _sharedAuthData.LogedUser.Id,
-                        offerId: _selectedOffer?.Id ?? 0,
-                        active: active
-                )).ToList<ProjectDto>();
-
-            var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
-
-            _projects.Clear();
-            foreach (var p in projectsVm)
-            {
-                var pm = await _dataProvider.Projects.GetProjectManager(p.Id);
-                p.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
-                _projects.Add(p);
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Dashboard._getProjects(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
-        _startLoading = false;
-    }
-
-    private async Task _getProjectManagers()
-    {
-        try
-        {
-            var defaultRoleId = await GetRoleId("Project Manager");
-            if (defaultRoleId == 0)
-                throw new Exception("Exception `Project Manager` role not exists!");
-
-            var pms = await _dataProvider.Roles.GetUsers(defaultRoleId);
-
-            if (pms == null)
-                throw new NullReferenceException(nameof(pms));
-
-            var pmsVM = Mapper.Map<List<UserVM>>(pms);
-
-            if (_selectedProject.ProjectManagerId != null && _selectedProject.ProjectManagerId != 0)
-            {
-                var myPM = await _dataProvider.Projects.GetProjectManager(_selectedProject.Id);
-                _selectedPmId = myPM.Id;
-            }
-
-            _projectManagers.Clear();
-            pmsVM.ForEach(_projectManagers.Add);
-
-            StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Dashboard._getProjectManagers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
-    }
-
-    private async Task<int> GetRoleId(string roleName)
-    {
-        try
-        {
-            var role = await _dataProvider.Roles.Get(roleName);
-            return role?.Id ?? 0;
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Dashboard.GetRoleId(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-            return 0;
-        }
-    }
-
-    private long GetProjectMenHours(int projecId) =>
-        _dataProvider.Projects.GetMenHours(projecId);
     #endregion
 
     #region When Row Selected Update Data
-    private async Task OnSelectClient(int clientId)
-    {
-        if (clientId == 0 || clientId == _selectedClient?.Id) return;
 
-        var client = _clients.FirstOrDefault(p => p.Id == clientId);
-        _offers.Clear();
-        _projects.Clear();
+
+
+    private async Task OnSelectProject(int projectId)
+    {
+        if (projectId == 0)
+            return;
+
         _clearRecordsDeliverables();
         _clearRecordsSupportiveWoprk();
         _clearRecordsDisciplines();
-        _selectedClient = client;
-        _selectedOffer = null;
-        _selectedProject = null;
         _resetSelectedDisciplines();;
         _resetSelectedDeliverable();
         _resetSelectedSupportiveWoprk();
 
-        await _getOffers();
-
-        StateHasChanged();
-    }
-
-    private async Task OnSelectOffer(int offerId)
-    {
-        if (offerId == 0 || offerId == _selectedOffer?.Id) return;
-
-        var offer = _offers.FirstOrDefault(p => p.Id == offerId);
-        _projects.Clear();
-        _clearRecordsDeliverables();
-        _clearRecordsSupportiveWoprk();
-        _clearRecordsDisciplines();
-        _selectedOffer = offer;
-        _selectedProject = null;
-        _resetSelectedDisciplines();;
-        _resetSelectedDeliverable();
-        _resetSelectedSupportiveWoprk();
-
-        await _getProjects(active: true);
-
-        StateHasChanged();
-    }
-
-    private async Task OnSelectProject(int projectId, bool force = false)
-    {
-        if (projectId == 0 || projectId == _selectedProject?.Id && !force) return;
-
-        var project = _projects.FirstOrDefault(p => p.Id == projectId);
-        _clearRecordsDeliverables();
-        _clearRecordsSupportiveWoprk();
-        _clearRecordsDisciplines();
-        _selectedProject = project;
-        _resetSelectedDisciplines();;
-        _resetSelectedDeliverable();
-        _resetSelectedSupportiveWoprk();
-
-
-        await _disciplinesComp.GetRecords(_selectedProject.Id);
-        
+        await _getRecordsDisciplines(projectId);
 
         await _checkIfHasAnySelections();
 
         StateHasChanged();
+    }
+
+    private void OnEditProject()
+    {
+        _resetSelectedDisciplines(); ;
+        _resetSelectedDeliverable();
+        _resetSelectedSupportiveWoprk();
     }
 
     private async void OnSelectDiscipline(int disciplineId)
@@ -578,8 +394,8 @@ public partial class Dashboard : IDisposable
         if (disciplineId == 0)
             return;
 
-        await _deliverablesComp.GetRecords(disciplineId);
-        await _supportiveWorksComp.GetRecords(disciplineId);
+        await _getRecordsDeliverables(disciplineId);
+        await _getRecordsSupportiveWorks(disciplineId);
     }
     #endregion
 
@@ -665,7 +481,7 @@ public partial class Dashboard : IDisposable
             _resetChangesDeliverables();
             _resetChangesSupportiveWoprk();
 
-            await _getProjects();
+            await _getRecordsProjects(_selectedOffer?.Id ?? 0);
 
             // Clear Timer From this User
             TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
@@ -684,128 +500,16 @@ public partial class Dashboard : IDisposable
 
     public void _endWorkDialogCansel()
     {
-        _clientsChanged.Clear();
-        _offersChanged.Clear();
-        _projectsChanged.Clear();
+        _resetChangesProjects();
         _resetChangesDeliverables();
         _resetChangesSupportiveWoprk();
 
         _selectedClient = null;
         _selectedOffer = null;
-        //_selectedProject = null;
-        //_resetSelectedDisciplines();;
-        //_resetSelectedDeliverable();
-        //_resetSelectedSupportiveWoprk();
 
         StartWorkClick();
         _endWorkDialog.Hide();
         _isEndWorkDialogOdepened = false;
-    }
-    #endregion
-
-    #region Projects Managers Assign Actions (Project Assign)
-    void ToggleSelection(UserVM pm, string selectedValue)
-    {
-        pm.IsSelected = !_projectManagers.First(p => p.Id.ToString() == selectedValue).IsSelected;
-    }
-
-    private async Task OnProjectAssignClick(ProjectVM project)
-    {
-        if (!isWorkingMode) return;
-        try
-        {
-            bool neaSelected = _selectedProject.Id != project.Id;
-
-            if (neaSelected)
-                _selectedProject = project;
-
-            await _getProjectManagers();
-            if (neaSelected)
-            {
-                await OnSelectProject(_selectedProject.Id, true);
-                StateHasChanged();
-            }
-
-            _addPMDialog.Show();
-            _isAddPMDialogOdepened = true;
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Dashboard.OnProjectAssignClick(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
-    }
-
-    public async Task _addPMDialogAccept()
-    {
-        try
-        {
-            var updated = _selectedProject.Clone() as ProjectVM;
-
-            var projectIndex = _projects.IndexOf(_selectedProject);
-
-            var pmDto = await _dataProvider.Users.Get(_selectedPmId);
-
-            if (pmDto == null)
-                return;
-
-            var pm = Mapping.Mapper.Map<User>(pmDto);
-            updated.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
-            updated.ProjectManagerId = _selectedPmId;
-            await _dataProvider.Projects.Update(Mapper.Map<ProjectDto>(updated));
-            updated.ProjectManager = pm;
-
-            var forDelete = _projects.FirstOrDefault(p => p.Id == updated.Id);
-            if (forDelete != null)
-                _projects.Remove(forDelete);
-
-            _projects.Insert(projectIndex, updated);
-
-            _addPMDialog.Hide();
-            _isAddPMDialogOdepened = false;
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Dashboard._addPMDialogAccept(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
-    }
-
-    public void _addPMDialogCansel()
-    {
-        _addPMDialog.Hide();
-        _isAddPMDialogOdepened = false;
-    }
-    #endregion
-
-    #region Add Issue Actions
-    private void OnAddIssueClick()
-    {
-        _startLoading = true;
-        issueCompoment.Refresh();
-        _startLoading = false;
-        _addIssueDialog.Show();
-        _isAddIssueDialogOdepened = true;
-    }
-
-    private void CloseAddIssueClick()
-    {
-        if (_isAddIssueDialogOdepened)
-        {
-            _addIssueDialog.Hide();
-            _isAddIssueDialogOdepened = false;
-        }
-    }
-
-    public async Task _addIssueDialogAccept()
-    {
-        await issueCompoment.HandleValidSubmit();
-        _addIssueDialog.Hide();
-        _isAddIssueDialogOdepened = false;
-    }
-
-    public void _addIssueDialogCansel()
-    {
-        _addIssueDialog.Hide();
-        _isAddIssueDialogOdepened = false;
     }
     #endregion
 
@@ -880,98 +584,6 @@ public partial class Dashboard : IDisposable
     }
     #endregion
 
-    #region Add/Edit/Delete Project Actions
-    private async Task NavigateOnMap(Address address)
-    {
-        if (address == null) return;
-        var directionsUrl = $"https://www.google.com/maps/dir/?api=1&destination={address.Latitude},{address.Longitude}&travelmode=driving&dir_action=navigate";
-        await MicrosoftTeams.OpenDirectionsInNewWindow(directionsUrl);
-    }
-
-    private async Task AddProject()
-    {
-        _selectedProject = null;
-        _resetSelectedDisciplines();;
-        _resetSelectedDeliverable();
-        _resetSelectedSupportiveWoprk();
-        _addEditProjectDialog.Show();
-        _isAddEditProjectDialogOdepened = true;
-
-        Offer offer = null;
-        if (!string.IsNullOrEmpty(selectedOfferFilterId))
-        {
-            var offerId = Convert.ToInt32(selectedOfferFilterId);
-            var dto = await _dataProvider.Offers.Get(offerId);
-            offer = Mapping.Mapper.Map<Offer>(dto);
-        }
-
-        await projectCompoment.Prepair(new ProjectVM()
-        {
-            Stage = null,
-            StageId = 0,
-            Offer = offer,
-            OfferId = offer != null ? offer.Id : 0,
-        });
-    }
-
-    private async Task EditProject()
-    {
-        _resetSelectedDisciplines();;
-        _resetSelectedDeliverable();
-        _resetSelectedSupportiveWoprk();
-        _addEditProjectDialog.Show();
-        _isAddEditProjectDialogOdepened = true;
-        await projectCompoment.Prepair();
-    }
-
-    private void CloseAddProjectClick()
-    {
-        if (_isAddEditProjectDialogOdepened)
-        {
-            _addEditProjectDialog.Hide();
-            _isAddEditProjectDialogOdepened = false;
-        }
-    }
-
-    private void DeleteProject()
-    {
-        _deleteDialogMsg = $"Are you sure you want delete {_selectedProject.Name}";
-        _deleteObj = nameof(_selectedProject);
-        _deleteDialog.Show();
-        _isDeleteDialogOdepened = true;
-    }
-
-    public async Task _addEditProjectDialogAccept()
-    {
-        var valid = projectCompoment.Validate();
-        if (valid)
-        {
-            await projectCompoment.SaveAsync();
-
-            var newProject = projectCompoment.GetProject();
-
-            if (_projects.Any(p => p.Id == newProject.Id))
-                _projects.Remove(newProject);
-
-            // Order by DeaLine and add new one on top
-            var sortedProjects = _projects.OrderByDescending(p => p.DeadLine).ToList();
-            sortedProjects.Insert(0, newProject);
-            _projects = new ObservableCollection<ProjectVM>(sortedProjects);
-
-            _addEditProjectDialog.Hide();
-            _isAddEditProjectDialogOdepened = false;
-
-            StateHasChanged();
-        }
-    }
-
-    public void _addEditProjectDialogCansel()
-    {
-        _addEditProjectDialog.Hide();
-        _isAddEditProjectDialogOdepened = false;
-    }
-    #endregion
-
     #region Correct Hours Dialog
     private async Task _correctHours()
     {
@@ -1011,7 +623,7 @@ public partial class Dashboard : IDisposable
             //    case nameof(_selectedProject):
             //        await _dataProvider.Projects.Delete(_selectedProject.Id);
             //        _projects.Remove(_selectedProject);
-            //        _selectedProject = null;
+            //        _resetSelectedProjects();
             //        break;
             //    case nameof(_selectedDiscipline):
             //        await _dataProvider.Disciplines.Delete(_selectedDiscipline.Id);
@@ -1109,18 +721,6 @@ public partial class Dashboard : IDisposable
 
     }
     #endregion
-
-    private async Task ExportProjectsToCSV()
-    {
-        var date = DateTime.Today;
-        var fileName = $"Projects-{date.ToEuropeFormat()}.csv";
-        var data = _projects.ToList();
-        if (_projects.Count > 0)
-        {
-            string csvContent = Data.GetCsvContent(_projects);
-            await MicrosoftTeams.DownloadCsvFile(fileName, csvContent);
-        }
-    } 
 
     #region Database Manipulation
     bool _backUpLoading = false;

@@ -1,0 +1,362 @@
+﻿@using EmpiriaBMS.Front.Components.Offers
+@using EmpiriaBMS.Front.Components.KPIS
+@using EmpiriaBMS.Front.Horizontal
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Admin
+@using Color = Microsoft.Fast.Components.FluentUI.Color
+@using EmpiriaBMS.Core.Services.DBManipulation
+@using EmpiriaBMS.Front.Components.WorkingHours
+@using EmpiriaBMS.Front.Components.Reports
+@using EmpiriaBMS.Models.Enum
+@using EmpiriaBMS.Front.Components.Clients
+@using EmpiriaBMS.Front.Components.MainDashboard.Deliverables
+@using EmpiriaBMS.Front.Components.MainDashboard.Disciplines
+@using EmpiriaBMS.Front.Components.MainDashboard.Issues
+@using EmpiriaBMS.Front.Components.MainDashboard.Projects
+@using EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks
+
+@inject TeamsFx teamsfx
+@inject TeamsUserCredential teamsUserCredential
+@inject MicrosoftTeams MicrosoftTeams
+@inject IWebHostEnvironment HostEnvironment
+@inject IConfiguration Configuration
+@inject NavigationManager MyNavigationManager
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+@inject TimerService TimerService
+@inject AuthorizeServices authorizeServices
+@inject SharedAuthDataService _sharedAuthData
+@inject IDialogService DialogService
+@inject DatabaseBackupService DatabaseBackupService
+@inject Logging.LoggerManager Logger
+
+
+<div style="min-width: @((IsWorkingMode ? "660px" : "500px")); width: 100%;">
+    <!-- Actions -->
+    <div style="height: 74px;">
+        <div class="text-start row me-2">
+            <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
+        </div>
+        <div class="text-center row me-2">
+            <div class="col-6">
+                <!-- Projects Filters -->
+                <FluentStack HorizontalAlignment="HorizontalAlignment.Start">
+
+                    <!-- Project Name -->
+                    <FluentSearch @bind-Value="@_projectNameFilter"
+                                  @oninput="@HandleProjectNameFilter"
+                                  Placeholder="Project"
+                                  AriaLabel="Name"
+                                  Style="min-width: 150px !important; max-width: 151px !important; margin-left: 14px; margin-bottom: 4px;" />
+
+                    <!-- Offer -->
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Offer"
+                                    AriaLabel="Offer"
+                                    Height="140px"
+                                    Width="150px"
+                                    Items="@_offers"
+                                    TOption="OfferVM"
+                                    OptionValue="@((t) => t.Id.ToString())"
+                                    OptionText="@((t) => t.Code)"
+                                    SelectedOptionChanged="@_onOfferFilterChanged" />
+
+                </FluentStack>
+            </div>
+            <div class="col-6">
+                <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                    @if (IsWorkingMode && editProject)
+                    {
+                        @if (_selectedProject != null)
+                        {
+                            <span class="navigate-outline my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
+                                  style="display: @((_selectedProject?.Offer?.Client?.Address != null ? "block" : "none" ));"
+                                  @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Client?.Address))" />
+
+                            <span class="fluent--delete-28-regular mb-1"
+                                  @onclick="@(() => DeleteProject())" />
+
+                            <span class="material-symbols--edit-outline"
+                                  @onclick="@(async () => await EditProject())" />
+                        }
+                        <span class="grommet-icons--add"
+                              @onclick="@(async () => await AddProject())" />
+                    }
+
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                  Appearance="Appearance.Outline"
+                                  OnClick="@(async (e) => await ExportProjectsToCSV())"
+                                  Disabled="@(_data.Count() == 0)">
+                        Export
+                    </FluentButton>
+
+                </FluentStack>
+            </div>
+        </div>
+    </div>
+    <!-- Table -->
+    <div class="table-responsive mt-2 p-1 table-container"
+         style="overflow-x: auto !important;">
+        <table class="table table-hover table-success text-center">
+            <thead>
+                <tr>
+                    <th scope="col" class="sticky-header">Status</th>
+                    <th scope="col" class="sticky-header">Project</th>
+                    <th scope="col" class="sticky-header">Work Package Declared Completed</th>
+                    <th scope="col" class="sticky-header">Estimated Hours Completed</th>
+                    <th scope="col" class="sticky-header">Deadline</th>
+                    @if (IsWorkingMode)
+                    {
+                        <th scope="col" class="sticky-header">Issue</th>
+                    }
+                    @if (IsWorkingMode && assignPm)
+                    {
+                        <th scope="col" class="sticky-header">PM</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @*
+                @(( @GetProjectMenHours(project.Id) > project.EstimatedHours ? "table-warning" : ""))
+                @(( project.DeadLine < DateTime.Now ? "table-danger" : ""))
+                @(( project.EstimatedCompleted >= 100 || !project.Active ? "table-secondary" : ""))
+                *@
+                @foreach (var project in _filteredProjects)
+                {
+                    <tr class="align-middle">
+
+                        <td class="align-middle @((_selectedProject == null ||
+                                !_selectedProject.Id.Equals(project.Id)
+                                                ? "" : "selected_table_projects_row"))"
+                            style="word-wrap: break-word; max-width: 110px;"
+                            @onclick="@(async () => await OnRowSelect(project.Id))">
+
+                            @if (@GetProjectMenHours(project.Id) > project.EstimatedHours)
+                            {
+                                <span class="icon-worked-hours-passed"></span>
+                            }
+                            else if (project.DeadLine < DateTime.Now)
+                            {
+                                <span class="icon-missed-deadline"></span>
+                            }
+                            else if (project.EstimatedCompleted >= 100 || !project.Active)
+                            {
+                                <span class="icon-estimation-completion-passed"></span>
+                            }
+                            else
+                            {
+                                <span class="icon-all-ok"></span>
+                            }
+
+                        </td>
+
+                        <td class="align-middle @((_selectedProject == null ||
+                                !_selectedProject.Id.Equals(project.Id)
+                                                ? "" : "selected_table_projects_row"))"
+                            style="word-wrap: break-word; max-width: 110px;"
+                            @onclick="@(async () => await OnRowSelect(project.Id))">
+                            <labe>@project.Name</labe>
+                        </td>
+
+                        <td class="align-middle @((_selectedProject == null ||
+                                !_selectedProject.Id.Equals(project.Id)
+                                                ? "" : "selected_table_projects_row"))"
+                            @onclick="@(async () => await OnRowSelect(project.Id))">
+                            <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
+                        </td>
+
+                        <td class="align-middle @((_selectedProject == null ||
+                                !_selectedProject.Id.Equals(project.Id)
+                                                ? "" : "selected_table_projects_row"))"
+                            @onclick="@(async () => await OnRowSelect(project.Id))">
+                            <label>@(project.EstimatedCompleted.ToString("##0.0")) %</label>
+                        </td>
+
+                        <td class="align-middle @((_selectedProject == null ||
+                                !_selectedProject.Id.Equals(project.Id)
+                                                ? "" : "selected_table_projects_row"))"
+                            @onclick="@(async () => await OnRowSelect(project.Id))"
+                            style="min-width: 100px;">
+                            <label>@project.DeadLine?.ToEuropeFormat()</label>
+                        </td>
+
+                        @if (IsWorkingMode)
+                        {
+                            <td class="align-middle @((_selectedProject == null ||
+                                    !_selectedProject.Id.Equals(project.Id)
+                                                    ? "" : "selected_table_projects_row-hover"))">
+                                <span class="majesticons--chat-2-text"
+                                      @onclick="@OnAddIssueClick">
+                                </span>
+                            </td>
+                        }
+
+                        @if (IsWorkingMode && assignPm)
+                        {
+                            <td class="align-middle @((_selectedProject == null ||
+                                    !_selectedProject.Id.Equals(project.Id)
+                                                    ? "" : "selected_table_projects_row"))">
+                                @if (!string.IsNullOrEmpty(project.PmName))
+                                {
+                                    <button type="button" class="btn btn-outline-info default-color"
+                                            @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                        @project.PMFullName
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="clarity--assign-user-line"
+                                          @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                        Add PM
+                                    </span>
+                                }
+                            </td>
+                        }
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@if (!Loading)
+{
+    <!-- On "Change PM" Button Dialog -->
+    <FluentDialog @ref="_addPMDialog"
+                  Hidden="@(!_isAddPMDialogOdepened ||  Loading)"
+                  Modal="false"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: 400px !important;
+                         --dialog-height: auto !important;">
+
+        <div class="badge text-dark text-wrap fs-3">
+            Change PM
+        </div>
+
+        <div class="modal-body row">
+            <div class="m-1 row justify-content-center">
+                <div class="col-12 p-2">
+                    <select class="form-select form-select-lg" @bind="_selectedPmId">
+                        @foreach (var pm in _projectManagers)
+                        {
+                            <option value="@pm.Id"
+                                    selected="@pm.Id.Equals(_selectedPmId)"
+                                    @onchange="@(e => ToggleSelection(pm, e.Value.ToString()))">
+                                <span>@pm.LastName &nbsp; @pm.FirstName</span>
+                            </option>
+                        }
+                    </select>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addPMDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addPMDialogCansel())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add Issues Dialog -->
+    <FluentDialog @ref="_addIssueDialog"
+                  Hidden="@(!_isAddIssueDialogOdepened || Loading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: 700px !important;
+                         --dialog-height: 94vh !important;">
+
+        <div class="modal-body row mb-1">
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddIssueClick"></span>
+            </div>
+            <div class="col-12 justify-content-center">
+                <IssueDetailed @ref="@issueCompoment" Project="@_selectedProject" />
+            </div>
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addIssueDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => _addIssueDialogCansel())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Add/Edit Project Dialog -->
+    <FluentDialog @ref="_addEditProjectDialog"
+                  Hidden="@(!_isAddEditProjectDialogOdepened || Loading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: min(80vw, 800px) !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+                <span class="carbon--close-outline float-end" @onclick="CloseAddProjectClick"></span>
+            </div>
+
+            <div class="col-12 justify-content-center" style="max-height: 640px; overflow-y: hidden;">
+                <ProjectDetailed @ref="@projectCompoment" Content="@_selectedProject" DisplayActions="false" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await _addEditProjectDialogAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => CloseAddProjectClick())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+
+    <!-- On Delete Dialog -->
+    <FluentDialog @ref="_deleteDialog"
+                  Hidden="@(!_isDeleteDialogOdepened || Loading)"
+                  Modal="true"
+                  DialogType=@DialogType.Panel
+                  style="--dialog-width: auto !important;
+                         --dialog-width: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header row">
+                <div class="col-10">
+                    <h3>Delete Record</h3>
+                </div>
+                <span class="col-2 carbon--close-outline float-end" @onclick="OnDeleteClose"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <p>@_deleteDialogMsg</p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <FluentButton class="col-6"
+                          OnClick="@(async () => await OnDeleteAccept())">
+                Ok
+            </FluentButton>
+            <FluentButton class="col-6" OnClick="@(() => OnDeleteClose())">
+                Cancel
+            </FluentButton>
+        </div>
+
+    </FluentDialog>
+}
