@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.MainDashboard.Projects;
 public partial class ProjectDetailed : ComponentBase
 {
     FluentCombobox<OfferVM> _offerCombo;

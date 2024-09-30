@@ -21,8 +21,13 @@ using System.Collections.ObjectModel;
 using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
 using EmpiriaBMS.Front.Components.Admin.Projects;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using EmpiriaBMS.Front.Components.MainDashboard.Projects;
+using EmpiriaBMS.Front.Components.MainDashboard.Issues;
+using EmpiriaBMS.Front.Components.MainDashboard.Deliverables;
+using EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
+using EmpiriaBMS.Front.Components.MainDashboard.SupportiveWorks;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.MainDashboard;
 public partial class Dashboard : IDisposable
 {
     #region Authorization Properties
@@ -64,8 +69,8 @@ public partial class Dashboard : IDisposable
     private double _userTotalHoursThisMonth = 0;
 
     #region Compoment Refrense
-    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceIncomesListRef;
-    private EmpiriaBMS.Front.Components.Invoices.Invoices _invoiceExpensesListRef;
+    private Invoices.Invoices _invoiceIncomesListRef;
+    private Invoices.Invoices _invoiceExpensesListRef;
     private KPIDashboard _kpiDashRef;
     private ComReports.TimeMGMT _timeMGMTRef;
     #endregion
@@ -82,7 +87,7 @@ public partial class Dashboard : IDisposable
     public string CurentDate => $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}";
 
     #region Projects Filter
-    IQueryable<ProjectVM>? _filteredProjects => _projects?.AsQueryable()
+    IQueryable<ProjectVM> _filteredProjects => _projects?.AsQueryable()
         .Where(p => _filterProjects(p));
 
     private string _projectNameFilter = string.Empty;
@@ -399,7 +404,7 @@ public partial class Dashboard : IDisposable
         try
         {
             // Get Projects of last month
-            List<ProjectDto> projectsDto = 
+            List<ProjectDto> projectsDto =
                 (await _dataProvider.Projects
                     .GetProjectsWithFallback(
                         _sharedAuthData.LogedUser.Id,
@@ -867,7 +872,7 @@ public partial class Dashboard : IDisposable
                 await OnSelectProject(_selectedProject.Id, true);
                 StateHasChanged();
             }
-                
+
             _addPMDialog.Show();
             _isAddPMDialogOdepened = true;
         }
@@ -1344,7 +1349,7 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Tab Actions
-    private string? _activeid = "tab-home";
+    private string _activeid = "tab-home";
     #endregion
 
     #region Invoice

@@ -5,7 +5,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using EmpiriaBMS.Models.Models;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.MainDashboard.Disciplines;
 
 public partial class DisciplineDetailed : ComponentBase, IDisposable
 {
@@ -52,7 +52,7 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
         var disciplineType = _disciplineTypes.FirstOrDefault(t => t.Id == pdisciplineTypeId);
         _discipline.TypeId = pdisciplineTypeId;
         _discipline.Type = null;
-        
+
         await _getDisciplineTypes();
     }
 
