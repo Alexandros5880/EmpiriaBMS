@@ -18,8 +18,8 @@ public class OfferDto : EntityDto
     public int? SubCategoryId { get; set; }
     public ProjectSubCategory SubCategory { get; set; }
 
-    public int? LeadId { get; set; }
-    public Lead? Lead { get; set; }
+    public int? ClientId { get; set; }
+    public Client? Client { get; set; }
 
     public int? ProjectId { get; set; }
     public Project? Project { get; set; }

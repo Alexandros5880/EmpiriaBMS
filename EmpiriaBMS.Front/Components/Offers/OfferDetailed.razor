@@ -15,7 +15,7 @@
     }
 
     <div class="col-12 row" style="height: 440px; overflow-y: auto;">
-        
+
         <div class="col-12 row gx-2 mt-2">
             <!-- Result -->
             <div class="col-xl-6 col-lg-6 col-md-12">
@@ -48,23 +48,23 @@
                     </div>
                 }
             </div>
-            <!-- Lead -->
+            <!-- Client -->
             <div class="col-xl-6 col-lg-6 col-md-12">
                 <div class="col-12">
-                    Lead<span class="text-danger">*</span>
+                    Client<span class="text-danger">*</span>
                 </div>
                 <div class="col-12">
-                    <FluentCombobox @ref="@_leadCombo"
-                                    Placeholder="Select Category..."
-                                    Items="@_leads"
+                    <FluentCombobox @ref="@_clientCombo"
+                                    Placeholder="Select Client..."
+                                    Items="@_clients"
                                     Height="200px"
                                     Width="100%"
-                                    TOption="LeadVM"
-                                    OptionText="@(c => c.Name)"
+                                    TOption="ClientVM"
+                                    OptionText="@(c => $"{c.CompanyName} - {c.FullName}")"
                                     OptionValue="@(c => c.Id.ToString())"
-                                    SelectedOptionChanged="@(async (e) => await _onLeadChanged(e))" />
+                                    SelectedOptionChanged="@(async (e) => await _onClientChanged(e))" />
                 </div>
-                @if (!validLead)
+                @if (!validClient)
                 {
                     <div class="col-12">
                         <span class="text-warning">Field is required!</span>
@@ -80,7 +80,8 @@
                     Type<span class="text-danger">*</span>
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                    <FluentCombobox @ref="@_typeCombo"
+                                    Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Type..."
                                     Items="@_types"
                                     Height="200px"
@@ -103,7 +104,8 @@
                     State<span class="text-danger">*</span>
                 </div>
                 <div>
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                    <FluentCombobox @ref="@_stateCombo"
+                                    Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select State..."
                                     Items="_states"
                                     Height="200px"

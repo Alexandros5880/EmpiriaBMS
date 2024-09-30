@@ -44,36 +44,29 @@ public class ReportsRepo : IDisposable
                     offer => offer.Id,
                     (project, offer) => new { project, offer })
                 .Join(
-                    _context.Set<Lead>(),
-                    offerProject => offerProject.offer.LeadId,
-                    lead => lead.Id,
-                    (offerProject, lead) => new { offerProject.project, offerProject.offer, lead })
-                .Join(
                     _context.Set<Client>(),
-                    leadOfferProject => leadOfferProject.lead.ClientId,
+                    OfferProject => OfferProject.offer.ClientId,
                     client => client.Id,
-                    (leadOfferProject, client) => new { leadOfferProject.project, leadOfferProject.offer, leadOfferProject.lead, client })
+                    (leadOfferProject, client) => new { leadOfferProject.project, leadOfferProject.offer, client })
                 .Join(
                     _context.Set<ProjectCategory>(),
-                    leadOfferClientProject => leadOfferClientProject.offer.CategoryId,
+                    OfferClientProject => OfferClientProject.offer.CategoryId,
                     cat => cat.Id,
                     (leadOfferClientProject, cat) => new
                     {
                         project = leadOfferClientProject.project,
                         offer = leadOfferClientProject.offer,
-                        lead = leadOfferClientProject.lead,
                         client = leadOfferClientProject.client,
                         category = cat
                     })
                 .Join(
                     _context.Set<ProjectSubCategory>(),
-                    leadOfferClientCatProject => leadOfferClientCatProject.offer.SubCategoryId,
+                    OfferClientCatProject => OfferClientCatProject.offer.SubCategoryId,
                     subCat => subCat.Id,
                     (leadOfferClientCatProject, subCat) => new ReportProjectReturnModel
                     {
                         Project = leadOfferClientCatProject.project,
                         Offer = leadOfferClientCatProject.offer,
-                        Lead = leadOfferClientCatProject.lead,
                         Client = leadOfferClientCatProject.client,
                         Category = leadOfferClientCatProject.category,
                         SubCategory = subCat

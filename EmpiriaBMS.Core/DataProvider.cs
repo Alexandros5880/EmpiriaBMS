@@ -32,7 +32,6 @@ public class DataProvider : IDataProvider, IDisposable
     public OfferRepo Offers { get; set; }
     public EmailRepo Emails { get; set; }
     public TeamsRequestedUserRepo TeamsRequestedUsers { get; set; }
-    public LeadRepo Leads { get; set; }
     public KpisRepo KPIS { get; set; }
     public WorkingTime WorkingTime { get; set; }
     public ReportsRepo Reports { get; set; }
@@ -68,7 +67,6 @@ public class DataProvider : IDataProvider, IDisposable
         Offers = new OfferRepo(dbFactory, logger);
         Emails = new EmailRepo(dbFactory, logger);
         TeamsRequestedUsers = new TeamsRequestedUserRepo(dbFactory, logger);
-        Leads = new LeadRepo(dbFactory, logger);
         KPIS = new KpisRepo(dbFactory, logger);
         WorkingTime = new WorkingTime(dbFactory, logger);
         Reports = new ReportsRepo(dbFactory, logger);
@@ -106,7 +104,6 @@ public class DataProvider : IDataProvider, IDisposable
                 Offers.Dispose();
                 Emails.Dispose();
                 TeamsRequestedUsers.Dispose();
-                Leads.Dispose();
                 KPIS.Dispose();
                 WorkingTime.Dispose();
                 Reports.Dispose();

@@ -106,7 +106,7 @@
                                 Pagination="@pagination"
                                 TGridItem="ReportProjectReturnModel"
                                 OnRowFocus="HandleRowFocus"
-                                GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr"
+                                GridTemplateColumns="2fr 2fr 2fr 2fr 2fr 2fr 2fr"
                                 style="height: 240px; overflow:auto;">
 
                     <TemplateColumn Title="Name"
@@ -128,8 +128,6 @@
                     </TemplateColumn>
 
                     <PropertyColumn Property="@(p => p.Client.CompanyName)" Sortable="true" Title="Client" Align="@Align.Start" />
-
-                    <PropertyColumn Property="@(p => p.Lead.Name)" Sortable="true" Title="Lead" Align="@Align.Start" />
 
                     <PropertyColumn Property="@(p => p.Offer.Code)" Sortable="true" Title="Offer" Align="@Align.Start" />
 

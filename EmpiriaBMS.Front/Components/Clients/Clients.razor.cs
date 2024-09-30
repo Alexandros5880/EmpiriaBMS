@@ -1,6 +1,6 @@
-﻿using EmpiriaBMS.Core.Dtos;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
-using EmpiriaBMS.Front.Components.Admin.Leads;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
 using EmpiriaBMS.Models.Enum;
@@ -8,26 +8,26 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
 using System.ComponentModel.DataAnnotations;
+using System.IO.Pipelines;
 using System.Reflection;
-using System.Reflection.Metadata;
 
-namespace EmpiriaBMS.Front.Components.Leads;
+namespace EmpiriaBMS.Front.Components.Clients;
 
-public partial class Leads
+public partial class Clients
 {
     [Parameter]
-    public EventCallback<LeadVM> OnResultChanged { get; set; }
+    public EventCallback<ClientVM> OnResultChanged { get; set; }
 
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
 
     #region Data Grid
-    private List<LeadVM> _records = new List<LeadVM>();
+    private List<ClientVM> _records = new List<ClientVM>();
     private string _filterString = string.Empty;
-    IQueryable<LeadVM> FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
-    PaginationState pagination = new PaginationState { ItemsPerPage = 6 };
+    IQueryable<ClientVM>? FilteredItems => _records?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
-    private LeadVM _selectedRecord = new LeadVM();
+    private ClientVM _selectedRecord = new ClientVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -41,35 +41,22 @@ public partial class Leads
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<LeadVM> row)
+    private void HandleRowFocus(FluentDataGridRow<ClientVM> row)
     {
-        _selectedRecord = row.Item as LeadVM;
+        _selectedRecord = row.Item as ClientVM;
     }
 
-    private async Task HandleResultChange(LeadVM context, ChangeEventArgs e)
+    private async Task _getRecords(ClientResult result = ClientResult.WAITING)
     {
-        if (Enum.TryParse<LeadResult>(e.Value.ToString(), out var newResult))
-        {
-            context.Result = newResult;
-            var dto = Mapper.Map<LeadDto>(context);
-            await DataProvider.Leads.Update(dto);
-            await _getRecords();
-
-            await OnResultChanged.InvokeAsync(context);
-        }
-    }
-
-    private async Task _getRecords(LeadResult result = LeadResult.WAITING)
-    {
-        var dtos = await DataProvider.Leads.GetByResult(result);
-        _records = Mapper.Map<List<LeadVM>>(dtos);
+        var dtos = await DataProvider.Clients.GetByResult(result);
+        _records = Mapper.Map<List<ClientVM>>(dtos);
     }
 
     private async Task _add()
     {
         DialogParameters parameters = new()
         {
-            Title = $"New Record",
+            Title = $"New Client",
             PrimaryActionEnabled = true,
             SecondaryActionEnabled = true,
             PrimaryAction = "Save",
@@ -77,34 +64,29 @@ public partial class Leads
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(70%, 700px);"
+            Width = "min(max(50vw, 500px), 1000px)",
+            Height = "min(max(80vh, 500px), 1000px)"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<LeadDetailedDialog>(new LeadVM()
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(new ClientVM()
         {
             ExpectedDurationDate = DateTime.Now,
-            Result = Models.Enum.LeadResult.WAITING
+            Result = Models.Enum.ClientResult.WAITING
         }, parameters);
-        DialogResult result = await dialog.Result;
+        DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            LeadVM vm = result.Data as LeadVM;
-
-            // Update Result Filter To Waiting
-            var waitingResult = vm.Result.ToTuple();
-            SetSelectedOption(waitingResult.Value);
-            StateHasChanged();
-            await _onResultSelectionChanged(waitingResult);
-
+            ClientVM vm = result.Data as ClientVM;
+            _records.Add(vm);
         }
     }
 
-    private async Task _edit(LeadVM record)
+    private async Task _edit(ClientVM record)
     {
         DialogParameters parameters = new()
         {
-            Title = $"Edit Record {record.Name}",
+            Title = $"Edit {record.FullName}",
             PrimaryActionEnabled = true,
             SecondaryActionEnabled = true,
             PrimaryAction = "Save",
@@ -112,62 +94,55 @@ public partial class Leads
             TrapFocus = true,
             Modal = true,
             PreventScroll = true,
-            Width = "min(70%, 700px);"
+            Width = "min(max(50vw, 500px), 1000px)",
+            Height = "min(max(80vh, 500px), 1000px)"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<LeadDetailedDialog>(record, parameters);
-        DialogResult result = await dialog.Result;
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(record, parameters);
+        DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            // Update Record
-            LeadVM vm = result.Data as LeadVM;
-            // Update Result Filter To Waiting
-            var waitingResult = vm.Result.ToTuple();
-            SetSelectedOption(waitingResult.Value);
-            StateHasChanged();
-            await _onResultSelectionChanged(waitingResult);
+            ClientVM vm = result.Data as ClientVM;
+            _records.Add(vm);
         }
     }
 
-    private async Task _delete(LeadVM record)
+    private async Task _delete(ClientVM record)
     {
-        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete led {record.Name}?", "Yes", "No", "Deleting record...");
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the client {record.FullName}?", "Yes", "No", "Deleting record...");
 
         DialogResult result = await dialog.Result;
 
         if (!result.Cancelled)
         {
-            await DataProvider.Leads.Delete(record.Id);
+            await DataProvider.Clients.Delete(record.Id);
         }
 
         await dialog.CloseAsync();
+        await _getRecords();
+    }
 
-        LeadResult e;
-        Enum.TryParse(_selectedResult.Value, out e);
-        await _getRecords(e);
-        StateHasChanged();
+    private async Task HandleResultChange(ClientVM context, ChangeEventArgs e)
+    {
+        if (Enum.TryParse<ClientResult>(e.Value.ToString(), out var newResult))
+        {
+            context.Result = newResult;
+            var dto = Mapper.Map<ClientDto>(context);
+            await DataProvider.Clients.Update(dto);
+            await _getRecords();
+
+            await OnResultChanged.InvokeAsync(context);
+        }
     }
     #endregion
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            var resultFilter = LeadResult.WAITING;
-            _selectedResult = resultFilter.ToTuple();
-            SetSelectedOption(_selectedResult.Value);
-            await _getRecords(resultFilter);
-        }
-    }
-
-    #region Filter Result
+    #region Filter
     FluentCombobox<(string Value, string Text)> _resultFilterCombo;
+    
 
-    private List<(string Value, string Text)> _leadResults = Enum.GetValues(typeof(LeadResult))
-                                                                  .Cast<LeadResult>()
+    private List<(string Value, string Text)> _clientsResults = Enum.GetValues(typeof(ClientResult))
+                                                                  .Cast<ClientResult>()
                                                                   .Select(e => (e.ToString(), e.GetType().GetMember(e.ToString())
                                                                       .First()
                                                                       .GetCustomAttribute<DisplayAttribute>()?
@@ -180,14 +155,14 @@ public partial class Leads
     private async Task _onResultSelectionChanged((string Value, string Text) result)
     {
         _selectedResult = result;
-        LeadResult e;
+        ClientResult e;
         Enum.TryParse(result.Value, out e);
         await _getRecords(e);
     }
 
     public void SetSelectedOption(string value)
     {
-        var selectedOption = _leadResults.FirstOrDefault(item => item.Value == value);
+        var selectedOption = _clientsResults.FirstOrDefault(item => item.Value == value);
         if (selectedOption != default)
         {
             _selectedResultValue = selectedOption.Value;
@@ -195,12 +170,25 @@ public partial class Leads
     }
     #endregion
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            var resultFilter = ClientResult.WAITING;
+            _selectedResult = resultFilter.ToTuple();
+            SetSelectedOption(_selectedResult.Value);
+            await _getRecords();
+        }
+    }
+
     #region Import/Export Data
     private async Task ExportToCSV()
     {
         var date = DateTime.Today;
-        var fileName = $"Leds-{date.ToEuropeFormat()}.csv";
-        var data = FilteredItems.Select(c => new LedExport(c)).ToList();
+        var fileName = $"Clients-{date.ToEuropeFormat()}.csv";
+        var data = FilteredItems.Select(c => new ClientExport(c)).ToList();
         if (data.Count > 0)
         {
             string csvContent = Data.GetCsvContent(data);
@@ -219,24 +207,24 @@ public partial class Leads
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<LedExport> data = await Data.ImportDataFromCsv<LedExport>(stream);
+                List<ClientExport> data = await Data.ImportDataFromCsv<ClientExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
                     {
                         var vm = item.Get();
-                        var dto = Mapper.Map<LeadDto>(vm);
-                        var added = await DataProvider.Leads.Add(dto);
+                        var dto = Mapper.Map<ClientDto>(vm);
+                        var added = await DataProvider.Clients.Add(dto);
                         if (added == null)
                             continue;
-                        var addedDto = Mapper.Map<LeadVM>(added);
+                        var addedDto = Mapper.Map<ClientVM>(added);
                         _records.Add(addedDto);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Exception Leds.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+                Logger.LogError($"Exception Clients.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

@@ -39,7 +39,6 @@ public class AppDbContext : DbContext
     public DbSet<Document>? Documents { get; set; }
     public DbSet<Address>? Address { get; set; }
     public DbSet<Client>? Clients { get; set; }
-    public DbSet<Lead>? Leads { get; set; }
     public DbSet<Offer>? Offers { get; set; }
     public DbSet<OfferState>? OffesStates { get; set; }
     public DbSet<OfferType>? OffersTypes { get; set; }
@@ -526,14 +525,14 @@ public class AppDbContext : DbContext
             };
             builder.Entity<Permission>().HasData(per_37);
 
-            // See Leads On Dashboard
+            // See Clients On Dashboard
             var per_38_id = random.Next(123456789, 999999999);
             Permission per_38 = new Permission()
             {
                 Id = per_38_id,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                Name = "See Leads On Dashboard",
+                Name = "See Clients On Dashboard",
                 Ord = 38
             };
             builder.Entity<Permission>().HasData(per_38);
@@ -1578,7 +1577,7 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_114);
 
-            // CTO || See Leads On Dashboard
+            // CTO || See Clients On Dashboard
             RolePermission rp_122 = new RolePermission()
             {
                 Id = random.Next(123456789, 999999999) * 9,
@@ -2031,7 +2030,7 @@ public class AppDbContext : DbContext
             };
             builder.Entity<RolePermission>().HasData(rp_116);
 
-            // CEO || See Leads On Dashboard
+            // CEO || See Clients On Dashboard
             RolePermission rp_123 = new RolePermission()
             {
                 Id = random.Next(123456789, 999999999) * 9,
@@ -3773,22 +3772,12 @@ public class AppDbContext : DbContext
                     ProxyAddress = "alexandrosplatanios15@gmail.com",
                     Phone1 = "6949277783",
                     CompanyName = "Embiria BMS",
+                    Name = $"Alex Plat {i}",
+                    PotencialFee = random.Next(1000, 3000) + Math.Pow(i, 3),
+                    ExpectedDurationDate = DateTime.Now.AddMonths(i),
+                    Result = ClientResult.SUCCESSFUL
                 };
                 builder.Entity<Client>().HasData(client);
-
-                // Led
-                var ledId = random.Next(123456789, 999999999) + i * 3;
-                Lead led = new Lead()
-                {
-                    Id = ledId,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = $"Led-{i}",
-                    ClientId = clientId,
-                    PotencialFee = random.Next(i, i * 3),
-                    Result = LeadResult.SUCCESSFUL
-                };
-                builder.Entity<Lead>().HasData(led);
 
                 // Offers
                 var offerId = random.Next(123456789, 999999999) + i * 3;
@@ -3806,7 +3795,7 @@ public class AppDbContext : DbContext
                     OfferPrice = 1000 * i * 2,
                     CategoryId = projectCategories[categoriesIndex].Id,
                     SubCategoryId = projectSubCategories[i - 1].Id,
-                    LeadId = ledId,
+                    ClientId = clientId,
                 };
                 builder.Entity<Offer>().HasData(offer);
 
@@ -3884,27 +3873,17 @@ public class AppDbContext : DbContext
                     Id = clientId,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    FirstName = $"Client-Led-M-{i}",
+                    FirstName = $"Client-Led-{i}",
                     LastName = "LastName",
                     ProxyAddress = "alexandrosplatanios15@gmail.com",
                     Phone1 = "6949277783",
-                    CompanyName = "Embiria BMS"
+                    CompanyName = "Embiria BMS",
+                    Name = $"Alex Plat {i}",
+                    PotencialFee = random.Next(1000, 3000) + Math.Pow(i, 3),
+                    ExpectedDurationDate = DateTime.Now.AddMonths(i),
+                    Result = ClientResult.SUCCESSFUL
                 };
                 builder.Entity<Client>().HasData(client);
-
-                // Led
-                var ledId = random.Next(123456789, 999999999) + i * 3 + 13245;
-                Lead led = new Lead()
-                {
-                    Id = ledId,
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Name = $"Led-M-{i}",
-                    ClientId = clientId,
-                    PotencialFee = random.Next(i, i * 3),
-                    Result = LeadResult.SUCCESSFUL
-                };
-                builder.Entity<Lead>().HasData(led);
 
                 // Offers
                 var offerId = random.Next(123456789, 999999999) + i * 3;
@@ -3922,7 +3901,7 @@ public class AppDbContext : DbContext
                     OfferPrice = 1000 * i * 3,
                     CategoryId = projectCategories[categoriesIndex].Id,
                     SubCategoryId = projectSubCategories[subCategoriesIndex].Id,
-                    LeadId = ledId,
+                    ClientId = clientId
                 };
                 builder.Entity<Offer>().HasData(offer);
 
@@ -4159,7 +4138,6 @@ public class AppDbContext : DbContext
         allEntities.Add("Documents", await Documents.Cast<object>().ToListAsync());
         allEntities.Add("Address", await Address.Cast<object>().ToListAsync());
         allEntities.Add("Clients", await Clients.Cast<object>().ToListAsync());
-        allEntities.Add("Leds", await Leads.Cast<object>().ToListAsync());
         allEntities.Add("Offers", await Offers.Cast<object>().ToListAsync());
         allEntities.Add("OffesStates", await OffesStates.Cast<object>().ToListAsync());
         allEntities.Add("OffersTypes", await OffersTypes.Cast<object>().ToListAsync());

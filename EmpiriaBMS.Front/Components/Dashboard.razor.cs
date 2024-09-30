@@ -51,7 +51,7 @@ public partial class Dashboard : IDisposable
     bool seeBackupDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 35);
     bool seeRestoreDatabase => _sharedAuthData.Permissions.Any(p => p.Ord == 36);
     bool canChangeEverybodyHours => _sharedAuthData.Permissions.Any(p => p.Ord == 37);
-    bool seeLeadsOnDashboard => _sharedAuthData.Permissions.Any(p => p.Ord == 38);
+    bool seeClientsOnDashboard => _sharedAuthData.Permissions.Any(p => p.Ord == 38);
     bool canApproveTimeRequests => _sharedAuthData.Permissions.Any(p => p.Ord == 39);
     bool seeTimeMGMT => _sharedAuthData.Permissions.Any(p => p.Ord == 40);
     #endregion
@@ -117,13 +117,13 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Lists
-    private ObservableCollection<LeadVM> _leds = new ObservableCollection<LeadVM>();
+    private ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     private ObservableCollection<ProjectVM> _projects = new ObservableCollection<ProjectVM>();
     private ObservableCollection<DisciplineVM> _disciplines = new ObservableCollection<DisciplineVM>();
     private ObservableCollection<DeliverableVM> _deliverables = new ObservableCollection<DeliverableVM>();
     private ObservableCollection<SupportiveWorkVM> _supportiveWork = new ObservableCollection<SupportiveWorkVM>();
-    private List<LeadVM> _ledsChanged = new List<LeadVM>();
+    private List<ClientVM> _clientsChanged = new List<ClientVM>();
     private List<OfferVM> _offersChanged = new List<OfferVM>();
     private List<ProjectVM> _projectsChanged = new List<ProjectVM>();
     private List<DeliverableVM> _deliverablesChanged = new List<DeliverableVM>();
@@ -137,7 +137,7 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region Selected Models
-    private LeadVM _selectedLed = new LeadVM();
+    private ClientVM _selectedClient = new ClientVM();
     private OfferVM _selectedOffer = new OfferVM();
     private ProjectVM _selectedProject = new ProjectVM();
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
@@ -264,13 +264,10 @@ public partial class Dashboard : IDisposable
 
     #region On Create Offer WorkFlow
     private OffersComp _offersComp;
-    private async Task _onLeadResultChanged(LeadVM lead)
+    private async Task _onClientResultChanged(ClientVM client)
     {
-        if (lead.Result == LeadResult.SUCCESSFUL)
+        if (client.Result == ClientResult.SUCCESSFUL)
         {
-            //await _offersComp.SetLeadFilter(lead);
-            //await _offersComp.SetResultFilter(OfferResult.WAITING);
-            //await _offersComp.Search();
             await MicrosoftTeams.ScrollToElement("offers-table-dash");
         }
     }
@@ -335,9 +332,9 @@ public partial class Dashboard : IDisposable
         _userTotalHoursThisMonth = await _dataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
     }
 
-    public async Task _getLeds()
+    public async Task _getClients()
     {
-        _selectedLed = null;
+        _selectedClient = null;
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
@@ -349,14 +346,14 @@ public partial class Dashboard : IDisposable
 
         try
         {
-            var dtos = await _dataProvider.Leads.GetAll();
-            var vms = Mapper.Map<List<LeadVM>>(dtos);
-            _leds.Clear();
-            vms.ForEach(_leds.Add);
+            var dtos = await _dataProvider.Clients.GetAll();
+            var vms = Mapper.Map<List<ClientVM>>(dtos);
+            _clients.Clear();
+            vms.ForEach(_clients.Add);
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception Dashboard._getLeds(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception Dashboard._getClients(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
         _startLoading = false;
     }
@@ -377,7 +374,7 @@ public partial class Dashboard : IDisposable
 
         try
         {
-            var dtos = await _dataProvider.Offers.GetAllByLead(_selectedLed?.Id ?? 0);
+            var dtos = await _dataProvider.Offers.GetAllByLead(_selectedClient?.Id ?? 0);
             var vms = Mapper.Map<List<OfferVM>>(dtos);
             _offers.Clear();
             vms.ForEach(_offers.Add);
@@ -545,17 +542,17 @@ public partial class Dashboard : IDisposable
     #endregion
 
     #region When Row Selected Update Data
-    private async Task OnSelectLed(int ledId)
+    private async Task OnSelectClient(int clientId)
     {
-        if (ledId == 0 || ledId == _selectedLed?.Id) return;
+        if (clientId == 0 || clientId == _selectedClient?.Id) return;
 
-        var led = _leds.FirstOrDefault(p => p.Id == ledId);
+        var client = _clients.FirstOrDefault(p => p.Id == clientId);
         _offers.Clear();
         _projects.Clear();
         _deliverables.Clear();
         _supportiveWork.Clear();
         _disciplines.Clear();
-        _selectedLed = led;
+        _selectedClient = client;
         _selectedOffer = null;
         _selectedProject = null;
         _selectedDiscipline = null;
@@ -749,13 +746,13 @@ public partial class Dashboard : IDisposable
 
     public void _endWorkDialogCansel()
     {
-        _ledsChanged.Clear();
+        _clientsChanged.Clear();
         _offersChanged.Clear();
         _projectsChanged.Clear();
         _deliverablesChanged.Clear();
         _supportiveWorkChanged.Clear();
 
-        _selectedLed = null;
+        _selectedClient = null;
         _selectedOffer = null;
         //_selectedProject = null;
         //_selectedDiscipline = null;

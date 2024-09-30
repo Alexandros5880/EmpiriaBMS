@@ -29,7 +29,6 @@ namespace EmpiriaBMS.Core
         public OfferRepo Offers { get; set; }
         public EmailRepo Emails { get; set; }
         public TeamsRequestedUserRepo TeamsRequestedUsers { get; set; }
-        public LeadRepo Leads { get; set; }
         public KpisRepo KPIS { get; set; }
         public WorkingTime WorkingTime { get; set; }
         public ReportsRepo Reports { get; set; }
