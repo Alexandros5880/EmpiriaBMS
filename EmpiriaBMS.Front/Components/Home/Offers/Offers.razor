@@ -139,66 +139,76 @@
     </div>
 
     <!-- Offers Table -->
-    <div class="col-12">
-        <div class="border border-1 rounded mt-2 m-2"
-             style="height: 280px;">
-            <FluentDataGrid Items="@FilteredItems"
-                            ResizableColumns=true
-                            Pagination="@pagination"
-                            TGridItem="OfferVM"
-                            GridTemplateColumns="@((IsWorkingMode ? "3fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 100px" : "3fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 100px"))"
-                            style="height: 280px; overflow:auto;">
+    @if (_loading)
+    {
+        <div class="col-12 mt-5 mb-5">
+            <FluentProgressRing Style="margin: 0 auto;" />
+        </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="border border-1 rounded mt-2 m-2"
+                 style="height: 280px;">
+                <FluentDataGrid Items="@FilteredItems"
+                                ResizableColumns=true
+                                Pagination="@pagination"
+                                TGridItem="OfferVM"
+                                GridTemplateColumns="@((IsWorkingMode ? "3fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 100px" : "3fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr 100px"))"
+                                style="height: 280px; overflow:auto;">
 
-                <!-- Result -->
-                <TemplateColumn Title="Result" Sortable="true">
-                    <ChildContent>
-                        @if (IsWorkingMode)
-                        {
-                            <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
-                                @foreach (var result in Enum.GetValues(typeof(OfferResult)).Cast<OfferResult>())
-                                {
-                                    <option value="@(result)" selected="@(context.Result == result)">
-                                        @result.GetDisplayName()
-                                    </option>
-                                }
-                            </select>
-                        }
-                        else
-                        {
-                            <span>@context.Result.GetDisplayName()</span>
-                        }
-                    </ChildContent>
-                </TemplateColumn>
-
-                <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
-                <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
-                <PropertyColumn Property="@(p => p.Category.Name)" Sortable="true" Title="Category" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.SubCategory.Name)" Sortable="true" Title="SubCategory" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Style="min-width: 120px;" />
-                <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />
-                <PropertyColumn Property="@(p => p.PudgetPrice)" Sortable="true" Title="Pudget" Style="min-width: 100px;" />
-                <PropertyColumn Property="@(p => p.OfferPrice)" Sortable="true" Title="Price" Style="min-width: 100px;" />
-
-                @if (IsWorkingMode)
-                {
-                    <TemplateColumn Title="Actions" Align="@Align.End">
-                        <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(async () => await _edit(context))" />
-                        <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(async () => await _delete(context))" />
+                    <!-- Result -->
+                    <TemplateColumn Title="Result" Sortable="true">
+                        <ChildContent>
+                            @if (IsWorkingMode)
+                            {
+                                <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
+                                    @foreach (var result in Enum.GetValues(typeof(OfferResult)).Cast<OfferResult>())
+                                    {
+                                        <option value="@(result)" selected="@(context.Result == result)">
+                                            @result.GetDisplayName()
+                                        </option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <span>@context.Result.GetDisplayName()</span>
+                            }
+                        </ChildContent>
                     </TemplateColumn>
-                }
 
-            </FluentDataGrid>
+                    <PropertyColumn Property="@(p => p.State.Name)" Sortable="true" Title="State" Style="min-width: 140px;" />
+                    <PropertyColumn Property="@(p => p.Type.Name)" Sortable="true" Title="Type" Style="min-width: 100px;" />
+                    <PropertyColumn Property="@(p => p.Category.Name)" Sortable="true" Title="Category" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.SubCategory.Name)" Sortable="true" Title="SubCategory" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.Code)" Sortable="true" Title="Code" Style="min-width: 120px;" />
+                    <PropertyColumn Property="@(p => p.Date)" Sortable="true" Format="dd-mm-yyyy" Title="Date" Style="min-width: 100px;" />
+                    <PropertyColumn Property="@(p => p.PudgetPrice)" Sortable="true" Title="Pudget" Style="min-width: 100px;" />
+                    <PropertyColumn Property="@(p => p.OfferPrice)" Sortable="true" Title="Price" Style="min-width: 100px;" />
+
+                    @if (IsWorkingMode)
+                    {
+                        <TemplateColumn Title="Actions" Align="@Align.End">
+                            <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(async () => await _edit(context))" />
+                            <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(async () => await _delete(context))" />
+                        </TemplateColumn>
+                    }
+
+                </FluentDataGrid>
+            </div>
+            <div class="ms-2 me-2" style="min-width: 50%; margin: 0 auto;">
+                <FluentPaginator State="@pagination">
+                    <SummaryTemplate>
+                        There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                    </PaginationTextTemplate>
+                </FluentPaginator>
+            </div>
         </div>
-        <div class="ms-2 me-2" style="min-width: 50%; margin: 0 auto;">
-            <FluentPaginator State="@pagination">
-                <SummaryTemplate>
-                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
-                </SummaryTemplate>
-                <PaginationTextTemplate>
-                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
-                </PaginationTextTemplate>
-            </FluentPaginator>
-        </div>
-    </div>
+    }
+    
 
 </div>
