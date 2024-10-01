@@ -179,16 +179,22 @@ public partial class Clients
 
         if (firstRender)
         {
-            _loading = true;
-            StateHasChanged();
+            if (_loading == false)
+            {
+                _loading = true;
+                StateHasChanged();
+            }
 
             var resultFilter = ClientResult.WAITING;
             _selectedResult = resultFilter.ToTuple();
             SetSelectedOption(_selectedResult.Value);
             await _getRecords();
 
-            _loading = false;
-            StateHasChanged();
+            if (_loading == true)
+            {
+                _loading = false;
+                StateHasChanged();
+            }
         }
     }
 
@@ -202,8 +208,11 @@ public partial class Clients
 
         await _getRecords();
 
-        _loading = false;
-        StateHasChanged();
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
     }
 
     #region Import/Export Data

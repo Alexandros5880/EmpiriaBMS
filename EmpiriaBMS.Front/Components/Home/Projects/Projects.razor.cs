@@ -54,13 +54,19 @@ public partial class Projects
 
         if (firstRender)
         {
-            _loading = true;
-            StateHasChanged();
+            if (_loading == false)
+            {
+                _loading = true;
+                StateHasChanged();
+            }
 
             await GetRecords();
 
-            _loading = false;
-            StateHasChanged();
+            if (_loading == true)
+            {
+                _loading = false;
+                StateHasChanged();
+            }
         }
     }
 
@@ -74,8 +80,11 @@ public partial class Projects
 
         await GetRecords();
 
-        _loading = false;
-        StateHasChanged();
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
     }
 
     public void ResetSelection() =>

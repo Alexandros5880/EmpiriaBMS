@@ -13,14 +13,13 @@ namespace EmpiriaBMS.Front.Components.Home.Disciplines;
 
 public partial class Disciplines
 {
+    private bool _loading = false;
+
     #region Authorization Properties
     bool editDiscipline => _sharedAuthData.Permissions.Any(p => p.Ord == 14);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
     public bool assignEngineer => _sharedAuthData.PermissionOrds.Contains(4);
     #endregion
-
-    [Parameter]
-    public bool Loading { get; set; }
 
     [Parameter]
     public bool IsWorkingMode { get; set; }
@@ -56,6 +55,23 @@ public partial class Disciplines
 
     private ObservableCollection<UserVM> _engineers = new ObservableCollection<UserVM>();
 
+    public async Task Refresh()
+    {
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
+        await GetRecords(_projectId);
+
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
+    }
+
     public async Task CheckIfHasSelections()
     {
         if (_projectId != 0)
@@ -80,6 +96,12 @@ public partial class Disciplines
         if (projId == 0)
             return;
 
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
         _projectId = projId;
 
         var disciplines = await _dataProvider.Projects.GetDisciplines(projId, _sharedAuthData.LogedUser.Id, getAllDisciplines);
@@ -89,7 +111,11 @@ public partial class Disciplines
         foreach (var di in disciplines)
             _data.Add(Mapper.Map<DisciplineVM>(di));
 
-        StateHasChanged();
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
     }
 
     public void ClearRecords()

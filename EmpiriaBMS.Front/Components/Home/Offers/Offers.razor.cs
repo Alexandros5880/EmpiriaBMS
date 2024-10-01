@@ -75,12 +75,21 @@ public partial class Offers
 
         if (firstRender)
         {
-            _loading = true;
-            StateHasChanged();
+            if (_loading == false)
+            {
+                _loading = true;
+                StateHasChanged();
+            }
 
             var runInTeams = await MicrosoftTeams.IsInTeams();
 
             await Refresh();
+
+            if (_loading == true)
+            {
+                _loading = false;
+                StateHasChanged();
+            }
         }
     }
 
@@ -147,8 +156,11 @@ public partial class Offers
         Enum.TryParse(_selectedOfferResult.Value, out e);
         await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedClient?.Id ?? 0, e, refresh: true);
 
-        _loading = false;
-        StateHasChanged();
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
     }
 
     public async Task SetClientFilter(ClientVM client)

@@ -50,6 +50,7 @@ public partial class Home
         await _clientsComp?.Refresh();
         await _offersComp?.Refresh();
         await _projectsComp?.Refresh();
+        await _disciplinesComp?.Refresh();
     }
 
     #region Header Compoment
