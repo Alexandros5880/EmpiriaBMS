@@ -219,17 +219,21 @@ public partial class Projects
             var dto = Mapper.Map<ProjectDto>(vm);
 
             // Save Project
-            await _dataProvider.Projects.Add(dto);
+            var updatedDto = await _dataProvider.Projects.Add(dto);
+            var updateVm = Mapper.Map<ProjectVM>(updatedDto);
 
-            if (_data.Any(p => p.Id == vm.Id))
-                _data.Remove(vm);
+            if (_data.Any(p => p.Id == updateVm.Id))
+                _data.Remove(updateVm);
+
+            var pm = await _dataProvider.Projects.GetProjectManager(updateVm.Id);
+            updateVm.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
 
             // Order by DeaLine and add new one on top
             var sortedProjects = _data.OrderByDescending(p => p.DeadLine).ToList();
-            sortedProjects.Insert(0, vm);
+            sortedProjects.Insert(0, updateVm);
             _data = new ObservableCollection<ProjectVM>(sortedProjects);
 
-            _selectedProject = vm;
+            _selectedProject = updateVm;
             StateHasChanged();
         }
     }
@@ -259,17 +263,21 @@ public partial class Projects
             var dto = Mapper.Map<ProjectDto>(vm);
 
             // Save Project
-            await _dataProvider.Projects.Update(dto);
+            var updatedDto = await _dataProvider.Projects.Update(dto);
+            var updateVm = Mapper.Map<ProjectVM>(updatedDto);
 
-            if (_data.Any(p => p.Id == vm.Id))
-                _data.Remove(vm);
+            if (_data.Any(p => p.Id == updateVm.Id))
+                _data.Remove(updateVm);
+
+            var pm = await _dataProvider.Projects.GetProjectManager(updateVm.Id);
+            updateVm.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
 
             // Order by DeaLine and add new one on top
             var sortedProjects = _data.OrderByDescending(p => p.DeadLine).ToList();
-            sortedProjects.Insert(0, vm);
+            sortedProjects.Insert(0, updateVm);
             _data = new ObservableCollection<ProjectVM>(sortedProjects);
 
-            _selectedProject = vm;
+            _selectedProject = updateVm;
             StateHasChanged();
         }
     }

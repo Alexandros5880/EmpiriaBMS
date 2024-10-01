@@ -196,17 +196,16 @@
                             <td class="align-middle @((_selectedProject == null ||
                                     !_selectedProject.Id.Equals(project.Id)
                                                     ? "" : "selected_table_projects_row"))">
-                                @if (!string.IsNullOrEmpty(project.PMFullName))
+                                @if (!string.IsNullOrEmpty(project.PmName))
                                 {
                                     <button type="button" class="btn btn-outline-info default-color"
                                             @onclick="@(async (x) => await OnProjectAssignClick(project))">
-                                        @project.PMFullName
+                                        @project.PmName <br />
                                     </button>
                                 }
                                 else
                                 {
-                                    <span class="clarity--assign-user-line"
-                                          @onclick="@(async (x) => await OnProjectAssignClick(project))">
+                                    <span @onclick="@(async (x) => await OnProjectAssignClick(project))">
                                         Add PM
                                     </span>
                                 }
