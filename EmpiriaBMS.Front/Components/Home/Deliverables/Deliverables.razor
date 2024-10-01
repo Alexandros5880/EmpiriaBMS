@@ -165,12 +165,10 @@
                                     <tbody>
                                         @foreach (var designer in _designers)
                                         {
-                                            <tr clss="align-middle d-flex">
+                                            <tr clss="align-middle d-flex" @key="designer.Id">
                                                 <td class="align-middle">
-                                                    <input class="form-check-input big-checkbox mt-2"
-                                                           type="checkbox"
-                                                           id="isSelectedDesigner"
-                                                           @bind=@designer.IsSelected>
+                                                    <FluentCheckbox Class="big-checkbox mt-2"
+                                                                    @bind-Value="@designer.IsSelected"/>
                                                 </td>
                                                 <td class="align-middle">
                                                     <div class="ms-3 mt-2">

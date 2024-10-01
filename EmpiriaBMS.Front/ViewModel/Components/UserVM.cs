@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EmpiriaBMS.Front.ViewModel.Components;
 public class UserVM : BaseVM
 {
-    private bool? _isSelected = false;
-    public bool? IsSelected
+    private bool _isSelected = false;
+    public bool IsSelected
     {
         get => _isSelected;
         set
