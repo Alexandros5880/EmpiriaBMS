@@ -79,75 +79,83 @@
 
 <div class="row mt-1">
 
-    <div class="col-12">
-
-        <div class="border border-1 rounded mt-2 m-2" style="height: 280px;">
-            <FluentDataGrid Items="@FilteredItems"
-                            ResizableColumns=true
-                            Pagination="@pagination"
-                            TGridItem="ClientVM"
-                            OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="2fr 2fr 2fr 2fr 100px"
-                            style="height: 280px; overflow:auto;">
-
-                <!-- Result -->
-                <TemplateColumn Title="Result" Sortable="true">
-                    <ChildContent>
-                        @if (IsWorkingMode)
-                        {
-                            <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
-                                @foreach (var result in Enum.GetValues(typeof(ClientResult)).Cast<ClientResult>())
-                                {
-                                    <option value="@(result)" selected="@(context.Result == result)">
-                                        @result.GetDisplayName()
-                                    </option>
-                                }
-                            </select>
-                        }
-                        else
-                        {
-                            <span>@context.Result.GetDisplayName()</span>
-                        }
-                    </ChildContent>
-                </TemplateColumn>
-
-                <TemplateColumn Title="Name"
-                                Sortable="true"
-                                InitialSortDirection=SortDirection.Descending
-                                IsDefaultSortColumn=true>
-                    <ColumnOptions>
-                        <div class="search-box">
-                            <FluentSearch type="search"
-                                          Autofocus=true
-                                          @bind-Value="@_filterString"
-                                          Placeholder="Name..."
-                                          @oninput="@HandleFilter" />
-                        </div>
-                    </ColumnOptions>
-                    <ChildContent>
-                        @(context.FullName)
-                    </ChildContent>
-                </TemplateColumn>
-
-                <PropertyColumn Property="@(p => p.CompanyName)" Sortable="true" Title="Company" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.AddressFormated)" Sortable="true" Title="Address" Align="@Align.Start" />
-
-                <TemplateColumn Title="Actions" Align="@Align.End">
-                    <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
-                    <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
-                </TemplateColumn>
-
-            </FluentDataGrid>
+    @if (_loading)
+    {
+        <div class="col-12 mt-5 mb-5">
+            <FluentProgressRing Style="margin: 0 auto;" />
         </div>
-        <div style="min-width: 50%;">
-            <FluentPaginator State="@pagination">
-                <SummaryTemplate>
-                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
-                </SummaryTemplate>
-                <PaginationTextTemplate>
-                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
-                </PaginationTextTemplate>
-            </FluentPaginator>
+    }
+    else 
+    {
+        <div class="col-12">
+            <div class="border border-1 rounded mt-2 m-2" style="height: 280px;">
+                <FluentDataGrid Items="@FilteredItems"
+                                ResizableColumns=true
+                                Pagination="@pagination"
+                                TGridItem="ClientVM"
+                                OnRowFocus="HandleRowFocus"
+                                GridTemplateColumns="2fr 2fr 2fr 2fr 100px"
+                                style="height: 280px; overflow:auto;">
+
+                    <!-- Result -->
+                    <TemplateColumn Title="Result" Sortable="true">
+                        <ChildContent>
+                            @if (IsWorkingMode)
+                            {
+                                <select class="form-select" @onchange="@(async e => await HandleResultChange(context, e))">
+                                    @foreach (var result in Enum.GetValues(typeof(ClientResult)).Cast<ClientResult>())
+                                    {
+                                        <option value="@(result)" selected="@(context.Result == result)">
+                                            @result.GetDisplayName()
+                                        </option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <span>@context.Result.GetDisplayName()</span>
+                            }
+                        </ChildContent>
+                    </TemplateColumn>
+
+                    <TemplateColumn Title="Name"
+                                    Sortable="true"
+                                    InitialSortDirection=SortDirection.Descending
+                                    IsDefaultSortColumn=true>
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterString"
+                                              Placeholder="Name..."
+                                              @oninput="@HandleFilter" />
+                            </div>
+                        </ColumnOptions>
+                        <ChildContent>
+                            @(context.FullName)
+                        </ChildContent>
+                    </TemplateColumn>
+
+                    <PropertyColumn Property="@(p => p.CompanyName)" Sortable="true" Title="Company" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.AddressFormated)" Sortable="true" Title="Address" Align="@Align.Start" />
+
+                    <TemplateColumn Title="Actions" Align="@Align.End">
+                        <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                        <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                    </TemplateColumn>
+
+                </FluentDataGrid>
+            </div>
+            <div style="min-width: 50%;">
+                <FluentPaginator State="@pagination">
+                    <SummaryTemplate>
+                        There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                    </PaginationTextTemplate>
+                </FluentPaginator>
+            </div>
         </div>
-    </div>
+    }
 </div>

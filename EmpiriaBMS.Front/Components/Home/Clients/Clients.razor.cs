@@ -22,6 +22,8 @@ public partial class Clients
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
 
+    private bool _loading = false;
+
     #region Data Grid
     private List<ClientVM> _records = new List<ClientVM>();
     private string _filterString = string.Empty;
@@ -177,16 +179,31 @@ public partial class Clients
 
         if (firstRender)
         {
+            _loading = true;
+            StateHasChanged();
+
             var resultFilter = ClientResult.WAITING;
             _selectedResult = resultFilter.ToTuple();
             SetSelectedOption(_selectedResult.Value);
             await _getRecords();
+
+            _loading = false;
+            StateHasChanged();
         }
     }
 
     public async Task Refresh()
     {
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
         await _getRecords();
+
+        _loading = false;
+        StateHasChanged();
     }
 
     #region Import/Export Data
