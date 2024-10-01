@@ -16,12 +16,6 @@
 @using EmpiriaBMS.Front.Components.WorkingHours
 @using EmpiriaBMS.Front.Components.Reports
 @using EmpiriaBMS.Models.Enum
-@using EmpiriaBMS.Front.Components.Home.Clients
-@using EmpiriaBMS.Front.Components.Home.Deliverables
-@using EmpiriaBMS.Front.Components.Home.Disciplines
-@using EmpiriaBMS.Front.Components.Home.Issues
-@using EmpiriaBMS.Front.Components.Home.Projects
-@using EmpiriaBMS.Front.Components.Home.SupportiveWorks
 @using EmpiriaBMS.Front.Components.Home
 
 @inject TeamsFx teamsfx
@@ -69,93 +63,7 @@
 
                     @if (_activeid == "tab-home")
                     {
-                        <div class="justify-content-center mt-2 mb-2"
-                             style="overflow-x:hidden; margin: 0 auto;">
-
-                            <!-- Headder -->
-                            <HomeHeadComp @ref="@_headerComp"
-                                          IsWorkingModeChanged="@_onWorkingModeChanged"
-                                          OnRefresh="@_onRefresh"/>
-
-                            <!-- Clients -->
-                            @if (seeClientsOnDashboard)
-                            {
-                                <div class="mt-3">
-                                    <FluentAccordion>
-                                        <FluentAccordionItem Expanded="false">
-                                            <HeadingTemplate>
-                                                <div class="accordion-header">
-                                                    <h3>Clients</h3>
-                                                </div>
-                                            </HeadingTemplate>
-                                            <ChildContent>
-                                                <Clients @ref="_clientsComp"
-                                                         OnResultChanged="@_onClientResultChanged"
-                                                         IsWorkingMode="@_isWorkingMode" />
-                                            </ChildContent>
-                                        </FluentAccordionItem>
-                                    </FluentAccordion>
-                                </div>
-                            }
-
-                            <!-- Offers -->
-                            @if (seeOffers)
-                            {
-                                <div class="mt-2">
-                                    <FluentAccordion>
-                                        <FluentAccordionItem Expanded="true">
-                                            <HeadingTemplate>
-                                                <div class="accordion-header"
-                                                     id="offers-table-dash">
-                                                    <h3>Offers</h3>
-                                                </div>
-                                            </HeadingTemplate>
-                                            <ChildContent>
-                                                <Offers @ref="_offersComp"
-                                                        IsWorkingMode="@_isWorkingMode" />
-                                            </ChildContent>
-                                        </FluentAccordionItem>
-                                    </FluentAccordion>
-                                </div>
-                            }
-
-                            <!-- Tables (Projects/Disciplines/Deliverables/SupportiveWorks) -->
-                            <FluentGrid Spacing="4" Class="mt-5">
-
-                                <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
-                                    <!-- Table Projects -->
-                                    <Projects @ref="_projectsComp"
-                                              Loading="@_startLoading"
-                                              IsWorkingMode="@_isWorkingMode"
-                                              OnSelect="OnSelectProject"
-                                              OnEdit="OnEditProject" />
-                                </FluentGridItem>
-
-                                <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
-                                    <!-- Table Disciplines -->
-                                    <Disciplines @ref="_disciplinesComp"
-                                                 Loading="@_startLoading"
-                                                 IsWorkingMode="@_isWorkingMode"
-                                                 OnSelect="OnSelectDiscipline" />
-                                </FluentGridItem xxl="3" xl="6" lg="6" md="12" xs="12">
-
-                                <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
-                                    <!-- Table Deliverables -->
-                                    <Deliverables @ref="_deliverablesComp"
-                                                  Loading="@_startLoading"
-                                                  IsWorkingMode="@_isWorkingMode" />
-                                </FluentGridItem>
-
-                                <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
-                                    <!-- Table Supportive Works -->
-                                    <SupportiveWorks @ref="_supportiveWorksComp"
-                                                     Loading="@_startLoading"
-                                                     IsWorkingMode="@_isWorkingMode" />
-                                </FluentGridItem>
-
-                            </FluentGrid>
-
-                        </div>
+                        <Home/>
                     }
 
                 </FluentTab>
