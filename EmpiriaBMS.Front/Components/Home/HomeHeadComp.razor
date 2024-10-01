@@ -37,213 +37,238 @@
 <div class="mt-2 shadow p-2">
     @if (_sharedAuthData.LogedUser != null)
     {
-        <div class="m-2 d-flex flex-wrap
-                    align-items-center
-                    justify-content-xxl-between
-                    justify-content-xl-between
-                    justify-content-center"
-             style="column-gap: 10px; row-gap: 5px;">
+        <div class="container-fluid">
+            <div class="row g-4 m-2">
 
-            <!-- User Name + Roles + Current Date -->
-            <div class="row me-4">
-                <div class="col">
-                    <h5 class="mt-3" style="width: 200px;">
-                        @{
-                            var rolesNames = "";
-                            foreach (var role in _sharedAuthData.LoggedUserRoles)
-                            {
-                                rolesNames += $"   {role.Name}";
-                            }
-                        }
-                        <span class="my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@rolesNames">
-                            @_sharedAuthData.LogedUser.LastName &ensp; @_sharedAuthData.LogedUser.FirstName
-                        </span>
-                    </h5>
-                </div>
-                <div class="col mt-3">
-                    <h5>@CurentDate</h5>
-                </div>
-            </div>
-
-            <!-- Start / Stop Buttons -->
-            <div class="d-grid">
-                @if (editMyHours && !_isEndWorkDialogOdepened)
-                {
-                    @if (IsWorkingMode)
-                    {
-                        <button type="button"
-                                class="btn btn-danger btn-lg"
-                                style="width: 300px;"
-                                @onclick="@(async () => await StopWorkClick())">
-                            <span>@elapsedTime.ToString(@"hh\:mm\:ss")</span>
-                        </button>
-                    }
-                    else
-                    {
-                        <button type="button"
-                                class="btn btn-success btn-lg"
-                                style="width: 300px;"
-                                @onclick="@StartWorkClick">
-                            Press Work Start
-                        </button>
-                    }
-                }
-            </div>
-
-            <!-- Display Hours Passed -->
-            @if (seeMyHours)
-            {
-                <div class="primary-bg-color rounded float-end" style="min-width: 300px;">
-                    <div class="h5 text-center m-2">
-                        <span class="align-middle">My Total Hours This Month: </span>
-                        <b class="align-middle">@Convert.ToInt64(_userTotalHoursThisMonth)</b>
+                <!-- First Column -->
+                <div class="col-xxl-2 col-xl-2 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12
+                            order-xxs-1 order-xl-1 order-lg-1 order-md-1 order-sm-1 order-xs-1 order-1">
+                    <div class="float-xxl-start float-xl-start float-lg-start float-md-start float-sm-end float-xs-end float-end"
+                         style="min-width: 200px;">
+                        <!-- User Name + Roles + Current Date -->
+                        <div>
+                            <h5 class="mt-3">
+                                @{
+                                    var rolesNames = "";
+                                    foreach (var role in _sharedAuthData.LoggedUserRoles)
+                                    {
+                                        rolesNames += $"   {role.Name}";
+                                    }
+                                }
+                                @* User Roles *@
+                                <span class="my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@rolesNames">
+                                    @_sharedAuthData.LogedUser.LastName &ensp; @_sharedAuthData.LogedUser.FirstName
+                                </span>
+                            </h5>
+                        </div>
+                        <div class="mt-1">
+                            <h5>@CurentDate</h5>
+                        </div>
                     </div>
                 </div>
-            }
 
-            <FluentStack Orientation="Orientation.Horizontal"
-                         HorizontalAlignment="HorizontalAlignment.End"
-                         Wrap="false"
-                         Style="width: 310px;">
+                <!-- Second Column -->
+                <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12
+                            order-xxl-2 order-xl-2 order-lg-3 order-md-3 order-sm-3 order-xs-3 order-3">
+                    <div class="float-xxl-end float-xl-end float-lg-start float-md-start float-sm-none float-xs-none float-none"
+                         style="width: 100%;">
+                        <!-- Start / Stop Buttons -->
+                        <div class="d-grid">
+                            @if (editMyHours && !_isEndWorkDialogOdepened)
+                            {
+                                @if (IsWorkingMode)
+                                {
+                                    <button type="button"
+                                            class="btn btn-danger btn-lg"
+                                            style="width: 100%;"
+                                            @onclick="@(async () => await StopWorkClick())">
+                                        <span>@elapsedTime.ToString(@"hh\:mm\:ss")</span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button"
+                                            class="btn btn-success btn-lg"
+                                            style="width: 100%;"
+                                            @onclick="@StartWorkClick">
+                                        Press Work Start
+                                    </button>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
 
-                <!-- Issues Badge / Teams Requested Users Badge / Hours Corrections Requests -->
-                <FluentStack Orientation="Orientation.Horizontal"
-                             HorizontalAlignment="HorizontalAlignment.End"
-                             Wrap="false"
-                             Style="width: 140px;">
+                <!-- Third Column -->
+                <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12
+                            order-xxs-3 order-xl-3 order-lg-4 order-md-4 order-sm-4 order-xs-4 order-4">
+                    <div class="primary-bg-color rounded d-flex justify-content-center align-items-center
+                                float-xxl-end float-xl-end float-lg-end float-md-end float-sm-none float-xs-none float-none"
+                         style="min-width: 300px; padding: 0.375rem 0.75rem;">
+                        <!-- Display Hours Passed -->
+                        @if (seeMyHours)
+                        {
+                            <div class="h5 text-center align-middle">
+                                <span class="align-middle">My Total Hours This Month: </span>
+                                <b class="align-middle">@Convert.ToInt64(_userTotalHoursThisMonth)</b>
+                            </div>
+                        }
+                    </div>
+                </div>
 
-                    <!-- Issues Badge -->
-                    <FluentStack Orientation="Orientation.Vertical"
-                                 HorizontalAlignment="HorizontalAlignment.End"
-                                 Style="width: 50px; margin-top: 4px;"
-                                 Wrap="false">
-
-                        <!-- Issues Badge -->
-                        <FluentCounterBadge Count="@_issues.Count"
-                                            ShowZero="true"
-                                            Appearance="Appearance.Neutral"
-                                            HorizontalPosition="-25"
-                                            BottomPosition="-25">
-                            <FluentButton OnClick="@OpenIssuesClick"
-                                          Appearance="Appearance.Accent">
-                                <FluentIcon Value="@(new Icons.Regular.Size24.Alert())"
-                                            Color="@Color.Fill" />
-                            </FluentButton>
-                        </FluentCounterBadge>
-
-                    </FluentStack>
-
-                    <!-- Teams Requested Users Badge / Hours Corrections Requests -->
-                    @if (seeTeamsRequestedUsers || canApproveTimeRequests)
-                    {
-                        <FluentStack Orientation="Orientation.Vertical"
+                <!-- Fourth Column -->
+                <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12
+                            order-xxs-4 order-xl-4 order-lg-2 order-md-2 order-sm-2 order-xs-2 order-2">
+                    <div class="float-xxl-end float-xl-end float-lg-end float-md-end float-sm-end float-xs-end float-end"
+                         style="min-width: 260px;">
+                        <!-- Issues Badge / Teams Requested Users Badge / Hours Corrections Requests -->
+                        <FluentStack Orientation="Orientation.Horizontal"
                                      HorizontalAlignment="HorizontalAlignment.End"
-                                     Style="width: 50px; margin-top: 4px;"
-                                     Wrap="false">
+                                     Wrap="false"
+                                     Style="width: 310px;">
 
-                            <!-- Teams Requested Users Badge -->
-                            @if (seeTeamsRequestedUsers)
-                            {
-                                <div style="width: 50px;">
-                                    <FluentCounterBadge Count="@_teamsRequestedUsers.Count"
+                            <!-- Issues Badge / Teams Requested Users Badge / Hours Corrections Requests -->
+                            <FluentStack Orientation="Orientation.Horizontal"
+                                         HorizontalAlignment="HorizontalAlignment.End"
+                                         Wrap="false"
+                                         Style="width: 140px;">
+
+                                <!-- Issues Badge -->
+                                <FluentStack Orientation="Orientation.Vertical"
+                                             HorizontalAlignment="HorizontalAlignment.End"
+                                             Style="width: 50px; margin-top: 4px;"
+                                             Wrap="false">
+
+                                    <!-- Issues Badge -->
+                                    <FluentCounterBadge Count="@_issues.Count"
                                                         ShowZero="true"
                                                         Appearance="Appearance.Neutral"
                                                         HorizontalPosition="-25"
                                                         BottomPosition="-25">
-                                        <FluentButton OnClick="@OpenTeamsRequestedUsersClick"
+                                        <FluentButton OnClick="@OpenIssuesClick"
                                                       Appearance="Appearance.Accent">
-                                            <FluentIcon Value="@(new Icons.Regular.Size24.People())"
+                                            <FluentIcon Value="@(new Icons.Regular.Size24.Alert())"
                                                         Color="@Color.Fill" />
                                         </FluentButton>
                                     </FluentCounterBadge>
-                                </div>
-                            }
 
-                            <!-- Hours Corrections Requests -->
-                            @if (canApproveTimeRequests)
-                            {
-                                <div style="width: 50px;">
-                                    <FluentCounterBadge Count="@_hoursCorrectionCount"
-                                                        ShowZero="true"
-                                                        Appearance="Appearance.Neutral"
-                                                        HorizontalPosition="-25"
-                                                        BottomPosition="-25">
-                                        <FluentButton OnClick="@OpenHoursCorrectionRequestsClick"
-                                                      Appearance="Appearance.Accent">
-                                            <FluentIcon Value="@(new Icons.Regular.Size24.ClockDismiss())"
-                                                        Color="@Color.Fill" />
+                                </FluentStack>
+
+                                <!-- Teams Requested Users Badge / Hours Corrections Requests -->
+                                @if (seeTeamsRequestedUsers || canApproveTimeRequests)
+                                {
+                                    <FluentStack Orientation="Orientation.Vertical"
+                                                 HorizontalAlignment="HorizontalAlignment.End"
+                                                 Style="width: 50px; margin-top: 4px;"
+                                                 Wrap="false">
+
+                                        <!-- Teams Requested Users Badge -->
+                                        @if (seeTeamsRequestedUsers)
+                                        {
+                                            <div style="width: 50px;">
+                                                <FluentCounterBadge Count="@_teamsRequestedUsers.Count"
+                                                                    ShowZero="true"
+                                                                    Appearance="Appearance.Neutral"
+                                                                    HorizontalPosition="-25"
+                                                                    BottomPosition="-25">
+                                                    <FluentButton OnClick="@OpenTeamsRequestedUsersClick"
+                                                                  Appearance="Appearance.Accent">
+                                                        <FluentIcon Value="@(new Icons.Regular.Size24.People())"
+                                                                    Color="@Color.Fill" />
+                                                    </FluentButton>
+                                                </FluentCounterBadge>
+                                            </div>
+                                        }
+
+                                        <!-- Hours Corrections Requests -->
+                                        @if (canApproveTimeRequests)
+                                        {
+                                            <div style="width: 50px;">
+                                                <FluentCounterBadge Count="@_hoursCorrectionCount"
+                                                                    ShowZero="true"
+                                                                    Appearance="Appearance.Neutral"
+                                                                    HorizontalPosition="-25"
+                                                                    BottomPosition="-25">
+                                                    <FluentButton OnClick="@OpenHoursCorrectionRequestsClick"
+                                                                  Appearance="Appearance.Accent">
+                                                        <FluentIcon Value="@(new Icons.Regular.Size24.ClockDismiss())"
+                                                                    Color="@Color.Fill" />
+                                                    </FluentButton>
+                                                </FluentCounterBadge>
+                                            </div>
+                                        }
+
+                                    </FluentStack>
+                                }
+
+                            </FluentStack>
+
+                            <!-- Refresh / Correct Hours / RestoreDB / BackupDB Page -->
+                            <FluentStack Orientation="Orientation.Horizontal"
+                                         HorizontalAlignment="HorizontalAlignment.End"
+                                         Wrap="false"
+                                         Style="width: 140px;">
+
+                                <FluentStack Orientation="Orientation.Vertical"
+                                             HorizontalAlignment="HorizontalAlignment.End"
+                                             Style="width: 64px;"
+                                             Wrap="false">
+                                    <!-- Refresh -->
+                                    <FluentButton IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
+                                                  _loading="@_refreshLoading"
+                                                  Appearance="Appearance.Outline"
+                                                  OnClick="@Refresh"
+                                                  Style="width: 40px !important;">
+                                    </FluentButton>
+                                    <!-- Correct Hours -->
+                                    @if (isEmployee)
+                                    {
+                                        <FluentButton IconStart="@(new Icons.Regular.Size32.Clock())"
+                                                      Appearance="Appearance.Outline"
+                                                      OnClick="@_correctHours"
+                                                      Style="width: 40px !important;">
                                         </FluentButton>
-                                    </FluentCounterBadge>
-                                </div>
-                            }
+                                    }
+                                </FluentStack>
+
+                                <FluentStack Orientation="Orientation.Vertical"
+                                             HorizontalAlignment="HorizontalAlignment.Center"
+                                             Style="width: 64px;"
+                                             Wrap="false">
+                                    <!-- Restore Database -->
+                                    @if (seeRestoreDatabase)
+                                    {
+                                        <InputFile @ref="@fileRestoreDB"
+                                                   OnChange="RestoreDb"
+                                                   style="display: none;" />
+                                        <FluentButton IconStart="@(new MyIcons.Size32.RestoreDB())"
+                                                      _loading="@_restore_loading"
+                                                      Appearance="Appearance.Outline"
+                                                      OnClick="@(async () => await TriggerRestoreDbInport())"
+                                                      Style="width: 40px !important;">
+                                        </FluentButton>
+                                    }
+                                    <!-- BackUp Database -->
+                                    @if (seeBackupDatabase)
+                                    {
+                                        <FluentButton OnClick="@(async() => await BackUpDb())"
+                                                      _loading="@_backUp_loading"
+                                                      IconStart="@(new MyIcons.Size32.BackupDB())"
+                                                      Appearance="Appearance.Outline"
+                                                      Style="width: 40px !important;">
+                                        </FluentButton>
+                                    }
+                                </FluentStack>
+
+                            </FluentStack>
 
                         </FluentStack>
-                    }
+                    </div>
+                </div>
 
-                </FluentStack>
-
-                <!-- Refresh / Correct Hours / RestoreDB / BackupDB Page -->
-                <FluentStack Orientation="Orientation.Horizontal"
-                             HorizontalAlignment="HorizontalAlignment.End"
-                             Wrap="false"
-                             Style="width: 140px;">
-
-                    <FluentStack Orientation="Orientation.Vertical"
-                                 HorizontalAlignment="HorizontalAlignment.End"
-                                 Style="width: 64px;"
-                                 Wrap="false">
-                        <!-- Refresh -->
-                        <FluentButton IconStart="@(new Icons.Regular.Size32.ArrowClockwise())"
-                                      _loading="@_refreshLoading"
-                                      Appearance="Appearance.Outline"
-                                      OnClick="@Refresh"
-                                      Style="width: 40px !important;">
-                        </FluentButton>
-                        <!-- Correct Hours -->
-                        @if (isEmployee)
-                        {
-                            <FluentButton IconStart="@(new Icons.Regular.Size32.Clock())"
-                                          Appearance="Appearance.Outline"
-                                          OnClick="@_correctHours"
-                                          Style="width: 40px !important;">
-                            </FluentButton>
-                        }
-                    </FluentStack>
-
-                    <FluentStack Orientation="Orientation.Vertical"
-                                 HorizontalAlignment="HorizontalAlignment.Center"
-                                 Style="width: 64px;"
-                                 Wrap="false">
-                        <!-- Restore Database -->
-                        @if (seeRestoreDatabase)
-                        {
-                            <InputFile @ref="@fileRestoreDB"
-                                       OnChange="RestoreDb"
-                                       style="display: none;" />
-                            <FluentButton IconStart="@(new MyIcons.Size32.RestoreDB())"
-                                          _loading="@_restore_loading"
-                                          Appearance="Appearance.Outline"
-                                          OnClick="@(async () => await TriggerRestoreDbInport())"
-                                          Style="width: 40px !important;">
-                            </FluentButton>
-                        }
-                        <!-- BackUp Database -->
-                        @if (seeBackupDatabase)
-                        {
-                            <FluentButton OnClick="@(async() => await BackUpDb())"
-                                          _loading="@_backUp_loading"
-                                          IconStart="@(new MyIcons.Size32.BackupDB())"
-                                          Appearance="Appearance.Outline"
-                                          Style="width: 40px !important;">
-                            </FluentButton>
-                        }
-                    </FluentStack>
-
-                </FluentStack>
-
-            </FluentStack>
-
+            </div>
         </div>
+
     }
 </div>
 

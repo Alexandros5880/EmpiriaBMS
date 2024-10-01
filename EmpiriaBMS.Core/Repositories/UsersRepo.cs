@@ -69,27 +69,38 @@ public class UsersRepo : Repository<UserDto, User>
 
     public async Task<UserDto?> Get(string email, string password)
     {
-        if (email == null)
-            throw new ArgumentNullException(nameof(email));
-
-        if (password == null)
-            throw new ArgumentNullException(nameof(password));
-
-        // Create Hasher
-        var hash = PasswordHasher.HashPassword(password);
-
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            var u = await _context
-                             .Set<User>()
-                             .Where(r => !r.IsDeleted)
-                             .Include(r => r.Disciplines)
-                             .Include(r => r.UserRoles)
-                             .FirstOrDefaultAsync(r => r.ProxyAddress.Equals(email)
-                                                        && r.PasswordHash != null
-                                                        && r.PasswordHash.Equals(hash));
+            if (email == null)
+                throw new ArgumentNullException(nameof(email));
 
-            return Mapping.Mapper.Map<UserDto>(u);
+            if (password == null)
+                throw new ArgumentNullException(nameof(password));
+
+            // Create Hasher
+            var hash = PasswordHasher.HashPassword(password);
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var userWithSameProxy = await _context
+                                 .Set<User>()
+                                 .Where(r => !r.IsDeleted)
+                                 .Include(r => r.Disciplines)
+                                 .Include(r => r.UserRoles)
+                                 .FirstOrDefaultAsync(r => r.ProxyAddress.Equals(email));
+
+                var userHash = userWithSameProxy?.PasswordHash;
+
+                if (!string.IsNullOrEmpty(userHash) && hash.Equals(userHash))
+                    return Mapping.Mapper.Map<UserDto>(userWithSameProxy);
+
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On UsersRepo.Get(string email, string password): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return null;
         }
     }
 
