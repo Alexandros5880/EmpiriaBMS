@@ -85,50 +85,43 @@
     }
 
     <!-- Tables (Projects/Disciplines/Deliverables/SupportiveWorks) -->
-    <div class="container-fluid mt-5 mb-5">
-        <div class="row g-4 justify-content-center">
+    <FluentGrid Spacing="4" Class="mt-5">
 
-            <!-- Projects in the first column -->
-            <div class="col-12 col-lg-auto">
-                <div class="d-flex flex-column h-100"
-                     style="min-width: @((_isWorkingMode ? "660px" : "500px"));">
-                    <!-- Table Projects -->
-                    <Projects @ref="_projectsComp"
-                              IsWorkingMode="@_isWorkingMode"
-                              OnSelect="OnSelectProject"
-                              OnEdit="OnEditProject" />
-                </div>
+        <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
+            <div style="min-width: @((_isWorkingMode ? "660px" : "500px")); width: 100%;">
+                <!-- Table Projects -->
+                <Projects @ref="_projectsComp"
+                          IsWorkingMode="@_isWorkingMode"
+                          OnSelect="OnSelectProject"
+                          OnEdit="OnEditProject" />
             </div>
+        </FluentGridItem>
 
-            <!-- Disciplines in the second column -->
-            <div class="col-12 col-lg-auto">
-                <div class="d-flex flex-column h-100"
-                     style="min-width: @((_isWorkingMode ? "440px" : "300px"));">
-                    <!-- Table Disciplines -->
-                    <Disciplines @ref="_disciplinesComp"
-                                 IsWorkingMode="@_isWorkingMode"
-                                 OnSelect="OnSelectDiscipline" />
-                </div>
+        <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
+            <div style="min-width: @((_isWorkingMode ? "660px" : "500px")); width: 100%;">
+                <!-- Table Disciplines -->
+                <Disciplines @ref="_disciplinesComp"
+                             IsWorkingMode="@_isWorkingMode"
+                             OnSelect="OnSelectDiscipline" />
             </div>
+        </FluentGridItem>
 
-            <!-- Deliverables and SupportiveWorks in the third column, stacked vertically -->
-            <div class="col-12 col-lg-auto">
-                <div class="d-flex flex-column"
-                     style="min-width: @((_isWorkingMode ? "300px" : "200px"));">
-                    <div class="mb-4">
-                        <!-- Table Deliverables -->
-                        <Deliverables @ref="_deliverablesComp"
-                                      IsWorkingMode="@_isWorkingMode" />
-                    </div>
-                    <div>
-                        <!-- Table Supportive Works -->
-                        <SupportiveWorks @ref="_supportiveWorksComp"
-                                         IsWorkingMode="@_isWorkingMode" />
-                    </div>
-                </div>
+        <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
+            <div style="min-width: @((_isWorkingMode ? "660px" : "500px")); width: 100%;">
+                <!-- Table Deliverables -->
+                <Deliverables @ref="_deliverablesComp"
+                              IsWorkingMode="@_isWorkingMode" />
             </div>
+        </FluentGridItem>
 
-        </div>
-    </div>
+        <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
+            <div style="min-width: @((_isWorkingMode ? "660px" : "500px")); width: 100%;">
+                <!-- Table Supportive Works -->
+                <SupportiveWorks @ref="_supportiveWorksComp"
+                                 IsWorkingMode="@_isWorkingMode" />
+            </div>
+        </FluentGridItem>
+
+    </FluentGrid>
 
 </div>
