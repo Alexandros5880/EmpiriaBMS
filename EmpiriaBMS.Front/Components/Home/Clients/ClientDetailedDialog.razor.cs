@@ -4,7 +4,7 @@ using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.Clients;
+namespace EmpiriaBMS.Front.Components.Home.Clients;
 
 public partial class ClientDetailedDialog : IDialogContentComponent<ClientVM>
 {

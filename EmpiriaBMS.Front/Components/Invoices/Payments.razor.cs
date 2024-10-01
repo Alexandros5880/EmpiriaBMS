@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.Invoices;
 
 public partial class Payments : ComponentBase
 {
+    private bool _loading = false;
+
     [Parameter]
     public InvoiceVM Invoice { get; set; }
 
@@ -135,8 +137,19 @@ public partial class Payments : ComponentBase
     {
         if (invoiceId != 0)
         {
+            if (_loading == false)
+            {
+                _loading = true;
+                StateHasChanged();
+            }
+
             await _getRecords(invoiceId);
-            StateHasChanged();
+
+            if (_loading == true)
+            {
+                _loading = false;
+                StateHasChanged();
+            }
         }
     }
 
@@ -148,8 +161,19 @@ public partial class Payments : ComponentBase
         {
             if (Invoice != null)
             {
+                if (_loading == false)
+                {
+                    _loading = true;
+                    StateHasChanged();
+                }
+
                 await _getRecords(Invoice.Id);
-                StateHasChanged();
+
+                if (_loading == true)
+                {
+                    _loading = false;
+                    StateHasChanged();
+                }
             }
         }
     }

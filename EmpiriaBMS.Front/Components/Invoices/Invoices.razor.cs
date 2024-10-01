@@ -14,6 +14,8 @@ namespace EmpiriaBMS.Front.Components.Invoices;
 
 public partial class Invoices : ComponentBase
 {
+    private bool _loading = false;
+
     [Parameter]
     public EventCallback<InvoiceVM> OnSelect { get; set; }
 
@@ -26,14 +28,52 @@ public partial class Invoices : ComponentBase
     [Parameter]
     public bool DisplayTitle { get; set; } = false;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            if (_loading == false)
+            {
+                _loading = true;
+                StateHasChanged();
+            }
+
+            if (_invoices == null || _invoices.Count == 0)
+                await _getRecords();
+
+            if (_loading == true)
+            {
+                _loading = false;
+                StateHasChanged();
+            }
+        }
+    }
+
+    public async Task Refresh()
+    {
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
+        await _getRecords();
+
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
+    }
+
     #region Data Grid
     public List<InvoiceVM> _invoices { get; set; }
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     [Parameter]
     public InvoiceVM SelectedRecord { get; set; } = new InvoiceVM();
-
-    public async Task Refresh() => await _getRecords();
 
     private async Task HandleRowFocus(FluentDataGridRow<InvoiceVM> row)
     {
@@ -179,19 +219,6 @@ public partial class Invoices : ComponentBase
         return projectFilter && numberFilter;
     }
     #endregion
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            if (_invoices == null || _invoices.Count == 0)
-                await _getRecords();
-
-            StateHasChanged();
-        }
-    }
 
     #region Export Data
     private async Task _exportToCSV()

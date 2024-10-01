@@ -3,7 +3,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.Home;
 
 public partial class TeamsRequestedUsers : ComponentBase
 {
@@ -15,7 +15,7 @@ public partial class TeamsRequestedUsers : ComponentBase
 
     #region Data Grid
     private string _filterString = string.Empty;
-    IQueryable<TeamsRequestedUserVM>? FilteredItems => Source?.AsQueryable().Where(x => x.DisplayName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<TeamsRequestedUserVM> FilteredItems => Source?.AsQueryable().Where(x => x.DisplayName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
     private TeamsRequestedUserVM _selectedRecord = null;

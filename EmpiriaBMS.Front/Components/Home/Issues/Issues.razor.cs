@@ -3,7 +3,7 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.Home.Issues;
 
 public partial class Issues : ComponentBase
 {
@@ -29,7 +29,7 @@ public partial class Issues : ComponentBase
     }
 
     private string _filterString = string.Empty;
-    IQueryable<IssueVM>? FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<IssueVM> FilteredItems => Source?.AsQueryable().Where(x => x.ProjectName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
     private IssueVM _selectedRecord = null;

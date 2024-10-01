@@ -45,7 +45,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Add({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On OfferRepo.Add({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -78,7 +78,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Update({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On OfferRepo.Update({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -87,9 +87,6 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
     {
         try
         {
-            if (id == 0)
-                throw new ArgumentException(nameof(id));
-
             using (var _context = _dbContextFactory.CreateDbContext())
             {
                 var offer = await _context.Set<Offer>()
@@ -103,14 +100,14 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
                                            .Include(o => o.Category)
                                            .Include(o => o.Project)
                                            .ThenInclude(p => p.Stage)
-                                           .FirstOrDefaultAsync(o => o.Id == id);
+                                           .FirstOrDefaultAsync(o => id == 0 || o.Id == id);
 
                 return Mapping.Mapper.Map<Offer, OfferDto>(offer);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Get(Offer.Id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On OfferRepo.Get(Offer.Id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }

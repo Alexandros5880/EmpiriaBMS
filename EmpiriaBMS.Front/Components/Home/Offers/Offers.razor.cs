@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Front.ViewModel.ExportData;
@@ -15,12 +16,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace EmpiriaBMS.Front.Components.Offers;
+namespace EmpiriaBMS.Front.Components.Home.Offers;
 
 public partial class Offers
 {
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
+
+    private bool _loading = false;
 
     private FluentCombobox<(string Value, string Text)> resultFilterCombo;
     private FluentCombobox<ClientVM> clientFilterCombo;
@@ -72,9 +75,21 @@ public partial class Offers
 
         if (firstRender)
         {
+            if (_loading == false)
+            {
+                _loading = true;
+                StateHasChanged();
+            }
+
             var runInTeams = await MicrosoftTeams.IsInTeams();
 
             await Refresh();
+
+            if (_loading == true)
+            {
+                _loading = false;
+                StateHasChanged();
+            }
         }
     }
 
@@ -124,6 +139,12 @@ public partial class Offers
 
     public async Task Refresh()
     {
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
         await _getClients();
         await _getAllProjects();
         await _getOfferStates();
@@ -135,7 +156,11 @@ public partial class Offers
         Enum.TryParse(_selectedOfferResult.Value, out e);
         await _getOffers(_selectedProject?.Id, _selectedOfferState?.Id, _selectedOfferType?.Id, _selectedClient?.Id ?? 0, e, refresh: true);
 
-        StateHasChanged();
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
     }
 
     public async Task SetClientFilter(ClientVM client)

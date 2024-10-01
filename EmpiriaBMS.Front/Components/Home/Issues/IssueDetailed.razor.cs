@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.ComponentModel;
 
-namespace EmpiriaBMS.Front.Components;
+namespace EmpiriaBMS.Front.Components.Home.Issues;
 
 public partial class IssueDetailed : ComponentBase, IDisposable
 {
@@ -49,7 +49,7 @@ public partial class IssueDetailed : ComponentBase, IDisposable
         StateHasChanged();
     }
 
-    private void _issuePropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void _issuePropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
@@ -92,12 +92,12 @@ public partial class IssueDetailed : ComponentBase, IDisposable
             _issue.ProjectId = _project.Id;
             _issue.CreatorId = _sharedAuthData.LogedUser.Id;
             _issue.IsClose = false;
-        
+
             var dto = Mapper.Map<IssueDto>(_issue);
             var documentsDtos = Mapper.Map<List<DocumentDto>>(_documents);
             await DataProvider.Issues.Add(dto, documentsDtos);
         }
-        catch (System.NullReferenceException nex)
+        catch (NullReferenceException nex)
         {
             Logger.LogError($"Exception IssueDetailed.HandleValidSubmit(): {nex.Message}, \n Inner Exception: {nex.InnerException}");
         }

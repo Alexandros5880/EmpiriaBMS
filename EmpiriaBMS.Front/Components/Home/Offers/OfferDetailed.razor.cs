@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace EmpiriaBMS.Front.Components.Offers;
+namespace EmpiriaBMS.Front.Components.Home.Offers;
 
 public partial class OfferDetailed
 {

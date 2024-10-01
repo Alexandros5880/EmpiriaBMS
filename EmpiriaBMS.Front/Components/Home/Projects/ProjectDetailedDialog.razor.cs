@@ -1,10 +1,13 @@
-﻿using EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using System;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects;
-
+namespace EmpiriaBMS.Front.Components.Home.Projects;
 public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 {
     [Parameter]

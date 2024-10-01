@@ -10,8 +10,9 @@ using Microsoft.Fast.Components.FluentUI;
 using System.ComponentModel.DataAnnotations;
 using System.IO.Pipelines;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
-namespace EmpiriaBMS.Front.Components.Clients;
+namespace EmpiriaBMS.Front.Components.Home.Clients;
 
 public partial class Clients
 {
@@ -20,6 +21,8 @@ public partial class Clients
 
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
+
+    private bool _loading = false;
 
     #region Data Grid
     private List<ClientVM> _records = new List<ClientVM>();
@@ -176,10 +179,39 @@ public partial class Clients
 
         if (firstRender)
         {
+            if (_loading == false)
+            {
+                _loading = true;
+                StateHasChanged();
+            }
+
             var resultFilter = ClientResult.WAITING;
             _selectedResult = resultFilter.ToTuple();
             SetSelectedOption(_selectedResult.Value);
             await _getRecords();
+
+            if (_loading == true)
+            {
+                _loading = false;
+                StateHasChanged();
+            }
+        }
+    }
+
+    public async Task Refresh()
+    {
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
+        await _getRecords();
+
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
         }
     }
 

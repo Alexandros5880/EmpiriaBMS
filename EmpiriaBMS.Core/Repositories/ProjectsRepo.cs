@@ -28,16 +28,22 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
+            Project project;
+
             using (var _context = _dbContextFactory.CreateDbContext())
             {
+                entity.ProjectManager = null;
+                entity.Offer = null;
+
                 var result = await _context.Set<Project>().AddAsync(Mapping.Mapper.Map<Project>(entity));
                 await _context.SaveChangesAsync();
 
-                var project = result.Entity as Project;
-                var dto = await Get(project.Id);
-
-                return dto;
+                project = result.Entity as Project;
             }
+
+            var dto = await Get(project.Id);
+
+            return dto;
         }
         catch (Exception ex)
         {
@@ -60,6 +66,9 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 var project = await _context.Set<Project>().FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (project != null)
                 {
+                    entity.ProjectManager = null;
+                    entity.Offer = null;
+
                     _context.Entry(project).CurrentValues.SetValues(Mapping.Mapper.Map<Project>(entity));
                     await _context.SaveChangesAsync();
                 }
@@ -83,6 +92,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var offers = await _context.Set<Offer>()
+                    .Include(o => o.Category)
+                    .Include(o => o.SubCategory)
+                    .Include(o => o.Client)
+                    .ThenInclude(l => l.Address)
+                    .Where(r => !r.IsDeleted)
+                    .ToListAsync();
+
             var project = await _context
                              .Set<Project>()
                              .Where(r => !r.IsDeleted)
@@ -100,6 +117,8 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                              .Include(p => p.ProjectManager)
                              .Include(p => p.ProjectsSubConstructors)
                              .FirstOrDefaultAsync(r => r.Id == id);
+
+            project.Offer = offers.FirstOrDefault(o => o.Id == project.OfferId);
 
             var dto = Mapping.Mapper.Map<ProjectDto>(project);
 

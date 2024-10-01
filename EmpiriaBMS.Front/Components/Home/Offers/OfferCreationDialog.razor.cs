@@ -3,7 +3,7 @@ using EmpiriaBMS.Models.Enum;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.Offers;
+namespace EmpiriaBMS.Front.Components.Home.Offers;
 
 public partial class OfferCreationDialog : IDialogContentComponent<OfferVM>
 {
