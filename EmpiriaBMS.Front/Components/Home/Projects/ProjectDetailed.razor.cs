@@ -4,31 +4,17 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using System;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Home.Projects;
-public partial class ProjectDetailed : ComponentBase
+public partial class ProjectDetailed : IDialogContentComponent<ProjectVM>
 {
-    FluentCombobox<OfferVM> _offerCombo;
-    FluentCombobox<ProjectStageVM> _stageCombo;
-    FluentCombobox<UserVM> _pmCombo;
-
     [Parameter]
-    public bool DisplayActions { get; set; } = true;
+    public ProjectVM Content { get; set; } = default!;
 
-    private ProjectVM _project;
-    [Parameter]
-    public ProjectVM Content
-    {
-        get => _project;
-        set
-        {
-            if (value != null)
-                _project = value;
-        }
-    }
-
-    public bool _isNew => Content?.Id != 0 && Content?.Id != null;
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
 
     ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     ObservableCollection<ProjectStageVM> _stages = new ObservableCollection<ProjectStageVM>();
@@ -42,9 +28,10 @@ public partial class ProjectDetailed : ComponentBase
         {
             if (_offer == value || value == null) return;
             _offer = value;
-
-            if (_offer.Id != Content.OfferId)
-                Content.OfferId = _offer.Id;
+            Content.OfferId = _offer.Id;
+            var vm = _offers.FirstOrDefault(o => o.Id == _offer.Id);
+            var dto = Mapper.Map<OfferDto>(vm);
+            Content.Offer = Mapping.Mapper.Map<Offer>(dto);
         }
     }
 
@@ -56,9 +43,7 @@ public partial class ProjectDetailed : ComponentBase
         {
             if (_stage == value || value == null) return;
             _stage = value;
-
-            if (_stage.Id != Content.StageId)
-                Content.StageId = _stage.Id;
+            Content.StageId = _stage.Id;
         }
     }
 
@@ -70,9 +55,7 @@ public partial class ProjectDetailed : ComponentBase
         {
             if (_pm == value || value == null) return;
             _pm = value;
-
-            if (_pm.Id != Content.ProjectManagerId)
-                Content.ProjectManagerId = _pm.Id;
+            Content.ProjectManagerId = _pm.Id;
         }
     }
 
@@ -82,93 +65,25 @@ public partial class ProjectDetailed : ComponentBase
 
         if (firstRender)
         {
-            await Prepair();
+            await _getRecords();
+
+            StateHasChanged();
         }
     }
 
-    public async Task Prepair(ProjectVM project = null)
-    {
-        await _getRecords();
-
-        if (project == null)
-        {
-            Content = new ProjectVM()
-            {
-                Offer = null,
-                OfferId = 0,
-                Stage = null,
-                StageId = 0,
-                ProjectManager = null,
-                ProjectManagerId = 0
-            };
-        }
-        else
-            Content = project;
-
-        if (Content.OfferId != 0)
-        {
-            Offer = _offers.FirstOrDefault(t => t.Id == Content.OfferId);
-            if (_offerCombo != null)
-                _offerCombo.Value = Offer.Code;
-        }
-
-        if (Content.StageId != 0)
-        {
-            Stage = _stages.FirstOrDefault(t => t.Id == Content.StageId);
-            if (_stageCombo != null)
-                _stageCombo.Value = Stage.Name;
-        }
-
-        if (Content.ProjectManagerId != 0)
-        {
-            Pm = _pms.FirstOrDefault(t => t.Id == Content.ProjectManagerId);
-            if (_pmCombo != null)
-                _pmCombo.Value = Pm.FullName;
-        }
-
-        StateHasChanged();
-    }
-
-    public async Task<ProjectVM> SaveAsync()
+    private async Task SaveAsync()
     {
         var valid = Validate();
         if (!valid)
-            return null;
+            return;
 
-        try
-        {
-            Content.Stage = null;
-            Content.Offer = null;
-
-            // Save Project
-            ProjectDto saveProject;
-            var exists = await DataProvider.Projects.Any(p => p.Id == Content.Id);
-            if (exists)
-                saveProject = await DataProvider.Projects.Update(Mapper.Map<ProjectDto>(Content));
-            else
-                saveProject = await DataProvider.Projects.Add(Mapper.Map<ProjectDto>(Content));
-
-            var projectVm = Mapper.Map<ProjectVM>(saveProject);
-
-            Content = projectVm;
-
-            return projectVm;
-        }
-        catch (NullReferenceException ex)
-        {
-            Logger.LogError($"Exception ProjectDetailed.SaveAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-
-            return null;
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception ProjectDetailed.SaveAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-
-            return null;
-        }
+        await Dialog.CloseAsync(Content);
     }
 
-    public ProjectVM GetProject() => Content as ProjectVM;
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
 
     #region Validation
     private bool validOffer = true;
@@ -176,11 +91,9 @@ public partial class ProjectDetailed : ComponentBase
     private bool validCode = true;
     private bool validStage = true;
     private bool validPm = true;
-    private bool validEstHours = true;
 
-    public bool Validate(string fieldname = null)
+    private bool Validate(string fieldname = null)
     {
-        var valid = false;
         if (fieldname == null)
         {
             validOffer = _offer != null && _offer.Id != 0;
@@ -188,9 +101,8 @@ public partial class ProjectDetailed : ComponentBase
             validCode = !string.IsNullOrEmpty(Content.Code);
             validStage = _stage != null && _stage.Id != 0;
             validPm = _pm != null && _pm.Id != 0;
-            validEstHours = Content.EstimatedHours > 0;
 
-            valid = validOffer && validName && validCode && validStage && validPm && validEstHours;
+            return validOffer && validName && validCode && validStage && validPm;
         }
         else
         {
@@ -204,35 +116,24 @@ public partial class ProjectDetailed : ComponentBase
             {
                 case "Offer":
                     validOffer = _offer != null && _offer.Id != 0;
-                    valid = validOffer;
-                    break;
+                    return validOffer;
                 case "Name":
                     validName = !string.IsNullOrEmpty(Content.Name);
-                    valid = validName;
-                    break;
+                    return validName;
                 case "Code":
                     validCode = !string.IsNullOrEmpty(Content.Code);
-                    valid = validCode;
-                    break;
+                    return validCode;
                 case "Stage":
                     validStage = _stage != null && _stage.Id != 0;
-                    valid = validStage;
-                    break;
+                    return validStage;
                 case "PM":
                     validPm = _pm != null && _pm.Id != 0;
-                    valid = validPm;
-                    break;
-                case "EstimatedHours":
-                    validEstHours = Content.EstimatedHours > 0;
-                    valid = validEstHours;
-                    break;
+                    return validPm;
                 default:
-                    valid = true;
-                    break;
+                    return true;
             }
+
         }
-        StateHasChanged();
-        return valid;
     }
     #endregion
 
@@ -242,7 +143,6 @@ public partial class ProjectDetailed : ComponentBase
         await _getOffers();
         await _getStages();
         await _getProjectManagers();
-        await _getOffer();
     }
 
     private async Task _getStages()
@@ -251,6 +151,8 @@ public partial class ProjectDetailed : ComponentBase
         var vms = Mapper.Map<List<ProjectStageVM>>(dtos);
         _stages.Clear();
         vms.ForEach(_stages.Add);
+
+        Stage = _stages.FirstOrDefault(c => c.Id == Content.StageId) ?? null;
     }
 
     private async Task _getProjectManagers()
@@ -259,15 +161,8 @@ public partial class ProjectDetailed : ComponentBase
         var vms = Mapper.Map<List<UserVM>>(dtos);
         _pms.Clear();
         vms.ForEach(_pms.Add);
-    }
 
-    private async Task _getOffer()
-    {
-        if (Content == null || Content.OfferId == null || Content.OfferId == 0)
-            return;
-
-        var dto = await DataProvider.Offers.Get((int)Content.OfferId);
-        _offer = Mapper.Map<OfferVM>(dto);
+        Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId) ?? null;
     }
 
     private async Task _getOffers()

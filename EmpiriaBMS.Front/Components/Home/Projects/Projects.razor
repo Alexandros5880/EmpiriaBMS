@@ -294,39 +294,6 @@
 
     </FluentDialog>
 
-    <!-- On Add/Edit Project Dialog -->
-    <FluentDialog @ref="_addEditProjectDialog"
-                  Hidden="@(!_isAddEditProjectDialogOdepened || Loading)"
-                  Modal="true"
-                  DialogType=@DialogType.Panel
-                  style="--dialog-width: min(80vw, 800px) !important;">
-
-        <div class="modal-body row mb-1">
-
-            <div class="col-12 dialog-header">
-                <span class="carbon--close-outline float-end" @onclick="CloseAddProjectClick"></span>
-            </div>
-
-            <div class="col-12 justify-content-center" style="max-height: 640px; overflow-y: hidden;">
-                <ProjectDetailed @ref="@projectCompoment"
-                                 DisplayActions="false"
-                                 Content="@_selectedProject"/>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <FluentButton class="col-6"
-                          OnClick="@(async () => await _addEditProjectDialogAccept())">
-                Ok
-            </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => CloseAddProjectClick())">
-                Cancel
-            </FluentButton>
-        </div>
-
-    </FluentDialog>
-
     <!-- On Delete Dialog -->
     <FluentDialog @ref="_deleteDialog"
                   Hidden="@(!_isDeleteDialogOdepened || Loading)"

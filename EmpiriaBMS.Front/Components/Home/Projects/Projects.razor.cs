@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Components.Admin.Projects;
 using EmpiriaBMS.Front.Components.Home.Issues;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
@@ -8,9 +9,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
-using DevComp = EmpiriaBMS.Front.Components.Home.Deliverables;
-using DiscComp = EmpiriaBMS.Front.Components.Home.Disciplines;
-using SWComp = EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 
 namespace EmpiriaBMS.Front.Components.Home.Projects;
 
@@ -136,11 +134,6 @@ public partial class Projects
     }
 
     #region Dialogs
-    // On Add Project Dialog
-    private FluentDialog _addEditProjectDialog;
-    private bool _isAddEditProjectDialogOdepened = false;
-    private ProjectDetailed projectCompoment;
-
     // On Delete Dialog
     private FluentDialog _deleteDialog;
     private bool _isDeleteDialogOdepened = false;
@@ -203,34 +196,79 @@ public partial class Projects
     {
         _selectedProject = null;
 
-        //Offer offer = null;
-        //if (!string.IsNullOrEmpty(selectedOfferFilterId))
-        //{
-        //    var offerId = Convert.ToInt32(selectedOfferFilterId);
-        //    var dto = await _dataProvider.Offers.Get(offerId);
-        //    offer = Mapping.Mapper.Map<Offer>(dto);
-        //}
+        DialogParameters parameters = new()
+        {
+            Title = $"New Record",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 700px);"
+        };
 
-        _addEditProjectDialog.Show();
-        _isAddEditProjectDialogOdepened = true;
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailed>(new ProjectVM(), parameters);
+        DialogResult? result = await dialog.Result;
 
-        await projectCompoment.Prepair();
+        if (result.Data is not null)
+        {
+            ProjectVM vm = result.Data as ProjectVM;
+            var dto = Mapper.Map<ProjectDto>(vm);
+
+            // Save Project
+            await _dataProvider.Projects.Add(dto);
+
+            if (_data.Any(p => p.Id == vm.Id))
+                _data.Remove(vm);
+
+            // Order by DeaLine and add new one on top
+            var sortedProjects = _data.OrderByDescending(p => p.DeadLine).ToList();
+            sortedProjects.Insert(0, vm);
+            _data = new ObservableCollection<ProjectVM>(sortedProjects);
+
+            _selectedProject = vm;
+            StateHasChanged();
+        }
     }
 
     private async Task EditProject()
     {
-        _addEditProjectDialog.Show();
-        _isAddEditProjectDialogOdepened = true;
-
-        await projectCompoment.Prepair(_selectedProject);
-    }
-
-    private void CloseAddProjectClick()
-    {
-        if (_isAddEditProjectDialogOdepened)
+        DialogParameters parameters = new()
         {
-            _addEditProjectDialog.Hide();
-            _isAddEditProjectDialogOdepened = false;
+            Title = $"Edit {_selectedProject.Name}",
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
+            PrimaryAction = "Save",
+            SecondaryAction = "Cancel",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true,
+            Width = "min(80%, 700px);"
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailed>(_selectedProject, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result.Data is not null)
+        {
+            ProjectVM vm = result.Data as ProjectVM;
+            var dto = Mapper.Map<ProjectDto>(vm);
+
+            // Save Project
+            await _dataProvider.Projects.Update(dto);
+
+            if (_data.Any(p => p.Id == vm.Id))
+                _data.Remove(vm);
+
+            // Order by DeaLine and add new one on top
+            var sortedProjects = _data.OrderByDescending(p => p.DeadLine).ToList();
+            sortedProjects.Insert(0, vm);
+            _data = new ObservableCollection<ProjectVM>(sortedProjects);
+
+            _selectedProject = vm;
+            StateHasChanged();
         }
     }
 
@@ -239,36 +277,6 @@ public partial class Projects
         _deleteDialogMsg = $"Are you sure you want delete {_selectedProject.Name}";
         _deleteDialog.Show();
         _isDeleteDialogOdepened = true;
-    }
-
-    public async Task _addEditProjectDialogAccept()
-    {
-        var valid = projectCompoment.Validate();
-        if (valid)
-        {
-            await projectCompoment.SaveAsync();
-
-            var newProject = projectCompoment.GetProject();
-
-            if (_data.Any(p => p.Id == newProject.Id))
-                _data.Remove(newProject);
-
-            // Order by DeaLine and add new one on top
-            var sortedProjects = _data.OrderByDescending(p => p.DeadLine).ToList();
-            sortedProjects.Insert(0, newProject);
-            _data = new ObservableCollection<ProjectVM>(sortedProjects);
-
-            _addEditProjectDialog.Hide();
-            _isAddEditProjectDialogOdepened = false;
-
-            StateHasChanged();
-        }
-    }
-
-    public void _addEditProjectDialogCansel()
-    {
-        _addEditProjectDialog.Hide();
-        _isAddEditProjectDialogOdepened = false;
     }
     #endregion
 
