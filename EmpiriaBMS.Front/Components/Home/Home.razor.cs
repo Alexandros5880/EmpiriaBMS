@@ -47,10 +47,21 @@ public partial class Home
 
     private async Task _onRefresh()
     {
-        await _clientsComp?.Refresh();
-        await _offersComp?.Refresh();
-        await _projectsComp?.Refresh();
-        await _disciplinesComp?.Refresh();
+        var refreshTasks = new List<Task>();
+
+        if (_clientsComp != null)
+            refreshTasks.Add(_clientsComp.Refresh());
+
+        if (_offersComp != null)
+            refreshTasks.Add(_offersComp.Refresh());
+
+        if (_projectsComp != null)
+            refreshTasks.Add(_projectsComp.Refresh());
+
+        if (_disciplinesComp != null)
+            refreshTasks.Add(_disciplinesComp.Refresh());
+
+        await Task.WhenAll(refreshTasks);
     }
 
     #region Header Compoment
