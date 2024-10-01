@@ -205,8 +205,9 @@ public partial class Projects
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true,
-            Width = "min(80%, 700px);"
+            PreventScroll = false,
+            Width = "min(80%, 700px);",
+            Height = "min(80%, 800px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailed>(new ProjectVM(), parameters);
@@ -244,8 +245,9 @@ public partial class Projects
             SecondaryAction = "Cancel",
             TrapFocus = true,
             Modal = true,
-            PreventScroll = true,
-            Width = "min(80%, 700px);"
+            PreventScroll = false,
+            Width = "min(80%, 700px);",
+            Height = "min(80%, 800px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailed>(_selectedProject, parameters);

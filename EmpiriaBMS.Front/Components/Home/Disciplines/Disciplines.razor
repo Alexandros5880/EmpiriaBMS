@@ -97,7 +97,7 @@
                             <td class="align-middle
                                         @(((_selectedDiscipline == null
                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                                ? "" : "selected_table_data_row"))"
+                                                ? "" : "selected_table_disciplines_row"))"
                                 style="word-wrap: break-word; max-width: 100px;">
                                 <labe>@discipline.Type.Name</labe>
                             </td>
@@ -105,7 +105,7 @@
                             <td class="align-middle text-center
                                     @(((_selectedDiscipline == null
                                         || !_selectedDiscipline.Id.Equals(discipline.Id))
-                                            ? "" : "selected_table_data_row"))"
+                                            ? "" : "selected_table_disciplines_row"))"
                                 style="word-wrap: break-word; max-width: 100px;">
                                 <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
                             </td>
@@ -115,7 +115,7 @@
                                 <td class="align-middle
                                         @((_selectedDiscipline == null ||
                                                 !_selectedDiscipline.Id.Equals(discipline.Id)
-                                                                ? "" : "selected_table_data_row"))">
+                                                                ? "" : "selected_table_disciplines_row"))">
                                     <span class="clarity--assign-user-line"
                                           @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
                                     </span>
