@@ -28,8 +28,33 @@
 
 @* Body *@
 <FluentDialogBody>
-    <div class="row gx-2"
-         style="height: 77vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;">
+    <div class="row gy-1"
+         style="height: 100%; overflow-y: auto; overflow-x: hidden;">
+
+        <div class="col-12 row gx-2">
+            <!-- Offer -->
+            <div class="col-lg-6 col-md-12">
+                <div>
+                    Offer<span class="text-danger">*</span>
+                </div>
+                <div>
+                    <FluentCombobox Placeholder="Select Offer..."
+                                    Items="@_offers"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="OfferVM"
+                                    OptionText="@(c => c.Code)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Offer" />
+                </div>
+                @if (!validOffer)
+                {
+                    <div>
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
+        </div>
 
         <div class="col-12 row gx-2">
             <!-- Name -->

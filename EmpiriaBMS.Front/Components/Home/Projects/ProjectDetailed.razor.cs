@@ -29,9 +29,6 @@ public partial class ProjectDetailed : IDialogContentComponent<ProjectVM>
             if (_offer == value || value == null) return;
             _offer = value;
             Content.OfferId = _offer.Id;
-            var vm = _offers.FirstOrDefault(o => o.Id == _offer.Id);
-            var dto = Mapper.Map<OfferDto>(vm);
-            Content.Offer = Mapping.Mapper.Map<Offer>(dto);
         }
     }
 
@@ -171,6 +168,8 @@ public partial class ProjectDetailed : IDialogContentComponent<ProjectVM>
         var vms = Mapper.Map<List<OfferVM>>(dtos);
         _offers.Clear();
         vms.ForEach(_offers.Add);
+
+        Offer = _offers.FirstOrDefault(o => o.Id == Content.OfferId) ?? null;
     }
     #endregion
 }

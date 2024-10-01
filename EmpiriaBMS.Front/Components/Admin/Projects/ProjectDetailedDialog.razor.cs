@@ -13,8 +13,21 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
 
+    ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     ObservableCollection<ProjectStageVM> _stages = new ObservableCollection<ProjectStageVM>();
     ObservableCollection<UserVM> _pms = new ObservableCollection<UserVM>();
+
+    private OfferVM _offer = new OfferVM();
+    public OfferVM Offer
+    {
+        get => _offer;
+        set
+        {
+            if (_offer == value || value == null) return;
+            _offer = value;
+            Content.OfferId = _offer.Id;
+        }
+    }
 
     private ProjectStageVM _stage = new ProjectStageVM();
     public ProjectStageVM Stage
@@ -67,6 +80,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     }
 
     #region Validation
+    private bool validOffer = true;
     private bool validName = true;
     private bool validCode = true;
     private bool validStage = true;
@@ -76,15 +90,17 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     {
         if (fieldname == null)
         {
+            validOffer = _offer != null && _offer.Id != 0;
             validName = !string.IsNullOrEmpty(Content.Name);
             validCode = !string.IsNullOrEmpty(Content.Code);
             validStage = _stage != null && _stage.Id != 0;
             validPm = _pm != null && _pm.Id != 0;
 
-            return validName && validCode && validStage && validPm;
+            return validOffer && validName && validCode && validStage && validPm;
         }
         else
         {
+            validOffer = true;
             validName = true;
             validCode = true;
             validStage = true;
@@ -92,6 +108,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 
             switch (fieldname)
             {
+                case "Offer":
+                    validOffer = _offer != null && _offer.Id != 0;
+                    return validOffer;
                 case "Name":
                     validName = !string.IsNullOrEmpty(Content.Name);
                     return validName;
@@ -115,6 +134,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     #region Get Related Records
     private async Task _getRecords()
     {
+        await _getOffers();
         await _getStages();
         await _getProjectManagers();
     }
@@ -139,6 +159,14 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         Pm = _pms.FirstOrDefault(c => c.Id == Content.ProjectManagerId) ?? null;
     }
 
-    #endregion
+    private async Task _getOffers()
+    {
+        var dtos = await DataProvider.Offers.GetAll(result: Models.Enum.OfferResult.SUCCESSFUL);
+        var vms = Mapper.Map<List<OfferVM>>(dtos);
+        _offers.Clear();
+        vms.ForEach(_offers.Add);
 
+        Offer = _offers.FirstOrDefault(o => o.Id == Content.OfferId) ?? null;
+    }
+    #endregion
 }

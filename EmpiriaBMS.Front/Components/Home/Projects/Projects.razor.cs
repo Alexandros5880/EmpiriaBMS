@@ -206,8 +206,8 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = false,
-            Width = "min(80%, 700px);",
-            Height = "min(80%, 800px);"
+            Width = "min(82%, 740px);",
+            Height = "min(82%, 840px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailed>(new ProjectVM(), parameters);
@@ -250,8 +250,8 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = false,
-            Width = "min(80%, 700px);",
-            Height = "min(80%, 800px);"
+            Width = "min(82%, 740px);",
+            Height = "min(82%, 840px);"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailed>(_selectedProject, parameters);
