@@ -20,55 +20,64 @@
                 <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _add())">Add</FluentButton>
             </FluentStack>
         </div>
-        <div>
-            <FluentDataGrid Items="@FilteredItems"
-                            ResizableColumns=true
-                            Pagination="@pagination"
-                            TGridItem="PaymentVM"
-                            OnRowFocus="HandleRowFocus"
-                            GridTemplateColumns="auto 100px 100px 100px 100px 140px 100px"
-                            style="height: 100% min-height: 300px; overflow:auto;">
+        @if (_loading)
+        {
+            <div class="mt-5 mb-5">
+                <FluentProgressRing Style="margin: 0 auto;" />
+            </div>
+        }
+        else
+        {
+            <div>
+                <FluentDataGrid Items="@FilteredItems"
+                                ResizableColumns=true
+                                Pagination="@pagination"
+                                TGridItem="PaymentVM"
+                                OnRowFocus="HandleRowFocus"
+                                GridTemplateColumns="auto 100px 100px 100px 100px 140px 100px"
+                                style="height: 100% min-height: 300px; overflow:auto;">
 
-                <TemplateColumn Title="Name"
-                                Sortable="true"
-                                InitialSortDirection=SortDirection.Descending
-                                IsDefaultSortColumn=true>
-                    <ColumnOptions>
-                        <div class="search-box">
-                            <FluentSearch type="search"
-                                          Autofocus=true
-                                          @bind-Value="@_filterString"
-                                          Placeholder="Project..."
-                                          @oninput="@HandleFilter" />
-                        </div>
-                    </ColumnOptions>
-                    <ChildContent>
-                        @(context.ProjectName)
-                    </ChildContent>
-                </TemplateColumn>
+                    <TemplateColumn Title="Name"
+                                    Sortable="true"
+                                    InitialSortDirection=SortDirection.Descending
+                                    IsDefaultSortColumn=true>
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterString"
+                                              Placeholder="Project..."
+                                              @oninput="@HandleFilter" />
+                            </div>
+                        </ColumnOptions>
+                        <ChildContent>
+                            @(context.ProjectName)
+                        </ChildContent>
+                    </TemplateColumn>
 
-                <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.InvoiceTypeName)" Sortable="true" Title="Invoice Type" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.Bank)" Sortable="true" Title="Bank" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => @Culture.GetNumberFromated((double)p.Fee))" Sortable="true" Title="Fee" Align="@Align.Start" />
-                <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Payment Date" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.TypeName)" Sortable="true" Title="Type" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.InvoiceTypeName)" Sortable="true" Title="Invoice Type" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.Bank)" Sortable="true" Title="Bank" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => @Culture.GetNumberFromated((double)p.Fee))" Sortable="true" Title="Fee" Align="@Align.Start" />
+                    <PropertyColumn Property="@(p => p.PaymentDate)" Format="dd-mm-yyyy" Sortable="true" Title="Payment Date" Align="@Align.Start" />
 
-                <TemplateColumn Title="Actions" Align="@Align.End">
-                    <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
-                    <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
-                </TemplateColumn>
+                    <TemplateColumn Title="Actions" Align="@Align.End">
+                        <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                        <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                    </TemplateColumn>
 
-            </FluentDataGrid>
-        </div>
-        <div style="min-width: 50%;">
-            <FluentPaginator State="@pagination">
-                <SummaryTemplate>
-                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
-                </SummaryTemplate>
-                <PaginationTextTemplate>
-                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
-                </PaginationTextTemplate>
-            </FluentPaginator>
-        </div>
+                </FluentDataGrid>
+            </div>
+            <div style="min-width: 50%;">
+                <FluentPaginator State="@pagination">
+                    <SummaryTemplate>
+                        There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                    </PaginationTextTemplate>
+                </FluentPaginator>
+            </div>
+        }
     </div>
 </div>
