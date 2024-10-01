@@ -71,7 +71,6 @@ public partial class Projects
             _loading = true;
             StateHasChanged();
         }
-        _selectedProject = null;
 
         await GetRecords();
 
