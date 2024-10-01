@@ -34,118 +34,113 @@
 @inject DatabaseBackupService DatabaseBackupService
 @inject Logging.LoggerManager Logger
 
-
-
-<!-- Table Deliverables -->
-<div style="min-width: @((IsWorkingMode ? "660px" : "500px")); width: 100%;">
-    @if (_disciplineId != 0)
-    {
-        <!-- Actions -->
-        <div style="height: 74px;">
-            <div class="text-start row me-2">
-                <h3>Deliverables</h3>
+@if (_disciplineId != 0)
+{
+    <!-- Actions -->
+    <div style="height: 74px;">
+        <div class="text-start row me-2">
+            <h3>Deliverables</h3>
+        </div>
+        <div class="text-center row me-2">
+            <div class="col-6">
             </div>
-            <div class="text-center row me-2">
-                <div class="col-6">
-                </div>
-                <div class="col-6">
-                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
-                        @if (IsWorkingMode && editDeliverable)
+            <div class="col-6">
+                <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                    @if (IsWorkingMode && editDeliverable)
+                    {
+                        @if (_selectedDeliverable != null)
                         {
-                            @if (_selectedDeliverable != null)
+                            <span class="fluent--delete-28-regular"
+                                  @onclick="@(() => DeleteDeliverable())" />
+                            @if (_hasDeliverablessSelections)
                             {
-                                <span class="fluent--delete-28-regular"
-                                      @onclick="@(() => DeleteDeliverable())" />
-                                @if (_hasDeliverablessSelections)
-                                {
-                                    <span class="material-symbols--edit-outline"
-                                          @onclick="@(() => EditDeliverable())" />
-                                }
+                                <span class="material-symbols--edit-outline"
+                                      @onclick="@(() => EditDeliverable())" />
                             }
-                            <span class="grommet-icons--add"
-                                  @onclick="@(() => AddDeliverable())" />
                         }
+                        <span class="grommet-icons--add"
+                              @onclick="@(() => AddDeliverable())" />
+                    }
 
-                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                      Appearance="Appearance.Outline"
-                                      OnClick="@(async (e) => await ExportDeliverablesToCSV())"
-                                      Disabled="@(_data.Count() == 0)">
-                            Export
-                        </FluentButton>
-                    </FluentStack>
-                </div>
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                  Appearance="Appearance.Outline"
+                                  OnClick="@(async (e) => await ExportDeliverablesToCSV())"
+                                  Disabled="@(_data.Count() == 0)">
+                        Export
+                    </FluentButton>
+                </FluentStack>
             </div>
         </div>
-        @if (_loading)
-        {
-            <div class="mt-5 mb-5">
-                <FluentProgressRing Style="margin: 0 auto;" />
-            </div>
-        }
-        else
-        {
-            <!-- Table -->
-            <div class="table-responsive mt-2 p-1 table-container"
-                 style="overflow-x: auto !important;">
-                <table class="table table-hover table-primary text-center">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="sticky-header">Deliverable</th>
-                            <th scope="col" class="sticky-header">Total Hours</th>
-                            <th scope="col" class="sticky-header">Declared Completion</th>
-                            @if (IsWorkingMode && assignDesigner)
-                            {
-                                <th scope="col"></th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var deliverable in _data)
+    </div>
+    @if (_loading)
+    {
+        <div class="mt-5 mb-5">
+            <FluentProgressRing Style="margin: 0 auto;" />
+        </div>
+    }
+    else
+    {
+        <!-- Table -->
+        <div class="table-responsive mt-2 p-1 table-container"
+             style="overflow-x: auto !important;">
+            <table class="table table-hover table-primary text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="sticky-header">Deliverable</th>
+                        <th scope="col" class="sticky-header">Total Hours</th>
+                        <th scope="col" class="sticky-header">Declared Completion</th>
+                        @if (IsWorkingMode && assignDesigner)
                         {
-                            <tr class="align-middle"
-                                @onclick="@(() => OnSelect(deliverable))">
+                            <th scope="col"></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var deliverable in _data)
+                    {
+                        <tr class="align-middle"
+                            @onclick="@(() => OnSelect(deliverable))">
 
-                                <td class="align-middle
+                            <td class="align-middle
                                     @(((_selectedDeliverable == null ||
                                             !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                 ? "" : "selected_table_deliverables_row"))">
-                                    <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
-                                </td>
+                                <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
+                            </td>
 
-                                <td class="align-middle
+                            <td class="align-middle
                                     @(((_selectedDeliverable == null ||
                                             !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                 ? "" : "selected_table_deliverables_row"))">
-                                    <label>@GetMenHours(deliverable.Id) h</label>
-                                </td>
+                                <label>@GetMenHours(deliverable.Id) h</label>
+                            </td>
 
-                                <td class="align-middle
+                            <td class="align-middle
                                     @(((_selectedDeliverable == null ||
                                         !_selectedDeliverable.Id.Equals(deliverable.Id))
                                             ? "" : "selected_table_deliverables_row"))">
-                                    <label>@deliverable.CompletionEstimation %</label>
-                                </td>
+                                <label>@deliverable.CompletionEstimation %</label>
+                            </td>
 
-                                @if (IsWorkingMode && assignDesigner)
-                                {
-                                    <td class="align-middle
+                            @if (IsWorkingMode && assignDesigner)
+                            {
+                                <td class="align-middle
                                         @((_selectedDeliverable == null ||
                                                 !_selectedDeliverable.Id.Equals(deliverable?.Id)
                                                                 ? "" : "selected_table_deliverables_row"))">
-                                        <span class="clarity--assign-user-line"
-                                              @onclick="@(async (x) => await OnDeliverableAssignClick(deliverable))">
-                                        </span>
-                                    </td>
-                                }
+                                    <span class="clarity--assign-user-line"
+                                          @onclick="@(async (x) => await OnDeliverableAssignClick(deliverable))">
+                                    </span>
+                                </td>
+                            }
 
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
-</div>
+}
 
 @if (!_loading)
 {

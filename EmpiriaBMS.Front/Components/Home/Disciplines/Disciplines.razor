@@ -34,111 +34,108 @@
 @inject DatabaseBackupService DatabaseBackupService
 @inject Logging.LoggerManager Logger
 
-<div style="min-width: @((IsWorkingMode ? "660px" : "500px")); width: 100%;">
-    @if (_projectId != 0)
-    {
-        <!-- Actions -->
-        <div style="height: 74px;">
-            <div class="text-start row me-2">
-                <h3 class="@((IsWorkingMode ? "col-8" : "col-11"))">Disciplines</h3>
+@if (_projectId != 0)
+{
+    <!-- Actions -->
+    <div style="height: 74px;">
+        <div class="text-start row me-2">
+            <h3 class="@((IsWorkingMode ? "col-8" : "col-11"))">Disciplines</h3>
+        </div>
+        <div class="text-center row me-2">
+            <div class="col-6">
             </div>
-            <div class="text-center row me-2">
-                <div class="col-6">
-                </div>
-                <div class="col-6">
-                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
-                        @if (IsWorkingMode && editDiscipline)
+            <div class="col-6">
+                <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                    @if (IsWorkingMode && editDiscipline)
+                    {
+                        @if (_selectedDiscipline != null)
                         {
-                            @if (_selectedDiscipline != null)
-                            {
-                                <span class="fluent--delete-28-regular"
-                                      @onclick="@(() => DeleteDiscipline())" />
-                                <span class="material-symbols--edit-outline"
-                                      @onclick="@(async () => await EditDiscipline())" />
-                            }
-                            @if (_hasDisciplinesSelections)
-                            {
-                                <span class="grommet-icons--add"
-                                      @onclick="@(async () => await AddDiscipline())" />
-                            }
+                            <span class="fluent--delete-28-regular"
+                                  @onclick="@(() => DeleteDiscipline())" />
+                            <span class="material-symbols--edit-outline"
+                                  @onclick="@(async () => await EditDiscipline())" />
                         }
+                        @if (_hasDisciplinesSelections)
+                        {
+                            <span class="grommet-icons--add"
+                                  @onclick="@(async () => await AddDiscipline())" />
+                        }
+                    }
 
-                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                      Appearance="Appearance.Outline"
-                                      OnClick="@(async (e) => await ExportDisciplinesToCSV())"
-                                      Disabled="@(_data.Count() == 0)">
-                            Export
-                        </FluentButton>
-                    </FluentStack>
-                </div>
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                  Appearance="Appearance.Outline"
+                                  OnClick="@(async (e) => await ExportDisciplinesToCSV())"
+                                  Disabled="@(_data.Count() == 0)">
+                        Export
+                    </FluentButton>
+                </FluentStack>
             </div>
         </div>
-        @if (_loading)
-        {
-            <div class="mt-5 mb-5">
-                <FluentProgressRing Style="margin: 0 auto;" />
-            </div>
-        }
-        else
-        {
-            <!-- Table -->
-            <div class="table-responsive mt-2 p-1 table-container"
-                 style="overflow-x: auto !important;">
-                <table class="table table-hover table-danger text-center">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Discipline</th>
-                            <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Estimated Discipline Hours</th>
-                            @if (IsWorkingMode && assignEngineer)
-                            {
-                                <th scope="col"></th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var discipline in _data)
+    </div>
+    @if (_loading)
+    {
+        <div class="mt-5 mb-5">
+            <FluentProgressRing Style="margin: 0 auto;" />
+        </div>
+    }
+    else
+    {
+        <!-- Table -->
+        <div class="table-responsive mt-2 p-1 table-container"
+             style="overflow-x: auto !important;">
+            <table class="table table-hover table-danger text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Discipline</th>
+                        <th scope="col" class="sticky-header" style="word-wrap: break-word; max-width: 100px;">Estimated Discipline Hours</th>
+                        @if (IsWorkingMode && assignEngineer)
                         {
-                            <tr class="align-middle
+                            <th scope="col"></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var discipline in _data)
+                    {
+                        <tr class="align-middle
                                     @(( @GetMenHours(discipline.Id) > discipline.EstimatedHours ? "table-danger" : ""))"
-                                @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
+                            @onclick="@(async () => await OnSelectDiscipline(discipline.Id))">
 
-                                <td class="align-middle
+                            <td class="align-middle
                                             @(((_selectedDiscipline == null
                                                 || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                     ? "" : "selected_table_disciplines_row"))"
-                                    style="word-wrap: break-word; max-width: 100px;">
-                                    <labe>@discipline.Type.Name</labe>
-                                </td>
+                                style="word-wrap: break-word; max-width: 100px;">
+                                <labe>@discipline.Type.Name</labe>
+                            </td>
 
-                                <td class="align-middle text-center
+                            <td class="align-middle text-center
                                         @(((_selectedDiscipline == null
                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                 ? "" : "selected_table_disciplines_row"))"
-                                    style="word-wrap: break-word; max-width: 100px;">
-                                    <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
-                                </td>
+                                style="word-wrap: break-word; max-width: 100px;">
+                                <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
+                            </td>
 
-                                @if (IsWorkingMode && assignEngineer)
-                                {
-                                    <td class="align-middle
+                            @if (IsWorkingMode && assignEngineer)
+                            {
+                                <td class="align-middle
                                             @((_selectedDiscipline == null ||
                                                     !_selectedDiscipline.Id.Equals(discipline.Id)
                                                                     ? "" : "selected_table_disciplines_row"))">
-                                        <span class="clarity--assign-user-line"
-                                              @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
-                                        </span>
-                                    </td>
-                                }
+                                    <span class="clarity--assign-user-line"
+                                          @onclick="@(async (x) => await OnDesciplineAssignClick(discipline))">
+                                    </span>
+                                </td>
+                            }
 
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
-</div>
-
+}
 
 @if (!_loading)
 {

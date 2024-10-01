@@ -88,30 +88,38 @@
     <FluentGrid Spacing="4" Class="mt-5">
 
         <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
-            <!-- Table Projects -->
-            <Projects @ref="_projectsComp"
-                        IsWorkingMode="@_isWorkingMode"
-                        OnSelect="OnSelectProject"
-                        OnEdit="OnEditProject" />
+            <div style="min-width: @((_isWorkingMode ? "660px" : "500px")); width: 100%;">
+                <!-- Table Projects -->
+                <Projects @ref="_projectsComp"
+                          IsWorkingMode="@_isWorkingMode"
+                          OnSelect="OnSelectProject"
+                          OnEdit="OnEditProject" />
+            </div>
         </FluentGridItem>
 
         <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
-            <!-- Table Disciplines -->
-            <Disciplines @ref="_disciplinesComp"
-                            IsWorkingMode="@_isWorkingMode"
-                            OnSelect="OnSelectDiscipline" />
+            <div style="min-width: @((_isWorkingMode ? "660px" : "500px")); width: 100%;">
+                <!-- Table Disciplines -->
+                <Disciplines @ref="_disciplinesComp"
+                             IsWorkingMode="@_isWorkingMode"
+                             OnSelect="OnSelectDiscipline" />
+            </div>
         </FluentGridItem>
 
         <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
-            <!-- Table Deliverables -->
-            <Deliverables @ref="_deliverablesComp"
-                            IsWorkingMode="@_isWorkingMode" />
+            <div style="min-width: @((_isWorkingMode ? "660px" : "500px")); width: 100%;">
+                <!-- Table Deliverables -->
+                <Deliverables @ref="_deliverablesComp"
+                              IsWorkingMode="@_isWorkingMode" />
+            </div>
         </FluentGridItem>
 
         <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
-            <!-- Table Supportive Works -->
-            <SupportiveWorks @ref="_supportiveWorksComp"
-                                IsWorkingMode="@_isWorkingMode" />
+            <div style="min-width: @((_isWorkingMode ? "660px" : "500px")); width: 100%;">
+                <!-- Table Supportive Works -->
+                <SupportiveWorks @ref="_supportiveWorksComp"
+                                 IsWorkingMode="@_isWorkingMode" />
+            </div>
         </FluentGridItem>
 
     </FluentGrid>

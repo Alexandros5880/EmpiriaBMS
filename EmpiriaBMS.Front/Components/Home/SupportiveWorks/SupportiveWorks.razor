@@ -34,93 +34,90 @@
 @inject DatabaseBackupService DatabaseBackupService
 @inject Logging.LoggerManager Logger
 
-<div style="min-width: @((IsWorkingMode ? "660px" : "500px")); width: 100%;">
-    @if (_disciplineId != 0)
-    {
-        <!-- Actions -->
-        <div style="height: 74px;">
-            <div class="text-start row me-2">
-                <h3>Supportive Works</h3>
+@if (_disciplineId != 0)
+{
+    <!-- Actions -->
+    <div style="height: 74px;">
+        <div class="text-start row me-2">
+            <h3>Supportive Works</h3>
+        </div>
+        <div class="text-center row me-2">
+            <div class="col-6">
             </div>
-            <div class="text-center row me-2">
-                <div class="col-6">
-                </div>
-                <div class="col-6">
-                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
-                        @if (IsWorkingMode && editSupportiveWork)
+            <div class="col-6">
+                <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                    @if (IsWorkingMode && editSupportiveWork)
+                    {
+                        @if (_selectedSupportiveWork != null)
                         {
-                            @if (_selectedSupportiveWork != null)
+                            <span class="fluent--delete-28-regular col-1"
+                                  @onclick="@(() => DeleteSupportiveWork())" />
+                            @if (_hasSapportiveWorksSelections)
                             {
-                                <span class="fluent--delete-28-regular col-1"
-                                      @onclick="@(() => DeleteSupportiveWork())" />
-                                @if (_hasSapportiveWorksSelections)
-                                {
-                                    <span class="material-symbols--edit-outline col-1"
-                                          @onclick="@(() => EditSupportiveWork())" />
-                                }
+                                <span class="material-symbols--edit-outline col-1"
+                                      @onclick="@(() => EditSupportiveWork())" />
                             }
-                            <span class="grommet-icons--add col-1"
-                                  @onclick="@(() => AddSupportiveWork())" />
                         }
+                        <span class="grommet-icons--add col-1"
+                              @onclick="@(() => AddSupportiveWork())" />
+                    }
 
-                        <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                                      Appearance="Appearance.Outline"
-                                      OnClick="@(async (e) => await ExportSupportiveWorksToCSV())"
-                                      Disabled="@(_data.Count() == 0)">
-                            Export
-                        </FluentButton>
-                    </FluentStack>
-                </div>
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                  Appearance="Appearance.Outline"
+                                  OnClick="@(async (e) => await ExportSupportiveWorksToCSV())"
+                                  Disabled="@(_data.Count() == 0)">
+                        Export
+                    </FluentButton>
+                </FluentStack>
             </div>
         </div>
-        @if (_loading)
-        {
-            <div class="mt-5 mb-5">
-                <FluentProgressRing Style="margin: 0 auto;" />
-            </div>
-        }
-
-        {
-            <!-- Table -->
-            <div class="table-responsive mt-2 p-1 table-container"
-                 style="overflow-x: auto !important;">
-                <table class="table table-hover table-warning text-center">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="sticky-header">Supportive Work</th>
-                            <th scope="col" class="sticky-header">Total Hours</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var _supportiveWork in _data)
-                        {
-                            <tr class="align-middle" @onclick="@(() => OnSelect(_supportiveWork))">
-
-                                <td class="align-middle
-                                    @(((_selectedSupportiveWork == null ||
-                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
-                                                ? "" : "selected_table_supportiveworks_row"))"
-                                    style="min-width: 110px;">
-                                    <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
-                                </td>
-
-                                <td class="align-middle
-                                    @(((_selectedSupportiveWork == null ||
-                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
-                                                ? "" : "selected_table_supportiveworks_row"))"
-                                    style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                    <label>@GetMenHours(_supportiveWork.Id) h</label>
-                                </td>
-
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
+    </div>
+    @if (_loading)
+    {
+        <div class="mt-5 mb-5">
+            <FluentProgressRing Style="margin: 0 auto;" />
+        </div>
     }
-</div>
+    else
+    {
+        <!-- Table -->
+        <div class="table-responsive mt-2 p-1 table-container"
+             style="overflow-x: auto !important;">
+            <table class="table table-hover table-warning text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="sticky-header">Supportive Work</th>
+                        <th scope="col" class="sticky-header">Total Hours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var _supportiveWork in _data)
+                    {
+                        <tr class="align-middle" @onclick="@(() => OnSelect(_supportiveWork))">
 
+                            <td class="align-middle
+                                    @(((_selectedSupportiveWork == null ||
+                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
+                                                ? "" : "selected_table_supportiveworks_row"))"
+                                style="min-width: 110px;">
+                                <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
+                            </td>
+
+                            <td class="align-middle
+                                    @(((_selectedSupportiveWork == null ||
+                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
+                                                ? "" : "selected_table_supportiveworks_row"))"
+                                style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                <label>@GetMenHours(_supportiveWork.Id) h</label>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
 
 @if (!_loading)
 {
