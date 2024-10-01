@@ -6,7 +6,7 @@
 @using Microsoft.Fast.Components.FluentUI
 @using EmpiriaBMS.Front.Components.General
 @using EmpiriaBMS.Front.Components
-@using EmpiriaBMS.Front.Components.Offers
+@using EmpiriaBMS.Front.Components.Home.Offers
 @using EmpiriaBMS.Front.Components.KPIS
 @using EmpiriaBMS.Front.Horizontal
 @using EmpiriaBMS.Front.Services
@@ -16,7 +16,7 @@
 @using EmpiriaBMS.Front.Components.WorkingHours
 @using EmpiriaBMS.Front.Components.Reports
 @using EmpiriaBMS.Models.Enum
-@using EmpiriaBMS.Front.Components.Clients
+@using EmpiriaBMS.Front.Components.Home.Clients
 @using EmpiriaBMS.Front.Components.Home.Deliverables
 @using EmpiriaBMS.Front.Components.Home.Disciplines
 @using EmpiriaBMS.Front.Components.Home.Issues
@@ -74,7 +74,8 @@
 
                             <!-- Headder -->
                             <HomeHeadComp @ref="@_headerComp"
-                                          IsWorkingModeChanged="@_onWorkingModeChanged"/>
+                                          IsWorkingModeChanged="@_onWorkingModeChanged"
+                                          OnRefresh="@_onRefresh"/>
 
                             <!-- Clients -->
                             @if (seeClientsOnDashboard)
@@ -88,7 +89,8 @@
                                                 </div>
                                             </HeadingTemplate>
                                             <ChildContent>
-                                                <Clients OnResultChanged="@_onClientResultChanged"
+                                                <Clients @ref="_clientsComp"
+                                                         OnResultChanged="@_onClientResultChanged"
                                                          IsWorkingMode="@_isWorkingMode" />
                                             </ChildContent>
                                         </FluentAccordionItem>

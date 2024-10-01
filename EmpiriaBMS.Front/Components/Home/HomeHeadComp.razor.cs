@@ -1,33 +1,14 @@
-﻿using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Hellpers;
-using EmpiriaBMS.Front.Components.Invoices;
-using EmpiriaBMS.Front.Components.KPIS.Base;
-using ComReports = EmpiriaBMS.Front.Components.Reports;
-using EmpiriaBMS.Front.Components.WorkingHours;
+﻿using EmpiriaBMS.Front.Components.WorkingHours;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
-using Humanizer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.RulesetToEditorconfig;
 using Microsoft.Fast.Components.FluentUI;
-using System;
 using System.Collections.ObjectModel;
-using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
-using EmpiriaBMS.Front.Components.Admin.Projects;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using EmpiriaBMS.Front.Components.Home.Projects;
-using EmpiriaBMS.Front.Components.Home.Issues;
-using DevComp = EmpiriaBMS.Front.Components.Home.Deliverables;
-using DiscComp = EmpiriaBMS.Front.Components.Home.Disciplines;
-using SWComp = EmpiriaBMS.Front.Components.Home.SupportiveWorks;
-using projComp = EmpiriaBMS.Front.Components.Home.Projects;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace EmpiriaBMS.Front.Components.Home;
 
@@ -35,6 +16,9 @@ public partial class HomeHeadComp : IDisposable
 {
     [Parameter]
     public EventCallback<bool> IsWorkingModeChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnRefresh { get; set; }
 
     #region Authorization Properties
     bool isEmployee => _sharedAuthData.IsLogedUserEmployee;
@@ -96,10 +80,34 @@ public partial class HomeHeadComp : IDisposable
         if (firstRender)
         {
             _loading = true;
-            await Refresh();
+            await _getTeamsRequestedUsers();
+            await _getUserTotalHoursThisMonth();
+
+            if (canApproveTimeRequests)
+            {
+                await _getHoursCorrectionsRequests();
+                await _getHoursCorrectionRequestsCount();
+            }
             _loading = false;
             StateHasChanged();
         }
+    }
+
+    public async Task Refresh()
+    {
+        _refreshLoading = true;
+        await _getTeamsRequestedUsers();
+        await _getUserTotalHoursThisMonth();
+
+        if (canApproveTimeRequests)
+        {
+            await _getHoursCorrectionsRequests();
+            await _getHoursCorrectionRequestsCount();
+        }
+        _refreshLoading = false;
+        StateHasChanged();
+
+        await OnRefresh.InvokeAsync();
     }
 
     #region Timer
@@ -109,22 +117,7 @@ public partial class HomeHeadComp : IDisposable
     TimeSpan timePaused = TimeSpan.Zero;
     TimeSpan remainingTime = TimeSpan.Zero;
     private EditUsersHours _editHoursCompoment;
-
-    public async Task Refresh()
-    {
-        _refreshLoading = true;
-        await _getTeamsRequestedUsers();
-        await _getUserTotalHoursThisMonth();
-        
-        if (canApproveTimeRequests)
-        {
-            await _getHoursCorrectionsRequests();
-            await _getHoursCorrectionRequestsCount();
-        }
-        _refreshLoading = false;
-        StateHasChanged();
-    }
-
+    
     private void UpdateElapsedTime()
     {
         if (_sharedAuthData.LogedUser == null) return;
@@ -267,6 +260,8 @@ public partial class HomeHeadComp : IDisposable
             TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
             await _getUserTotalHoursThisMonth();
+
+            await Refresh();
 
             StateHasChanged();
         }

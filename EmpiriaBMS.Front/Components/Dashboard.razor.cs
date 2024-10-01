@@ -1,34 +1,17 @@
-﻿using EmpiriaBMS.Core.Config;
-using EmpiriaBMS.Core.Dtos;
-using EmpiriaBMS.Core.Hellpers;
-using EmpiriaBMS.Front.Components.Invoices;
+﻿using EmpiriaBMS.Front.Components.Invoices;
 using EmpiriaBMS.Front.Components.KPIS.Base;
 using ComReports = EmpiriaBMS.Front.Components.Reports;
-using EmpiriaBMS.Front.Components.WorkingHours;
-using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
-using EmpiriaBMS.Models.Models;
-using Humanizer;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.RulesetToEditorconfig;
-using Microsoft.Fast.Components.FluentUI;
-using System;
-using System.Collections.ObjectModel;
-using OffersComp = EmpiriaBMS.Front.Components.Offers.Offers;
-using EmpiriaBMS.Front.Components.Admin.Projects;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using EmpiriaBMS.Front.Components.Home.Projects;
-using EmpiriaBMS.Front.Components.Home.Issues;
+using OffersComp = EmpiriaBMS.Front.Components.Home.Offers.Offers;
 using DevComp = EmpiriaBMS.Front.Components.Home.Deliverables;
 using DiscComp = EmpiriaBMS.Front.Components.Home.Disciplines;
 using SWComp = EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 using projComp = EmpiriaBMS.Front.Components.Home.Projects;
 using Microsoft.CodeAnalysis.CSharp;
 using EmpiriaBMS.Front.Components.Home;
+using ClientsComp = EmpiriaBMS.Front.Components.Home.Clients;
 
 namespace EmpiriaBMS.Front.Components;
 public partial class Dashboard
@@ -99,9 +82,7 @@ public partial class Dashboard
 
         if (firstRender)
         {
-            _startLoading = true;
             _runInTeams = await MicrosoftTeams.IsInTeams();
-            
             _startLoading = false;
             StateHasChanged();
         }
@@ -110,6 +91,19 @@ public partial class Dashboard
     private void _onWorkingModeChanged(bool workMode)
     {
         _isWorkingMode = workMode;
+        StateHasChanged();
+    }
+
+    private async Task _onRefresh()
+    {
+        _startLoading = true;
+        StateHasChanged();
+
+        await _clientsComp?.Refresh();
+        await _offersComp?.Refresh();
+        await _projectsComp?.Refresh();
+
+        _startLoading = false;
         StateHasChanged();
     }
 
@@ -122,6 +116,7 @@ public partial class Dashboard
     #endregion
 
     #region Clients Table Compoment
+    private ClientsComp.Clients _clientsComp;
     private async Task _onClientResultChanged(ClientVM client)
     {
         if (client.Result == ClientResult.SUCCESSFUL)

@@ -10,8 +10,9 @@ using Microsoft.Fast.Components.FluentUI;
 using System.ComponentModel.DataAnnotations;
 using System.IO.Pipelines;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
-namespace EmpiriaBMS.Front.Components.Clients;
+namespace EmpiriaBMS.Front.Components.Home.Clients;
 
 public partial class Clients
 {
@@ -181,6 +182,11 @@ public partial class Clients
             SetSelectedOption(_selectedResult.Value);
             await _getRecords();
         }
+    }
+
+    public async Task Refresh()
+    {
+        await _getRecords();
     }
 
     #region Import/Export Data

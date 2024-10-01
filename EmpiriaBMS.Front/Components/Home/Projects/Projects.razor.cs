@@ -58,6 +58,11 @@ public partial class Projects
         }
     }
 
+    public async Task Refresh()
+    {
+        await GetRecords();
+    }
+
     public void ResetSelection() =>
         _selectedProject = null;
 

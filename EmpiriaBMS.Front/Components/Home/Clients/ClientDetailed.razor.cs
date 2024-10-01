@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 
-namespace EmpiriaBMS.Front.Components.Clients;
+namespace EmpiriaBMS.Front.Components.Home.Clients;
 
 public partial class ClientDetailed
 {
