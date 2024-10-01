@@ -8,12 +8,11 @@ namespace EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 
 public partial class SupportiveWorks
 {
+    private bool _loading = false;
+
     #region Authorization Properties
     bool editSupportiveWork => _sharedAuthData.Permissions.Any(p => p.Ord == 16);
     #endregion
-
-    [Parameter]
-    public bool Loading { get; set; }
 
     [Parameter]
     public bool IsWorkingMode { get; set; }
@@ -27,6 +26,23 @@ public partial class SupportiveWorks
     private bool _hasSapportiveWorksSelections = false;
 
     private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
+
+    public async Task Refresh()
+    {
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
+        await GetRecords(_disciplineId);
+
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
+    }
 
     public async Task CheckIfHasSelections()
     {
@@ -52,6 +68,12 @@ public partial class SupportiveWorks
         if (discId == 0)
             return;
 
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
         _disciplineId = discId;
 
         var others = await _dataProvider.Disciplines.GetOthers(discId, _sharedAuthData.LogedUser.Id, true);
@@ -60,7 +82,11 @@ public partial class SupportiveWorks
         foreach (var di in others)
             _data.Add(Mapper.Map<SupportiveWorkVM>(di));
 
-        StateHasChanged();
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
     }
 
     public void ClearRecords()

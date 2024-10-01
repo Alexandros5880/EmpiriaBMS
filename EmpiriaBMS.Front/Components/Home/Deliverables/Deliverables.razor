@@ -76,73 +76,82 @@
                 </div>
             </div>
         </div>
-        <!-- Table -->
-        <div class="table-responsive mt-2 p-1 table-container"
-             style="overflow-x: auto !important;">
-            <table class="table table-hover table-primary text-center">
-                <thead>
-                    <tr>
-                        <th scope="col" class="sticky-header">Deliverable</th>
-                        <th scope="col" class="sticky-header">Total Hours</th>
-                        <th scope="col" class="sticky-header">Declared Completion</th>
-                        @if (IsWorkingMode && assignDesigner)
+        @if (_loading)
+        {
+            <div class="mt-5 mb-5">
+                <FluentProgressRing Style="margin: 0 auto;" />
+            </div>
+        }
+        else
+        {
+            <!-- Table -->
+            <div class="table-responsive mt-2 p-1 table-container"
+                 style="overflow-x: auto !important;">
+                <table class="table table-hover table-primary text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="sticky-header">Deliverable</th>
+                            <th scope="col" class="sticky-header">Total Hours</th>
+                            <th scope="col" class="sticky-header">Declared Completion</th>
+                            @if (IsWorkingMode && assignDesigner)
+                            {
+                                <th scope="col"></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var deliverable in _data)
                         {
-                            <th scope="col"></th>
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var deliverable in _data)
-                    {
-                        <tr class="align-middle"
-                            @onclick="@(() => OnSelect(deliverable))">
+                            <tr class="align-middle"
+                                @onclick="@(() => OnSelect(deliverable))">
 
-                            <td class="align-middle
+                                <td class="align-middle
                                     @(((_selectedDeliverable == null ||
                                             !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                 ? "" : "selected_table_deliverables_row"))">
-                                <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
-                            </td>
+                                    <div class="align-middle h-100"><labe>@deliverable.Type.Name</labe></div>
+                                </td>
 
-                            <td class="align-middle
+                                <td class="align-middle
                                     @(((_selectedDeliverable == null ||
                                             !_selectedDeliverable.Id.Equals(deliverable.Id))
                                                 ? "" : "selected_table_deliverables_row"))">
-                                <label>@GetMenHours(deliverable.Id) h</label>
-                            </td>
+                                    <label>@GetMenHours(deliverable.Id) h</label>
+                                </td>
 
-                            <td class="align-middle
+                                <td class="align-middle
                                     @(((_selectedDeliverable == null ||
                                         !_selectedDeliverable.Id.Equals(deliverable.Id))
                                             ? "" : "selected_table_deliverables_row"))">
-                                <label>@deliverable.CompletionEstimation %</label>
-                            </td>
+                                    <label>@deliverable.CompletionEstimation %</label>
+                                </td>
 
-                            @if (IsWorkingMode && assignDesigner)
-                            {
-                                <td class="align-middle
+                                @if (IsWorkingMode && assignDesigner)
+                                {
+                                    <td class="align-middle
                                         @((_selectedDeliverable == null ||
                                                 !_selectedDeliverable.Id.Equals(deliverable?.Id)
                                                                 ? "" : "selected_table_deliverables_row"))">
-                                    <span class="clarity--assign-user-line"
-                                          @onclick="@(async (x) => await OnDeliverableAssignClick(deliverable))">
-                                    </span>
-                                </td>
-                            }
+                                        <span class="clarity--assign-user-line"
+                                              @onclick="@(async (x) => await OnDeliverableAssignClick(deliverable))">
+                                        </span>
+                                    </td>
+                                }
 
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     }
 </div>
 
-@if (!Loading)
+@if (!_loading)
 {
     <!-- On "Add Designers" Button Dialog -->
     <FluentDialog @ref="_addDesignerDialog"
-                  Hidden="@(!_isAddDesignerDialogOdepened || Loading)"
+                  Hidden="@(!_isAddDesignerDialogOdepened)"
                   Modal="false"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: 400px !important;
@@ -202,7 +211,7 @@
 
     <!-- On Add/Edit Deliverable Dialog -->
     <FluentDialog @ref="_addEditDeliverableDialog"
-                  Hidden="@(!_isAddEditDeliverableDialogOdepened || Loading)"
+                  Hidden="@(!_isAddEditDeliverableDialogOdepened)"
                   Modal="true"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: auto !important;
@@ -241,7 +250,7 @@
 
     <!-- On Delete Dialog -->
     <FluentDialog @ref="_deleteDialog"
-                  Hidden="@(!_isDeleteDialogOdepened || Loading)"
+                  Hidden="@(!_isDeleteDialogOdepened)"
                   Modal="true"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: auto !important;

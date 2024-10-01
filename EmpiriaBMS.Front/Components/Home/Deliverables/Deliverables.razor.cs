@@ -6,19 +6,19 @@ using System.Collections.ObjectModel;
 using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
+using Microsoft.CodeAnalysis;
 
 namespace EmpiriaBMS.Front.Components.Home.Deliverables;
 
 public partial class Deliverables
 {
+    private bool _loading = false;
+
     #region Authorization Properties
     public bool assignDesigner => _sharedAuthData.PermissionOrds.Contains(3);
     bool editDeliverable => _sharedAuthData.Permissions.Any(p => p.Ord == 15);
     bool getAllDeliverables => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
     #endregion
-
-    [Parameter]
-    public bool Loading { get; set; }
 
     [Parameter]
     public bool IsWorkingMode { get; set; }
@@ -34,6 +34,23 @@ public partial class Deliverables
     private bool _hasDeliverablessSelections = false;
 
     private DeliverableVM _selectedDeliverable = new DeliverableVM();
+
+    public async Task Refresh()
+    {
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
+        await GetRecords(_disciplineId);
+
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
+    }
 
     public async Task CheckIfHasSelections()
     {
@@ -66,6 +83,12 @@ public partial class Deliverables
         if (discId == 0)
             return;
 
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+
         _disciplineId = discId;
 
         var draws = await _dataProvider.Disciplines.GetDraws(discId, _sharedAuthData.LogedUser.Id, getAllDeliverables);
@@ -74,7 +97,11 @@ public partial class Deliverables
         foreach (var di in draws)
             _data.Add(Mapper.Map<DeliverableVM>(di));
 
-        StateHasChanged();
+        if (_loading == true)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
     }
 
     public void ClearRecords()

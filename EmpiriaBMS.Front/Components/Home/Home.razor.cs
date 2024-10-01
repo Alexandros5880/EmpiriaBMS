@@ -61,6 +61,12 @@ public partial class Home
         if (_disciplinesComp != null)
             refreshTasks.Add(_disciplinesComp.Refresh());
 
+        if (_deliverablesComp != null)
+            refreshTasks.Add(_deliverablesComp.Refresh());
+
+        if (_supportiveWorksComp != null)
+            refreshTasks.Add(_supportiveWorksComp.Refresh());
+
         await Task.WhenAll(refreshTasks);
     }
 

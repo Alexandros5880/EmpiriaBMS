@@ -73,51 +73,60 @@
                 </div>
             </div>
         </div>
-        <!-- Table -->
-        <div class="table-responsive mt-2 p-1 table-container"
-             style="overflow-x: auto !important;">
-            <table class="table table-hover table-warning text-center">
-                <thead>
-                    <tr>
-                        <th scope="col" class="sticky-header">Supportive Work</th>
-                        <th scope="col" class="sticky-header">Total Hours</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var _supportiveWork in _data)
-                    {
-                        <tr class="align-middle" @onclick="@(() => OnSelect(_supportiveWork))">
+        @if (_loading)
+        {
+            <div class="mt-5 mb-5">
+                <FluentProgressRing Style="margin: 0 auto;" />
+            </div>
+        }
 
-                            <td class="align-middle
-                                    @(((_selectedSupportiveWork == null ||
-                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
-                                                ? "" : "selected_table_supportiveworks_row"))"
-                                style="min-width: 110px;">
-                                <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
-                            </td>
-
-                            <td class="align-middle
-                                    @(((_selectedSupportiveWork == null ||
-                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
-                                                ? "" : "selected_table_supportiveworks_row"))"
-                                style="min-width: 90px;max-width: 90px; margin: 0 auto;">
-                                <label>@GetMenHours(_supportiveWork.Id) h</label>
-                            </td>
-
+        {
+            <!-- Table -->
+            <div class="table-responsive mt-2 p-1 table-container"
+                 style="overflow-x: auto !important;">
+                <table class="table table-hover table-warning text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="sticky-header">Supportive Work</th>
+                            <th scope="col" class="sticky-header">Total Hours</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var _supportiveWork in _data)
+                        {
+                            <tr class="align-middle" @onclick="@(() => OnSelect(_supportiveWork))">
+
+                                <td class="align-middle
+                                    @(((_selectedSupportiveWork == null ||
+                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
+                                                ? "" : "selected_table_supportiveworks_row"))"
+                                    style="min-width: 110px;">
+                                    <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
+                                </td>
+
+                                <td class="align-middle
+                                    @(((_selectedSupportiveWork == null ||
+                                            !_selectedSupportiveWork.Id.Equals(_supportiveWork.Id))
+                                                ? "" : "selected_table_supportiveworks_row"))"
+                                    style="min-width: 90px;max-width: 90px; margin: 0 auto;">
+                                    <label>@GetMenHours(_supportiveWork.Id) h</label>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     }
 </div>
 
 
-@if (!Loading)
+@if (!_loading)
 {
     <!-- On Add/Edit SupportiveWorks Dialog -->
     <FluentDialog @ref="_addEditSupportiveWorkDialog"
-                  Hidden="@(!_isAddEditSupportiveWorkDialogOdepened || Loading)"
+                  Hidden="@(!_isAddEditSupportiveWorkDialogOdepened)"
                   Modal="true"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: auto !important;
@@ -156,7 +165,7 @@
 
     <!-- On Delete Dialog -->
     <FluentDialog @ref="_deleteDialog"
-                  Hidden="@(!_isDeleteDialogOdepened || Loading)"
+                  Hidden="@(!_isDeleteDialogOdepened)"
                   Modal="true"
                   DialogType=@DialogType.Panel
                   style="--dialog-width: auto !important;
