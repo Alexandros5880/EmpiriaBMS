@@ -28,16 +28,22 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
+            Project project;
+
             using (var _context = _dbContextFactory.CreateDbContext())
             {
+                entity.ProjectManager = null;
+                entity.Offer = null;
+
                 var result = await _context.Set<Project>().AddAsync(Mapping.Mapper.Map<Project>(entity));
                 await _context.SaveChangesAsync();
 
-                var project = result.Entity as Project;
-                var dto = await Get(project.Id);
-
-                return dto;
+                project = result.Entity as Project;
             }
+
+            var dto = await Get(project.Id);
+
+            return dto;
         }
         catch (Exception ex)
         {
@@ -60,6 +66,9 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 var project = await _context.Set<Project>().FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (project != null)
                 {
+                    entity.ProjectManager = null;
+                    entity.Offer = null;
+
                     _context.Entry(project).CurrentValues.SetValues(Mapping.Mapper.Map<Project>(entity));
                     await _context.SaveChangesAsync();
                 }
@@ -83,6 +92,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
+            var offers = await _context.Set<Offer>()
+                    .Include(o => o.Category)
+                    .Include(o => o.SubCategory)
+                    .Include(o => o.Client)
+                    .ThenInclude(l => l.Address)
+                    .Where(r => !r.IsDeleted)
+                    .ToListAsync();
+
             var project = await _context
                              .Set<Project>()
                              .Where(r => !r.IsDeleted)
@@ -93,14 +110,15 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                              .Include(p => p.Offer)
                              .ThenInclude(o => o.SubCategory)
                              .Include(p => p.Offer)
-                             .ThenInclude(o => o.Lead)
+                             .ThenInclude(o => o.Client)
                              .ThenInclude(l => l.Address)
                              .Include(p => p.Offer)
-                             .ThenInclude(o => o.Lead)
-                             .ThenInclude(l => l.Client)
+                             .ThenInclude(o => o.Client)
                              .Include(p => p.ProjectManager)
                              .Include(p => p.ProjectsSubConstructors)
                              .FirstOrDefaultAsync(r => r.Id == id);
+
+            project.Offer = offers.FirstOrDefault(o => o.Id == project.OfferId);
 
             var dto = Mapping.Mapper.Map<ProjectDto>(project);
 
@@ -116,30 +134,29 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var offers = await _context.Set<Offer>()
                     .Include(o => o.Category)
                     .Include(o => o.SubCategory)
-                    .Include(o => o.Lead)
+                    .Include(o => o.Client)
                     .ThenInclude(l => l.Address)
                     .Where(r => !r.IsDeleted)
                     .ToListAsync();
 
             projects = await _context.Set<Project>()
-                                     .Where(r => !r.IsDeleted)
-                                     .Include(r => r.Invoices)
-                                      .Include(p => p.Stage)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Category)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.SubCategory)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Lead)
-                                      .ThenInclude(l => l.Address)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Lead)
-                                      .ThenInclude(l => l.Client)
-                                      .Include(p => p.ProjectManager)
-                                      .Include(p => p.ProjectsSubConstructors)
-                                     .OrderBy(e => !e.Active)
-                                     .ThenByDescending(e => e.DeadLine)
-                                     .ToListAsync();
+                .Where(r => !r.IsDeleted)
+                .Include(r => r.Invoices)
+                .Include(p => p.Stage)
+                .Include(p => p.Offer)
+                .ThenInclude(o => o.Category)
+                .Include(p => p.Offer)
+                .ThenInclude(o => o.SubCategory)
+                .Include(p => p.Offer)
+                .ThenInclude(o => o.Client)
+                .ThenInclude(l => l.Address)
+                .Include(p => p.Offer)
+                .ThenInclude(o => o.Client)
+                .Include(p => p.ProjectManager)
+                .Include(p => p.ProjectsSubConstructors)
+                .OrderBy(e => !e.Active)
+                .ThenByDescending(e => e.DeadLine)
+                .ToListAsync();
 
             // Perform the projection after the data is loaded
             projects = projects.Select(p =>
@@ -189,7 +206,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 var offers = await _context.Set<Offer>()
                     .Include(o => o.Category)
                     .Include(o => o.SubCategory)
-                    .Include(o => o.Lead)
+                    .Include(o => o.Client)
                     .ThenInclude(l => l.Address)
                     .Where(r => !r.IsDeleted)
                     .ToListAsync();
@@ -201,27 +218,26 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 if (permissions.Any(p => p.Ord == 11))
                 {
                     allProjects = await _context.Set<Project>()
-                                                .Where(r => !r.IsDeleted)
-                                                .Where(r => active == null || r.Active == active)
-                                                .Where(p => (offerId == 0 || p.OfferId == offerId))
-                                                .Where(p => p.StartDate >= fromDate)
-                                                .Include(r => r.Invoices)
-                                                .Include(p => p.Stage)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Category)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.SubCategory)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Lead)
-                                                .ThenInclude(l => l.Address)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Lead)
-                                                .ThenInclude(l => l.Client)
-                                                .Include(p => p.ProjectManager)
-                                                .Include(p => p.ProjectsSubConstructors)
-                                                .OrderBy(e => !e.Active)
-                                                .ThenByDescending(e => e.DeadLine)
-                                                .ToListAsync();
+                        .Where(r => !r.IsDeleted)
+                        .Where(r => active == null || r.Active == active)
+                        .Where(p => (offerId == 0 || p.OfferId == offerId))
+                        .Where(p => p.StartDate >= fromDate)
+                        .Include(r => r.Invoices)
+                        .Include(p => p.Stage)
+                        .Include(p => p.Offer)
+                        .ThenInclude(o => o.Category)
+                        .Include(p => p.Offer)
+                        .ThenInclude(o => o.SubCategory)
+                        .Include(p => p.Offer)
+                        .ThenInclude(o => o.Client)
+                        .ThenInclude(l => l.Address)
+                        .Include(p => p.Offer)
+                        .ThenInclude(o => o.Client)
+                        .Include(p => p.ProjectManager)
+                        .Include(p => p.ProjectsSubConstructors)
+                        .OrderBy(e => !e.Active)
+                        .ThenByDescending(e => e.DeadLine)
+                        .ToListAsync();
                 }
                 else
                 {
@@ -253,28 +269,27 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                                                 .ToArrayAsync();
 
                     allProjects = await _context.Set<Project>()
-                                                .Where(r => !r.IsDeleted)
-                                                .Where(r => active == null || r.Active == active)
-                                                .Where(p => (offerId == 0 || p.OfferId == offerId))
-                                                .Where(p => projectsFromDisciplineIds.Contains(p.Id))
-                                                .Where(p => p.StartDate >= fromDate)
-                                                .Include(r => r.Invoices)
-                                                .Include(p => p.Stage)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Category)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.SubCategory)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Lead)
-                                                .ThenInclude(l => l.Address)
-                                                .Include(p => p.Offer)
-                                                .ThenInclude(o => o.Lead)
-                                                .ThenInclude(l => l.Client)
-                                                .Include(p => p.ProjectManager)
-                                                .Include(p => p.ProjectsSubConstructors)
-                                                .OrderBy(e => !e.Active)
-                                                .ThenByDescending(e => e.DeadLine)
-                                                .ToListAsync();
+                        .Where(r => !r.IsDeleted)
+                        .Where(r => active == null || r.Active == active)
+                        .Where(p => (offerId == 0 || p.OfferId == offerId))
+                        .Where(p => projectsFromDisciplineIds.Contains(p.Id))
+                        .Where(p => p.StartDate >= fromDate)
+                        .Include(r => r.Invoices)
+                        .Include(p => p.Stage)
+                        .Include(p => p.Offer)
+                        .ThenInclude(o => o.Category)
+                        .Include(p => p.Offer)
+                        .ThenInclude(o => o.SubCategory)
+                        .Include(p => p.Offer)
+                        .ThenInclude(o => o.Client)
+                        .ThenInclude(l => l.Address)
+                        .Include(p => p.Offer)
+                        .ThenInclude(o => o.Client)
+                        .Include(p => p.ProjectManager)
+                        .Include(p => p.ProjectsSubConstructors)
+                        .OrderBy(e => !e.Active)
+                        .ThenByDescending(e => e.DeadLine)
+                        .ToListAsync();
                 }
 
                 // Perform the projection after the data is loaded
@@ -318,25 +333,24 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             projects = await _context.Set<Project>()
-                                     .Where(r => !r.IsDeleted)
-                                     .Where(r => r.OfferId == offerId)
-                                     .Include(r => r.Invoices)
-                                      .Include(p => p.Stage)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Category)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.SubCategory)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Lead)
-                                      .ThenInclude(l => l.Address)
-                                      .Include(p => p.Offer)
-                                      .ThenInclude(o => o.Lead)
-                                      .ThenInclude(l => l.Client)
-                                      .Include(p => p.ProjectManager)
-                                      .Include(p => p.ProjectsSubConstructors)
-                                     .OrderBy(e => !e.Active)
-                                     .ThenByDescending(e => e.DeadLine)
-                                     .ToListAsync();
+                    .Where(r => !r.IsDeleted)
+                    .Where(r => r.OfferId == offerId)
+                    .Include(r => r.Invoices)
+                    .Include(p => p.Stage)
+                    .Include(p => p.Offer)
+                    .ThenInclude(o => o.Category)
+                    .Include(p => p.Offer)
+                    .ThenInclude(o => o.SubCategory)
+                    .Include(p => p.Offer)
+                    .ThenInclude(o => o.Client)
+                    .ThenInclude(l => l.Address)
+                    .Include(p => p.Offer)
+                    .ThenInclude(o => o.Client)
+                    .Include(p => p.ProjectManager)
+                    .Include(p => p.ProjectsSubConstructors)
+                    .OrderBy(e => !e.Active)
+                    .ThenByDescending(e => e.DeadLine)
+                    .ToListAsync();
 
             return Mapping.Mapper.Map<List<Project>, List<ProjectDto>>(projects.Distinct().ToList());
         }

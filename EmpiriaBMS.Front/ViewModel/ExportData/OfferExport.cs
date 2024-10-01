@@ -23,9 +23,9 @@ public class OfferExport : IInport<OfferVM>
 
     public string SubCategoryName { get; set; }
 
-    public int LedId { get; set; }
+    public int ClientId { get; set; }
 
-    public string LedName { get; set; }
+    public string ClientName { get; set; }
 
     public string Result { get; set; }
 
@@ -55,8 +55,8 @@ public class OfferExport : IInport<OfferVM>
         CategoryName = model.Category?.Name ?? "";
         SubCategoryId = model.SubCategoryId ?? 0;
         SubCategoryName = model.SubCategory?.Name ?? "";
-        LedId = model.LeadId ?? 0;
-        LedName = model.Lead?.Name ?? "";
+        ClientId = model.ClientId ?? 0;
+        ClientName = model.Client?.CompanyName ?? "";
         Result = Convert.ToString(model.Result);
         Code = model.Code;
         Date = model.Date?.ToEuropeFormat() ?? "";
@@ -91,7 +91,7 @@ public class OfferExport : IInport<OfferVM>
             StateId = StateId,
             CategoryId = CategoryId,
             SubCategoryId = SubCategoryId,
-            LeadId = LedId,
+            ClientId = ClientId,
             Result = Result.GetValueFromDisplayName<OfferResult>(),
             Code = Code,
             Date = date,

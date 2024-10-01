@@ -1,0 +1,29 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
+@using EmpiriaBMS.Models.Models
+
+@implements IDialogContentComponent<OfferVM>
+
+@inject MicrosoftTeams MicrosoftTeams
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
+@inject Logging.LoggerManager Logger
+
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<FluentDialogBody>
+
+    <OfferDetailed @ref="@_offerCompoment"
+                   Content="@Content"
+                   OnSave="@SaveAsync"
+                   DisplayTitle="false"
+                   DisplayActions="true"
+                   OnResultChanged="@_onOfferResultChanged" />
+
+</FluentDialogBody>

@@ -137,33 +137,33 @@ public class OfferVM : BaseVM
     public string ProjectSubCategoryName => SubCategory != null ? SubCategory.Name : "";
 
     // Led
-    private int? _leadId;
-    public int? LeadId
+    private int? _clientId;
+    public int? ClientId
     {
-        get => _leadId;
+        get => _clientId;
         set
         {
-            if (value == _leadId)
+            if (value == _clientId)
                 return;
-            _leadId = value;
-            NotifyPropertyChanged(nameof(LeadId));
+            _clientId = value;
+            NotifyPropertyChanged(nameof(ClientId));
         }
     }
 
-    private Lead? _lead;
-    public Lead? Lead
+    private Client? _client;
+    public Client? Client
     {
-        get => _lead;
+        get => _client;
         set
         {
-            if (value == _lead)
+            if (value == _client)
                 return;
-            _lead = value;
-            NotifyPropertyChanged(nameof(Lead));
+            _client = value;
+            NotifyPropertyChanged(nameof(Client));
         }
     }
 
-    public string LedName => Lead != null ? Lead.Name : "";
+    public string ClientName => Client != null ? Client.CompanyName : "";
 
     // Project
     private int? _projectId;

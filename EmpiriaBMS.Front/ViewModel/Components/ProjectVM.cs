@@ -270,5 +270,5 @@ public class ProjectVM : BaseVM
     public string PMFullName => ProjectManager != null ? $"{ProjectManager.LastName} {ProjectManager.MidName} {ProjectManager.FirstName}" : "";
 
     [NotMapped]
-    public string ClientFullName => Offer?.Lead?.Client?.FullName ?? "";
+    public string ClientFullName => Offer?.Client?.FullName ?? "";
 }

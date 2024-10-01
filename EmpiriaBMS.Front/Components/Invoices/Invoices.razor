@@ -53,109 +53,118 @@
 
         </div>
 
-        <div>
-            <FluentDataGrid Items="@FilteredItems"
-                            ResizableColumns=true
-                            Pagination="@pagination"
-                            TGridItem="InvoiceVM"
-                            OnRowFocus="@(async (i) => await HandleRowFocus(i))"
-                            GridTemplateColumns="50px 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
-                            style="height: 100%; overflow:auto;">
+        @if (_loading)
+        {
+            <div class="mt-5 mb-5">
+                <FluentProgressRing Style="margin: 0 auto;" />
+            </div>
+        }
+        else
+        {
+            <div>
+                <FluentDataGrid Items="@FilteredItems"
+                                ResizableColumns=true
+                                Pagination="@pagination"
+                                TGridItem="InvoiceVM"
+                                OnRowFocus="@(async (i) => await HandleRowFocus(i))"
+                                GridTemplateColumns="50px 2fr 2fr 2fr 2fr 2fr 2fr 2fr 100px"
+                                style="height: 100%; overflow:auto;">
 
-                <!-- CheckBox -->
-                <TemplateColumn Title="" Sortable="false">
-                    <ChildContent>
-                        <div>
-                            @if (IsRowSelect(context.Id))
-                            {
-                                <FluentIcon Icon="Icons.Regular.Size32.Checkmark" />
-                            }
-                        </div>
-                    </ChildContent>
-                </TemplateColumn>
+                    <!-- CheckBox -->
+                    <TemplateColumn Title="" Sortable="false">
+                        <ChildContent>
+                            <div>
+                                @if (IsRowSelect(context.Id))
+                                {
+                                    <FluentIcon Icon="Icons.Regular.Size32.Checkmark" />
+                                }
+                            </div>
+                        </ChildContent>
+                    </TemplateColumn>
 
-                <!-- Invoice Number -->
-                <TemplateColumn Title="Invoice Number"
-                                Sortable="true"
-                                InitialSortDirection=SortDirection.Descending
-                                IsDefaultSortColumn=true>
-                    <ColumnOptions>
-                        <div class="search-box">
-                            <FluentSearch type="search"
-                                            Autofocus=true
-                                          @bind-Value="@_filterNumberString"
-                                          Placeholder="InvoiceNumber..."
-                                          @oninput="@HandleNumberFilter" />
-                        </div>
-                    </ColumnOptions>
-                    <ChildContent>
-                        @(context.InvoiceNumber)
-                    </ChildContent>
-                </TemplateColumn>
-                
-                <!-- Project Name -->
-                <TemplateColumn Title="Project"
-                                Sortable="true"
-                                InitialSortDirection=SortDirection.Descending
-                                IsDefaultSortColumn=true>
-                    <ColumnOptions>
-                        <div class="search-box">
-                            <FluentSearch type="search"
-                                            Autofocus=true
-                                          @bind-Value="@_filterProjectString"
-                                            Placeholder="Project..."
-                                          @oninput="@HandleProjectFilter" />
-                        </div>
-                    </ColumnOptions>
-                    <ChildContent>
-                        @(context.ProjectName)
-                    </ChildContent>
-                </TemplateColumn>
+                    <!-- Invoice Number -->
+                    <TemplateColumn Title="Invoice Number"
+                                    Sortable="true"
+                                    InitialSortDirection=SortDirection.Descending
+                                    IsDefaultSortColumn=true>
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterNumberString"
+                                              Placeholder="InvoiceNumber..."
+                                              @oninput="@HandleNumberFilter" />
+                            </div>
+                        </ColumnOptions>
+                        <ChildContent>
+                            @(context.InvoiceNumber)
+                        </ChildContent>
+                    </TemplateColumn>
 
-                <!-- Estimate Date -->
-                <PropertyColumn Property="@(p => p.EstimatedPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Estimated Payment" Align="@Align.Start" />
+                    <!-- Project Name -->
+                    <TemplateColumn Title="Project"
+                                    Sortable="true"
+                                    InitialSortDirection=SortDirection.Descending
+                                    IsDefaultSortColumn=true>
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterProjectString"
+                                              Placeholder="Project..."
+                                              @oninput="@HandleProjectFilter" />
+                            </div>
+                        </ColumnOptions>
+                        <ChildContent>
+                            @(context.ProjectName)
+                        </ChildContent>
+                    </TemplateColumn>
 
-                <!-- Payment Date -->
-                <PropertyColumn Property="@(p => p.ActualPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Actual Payment" Align="@Align.Start" />
+                    <!-- Estimate Date -->
+                    <PropertyColumn Property="@(p => p.EstimatedPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Estimated Payment" Align="@Align.Start" />
 
-                <!-- Actual Paid -->
-                <TemplateColumn Title="Actual Paid" Sortable="true">
-                    <ChildContent>
-                        <PayedPaymentCell Item="context" />
-                    </ChildContent>
-                </TemplateColumn>
+                    <!-- Payment Date -->
+                    <PropertyColumn Property="@(p => p.ActualPayment)" Format="dd-mm-yyyy" Sortable="true" Title="Actual Payment" Align="@Align.Start" />
 
-                <!-- Pending Paiments -->
-                <TemplateColumn Title="Pending" Sortable="true">
-                    <ChildContent>
-                        <PendingPaymentCell Item="context" />
-                    </ChildContent>
-                </TemplateColumn>
+                    <!-- Actual Paid -->
+                    <TemplateColumn Title="Actual Paid" Sortable="true">
+                        <ChildContent>
+                            <PayedPaymentCell Item="context" />
+                        </ChildContent>
+                    </TemplateColumn>
 
-                <!-- Expenses Type -->
-                @if (InvoiceCategory == Models.Enum.InvoiceCategory.EXPENSES)
-                {
-                    <PropertyColumn Property="@(p => p.ExpensesType.Name)" Sortable="true" Title="Expsenses Type" Align="@Align.Start" />
-                }
+                    <!-- Pending Paiments -->
+                    <TemplateColumn Title="Pending" Sortable="true">
+                        <ChildContent>
+                            <PendingPaymentCell Item="context" />
+                        </ChildContent>
+                    </TemplateColumn>
 
-                <!-- Actions -->
-                <TemplateColumn Title="Actions" Align="@Align.End">
-                    @* <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" /> *@
-                    <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
-                </TemplateColumn>
+                    <!-- Expenses Type -->
+                    @if (InvoiceCategory == Models.Enum.InvoiceCategory.EXPENSES)
+                    {
+                        <PropertyColumn Property="@(p => p.ExpensesType.Name)" Sortable="true" Title="Expsenses Type" Align="@Align.Start" />
+                    }
 
-            </FluentDataGrid>
-        </div>
-        <div style="min-width: 50%;">
-            <FluentPaginator State="@pagination">
-                <SummaryTemplate>
-                    There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
-                </SummaryTemplate>
-                <PaginationTextTemplate>
-                    This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
-                </PaginationTextTemplate>
-            </FluentPaginator>
-        </div>
+                    <!-- Actions -->
+                    <TemplateColumn Title="Actions" Align="@Align.End">
+                        @* <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" /> *@
+                        <FluentButton Disabled="@(!IsWorkingMode)" aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                    </TemplateColumn>
+
+                </FluentDataGrid>
+            </div>
+            <div style="min-width: 50%;">
+                <FluentPaginator State="@pagination">
+                    <SummaryTemplate>
+                        There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                    </PaginationTextTemplate>
+                </FluentPaginator>
+            </div>
+        }
 
     </div>
 </div>

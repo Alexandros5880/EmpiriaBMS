@@ -45,7 +45,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Add({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On OfferRepo.Add({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -78,7 +78,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Update({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On OfferRepo.Update({Mapping.Mapper.Map<Offer>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -87,32 +87,27 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
     {
         try
         {
-            if (id == 0)
-                throw new ArgumentException(nameof(id));
-
             using (var _context = _dbContextFactory.CreateDbContext())
             {
                 var offer = await _context.Set<Offer>()
                                            .Where(r => !r.IsDeleted)
-                                           .Include(o => o.Lead)
+                                           .Include(o => o.Client)
                                            .Include(o => o.State)
                                            .Include(o => o.Type)
-                                           .Include(o => o.Lead)
-                                           .ThenInclude(p => p.Client)
-                                           .Include(o => o.Lead)
+                                           .Include(o => o.Client)
                                            .ThenInclude(l => l.Address)
                                            .Include(o => o.SubCategory)
                                            .Include(o => o.Category)
                                            .Include(o => o.Project)
                                            .ThenInclude(p => p.Stage)
-                                           .FirstOrDefaultAsync(o => o.Id == id);
+                                           .FirstOrDefaultAsync(o => id == 0 || o.Id == id);
 
                 return Mapping.Mapper.Map<Offer, OfferDto>(offer);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On Repository.Get(Offer.Id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On OfferRepo.Get(Offer.Id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return null;
         }
     }
@@ -121,18 +116,16 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         int? projectId = 0,
         int? stateId = 0,
         int? typeId = 0,
-        int? leadId = 0,
+        int? clientId = 0,
         OfferResult? result = null)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var offers = await _context.Set<Offer>()
-                                       .Include(o => o.Lead)
+                                       .Include(o => o.Client)
                                        .Include(o => o.State)
                                        .Include(o => o.Type)
-                                       .Include(o => o.Lead)
-                                       .ThenInclude(p => p.Client)
-                                       .Include(o => o.Lead)
+                                       .Include(o => o.Client)
                                        .ThenInclude(l => l.Address)
                                        .Include(o => o.SubCategory)
                                        .Include(o => o.Category)
@@ -142,7 +135,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
                                                     && (stateId == null || stateId == 0 || o.StateId == stateId)
                                                     && (typeId == null || typeId == 0 || o.TypeId == typeId)
                                                     && (result == null || result == null || o.Result == result)
-                                                    && (leadId == null || leadId == 0 || o.LeadId == leadId)
+                                                    && (clientId == null || clientId == 0 || o.ClientId == clientId)
                                                     && (projectId == null || projectId == 0 || o.ProjectId == projectId)
                                        )
                                        .ToListAsync();
@@ -151,18 +144,16 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    public async Task<ICollection<OfferDto>> GetAllByLead(int ledId = 0)
+    public async Task<ICollection<OfferDto>> GetAllByLead(int clientId = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
             var offers = await _context.Set<Offer>()
-                                       .Where(o => !o.IsDeleted && (ledId == 0 || o.LeadId == ledId))
-                                       .Include(o => o.Lead)
+                                       .Where(o => !o.IsDeleted && (clientId == 0 || o.ClientId == clientId))
+                                       .Include(o => o.Client)
                                        .Include(o => o.State)
                                        .Include(o => o.Type)
-                                       .Include(o => o.Lead)
-                                       .ThenInclude(p => p.Client)
-                                       .Include(o => o.Lead)
+                                       .Include(o => o.Client)
                                        .ThenInclude(l => l.Address)
                                        .Include(o => o.SubCategory)
                                        .Include(o => o.Category)

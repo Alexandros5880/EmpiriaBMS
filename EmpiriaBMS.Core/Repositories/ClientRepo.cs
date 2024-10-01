@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +9,19 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class ClientRepo : Repository<ClientDto, Client>
 {
+    private readonly OfferRepo _offerRepo;
+    private readonly ProjectsRepo _projectRep;
+    private readonly InvoiceRepo _invoiceRepo;
+
     public ClientRepo(
         IDbContextFactory<AppDbContext> DbFactory,
         Logging.LoggerManager logger
-    ) : base(DbFactory, logger) { }
+    ) : base(DbFactory, logger)
+    {
+        _projectRep = new ProjectsRepo(DbFactory, logger);
+        _offerRepo = new OfferRepo(DbFactory, logger);
+        _invoiceRepo = new InvoiceRepo(DbFactory, logger);
+    }
 
     public async Task<ClientDto> Add(ClientDto entity, bool update = false)
     {
@@ -87,6 +97,21 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
+    public new async Task<ICollection<ClientDto>> GetByResult(ClientResult result = ClientResult.WAITING)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            List<Client> items = await _context.Set<Client>()
+                .Where(r => !r.IsDeleted)
+                .Where(l => l.Result == result)
+                .Include(l => l.Address)
+                .ToListAsync();
+
+            return Mapping.Mapper.Map<List<ClientDto>>(items);
+        }
+    }
+
+
     public async Task<ICollection<Email>> GetEmails(int userId)
     {
         if (userId == 0)
@@ -98,4 +123,224 @@ public class ClientRepo : Repository<ClientDto, Client>
                                  .Where(r => r.UserId == userId)
                                  .ToListAsync();
     }
+
+    #region Next Income Functions
+    public async Task<List<ClientDto>> GetAllOppen()
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var allClientsIds = await _context.Set<Client>()
+                    .Where(l => !l.IsDeleted)
+                    .Select(l => l.Id)
+                    .ToListAsync();
+
+                if (allClientsIds == null || allClientsIds.Count == 0)
+                    return new List<ClientDto>();
+
+                var clients = new List<ClientDto>();
+
+                foreach (var id in allClientsIds)
+                {
+                    if (id == 0)
+                        continue;
+
+                    var isClosed = await IsClosed(id);
+                    if (!isClosed)
+                    {
+                        var client = await Get(id);
+                        if (client == null)
+                            continue;
+
+                        clients.Add(client);
+                    }
+                }
+
+                return clients;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.GetAllOppen(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return new List<ClientDto>();
+        }
+    }
+
+    public async Task<double> GetSumOfAllOppenClientsPotencialFee()
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var allClientsIds = await _context.Set<Client>()
+                    .Where(l => !l.IsDeleted)
+                    .Select(l => l.Id)
+                    .ToListAsync();
+
+                if (allClientsIds == null || allClientsIds.Count == 0)
+                    return 0;
+
+                double sumPontecialFee = 0;
+
+                foreach (var id in allClientsIds)
+                {
+                    if (id == 0)
+                        continue;
+
+                    var isClosed = await IsClosed(id);
+                    if (!isClosed)
+                    {
+                        var sum = await GetSumOfPotencialFee(id);
+                        sumPontecialFee += sum;
+                    }
+                }
+
+                return sumPontecialFee;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.GetSumOfAllOppenClientsPotencialFee(): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<double> GetSumOfPayedFee(int clientId)
+    {
+        try
+        {
+            if (clientId == 0)
+                throw new ArgumentNullException(nameof(clientId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var offerId = await _context.Set<Offer>()
+                    .Where(o => !o.IsDeleted && o.ClientId == clientId)
+                    .Select(l => l.Id)
+                    .FirstOrDefaultAsync();
+
+                if (offerId == 0)
+                    throw new ArgumentNullException(nameof(offerId));
+
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return 0;
+
+            double sum = 0;
+
+            foreach (var projectId in projectIds)
+            {
+                sum += await _projectRep.GetSumOfPayedFee(projectId);
+            }
+
+            return sum;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.GetSumOfPayedFee({clientId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<double> GetSumOfPotencialFee(int clientId)
+    {
+        try
+        {
+            if (clientId == 0)
+                throw new ArgumentNullException(nameof(clientId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var offerId = await _context.Set<Offer>()
+                    .Where(o => !o.IsDeleted && o.ClientId == clientId)
+                    .Select(l => l.Id)
+                    .FirstOrDefaultAsync();
+
+                if (offerId == 0)
+                    return 0;
+
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return 0;
+
+            double sum = 0;
+
+            foreach (var projectId in projectIds)
+            {
+                if (projectId != 0)
+                    sum += await _projectRep.GetSumOfPotencialFee(projectId);
+            }
+
+            return sum;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.GetSumOfPotencialFee({clientId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<bool> IsClosed(int clientId)
+    {
+        try
+        {
+            if (clientId == 0)
+                throw new ArgumentNullException(nameof(clientId));
+
+            List<int> projectIds;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var offerId = await _context.Set<Offer>()
+                    .Where(o => !o.IsDeleted && o.ClientId == clientId)
+                    .Select(l => l.Id)
+                    .FirstOrDefaultAsync();
+
+                if (offerId == 0)
+                    return false;
+
+                projectIds = await _context
+                                .Set<Project>()
+                                .Where(i => !i.IsDeleted && i.OfferId == offerId)
+                                .Select(i => i.Id)
+                                .ToListAsync();
+            }
+
+            if (projectIds == null || projectIds.Count == 0)
+                return false;
+
+            List<bool> isClosed = new List<bool>();
+
+            foreach (var projectId in projectIds)
+            {
+                var closed = await _projectRep.IsClosed(projectId);
+                isClosed.Add(closed);
+            }
+
+            return isClosed.Count == 0 || isClosed.Any(c => c == false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.IsClosed({clientId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return false;
+        }
+    }
+    #endregion
 }

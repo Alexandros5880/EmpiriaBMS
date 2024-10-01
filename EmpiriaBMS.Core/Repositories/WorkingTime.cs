@@ -38,7 +38,7 @@ public class WorkingTime : IDisposable
                                              .Include(r => r.Other)
                                              .Include(r => r.Discipline)
                                              .Include(r => r.Project)
-                                             .Include(r => r.Lead)
+                                             .Include(r => r.Client)
                                              .Include(r => r.Offer)
                                              .ToListAsync();
 
@@ -94,7 +94,7 @@ public class WorkingTime : IDisposable
                 !request.PersonalUserId.HasValue &&
                 !request.TrainingUserId.HasValue &&
                 !request.CorporateUserId.HasValue &&
-                !request.LeadId.HasValue &&
+                !request.ClientId.HasValue &&
                 !request.OfferId.HasValue &&
                 !request.ProjectId.HasValue &&
                 !request.DisciplineId.HasValue &&
@@ -109,7 +109,7 @@ public class WorkingTime : IDisposable
                 !request.DailyUserId.HasValue &&
                 !request.TrainingUserId.HasValue &&
                 !request.CorporateUserId.HasValue &&
-                !request.LeadId.HasValue &&
+                !request.ClientId.HasValue &&
                 !request.OfferId.HasValue &&
                 !request.ProjectId.HasValue &&
                 !request.DisciplineId.HasValue &&
@@ -124,7 +124,7 @@ public class WorkingTime : IDisposable
                 !request.DailyUserId.HasValue &&
                 !request.PersonalUserId.HasValue &&
                 !request.CorporateUserId.HasValue &&
-                !request.LeadId.HasValue &&
+                !request.ClientId.HasValue &&
                 !request.OfferId.HasValue &&
                 !request.ProjectId.HasValue &&
                 !request.DisciplineId.HasValue &&
@@ -139,7 +139,7 @@ public class WorkingTime : IDisposable
                 !request.DailyUserId.HasValue &&
                 !request.PersonalUserId.HasValue &&
                 !request.TrainingUserId.HasValue &&
-                !request.LeadId.HasValue &&
+                !request.ClientId.HasValue &&
                 !request.OfferId.HasValue &&
                 !request.ProjectId.HasValue &&
                 !request.DisciplineId.HasValue &&
@@ -150,7 +150,7 @@ public class WorkingTime : IDisposable
                 return DailyTimeTypes.CorporateUser;
             }
             // Lead
-            else if (request.LeadId.HasValue &&
+            else if (request.ClientId.HasValue &&
                      request.DailyUserId.HasValue &&
                     !request.PersonalUserId.HasValue &&
                     !request.TrainingUserId.HasValue &&
@@ -170,7 +170,7 @@ public class WorkingTime : IDisposable
                     !request.PersonalUserId.HasValue &&
                     !request.TrainingUserId.HasValue &&
                     !request.CorporateUserId.HasValue &&
-                    !request.LeadId.HasValue &&
+                    !request.ClientId.HasValue &&
                     !request.ProjectId.HasValue &&
                     !request.DisciplineId.HasValue &&
                     !request.DrawingId.HasValue &&
@@ -185,7 +185,7 @@ public class WorkingTime : IDisposable
                     !request.PersonalUserId.HasValue &&
                     !request.TrainingUserId.HasValue &&
                     !request.CorporateUserId.HasValue &&
-                    !request.LeadId.HasValue &&
+                    !request.ClientId.HasValue &&
                     !request.OfferId.HasValue &&
                     !request.DisciplineId.HasValue &&
                     !request.DrawingId.HasValue &&
@@ -202,7 +202,7 @@ public class WorkingTime : IDisposable
                     !request.PersonalUserId.HasValue &&
                     !request.TrainingUserId.HasValue &&
                     !request.CorporateUserId.HasValue &&
-                    !request.LeadId.HasValue &&
+                    !request.ClientId.HasValue &&
                     !request.OfferId.HasValue &&
                     !request.DrawingId.HasValue &&
                     !request.OtherId.HasValue)
@@ -218,7 +218,7 @@ public class WorkingTime : IDisposable
                     !request.PersonalUserId.HasValue &&
                     !request.TrainingUserId.HasValue &&
                     !request.CorporateUserId.HasValue &&
-                    !request.LeadId.HasValue &&
+                    !request.ClientId.HasValue &&
                     !request.OfferId.HasValue &&
                     !request.OtherId.HasValue)
             {
@@ -233,7 +233,7 @@ public class WorkingTime : IDisposable
                     !request.PersonalUserId.HasValue &&
                     !request.TrainingUserId.HasValue &&
                     !request.CorporateUserId.HasValue &&
-                    !request.LeadId.HasValue &&
+                    !request.ClientId.HasValue &&
                     !request.OfferId.HasValue &&
                     !request.DrawingId.HasValue)
             {
@@ -293,8 +293,8 @@ public class WorkingTime : IDisposable
                                             dailyTime.IsEditByAdmin);
                         break;
                     case DailyTimeTypes.Lead:
-                        await LeadAddTime((int)dailyTime.DailyUserId,
-                                            (int)dailyTime.LeadId,
+                        await ClientAddTime((int)dailyTime.DailyUserId,
+                                            (int)dailyTime.ClientId,
                                             timeSpan,
                                             dailyTime.IsEditByAdmin);
                         break;
@@ -852,7 +852,7 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Lead Time
-    public async Task LeadAddTime(int userId, int ledId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task ClientAddTime(int userId, int clientId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         try
         {
@@ -867,7 +867,7 @@ public class WorkingTime : IDisposable
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
                         DailyUserId = userId,
-                        LeadId = ledId,
+                        ClientId = clientId,
                         TimeSpan = new Timespan(
                             timeSpans[i].Days,
                             timeSpans[i].Hours,
@@ -885,11 +885,11 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.LeadAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On WorkingTime.ClientAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
-    public async Task LeadAddTimeRequest(int userId, int ledId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task ClientAddTimeRequest(int userId, int clientId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -904,7 +904,7 @@ public class WorkingTime : IDisposable
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
                         DailyUserId = userId,
-                        LeadId = ledId,
+                        ClientId = clientId,
                         TimeSpan = new Timespan(
                             timeSpans[i].Days,
                             timeSpans[i].Hours,
@@ -924,7 +924,7 @@ public class WorkingTime : IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On WorkingTime.LeadAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On WorkingTime.ClientAddTimeRequest: {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
     #endregion
