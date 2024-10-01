@@ -2392,7 +2392,8 @@ public class AppDbContext : DbContext
                 FirstName = "Alexandros",
                 Phone1 = "694927778",
                 Description = "Admin",
-                ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com"
+                ProxyAddress = "empiriasoft@empiriasoftplat.onmicrosoft.com",
+                PasswordHash = "93d5420a281e24afb376e762605a8a7e469334a110ff5f97c7cd0fe5cefd7e47"
             };
             builder.Entity<User>().HasData(admin_1);
             Email email_admin_1 = new Email()
