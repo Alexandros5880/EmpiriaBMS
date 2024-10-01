@@ -17,6 +17,8 @@ public partial class Projects
     private string _dialogWidth = "min(82%, 740px);";
     private string _dialogHeight = "min(85%, 880px);";
 
+    private bool _loading = false;
+
     #region Authorization Properties
     bool editDiscipline => _sharedAuthData.Permissions.Any(p => p.Ord == 14);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
@@ -24,9 +26,6 @@ public partial class Projects
     bool editProject => _sharedAuthData.Permissions.Any(p => p.Ord == 12);
     bool assignPm => _sharedAuthData.PermissionOrds.Contains(5);
     #endregion
-
-    [Parameter]
-    public bool Loading { get; set; }
 
     [Parameter]
     public bool IsWorkingMode { get; set; }
@@ -55,13 +54,29 @@ public partial class Projects
 
         if (firstRender)
         {
+            _loading = true;
+            StateHasChanged();
+
             await GetRecords();
+
+            _loading = false;
+            StateHasChanged();
         }
     }
 
     public async Task Refresh()
     {
+        if (_loading == false)
+        {
+            _loading = true;
+            StateHasChanged();
+        }
+        _selectedProject = null;
+
         await GetRecords();
+
+        _loading = false;
+        StateHasChanged();
     }
 
     public void ResetSelection() =>
@@ -121,7 +136,6 @@ public partial class Projects
 
     public async Task _getOffers()
     {
-        Loading = true;
         try
         {
             var dtos = await _dataProvider.Offers.GetAllByLead();
@@ -133,7 +147,6 @@ public partial class Projects
         {
             Logger.LogError($"Exception Projects._getOffers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
-        Loading = false;
     }
 
     #region Dialogs
@@ -324,9 +337,7 @@ public partial class Projects
     #region Add Issue Actions
     private void OnAddIssueClick()
     {
-        Loading = true;
         issueCompoment.Refresh();
-        Loading = false;
         _addIssueDialog.Show();
         _isAddIssueDialogOdepened = true;
     }

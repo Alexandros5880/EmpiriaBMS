@@ -27,7 +27,6 @@ public partial class Home
 
     // General Fields
     bool _runInTeams = true;
-    bool _startLoading = true;
     bool _isWorkingMode = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -37,8 +36,6 @@ public partial class Home
         if (firstRender)
         {
             _runInTeams = await MicrosoftTeams.IsInTeams();
-            _startLoading = false;
-            StateHasChanged();
         }
     }
 
@@ -50,15 +47,9 @@ public partial class Home
 
     private async Task _onRefresh()
     {
-        _startLoading = true;
-        StateHasChanged();
-
         await _clientsComp?.Refresh();
         await _offersComp?.Refresh();
         await _projectsComp?.Refresh();
-
-        _startLoading = false;
-        StateHasChanged();
     }
 
     #region Header Compoment

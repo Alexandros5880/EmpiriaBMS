@@ -90,7 +90,6 @@
         <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
             <!-- Table Projects -->
             <Projects @ref="_projectsComp"
-                        Loading="@_startLoading"
                         IsWorkingMode="@_isWorkingMode"
                         OnSelect="OnSelectProject"
                         OnEdit="OnEditProject" />
@@ -99,7 +98,6 @@
         <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
             <!-- Table Disciplines -->
             <Disciplines @ref="_disciplinesComp"
-                            Loading="@_startLoading"
                             IsWorkingMode="@_isWorkingMode"
                             OnSelect="OnSelectDiscipline" />
         </FluentGridItem>
@@ -107,14 +105,12 @@
         <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
             <!-- Table Deliverables -->
             <Deliverables @ref="_deliverablesComp"
-                            Loading="@_startLoading"
                             IsWorkingMode="@_isWorkingMode" />
         </FluentGridItem>
 
         <FluentGridItem xxl="3" xl="@((!_isWorkingMode ? 3 : 4))" lg="6" md="6" xs="12">
             <!-- Table Supportive Works -->
             <SupportiveWorks @ref="_supportiveWorksComp"
-                                Loading="@_startLoading"
                                 IsWorkingMode="@_isWorkingMode" />
         </FluentGridItem>
 
