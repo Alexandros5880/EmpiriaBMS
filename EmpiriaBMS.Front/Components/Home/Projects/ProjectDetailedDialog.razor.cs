@@ -8,7 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Home.Projects;
-public partial class ProjectDetailed : IDialogContentComponent<ProjectVM>
+public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 {
     [Parameter]
     public ProjectVM Content { get; set; } = default!;

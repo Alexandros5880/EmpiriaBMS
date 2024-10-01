@@ -14,6 +14,9 @@ namespace EmpiriaBMS.Front.Components.Home.Projects;
 
 public partial class Projects
 {
+    private string _dialogWidth = "min(82%, 740px);";
+    private string _dialogHeight = "min(85%, 880px);";
+
     #region Authorization Properties
     bool editDiscipline => _sharedAuthData.Permissions.Any(p => p.Ord == 14);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
@@ -206,11 +209,11 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = false,
-            Width = "min(82%, 740px);",
-            Height = "min(82%, 840px);"
+            Width = _dialogWidth,
+            Height = _dialogHeight
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailed>(new ProjectVM(), parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(new ProjectVM(), parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
@@ -250,11 +253,11 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = false,
-            Width = "min(82%, 740px);",
-            Height = "min(82%, 840px);"
+            Width = _dialogWidth,
+            Height = _dialogHeight
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailed>(_selectedProject, parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(_selectedProject, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)

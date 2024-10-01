@@ -10,6 +10,9 @@ namespace EmpiriaBMS.Front.Components.Admin.Projects;
 
 public partial class Projects
 {
+    private string _dialogWidth = "min(82%, 740px);";
+    private string _dialogHeight = "min(85%, 880px);";
+
     [Parameter]
     public bool DisplayActions { get; set; } = true;
 
@@ -66,8 +69,8 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = false,
-            Width = "min(82%, 740px);",
-            Height = "min(82%, 840px);"
+            Width = _dialogWidth,
+            Height = _dialogHeight
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(new ProjectVM(), parameters);
@@ -97,8 +100,8 @@ public partial class Projects
             TrapFocus = true,
             Modal = true,
             PreventScroll = false,
-            Width = "min(82%, 740px);",
-            Height = "min(82%, 840px);"
+            Width = _dialogWidth,
+            Height = _dialogHeight
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ProjectDetailedDialog>(record, parameters);
