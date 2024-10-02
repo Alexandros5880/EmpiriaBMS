@@ -13,7 +13,7 @@ public partial class KPIDashboard2
 
     #region Only For Development
     int _widgetWidth = 4;
-    int _widgetHeight = 3;
+    int _widgetHeight = 4;
 
     private void _preloadKpisComps()
     {
