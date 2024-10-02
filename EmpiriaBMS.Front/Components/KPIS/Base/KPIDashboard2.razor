@@ -1,0 +1,47 @@
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Horizontal
+@using ChartJs.Blazor
+@using EmpiriaBMS.Front.Components.KPIS
+@using FluentUI = Microsoft.Fast.Components.FluentUI
+@using EmpiriaBMS.Front.Components.KPIS.Simple
+@using Microsoft.AspNetCore.Components
+
+@inject IDataProvider _dataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject IMapper _mapper
+@inject Logging.LoggerManager Logger
+@inject MicrosoftTeams MicrosoftTeams
+
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-gap: 10px;
+    }
+
+    .grid-item {
+        padding: 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+    }
+</style>
+
+
+<div>
+    <h4>KPIS</h4>
+</div>
+
+<div class="dashboard-grid">
+    @foreach (var component in components)
+    {
+        <div class="grid-item" id="@component.ComponentType.ToString()">
+            <DynamicComponent Type="@component.ComponentType" Parameters="@component.Parameters" />
+        </div>
+    }
+</div>
+
+<FluentButton IconStart="@(new Icons.Regular.Size16.Add())"
+              Appearance="Appearance.Accent"
+              OnClick="_addNewComponents">
+    Add KPIS
+</FluentButton>

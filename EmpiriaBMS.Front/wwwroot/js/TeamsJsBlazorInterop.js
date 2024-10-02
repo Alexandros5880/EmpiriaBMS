@@ -113,6 +113,21 @@ export function scrollToElement(id) {
     }
 }
 
+
+// Dragable Compoments
+export function initializeDragAndDrop(divId) {
+    var containers = document.querySelector('.dashboard-grid');
+    if (containers) {
+        dragula([containers]).on('drag', function (el) {
+            console.log('Element is being dragged:', el);
+        });
+    } else {
+        console.error("Dashboard grid container not found.");
+    }
+};
+// Dragable Compoments
+
+
 // Register MNouse Weel Event
 export function registerGlobalMouseWheelEvent(objRef, id) {
     $('[data-id="' + id + '"]').on('wheel', function (e) {

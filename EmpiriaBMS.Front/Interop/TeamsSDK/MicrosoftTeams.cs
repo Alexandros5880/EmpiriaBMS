@@ -50,6 +50,11 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("navigateToAdmin", url, objectId);
     }
 
+    public Task InitializeTooltips()
+    {
+        return InvokeVoidAsync("initializeTooltips");
+    }
+
     public Task RegisterGlobalMouseWheelEvent(DotNetObjectReference<TimeInput> objRef, string Id)
     {
         return InvokeVoidAsync("registerGlobalMouseWheelEvent", objRef, Id);
@@ -71,9 +76,9 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("scrollToElement", id);
     }
 
-    public Task InitializeTooltips()
+    public Task InitializeDragAndDrop(string divId)
     {
-        return InvokeVoidAsync("initializeTooltips");
+        return InvokeVoidAsync("initializeDragAndDrop", divId);
     }
 
     #region Cookies
