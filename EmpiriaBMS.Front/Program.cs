@@ -99,6 +99,12 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 15 * 1024 * 1024; // 15 MB
 });
 
+builder.Services.AddServerSideBlazor()
+    .AddHubOptions(options =>
+    {
+        options.MaximumReceiveMessageSize = 102400; // 100KB limit for large messages
+    });
+
 
 var app = builder.Build();
 

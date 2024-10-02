@@ -16,24 +16,33 @@
 
 
 
-<div>
-    <h4>KPIS</h4>
+<div class="p-3 rounded-3"
+     style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+    <h3>Key Performance Indicators (KPIS)</h3>
 </div>
 
-<BlazorGridStackBody @ref="Grid">
-    @if (kpiCompoments != null && kpiCompoments.Count > 0)
-    {
-        @foreach (var component in kpiCompoments)
+<div class="mt-3 mb-5">
+    <BlazorGridStackBody @ref="Grid">
+        @if (kpiCompoments != null && kpiCompoments.Count > 0)
         {
-            @* Y = component.Position.Y, *@
-            <BlazorGridStackWidget WidgetOptions="@(new BlazorGridStackWidgetOptions
+            @foreach (var component in kpiCompoments)
             {
-                X = component.Position.X,
-                W = component.Position.W,
-                H = component.Position.H
-            })">
-                <DynamicComponent Type="@component.ComponentType" Parameters="@component.Parameters" />
-            </BlazorGridStackWidget>
+                @* Y = component.Position.Y, *@
+                <BlazorGridStackWidget  
+                    WidgetOptions="@(new BlazorGridStackWidgetOptions
+                    {
+                        X = component.Position.X,
+                        W = component.Position.W,
+                        H = component.Position.H,
+                    })">
+
+                    <div class="p-3 rounded-3" style="background-color: #bfc1d7; height: 100%; width: 100%;">
+                        <DynamicComponent Type="@component.ComponentType" Parameters="@component.Parameters" />
+                    </div>
+
+                </BlazorGridStackWidget>
+            }
         }
-    }
-</BlazorGridStackBody>
+    </BlazorGridStackBody>
+</div>
+
