@@ -25,10 +25,10 @@
     {
         @foreach (var component in kpiCompoments)
         {
+            @* Y = component.Position.Y, *@
             <BlazorGridStackWidget WidgetOptions="@(new BlazorGridStackWidgetOptions
             {
                 X = component.Position.X,
-                Y = component.Position.Y,
                 W = component.Position.W,
                 H = component.Position.H
             })">

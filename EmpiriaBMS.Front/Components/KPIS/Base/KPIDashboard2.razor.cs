@@ -11,8 +11,9 @@ public partial class KPIDashboard2
 
     private List<KPIGridItem> kpiCompoments = new();
 
-    int _widgetWidth = 2;
-    int _widgetHeight = 2;
+    #region Only For Development
+    int _widgetWidth = 4;
+    int _widgetHeight = 3;
 
     private void _preloadKpisComps()
     {
@@ -25,7 +26,7 @@ public partial class KPIDashboard2
             {
                 Id = 3465546,
                 KPIGridItemId = 2354,
-                X = 1,
+                X = 1 * _widgetWidth,
                 Y = 1,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -41,7 +42,7 @@ public partial class KPIDashboard2
             {
                 Id = 435673654,
                 KPIGridItemId = 2363546,
-                X = 10,
+                X = 2 * _widgetWidth,
                 Y = 10,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -57,7 +58,7 @@ public partial class KPIDashboard2
             {
                 Id = 65546,
                 KPIGridItemId = 45645,
-                X = 30,
+                X = 3 * _widgetWidth,
                 Y = 30,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -73,7 +74,7 @@ public partial class KPIDashboard2
             {
                 Id = 65546,
                 KPIGridItemId = 345654,
-                X = 40,
+                X = 4 * _widgetWidth,
                 Y = 40,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -89,7 +90,7 @@ public partial class KPIDashboard2
             {
                 Id = 36543,
                 KPIGridItemId = 342654,
-                X = 50,
+                X = 5 * _widgetWidth,
                 Y = 50,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -105,7 +106,7 @@ public partial class KPIDashboard2
             {
                 Id = 698769,
                 KPIGridItemId = 32546,
-                X = 60,
+                X = 6 * _widgetWidth,
                 Y = 60,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -121,7 +122,7 @@ public partial class KPIDashboard2
             {
                 Id = 675688,
                 KPIGridItemId = 435677,
-                X = 70,
+                X = 7 * _widgetWidth,
                 Y = 70,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -137,7 +138,7 @@ public partial class KPIDashboard2
             {
                 Id = 56786578,
                 KPIGridItemId = 67589875,
-                X = 80,
+                X = 8 * _widgetWidth,
                 Y = 80,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -153,7 +154,7 @@ public partial class KPIDashboard2
             {
                 Id = 45367567,
                 KPIGridItemId = 6478768,
-                X = 90,
+                X = 9 * _widgetWidth,
                 Y = 90,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -169,7 +170,7 @@ public partial class KPIDashboard2
             {
                 Id = 4675568,
                 KPIGridItemId = 6786579,
-                X = 100,
+                X = 10 * _widgetWidth,
                 Y = 100,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -185,7 +186,7 @@ public partial class KPIDashboard2
             {
                 Id = 9887679,
                 KPIGridItemId = 35476758,
-                X = 110,
+                X = 11 * _widgetWidth,
                 Y = 110,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -201,7 +202,7 @@ public partial class KPIDashboard2
             {
                 Id = 3567458,
                 KPIGridItemId = 587658,
-                X = 120,
+                X = 12 * _widgetWidth,
                 Y = 120,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -217,7 +218,7 @@ public partial class KPIDashboard2
             {
                 Id = 45647867,
                 KPIGridItemId = 586678,
-                X = 130,
+                X = 13 * _widgetWidth,
                 Y = 130,
                 W = _widgetWidth,
                 H = _widgetHeight
@@ -233,13 +234,14 @@ public partial class KPIDashboard2
             {
                 Id = 43765765,
                 KPIGridItemId = 56765798,
-                X = 140,
+                X = 14 * _widgetWidth,
                 Y = 140,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
         });
     }
+    #endregion
 
     protected override async Task OnInitializedAsync()
     {
