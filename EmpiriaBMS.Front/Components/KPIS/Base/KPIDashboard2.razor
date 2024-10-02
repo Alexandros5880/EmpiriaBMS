@@ -12,36 +12,24 @@
 @inject Logging.LoggerManager Logger
 @inject MicrosoftTeams MicrosoftTeams
 
-<style>
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        grid-gap: 10px;
-    }
-
-    .grid-item {
-        padding: 10px;
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-    }
-</style>
 
 
 <div>
     <h4>KPIS</h4>
 </div>
 
-<div class="dashboard-grid">
-    @foreach (var component in components)
+<div class="grid-stack" style="width: 100vw; height: 100vh;">
+    @foreach (var component in displayedCompoments)
     {
-        <div class="grid-item" id="@component.ComponentType.ToString()">
-            <DynamicComponent Type="@component.ComponentType" Parameters="@component.Parameters" />
+        <div class="grid-stack-item"
+             gs-w="@component.Position.W"
+             gs-h="@component.Position.H"
+             gs-x="@component.Position.X"
+             gs-y="@component.Position.Y"
+             id="@component.ComponentType.ToString()">
+            <div class="grid-stack-item-content">
+                <DynamicComponent Type="@component.ComponentType" Parameters="@component.Parameters" />
+            </div>
         </div>
     }
 </div>
-
-<FluentButton IconStart="@(new Icons.Regular.Size16.Add())"
-              Appearance="Appearance.Accent"
-              OnClick="_addNewComponents">
-    Add KPIS
-</FluentButton>

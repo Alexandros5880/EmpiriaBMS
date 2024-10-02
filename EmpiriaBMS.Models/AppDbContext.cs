@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Models.Enum;
+﻿using EmpiriaBMS.Front.Components.KPIS.Helper;
+using EmpiriaBMS.Models.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,6 +14,8 @@ public class AppDbContext : DbContext
     public string SelectedConnectionString = string.Empty;
     public string Enviroment = string.Empty;
 
+    public DbSet<KPIGridItem>? KPIGridItems { get; set; }
+    public DbSet<KPIGridItemPosition>? KPIGridItemPositions { get; set; }
     public DbSet<User>? Users { get; set; }
     public DbSet<Role>? Roles { get; set; }
     public DbSet<Email>? Emails { get; set; }

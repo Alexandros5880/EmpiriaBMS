@@ -76,9 +76,15 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("scrollToElement", id);
     }
 
-    public Task InitializeDragAndDrop(string divId)
+    /// <summary>
+    /// Resizable Components Inside Div Section
+    /// </summary>
+    /// <param name="gridClass"></param>
+    /// <param name="hundleItemClass"></param>
+    /// <returns></returns>
+    public Task InitializeGridStack()
     {
-        return InvokeVoidAsync("initializeDragAndDrop", divId);
+        return InvokeVoidAsync("initializeGridStack");
     }
 
     #region Cookies

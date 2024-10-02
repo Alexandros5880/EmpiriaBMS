@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Components;
 using ChartJs.Blazor.PieChart;
 using Microsoft.Fast.Components.FluentUI;
 using EmpiriaBMS.Front.ViewModel.Helper;
+using EmpiriaBMS.Front.Components.KPIS.Contract;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class DelayedProjectTypesKPI
+public partial class DelayedProjectTypesKPI : IKpiCompoment
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
@@ -24,7 +25,7 @@ public partial class DelayedProjectTypesKPI
 
     private IQueryable<DictRow<int>> _data;
     private BarConfig _chartConfig;
-    private string _title = "Count Delayed Projects By Type";
+    public string Title => "Count Delayed Projects By Type";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -55,7 +56,7 @@ public partial class DelayedProjectTypesKPI
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = _title,
+                    Text = Title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -171,7 +172,7 @@ public partial class DelayedProjectTypesKPI
         await Task.Delay(1000);
 
         string[] divsIds = new string[] { "export-to-pdf" };
-        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+        string fileName = $"EmbiriaBMS-{Title}-{DateTime.Now.ToEuropeFormat()}.pdf";
 
         await _microsoftTeams.ExportPdfContent(divsIds, fileName);
 

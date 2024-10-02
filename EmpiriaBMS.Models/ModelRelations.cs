@@ -1,11 +1,20 @@
-﻿using EmpiriaBMS.Models.Models;
+﻿using EmpiriaBMS.Front.Components.KPIS.Helper;
+using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace EmpiriaBMS.Models;
 public static class ModelRelations
 {
     public static void CreateRelations(ModelBuilder builder)
     {
+        // KPIGridItem KPIGridItemPosition
+        builder.Entity<KPIGridItem>()
+               .HasOne(u => u.Position)
+               .WithOne(p => p.KPIGridItem)
+               .HasForeignKey<KPIGridItemPosition>(p => p.KPIGridItemId)
+               .OnDelete(DeleteBehavior.Cascade);
+
         // Roles Permissions
         builder.Entity<RolePermission>()
                .HasKey(sc => new { sc.RoleId, sc.PermissionId });

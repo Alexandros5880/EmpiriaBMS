@@ -1,16 +1,19 @@
 ﻿using EmpiriaBMS.Core.Dtos.KPIS;
+using EmpiriaBMS.Front.Components.KPIS.Contract;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class TenderTable
+public partial class TenderTable : IKpiCompoment
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
 
     [Parameter]
     public DateTimeOffset? EndDate { get; set; }
+
+    public string Title => "Tender Table";
 
     private IQueryable<TenderDataDto> _data;
     IQueryable<TenderDataDto>? FilteredItems => _data?.Where(x => x.ProjectName.Contains(_nameFilter, StringComparison.CurrentCultureIgnoreCase));

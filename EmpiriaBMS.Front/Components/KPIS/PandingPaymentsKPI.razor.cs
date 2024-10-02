@@ -10,10 +10,11 @@ using Microsoft.AspNetCore.Components;
 using ChartJs.Blazor.PieChart;
 using Microsoft.Fast.Components.FluentUI;
 using EmpiriaBMS.Front.ViewModel.Helper;
+using EmpiriaBMS.Front.Components.KPIS.Contract;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class PandingPaymentsKPI
+public partial class PandingPaymentsKPI : IKpiCompoment
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
@@ -25,7 +26,7 @@ public partial class PandingPaymentsKPI
 
     private IQueryable<DictRow<PendingPayments>> _data;
     private BarConfig _chartConfig;
-    private string _title = "Delayed Payments";
+    public string Title => "Delayed Payments";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -62,7 +63,7 @@ public partial class PandingPaymentsKPI
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = _title,
+                    Text = Title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -171,7 +172,7 @@ public partial class PandingPaymentsKPI
         await Task.Delay(1000);
 
         string[] divsIds = new string[] { "export-to-pdf" };
-        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+        string fileName = $"EmbiriaBMS-{Title}-{DateTime.Now.ToEuropeFormat()}.pdf";
 
         await _microsoftTeams.ExportPdfContent(divsIds, fileName);
 
