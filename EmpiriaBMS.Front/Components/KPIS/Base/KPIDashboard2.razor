@@ -5,6 +5,8 @@
 @using FluentUI = Microsoft.Fast.Components.FluentUI
 @using EmpiriaBMS.Front.Components.KPIS.Simple
 @using Microsoft.AspNetCore.Components
+@using BlazorGridStack
+@using BlazorGridStack.Models
 
 @inject IDataProvider _dataProvider
 @inject SharedAuthDataService _sharedAuthData
@@ -18,18 +20,20 @@
     <h4>KPIS</h4>
 </div>
 
-<div class="grid-stack" style="width: 100vw; height: 100vh;">
-    @foreach (var component in displayedCompoments)
+<BlazorGridStackBody @ref="Grid">
+    @if (kpiCompoments != null && kpiCompoments.Count > 0)
     {
-        <div class="grid-stack-item"
-             gs-w="@component.Position.W"
-             gs-h="@component.Position.H"
-             gs-x="@component.Position.X"
-             gs-y="@component.Position.Y"
-             id="@component.ComponentType.ToString()">
-            <div class="grid-stack-item-content">
+        @foreach (var component in kpiCompoments)
+        {
+            <BlazorGridStackWidget WidgetOptions="@(new BlazorGridStackWidgetOptions
+            {
+                X = component.Position.X,
+                Y = component.Position.Y,
+                W = component.Position.W,
+                H = component.Position.H
+            })">
                 <DynamicComponent Type="@component.ComponentType" Parameters="@component.Parameters" />
-            </div>
-        </div>
+            </BlazorGridStackWidget>
+        }
     }
-</div>
+</BlazorGridStackBody>

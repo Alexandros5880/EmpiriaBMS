@@ -61,6 +61,7 @@
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
     <PackageReference Include="Blazor.Bootstrap" Version="2.0.0" />
     <PackageReference Include="BlazorDateRangePicker" Version="5.2.0" />
+    <PackageReference Include="BlazorGridStack" Version="1.0.12" />
     <PackageReference Include="ChartJs.Blazor.Fork" Version="2.0.2" />
     <PackageReference Include="jQuery" Version="3.5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.26" />

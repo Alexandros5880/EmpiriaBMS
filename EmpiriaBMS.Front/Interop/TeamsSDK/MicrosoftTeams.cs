@@ -76,17 +76,6 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("scrollToElement", id);
     }
 
-    /// <summary>
-    /// Resizable Components Inside Div Section
-    /// </summary>
-    /// <param name="gridClass"></param>
-    /// <param name="hundleItemClass"></param>
-    /// <returns></returns>
-    public Task InitializeGridStack()
-    {
-        return InvokeVoidAsync("initializeGridStack");
-    }
-
     #region Cookies
     public async Task SetCookie(string key, string value)
     {
