@@ -21,6 +21,9 @@ public class KPIGridItem : Entity
     }
 
     [Required]
+    public string Name { get; set; }
+
+    [Required]
     public int PositionId { get; set; }
     public KPIGridItemPosition? Position { get; set; }
 

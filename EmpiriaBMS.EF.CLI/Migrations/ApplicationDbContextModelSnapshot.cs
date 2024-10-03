@@ -45,6 +45,10 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ParametersJson")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

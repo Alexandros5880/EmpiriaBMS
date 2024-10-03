@@ -1,4 +1,5 @@
-﻿using BlazorGridStack;
+﻿using BlazorDateRangePicker;
+using BlazorGridStack;
 using BlazorGridStack.Models;
 using EmpiriaBMS.Front.Components.KPIS.Helper;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -15,12 +16,13 @@ public partial class KPIDashboard2
     int _widgetWidth = 4;
     int _widgetHeight = 4;
 
-    private void _preloadKpisComps()
+    private void _getKPIS()
     {
         kpiCompoments.Add(new KPIGridItem
         {
             Id = 2354,
             ComponentType = typeof(DelayedPaymentsKpi),
+            Name = "DelayedPaymentsKpi",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -37,6 +39,7 @@ public partial class KPIDashboard2
         {
             Id = 2363546,
             ComponentType = typeof(DelayedProjectsKPI),
+            Name = "DelayedProjectsKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -53,6 +56,7 @@ public partial class KPIDashboard2
         {
             Id = 45645,
             ComponentType = typeof(DelayedProjectTypesKPI),
+            Name = "DelayedProjectTypesKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -69,6 +73,7 @@ public partial class KPIDashboard2
         {
             Id = 345654,
             ComponentType = typeof(HoursPerRoleKPI),
+            Name = "HoursPerRoleKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -85,6 +90,7 @@ public partial class KPIDashboard2
         {
             Id = 342654,
             ComponentType = typeof(HoursPerUserKPI),
+            Name = "HoursPerUserKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -101,6 +107,7 @@ public partial class KPIDashboard2
         {
             Id = 32546,
             ComponentType = typeof(IssuesPerProjectCountKPI),
+            Name = "IssuesPerProjectCountKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -117,6 +124,7 @@ public partial class KPIDashboard2
         {
             Id = 435677,
             ComponentType = typeof(IssuesPerUserCount),
+            Name = "IssuesPerUserCount",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -133,6 +141,7 @@ public partial class KPIDashboard2
         {
             Id = 67589875,
             ComponentType = typeof(ProfitPerProjectKPI),
+            Name = "ProfitPerProjectKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -149,6 +158,7 @@ public partial class KPIDashboard2
         {
             Id = 6478768,
             ComponentType = typeof(ProfitPerProjectTableKPI),
+            Name = "ProfitPerProjectTableKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -165,6 +175,7 @@ public partial class KPIDashboard2
         {
             Id = 6786579,
             ComponentType = typeof(TenderTable),
+            Name = "TenderTable",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -181,6 +192,7 @@ public partial class KPIDashboard2
         {
             Id = 35476758,
             ComponentType = typeof(TurnoverPerEmployeeKPI),
+            Name = "TurnoverPerEmployeeKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -197,6 +209,7 @@ public partial class KPIDashboard2
         {
             Id = 587658,
             ComponentType = typeof(TurnoverPerProjectCategoryKPI),
+            Name = "TurnoverPerProjectCategoryKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -213,6 +226,7 @@ public partial class KPIDashboard2
         {
             Id = 586678,
             ComponentType = typeof(TurnoverPerProjectManagerKPI),
+            Name = "TurnoverPerProjectManagerKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -229,6 +243,7 @@ public partial class KPIDashboard2
         {
             Id = 56765798,
             ComponentType = typeof(TurnoverPerProjectSubCategoryKPI),
+            Name = "TurnoverPerProjectSubCategoryKPI",
             IsSelected = true,
             Position = new KPIGridItemPosition()
             {
@@ -247,7 +262,28 @@ public partial class KPIDashboard2
     {
         await base.OnInitializedAsync();
 
-        _preloadKpisComps();
+        await Refresh();
     }
 
+    public async Task Refresh()
+    {
+        await Task.Delay(100);
+
+        _getKPIS();
+    }
+
+    #region Date Range Filter
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2023"));
+    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
+
+    public async Task OnDateSelect(DateRange range)
+    {
+        if (StartDate.HasValue && EndDate.HasValue)
+        {
+            StartDate = range.Start;
+            EndDate = range.End;
+            await Refresh();
+        }
+    }
+    #endregion
 }
