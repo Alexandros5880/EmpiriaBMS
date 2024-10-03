@@ -89,29 +89,31 @@
             <!-- Full Width -->
             <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
                 <!-- Select KPIS -->
-                <div class="badge text-dark text-wrap fs-3">
-                    Select KPIS
-                </div>
-                <div class="table-responsive p-1"
-                     style="overflow-y: auto; overflow-x: hiden; width: 100%;">
-                    <table class="bg-transparent">
-                        <tbody>
+                <div class="p-3 rounded-3"
+                     style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                    <div class="badge text-dark text-wrap fs-3">
+                        Select KPIS
+                    </div>
+                    <div class="p-1 mb-2 mt-1">
+                        <FluentTreeView>
                             @foreach (var kpi in kpiCompoments)
                             {
-                                <tr clss="align-middle" @key="kpi.Id">
-                                    <td class="align-middle">
-                                        <FluentCheckbox Class="big-checkbox mt-2"
-                                                        @bind-Value="@kpi.IsSelected" />
-                                    </td>
-                                    <td class="align-middle">
-                                        <div class="ms-3 mt-2 text-wrap">
-                                            @kpi.Name;
+                                <FluentTreeItem Style="background-color: #bfc1d7; color: var(--kpi-text-color);">
+                                    <div class="row">
+                                        <div class="col">
+                                            <FluentCheckbox Class="big-checkbox mt-2"
+                                                            @bind-Value="@kpi.IsSelected" />
                                         </div>
-                                    </td>
-                                </tr>
+                                        <div class="col">
+                                            <div class="align-middle ms-3 mt-2 text-wrap">
+                                                @kpi.Name
+                                            </div>
+                                        </div>
+                                    </div>
+                                </FluentTreeItem>
                             }
-                        </tbody>
-                    </table>
+                        </FluentTreeView>
+                    </div>
                 </div>
             </FluentGridItem>
 
