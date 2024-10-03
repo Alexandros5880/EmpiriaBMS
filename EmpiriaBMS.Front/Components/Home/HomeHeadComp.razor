@@ -80,7 +80,7 @@
                                 {
                                     <button type="button"
                                             class="btn btn-danger btn-lg"
-                                            style="width: 100%;"
+                                            style="width: 100%; max-width: 300px; margin: 0 auto;"
                                             @onclick="@(async () => await StopWorkClick())">
                                         <span>@elapsedTime.ToString(@"hh\:mm\:ss")</span>
                                     </button>
@@ -89,7 +89,7 @@
                                 {
                                     <button type="button"
                                             class="btn btn-success btn-lg"
-                                            style="width: 100%;"
+                                            style="width: 100%; max-width: 300px; margin: 0 auto;"
                                             @onclick="@StartWorkClick">
                                         Press Work Start
                                     </button>

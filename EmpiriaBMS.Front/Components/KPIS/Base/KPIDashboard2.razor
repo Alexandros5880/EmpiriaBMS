@@ -38,12 +38,12 @@
                         {
                             @foreach (var component in kpiCompoments.Where(kpi => kpi.IsSelected))
                             {
-                                @* Y = component.Position.Y, *@
                                 <BlazorGridStackWidget WidgetOptions="@(new BlazorGridStackWidgetOptions
                                                         {
                                                             X = component.Position.X,
                                                             W = component.Position.W,
                                                             H = component.Position.H,
+                                                            Y = component.Position.Y
                                                         })">
 
                                     <div class="p-3 rounded-3" style="background-color: #bfc1d7; height: 100%; width: 100%;">

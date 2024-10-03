@@ -6,6 +6,7 @@ using EmpiriaBMS.Front.Components.KPIS.Helper;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Fast.Components.FluentUI.DesignTokens;
 using NuGet.Packaging.Core;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Runtime.CompilerServices;
@@ -50,7 +51,7 @@ public partial class KPIDashboard2
                 Id = 435673654,
                 KPIGridItemId = 2363546,
                 X = 2 * _widgetWidth,
-                Y = 10,
+                Y = 1,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -67,7 +68,7 @@ public partial class KPIDashboard2
                 Id = 65546,
                 KPIGridItemId = 45645,
                 X = 3 * _widgetWidth,
-                Y = 30,
+                Y = 1,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -84,7 +85,7 @@ public partial class KPIDashboard2
                 Id = 65546,
                 KPIGridItemId = 345654,
                 X = 4 * _widgetWidth,
-                Y = 40,
+                Y = 5,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -101,7 +102,7 @@ public partial class KPIDashboard2
                 Id = 36543,
                 KPIGridItemId = 342654,
                 X = 5 * _widgetWidth,
-                Y = 50,
+                Y = 5,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -118,7 +119,7 @@ public partial class KPIDashboard2
                 Id = 698769,
                 KPIGridItemId = 32546,
                 X = 6 * _widgetWidth,
-                Y = 60,
+                Y = 5,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -135,7 +136,7 @@ public partial class KPIDashboard2
                 Id = 675688,
                 KPIGridItemId = 435677,
                 X = 7 * _widgetWidth,
-                Y = 70,
+                Y = 9,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -152,7 +153,7 @@ public partial class KPIDashboard2
                 Id = 56786578,
                 KPIGridItemId = 67589875,
                 X = 8 * _widgetWidth,
-                Y = 80,
+                Y = 9,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -169,7 +170,7 @@ public partial class KPIDashboard2
                 Id = 45367567,
                 KPIGridItemId = 6478768,
                 X = 9 * _widgetWidth,
-                Y = 90,
+                Y = 9,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -186,7 +187,7 @@ public partial class KPIDashboard2
                 Id = 4675568,
                 KPIGridItemId = 6786579,
                 X = 10 * _widgetWidth,
-                Y = 100,
+                Y = 13,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -203,7 +204,7 @@ public partial class KPIDashboard2
                 Id = 9887679,
                 KPIGridItemId = 35476758,
                 X = 11 * _widgetWidth,
-                Y = 110,
+                Y = 13,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -220,7 +221,7 @@ public partial class KPIDashboard2
                 Id = 3567458,
                 KPIGridItemId = 587658,
                 X = 12 * _widgetWidth,
-                Y = 120,
+                Y = 13,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -237,7 +238,7 @@ public partial class KPIDashboard2
                 Id = 45647867,
                 KPIGridItemId = 586678,
                 X = 13 * _widgetWidth,
-                Y = 130,
+                Y = 18,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -254,7 +255,7 @@ public partial class KPIDashboard2
                 Id = 43765765,
                 KPIGridItemId = 56765798,
                 X = 14 * _widgetWidth,
-                Y = 140,
+                Y = 18,
                 W = _widgetWidth,
                 H = _widgetHeight
             }
@@ -281,6 +282,16 @@ public partial class KPIDashboard2
         kpiCompoments.CollectionChanged += _onlistChange;
     }
 
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    await base.OnAfterRenderAsync(firstRender);
+
+    //    if (firstRender)
+    //    {
+    //        await RefreshGridAsync();
+    //    }
+    //}
+
     private Task _getKPIS(List<KPIGridItem> list = null)
     {
         var dto = _loadSeedDbData();
@@ -299,13 +310,46 @@ public partial class KPIDashboard2
         return Task.Delay(100);
     }
 
+    private async Task RefreshGridAsync()
+    {
+        Grid?.RemoveAll();
+
+        await Task.Delay(50);
+
+        foreach (var component in kpiCompoments.Where(kpi => kpi.IsSelected))
+        {
+            Grid?.AddWidget(new BlazorGridStackWidgetOptions
+            {
+                X = component.Position.X,
+                Y = component.Position.Y,
+                W = component.Position.W,
+                H = component.Position.H
+            });
+
+            Grid?.Movable(component.Id.ToString(), true);
+            Grid?.Resizable(component.Id.ToString(), true);
+        }
+
+        Grid?.BatchUpdate();
+    }
+
     private async void _onlistChange(object? sender, NotifyCollectionChangedEventArgs e)
     {
         var updated = e.NewItems.Cast<KPIGridItem>().ToList();
 
         await _getKPIS(updated);
 
+        //await RefreshGridAsync();
+
         Grid?.BatchUpdate();
+
+        foreach (var i in kpiCompoments)
+        {
+            Grid?.Movable(i.Id.ToString(), true);
+            Grid?.Resizable(i.Id.ToString(), true);
+        }
+
+        StateHasChanged();
     }
 
     private Task _onUIChanged(BlazorGridStackWidgetEventArgs e)
