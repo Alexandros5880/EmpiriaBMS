@@ -21,9 +21,9 @@ public partial class KPIDashboard2
 
     private List<KPIGridItem> _loadSeedDbData(int id = 0)
     {
-        List<KPIGridItem> dbCollection = new List<KPIGridItem>();
+        List<KPIGridItem> data = new List<KPIGridItem>();
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 2354,
             ComponentType = typeof(DelayedPaymentsKpi),
@@ -40,7 +40,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 2363546,
             ComponentType = typeof(DelayedProjectsKPI),
@@ -57,7 +57,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 45645,
             ComponentType = typeof(DelayedProjectTypesKPI),
@@ -74,7 +74,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 345654,
             ComponentType = typeof(HoursPerRoleKPI),
@@ -91,7 +91,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 342654,
             ComponentType = typeof(HoursPerUserKPI),
@@ -108,7 +108,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 32546,
             ComponentType = typeof(IssuesPerProjectCountKPI),
@@ -125,7 +125,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 435677,
             ComponentType = typeof(IssuesPerUserCount),
@@ -142,7 +142,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 67589875,
             ComponentType = typeof(ProfitPerProjectKPI),
@@ -159,7 +159,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 6478768,
             ComponentType = typeof(ProfitPerProjectTableKPI),
@@ -176,7 +176,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 6786579,
             ComponentType = typeof(TenderTable),
@@ -193,7 +193,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 35476758,
             ComponentType = typeof(TurnoverPerEmployeeKPI),
@@ -210,7 +210,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 587658,
             ComponentType = typeof(TurnoverPerProjectCategoryKPI),
@@ -227,7 +227,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 586678,
             ComponentType = typeof(TurnoverPerProjectManagerKPI),
@@ -244,7 +244,7 @@ public partial class KPIDashboard2
             }
         });
 
-        dbCollection.Add(new KPIGridItem
+        data.Add(new KPIGridItem
         {
             Id = 56765798,
             ComponentType = typeof(TurnoverPerProjectSubCategoryKPI),
@@ -260,6 +260,35 @@ public partial class KPIDashboard2
                 H = _widgetHeight
             }
         });
+
+
+        List<KPIGridItem> dbCollection = new List<KPIGridItem>();
+
+        int columnCount = 3; // Number of components per row
+        int currentRow = 1;  // Start at the first row
+        int currentColumn = 0; // Track the current column in the row
+
+        foreach (var item in data)
+        {
+            // Set the position of the current component
+            item.Position.X = currentColumn * _widgetWidth;
+            item.Position.Y = currentRow;
+            item.Position.W = _widgetWidth;
+            item.Position.H = _widgetHeight;
+
+            // Add the item to the collection
+            dbCollection.Add(item);
+
+            // Increment column
+            currentColumn++;
+
+            // After every 3rd component, move to the next row
+            if (currentColumn >= columnCount)
+            {
+                currentColumn = 0; // Reset to the first column
+                currentRow += 1;   // Move to the next row
+            }
+        }
 
         if (id != 0)
             return dbCollection.Where(r => r.Id == id).ToList();
