@@ -1,6 +1,7 @@
 ﻿using BlazorDateRangePicker;
 using BlazorGridStack;
 using BlazorGridStack.Models;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Components.KPIS.Contract;
 using EmpiriaBMS.Front.Components.KPIS.Helper;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -261,42 +262,12 @@ public partial class KPIDashboard2
             }
         });
 
-
-        List<KPIGridItem> dbCollection = new List<KPIGridItem>();
-
-        int columnCount = 3; // Number of components per row
-        int currentRow = 1;  // Start at the first row
-        int currentColumn = 0; // Track the current column in the row
-
-        foreach (var item in data)
-        {
-            // Set the position of the current component
-            item.Position.X = currentColumn * _widgetWidth;
-            item.Position.Y = currentRow;
-            item.Position.W = _widgetWidth;
-            item.Position.H = _widgetHeight;
-
-            // Add the item to the collection
-            dbCollection.Add(item);
-
-            // Increment column
-            currentColumn++;
-
-            // After every 3rd component, move to the next row
-            if (currentColumn >= columnCount)
-            {
-                currentColumn = 0; // Reset to the first column
-                currentRow += 1;   // Move to the next row
-            }
-        }
-
         if (id != 0)
-            return dbCollection.Where(r => r.Id == id).ToList();
+            return data.Where(r => r.Id == id).ToList();
 
-        return dbCollection;
+        return data;
     }
     #endregion
-
 
     BlazorGridStackBody Grid;
 
@@ -306,9 +277,7 @@ public partial class KPIDashboard2
     {
         await base.OnInitializedAsync();
 
-        await _getKPIS();
-
-        kpiCompoments.CollectionChanged += _onlistChange;
+        await RefreshData();
     }
 
     //protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -321,23 +290,66 @@ public partial class KPIDashboard2
     //    }
     //}
 
-    private Task _getKPIS(List<KPIGridItem> list = null)
+    #region Get Data
+    private async Task<List<KPIGridItem>> _getKPIS(List<KPIGridItem> list = null)
     {
         var dto = _loadSeedDbData();
-        kpiCompoments.Clear();
 
-        foreach(var item in dto)
+        List<KPIGridItem> dbCollection = new List<KPIGridItem>();
+
+        foreach (var item in dto)
         {
             if (list != null && list.Select(i => i.Id).Contains(item.Id))
             {
                 var updated = list.FirstOrDefault(i => i.Id == item.Id);
                 item.IsSelected = updated.IsSelected;
             }
-            kpiCompoments.Add(item);
+            dbCollection.Add(item);
+        }
+        
+        await Task.Delay(100);
+
+        return dbCollection;
+    }
+
+    private List<KPIGridItem> _reorderList(List<KPIGridItem> data)
+    {
+        List<KPIGridItem> dbCollection =  new List<KPIGridItem>();
+
+        int columnCount = 3;
+        int currentRow = 0;
+        int currentColumn = 0;
+
+        foreach (var item in data)
+        {
+            item.Position.X = currentColumn * item.Position.W;
+            item.Position.Y = currentRow * item.Position.H;
+            dbCollection.Add(item);
+
+            currentColumn++;
+
+            if (currentColumn >= columnCount)
+            {
+                currentColumn = 0;
+                currentRow += 1;
+            }
         }
 
-        return Task.Delay(100);
+        return dbCollection;
     }
+
+    public async Task RefreshData(List<KPIGridItem> updated = null)
+    {
+        var data = await _getKPIS(updated);
+        var onlySelected = data.Where(d => d.IsSelected).ToList();
+        var notSelected = data.Where(d => !d.IsSelected).ToList();
+        var orderedData = _reorderList(onlySelected);
+
+        kpiCompoments.Clear();
+        orderedData.ForEach(kpiCompoments.Add);
+        notSelected.ForEach(kpiCompoments.Add);
+    }
+    #endregion
 
     private async Task RefreshGridAsync()
     {
@@ -362,23 +374,20 @@ public partial class KPIDashboard2
         Grid?.BatchUpdate();
     }
 
-    private async void _onlistChange(object? sender, NotifyCollectionChangedEventArgs e)
+
+    private async Task _onSelectionChanged(bool val, int id)
     {
-        var updated = e.NewItems.Cast<KPIGridItem>().ToList();
-
-        await _getKPIS(updated);
-
-        //await RefreshGridAsync();
-
-        Grid?.BatchUpdate();
-
-        foreach (var i in kpiCompoments)
+        var data = new List<KPIGridItem>(kpiCompoments);
+        
+        foreach (var item in data)
         {
-            Grid?.Movable(i.Id.ToString(), true);
-            Grid?.Resizable(i.Id.ToString(), true);
+            if (item.Id == id)
+            {
+                item.IsSelected = val;
+            }
         }
 
-        StateHasChanged();
+        await RefreshData(data);
     }
 
     private Task _onUIChanged(BlazorGridStackWidgetEventArgs e)

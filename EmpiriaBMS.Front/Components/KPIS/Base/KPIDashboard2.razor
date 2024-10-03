@@ -36,7 +36,7 @@
                     <BlazorGridStackBody @ref="Grid" OnResizeStop="_onUIChanged" OnDragStop="_onUIChanged">
                         @if (kpiCompoments != null && kpiCompoments.Count > 0)
                         {
-                            @foreach (var component in kpiCompoments.Where(kpi => kpi.IsSelected))
+                            @foreach (var component in kpiCompoments.Where(kpi => kpi.IsSelected).Reverse())
                             {
                                 <BlazorGridStackWidget WidgetOptions="@(new BlazorGridStackWidgetOptions
                                                         {
@@ -89,30 +89,31 @@
             <!-- Full Width -->
             <FluentGridItem xl="12" lg="12" md="12" sm="12" xs="12">
                 <!-- Select KPIS -->
-                <div class="p-3 rounded-3">
+                <div class="p-3 rounded-3"
+                     style="background-color: #bfc1d7; color: var(--kpi-text-color);">
                     <div class="badge text-dark text-wrap fs-3">
                         Select KPIS
                     </div>
                     <div class="p-1 mb-2 mt-1">
-                        <!-- Style="background-color: #bfc1d7; color: var(--kpi-text-color);" -->
-                        <FluentTreeView>
-                            @foreach (var kpi in kpiCompoments.Reverse())
-                            {
-                                <FluentTreeItem>
-                                    <div class="row">
-                                        <div class="col">
+                        <table class="bg-transparent">
+                            <tbody>
+                                @foreach (var kpi in kpiCompoments)
+                                {
+                                    <tr clss="align-middle d-flex" @key="kpi.Id">
+                                        <td class="align-middle">
                                             <FluentCheckbox Class="big-checkbox mt-2"
-                                                            @bind-Value="@kpi.IsSelected"/>
-                                        </div>
-                                        <div class="col">
-                                            <div class="align-middle ms-3 mt-2 text-wrap">
+                                                            Value="@kpi.IsSelected"
+                                                            ValueChanged="@(async (value) => await _onSelectionChanged(value, kpi.Id))"/>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="ms-3 mt-2">
                                                 @kpi.Name
                                             </div>
-                                        </div>
-                                    </div>
-                                </FluentTreeItem>
-                            }
-                        </FluentTreeView>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </FluentGridItem>
