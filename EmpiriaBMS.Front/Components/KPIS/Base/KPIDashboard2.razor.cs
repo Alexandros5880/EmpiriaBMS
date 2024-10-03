@@ -1,24 +1,28 @@
 ﻿using BlazorDateRangePicker;
 using BlazorGridStack;
 using BlazorGridStack.Models;
+using EmpiriaBMS.Front.Components.KPIS.Contract;
 using EmpiriaBMS.Front.Components.KPIS.Helper;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Fast.Components.FluentUI.DesignTokens;
+using NuGet.Packaging.Core;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace EmpiriaBMS.Front.Components.KPIS.Base;
 
 public partial class KPIDashboard2
 {
-    BlazorGridStackBody Grid;
-
-    private List<KPIGridItem> kpiCompoments = new();
-
-    #region Only For Development
+    #region Only for development
     int _widgetWidth = 4;
     int _widgetHeight = 4;
 
-    private void _getKPIS()
+    private List<KPIGridItem> _loadSeedDbData(int id = 0)
     {
-        kpiCompoments.Add(new KPIGridItem
+        List<KPIGridItem> dbCollection = new List<KPIGridItem>();
+
+        dbCollection.Add(new KPIGridItem
         {
             Id = 2354,
             ComponentType = typeof(DelayedPaymentsKpi),
@@ -35,7 +39,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 2363546,
             ComponentType = typeof(DelayedProjectsKPI),
@@ -52,7 +56,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 45645,
             ComponentType = typeof(DelayedProjectTypesKPI),
@@ -69,7 +73,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 345654,
             ComponentType = typeof(HoursPerRoleKPI),
@@ -86,7 +90,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 342654,
             ComponentType = typeof(HoursPerUserKPI),
@@ -103,7 +107,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 32546,
             ComponentType = typeof(IssuesPerProjectCountKPI),
@@ -120,7 +124,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 435677,
             ComponentType = typeof(IssuesPerUserCount),
@@ -137,7 +141,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 67589875,
             ComponentType = typeof(ProfitPerProjectKPI),
@@ -154,7 +158,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 6478768,
             ComponentType = typeof(ProfitPerProjectTableKPI),
@@ -171,7 +175,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 6786579,
             ComponentType = typeof(TenderTable),
@@ -188,7 +192,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 35476758,
             ComponentType = typeof(TurnoverPerEmployeeKPI),
@@ -205,7 +209,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 587658,
             ComponentType = typeof(TurnoverPerProjectCategoryKPI),
@@ -222,7 +226,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 586678,
             ComponentType = typeof(TurnoverPerProjectManagerKPI),
@@ -239,7 +243,7 @@ public partial class KPIDashboard2
             }
         });
 
-        kpiCompoments.Add(new KPIGridItem
+        dbCollection.Add(new KPIGridItem
         {
             Id = 56765798,
             ComponentType = typeof(TurnoverPerProjectSubCategoryKPI),
@@ -255,35 +259,81 @@ public partial class KPIDashboard2
                 H = _widgetHeight
             }
         });
+
+        if (id != 0)
+            return dbCollection.Where(r => r.Id == id).ToList();
+
+        return dbCollection;
     }
     #endregion
+
+
+    BlazorGridStackBody Grid;
+
+    private ObservableCollection<KPIGridItem> kpiCompoments = new();
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
-        await Refresh();
+        await _getKPIS();
+
+        kpiCompoments.CollectionChanged += _onlistChange;
     }
 
-    public async Task Refresh()
+    private Task _getKPIS(List<KPIGridItem> list = null)
     {
-        await Task.Delay(100);
+        var dto = _loadSeedDbData();
+        kpiCompoments.Clear();
 
-        _getKPIS();
+        foreach(var item in dto)
+        {
+            if (list != null && list.Select(i => i.Id).Contains(item.Id))
+            {
+                var updated = list.FirstOrDefault(i => i.Id == item.Id);
+                item.IsSelected = updated.IsSelected;
+            }
+            kpiCompoments.Add(item);
+        }
+
+        return Task.Delay(100);
+    }
+
+    private async void _onlistChange(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        var updated = e.NewItems.Cast<KPIGridItem>().ToList();
+
+        await _getKPIS(updated);
+
+        Grid?.BatchUpdate();
+    }
+
+    private Task _onUIChanged(BlazorGridStackWidgetEventArgs e)
+    {
+        if (e == null)
+            return Task.CompletedTask;
+
+        var item = e.Item;
+        Logger.LogInformation($"\n\nWidget Item[{item.Id}] {item.ClassName}. New width: {item.W}, New height: {item.H}, New X: {item.X}, New Y: {item.Y}.\n\n");
+
+        return Task.CompletedTask;
     }
 
     #region Date Range Filter
     DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2023"));
     DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
 
-    public async Task OnDateSelect(DateRange range)
+    public Task OnDateSelect(DateRange range)
     {
         if (StartDate.HasValue && EndDate.HasValue)
         {
             StartDate = range.Start;
             EndDate = range.End;
-            await Refresh();
+            Grid.BatchUpdate();
+            //StateHasChanged();
         }
+
+        return Task.CompletedTask;
     }
     #endregion
 }
