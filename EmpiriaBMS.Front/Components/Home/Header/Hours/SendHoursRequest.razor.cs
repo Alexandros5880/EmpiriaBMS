@@ -9,16 +9,10 @@ namespace EmpiriaBMS.Front.Components.Home.Header.Hours;
 public partial class SendHoursRequest
 {
     [Parameter]
-    public TimeSpan RemainingTime { get; set; }
-
-    [Parameter]
     public UserVM User { get; set; } = null;
 
     [Parameter]
     public EventCallback OnEnd { get; set; }
-
-    [Parameter]
-    public EventCallback<TimeSpan> OnTimeChanged { get; set; }
 
     #region Authorization Properties
     bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
@@ -26,7 +20,7 @@ public partial class SendHoursRequest
     bool getAllDeliverables => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
     bool workOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
     bool workOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
-    bool workOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
+    bool workOnClients => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
     #endregion
 
     bool _startLoading = true;
@@ -82,16 +76,12 @@ public partial class SendHoursRequest
 
         if (firstRender)
         {
-            RemainingTime = new TimeSpan(300, 0, 0);
             await Refresh();
         }
     }
 
     public async Task Refresh(TimeSpan? timespan = null)
     {
-        if (timespan != null)
-            RemainingTime = (TimeSpan)timespan;
-
         _description = string.Empty;
 
         _clients.Clear();
@@ -101,13 +91,13 @@ public partial class SendHoursRequest
         _deliverables.Clear();
         _disciplines.Clear();
 
-        if (workOnLeds || seeAdmin)
+        if (workOnClients || seeAdmin)
             await _getClients();
 
         if (workOnOffers || seeAdmin)
             await _getOffers();
 
-        if (!workOnLeds && !workOnOffers)
+        if (!workOnClients && !workOnOffers)
             await _getProjects(active: true);
 
         _selectedClient = new ClientVM() { Id = 0 };
@@ -221,13 +211,12 @@ public partial class SendHoursRequest
     #endregion
 
     #region On Time Changed
-    private async Task _onLedTimeChanged(ClientVM client, TimeSpan newTimeSpan)
+    private async Task _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime, RemainingTime
+        // previusTime, updatedTime
 
         var previusTime = client.Time;
         var updatedTime = newTimeSpan - previusTime;
-        RemainingTime += (-updatedTime);
 
         client.Time = newTimeSpan;
 
@@ -241,18 +230,15 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
-        await OnTimeChanged.InvokeAsync(RemainingTime);
-
         StateHasChanged();
     }
 
     private async Task _onOfferTimeChanged(OfferVM offer, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime, RemainingTime
+        // previusTime, updatedTime
 
         var previusTime = offer.Time;
         var updatedTime = newTimeSpan - previusTime;
-        RemainingTime += (-updatedTime);
 
         offer.Time = newTimeSpan;
 
@@ -266,18 +252,15 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
-        await OnTimeChanged.InvokeAsync(RemainingTime);
-
         StateHasChanged();
     }
 
     private async Task _onProjectTimeChanged(ProjectVM project, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime, RemainingTime
+        // previusTime, updatedTime
 
         var previusTime = project.Time;
         var updatedTime = newTimeSpan - previusTime;
-        RemainingTime += (-updatedTime);
 
         project.Time = newTimeSpan;
 
@@ -291,18 +274,15 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
-        await OnTimeChanged.InvokeAsync(RemainingTime);
-
         StateHasChanged();
     }
 
     private async Task _onDisciplineTimeChanged(DisciplineVM discipline, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime, RemainingTime
+        // previusTime, updatedTime
 
         var previusTime = discipline.Time;
         var updatedTime = newTimeSpan - previusTime;
-        RemainingTime += (-updatedTime);
 
         discipline.Time = newTimeSpan;
 
@@ -316,18 +296,15 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
-        await OnTimeChanged.InvokeAsync(RemainingTime);
-
         StateHasChanged();
     }
 
     private async Task _onDeliverableTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime, RemainingTime
+        // previusTime, updatedTime
 
         var previusTime = draw.Time;
         var updatedTime = newTimeSpan - previusTime;
-        RemainingTime += (-updatedTime);
 
         draw.Time = newTimeSpan;
 
@@ -340,8 +317,6 @@ public partial class SendHoursRequest
             _deliverablesChanged.Add(draw);
 
         _hasChanged = true;
-
-        await OnTimeChanged.InvokeAsync(RemainingTime);
 
         StateHasChanged();
     }
@@ -360,18 +335,15 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
-        await OnTimeChanged.InvokeAsync(RemainingTime);
-
         StateHasChanged();
     }
 
     private async Task _onOtherTimeChanged(SupportiveWorkVM other, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime, RemainingTime
+        // previusTime, updatedTime
 
         var previusTime = other.Time;
         var updatedTime = newTimeSpan - previusTime;
-        RemainingTime += (-updatedTime);
 
         other.Time = newTimeSpan;
 
@@ -385,65 +357,54 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
-        await OnTimeChanged.InvokeAsync(RemainingTime);
-
         StateHasChanged();
     }
 
     private async Task _onPersonalTimeChanged(TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime, RemainingTime
+        // previusTime, updatedTime
 
         var previusTime = _editLogedUserTimes.PersonalTime;
         var updatedTime = newTimeSpan - previusTime;
-        RemainingTime += (-updatedTime);
 
         _editLogedUserTimes.PersonalTime = newTimeSpan;
 
         _hasChanged = true;
-
-        await OnTimeChanged.InvokeAsync(RemainingTime);
 
         StateHasChanged();
     }
 
     private async Task _onTrainingTimeChanged(TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime, RemainingTime
+        // previusTime, updatedTime
 
         var previusTime = _editLogedUserTimes.TrainingTime;
         var updatedTime = newTimeSpan - previusTime;
-        RemainingTime += (-updatedTime);
 
         _editLogedUserTimes.TrainingTime = newTimeSpan;
 
         _hasChanged = true;
-
-        await OnTimeChanged.InvokeAsync(RemainingTime);
 
         StateHasChanged();
     }
 
     private async Task _onCorporateTimeChanged(TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime, RemainingTime
+        // previusTime, updatedTime
 
         var previusTime = _editLogedUserTimes.CorporateEventTime;
         var updatedTime = newTimeSpan - previusTime;
-        RemainingTime += (-updatedTime);
 
         _editLogedUserTimes.CorporateEventTime = newTimeSpan;
 
         _hasChanged = true;
-
-        await OnTimeChanged.InvokeAsync(RemainingTime);
 
         StateHasChanged();
     }
     #endregion
 
     #region When Records Selected
-    private async Task OnSelectLed(int ledId)
+    private async Task OnSelectClient(int ledId)
     {
         if (ledId == 0 || ledId == _selectedClient?.Id) return;
 
@@ -573,7 +534,7 @@ public partial class SendHoursRequest
         {
             var userId = _sharedAuthData.LogedUser.Id;
 
-            // Update Leds
+            // Update Clients
             foreach (var led in _clientsChanged)
             {
                 await _dataProvider.WorkingTime.ClientAddTimeRequest(userId, led.Id, led.Time, _description);

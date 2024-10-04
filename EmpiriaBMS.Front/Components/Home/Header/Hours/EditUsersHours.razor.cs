@@ -12,9 +12,6 @@ public partial class EditUsersHours
     public bool IsFromDashboard { get; set; } = false;
 
     [Parameter]
-    public bool SendRequest { get; set; } = false;
-
-    [Parameter]
     public bool DisplayTitle { get; set; } = true;
 
     [Parameter]
@@ -35,7 +32,7 @@ public partial class EditUsersHours
     bool getAllDeliverables => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
     bool workOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
     bool workOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
-    bool workOnLeds => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
+    bool workOnClients => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
     #endregion
 
     bool _startLoading = true;
@@ -49,8 +46,6 @@ public partial class EditUsersHours
     };
 
     private bool _hasChanged = false;
-
-    private string _description { get; set; }
 
     #region Selections Lists
     private ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
@@ -108,8 +103,6 @@ public partial class EditUsersHours
         if (timespan != null)
             RemainingTime = (TimeSpan)timespan;
 
-        _description = string.Empty;
-
         _users.Clear();
         _clients.Clear();
         _offers.Clear();
@@ -121,13 +114,13 @@ public partial class EditUsersHours
         if (!IsFromDashboard)
             await _getUsers();
 
-        if (workOnLeds || seeAdmin)
+        if (workOnClients || seeAdmin)
             await _getClients();
 
         if (workOnOffers || seeAdmin)
             await _getOffers();
 
-        if (!workOnLeds && !workOnOffers)
+        if (!workOnClients && !workOnOffers)
             await _getProjects(active: true);
 
         _selectedUser = new UserVM() { Id = 0 };
@@ -269,7 +262,7 @@ public partial class EditUsersHours
     #endregion
 
     #region On Time Changed
-    private async Task _onLedTimeChanged(ClientVM client, TimeSpan newTimeSpan)
+    private async Task _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
 
@@ -517,7 +510,7 @@ public partial class EditUsersHours
         StateHasChanged();
     }
 
-    private async Task OnSelectLed(int ledId)
+    private async Task OnSelectClient(int ledId)
     {
         if (ledId == 0 || ledId == _selectedClient?.Id) return;
 
@@ -632,16 +625,7 @@ public partial class EditUsersHours
         if (!_hasChanged)
             return;
 
-        if (SendRequest)
-        {
-            var valid = Validate();
-            if (valid)
-                await _sendRequest();
-            else
-                return;
-        }
-        else
-            await _addHours();
+        await _addHours();
 
         // Refresh
         RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
@@ -653,68 +637,6 @@ public partial class EditUsersHours
         }
 
         _startLoading = false;
-    }
-
-    private async Task _sendRequest()
-    {
-        try
-        {
-            var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
-
-            // Update Leds
-            foreach (var led in _clientsChanged)
-            {
-                await _dataProvider.WorkingTime.ClientAddTimeRequest(userId, led.Id, led.Time, _description);
-            }
-            _clientsChanged.Clear();
-            _selectedClient = null;
-
-            // Update Offers
-            foreach (var offer in _offersChanged)
-            {
-                await _dataProvider.WorkingTime.OfferAddTimeRequest(userId, offer.Id, offer.Time, _description);
-            }
-            _offersChanged.Clear();
-            _selectedOffer = null;
-
-            // Update Projects
-            foreach (var project in _projectsChanged)
-            {
-                await _dataProvider.WorkingTime.ProjectAddTimeRequest(userId, project.Id, project.Time, _description);
-            }
-            _projectsChanged.Clear();
-            //_selectedProject = null;
-
-            // Update Discipline
-            foreach (var discipline in _disciplinesChanged)
-            {
-                await _dataProvider.WorkingTime.DisciplineAddTimeRequest(userId, _selectedProject.Id, discipline.Id, discipline.Time, _description);
-            }
-            _disciplinesChanged.Clear();
-            //_selectedDiscipline = null;
-
-            // Update Draws
-            foreach (var draw in _deliverablesChanged)
-                await _dataProvider.WorkingTime.DeliverableAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, _description);
-
-            // Update Others
-            foreach (var other in _supportiveWorkChanged)
-                await _dataProvider.WorkingTime.SupportiveWorkAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, _description);
-
-            // Update User Hours
-            if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddPersonaTimeRequest(userId, _editLogedUserTimes.PersonalTime, _description);
-            if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddTraningTimeRequest(userId, _editLogedUserTimes.TrainingTime, _description);
-            if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddCorporateEventTimeRequest(userId, _editLogedUserTimes.CorporateEventTime, _description);
-
-            await OnEnd.InvokeAsync();
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception EditUsersHours._sendRequest(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-        }
     }
 
     private async Task _addHours()
@@ -735,7 +657,7 @@ public partial class EditUsersHours
             var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
 
 
-            // Update Leds
+            // Update Clients
             foreach (var led in _clientsChanged)
             {
                 await _dataProvider.WorkingTime.ClientAddTime(userId, led.Id, led.Time);
@@ -804,33 +726,4 @@ public partial class EditUsersHours
             Logger.LogError($"Exception EditUsersHours._addHours(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
-
-    #region Validation
-    private bool validDescription = true;
-
-    public bool Validate(string fieldname = null)
-    {
-        if (fieldname == null)
-        {
-            validDescription = !string.IsNullOrEmpty(_description) && !string.IsNullOrWhiteSpace(_description);
-
-            return validDescription;
-        }
-        else
-        {
-            validDescription = true;
-
-            switch (fieldname)
-            {
-                case "Description":
-                    validDescription = !string.IsNullOrEmpty(_description) && !string.IsNullOrWhiteSpace(_description);
-                    return validDescription;
-
-                default:
-                    return true;
-            }
-
-        }
-    }
-    #endregion
 }

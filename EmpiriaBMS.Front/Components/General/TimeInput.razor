@@ -2,13 +2,13 @@
 @using Microsoft.JSInterop
 @inject Logging.LoggerManager Logger
 
-<div class="input-group text-center" style="width:118px; margin: 0 auto !important;">
+<div class="input-group text-center">
     
     <input class="form-control"
            type="number"
            @bind="@Hours"
            placeholder="H"
-           style="min-width: 45px !important; max-width: 45px !important;"
+           style="min-width: 60px !important; max-width: 60px !important;"
            min="@MinTime.Hours"
            max="@_remainingTime.TotalHours"
            data-input-type="hours"
@@ -23,7 +23,7 @@
            type="number"
            @bind="@Minutes"
            placeholder="M"
-           style="min-width: 45px !important; max-width: 45px !important;"
+           style="min-width: 60px !important; max-width: 60px !important;"
            min="@MinTime.Minutes"
            max="@(_remainingTime.TotalMinutes % 60)"
            data-input-type="minutes"
