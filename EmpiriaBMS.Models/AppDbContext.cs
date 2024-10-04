@@ -79,7 +79,7 @@ public class AppDbContext : DbContext
         Random random = new Random();
         var createdDate = DateTime.Now;
 
-        if (true)
+        if (false)
         {
             #region Permissions
             // See Dashboard Layout
