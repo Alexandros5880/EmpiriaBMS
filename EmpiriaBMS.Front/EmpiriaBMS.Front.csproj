@@ -111,6 +111,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\WorkingHours\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties apppackage_4manifest_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

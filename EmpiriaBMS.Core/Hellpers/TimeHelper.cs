@@ -18,10 +18,10 @@ public static class TimeHelper
         {
             totalTime = totalTime.Add(
                 new TimeSpan(
-                    (int)dailyTime.TimeSpan.Days,
-                    (int)dailyTime.TimeSpan.Hours,
-                    (int)dailyTime.TimeSpan.Minutes,
-                    (int)dailyTime.TimeSpan.Seconds)
+                    (int)dailyTime.Days,
+                    (int)dailyTime.Hours,
+                    (int)dailyTime.Minutes,
+                    (int)dailyTime.Seconds)
             );
         }
 

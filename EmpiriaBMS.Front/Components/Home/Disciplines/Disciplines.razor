@@ -9,7 +9,7 @@
 @using EmpiriaBMS.Front.Components.Admin
 @using Color = Microsoft.Fast.Components.FluentUI.Color
 @using EmpiriaBMS.Core.Services.DBManipulation
-@using EmpiriaBMS.Front.Components.WorkingHours
+@using EmpiriaBMS.Front.Components.Home.Header.Hours
 @using EmpiriaBMS.Front.Components.Reports
 @using EmpiriaBMS.Models.Enum
 @using EmpiriaBMS.Front.Components.Home.Clients
@@ -114,7 +114,7 @@
                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                 ? "" : "selected_table_disciplines_row"))"
                                 style="word-wrap: break-word; max-width: 100px;">
-                                <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
+                                <DisciplineEstimatedCompleted Id="discipline.Id"/>
                             </td>
 
                             @if (IsWorkingMode && assignEngineer)

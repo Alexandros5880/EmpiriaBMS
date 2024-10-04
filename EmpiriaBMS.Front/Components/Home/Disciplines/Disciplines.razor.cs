@@ -267,6 +267,10 @@ public partial class Disciplines
         await disciplineCompoment.HandleValidSubmit();
 
         var newDiscipline = disciplineCompoment.GetDiscipline();
+
+        if (newDiscipline == null)
+            return;
+
         if (_data.Any(d => d.Id == newDiscipline.Id))
             _data.Remove(newDiscipline);
 

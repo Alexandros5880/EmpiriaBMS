@@ -3786,8 +3786,6 @@ public class SeedData
                 DeadLine = DateTime.Now.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
-                DeclaredCompleted = 0,
-                EstimatedCompleted = 0,
                 StageId = projectStages[stagesIndex].Id,
                 Active = i % 2 == 0 ? true : false,
                 ProjectManagerId = projectManagers[projectManagersIndex].Id,
@@ -3964,8 +3962,6 @@ public class SeedData
                 DeadLine = DateTime.Now.AddMonths(-i),
                 EstimatedMandays = 100 / 8,
                 EstimatedHours = 1500,
-                DeclaredCompleted = 0,
-                EstimatedCompleted = 0,
                 StageId = projectStages[stagesIndex].Id,
                 Active = i % 2 == 0 ? true : false,
                 ProjectManagerId = projectManagers[projectManagersIndex].Id,
@@ -4091,8 +4087,7 @@ public class SeedData
                     TypeId = disciplineTypes[typeIndex].Id,
                     EstimatedMandays = 50 + j,
                     EstimatedHours = (50 + j) * 8,
-                    ProjectId = projects[i].Id,
-                    DeclaredCompleted = 0
+                    ProjectId = projects[i].Id
                 };
                 disciplines.Add(discipline);
             }
@@ -4176,8 +4171,7 @@ public class SeedData
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
                     TypeId = otherTypes[j].Id,
-                    DisciplineId = disciplines[i].Id,
-                    CompletionEstimation = 0
+                    DisciplineId = disciplines[i].Id
                 };
                 supportiveWorks.Add(other);
             }

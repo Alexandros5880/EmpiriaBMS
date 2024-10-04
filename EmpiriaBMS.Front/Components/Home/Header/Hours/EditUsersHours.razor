@@ -1,4 +1,5 @@
 ﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Home;
 
 @inject IDataProvider _dataProvider
 @inject IMapper Mapper
@@ -62,19 +63,19 @@
             }
         }
 
-        <!-- Select Led -->
-        @if (workOnLeds || seeAdmin && (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0)))
+        <!-- Select Client -->
+        @if (workOnClients || seeAdmin && (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0)))
         {
             <div class="col selections">
                 <div class="text-center">
-                    <h5>Select Led</h5>
+                    <h5>Select Client</h5>
                 </div>
                 <div class="select-wrapper form-column form-column-field">
                     <select class="form-select form-select-lg"
-                            aria-label="Select Led"
+                            aria-label="Select Client"
                             value="@_selectedClient?.Id"
-                            @onchange="@(async (ChangeEventArgs e) => await OnSelectLed(Convert.ToInt32(e.Value)))">
-                        <option value="0" selected>Select Led</option>
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectClient(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select Client</option>
                         @foreach (var client in _clients)
                         {
                             <option value="@client.Id">
@@ -176,10 +177,7 @@
                             <tr>
                                 <th scope="col" class="sticky-header">Deliverable</th>
                                 <th scope="col" class="sticky-header">Time</th>
-                                @if (!SendRequest)
-                                {
-                                    <th scope="col" class="sticky-header">Declared Completion</th>
-                                }
+                                <th scope="col" class="sticky-header">Declared Completion</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -189,31 +187,28 @@
                                     <td class="align-middle">
                                         <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
                                     </td>
-                                    <td class="align-middle">
+                                    <td class="align-middle nowrap-td">
                                         <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
                                                    MaxTime="@RemainingTime"
                                                    Time="_deliverable.Time"
                                                    OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
                                     </td>
-                                    @if (!SendRequest)
-                                    {
-                                        <td class="align-middle">
-                                            <div class="input-group" style="width: 110px;">
-                                                <input type="number"
-                                                       class="form-control"
-                                                       EnableMinMax="true"
-                                                       min="0"
-                                                       max="100"
-                                                       style="min-width: 52px !important; max-width: 52px !important;"
-                                                       onkeyup="if(value<0) value=0; if(value>100) value=100;"
-                                                       onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
-                                                       @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">%</span>
-                                                </div>
+                                    <td class="align-middle">
+                                        <div class="input-group" style="width: 120px;">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   EnableMinMax="true"
+                                                   min="0"
+                                                   max="100"
+                                                   style="width: 80px;"
+                                                   onkeyup="if(value<0) value=0; if(value>100) value=100;"
+                                                   onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+                                                   @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
                                             </div>
-                                        </td>
-                                    }
+                                        </div>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -245,7 +240,7 @@
                                     <td class="align-middle">
                                         <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
                                     </td>
-                                    <td class="align-middle">
+                                    <td class="align-middle nowrap-td">
                                         <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
                                                    MaxTime="@RemainingTime"
                                                    Time="@_supportiveWork.Time"
@@ -261,12 +256,25 @@
 
     </FluentStack>
 
-    <div class="mt-2">
+    <div class="mt-4">
 
-        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
+        @{
+            var seeSetUserWithHighRolesTime = IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0
+                                                && (_selectedClient != null && _selectedClient.Id != 0
+                                                || _selectedOffer != null && _selectedOffer.Id != 0
+                                                || _selectedProject != null && _selectedProject.Id != 0));
+
+            var seeSetUserExtraTime = IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0);
+
+            var seeGeneralTime = seeSetUserWithHighRolesTime || seeSetUserExtraTime;
+
+            var minTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0);
+        }
+
+        @if (seeGeneralTime)
         {
             <FluentAccordion>
-                <FluentAccordionItem Expanded="@(!IsFromDashboard && !SendRequest)">
+                <FluentAccordionItem Expanded="@(!IsFromDashboard)">
                     <HeadingTemplate>
                         <div class="accordion-header">
                             <h3>General Time</h3>
@@ -275,22 +283,19 @@
                     <ChildContent>
 
                         <!-- Set User With High Roles Time -->
-                        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0
-                               && (_selectedClient != null && _selectedClient.Id != 0
-                               || _selectedOffer != null && _selectedOffer.Id != 0
-                               || _selectedProject != null && _selectedProject.Id != 0)))
+                        @if (seeSetUserWithHighRolesTime)
                         {
                             <div class="mb-1">
                                 <div class="row gx-3 m-2 w-96">
 
-                                    @if ((workOnLeds || seeAdmin) && (_selectedClient != null && _selectedClient.Id != 0))
+                                    @if ((workOnClients || seeAdmin) && (_selectedClient != null && _selectedClient.Id != 0))
                                     {
                                         <div class="col-3 text-center">
-                                            <span class="mb-2 fs-5">Led</span>
+                                            <span class="mb-2 fs-5">Client</span>
                                             <TimeInput MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
                                                        MaxTime="@RemainingTime"
                                                        Time="_selectedClient.Time"
-                                                       OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedClient, time)) />
+                                                       OnPropertyChanged=@((time) => _onClientTimeChanged(_selectedClient, time)) />
                                         </div>
                                     }
 
@@ -331,12 +336,12 @@
                         }
 
                         <!-- Set User Extra Time -->
-                        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
+                        @if (seeSetUserExtraTime)
                         {
                             <div class="mb-1">
                                 <SetUserTime LogedUserTimes="@_editLogedUserTimes"
                                              RemainingTime="@RemainingTime"
-                                             MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
+                                             MinTime="@minTime"
                                              OnPersonalTimeChanged="@_onPersonalTimeChanged"
                                              OnTrainingTimeChanged="@_onTrainingTimeChanged"
                                              OnCorporateTimeChanged="@_onCorporateTimeChanged" />
@@ -349,25 +354,6 @@
         }
 
     </div>
-
-    <!-- Description -->
-    @if (SendRequest)
-    {
-        <div class="mt-1 w-98">
-            <div>
-                Description<span class="text-danger">*</span>
-            </div>
-            <div>
-                <FluentTextArea Class="" Style="width:100%;" @bind-Value="@_description" Rows="3" Resize="TextAreaResize.Vertical" />
-            </div>
-            @if (!validDescription)
-            {
-                <div>
-                    <span class="text-warning">Field is required!</span>
-                </div>
-            }
-        </div>
-    }
 
 </div>
 

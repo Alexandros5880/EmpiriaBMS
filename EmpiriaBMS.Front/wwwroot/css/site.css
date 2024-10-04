@@ -94,6 +94,7 @@ code {
     cursor: pointer !important;
 }
 
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 0px; /* If you want to appears set 20px*/

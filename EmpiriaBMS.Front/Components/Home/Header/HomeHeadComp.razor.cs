@@ -1,4 +1,4 @@
-﻿using EmpiriaBMS.Front.Components.WorkingHours;
+﻿using EmpiriaBMS.Front.Components.Home.Header.Hours;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Home;
+namespace EmpiriaBMS.Front.Components.Home.Header;
 
 public partial class HomeHeadComp : IDisposable
 {
@@ -39,7 +39,7 @@ public partial class HomeHeadComp : IDisposable
     #region Lists    
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
     private ObservableCollection<TeamsRequestedUserVM> _teamsRequestedUsers = new ObservableCollection<TeamsRequestedUserVM>();
-    private Dictionary<DailyTimeTypes, List<DailyTimeRequest>> _dailyTimeRequest = new Dictionary<DailyTimeTypes, List<DailyTimeRequest>>();
+    private Dictionary<DailyTimeTypes, List<DailyTime>> _dailyTimeRequest = new Dictionary<DailyTimeTypes, List<DailyTime>>();
     #endregion
 
     #region Dialogs
