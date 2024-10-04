@@ -88,6 +88,12 @@ public partial class Dashboard
         }
     }
 
+    private void _onWorkingModeChanged(bool workMode)
+    {
+        _isWorkingMode = workMode;
+        StateHasChanged();
+    }
+
     #region Tab Actions
     private string _activeid = "tab-home";
     #endregion
