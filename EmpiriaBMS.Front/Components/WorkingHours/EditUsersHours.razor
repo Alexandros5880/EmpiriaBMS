@@ -199,13 +199,13 @@
                                     @if (!SendRequest)
                                     {
                                         <td class="align-middle">
-                                            <div class="input-group" style="width: 110px;">
+                                            <div class="input-group" style="width: 120px;">
                                                 <input type="number"
                                                        class="form-control"
                                                        EnableMinMax="true"
                                                        min="0"
                                                        max="100"
-                                                       style="min-width: 52px !important; max-width: 52px !important;"
+                                                       style="width: 80px;"
                                                        onkeyup="if(value<0) value=0; if(value>100) value=100;"
                                                        onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
                                                        @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
