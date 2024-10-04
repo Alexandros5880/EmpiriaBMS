@@ -14,6 +14,7 @@
 @using EmpiriaBMS.Front.Components.Home.Issues
 @using EmpiriaBMS.Front.Components.Home.Projects
 @using EmpiriaBMS.Front.Components.Home.SupportiveWorks
+@using EmpiriaBMS.Front.Components.Home.Projects
 
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
@@ -93,7 +94,6 @@
     </div>
 </div>
 
-<!-- Table -->
 @if (_loading)
 {
     <div class="mt-5 mb-5">
@@ -102,6 +102,7 @@
 }
 else
 {
+    <!-- Table -->
     <div class="table-responsive mt-2 p-1 table-container"
          style="overflow-x: auto !important;">
         <table class="table table-hover table-success text-center">
@@ -169,14 +170,14 @@ else
                                     !_selectedProject.Id.Equals(project.Id)
                                                     ? "" : "selected_table_projects_row"))"
                             @onclick="@(async () => await OnRowSelect(project.Id))">
-                            <label>@(project.DeclaredCompleted.ToString("##0.0")) %</label>
+                            <ProjectDeclaredCompleted Id="project.Id" />
                         </td>
 
                         <td class="align-middle @((_selectedProject == null ||
                                     !_selectedProject.Id.Equals(project.Id)
                                                     ? "" : "selected_table_projects_row"))"
                             @onclick="@(async () => await OnRowSelect(project.Id))">
-                            <label>@(project.EstimatedCompleted.ToString("##0.0")) %</label>
+                            <ProjectEstimatedCompleted Id="@project.Id" />
                         </td>
 
                         <td class="align-middle @((_selectedProject == null ||

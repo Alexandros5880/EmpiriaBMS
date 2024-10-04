@@ -396,7 +396,7 @@ public partial class EditUsersHours
 
     private async Task _onDeliverableCompletedChanged(DeliverableVM draw, object val)
     {
-        draw.CompletionEstimation += Convert.ToInt32(val);
+        draw.CompletionEstimation = Convert.ToInt32(val);
 
         if (_deliverablesChanged.Any(d => d.Id == draw.Id))
         {

@@ -29,10 +29,6 @@ public class Project : Entity
     [Column(TypeName = "datetime2")]
     public DateTime? DeadLine { get; set; }
 
-    public float EstimatedCompleted { get; set; }
-
-    public float DeclaredCompleted { get; set; }
-
     public int? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 

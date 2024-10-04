@@ -114,7 +114,7 @@
                                             || !_selectedDiscipline.Id.Equals(discipline.Id))
                                                 ? "" : "selected_table_disciplines_row"))"
                                 style="word-wrap: break-word; max-width: 100px;">
-                                <label>@(discipline.EstimatedCompleted.ToString("##0.0")) %</label>
+                                <DisciplineEstimatedCompleted Id="discipline.Id"/>
                             </td>
 
                             @if (IsWorkingMode && assignEngineer)

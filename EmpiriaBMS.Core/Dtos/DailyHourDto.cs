@@ -31,11 +31,11 @@ public class DailyHourDto : EntityDto
     public int? CorporateUserId { get; set; }
     public User? CorporateUser { get; set; }
 
-    public int? DrawingId { get; set; }
-    public Deliverable? Drawing { get; set; }
+    public int? DeliverableId { get; set; }
+    public Deliverable? Deliverable { get; set; }
 
-    public int? OtherId { get; set; }
-    public SupportiveWork? Other { get; set; }
+    public int? SupportiveWorkId { get; set; }
+    public SupportiveWork? SupportiveWork { get; set; }
 
     public int? DisciplineId { get; set; }
     public Discipline? Discipline { get; set; }
@@ -81,10 +81,10 @@ public class DailyHourDto : EntityDto
             TrainingUser = TrainingUser,
             CorporateUserId = CorporateUserId,
             CorporateUser = CorporateUser,
-            DrawingId = DrawingId,
-            Drawing = Drawing,
-            OtherId = OtherId,
-            Other = Other,
+            DeliverableId = DeliverableId,
+            Deliverable = Deliverable,
+            SupportiveWorkId = SupportiveWorkId,
+            SupportiveWork = SupportiveWork,
             DisciplineId = DisciplineId,
             Discipline = Discipline,
             ProjectId = ProjectId,

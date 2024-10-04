@@ -63,7 +63,7 @@ public static class ModelRelations
                .WithMany(de => de.DeliverablesEmployees)
                .HasForeignKey(de => de.EmployeeId);
 
-        // Others Employees
+        // SupportiveWorks Employees
         builder.Entity<SupportiveWorkEmployee>()
                .HasKey(de => new { de.SupportiveWorkId, de.EmployeeId });
         builder.Entity<SupportiveWorkEmployee>()
@@ -220,21 +220,21 @@ public static class ModelRelations
                .HasForeignKey(c => c.DisciplineId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // DrawingType Deliverables
+        // DeliverableType Deliverables
         builder.Entity<DeliverableType>()
                .HasMany(p => p.Deliverables)
                .WithOne(c => c.Type)
                .HasForeignKey(c => c.TypeId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // Discipline Others
+        // Discipline SupportiveWorks
         builder.Entity<Discipline>()
-               .HasMany(p => p.Others)
+               .HasMany(p => p.SupportiveWorks)
                .WithOne(c => c.Discipline)
                .HasForeignKey(c => c.DisciplineId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // OtherType Others
+        // SupportiveWorkType SupportiveWorks
         builder.Entity<SupportiveWorkType>()
                .HasMany(p => p.SupportiveWorks)
                .WithOne(c => c.Type)
@@ -297,18 +297,18 @@ public static class ModelRelations
                .HasForeignKey(c => c.DisciplineId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
-        // Other DailyTime
+        // SupportiveWork DailyTime
         builder.Entity<SupportiveWork>()
                .HasMany(p => p.DailyTime)
-               .WithOne(c => c.Other)
-               .HasForeignKey(c => c.OtherId)
+               .WithOne(c => c.SupportiveWork)
+               .HasForeignKey(c => c.SupportiveWorkId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
-        // Drawing DailyTime
+        // Deliverable DailyTime
         builder.Entity<Deliverable>()
                .HasMany(p => p.DailyTime)
-               .WithOne(c => c.Drawing)
-               .HasForeignKey(c => c.DrawingId)
+               .WithOne(c => c.Deliverable)
+               .HasForeignKey(c => c.DeliverableId)
                .OnDelete(DeleteBehavior.ClientCascade);
 
         // SubCategorys Category

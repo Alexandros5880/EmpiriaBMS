@@ -1,0 +1,27 @@
+﻿@inject IDataProvider _dataProvider
+@inject Logging.LoggerManager Logger
+
+
+<label>@(DeclaredCompleted.ToString("##0.0")) %</label>
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    public float DeclaredCompleted { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            DeclaredCompleted = await _dataProvider.Projects.GetDeclaredCompleted(Id);
+            StateHasChanged();
+        }
+    }
+
+
+}

@@ -279,8 +279,8 @@
                   Hidden="@(!_isEndWorkDialogOdepened || _loading)"
                   Modal="false"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
-                        --dialog-height: auto !important;">
+                  style="--dialog-width: min(max(80vw, 800px), 1000px) !important;
+                         --dialog-height: min(max(80vw, 800px), 900px) !important;">
 
         <EditUsersHours @ref="@_editHoursCompoment"
                         RemainingTime="@remainingTime"

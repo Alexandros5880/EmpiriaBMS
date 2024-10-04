@@ -33,8 +33,8 @@ public class WorkingTime : IDisposable
                                              .Include(r => r.PersonalUser)
                                              .Include(r => r.TrainingUser)
                                              .Include(r => r.CorporateUser)
-                                             .Include(r => r.Drawing)
-                                             .Include(r => r.Other)
+                                             .Include(r => r.Deliverable)
+                                             .Include(r => r.SupportiveWork)
                                              .Include(r => r.Discipline)
                                              .Include(r => r.Project)
                                              .Include(r => r.Client)
@@ -99,8 +99,8 @@ public class WorkingTime : IDisposable
                 !request.OfferId.HasValue &&
                 !request.ProjectId.HasValue &&
                 !request.DisciplineId.HasValue &&
-                !request.DrawingId.HasValue &&
-                !request.OtherId.HasValue)
+                !request.DeliverableId.HasValue &&
+                !request.SupportiveWorkId.HasValue)
             {
                 //var dailyUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.DailyUserId);
                 return DailyTimeTypes.DailyUser;
@@ -114,8 +114,8 @@ public class WorkingTime : IDisposable
                 !request.OfferId.HasValue &&
                 !request.ProjectId.HasValue &&
                 !request.DisciplineId.HasValue &&
-                !request.DrawingId.HasValue &&
-                !request.OtherId.HasValue)
+                !request.DeliverableId.HasValue &&
+                !request.SupportiveWorkId.HasValue)
             {
                 //var personalUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.PersonalUserId);
                 return DailyTimeTypes.PersonalUser;
@@ -129,8 +129,8 @@ public class WorkingTime : IDisposable
                 !request.OfferId.HasValue &&
                 !request.ProjectId.HasValue &&
                 !request.DisciplineId.HasValue &&
-                !request.DrawingId.HasValue &&
-                !request.OtherId.HasValue)
+                !request.DeliverableId.HasValue &&
+                !request.SupportiveWorkId.HasValue)
             {
                 //var trainingUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.TrainingUserId);
                 return DailyTimeTypes.TrainingUser;
@@ -144,8 +144,8 @@ public class WorkingTime : IDisposable
                 !request.OfferId.HasValue &&
                 !request.ProjectId.HasValue &&
                 !request.DisciplineId.HasValue &&
-                !request.DrawingId.HasValue &&
-                !request.OtherId.HasValue)
+                !request.DeliverableId.HasValue &&
+                !request.SupportiveWorkId.HasValue)
             {
                 //var corporateUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.CorporateUserId);
                 return DailyTimeTypes.CorporateUser;
@@ -159,8 +159,8 @@ public class WorkingTime : IDisposable
                     !request.OfferId.HasValue &&
                     !request.ProjectId.HasValue &&
                     !request.DisciplineId.HasValue &&
-                    !request.DrawingId.HasValue &&
-                    !request.OtherId.HasValue)
+                    !request.DeliverableId.HasValue &&
+                    !request.SupportiveWorkId.HasValue)
             {
                 //var lead = await _context.Set<Lead>().FirstOrDefaultAsync(u => u.Id == request.LeadId);
                 return DailyTimeTypes.Lead;
@@ -174,8 +174,8 @@ public class WorkingTime : IDisposable
                     !request.ClientId.HasValue &&
                     !request.ProjectId.HasValue &&
                     !request.DisciplineId.HasValue &&
-                    !request.DrawingId.HasValue &&
-                    !request.OtherId.HasValue)
+                    !request.DeliverableId.HasValue &&
+                    !request.SupportiveWorkId.HasValue)
             {
                 //var offer = await _context.Set<Offer>().FirstOrDefaultAsync(u => u.Id == request.OfferId);
                 return DailyTimeTypes.Offer;
@@ -189,8 +189,8 @@ public class WorkingTime : IDisposable
                     !request.ClientId.HasValue &&
                     !request.OfferId.HasValue &&
                     !request.DisciplineId.HasValue &&
-                    !request.DrawingId.HasValue &&
-                    !request.OtherId.HasValue)
+                    !request.DeliverableId.HasValue &&
+                    !request.SupportiveWorkId.HasValue)
             {
                 //var project = await _context.Set<Project>().FirstOrDefaultAsync(u => u.Id == request.ProjectId);
                 return DailyTimeTypes.Project;
@@ -205,14 +205,14 @@ public class WorkingTime : IDisposable
                     !request.CorporateUserId.HasValue &&
                     !request.ClientId.HasValue &&
                     !request.OfferId.HasValue &&
-                    !request.DrawingId.HasValue &&
-                    !request.OtherId.HasValue)
+                    !request.DeliverableId.HasValue &&
+                    !request.SupportiveWorkId.HasValue)
             {
                 //var discipline = await _context.Set<Discipline>().FirstOrDefaultAsync(u => u.Id == request.DisciplineId);
                 return DailyTimeTypes.Discipline;
             }
             // Drawing
-            else if (request.DrawingId.HasValue &&
+            else if (request.DeliverableId.HasValue &&
                      request.DisciplineId.HasValue &&
                      request.ProjectId.HasValue &&
                      request.DailyUserId.HasValue &&
@@ -221,13 +221,13 @@ public class WorkingTime : IDisposable
                     !request.CorporateUserId.HasValue &&
                     !request.ClientId.HasValue &&
                     !request.OfferId.HasValue &&
-                    !request.OtherId.HasValue)
+                    !request.SupportiveWorkId.HasValue)
             {
-                //var deliverable = await _context.Set<Deliverable>().FirstOrDefaultAsync(u => u.Id == request.DrawingId);
+                //var deliverable = await _context.Set<Deliverable>().FirstOrDefaultAsync(u => u.Id == request.DeliverableId);
                 return DailyTimeTypes.Deliverable;
             }
             // Other
-            else if (request.OtherId.HasValue &&
+            else if (request.SupportiveWorkId.HasValue &&
                      request.DisciplineId.HasValue &&
                      request.ProjectId.HasValue &&
                      request.DailyUserId.HasValue &&
@@ -236,9 +236,9 @@ public class WorkingTime : IDisposable
                     !request.CorporateUserId.HasValue &&
                     !request.ClientId.HasValue &&
                     !request.OfferId.HasValue &&
-                    !request.DrawingId.HasValue)
+                    !request.DeliverableId.HasValue)
             {
-                //var supportiveWork = await _context.Set<SupportiveWork>().FirstOrDefaultAsync(u => u.Id == request.OtherId);
+                //var supportiveWork = await _context.Set<SupportiveWork>().FirstOrDefaultAsync(u => u.Id == request.SupportiveWorkId);
                 return DailyTimeTypes.SupportiveWork;
             }
 
@@ -1038,34 +1038,6 @@ public class WorkingTime : IDisposable
 
                 // Save Changes
                 await _context.SaveChangesAsync();
-
-                // Get Discipline && Calculate Estimated Hours
-                //var discipline = await _context.Set<Discipline>()
-                //                               .Where(r => !r.IsDeleted)
-                //                               .Include(p => p.DailyTime)
-                //                               .FirstOrDefaultAsync(p => p.Id == disciplineId);
-                //if (discipline == null)
-                //    throw new NullReferenceException(nameof(discipline));
-                //var disciplineMenHours = discipline.DailyTime.Select(h => h.TimeSpan?.Hours ?? 0).Sum();
-
-                //decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
-                //discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
-
-                //// Get Project && Calculate Estimated Hours
-                //var project = await _context.Set<Project>()
-                //                            .Where(r => !r.IsDeleted)
-                //                            .Include(p => p.DailyTime)
-                //                            .FirstOrDefaultAsync(p => p.Id == projectId);
-                //if (project == null)
-                //    throw new NullReferenceException(nameof(project));
-                //var projectsTimes = project.DailyTime.Select(dt => dt.TimeSpan).ToList();
-                //var projectMenHours = projectsTimes.Select(t => t.Hours).Sum();
-
-                //decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
-                //project.EstimatedCompleted = (float)divitionProResult * 100;
-
-                //// Save Changes
-                //await _context.SaveChangesAsync();
             }
         }
         catch (Exception ex)
@@ -1131,7 +1103,7 @@ public class WorkingTime : IDisposable
                         DailyUserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
-                        DrawingId = drawId,
+                        DeliverableId = drawId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
@@ -1143,43 +1115,6 @@ public class WorkingTime : IDisposable
 
                 // Save Changes
                 await _context.SaveChangesAsync();
-
-                //// Get Discipline && Calculate Estimated Hours
-                //var discipline = await _context.Set<Discipline>()
-                //                               .Where(r => !r.IsDeleted)
-                //                               .Include(p => p.DailyTime)
-                //                               .FirstOrDefaultAsync(p => p.Id == disciplineId);
-                //if (discipline == null)
-                //    throw new NullReferenceException(nameof(discipline));
-                //var disciplineMenHours = await _context.Set<DailyTime>()
-                //                                       .Where(r => !r.IsDeleted)
-                //                                       .Where(d => d.DisciplineId == disciplineId)
-                //                                       .Select(d => d.TimeSpan != null ? d.TimeSpan.Hours : 0)
-                //                                       .SumAsync();
-
-                //decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours)
-                //                                        / Convert.ToDecimal(discipline.EstimatedHours);
-                //discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
-
-                //// Get Project && Calculate Estimated Hours
-                //var project = await _context.Set<Project>()
-                //                            .Where(r => !r.IsDeleted)
-                //                            .Include(p => p.DailyTime)
-                //                            .FirstOrDefaultAsync(p => p.Id == projectId);
-                //if (project == null)
-                //    throw new NullReferenceException(nameof(project));
-                //var projectsTimes = project.DailyTime.Where(r => !r.IsDeleted).Select(dt => dt.TimeSpan).ToList();
-                //var projectMenHours = await _context.Set<DailyTime>()
-                //                                    .Where(r => !r.IsDeleted)
-                //                                    .Where(d => d.ProjectId == projectId)
-                //                                    .Select(d => d.TimeSpan.Hours)
-                //                                    .SumAsync();
-                //decimal divitionProResult = Convert.ToDecimal(projectMenHours)
-                //                                        / Convert.ToDecimal(project.EstimatedHours);
-                //project.EstimatedCompleted = (float)divitionProResult * 100;
-
-                //// Save Changes
-                //await _context.SaveChangesAsync();
             }
         }
         catch (Exception ex)
@@ -1205,7 +1140,7 @@ public class WorkingTime : IDisposable
                         DailyUserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
-                        DrawingId = drawId,
+                        DeliverableId = drawId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
@@ -1246,7 +1181,7 @@ public class WorkingTime : IDisposable
                         DailyUserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
-                        OtherId = otherId,
+                        SupportiveWorkId = otherId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
@@ -1258,40 +1193,6 @@ public class WorkingTime : IDisposable
 
                 // Save Changes
                 await _context.SaveChangesAsync();
-
-                // Get Discipline && Calculate Estimated Hours
-                //var discipline = await _context.Set<Discipline>()
-                //                               .Where(r => !r.IsDeleted)
-                //                               .Include(p => p.DailyTime)
-                //                               .FirstOrDefaultAsync(p => p.Id == disciplineId);
-                //if (discipline == null)
-                //    throw new NullReferenceException(nameof(discipline));
-                //var disciplineMenHours = await _context.Set<DailyTime>()
-                //                              .Where(r => !r.IsDeleted)
-                //                              .Where(d => d.DisciplineId == disciplineId)
-                //                              .Select(d => d.TimeSpan.Hours)
-                //                              .SumAsync();
-                //decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
-                //discipline.EstimatedCompleted = (float)divitionDiscResult * 100;
-
-                //// Get Project && Calculate Estimated Hours
-                //var project = await _context.Set<Project>()
-                //                            .Where(r => !r.IsDeleted)
-                //                            .Include(p => p.DailyTime)
-                //                            .FirstOrDefaultAsync(p => p.Id == projectId);
-                //if (project == null)
-                //    throw new NullReferenceException(nameof(project));
-                //var projectsTimes = project.DailyTime.Where(r => !r.IsDeleted).Select(dt => dt.TimeSpan).ToList();
-                //var projectMenHours = await _context.Set<DailyTime>()
-                //                              .Where(r => !r.IsDeleted)
-                //                              .Where(d => d.ProjectId == projectId)
-                //                              .Select(d => d.TimeSpan.Hours)
-                //                              .SumAsync();
-                //decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
-                //project.EstimatedCompleted = (float)divitionProResult * 100;
-
-                //// Save Changes
-                //await _context.SaveChangesAsync();
             }
         }
         catch (Exception ex)
@@ -1317,7 +1218,7 @@ public class WorkingTime : IDisposable
                         DailyUserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
-                        OtherId = otherId,
+                        SupportiveWorkId = otherId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,

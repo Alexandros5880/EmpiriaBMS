@@ -3815,8 +3815,6 @@ public class AppDbContext : DbContext
                     DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                     EstimatedMandays = 100 / 8,
                     EstimatedHours = 1500,
-                    DeclaredCompleted = 0,
-                    EstimatedCompleted = 0,
                     StageId = ProjectStages[stagesIndex],
                     Active = i % 2 == 0 ? true : false,
                     ProjectManagerId = projectManagers[projectManagersIndex].Id,
@@ -3921,8 +3919,6 @@ public class AppDbContext : DbContext
                     DeadLine = createdDate.AddMonths(-i),
                     EstimatedMandays = 100 / 8,
                     EstimatedHours = 1500,
-                    DeclaredCompleted = 0,
-                    EstimatedCompleted = 0,
                     StageId = ProjectStages[stagesIndex],
                     Active = i % 2 == 0 ? true : false,
                     ProjectManagerId = projectManagers[projectManagersIndex].Id,
@@ -3987,7 +3983,6 @@ public class AppDbContext : DbContext
                         EstimatedMandays = 50 + j,
                         EstimatedHours = (50 + j) * 8,
                         ProjectId = projects[i].Id,
-                        DeclaredCompleted = 0
                     };
                     builder.Entity<Discipline>().HasData(discipline);
                     disciplines.Add(discipline);
@@ -4031,8 +4026,7 @@ public class AppDbContext : DbContext
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         TypeId = otherTypes[j].Id,
-                        DisciplineId = disciplines[i].Id,
-                        CompletionEstimation = 0
+                        DisciplineId = disciplines[i].Id
                     };
                     builder.Entity<SupportiveWork>().HasData(other);
                 }
