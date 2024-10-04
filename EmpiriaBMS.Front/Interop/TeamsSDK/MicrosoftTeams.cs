@@ -50,6 +50,11 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("navigateToAdmin", url, objectId);
     }
 
+    public Task InitializeTooltips()
+    {
+        return InvokeVoidAsync("initializeTooltips");
+    }
+
     public Task RegisterGlobalMouseWheelEvent(DotNetObjectReference<TimeInput> objRef, string Id)
     {
         return InvokeVoidAsync("registerGlobalMouseWheelEvent", objRef, Id);

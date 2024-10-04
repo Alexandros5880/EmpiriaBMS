@@ -10,10 +10,11 @@ using EmpiriaBMS.Front.Components.General;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using EmpiriaBMS.Front.ViewModel.Helper;
+using EmpiriaBMS.Front.Components.KPIS.Contract;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class HoursPerUserKPI
+public partial class HoursPerUserKPI : IKpiCompoment
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
@@ -24,7 +25,7 @@ public partial class HoursPerUserKPI
     private bool _startLoading = true;
 
     private IQueryable<DictRow<long>> _data;
-    private string _title = "Hours Per User";
+    public string Title => "Hours Per User";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -66,7 +67,7 @@ public partial class HoursPerUserKPI
                 Title = new OptionsTitle()
                 {
                     Display = true,
-                    Text = _title,
+                    Text = Title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -147,7 +148,7 @@ public partial class HoursPerUserKPI
         await Task.Delay(1000);
 
         string[] divsIds = new string[] { "export-to-pdf" };
-        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+        string fileName = $"EmbiriaBMS-{Title}-{DateTime.Now.ToEuropeFormat()}.pdf";
 
         await _microsoftTeams.ExportPdfContent(divsIds, fileName);
 

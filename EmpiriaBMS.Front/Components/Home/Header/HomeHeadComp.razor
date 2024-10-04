@@ -9,7 +9,7 @@
 @using EmpiriaBMS.Front.Components.Admin
 @using Color = Microsoft.Fast.Components.FluentUI.Color
 @using EmpiriaBMS.Core.Services.DBManipulation
-@using EmpiriaBMS.Front.Components.WorkingHours
+@using EmpiriaBMS.Front.Components.Home.Header.Hours
 @using EmpiriaBMS.Front.Components.Reports
 @using EmpiriaBMS.Models.Enum
 @using EmpiriaBMS.Front.Components.Home.Clients
@@ -80,7 +80,7 @@
                                 {
                                     <button type="button"
                                             class="btn btn-danger btn-lg"
-                                            style="width: 100%;"
+                                            style="width: 100%; max-width: 300px; margin: 0 auto;"
                                             @onclick="@(async () => await StopWorkClick())">
                                         <span>@elapsedTime.ToString(@"hh\:mm\:ss")</span>
                                     </button>
@@ -89,7 +89,7 @@
                                 {
                                     <button type="button"
                                             class="btn btn-success btn-lg"
-                                            style="width: 100%;"
+                                            style="width: 100%; max-width: 300px; margin: 0 auto;"
                                             @onclick="@StartWorkClick">
                                         Press Work Start
                                     </button>
@@ -102,18 +102,18 @@
                 <!-- Third Column -->
                 <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12
                             order-xxs-3 order-xl-3 order-lg-4 order-md-4 order-sm-4 order-xs-4 order-4">
-                    <div class="primary-bg-color rounded d-flex justify-content-center align-items-center
-                                float-xxl-end float-xl-end float-lg-end float-md-end float-sm-none float-xs-none float-none"
-                         style="min-width: 300px; padding: 0.375rem 0.75rem;">
-                        <!-- Display Hours Passed -->
-                        @if (seeMyHours)
-                        {
-                            <div class="h5 text-center align-middle">
-                                <span class="align-middle">My Total Hours This Month: </span>
-                                <b class="align-middle">@Convert.ToInt64(_userTotalHoursThisMonth)</b>
-                            </div>
-                        }
-                    </div>
+                    <!-- Display Hours Passed -->
+                    @if (seeMyHours)
+                    {
+                        <div class="primary-bg-color rounded d-flex justify-content-center align-items-center
+                                    float-xxl-end float-xl-end float-lg-end float-md-end float-sm-none float-xs-none float-none"
+                             style="min-width: 300px; padding: 0.375rem 0.75rem;">
+                                <div class="h5 text-center align-middle">
+                                    <span class="align-middle">My Total Hours This Month: </span>
+                                    <b class="align-middle">@Convert.ToInt64(_userTotalHoursThisMonth)</b>
+                                </div>
+                        </div>
+                    }
                 </div>
 
                 <!-- Fourth Column -->
@@ -279,8 +279,8 @@
                   Hidden="@(!_isEndWorkDialogOdepened || _loading)"
                   Modal="false"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
-                        --dialog-height: auto !important;">
+                  style="--dialog-width: min(max(80vw, 800px), 1000px) !important;
+                         --dialog-height: auto !important;">
 
         <EditUsersHours @ref="@_editHoursCompoment"
                         RemainingTime="@remainingTime"
@@ -327,8 +327,8 @@
                   Hidden="@(!_isCorrectHoursDialogOdepened || _loading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
-                         --dialog-max-height: 700px !important;">
+                  style="--dialog-width: min(max(80vw, 800px), 1000px) !important;
+                         --dialog-height: auto !important;">
 
         <div class="modal-body row mb-1">
 
@@ -338,7 +338,7 @@
             </div>
 
             <div class="col-12 justify-content-center">
-                <EditUsersHours User="@_sharedAuthData?.LogedUser" SendRequest="true" IsFromDashboard="false" />
+                <SendHoursRequest User="@_sharedAuthData?.LogedUser"/>
             </div>
 
         </div>
@@ -362,7 +362,7 @@
             <div class="col-12 justify-content-center">
                 <DailyTimeRequestsCorrection RequestCount="@_hoursCorrectionCount"
                                              DailyRequests="@_dailyTimeRequest"
-                                             OnChange="@_onHoursRequestChange" />
+                                             OnChange="@_onHoursRequestChange"/>
             </div>
 
         </div>

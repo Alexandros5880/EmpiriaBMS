@@ -184,9 +184,8 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         {
             return await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
-                                 .Where(mh => mh.DrawingId == drwaingId)
-                                 .Include(mh => mh.TimeSpan)
-                                 .Select(mh => mh.TimeSpan.Hours)
+                                 .Where(mh => mh.DeliverableId == drwaingId)
+                                 .Select(mh => mh.Hours)
                                  .SumAsync();
         }
     }
@@ -197,9 +196,8 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         {
             return _context.Set<DailyTime>()
                            .Where(r => !r.IsDeleted)
-                           .Where(mh => mh.DrawingId == drwaingId)
-                           .Include(mh => mh.TimeSpan)
-                           .Select(mh => mh.TimeSpan.Hours)
+                           .Where(mh => mh.DeliverableId == drwaingId)
+                           .Select(mh => mh.Hours)
                            .Sum();
         }
     }
@@ -214,33 +212,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
                                         .FirstOrDefaultAsync(d => d.Id == drawId);
             if (drawing == null)
                 throw new NullReferenceException(nameof(drawing));
-            drawing.CompletionEstimation += completed;
-
-            // Calculate Parent Discipline Completed
-            var discipline = await _context.Set<Discipline>()
-                                           .Where(r => !r.IsDeleted)
-                                           .Include(d => d.Deliverables)
-                                           .FirstOrDefaultAsync(d => d.Id == disciplineId);
-            if (discipline == null)
-                throw new NullReferenceException(nameof(discipline));
-            var allDrawings = discipline.Deliverables;
-            var sumComplitionOfDrawings = allDrawings
-                                          .Where(r => !r.IsDeleted)
-                                          .Select(d => d.CompletionEstimation)
-                                          .Sum();
-            var drawsCounter = allDrawings.Where(r => !r.IsDeleted).Count();
-            discipline.DeclaredCompleted = sumComplitionOfDrawings / drawsCounter;
-
-            // Calculate Parent Project Complition
-            var disciplines = await _context.Set<Discipline>()
-                                            .Where(r => !r.IsDeleted)
-                                            .Where(d => d.ProjectId == projectId)
-                                            .Include(d => d.Project)
-                                            .ToListAsync();
-            var project = discipline.Project;
-            var sumCompplitionOfDisciplines = disciplines.Select(d => d.DeclaredCompleted).Sum();
-            var disciplinesCounter = disciplines.Count();
-            project.DeclaredCompleted = sumCompplitionOfDisciplines / disciplinesCounter;
+            drawing.CompletionEstimation = completed;
 
             await _context.SaveChangesAsync();
         }

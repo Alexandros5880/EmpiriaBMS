@@ -12,8 +12,6 @@ public class SupportiveWork : Entity
     public int DisciplineId { get; set; }
     public Discipline? Discipline { get; set; }
 
-    public float CompletionEstimation { get; set; }
-
     public ICollection<DailyTime>? DailyTime { get; set; }
 
     public ICollection<SupportiveWorkEmployee>? SupportiveWorksEmployees { get; set; }

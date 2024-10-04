@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Models.Enum;
+﻿using EmpiriaBMS.Front.Components.KPIS.Helper;
+using EmpiriaBMS.Models.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,6 +14,8 @@ public class AppDbContext : DbContext
     public string SelectedConnectionString = string.Empty;
     public string Enviroment = string.Empty;
 
+    public DbSet<KPIGridItem>? KPIGridItems { get; set; }
+    public DbSet<KPIGridItemPosition>? KPIGridItemPositions { get; set; }
     public DbSet<User>? Users { get; set; }
     public DbSet<Role>? Roles { get; set; }
     public DbSet<Email>? Emails { get; set; }
@@ -29,8 +32,6 @@ public class AppDbContext : DbContext
     public DbSet<SupportiveWorkEmployee>? SupportiveWorkEmployees { get; set; }
     public DbSet<Invoice>? Invoices { get; set; }
     public DbSet<InvoiceType>? InvoicesTypes { get; set; }
-    public DbSet<Timespan>? TimeSpans { get; set; }
-    public DbSet<DailyTimeRequest>? DailyTimeRequests { get; set; }
     public DbSet<DailyTime>? DailyTime { get; set; }
     public DbSet<DailyTime>? ParsonalTime { get; set; }
     public DbSet<DailyTime>? TrainingTime { get; set; }
@@ -3814,8 +3815,6 @@ public class AppDbContext : DbContext
                     DeadLine = createdDate.AddMonths(Convert.ToInt32(Math.Pow(i, 2))),
                     EstimatedMandays = 100 / 8,
                     EstimatedHours = 1500,
-                    DeclaredCompleted = 0,
-                    EstimatedCompleted = 0,
                     StageId = ProjectStages[stagesIndex],
                     Active = i % 2 == 0 ? true : false,
                     ProjectManagerId = projectManagers[projectManagersIndex].Id,
@@ -3920,8 +3919,6 @@ public class AppDbContext : DbContext
                     DeadLine = createdDate.AddMonths(-i),
                     EstimatedMandays = 100 / 8,
                     EstimatedHours = 1500,
-                    DeclaredCompleted = 0,
-                    EstimatedCompleted = 0,
                     StageId = ProjectStages[stagesIndex],
                     Active = i % 2 == 0 ? true : false,
                     ProjectManagerId = projectManagers[projectManagersIndex].Id,
@@ -3986,7 +3983,6 @@ public class AppDbContext : DbContext
                         EstimatedMandays = 50 + j,
                         EstimatedHours = (50 + j) * 8,
                         ProjectId = projects[i].Id,
-                        DeclaredCompleted = 0
                     };
                     builder.Entity<Discipline>().HasData(discipline);
                     disciplines.Add(discipline);
@@ -4030,8 +4026,7 @@ public class AppDbContext : DbContext
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         TypeId = otherTypes[j].Id,
-                        DisciplineId = disciplines[i].Id,
-                        CompletionEstimation = 0
+                        DisciplineId = disciplines[i].Id
                     };
                     builder.Entity<SupportiveWork>().HasData(other);
                 }
@@ -4130,7 +4125,6 @@ public class AppDbContext : DbContext
         allEntities.Add("SupportiveWorkEmployees", await SupportiveWorkEmployees.Cast<object>().ToListAsync());
         allEntities.Add("Invoices", await Invoices.Cast<object>().ToListAsync());
         allEntities.Add("InvoicesTypes", await InvoicesTypes.Cast<object>().ToListAsync());
-        allEntities.Add("TimeSpans", await TimeSpans.Cast<object>().ToListAsync());
         allEntities.Add("DailyTime", await DailyTime.Cast<object>().ToListAsync());
         allEntities.Add("ParsonalTime", await ParsonalTime.Cast<object>().ToListAsync());
         allEntities.Add("TrainingTime", await TrainingTime.Cast<object>().ToListAsync());

@@ -189,9 +189,8 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         {
             return await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
-                                 .Where(mh => mh.OtherId == otherId)
-                                 .Include(mh => mh.TimeSpan)
-                                 .Select(mh => mh.TimeSpan.Hours)
+                                 .Where(mh => mh.SupportiveWorkId == otherId)
+                                 .Select(mh => mh.Hours)
                                  .SumAsync();
         }
     }
@@ -202,50 +201,9 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         {
             return _context.Set<DailyTime>()
                            .Where(r => !r.IsDeleted)
-                           .Where(mh => mh.OtherId == otherId)
-                           .Include(mh => mh.TimeSpan)
-                           .Select(mh => mh.TimeSpan.Hours)
+                           .Where(mh => mh.SupportiveWorkId == otherId)
+                           .Select(mh => mh.Hours)
                            .Sum();
-        }
-    }
-
-    public async Task UpdateCompleted(int projectId, int disciplineId, int otherId, float completed)
-    {
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            // Update Current Other
-            var other = await _context.Set<SupportiveWork>()
-                                      .Where(r => !r.IsDeleted)
-                                      .FirstOrDefaultAsync(d => d.Id == otherId);
-            if (other == null)
-                throw new NullReferenceException(nameof(other));
-            other.CompletionEstimation += completed;
-
-            // Calculate Parent Discipline Completed
-            var discipline = await _context.Set<Discipline>()
-                                           .Where(r => !r.IsDeleted)
-                                           .Include(d => d.Others)
-                                           .FirstOrDefaultAsync(d => d.Id == disciplineId);
-            if (discipline == null)
-                throw new NullReferenceException(nameof(discipline));
-            var allOthers = discipline.Others;
-            var sumComplitionOfOthers = allOthers.Where(r => !r.IsDeleted)
-                                                 .Select(d => d.CompletionEstimation)
-                                                 .Sum();
-            var othersCounter = allOthers.Where(r => !r.IsDeleted).Count();
-            discipline.DeclaredCompleted = sumComplitionOfOthers / othersCounter;
-
-            // Calculate Parent Project Complition
-            var disciplines = await _context.Set<Discipline>()
-                                            .Where(r => !r.IsDeleted)
-                                            .Where(d => d.ProjectId == projectId)
-                                            .ToListAsync();
-            var project = discipline.Project;
-            var sumCompplitionOfDisciplines = disciplines.Select(d => d.DeclaredCompleted).Sum();
-            var disciplinesCounter = disciplines.Count();
-            project.DeclaredCompleted = sumCompplitionOfDisciplines / disciplinesCounter;
-
-            await _context.SaveChangesAsync();
         }
     }
 }

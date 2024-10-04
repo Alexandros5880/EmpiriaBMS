@@ -22,6 +22,85 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ComponentTypeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParametersJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KPIGridItems");
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItemPosition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("H")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KPIGridItemId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("W")
+                        .HasColumnType("int");
+
+                    b.Property<int>("X")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KPIGridItemId")
+                        .IsUnique();
+
+                    b.ToTable("KPIGridItemPositions");
+                });
+
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Address", b =>
                 {
                     b.Property<int>("Id")
@@ -101,88 +180,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DisciplineId")
+                    b.Property<long>("Days")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("DeliverableId")
                         .HasColumnType("int");
-
-                    b.Property<int?>("DrawingId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsEditByAdmin")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("OfferId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OtherId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PersonalUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TimeSpanId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TrainingUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("CorporateUserId");
-
-                    b.HasIndex("DailyUserId");
-
-                    b.HasIndex("DisciplineId");
-
-                    b.HasIndex("DrawingId");
-
-                    b.HasIndex("OfferId");
-
-                    b.HasIndex("OtherId");
-
-                    b.HasIndex("PersonalUserId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("TimeSpanId");
-
-                    b.HasIndex("TrainingUserId");
-
-                    b.ToTable("DailyTime");
-                });
-
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.DailyTimeRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CorporateUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DailyUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -190,11 +192,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<int?>("DisciplineId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DrawingId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsClosed")
-                        .HasColumnType("bit");
+                    b.Property<long>("Hours")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -205,10 +204,10 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("OfferId")
-                        .HasColumnType("int");
+                    b.Property<long>("Minutes")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("OtherId")
+                    b.Property<int?>("OfferId")
                         .HasColumnType("int");
 
                     b.Property<int?>("PersonalUserId")
@@ -217,10 +216,16 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TimeSpanId")
+                    b.Property<long>("Seconds")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("SupportiveWorkId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TrainingUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -231,23 +236,21 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.HasIndex("DailyUserId");
 
+                    b.HasIndex("DeliverableId");
+
                     b.HasIndex("DisciplineId");
 
-                    b.HasIndex("DrawingId");
-
                     b.HasIndex("OfferId");
-
-                    b.HasIndex("OtherId");
 
                     b.HasIndex("PersonalUserId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("TimeSpanId");
+                    b.HasIndex("SupportiveWorkId");
 
                     b.HasIndex("TrainingUserId");
 
-                    b.ToTable("DailyTimeRequests");
+                    b.ToTable("DailyTime");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Deliverable", b =>
@@ -357,12 +360,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<float>("DeclaredCompleted")
-                        .HasColumnType("real");
-
-                    b.Property<float>("EstimatedCompleted")
-                        .HasColumnType("real");
 
                     b.Property<long>("EstimatedHours")
                         .HasColumnType("bigint");
@@ -977,14 +974,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime?>("DeadLine")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("DeclaredCompleted")
-                        .HasColumnType("real");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("EstimatedCompleted")
-                        .HasColumnType("real");
 
                     b.Property<long>("EstimatedHours")
                         .HasColumnType("bigint");
@@ -1223,9 +1214,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<float>("CompletionEstimation")
-                        .HasColumnType("real");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -1338,40 +1326,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TeamsRequestedUser");
-                });
-
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.Timespan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("Days")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("Hours")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("Minutes")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("Seconds")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TimeSpans");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.User", b =>
@@ -1494,6 +1448,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasDiscriminator().HasValue("Client");
                 });
 
+            modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItemPosition", b =>
+                {
+                    b.HasOne("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", "KPIGridItem")
+                        .WithOne("Position")
+                        .HasForeignKey("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItemPosition", "KPIGridItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KPIGridItem");
+                });
+
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DailyTime", b =>
                 {
                     b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
@@ -1511,24 +1476,19 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasForeignKey("DailyUserId")
                         .OnDelete(DeleteBehavior.ClientCascade);
 
+                    b.HasOne("EmpiriaBMS.Models.Models.Deliverable", "Deliverable")
+                        .WithMany("DailyTime")
+                        .HasForeignKey("DeliverableId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
                     b.HasOne("EmpiriaBMS.Models.Models.Discipline", "Discipline")
                         .WithMany("DailyTime")
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("EmpiriaBMS.Models.Models.Deliverable", "Drawing")
-                        .WithMany("DailyTime")
-                        .HasForeignKey("DrawingId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
-
                     b.HasOne("EmpiriaBMS.Models.Models.Offer", "Offer")
                         .WithMany("DailyTime")
                         .HasForeignKey("OfferId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
-
-                    b.HasOne("EmpiriaBMS.Models.Models.SupportiveWork", "Other")
-                        .WithMany("DailyTime")
-                        .HasForeignKey("OtherId")
                         .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "PersonalUser")
@@ -1541,9 +1501,10 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("EmpiriaBMS.Models.Models.Timespan", "TimeSpan")
-                        .WithMany()
-                        .HasForeignKey("TimeSpanId");
+                    b.HasOne("EmpiriaBMS.Models.Models.SupportiveWork", "SupportiveWork")
+                        .WithMany("DailyTime")
+                        .HasForeignKey("SupportiveWorkId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "TrainingUser")
                         .WithMany("TrainingTime")
@@ -1556,88 +1517,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.Navigation("DailyUser");
 
+                    b.Navigation("Deliverable");
+
                     b.Navigation("Discipline");
 
-                    b.Navigation("Drawing");
-
                     b.Navigation("Offer");
-
-                    b.Navigation("Other");
 
                     b.Navigation("PersonalUser");
 
                     b.Navigation("Project");
 
-                    b.Navigation("TimeSpan");
-
-                    b.Navigation("TrainingUser");
-                });
-
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.DailyTimeRequest", b =>
-                {
-                    b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "CorporateUser")
-                        .WithMany()
-                        .HasForeignKey("CorporateUserId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "DailyUser")
-                        .WithMany()
-                        .HasForeignKey("DailyUserId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.Discipline", "Discipline")
-                        .WithMany()
-                        .HasForeignKey("DisciplineId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.Deliverable", "Drawing")
-                        .WithMany()
-                        .HasForeignKey("DrawingId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.Offer", "Offer")
-                        .WithMany()
-                        .HasForeignKey("OfferId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.SupportiveWork", "Other")
-                        .WithMany()
-                        .HasForeignKey("OtherId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "PersonalUser")
-                        .WithMany()
-                        .HasForeignKey("PersonalUserId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.Timespan", "TimeSpan")
-                        .WithMany()
-                        .HasForeignKey("TimeSpanId");
-
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "TrainingUser")
-                        .WithMany()
-                        .HasForeignKey("TrainingUserId");
-
-                    b.Navigation("Client");
-
-                    b.Navigation("CorporateUser");
-
-                    b.Navigation("DailyUser");
-
-                    b.Navigation("Discipline");
-
-                    b.Navigation("Drawing");
-
-                    b.Navigation("Offer");
-
-                    b.Navigation("Other");
-
-                    b.Navigation("PersonalUser");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("TimeSpan");
+                    b.Navigation("SupportiveWork");
 
                     b.Navigation("TrainingUser");
                 });
@@ -1952,7 +1842,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SupportiveWork", b =>
                 {
                     b.HasOne("EmpiriaBMS.Models.Models.Discipline", "Discipline")
-                        .WithMany("Others")
+                        .WithMany("SupportiveWorks")
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2016,6 +1906,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("Address");
                 });
 
+            modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", b =>
+                {
+                    b.Navigation("Position");
+                });
+
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Address", b =>
                 {
                     b.Navigation("Clients");
@@ -2041,7 +1936,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.Navigation("DisciplinesEngineers");
 
-                    b.Navigation("Others");
+                    b.Navigation("SupportiveWorks");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DisciplineType", b =>

@@ -2,21 +2,22 @@
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 
-namespace EmpiriaBMS.Front.Components.WorkingHours;
+namespace EmpiriaBMS.Front.Components.Home.Header.Hours;
 
 public partial class DailyTimeRequestCard
 {
     [Parameter]
-    public DailyTimeRequest Request { get; set; }
+    public DailyTime Request { get; set; }
 
     [Parameter]
     public DailyTimeTypes Type { get; set; }
 
     [Parameter]
-    public EventCallback<DailyTimeRequest> OnEnd { get; set; }
+    public EventCallback<DailyTime> OnEnd { get; set; }
 
-    private string FormatTimeSpan(Timespan timeSpan)
+    private string FormatTimeSpan(DailyTime dailyTime)
     {
+        var timeSpan = dailyTime.ToTimeSpan();
         return $"{timeSpan.Days} days, {timeSpan.Hours} hours, {timeSpan.Minutes} minutes, {timeSpan.Seconds} seconds";
     }
 

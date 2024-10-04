@@ -311,17 +311,36 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
     public async Task<List<ProjectDto>> GetProjectsWithFallback(int userId, int offerId, bool? active)
     {
-        List<ProjectDto> projectsDto = new List<ProjectDto>();
-        int monthsToCheck = 1;
-
-        while (!projectsDto.Any())
+        try
         {
-            TimeSpan period = TimeSpan.FromDays(30 * monthsToCheck);
-            monthsToCheck++;
-            projectsDto = (await GetAll(userId, offerId, active, period)).ToList();
-        }
+            List<ProjectDto> projectsDto = new List<ProjectDto>();
+            int monthsToCheck = 1;
+            int maxMonthsToCheck = 12; // Define a reasonable limit to avoid overflow
 
-        return projectsDto;
+            while (!projectsDto.Any() && monthsToCheck <= maxMonthsToCheck)
+            {
+                // Calculate the total days to check
+                int totalDaysToCheck = 30 * monthsToCheck;
+
+                // Safeguard against overflow
+                if (totalDaysToCheck < 0)
+                {
+                    throw new InvalidOperationException("Calculated days exceed maximum limit.");
+                }
+
+                TimeSpan period = TimeSpan.FromDays(totalDaysToCheck);
+                projectsDto = (await GetAll(userId, offerId, active, period)).ToList();
+
+                monthsToCheck++;
+            }
+
+            return projectsDto;
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.GetProjectsWithFallback({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return default(List<ProjectDto>)!;
+        }
     }
 
     public async Task<ICollection<ProjectDto>> GetOffersProjects(int? offerId)
@@ -363,8 +382,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
                                  .Where(mh => mh.ProjectId == projectId)
-                                 .Include(mh => mh.TimeSpan)
-                                 .Select(mh => mh.TimeSpan.Hours)
+                                 .Select(mh => mh.Hours)
                                  .SumAsync();
         }
     }
@@ -376,8 +394,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return _context.Set<DailyTime>()
                            .Where(r => !r.IsDeleted)
                            .Where(mh => mh.ProjectId == projectId)
-                           .Include(mh => mh.TimeSpan)
-                           .Select(mh => mh.TimeSpan.Hours)
+                           .Select(mh => mh.Hours)
                            .Sum();
         }
     }
@@ -432,88 +449,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                  .Where(r => !r.IsDeleted)
                                  .Where(de => de.ProjectId == id)
                                  .CountAsync();
-    }
-
-    public async Task UpdateDisciplines(int projectId, List<DisciplineDto> disciplines)
-    {
-        if (projectId == 0)
-            throw new ArgumentNullException(nameof(projectId));
-
-        using (var _context = _dbContextFactory.CreateDbContext())
-        {
-            // Get Project
-            var project = await _context.Set<Project>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(p => p.Id == projectId);
-            if (project == null)
-                throw new ArgumentNullException(nameof(project));
-
-            var otherTypes = await _context.Set<SupportiveWorkType>().Where(r => !r.IsDeleted).ToListAsync();
-
-            // Calculate Disciplines Estimated Hours, Disciplines Estimated ManDays, Disciplines EstimatedCompleted
-            foreach (var d in disciplines)
-            {
-                d.EstimatedHours = d.EstimatedMandays * 8;
-
-                // Calculate Discipline EstimatedCompleted
-                var disciplineMenHours = await _context.Set<DailyTime>()
-                                                       .Where(r => !r.IsDeleted)
-                                                       .Where(d => d.DisciplineId == d.Id)
-                                                       .Select(d => d.TimeSpan.Hours)
-                                                       .SumAsync();
-                decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours)
-                                                        / Convert.ToDecimal(d.EstimatedHours);
-                d.EstimatedCompleted = (float)divitionDiscResult * 100;
-
-                // Update Discipline Project
-                d.ProjectId = projectId;
-
-                // Update Discipline
-                var exists = await _context.Set<Discipline>().Where(r => !r.IsDeleted).AnyAsync(disc => disc.Id == d.Id);
-                if (exists)
-                {
-                    var dbDisc = await _context.Set<Discipline>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(disc => disc.Id == d.Id);
-                    if (dbDisc == null)
-                        throw new NullReferenceException(nameof(dbDisc));
-                    _context.Entry<Discipline>(dbDisc).CurrentValues.SetValues(Mapping.Mapper.Map<Discipline>(d));
-                }
-                else
-                {
-                    var savedDiscipline = await _context.Set<Discipline>().AddAsync(Mapping.Mapper.Map<Discipline>(d));
-                    await _context.SaveChangesAsync();
-
-                    var savedDisciplineId = savedDiscipline.Entity.Id;
-
-                    // Create Supportive Works For Every Discipline
-                    foreach (var t in otherTypes)
-                    {
-                        SupportiveWork other = new SupportiveWork()
-                        {
-                            TypeId = t.Id,
-                            DisciplineId = savedDisciplineId
-                        };
-                        await _context.Set<SupportiveWork>().AddAsync(other);
-                    }
-                }
-            }
-
-            // Get Sum EstimatedManDays && EstimatedHours and update Project
-            var estimatedManDaysSum = disciplines.Where(r => !r.IsDeleted).Select(d => d.EstimatedMandays).Sum();
-            var estimatedHoursSum = disciplines.Where(r => !r.IsDeleted).Select(d => d.EstimatedHours).Sum();
-            project.EstimatedMandays = estimatedManDaysSum;
-            project.EstimatedHours = estimatedHoursSum;
-
-            // Calculate Project EstimatedComplete
-            var projectMenHours = await _context.Set<DailyTime>()
-                                                .Where(r => !r.IsDeleted)
-                                                .Where(d => d.ProjectId == projectId)
-                                                .Select(d => d.TimeSpan.Hours)
-                                                .SumAsync();
-            decimal divitionProResult = Convert.ToDecimal(projectMenHours)
-                                                    / Convert.ToDecimal(project.EstimatedHours);
-            project.EstimatedCompleted = (float)divitionProResult * 100;
-
-            // Save Changes
-            await _context.SaveChangesAsync();
-        }
     }
 
     public async Task<UserDto> GetProjectManager(int projectId)
@@ -641,6 +576,101 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ProjectsRepo.GetSumOfPotencialFee({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<float> GetEstimatedCompleted(int id)
+    {
+        try
+        {
+            if (id == 0)
+                throw new ArgumentNullException(nameof(id));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var disciplinesIds = await _context.Set<Discipline>()
+                                       .Where(r => r.ProjectId == id)
+                                               .Select(r => r.Id)
+                                               .ToListAsync();
+
+                var deliverablesIds = await _context.Set<Deliverable>()
+                                                   .Where(r => !r.IsDeleted)
+                                                   .Where(r => disciplinesIds.Contains(r.DisciplineId))
+                                                   .Select(r => r.Id)
+                                                   .ToListAsync();
+
+                var supportiveWorksIds = await _context.Set<SupportiveWork>()
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(r => disciplinesIds.Contains(r.DisciplineId))
+                                               .Select(r => r.Id)
+                                               .ToListAsync();
+
+                var projectMenHours = await _context.Set<DailyTime>()
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(r => r.ProjectId == id
+                                                        || disciplinesIds.Contains(r.DisciplineId ?? 0)
+                                                        || deliverablesIds.Contains(r.DeliverableId ?? 0)
+                                                        || supportiveWorksIds.Contains(r.SupportiveWorkId ?? 0))
+                                               .Select(h => h.Hours)
+                                               .SumAsync();
+
+                var project = await _context.Set<Project>()
+                                            .Where(r => !r.IsDeleted)
+                                            .FirstOrDefaultAsync(p => p.Id == id);
+
+                if (project == null)
+                    throw new NullReferenceException(nameof(project));
+
+                decimal divitionProResult = Convert.ToDecimal(projectMenHours) / Convert.ToDecimal(project.EstimatedHours);
+                var estimatedCompleted = (float)divitionProResult * 100;
+
+                return estimatedCompleted;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.GetEstimatedCompleted(id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<float> GetDeclaredCompleted(int id)
+    {
+        try
+        {
+            if (id == 0)
+                throw new ArgumentNullException(nameof(id));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var disciplinesIds = await _context.Set<Discipline>()
+                                       .Where(r => r.ProjectId == id)
+                                               .Select(r => r.Id)
+                                               .ToListAsync();
+
+                var deliverablesComplEstSum = await _context.Set<Deliverable>()
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(r => disciplinesIds.Contains(r.DisciplineId))
+                                               .Select(r => r.CompletionEstimation)
+                                               .SumAsync();
+
+                var deliverablesComplEstCount = await _context.Set<Deliverable>()
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(r => disciplinesIds.Contains(r.DisciplineId))
+                                               .CountAsync();
+
+                if (deliverablesComplEstSum == 0 || deliverablesComplEstCount == 0)
+                    return 0;
+
+                var avgCompletedEstimation = deliverablesComplEstSum / deliverablesComplEstCount;
+
+                return avgCompletedEstimation;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.GetEstimatedCompleted(id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
         }
     }

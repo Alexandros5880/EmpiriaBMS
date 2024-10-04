@@ -8,10 +8,6 @@ public class Discipline : Entity
 
     public long EstimatedHours { get; set; }
 
-    public float EstimatedCompleted { get; set; }
-
-    public float DeclaredCompleted { get; set; }
-
     [Required]
     public int ProjectId { get; set; }
     public Project? Project { get; set; }
@@ -22,7 +18,7 @@ public class Discipline : Entity
 
     public ICollection<Deliverable>? Deliverables { get; set; }
 
-    public ICollection<SupportiveWork>? Others { get; set; }
+    public ICollection<SupportiveWork>? SupportiveWorks { get; set; }
 
     public ICollection<DailyTime>? DailyTime { get; set; }
 

@@ -3,6 +3,7 @@ using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Repositories.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace EmpiriaBMS.Core.Repositories;
@@ -101,6 +102,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 
             entity.CreatedDate = update ? DateTime.Now.ToUniversalTime() : entity.CreatedDate;
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+            entity.EstimatedHours = entity.EstimatedMandays / 8;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -133,6 +135,8 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
 
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
+            entity.EstimatedHours = entity.EstimatedMandays / 8;
+
             using (var _context = _dbContextFactory.CreateDbContext())
             {
                 var entry = await Get(entity.Id);
@@ -148,7 +152,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On DisciplineRepo.Update(Discipline): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(DisciplineDto)!;
         }
     }
 
@@ -275,6 +279,96 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
+    public async Task<float> GetEstimatedCompleted(int id)
+    {
+        try
+        {
+            if (id == 0)
+                throw new ArgumentNullException(nameof(id));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var deliverablesIds = await _context.Set<Deliverable>()
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(r => r.DisciplineId == id)
+                                               .Select(r => r.Id)
+                                               .ToListAsync();
+
+
+                var supportiveWorksIds = await _context.Set<SupportiveWork>()
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(r => r.DisciplineId == id)
+                                               .Select(r => r.Id)
+                                               .ToListAsync();
+
+                var disciplineMenHours = await _context.Set<DailyTime>()
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(r => r.DisciplineId == id
+                                                        || deliverablesIds.Contains(r.DeliverableId ?? 0)
+                                                        || supportiveWorksIds.Contains(r.SupportiveWorkId ?? 0))
+                                               .Select(h => h.Hours)
+                                               .SumAsync();
+
+                var discipline = await _context.Set<Discipline>()
+                                           .Where(r => !r.IsDeleted)
+                                           .Include(p => p.DailyTime)
+                                           .FirstOrDefaultAsync(p => p.Id == id);
+
+                if (discipline == null)
+                    throw new NullReferenceException(nameof(discipline));
+
+                decimal divitionDiscResult = 0;
+
+                if (disciplineMenHours != 0 && discipline.EstimatedHours != 0)
+                    divitionDiscResult = Convert.ToDecimal(disciplineMenHours) / Convert.ToDecimal(discipline.EstimatedHours);
+
+                var estimatedCompleted = (float)divitionDiscResult * 100;
+
+                return estimatedCompleted;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On DisciplineRepo.GetEstimatedCompleted(id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return 0;
+        }
+    }
+
+    public async Task<float> GetDeclaredCompleted(int id)
+    {
+        try
+        {
+            if (id == 0)
+                throw new ArgumentNullException(nameof(id));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var deliverablesComplEstSum = await _context.Set<Deliverable>()
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(r => r.DisciplineId == id)
+                                               .Select(r => r.CompletionEstimation)
+                                               .SumAsync();
+
+                var deliverablesComplEstCount = await _context.Set<Deliverable>()
+                                               .Where(r => !r.IsDeleted)
+                                               .Where(r => r.DisciplineId == id)
+                                               .CountAsync();
+
+                if (deliverablesComplEstSum == 0 || deliverablesComplEstCount == 0)
+                    return 0;
+
+                var avgCompletedEstimation = deliverablesComplEstSum / deliverablesComplEstCount;
+
+                return avgCompletedEstimation;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On DisciplineRepo.GetEstimatedCompleted(id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return 0;
+        }
+    }
+
     public async Task<long> GetMenHoursAsync(int disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -282,8 +376,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             return await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
                                  .Where(mh => mh.DisciplineId == disciplineId)
-                                 .Include(mh => mh.TimeSpan)
-                                 .Select(mh => mh.TimeSpan.Hours)
+                                 .Select(mh => mh.Hours)
                                  .SumAsync();
         }
     }
@@ -295,8 +388,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
             return _context.Set<DailyTime>()
                            .Where(r => !r.IsDeleted)
                            .Where(mh => mh.DisciplineId == disciplineId)
-                           .Include(mh => mh.TimeSpan)
-                           .Select(mh => mh.TimeSpan.Hours)
+                           .Select(mh => mh.Hours)
                            .Sum();
         }
     }

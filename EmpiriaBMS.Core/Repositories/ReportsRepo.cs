@@ -79,7 +79,6 @@ public class ReportsRepo : IDisposable
                 // Get Times
                 var projectsIds = projects.Select(p => p.Project.Id).ToList();
                 var dailyTimes = await _context.Set<DailyTime>()
-                    .Include(dt => dt.TimeSpan)
                     .Where(dt => !dt.IsDeleted)
                     .Where(dt => projectsIds.Contains((int)dt.ProjectId))
                     .ToListAsync();
@@ -88,7 +87,7 @@ public class ReportsRepo : IDisposable
                 {
                     var sum = dailyTimes
                         .Where(dt => dt.ProjectId == project.Project.Id)
-                        .Select(dt => dt.TimeSpan?.ToTimeSpan().Ticks)
+                        .Select(dt => dt.ToTimeSpan().Ticks)
                         .Sum();
 
                     project.TotalWorkedTime = new TimeSpan((long)sum);
