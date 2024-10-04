@@ -14,6 +14,7 @@ using projComp = EmpiriaBMS.Front.Components.Home.Projects;
 using Microsoft.CodeAnalysis.CSharp;
 using EmpiriaBMS.Front.Components.Home.Header;
 using ClientsComp = EmpiriaBMS.Front.Components.Home.Clients;
+using Microsoft.AspNetCore.Components;
 
 namespace EmpiriaBMS.Front.Components.Home;
 
@@ -24,6 +25,9 @@ public partial class Home
     bool seeOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 24);
 
     #endregion
+
+    [Parameter]
+    public EventCallback<bool> IsWorkingModeChanged { get; set; }
 
     // General Fields
     bool _runInTeams = true;
@@ -42,6 +46,7 @@ public partial class Home
     private void _onWorkingModeChanged(bool workMode)
     {
         _isWorkingMode = workMode;
+        IsWorkingModeChanged.InvokeAsync(_isWorkingMode);
         StateHasChanged();
     }
 
