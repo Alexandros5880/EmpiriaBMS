@@ -31,69 +31,6 @@
 @inject DatabaseBackupService DatabaseBackupService
 @inject Logging.LoggerManager Logger
 
-<!-- Actions -->
-<div style="height: 74px;">
-    <div class="text-start row me-2">
-        <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
-    </div>
-    <div class="text-center row me-2">
-        <div class="col-6">
-            <!-- Projects Filters -->
-            <FluentStack HorizontalAlignment="HorizontalAlignment.Start">
-
-                <!-- Project Name -->
-                <FluentSearch @bind-Value="@_projectNameFilter"
-                              @oninput="@HandleProjectNameFilter"
-                              Placeholder="Project"
-                              AriaLabel="Name"
-                              Style="min-width: 150px !important; max-width: 151px !important; margin-left: 14px; margin-bottom: 4px;" />
-
-                <!-- Offer -->
-                <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                Placeholder="Offer"
-                                AriaLabel="Offer"
-                                Height="140px"
-                                Width="150px"
-                                Items="@_offers"
-                                TOption="OfferVM"
-                                OptionValue="@((t) => t.Id.ToString())"
-                                OptionText="@((t) => t.Code)"
-                                SelectedOptionChanged="@_onOfferFilterChanged" />
-
-            </FluentStack>
-        </div>
-        <div class="col-6">
-            <FluentStack HorizontalAlignment="HorizontalAlignment.End">
-                @if (IsWorkingMode && editProject)
-                {
-                    @if (_selectedProject != null)
-                    {
-                        <span class="navigate-outline my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
-                              style="display: @((_selectedProject?.Offer?.Client?.Address != null ? "block" : "none" ));"
-                              @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Client?.Address))" />
-
-                        <span class="fluent--delete-28-regular mb-1"
-                              @onclick="@(() => DeleteProject())" />
-
-                        <span class="material-symbols--edit-outline"
-                              @onclick="@(async () => await EditProject())" />
-                    }
-                    <span class="grommet-icons--add"
-                          @onclick="@(async () => await AddProject())" />
-                }
-
-                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
-                              Appearance="Appearance.Outline"
-                              OnClick="@(async (e) => await ExportProjectsToCSV())"
-                              Disabled="@(_data.Count() == 0)">
-                    Export
-                </FluentButton>
-
-            </FluentStack>
-        </div>
-    </div>
-</div>
-
 @if (_loading)
 {
     <div class="mt-5 mb-5">
@@ -102,6 +39,69 @@
 }
 else
 {
+    <!-- Actions -->
+    <div style="height: 74px;">
+        <div class="text-start row me-2">
+            <h3 class="@((_selectedProject != null ? "col-6" : "col-11"))">Projects</h3>
+        </div>
+        <div class="text-center row me-2">
+            <div class="col-6">
+                <!-- Projects Filters -->
+                <FluentStack HorizontalAlignment="HorizontalAlignment.Start">
+
+                    <!-- Project Name -->
+                    <FluentSearch @bind-Value="@_projectNameFilter"
+                                  @oninput="@HandleProjectNameFilter"
+                                  Placeholder="Project"
+                                  AriaLabel="Name"
+                                  Style="min-width: 150px !important; max-width: 151px !important; margin-left: 14px; margin-bottom: 4px;" />
+
+                    <!-- Offer -->
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Offer"
+                                    AriaLabel="Offer"
+                                    Height="140px"
+                                    Width="150px"
+                                    Items="@_offers"
+                                    TOption="OfferVM"
+                                    OptionValue="@((t) => t.Id.ToString())"
+                                    OptionText="@((t) => t.Code)"
+                                    SelectedOptionChanged="@_onOfferFilterChanged" />
+
+                </FluentStack>
+            </div>
+            <div class="col-6">
+                <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                    @if (IsWorkingMode && editProject)
+                    {
+                        @if (_selectedProject != null)
+                        {
+                            <span class="navigate-outline my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
+                                  style="display: @((_selectedProject?.Offer?.Client?.Address != null ? "block" : "none" ));"
+                                  @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Client?.Address))" />
+
+                            <span class="fluent--delete-28-regular mb-1"
+                                  @onclick="@(() => DeleteProject())" />
+
+                            <span class="material-symbols--edit-outline"
+                                  @onclick="@(async () => await EditProject())" />
+                        }
+                        <span class="grommet-icons--add"
+                              @onclick="@(async () => await AddProject())" />
+                    }
+
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
+                                  Appearance="Appearance.Outline"
+                                  OnClick="@(async (e) => await ExportProjectsToCSV())"
+                                  Disabled="@(_data.Count() == 0)">
+                        Export
+                    </FluentButton>
+
+                </FluentStack>
+            </div>
+        </div>
+    </div>
+
     <!-- Table -->
     <div class="table-responsive mt-2 p-1 table-container"
          style="overflow-x: auto !important;">
