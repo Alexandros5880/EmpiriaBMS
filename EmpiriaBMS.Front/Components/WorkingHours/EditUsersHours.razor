@@ -1,4 +1,5 @@
 ﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Home;
 
 @inject IDataProvider _dataProvider
 @inject IMapper Mapper
@@ -261,9 +262,22 @@
 
     </FluentStack>
 
-    <div class="mt-2">
+    <div class="mt-4">
 
-        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
+        @{
+            var seeSetUserWithHighRolesTime = IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0
+                                                && (_selectedClient != null && _selectedClient.Id != 0
+                                                || _selectedOffer != null && _selectedOffer.Id != 0
+                                                || _selectedProject != null && _selectedProject.Id != 0));
+
+            var seeSetUserExtraTime = IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0);
+
+            var seeGeneralTime = seeSetUserWithHighRolesTime || seeSetUserExtraTime;
+
+            var minTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0);
+        }
+
+        @if (seeGeneralTime)
         {
             <FluentAccordion>
                 <FluentAccordionItem Expanded="@(!IsFromDashboard && !SendRequest)">
@@ -275,10 +289,7 @@
                     <ChildContent>
 
                         <!-- Set User With High Roles Time -->
-                        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0
-                               && (_selectedClient != null && _selectedClient.Id != 0
-                               || _selectedOffer != null && _selectedOffer.Id != 0
-                               || _selectedProject != null && _selectedProject.Id != 0)))
+                        @if (seeSetUserWithHighRolesTime)
                         {
                             <div class="mb-1">
                                 <div class="row gx-3 m-2 w-96">
@@ -331,12 +342,12 @@
                         }
 
                         <!-- Set User Extra Time -->
-                        @if (IsFromDashboard || (_selectedUser != null && _selectedUser.Id != 0))
+                        @if (seeSetUserExtraTime)
                         {
                             <div class="mb-1">
                                 <SetUserTime LogedUserTimes="@_editLogedUserTimes"
                                              RemainingTime="@RemainingTime"
-                                             MinTime="@(IsFromDashboard ? TimeSpan.Zero : new TimeSpan(-300, 0, 0))"
+                                             MinTime="@minTime"
                                              OnPersonalTimeChanged="@_onPersonalTimeChanged"
                                              OnTrainingTimeChanged="@_onTrainingTimeChanged"
                                              OnCorporateTimeChanged="@_onCorporateTimeChanged" />

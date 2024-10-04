@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EmpiriaBMS.Models.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
@@ -9,7 +10,7 @@ public class DailyTime : Entity
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
-    public Timespan? TimeSpan { get; set; }
+    public DailyTimeType Type { get; set; }
 
     public bool IsEditByAdmin { get; set; }
 
@@ -42,4 +43,56 @@ public class DailyTime : Entity
 
     public int? OfferId { get; set; }
     public Offer? Offer { get; set; }
+
+    public string? Description { get; set; }
+
+    #region TimeSpan
+    public long Days { get; set; }
+
+    public long Hours { get; set; }
+
+    public long Minutes { get; set; }
+
+    public long Seconds { get; set; }
+    #endregion
+
+    public DailyTime GetDailyTime()
+    {
+        return new DailyTime()
+        {
+            Date = Date,
+            Type = Type,
+            Days = Days,
+            Hours = Hours,
+            Minutes = Minutes,
+            Seconds = Seconds,
+            Description = Description,
+            IsEditByAdmin = IsEditByAdmin,
+            DailyUserId = DailyUserId,
+            DailyUser = DailyUser,
+            PersonalUserId = PersonalUserId,
+            PersonalUser = PersonalUser,
+            TrainingUserId = TrainingUserId,
+            TrainingUser = TrainingUser,
+            CorporateUserId = CorporateUserId,
+            CorporateUser = CorporateUser,
+            DrawingId = DrawingId,
+            Drawing = Drawing,
+            OtherId = OtherId,
+            Other = Other,
+            DisciplineId = DisciplineId,
+            Discipline = Discipline,
+            ProjectId = ProjectId,
+            Project = Project,
+            ClientId = ClientId,
+            Client = Client,
+            OfferId = OfferId,
+            Offer = Offer
+        };
+    }
+
+    public TimeSpan ToTimeSpan()
+    {
+        return new TimeSpan((int)Days, (int)Hours, (int)Minutes, (int)Seconds);
+    }
 }

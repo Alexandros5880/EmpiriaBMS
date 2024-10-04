@@ -190,8 +190,7 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
             return await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
                                  .Where(mh => mh.OtherId == otherId)
-                                 .Include(mh => mh.TimeSpan)
-                                 .Select(mh => mh.TimeSpan.Hours)
+                                 .Select(mh => mh.Hours)
                                  .SumAsync();
         }
     }
@@ -203,8 +202,7 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
             return _context.Set<DailyTime>()
                            .Where(r => !r.IsDeleted)
                            .Where(mh => mh.OtherId == otherId)
-                           .Include(mh => mh.TimeSpan)
-                           .Select(mh => mh.TimeSpan.Hours)
+                           .Select(mh => mh.Hours)
                            .Sum();
         }
     }

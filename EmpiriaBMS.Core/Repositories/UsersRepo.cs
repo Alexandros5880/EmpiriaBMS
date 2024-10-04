@@ -383,7 +383,7 @@ public class UsersRepo : Repository<UserDto, User>
                                         || u.TrainingUserId == userId
                                         || u.CorporateUserId == userId)
                                  .Where(u => u.Date.CompareTo(dateOneMonthLater) > 0)
-                                 .Select(u => u.TimeSpan.ToTimeSpan())
+                                 .Select(u => u.ToTimeSpan())
                                  .ToListAsync();
 
             var totalTimeSpan = timeSpans.Aggregate(TimeSpan.Zero, (sum, next) => sum.Add(next));
@@ -402,7 +402,7 @@ public class UsersRepo : Repository<UserDto, User>
             return await _context.Set<DailyTime>()
                            .Where(r => !r.IsDeleted)
                            .Where(u => u.DailyUserId == userId)
-                           .Select(d => d.TimeSpan.Hours)
+                           .Select(d => d.Hours)
                            .SumAsync();
         }
     }
@@ -422,7 +422,7 @@ public class UsersRepo : Repository<UserDto, User>
                                            .Where(r => !r.IsDeleted)
                                            .Where(u => u.DailyUserId == userId)
                                            .Where(u => u.Date.CompareTo(dateBeforeWeek) > 0)
-                                           .Select(u => u.TimeSpan.Hours)
+                                           .Select(u => u.Hours)
                                            .SumAsync();
         }
     }
@@ -439,7 +439,6 @@ public class UsersRepo : Repository<UserDto, User>
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)
                                                 && dt.Date.Day.Equals(date.Day))
-                                          .Include(dt => dt.TimeSpan)
                                           .ToListAsync();
             TimeSpan dailyTimeTotal = TimeHelper.CalculateTotalTime(dailyTimeSpans);
 
@@ -451,7 +450,6 @@ public class UsersRepo : Repository<UserDto, User>
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)
                                                 && dt.Date.Day.Equals(date.Day))
-                                          .Include(dt => dt.TimeSpan)
                                           .ToListAsync();
             TimeSpan personalTimeTotal = TimeHelper.CalculateTotalTime(personalTimeSpans);
 
@@ -463,7 +461,6 @@ public class UsersRepo : Repository<UserDto, User>
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)
                                                 && dt.Date.Day.Equals(date.Day))
-                                          .Include(dt => dt.TimeSpan)
                                           .ToListAsync();
             TimeSpan trainingTimeTotal = TimeHelper.CalculateTotalTime(trainingTimeSpans);
 
@@ -475,7 +472,6 @@ public class UsersRepo : Repository<UserDto, User>
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)
                                                 && dt.Date.Day.Equals(date.Day))
-                                          .Include(dt => dt.TimeSpan)
                                           .ToListAsync();
             TimeSpan corporateEventTimeTotal = TimeHelper.CalculateTotalTime(corporateEventTimeSpans);
 

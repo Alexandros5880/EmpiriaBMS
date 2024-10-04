@@ -185,8 +185,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
             return await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
                                  .Where(mh => mh.DrawingId == drwaingId)
-                                 .Include(mh => mh.TimeSpan)
-                                 .Select(mh => mh.TimeSpan.Hours)
+                                 .Select(mh => mh.Hours)
                                  .SumAsync();
         }
     }
@@ -198,8 +197,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
             return _context.Set<DailyTime>()
                            .Where(r => !r.IsDeleted)
                            .Where(mh => mh.DrawingId == drwaingId)
-                           .Include(mh => mh.TimeSpan)
-                           .Select(mh => mh.TimeSpan.Hours)
+                           .Select(mh => mh.Hours)
                            .Sum();
         }
     }

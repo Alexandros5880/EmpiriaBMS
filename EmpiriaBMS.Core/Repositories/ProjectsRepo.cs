@@ -311,17 +311,36 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
     public async Task<List<ProjectDto>> GetProjectsWithFallback(int userId, int offerId, bool? active)
     {
-        List<ProjectDto> projectsDto = new List<ProjectDto>();
-        int monthsToCheck = 1;
-
-        while (!projectsDto.Any())
+        try
         {
-            TimeSpan period = TimeSpan.FromDays(30 * monthsToCheck);
-            monthsToCheck++;
-            projectsDto = (await GetAll(userId, offerId, active, period)).ToList();
-        }
+            List<ProjectDto> projectsDto = new List<ProjectDto>();
+            int monthsToCheck = 1;
+            int maxMonthsToCheck = 12; // Define a reasonable limit to avoid overflow
 
-        return projectsDto;
+            while (!projectsDto.Any() && monthsToCheck <= maxMonthsToCheck)
+            {
+                // Calculate the total days to check
+                int totalDaysToCheck = 30 * monthsToCheck;
+
+                // Safeguard against overflow
+                if (totalDaysToCheck < 0)
+                {
+                    throw new InvalidOperationException("Calculated days exceed maximum limit.");
+                }
+
+                TimeSpan period = TimeSpan.FromDays(totalDaysToCheck);
+                projectsDto = (await GetAll(userId, offerId, active, period)).ToList();
+
+                monthsToCheck++;
+            }
+
+            return projectsDto;
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.GetProjectsWithFallback({typeof(Invoice)}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return default(List<ProjectDto>)!;
+        }
     }
 
     public async Task<ICollection<ProjectDto>> GetOffersProjects(int? offerId)
@@ -363,8 +382,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
                                  .Where(mh => mh.ProjectId == projectId)
-                                 .Include(mh => mh.TimeSpan)
-                                 .Select(mh => mh.TimeSpan.Hours)
+                                 .Select(mh => mh.Hours)
                                  .SumAsync();
         }
     }
@@ -376,8 +394,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return _context.Set<DailyTime>()
                            .Where(r => !r.IsDeleted)
                            .Where(mh => mh.ProjectId == projectId)
-                           .Include(mh => mh.TimeSpan)
-                           .Select(mh => mh.TimeSpan.Hours)
+                           .Select(mh => mh.Hours)
                            .Sum();
         }
     }
@@ -457,7 +474,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 var disciplineMenHours = await _context.Set<DailyTime>()
                                                        .Where(r => !r.IsDeleted)
                                                        .Where(d => d.DisciplineId == d.Id)
-                                                       .Select(d => d.TimeSpan.Hours)
+                                                       .Select(d => d.Hours)
                                                        .SumAsync();
                 decimal divitionDiscResult = Convert.ToDecimal(disciplineMenHours)
                                                         / Convert.ToDecimal(d.EstimatedHours);
@@ -505,7 +522,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var projectMenHours = await _context.Set<DailyTime>()
                                                 .Where(r => !r.IsDeleted)
                                                 .Where(d => d.ProjectId == projectId)
-                                                .Select(d => d.TimeSpan.Hours)
+                                                .Select(d => d.Hours)
                                                 .SumAsync();
             decimal divitionProResult = Convert.ToDecimal(projectMenHours)
                                                     / Convert.ToDecimal(project.EstimatedHours);

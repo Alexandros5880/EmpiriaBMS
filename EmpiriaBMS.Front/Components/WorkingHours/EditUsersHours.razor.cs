@@ -228,11 +228,10 @@ public partial class EditUsersHours
         _deliverables.Clear();
         _supportiveWork.Clear();
 
+        var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+
         try
         {
-
-            var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
-
             // Get Projects of last month
             List<ProjectDto> projectsDto = (await _dataProvider.Projects
                 .GetProjectsWithFallback(
@@ -240,7 +239,6 @@ public partial class EditUsersHours
                     offerId: _selectedOffer?.Id ?? 0,
                     active: active
                 )).ToList<ProjectDto>();
-
 
             var projectsVm = Mapper.Map<List<ProjectDto>, List<ProjectVM>>(projectsDto);
 

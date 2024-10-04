@@ -164,7 +164,7 @@ public class KpisRepo : IDisposable
                                                 .Select(ur => new
                                                 {
                                                     RoleName = ur.Role.Name,
-                                                    DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.TimeSpan.Hours)
+                                                    DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.Hours)
                                                 })
                                                 .ToListAsync();
 
@@ -201,7 +201,7 @@ public class KpisRepo : IDisposable
                                                 .Select(ur => new
                                                 {
                                                     UserName = $"{ur.User.FirstName} {ur.User.MidName} {ur.User.LastName}",
-                                                    DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.TimeSpan.Hours)
+                                                    DailyTimeHours = ur.User.DailyTime.Sum(dt => dt.Hours)
                                                 })
                                                 .ToListAsync();
 
