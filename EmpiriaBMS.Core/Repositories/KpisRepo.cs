@@ -181,7 +181,7 @@ public class KpisRepo : IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On KpisRepo.GetHoursPerRole(DateTime? start = null,DateTime? end = null): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(Dictionary<string, long>)!;
         }
     }
 

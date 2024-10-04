@@ -48,8 +48,8 @@ public partial class KPIDashboard
     }
 
     #region Date Range Filter
-    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Parse("8-1-2023"));
-    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Parse("10-1-2024"));
+    DateTimeOffset? StartDate { get; set; } = new DateTimeOffset(DateTime.Now.AddMonths(-2));
+    DateTimeOffset? EndDate { get; set; } = new DateTimeOffset(DateTime.Now.AddDays(10));
 
     public async Task OnDateSelect(DateRange range)
     {
