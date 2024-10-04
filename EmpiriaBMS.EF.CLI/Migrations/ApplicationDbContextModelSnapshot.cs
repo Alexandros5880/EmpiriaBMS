@@ -22,6 +22,85 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ComponentTypeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParametersJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KPIGridItems");
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItemPosition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("H")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KPIGridItemId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("W")
+                        .HasColumnType("int");
+
+                    b.Property<int>("X")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KPIGridItemId")
+                        .IsUnique();
+
+                    b.ToTable("KPIGridItemPositions");
+                });
+
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Address", b =>
                 {
                     b.Property<int>("Id")
@@ -1494,6 +1573,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasDiscriminator().HasValue("Client");
                 });
 
+            modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItemPosition", b =>
+                {
+                    b.HasOne("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", "KPIGridItem")
+                        .WithOne("Position")
+                        .HasForeignKey("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItemPosition", "KPIGridItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KPIGridItem");
+                });
+
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DailyTime", b =>
                 {
                     b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
@@ -2014,6 +2104,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", b =>
+                {
+                    b.Navigation("Position");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Address", b =>

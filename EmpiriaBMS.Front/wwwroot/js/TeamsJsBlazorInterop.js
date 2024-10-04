@@ -113,6 +113,7 @@ export function scrollToElement(id) {
     }
 }
 
+
 // Register MNouse Weel Event
 export function registerGlobalMouseWheelEvent(objRef, id) {
     $('[data-id="' + id + '"]').on('wheel', function (e) {

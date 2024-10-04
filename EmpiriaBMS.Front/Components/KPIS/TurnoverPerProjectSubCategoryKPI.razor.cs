@@ -11,10 +11,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using Microsoft.Bot.Builder.Dialogs;
 using EmpiriaBMS.Front.ViewModel.Helper;
+using EmpiriaBMS.Front.Components.KPIS.Contract;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class TurnoverPerProjectSubCategoryKPI
+public partial class TurnoverPerProjectSubCategoryKPI : IKpiCompoment
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
@@ -26,7 +27,7 @@ public partial class TurnoverPerProjectSubCategoryKPI
 
     private IQueryable<DictRow<double>> _data;
 
-    private string _title = "Turnover per Project Sub Category";
+    public string Title => "Turnover per Project Sub Category";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -68,7 +69,7 @@ public partial class TurnoverPerProjectSubCategoryKPI
                 Title = new OptionsTitle()
                 {
                     Display = true,
-                    Text = _title,
+                    Text = Title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -149,7 +150,7 @@ public partial class TurnoverPerProjectSubCategoryKPI
         await Task.Delay(1000);
 
         string[] divsIds = new string[] { "export-to-pdf" };
-        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+        string fileName = $"EmbiriaBMS-{Title}-{DateTime.Now.ToEuropeFormat()}.pdf";
 
         await _microsoftTeams.ExportPdfContent(divsIds, fileName);
 

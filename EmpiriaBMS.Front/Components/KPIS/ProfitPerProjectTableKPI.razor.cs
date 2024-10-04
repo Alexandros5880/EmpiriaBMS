@@ -1,19 +1,22 @@
 ﻿using ChartJs.Blazor.Common;
 using ChartJs.Blazor.PieChart;
 using EmpiriaBMS.Core.Dtos.KPIS;
+using EmpiriaBMS.Front.Components.KPIS.Contract;
 using EmpiriaBMS.Front.Horizontal;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class ProfitPerProjectTableKPI
+public partial class ProfitPerProjectTableKPI : IKpiCompoment
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
 
     [Parameter]
     public DateTimeOffset? EndDate { get; set; }
+
+    public string Title => "Prefit Per Project";
 
     private IQueryable<TenderDataDto> _data = null;
     

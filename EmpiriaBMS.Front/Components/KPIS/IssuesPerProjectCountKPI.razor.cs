@@ -5,6 +5,7 @@ using ChartJs.Blazor.Common.Axes;
 using ChartJs.Blazor.Common.Axes.Ticks;
 using ChartJs.Blazor.PieChart;
 using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Front.Components.KPIS.Contract;
 using EmpiriaBMS.Front.Horizontal;
 using EmpiriaBMS.Front.ViewModel.Helper;
 using Microsoft.AspNetCore.Components;
@@ -13,7 +14,7 @@ using ChartEnums = ChartJs.Blazor.Common.Enums;
 
 namespace EmpiriaBMS.Front.Components.KPIS;
 
-public partial class IssuesPerProjectCountKPI
+public partial class IssuesPerProjectCountKPI : IKpiCompoment
 {
     [Parameter]
     public DateTimeOffset? StartDate { get; set; }
@@ -25,7 +26,7 @@ public partial class IssuesPerProjectCountKPI
 
     private IQueryable<DictRow<long>> _data;
 
-    private string _title = "Count Issues per Project";
+    public string Title => "Count Issues per Project";
     private BarConfig _chartConfig;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -57,7 +58,7 @@ public partial class IssuesPerProjectCountKPI
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = _title,
+                    Text = Title,
                     Position = ChartEnums.Position.Top,
                     FontSize = 24
                 },
@@ -172,7 +173,7 @@ public partial class IssuesPerProjectCountKPI
         await Task.Delay(1000);
 
         string[] divsIds = new string[] { "export-to-pdf" };
-        string fileName = $"EmbiriaBMS-{_title}-{DateTime.Now.ToEuropeFormat()}.pdf";
+        string fileName = $"EmbiriaBMS-{Title}-{DateTime.Now.ToEuropeFormat()}.pdf";
 
         await _microsoftTeams.ExportPdfContent(divsIds, fileName);
 
