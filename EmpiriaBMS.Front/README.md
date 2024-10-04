@@ -82,51 +82,97 @@
 
 ### Ord -> Permisions:
 ***1*** -> ***See Dashboard Layout***
+
 ***2*** -> ***Dashboard Edit My Hours***
+
 ***3*** -> ***Dashboard Assign Designer***
+
 ***4*** -> ***Dashboard Assign Engineer***
+
 ***5*** -> ***Dashboard Assign Project Manager***
+
 ***6*** -> ***Dashboard Add Project***
+
 ***7*** -> ***See Admin Layout***
+
 ***8*** -> ***Dashboard See My Hours***
+
 ***9*** -> ***See All Disciplines***
+
 ***10*** -> ***See All Drawings***
+
 ***11*** -> ***See All Projects***
+
 ***12*** -> ***Dashboard Edit Project***
+
 ***13*** -> ***Display Projects Code***
+
 ***14*** -> ***Dashboard Edit Discipline***
+
 ***15*** -> ***Dashboard Edit Deliverable***
+
 ***16*** -> ***Dashboard Edit Other***
+
 ***17*** -> ***Dashboard See KPIS***
+
 ***18*** -> ***See Hours Per Role KPI***
+
 ***19*** -> ***See Active Delayed Projects KPI***
+
 ***20*** -> ***See All Projects Missed DeadLine KPI***
+
 ***21*** -> ***See Employee Turnover KPI***
+
 ***22*** -> ***See My Projects Missed DeadLine KPI***
+
 ***23*** -> ***See Active Delayed Project Types Counter KPI***
+
 ***24*** -> ***See Offers***
+
 ***25*** -> ***See Tender Table KPI***
+
 ***26*** -> ***See Delayed Payments KPI***
+
 ***27*** -> ***See Pendings Payments KPI***
+
 ***28*** -> ***See Teams Requested Users***
+
 ***29*** -> ***See Invoices***
+
 ***30*** -> ***See Excpences***
+
 ***31*** -> ***Work on Project***
+
 ***32*** -> ***Work on Offers***
+
 ***33*** -> ***Work on Leds***
+
 ***34*** -> ***See Next Year Income***
+
 ***35*** -> ***Backup Database***
+
 ***36*** -> ***Restore Database***
+
 ***37*** -> ***Can Change Everybody Hours***
+
 ***38*** -> ***See Leads On Dashboard***
+
 ***39*** -> ***Approve Time Requests***
+
 ***40*** -> ***See Reports***
+
 ***41*** -> ***See Estimated Invoicing***
+
 ***42*** -> ***See Unpaid/Paid Invoices***
+
 ***43*** -> ***See Profit in every project KPI***
+
 ***44*** -> ***See Issues per time period KPI***
+
 ***45*** -> ***Turnover per projects category KPI***
+
 ***46*** -> ***Turnover per projects sub category KPI***
+
 ***47*** -> ***Turnover per project managers KPI***
 
 ### Roles -> Permissions Ords:

@@ -12,7 +12,7 @@ using DiscComp = EmpiriaBMS.Front.Components.Home.Disciplines;
 using SWComp = EmpiriaBMS.Front.Components.Home.SupportiveWorks;
 using projComp = EmpiriaBMS.Front.Components.Home.Projects;
 using Microsoft.CodeAnalysis.CSharp;
-using EmpiriaBMS.Front.Components.Home;
+using EmpiriaBMS.Front.Components.Home.Header;
 using ClientsComp = EmpiriaBMS.Front.Components.Home.Clients;
 
 namespace EmpiriaBMS.Front.Components.Home;

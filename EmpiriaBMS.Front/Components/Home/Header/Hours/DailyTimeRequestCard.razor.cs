@@ -2,7 +2,7 @@
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 
-namespace EmpiriaBMS.Front.Components.WorkingHours;
+namespace EmpiriaBMS.Front.Components.Home.Header.Hours;
 
 public partial class DailyTimeRequestCard
 {

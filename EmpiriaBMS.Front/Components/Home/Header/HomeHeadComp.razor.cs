@@ -1,4 +1,4 @@
-﻿using EmpiriaBMS.Front.Components.WorkingHours;
+﻿using EmpiriaBMS.Front.Components.Home.Header.Hours;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Home;
+namespace EmpiriaBMS.Front.Components.Home.Header;
 
 public partial class HomeHeadComp : IDisposable
 {

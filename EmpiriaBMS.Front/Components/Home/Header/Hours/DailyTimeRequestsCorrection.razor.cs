@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace EmpiriaBMS.Front.Components.WorkingHours;
+namespace EmpiriaBMS.Front.Components.Home.Header.Hours;
 
 public partial class DailyTimeRequestsCorrection
 {

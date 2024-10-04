@@ -1,0 +1,307 @@
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Home;
+
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+@inject SharedAuthDataService _sharedAuthData
+@inject TimerService TimerService
+@inject Logging.LoggerManager Logger
+
+<!-- Headder -->
+<div class="d-flex justify-content-between">
+
+    <h3>Work Hours Update</h3>
+
+</div>
+
+<div style="max-height: 600px; width: auto; overflow-y: hidden; overflow-x: hidden;">
+
+    <div class="mt-1 row gx-2 ms-1 me-1">
+
+        <!-- Select Led -->
+        @if (workOnLeds || seeAdmin)
+        {
+            <div class="col selections">
+                <div class="text-center">
+                    <h5>Select Led</h5>
+                </div>
+                <div class="select-wrapper form-column form-column-field">
+                    <select class="form-select form-select-lg"
+                            aria-label="Select Led"
+                            value="@_selectedClient?.Id"
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectLed(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select Led</option>
+                        @foreach (var client in _clients)
+                        {
+                            <option value="@client.Id">
+                                @client.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+        }
+
+        <!-- Select Offer -->
+        @if (workOnOffers || seeAdmin && (_selectedClient != null && _selectedClient.Id != 0))
+        {
+            <div class="col selections">
+                <div class="text-center">
+                    <h5>Select Offer</h5>
+                </div>
+                <div class="select-wrapper form-column form-column-field">
+                    <select class="form-select form-select-lg"
+                            aria-label="Select Offer"
+                            value="@_selectedOffer?.Id"
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
+                        <option value="0" selected>Select Offer</option>
+                        @foreach (var offer in _offers)
+                        {
+                            <option value="@offer.Id">
+                                @offer.Code
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+        }
+
+        <!-- Select Project -->
+        <div class="col selections">
+            <div class="text-center">
+                <h5>Select Project</h5>
+            </div>
+            <div class="select-wrapper form-column form-column-field">
+                <select class="form-select form-select-lg"
+                        aria-label="Select Project"
+                        value="@_selectedProject?.Id"
+                        @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
+                    <option value="0" selected>Select Project</option>
+                    @foreach (var project in _projects)
+                    {
+                        <option value="@project.Id">
+                            @project.Name
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <!-- Discipline -->
+        <div class="col selections">
+            <div class="text-center">
+                <h5>Select Discipline</h5>
+            </div>
+            <div class="select-wrapper form-column form-column-field">
+                <select class="form-select form-select-lg"
+                        aria-label="Select Discipline"
+                        value="@_selectedDiscipline?.Id"
+                        @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
+                    <option value="0" selected>Select Discipline</option>
+                    @foreach (var discipline in _disciplines)
+                    {
+                        <option value="@discipline.Id">
+                            @discipline.Type.Name
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <FluentStack Orientation="Orientation.Horizontal" Class="mt-1">
+
+        <!-- Deliverables -->
+        @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
+        {
+            <div class="w-50">
+                <div class="text-center">
+                    <h5>Deliverables</h5>
+                </div>
+                <div class="table-responsive"
+                     style="height: 240px;">
+                    <table class="table table-hover table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="sticky-header">Deliverable</th>
+                                <th scope="col" class="sticky-header">Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var _deliverable in _deliverables)
+                            {
+                                <tr class="align-middle">
+                                    <td class="align-middle">
+                                        <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <TimeInput MinTime="@(new TimeSpan(-300, 0, 0))"
+                                                   MaxTime="@RemainingTime"
+                                                   Time="_deliverable.Time"
+                                                   OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+        <!-- Supportive Works -->
+        @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
+        {
+            <div class="w-50">
+                <div class="text-center">
+                    <h5>Supportive Works</h5>
+                </div>
+                <div class="table-responsive"
+                     style="height: 240px;">
+                    <table class="table table-hover table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="sticky-header">Other</th>
+                                <th scope="col" class="sticky-header">Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var _supportiveWork in _supportiveWork)
+                            {
+                                <tr class="align-middle">
+                                    <td class="align-middle">
+                                        <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <TimeInput MinTime="@(new TimeSpan(-300, 0, 0))"
+                                                   MaxTime="@RemainingTime"
+                                                   Time="@_supportiveWork.Time"
+                                                   OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+    </FluentStack>
+
+    <div class="mt-4">
+
+        @{
+            var seeGeneralTime = (_selectedClient != null && _selectedClient.Id != 0)
+                                                || (_selectedOffer != null && _selectedOffer.Id != 0)
+                                                || (_selectedProject != null && _selectedProject.Id != 0);
+
+
+            var minTime = new TimeSpan(-300, 0, 0);
+        }
+
+        @if (seeGeneralTime)
+        {
+            <FluentAccordion>
+                <FluentAccordionItem Expanded="false">
+                    <HeadingTemplate>
+                        <div class="accordion-header">
+                            <h3>General Time</h3>
+                        </div>
+                    </HeadingTemplate>
+                    <ChildContent>
+
+                        <!-- Set Time Client / Offer/ Project / Discipline -->
+                        <div class="mb-1">
+                            <div class="row gx-3 m-2 w-96">
+
+                                @if ((workOnLeds || seeAdmin) && (_selectedClient != null && _selectedClient.Id != 0))
+                                {
+                                    <div class="col-3 text-center">
+                                        <span class="mb-2 fs-5">Client</span>
+                                        <TimeInput MinTime="@(new TimeSpan(-300, 0, 0))"
+                                                   MaxTime="@RemainingTime"
+                                                   Time="_selectedClient.Time"
+                                                   OnPropertyChanged=@((time) => _onLedTimeChanged(_selectedClient, time)) />
+                                    </div>
+                                }
+
+                                @if ((workOnOffers || seeAdmin) && (_selectedOffer != null && _selectedOffer.Id != 0))
+                                {
+                                    <div class="col-3 text-center">
+                                        <span class="mb-2 fs-5">Offer</span>
+                                        <TimeInput MinTime="@(new TimeSpan(-300, 0, 0))"
+                                                   MaxTime="@RemainingTime"
+                                                   Time="_selectedOffer.Time"
+                                                   OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
+                                    </div>
+                                }
+
+                                @if ((workOnProject || seeAdmin) && (_selectedProject != null && _selectedProject.Id != 0))
+                                {
+                                    <div class="col-3 text-center">
+                                        <span class="mb-2 fs-5">Project</span>
+                                        <TimeInput MinTime="@(new TimeSpan(-300, 0, 0))"
+                                                   MaxTime="@RemainingTime"
+                                                   Time="_selectedProject.Time"
+                                                   OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
+                                    </div>
+                                }
+
+                                @if ((workOnProject || seeAdmin) && (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
+                                {
+                                    <div class="col-3 text-center">
+                                        <span class="mb-2 fs-5">Discipline</span>
+                                        <TimeInput MinTime="@(new TimeSpan(-300, 0, 0))"
+                                                   MaxTime="@RemainingTime"
+                                                   Time="_selectedDiscipline.Time"
+                                                   OnPropertyChanged=@((time) => _onDisciplineTimeChanged(_selectedDiscipline, time)) />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Set User Extra Time -->
+                        <div class="mb-1">
+                            <SetUserTime LogedUserTimes="@_editLogedUserTimes"
+                                         RemainingTime="@RemainingTime"
+                                         MinTime="@minTime"
+                                         OnPersonalTimeChanged="@_onPersonalTimeChanged"
+                                         OnTrainingTimeChanged="@_onTrainingTimeChanged"
+                                         OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+                        </div>
+
+                    </ChildContent>
+                </FluentAccordionItem>
+            </FluentAccordion>
+        }
+
+    </div>
+
+    <!-- Description -->
+    <div class="mt-1 w-98">
+        <div>
+            Description<span class="text-danger">*</span>
+        </div>
+        <div>
+            <FluentTextArea Class="" Style="width:100%;" @bind-Value="@_description" Rows="3" Resize="TextAreaResize.Vertical" />
+        </div>
+        @if (!validDescription)
+        {
+            <div>
+                <span class="text-warning">Field is required!</span>
+            </div>
+        }
+    </div>
+
+</div>
+
+<div class="mt-1">
+    <FluentStack Orientation="Orientation.Horizontal" Class="d-flex justify-content-center">
+        <!-- Class="d-flex justify-content-end" -->
+        <FluentButton OnClick="@(async () => await Save())"
+                      Disabled="@(!_hasChanged)">
+            <!--  && (SendRequest && (string.IsNullOrEmpty(_description) || string.IsNullOrWhiteSpace(_description))) -->
+            Save
+        </FluentButton>
+    </FluentStack>
+</div>
