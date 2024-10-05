@@ -76,11 +76,6 @@ public class MicrosoftTeams : InteropModuleBase
         return InvokeVoidAsync("scrollToElement", id);
     }
 
-    public Task InitializeTooltips()
-    {
-        return InvokeVoidAsync("initializeTooltips");
-    }
-
     public Task<string> GetElementStyle(string elementId)
     {
         return InvokeAsync<string>("getElementStyle", elementId);

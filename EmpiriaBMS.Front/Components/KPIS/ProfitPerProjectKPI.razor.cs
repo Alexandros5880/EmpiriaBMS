@@ -159,7 +159,7 @@ public partial class ProfitPerProjectKPI : IKpiCompoment
         var chartId = "chart-to-pdf";
         var tableId = "table-to-pdf";
 
-        string fileName = $"EmbiriaBMS {_title} {DateTime.Now.ToEuropeFormat()}.pdf";
+        string fileName = $"EmbiriaBMS {Title} {DateTime.Now.ToEuropeFormat()}.pdf";
         await _microsoftTeams.ExportChartTableToPdf(filtersId, chartId, tableId, fileName);
 
         await Task.Delay(1000);
