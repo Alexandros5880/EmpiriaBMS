@@ -2,32 +2,32 @@
 @using Microsoft.JSInterop
 @inject Logging.LoggerManager Logger
 
-<div class="input-group text-center">
-    
-    <input class="form-control"
-           type="number"
-           @bind="@Hours"
-           placeholder="H"
-           style="min-width: 60px !important; max-width: 60px !important;"
-           min="@MinTime.Hours"
-           max="@_remainingTime.TotalHours"
-           data-input-type="hours"
-           data-id="@HoursId"
-           @onfocus="@(() => _remainingTime = MaxTime)"/>
-
+<div class="input-group d-flex justify-content-center">
+    <div>
+        <input class="form-control"
+               type="number"
+               @bind="@Hours"
+               placeholder="H"
+               style="min-width: 60px !important; max-width: 60px !important;"
+               min="@MinTime.Hours"
+               max="@_remainingTime.TotalHours"
+               data-input-type="hours"
+               data-id="@HoursId"
+               @onfocus="@(() => _remainingTime = MaxTime)" />
+    </div>
     <div class="input-group-append">
         <span class="input-group-text">:</span>
     </div>
-    
-    <input class="form-control"
-           type="number"
-           @bind="@Minutes"
-           placeholder="M"
-           style="min-width: 60px !important; max-width: 60px !important;"
-           min="@MinTime.Minutes"
-           max="@(_remainingTime.TotalMinutes % 60)"
-           data-input-type="minutes"
-           data-id="@MinutesId"
-           @onfocus="@(() => _remainingTime = MaxTime)"/>
-
+    <div>
+        <input class="form-control"
+               type="number"
+               @bind="@Minutes"
+               placeholder="M"
+               style="min-width: 60px !important; max-width: 60px !important;"
+               min="@MinTime.Minutes"
+               max="@(_remainingTime.TotalMinutes % 60)"
+               data-input-type="minutes"
+               data-id="@MinutesId"
+               @onfocus="@(() => _remainingTime = MaxTime)" />
+    </div>
 </div>
