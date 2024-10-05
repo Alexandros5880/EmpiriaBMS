@@ -213,6 +213,13 @@ public static class ModelRelations
                .HasForeignKey(c => c.AddressId)
                .OnDelete(DeleteBehavior.SetNull);
 
+        // Project Address
+        builder.Entity<Address>()
+               .HasMany(p => p.Projects)
+               .WithOne(c => c.Address)
+               .HasForeignKey(c => c.AddressId)
+               .OnDelete(DeleteBehavior.SetNull);
+
         // Discipline Draws
         builder.Entity<Discipline>()
                .HasMany(p => p.Deliverables)

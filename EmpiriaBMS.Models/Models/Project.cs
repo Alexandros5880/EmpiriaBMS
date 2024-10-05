@@ -35,6 +35,9 @@ public class Project : Entity
     public int? OfferId { get; set; }
     public Offer? Offer { get; set; }
 
+    public int? AddressId { get; set; }
+    public Address? Address { get; set; }
+
     public ICollection<Invoice>? Invoices { get; set; }
 
     public ICollection<DailyTime>? DailyTime { get; set; }

@@ -116,6 +116,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                              .ThenInclude(o => o.Client)
                              .Include(p => p.ProjectManager)
                              .Include(p => p.ProjectsSubConstructors)
+                             .Include(p => p.Address)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
             project.Offer = offers.FirstOrDefault(o => o.Id == project.OfferId);
@@ -154,6 +155,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 .ThenInclude(o => o.Client)
                 .Include(p => p.ProjectManager)
                 .Include(p => p.ProjectsSubConstructors)
+                .Include(p => p.Address)
                 .OrderBy(e => !e.Active)
                 .ThenByDescending(e => e.DeadLine)
                 .ToListAsync();
@@ -235,6 +237,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                         .ThenInclude(o => o.Client)
                         .Include(p => p.ProjectManager)
                         .Include(p => p.ProjectsSubConstructors)
+                        .Include(p => p.Address)
                         .OrderBy(e => !e.Active)
                         .ThenByDescending(e => e.DeadLine)
                         .ToListAsync();
@@ -287,6 +290,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                         .ThenInclude(o => o.Client)
                         .Include(p => p.ProjectManager)
                         .Include(p => p.ProjectsSubConstructors)
+                        .Include(p => p.Address)
                         .OrderBy(e => !e.Active)
                         .ThenByDescending(e => e.DeadLine)
                         .ToListAsync();

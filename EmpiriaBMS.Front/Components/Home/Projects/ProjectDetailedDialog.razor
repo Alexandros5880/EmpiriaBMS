@@ -182,6 +182,26 @@
             </div>
         </div>
 
+        <!-- Address -->
+        <div class="col-12 row border rounded m-2"
+             style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
+            <div class="col-12">
+                <h4>Address</h4>
+            </div>
+            <!-- Search Address / (Map) -->
+            <div class="col-12 row">
+                <div class="row mt-3 mb-3">
+                    <div class="col-12">
+                        <Map @ref="@_map"
+                             Id="adminClientMap"
+                             AutoCompeteId="autocompeteAdminClientMap"
+                             OnFindAddress="@(() => _onSearchAddressChange())"
+                             IsMapVisible="false" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Description -->
         <div class="col-12">
             <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>

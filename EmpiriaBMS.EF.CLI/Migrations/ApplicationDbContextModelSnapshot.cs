@@ -965,6 +965,9 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
@@ -1006,6 +1009,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("ProjectManagerId");
 
@@ -1763,6 +1768,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Project", b =>
                 {
+                    b.HasOne("EmpiriaBMS.Models.Models.Address", "Address")
+                        .WithMany("Projects")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("EmpiriaBMS.Models.Models.User", "ProjectManager")
                         .WithMany("PMProjects")
                         .HasForeignKey("ProjectManagerId");
@@ -1772,6 +1782,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasForeignKey("StageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("ProjectManager");
 
@@ -1914,6 +1926,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Address", b =>
                 {
                     b.Navigation("Clients");
+
+                    b.Navigation("Projects");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Deliverable", b =>
