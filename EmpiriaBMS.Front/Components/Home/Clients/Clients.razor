@@ -55,13 +55,16 @@
                 </FluentButton>
             }
 
-            <!-- Import -->
-            <InputFile @ref="@fileInput" OnChange="ImportFromCSV" style="display: none;" />
-            <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
-                          Appearance="Appearance.Outline"
-                          OnClick="@(async () => await TriggerFileInput())">
-                Import
-            </FluentButton>
+            @if (IsWorkingMode)
+            {
+                <!-- Import -->
+                <InputFile @ref="@fileInput" OnChange="ImportFromCSV" style="display: none;" />
+                <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowImport())"
+                              Appearance="Appearance.Outline"
+                              OnClick="@(async () => await TriggerFileInput())">
+                    Import
+                </FluentButton>
+            }
 
             <!-- Export -->
             <FluentButton IconStart="@(new Icons.Regular.Size16.ArrowExport())"
@@ -139,10 +142,13 @@
                     <PropertyColumn Property="@(p => p.CompanyName)" Sortable="true" Title="Company" Align="@Align.Start" />
                     <PropertyColumn Property="@(p => p.AddressFormated)" Sortable="true" Title="Address" Align="@Align.Start" />
 
-                    <TemplateColumn Title="Actions" Align="@Align.End">
-                        <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
-                        <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
-                    </TemplateColumn>
+                    @if (IsWorkingMode)
+                    {
+                        <TemplateColumn Title="Actions" Align="@Align.End">
+                            <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _edit(context))" />
+                            <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _delete(context))" />
+                        </TemplateColumn>
+                    }
 
                 </FluentDataGrid>
             </div>
