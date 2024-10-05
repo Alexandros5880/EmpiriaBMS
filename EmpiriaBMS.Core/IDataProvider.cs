@@ -33,5 +33,6 @@ namespace EmpiriaBMS.Core
         public WorkingTime WorkingTime { get; set; }
         public ReportsRepo Reports { get; set; }
         public ExpensesTypeRepo ExpensesTypes { get; set; }
+        public SubConstructorRepo SubConstructors { get; set; }
     }
 }

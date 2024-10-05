@@ -34,6 +34,9 @@ public class ProjectDto : EntityDto
     public int? OfferId { get; set; }
     public Offer? Offer { get; set; }
 
+    public int? AddressId { get; set; }
+    public Address? Address { get; set; }
+
     public ICollection<Invoice> Invoices { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
@@ -42,5 +45,5 @@ public class ProjectDto : EntityDto
 
     public ICollection<Issue> Complains { get; set; }
 
-    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public ICollection<SubConstructor> ProjectsSubConstructors { get; set; }
 }

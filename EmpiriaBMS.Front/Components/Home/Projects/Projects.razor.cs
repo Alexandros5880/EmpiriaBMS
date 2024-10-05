@@ -242,12 +242,24 @@ public partial class Projects
             ProjectVM vm = result.Data as ProjectVM;
             var dto = Mapper.Map<ProjectDto>(vm);
 
+            // If Addres Then Save Address
+            if (dto?.Address != null && !(await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await _dataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var address = await _dataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                dto.AddressId = address.Id;
+            }
+
+            dto.Address = null;
+
             // Save Project
             var updatedDto = await _dataProvider.Projects.Add(dto);
             var updateVm = Mapper.Map<ProjectVM>(updatedDto);
-
-            if (_data.Any(p => p.Id == updateVm.Id))
-                _data.Remove(updateVm);
 
             var pm = await _dataProvider.Projects.GetProjectManager(updateVm.Id);
             updateVm.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
@@ -255,6 +267,9 @@ public partial class Projects
             // Order by DeaLine and add new one on top
             var sortedProjects = _data.OrderByDescending(p => p.DeadLine).ToList();
             sortedProjects.Insert(0, updateVm);
+
+            // Clear _data and assign the new sorted collection
+            _data.Clear();
             _data = new ObservableCollection<ProjectVM>(sortedProjects);
 
             _selectedProject = updateVm;
@@ -286,20 +301,38 @@ public partial class Projects
             ProjectVM vm = result.Data as ProjectVM;
             var dto = Mapper.Map<ProjectDto>(vm);
 
+            // If Addres Then Save Address
+            if (dto?.Address != null && !(await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
+                var address = await _dataProvider.Address.Add(addressDto);
+                dto.AddressId = address.Id;
+            }
+            else if (dto?.Address != null && (await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
+            {
+                var address = await _dataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
+                dto.AddressId = address.Id;
+            }
+
+            dto.Address = null;
+
             // Save Project
             var updatedDto = await _dataProvider.Projects.Update(dto);
             var updateVm = Mapper.Map<ProjectVM>(updatedDto);
 
-            if (_data.Any(p => p.Id == updateVm.Id))
-                _data.Remove(updateVm);
-
             var pm = await _dataProvider.Projects.GetProjectManager(updateVm.Id);
             updateVm.PmName = pm != null ? $"{pm.LastName} {pm.FirstName}" : null;
 
-            // Order by DeaLine and add new one on top
-            var sortedProjects = _data.OrderByDescending(p => p.DeadLine).ToList();
-            sortedProjects.Insert(0, updateVm);
-            _data = new ObservableCollection<ProjectVM>(sortedProjects);
+            // Remove the old record (if it exists) based on a unique identifier like ProjectId
+            var oldRecord = _data.FirstOrDefault(p => p.Id == updateVm.Id);
+            if (oldRecord != null)
+                _data.Remove(oldRecord);
+
+            _data.Insert(0, updateVm);
+
+            // Clear _data and assign the new sorted collection
+            //_data.Clear();
+            //_data = new ObservableCollection<ProjectVM>(oldRecord);
 
             _selectedProject = updateVm;
             StateHasChanged();

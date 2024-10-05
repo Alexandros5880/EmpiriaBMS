@@ -20,6 +20,8 @@ public class AppDbContext : DbContext
     public DbSet<Role>? Roles { get; set; }
     public DbSet<Email>? Emails { get; set; }
     public DbSet<Project>? Projects { get; set; }
+    public DbSet<SubConstructor>? SubConstructors { get; set; }
+    public DbSet<ProjectSubConstractor>? ProjectSubConstractors { get; set; }
     public DbSet<ProjectCategory>? ProjectsCategories { get; set; }
     public DbSet<ProjectSubCategory>? ProjectsSubCategories { get; set; }
     public DbSet<ProjectStage>? ProjectsStages { get; set; }
@@ -50,7 +52,7 @@ public class AppDbContext : DbContext
     public DbSet<UserRole>? UsersRoles { get; set; }
     public DbSet<RolePermission>? RolesPermissions { get; set; }
     public DbSet<DeliverableEmployee>? DeliverablesEmployees { get; set; }
-    public DbSet<ProjectSubConstructor>? ProjectsSubConstructors { get; set; }
+    public DbSet<SubConstructor>? ProjectsSubConstructors { get; set; }
     public DbSet<TeamsRequestedUser>? TeamsRequestedUser { get; set; }
     public DbSet<DisciplineEngineer>? DisciplinesEngineers { get; set; }
 

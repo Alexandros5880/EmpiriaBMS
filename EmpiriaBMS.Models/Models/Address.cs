@@ -12,5 +12,7 @@ public class Address : Entity
     public string PlaceId { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+
+    public List<Project>? Projects { get; set; }
     public List<Client>? Clients { get; set; }
 }

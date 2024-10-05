@@ -165,7 +165,7 @@ public class UserVM : BaseVM
 
     public ICollection<Email> Emails { get; set; }
 
-    public List<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public List<SubConstructor> ProjectsSubConstructors { get; set; }
 
     [NotMapped]
     public ICollection<int>? MyRolesIds { get; set; }

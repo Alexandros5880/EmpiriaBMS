@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
+using EmpiriaBMS.Front.Components.General;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects;
 
@@ -60,6 +61,8 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         if (firstRender)
         {
             await _getRecords();
+
+            await RefreshMap();
 
             StateHasChanged();
         }
@@ -167,6 +170,25 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         vms.ForEach(_offers.Add);
 
         Offer = _offers.FirstOrDefault(o => o.Id == Content.OfferId) ?? null;
+    }
+    #endregion
+
+    #region Map Address
+    private Map _map;
+
+    public async Task RefreshMap()
+    {
+        if (Content.Id != 0 && Content.Address != null)
+        {
+            await _map.SetAddress(Content.Address);
+        }
+    }
+
+    private void _onSearchAddressChange()
+    {
+        var address = _map.GetAddress();
+        if (address != null)
+            Content.Address = address;
     }
     #endregion
 }
