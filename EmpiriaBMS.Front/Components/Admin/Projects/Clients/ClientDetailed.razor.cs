@@ -53,7 +53,7 @@ public partial class ClientDetailed
 
         // Get Emails
         var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
-        emails.ForEach(e => e.User = null);
+        emails.ForEach(e => e.Client = null);
         dto.Emails = null;
 
         // If Addres Then Save Address
@@ -74,7 +74,7 @@ public partial class ClientDetailed
             var added = await _dataProvider.Clients.Add(dto);
             if (added != null)
             {
-                emails.ForEach(e => e.UserId = added.Id);
+                emails.ForEach(e => e.ClientId = added.Id);
                 await _dataProvider.Emails.AddRange(emails);
                 await _getRecords();
             }
@@ -140,7 +140,7 @@ public partial class ClientDetailed
             _emails.Add(new Email()
             {
                 Address = newEmailAddress,
-                UserId = Content.Id,
+                ClientId = Content.Id,
             });
         }
 
@@ -154,7 +154,7 @@ public partial class ClientDetailed
         _emails.Add(new Email()
         {
             Address = string.Empty,
-            UserId = Content.Id
+            ClientId = Content.Id
         });
         await myGrid.RefreshDataAsync();
     }
@@ -168,12 +168,8 @@ public partial class ClientDetailed
 
     #region Validation
     private bool validEmails = true;
-    private bool validFirstName = true;
-    private bool validLastName = true;
-    private bool validPhone1 = true;
-    private bool validPhone2 = true;
-    private bool validPhone3 = true;
-    private bool validProxyAddress = true;
+    private bool validName = true;
+    private bool validPhone = true;
     private bool validCompanyName = true;
 
     public bool Validate(string fieldname = null)
@@ -181,25 +177,17 @@ public partial class ClientDetailed
         if (fieldname == null)
         {
             validEmails = _emails?.Any() ?? false;
-            validFirstName = !string.IsNullOrEmpty(Content.FirstName);
-            validLastName = !string.IsNullOrEmpty(Content.LastName);
-            validPhone1 = !string.IsNullOrEmpty(Content.Phone1) && _isValidPhoneNumber(Content.Phone1);
-            validPhone2 = string.IsNullOrEmpty(Content.Phone2) || _isValidPhoneNumber(Content.Phone2);
-            validPhone3 = string.IsNullOrEmpty(Content.Phone3) || _isValidPhoneNumber(Content.Phone3);
-            validProxyAddress = _isValidEmail(Content.ProxyAddress);
+            validName = !string.IsNullOrEmpty(Content.Name);
+            validPhone = !string.IsNullOrEmpty(Content.Phone) && _isValidPhoneNumber(Content.Phone);
             validCompanyName = !string.IsNullOrEmpty(Content.CompanyName);
 
-            return validEmails && validFirstName && validLastName && validPhone1 && validPhone2 && validPhone3 && validProxyAddress && validCompanyName;
+            return validEmails && validName && validPhone && validCompanyName;
         }
         else
         {
             validEmails = true;
-            validFirstName = true;
-            validLastName = true;
-            validPhone1 = true;
-            validPhone2 = true;
-            validPhone3 = true;
-            validProxyAddress = true;
+            validName = true;
+            validPhone = true;
             validCompanyName = true;
 
             switch (fieldname)
@@ -207,24 +195,12 @@ public partial class ClientDetailed
                 case "Emails":
                     validEmails = _emails?.Any() ?? false;
                     return validEmails;
-                case "FirstName":
-                    validFirstName = !string.IsNullOrEmpty(Content.FirstName);
-                    return validFirstName;
-                case "LastName":
-                    validLastName = !string.IsNullOrEmpty(Content.LastName);
-                    return validLastName;
-                case "Phone1":
-                    validPhone1 = !string.IsNullOrEmpty(Content.Phone1) && _isValidPhoneNumber(Content.Phone1);
-                    return validPhone1;
-                case "Phone2":
-                    validPhone2 = string.IsNullOrEmpty(Content.Phone2) && _isValidPhoneNumber(Content.Phone2);
-                    return validPhone2;
-                case "Phone3":
-                    validPhone3 = string.IsNullOrEmpty(Content.Phone3) && _isValidPhoneNumber(Content.Phone3);
-                    return validPhone3;
-                case "ProxyAddress":
-                    validProxyAddress = _isValidEmail(Content.ProxyAddress);
-                    return validProxyAddress;
+                case "Name":
+                    validName = !string.IsNullOrEmpty(Content.Name);
+                    return validName;
+                case "Phone":
+                    validPhone = !string.IsNullOrEmpty(Content.Phone) && _isValidPhoneNumber(Content.Phone);
+                    return validPhone;
                 case "CompanyName":
                     validCompanyName = !string.IsNullOrEmpty(Content.CompanyName);
                     return validCompanyName;
@@ -233,12 +209,6 @@ public partial class ClientDetailed
             }
 
         }
-    }
-
-    private void _onProxyAddressChange(ChangeEventArgs e)
-    {
-        Content.ProxyAddress = e.Value?.ToString();
-        Validate("ProxyAddress");
     }
 
     private bool _isValidEmail(string email) => GeneralValidator.IsValidEmail(email);

@@ -157,6 +157,55 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.ToTable("Address");
                 });
 
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ExpectedDurationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("PotencialFee")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Result")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.ToTable("Clients");
+                });
+
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DailyTime", b =>
                 {
                     b.Property<int>("Id")
@@ -500,6 +549,9 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -509,10 +561,12 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("UserId");
 
@@ -1232,7 +1286,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1372,14 +1426,13 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
@@ -1420,9 +1473,9 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("ClientId");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.UserRole", b =>
@@ -1455,35 +1508,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.ToTable("UsersRoles");
                 });
 
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.Client", b =>
-                {
-                    b.HasBaseType("EmpiriaBMS.Models.Models.User");
-
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ExpectedDurationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("PotencialFee")
-                        .HasColumnType("float");
-
-                    b.Property<int>("Result")
-                        .HasColumnType("int");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasDiscriminator().HasValue("Client");
-                });
-
             modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItemPosition", b =>
                 {
                     b.HasOne("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", "KPIGridItem")
@@ -1493,6 +1517,15 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .IsRequired();
 
                     b.Navigation("KPIGridItem");
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.Client", b =>
+                {
+                    b.HasOne("EmpiriaBMS.Models.Models.Address", "Address")
+                        .WithMany("Clients")
+                        .HasForeignKey("AddressId");
+
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DailyTime", b =>
@@ -1661,11 +1694,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Email", b =>
                 {
+                    b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
+                        .WithMany("Emails")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("EmpiriaBMS.Models.Models.User", "User")
                         .WithMany("Emails")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Client");
 
                     b.Navigation("User");
                 });
@@ -1887,8 +1926,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.User", "User")
                         .WithMany("SubConstructors")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("User");
                 });
@@ -1931,6 +1969,16 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("SupportiveWork");
                 });
 
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.User", b =>
+                {
+                    b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
+                        .WithMany("Users")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("EmpiriaBMS.Models.Models.UserRole", b =>
                 {
                     b.HasOne("EmpiriaBMS.Models.Models.Role", "Role")
@@ -1950,16 +1998,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.Client", b =>
-                {
-                    b.HasOne("EmpiriaBMS.Models.Models.Address", "Address")
-                        .WithMany("Clients")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Address");
-                });
-
             modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", b =>
                 {
                     b.Navigation("Position");
@@ -1970,6 +2008,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("Clients");
 
                     b.Navigation("Projects");
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.Client", b =>
+                {
+                    b.Navigation("ClientDailyTime");
+
+                    b.Navigation("Emails");
+
+                    b.Navigation("Offers");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Deliverable", b =>
@@ -2132,13 +2181,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("TrainingTime");
 
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.Client", b =>
-                {
-                    b.Navigation("ClientDailyTime");
-
-                    b.Navigation("Offers");
                 });
 #pragma warning restore 612, 618
         }

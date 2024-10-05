@@ -3771,12 +3771,9 @@ public class AppDbContext : DbContext
                     Id = clientId,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    FirstName = $"Client-Led-{i}",
-                    LastName = "LastName",
-                    ProxyAddress = "alexandrosplatanios15@gmail.com",
-                    Phone1 = "6949277783",
                     CompanyName = "Embiria BMS",
                     Name = $"Alex Plat {i}",
+                    Phone = "6949277783",
                     PotencialFee = random.Next(1000, 3000) + Math.Pow(i, 3),
                     ExpectedDurationDate = DateTime.Now.AddMonths(i),
                     Result = ClientResult.SUCCESSFUL
@@ -3875,12 +3872,9 @@ public class AppDbContext : DbContext
                     Id = clientId,
                     CreatedDate = DateTime.Now,
                     LastUpdatedDate = DateTime.Now,
-                    FirstName = $"Client-Led-{i}",
-                    LastName = "LastName",
-                    ProxyAddress = "alexandrosplatanios15@gmail.com",
-                    Phone1 = "6949277783",
                     CompanyName = "Embiria BMS",
                     Name = $"Alex Plat {i}",
+                    Phone = "6949277783",
                     PotencialFee = random.Next(1000, 3000) + Math.Pow(i, 3),
                     ExpectedDurationDate = DateTime.Now.AddMonths(i),
                     Result = ClientResult.SUCCESSFUL
@@ -4148,6 +4142,8 @@ public class AppDbContext : DbContext
         allEntities.Add("TeamsRequestedUser", await TeamsRequestedUser.Cast<object>().ToListAsync());
         allEntities.Add("DisciplinesEngineers", await DisciplinesEngineers.Cast<object>().ToListAsync());
         allEntities.Add("ExpensesTypes", await ExpensesTypes.Cast<object>().ToListAsync());
+        allEntities.Add("SubConstructors", await SubConstructors.Cast<object>().ToListAsync());
+        allEntities.Add("ProjectSubConstractors", await ProjectSubConstractors.Cast<object>().ToListAsync());
 
         return allEntities;
     }

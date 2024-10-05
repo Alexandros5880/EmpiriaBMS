@@ -2,15 +2,20 @@
 using EmpiriaBMS.Models.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using EmpiriaBMS.Core.Dtos.Base;
 
 namespace EmpiriaBMS.Core.Dtos;
 
-public class ClientDto : UserDto
+public class ClientDto : EntityDto
 {
     [Required]
     public string CompanyName { get; set; }
 
     public string Name { get; set; }
+
+    public string? Phone { get; set; }
+
+    public string? Description { get; set; }
 
     public int? AddressId { get; set; }
     public Address? Address { get; set; }
@@ -27,6 +32,7 @@ public class ClientDto : UserDto
 
     public ICollection<Offer>? Offers { get; set; }
 
-    [NotMapped]
-    public new string FullName => $"{LastName} {MidName} {FirstName}";
+    public ICollection<User>? Users { get; set; }
+
+    public ICollection<Email>? Emails { get; set; }
 }

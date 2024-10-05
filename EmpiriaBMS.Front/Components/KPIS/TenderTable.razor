@@ -53,9 +53,8 @@
             @if (_showClient)
             {
                 <PropertyColumn Property="@(p => p.ClientCompanyName)" Sortable="true" Title="Company" Style="min-width: 100px;" />
-                <PropertyColumn Property="@(p => p.ClientFullName)" Sortable="true" Title="Client" Style="min-width: 100px;" />
+                <PropertyColumn Property="@(p => p.ClientName)" Sortable="true" Title="Client" Style="min-width: 100px;" />
                 <PropertyColumn Property="@(p => p.ClientPhone)" Sortable="true" Title="Phone" Style="min-width: 100px;" />
-                <PropertyColumn Property="@(p => p.ClientEmail)" Sortable="true" Title="Email" Style="min-width: 100px;" />
             }
         </FluentDataGrid>
     </div>

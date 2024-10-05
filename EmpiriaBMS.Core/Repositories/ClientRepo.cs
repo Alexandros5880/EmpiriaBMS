@@ -72,7 +72,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task<ICollection<ClientDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public async new Task<ICollection<ClientDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -112,15 +112,15 @@ public class ClientRepo : Repository<ClientDto, Client>
     }
 
 
-    public async Task<ICollection<Email>> GetEmails(int userId)
+    public async Task<ICollection<Email>> GetEmails(int clientId)
     {
-        if (userId == 0)
+        if (clientId == 0)
             return new List<Email>();
 
         using (var _context = _dbContextFactory.CreateDbContext())
             return await _context.Set<Email>()
                                  .Where(r => !r.IsDeleted)
-                                 .Where(r => r.UserId == userId)
+                                 .Where(r => r.ClientId == clientId)
                                  .ToListAsync();
     }
 

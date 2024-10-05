@@ -629,9 +629,8 @@ public class KpisRepo : IDisposable
                         ProjectPrice = offers.Sum(o => o.OfferPrice) ?? 0,
                         ProjectPudgedPrice = offers.Sum(o => o.PudgetPrice) ?? 0,
                         ClientCompanyName = projectOffer?.Client?.CompanyName ?? "",
-                        ClientFullName = client?.FullName ?? "",
-                        ClientPhone = client?.Phone1 ?? client?.Phone2 ?? client?.Phone3 ?? "",
-                        ClientEmail = client?.Emails?.FirstOrDefault()?.Address ?? ""
+                        ClientName = client?.Name ?? "",
+                        ClientPhone = client?.Phone ?? ""
                     };
 
                     tenderData.Add(data);

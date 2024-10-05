@@ -60,7 +60,7 @@
                                     Height="200px"
                                     Width="100%"
                                     TOption="ClientVM"
-                                    OptionText="@(c => $"{c.CompanyName} - {c.FullName}")"
+                                    OptionText="@(c => $"{c.CompanyName} - {c.Name}")"
                                     OptionValue="@(c => c.Id.ToString())"
                                     SelectedOptionChanged="@(async (e) => await _onClientChanged(e))" />
                 </div>

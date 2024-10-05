@@ -108,6 +108,13 @@ public static class ModelRelations
                .HasForeignKey(i => i.ClientId)
                .OnDelete(DeleteBehavior.Cascade);
 
+        // Users Client
+        builder.Entity<User>()
+               .HasOne(u => u.Client)
+               .WithMany(c => c.Users)
+               .HasForeignKey(u => u.ClientId)
+               .OnDelete(DeleteBehavior.Cascade);
+
         // SubConstructors User
         builder.Entity<SubConstructor>()
                .HasOne(i => i.User)
@@ -214,11 +221,18 @@ public static class ModelRelations
                .OnDelete(DeleteBehavior.ClientSetNull);
 
         // Client Address
-        builder.Entity<Address>()
-               .HasMany(p => p.Clients)
-               .WithOne(c => c.Address)
-               .HasForeignKey(c => c.AddressId)
-               .OnDelete(DeleteBehavior.SetNull);
+        builder.Entity<Email>()
+               .HasOne(e => e.Client)
+               .WithMany(c => c.Emails)
+               .HasForeignKey(e => e.ClientId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        // Client Emails
+        builder.Entity<Email>()
+               .HasOne(e => e.Client)
+               .WithMany(u => u.Emails)
+               .HasForeignKey(e => e.ClientId)
+               .OnDelete(DeleteBehavior.Cascade);
 
         // Project Address
         builder.Entity<Address>()
