@@ -32,7 +32,7 @@
     <div class="col-12 row" style="margin: 0 auto;">
 
         <!-- Main Imfo -->
-        <div class="col-12 row border rounded m-2"
+        <div class="col-12 row border rounded m-2 p3"
              style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
         
              <!-- Title -->
@@ -109,16 +109,16 @@
                     }
                 </div>
 
-                <!-- Description -->
-                <div class="col-xl-6 col-lg-6">
-                    <FluentTextArea Style="width:100%; margin:4px;"
-                                    @bind-Value="@Content.Description"
-                                    Rows="3"
-                                    Resize="TextAreaResize.Vertical">
-                        Description:
-                    </FluentTextArea>
-                </div>
+            </div>
 
+            <!-- Description -->
+            <div class="col-12 row" style="margin: 0 auto;">
+                <FluentTextArea Style="width:100%; margin:4px;"
+                                @bind-Value="@Content.Description"
+                                Rows="3"
+                                Resize="TextAreaResize.Vertical">
+                    Description:
+                </FluentTextArea>
             </div>
 
         </div>

@@ -4142,6 +4142,8 @@ public class AppDbContext : DbContext
         allEntities.Add("TeamsRequestedUser", await TeamsRequestedUser.Cast<object>().ToListAsync());
         allEntities.Add("DisciplinesEngineers", await DisciplinesEngineers.Cast<object>().ToListAsync());
         allEntities.Add("ExpensesTypes", await ExpensesTypes.Cast<object>().ToListAsync());
+        allEntities.Add("SubConstructors", await SubConstructors.Cast<object>().ToListAsync());
+        allEntities.Add("ProjectSubConstractors", await ProjectSubConstractors.Cast<object>().ToListAsync());
 
         return allEntities;
     }

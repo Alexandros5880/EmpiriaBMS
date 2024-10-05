@@ -119,7 +119,7 @@ public partial class ClientDetailed
 
         // Get Emails
         var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
-        emails.ForEach(e => e.User = null);
+        emails.ForEach(e => e.Client = null);
         dto.Emails = null;
 
         // If Addres Then Save Address
@@ -142,7 +142,7 @@ public partial class ClientDetailed
             var added = await _dataProvider.Clients.Add(dto);
             if (added != null)
             {
-                emails.ForEach(e => e.UserId = added.Id);
+                emails.ForEach(e => e.ClientId = added.Id);
                 await _dataProvider.Emails.AddRange(emails);
                 await _getRecords();
             }
@@ -208,7 +208,7 @@ public partial class ClientDetailed
             _emails.Add(new Email()
             {
                 Address = newEmailAddress,
-                UserId = Content.Id,
+                ClientId = Content.Id,
             });
         }
 
@@ -222,7 +222,7 @@ public partial class ClientDetailed
         _emails.Add(new Email()
         {
             Address = string.Empty,
-            UserId = Content.Id
+            ClientId = Content.Id
         });
         await myGrid.RefreshDataAsync();
     }

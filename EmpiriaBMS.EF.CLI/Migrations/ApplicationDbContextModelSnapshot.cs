@@ -188,7 +188,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -562,7 +561,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1524,8 +1523,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                 {
                     b.HasOne("EmpiriaBMS.Models.Models.Address", "Address")
                         .WithMany("Clients")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
                 });
@@ -1696,15 +1694,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Email", b =>
                 {
-                    b.HasOne("EmpiriaBMS.Models.Models.Client", null)
+                    b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
                         .WithMany("Emails")
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "User")
                         .WithMany("Emails")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Client");
 
                     b.Navigation("User");
                 });
