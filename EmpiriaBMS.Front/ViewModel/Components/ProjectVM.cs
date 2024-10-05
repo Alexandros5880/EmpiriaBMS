@@ -261,7 +261,7 @@ public class ProjectVM : BaseVM
 
     public ICollection<Issue> Complains { get; set; }
 
-    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public ICollection<SubConstructor> ProjectsSubConstructors { get; set; }
 
     public ProjectVM()
     {

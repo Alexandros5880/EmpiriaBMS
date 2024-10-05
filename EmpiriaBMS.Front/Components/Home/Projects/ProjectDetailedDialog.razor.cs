@@ -20,6 +20,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     ObservableCollection<ProjectStageVM> _stages = new ObservableCollection<ProjectStageVM>();
     ObservableCollection<UserVM> _pms = new ObservableCollection<UserVM>();
+    private ObservableCollection<SubConstructorVM> _subConstructors = new ObservableCollection<SubConstructorVM>();
 
     private OfferVM _offer = new OfferVM();
     public OfferVM Offer
@@ -143,6 +144,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         await _getOffers();
         await _getStages();
         await _getProjectManagers();
+        await _getSubConstructors();
     }
 
     private async Task _getStages()
@@ -173,6 +175,14 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         vms.ForEach(_offers.Add);
 
         Offer = _offers.FirstOrDefault(o => o.Id == Content.OfferId) ?? null;
+    }
+
+    private async Task _getSubConstructors()
+    {
+        var dtos = await DataProvider.SubConstructors.GetAll();
+        var vms = Mapper.Map<List<SubConstructorVM>>(dtos);
+        _subConstructors.Clear();
+        vms.ForEach(_subConstructors.Add);
     }
     #endregion
 

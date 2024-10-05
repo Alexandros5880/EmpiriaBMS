@@ -1114,12 +1114,12 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.ToTable("ProjectsSubCategories");
                 });
 
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.ProjectSubConstructor", b =>
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.ProjectSubConstractor", b =>
                 {
-                    b.Property<int>("SubContractorId")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int>("SubConstructorId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -1137,11 +1137,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("SubContractorId", "ProjectId");
+                    b.HasKey("ProjectId", "SubConstructorId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("SubConstructorId");
 
-                    b.ToTable("ProjectsSubConstructors");
+                    b.ToTable("ProjectSubConstractors");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Role", b =>
@@ -1209,6 +1209,37 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasIndex("PermissionId");
 
                     b.ToTable("RolesPermissions");
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.SubConstructor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SubConstructor");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SupportiveWork", b =>
@@ -1804,7 +1835,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.ProjectSubConstructor", b =>
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.ProjectSubConstractor", b =>
                 {
                     b.HasOne("EmpiriaBMS.Models.Models.Project", "Project")
                         .WithMany("ProjectsSubConstructors")
@@ -1812,15 +1843,15 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "SubContractor")
+                    b.HasOne("EmpiriaBMS.Models.Models.SubConstructor", "SubConstructor")
                         .WithMany("ProjectsSubConstructors")
-                        .HasForeignKey("SubContractorId")
+                        .HasForeignKey("SubConstructorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Project");
 
-                    b.Navigation("SubContractor");
+                    b.Navigation("SubConstructor");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Role", b =>
@@ -1849,6 +1880,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("Permission");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.SubConstructor", b =>
+                {
+                    b.HasOne("EmpiriaBMS.Models.Models.User", "User")
+                        .WithMany("SubConstructors")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SupportiveWork", b =>
@@ -2046,6 +2088,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("UserRoles");
                 });
 
+            modelBuilder.Entity("EmpiriaBMS.Models.Models.SubConstructor", b =>
+                {
+                    b.Navigation("ProjectsSubConstructors");
+                });
+
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SupportiveWork", b =>
                 {
                     b.Navigation("DailyTime");
@@ -2078,7 +2125,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.Navigation("PersonalTime");
 
-                    b.Navigation("ProjectsSubConstructors");
+                    b.Navigation("SubConstructors");
 
                     b.Navigation("SupportiveWorksEmployees");
 

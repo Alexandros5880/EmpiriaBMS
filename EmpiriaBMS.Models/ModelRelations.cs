@@ -39,18 +39,6 @@ public static class ModelRelations
                .WithMany(c => c.UserRoles)
                .HasForeignKey(sc => sc.RoleId);
 
-        // SubContractors Projects
-        builder.Entity<ProjectSubConstructor>()
-               .HasKey(ps => new { ps.SubContractorId, ps.ProjectId });
-        builder.Entity<ProjectSubConstructor>()
-               .HasOne(ps => ps.SubContractor)
-               .WithMany(s => s.ProjectsSubConstructors)
-               .HasForeignKey(ps => ps.SubContractorId);
-        builder.Entity<ProjectSubConstructor>()
-               .HasOne(ps => ps.Project)
-               .WithMany(p => p.ProjectsSubConstructors)
-               .HasForeignKey(ps => ps.ProjectId);
-
         // Deliverable Employees
         builder.Entity<DeliverableEmployee>()
                .HasKey(de => new { de.DeliverableId, de.EmployeeId });
@@ -87,6 +75,18 @@ public static class ModelRelations
                .WithMany(de => de.DisciplinesEngineers)
                .HasForeignKey(de => de.DisciplineId);
 
+        // Projects SubConstructors
+        builder.Entity<ProjectSubConstractor>()
+               .HasKey(ps => new { ps.ProjectId, ps.SubConstructorId });
+        builder.Entity<ProjectSubConstractor>()
+               .HasOne(ps => ps.Project)
+               .WithMany(p => p.ProjectsSubConstructors)
+               .HasForeignKey(ps => ps.ProjectId);
+        builder.Entity<ProjectSubConstractor>()
+               .HasOne(ps => ps.SubConstructor)
+               .WithMany(s => s.ProjectsSubConstructors)
+               .HasForeignKey(ps => ps.SubConstructorId);
+
         // Offer Project (OneToOne)
         builder.Entity<Offer>()
                .HasOne(a => a.Project)
@@ -107,6 +107,13 @@ public static class ModelRelations
                .WithMany(p => p.Offers)
                .HasForeignKey(i => i.ClientId)
                .OnDelete(DeleteBehavior.Cascade);
+
+        // SubConstructors User
+        builder.Entity<SubConstructor>()
+               .HasOne(i => i.User)
+               .WithMany(p => p.SubConstructors)
+               .HasForeignKey(i => i.UserId)
+               .OnDelete(DeleteBehavior.NoAction);
 
         // Invoices Project
         builder.Entity<Invoice>()

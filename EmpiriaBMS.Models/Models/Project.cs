@@ -46,5 +46,5 @@ public class Project : Entity
 
     public ICollection<Issue>? Complains { get; set; }
 
-    public ICollection<ProjectSubConstructor>? ProjectsSubConstructors { get; set; }
+    public ICollection<ProjectSubConstractor>? ProjectsSubConstructors { get; set; }
 }

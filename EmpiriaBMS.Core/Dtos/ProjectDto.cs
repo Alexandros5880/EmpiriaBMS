@@ -45,5 +45,5 @@ public class ProjectDto : EntityDto
 
     public ICollection<Issue> Complains { get; set; }
 
-    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public ICollection<SubConstructor> ProjectsSubConstructors { get; set; }
 }
