@@ -77,8 +77,8 @@ else
                         @if (_selectedProject != null)
                         {
                             <span class="navigate-outline my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
-                                  style="display: @((_selectedProject?.Offer?.Client?.Address != null ? "block" : "none" ));"
-                                  @onclick="@(async () => await NavigateOnMap(_selectedProject?.Offer?.Client?.Address))" />
+                                  style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
+                                  @onclick="@(async () => await NavigateOnMap(_selectedProject?.Address))" />
 
                             <span class="fluent--delete-28-regular mb-1"
                                   @onclick="@(() => DeleteProject())" />

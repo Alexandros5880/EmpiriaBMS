@@ -52,7 +52,7 @@ public class User : Entity
 
     public ICollection<Issue>? MyIssues { get; set; }
 
-    public ICollection<ProjectSubConstructor>? ProjectsSubConstructors { get; set; }
+    public ICollection<SubConstructor>? SubConstructors { get; set; }
 
     [NotMapped]
     public string FullName => $"{LastName} {MidName} {FirstName}";

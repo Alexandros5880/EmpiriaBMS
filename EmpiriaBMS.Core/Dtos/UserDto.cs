@@ -30,5 +30,5 @@ public class UserDto : EntityDto
 
     public ICollection<RoleDto> Roles { get; set; }
 
-    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public ICollection<SubConstructor> ProjectsSubConstructors { get; set; }
 }

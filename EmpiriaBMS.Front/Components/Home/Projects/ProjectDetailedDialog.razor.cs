@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 using System;
 using System.Collections.ObjectModel;
+using EmpiriaBMS.Front.Components.General;
 
 namespace EmpiriaBMS.Front.Components.Home.Projects;
 public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
@@ -19,6 +20,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
     ObservableCollection<ProjectStageVM> _stages = new ObservableCollection<ProjectStageVM>();
     ObservableCollection<UserVM> _pms = new ObservableCollection<UserVM>();
+    private ObservableCollection<SubConstructorVM> _subConstructors = new ObservableCollection<SubConstructorVM>();
 
     private OfferVM _offer = new OfferVM();
     public OfferVM Offer
@@ -63,6 +65,8 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         if (firstRender)
         {
             await _getRecords();
+
+            await RefreshMap();
 
             StateHasChanged();
         }
@@ -140,6 +144,7 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         await _getOffers();
         await _getStages();
         await _getProjectManagers();
+        await _getSubConstructors();
     }
 
     private async Task _getStages()
@@ -170,6 +175,33 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         vms.ForEach(_offers.Add);
 
         Offer = _offers.FirstOrDefault(o => o.Id == Content.OfferId) ?? null;
+    }
+
+    private async Task _getSubConstructors()
+    {
+        var dtos = await DataProvider.SubConstructors.GetAll();
+        var vms = Mapper.Map<List<SubConstructorVM>>(dtos);
+        _subConstructors.Clear();
+        vms.ForEach(_subConstructors.Add);
+    }
+    #endregion
+
+    #region Map Address
+    private Map _map;
+
+    public async Task RefreshMap()
+    {
+        if (Content.Id != 0 && Content.Address != null)
+        {
+            await _map.SetAddress(Content.Address);
+        }
+    }
+
+    private void _onSearchAddressChange()
+    {
+        var address = _map.GetAddress();
+        if (address != null)
+            Content.Address = address;
     }
     #endregion
 }

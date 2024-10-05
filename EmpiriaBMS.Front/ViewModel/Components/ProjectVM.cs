@@ -227,6 +227,32 @@ public class ProjectVM : BaseVM
         }
     }
 
+    private int? _addressId;
+    public int? AddressId
+    {
+        get => _addressId;
+        set
+        {
+            if (value == _addressId)
+                return;
+            _addressId = value;
+            NotifyPropertyChanged(nameof(AddressId));
+        }
+    }
+
+    private Address _address;
+    public Address Address
+    {
+        get => _address;
+        set
+        {
+            if (value == _address)
+                return;
+            _address = value;
+            NotifyPropertyChanged(nameof(Address));
+        }
+    }
+
     public ICollection<Invoice> Invoices { get; set; }
 
     public ICollection<DailyTime> DailyTime { get; set; }
@@ -235,7 +261,7 @@ public class ProjectVM : BaseVM
 
     public ICollection<Issue> Complains { get; set; }
 
-    public ICollection<ProjectSubConstructor> ProjectsSubConstructors { get; set; }
+    public ICollection<SubConstructor> ProjectsSubConstructors { get; set; }
 
     public ProjectVM()
     {
