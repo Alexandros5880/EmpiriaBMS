@@ -28,6 +28,9 @@ public class User : Entity
 
     public string? Description { get; set; }
 
+    public int? ClientId { get; set; }
+    public Client? Client { get; set; }
+
     public ICollection<Email>? Emails { get; set; }
 
     public ICollection<Project>? PMProjects { get; set; }

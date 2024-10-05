@@ -42,148 +42,56 @@
                 <h4>Main Imfo</h4>
             </FluentStack>
 
-             <!-- Names -->
-            <div class="col-12 row" style="margin: 0 auto;">
-            
-                <!-- FirstName -->
-                <div class="col-xl-4 col-lg-4">
-                    <div class="col-12">
-                        <FluentTextField Style="width:100%; margin:4px;"
-                                         @bind-Value="@Content.FirstName">FirstName<span class="text-danger">*</span></FluentTextField>
-                    </div>
-                    @if (!validFirstName)
-                    {
-                        @if (string.IsNullOrEmpty(@Content.FirstName))
-                        {
-                            <div class="col-12">
-                                <span class="text-warning">Field is required!</span>
-                            </div>
-                        }
-                    }
-                </div>
-
-                <!-- MidName -->
-                <div class="col-xl-4 col-lg-4">
-                    <FluentTextField Style="width:100%; margin:4px;" @bind-Value="@Content.MidName">MidName</FluentTextField>
-                </div>
-
-                <!-- LastName -->
-                <div class="col-xl-4 col-lg-4">
-                    <div class="col-12">
-                        <FluentTextField Style="width:100%; margin:4px;"
-                                         @bind-Value="@Content.LastName">
-                            LastName<span class="text-danger">*</span>
-                        </FluentTextField>
-                    </div>
-                    @if (!validLastName)
-                    {
-                        @if (string.IsNullOrEmpty(@Content.LastName))
-                        {
-                            <div class="col-12">
-                                <span class="text-warning">Field is required!</span>
-                            </div>
-                        }
-                    }
-                </div>
-
-            </div>
-
-            <!-- Phones-->
+            <!-- Name / Phone -->
             <div class="col-12 row" style="margin: 0 auto;">
 
-                <!-- Phone 1 -->
-                <div class="col-xl-4 col-lg-4">
-                    <div class="col-12">
-                        <FluentTextField Style="width:100%; margin:4px;"
-                                         @bind-Value="@Content.Phone1">
-                            Phone1<span class="text-danger">*</span>
-                        </FluentTextField>
-                    </div>
-                    @if (!validPhone1)
-                    {
-                        @if (string.IsNullOrEmpty(@Content.Phone1))
-                        {
-                            <div class="col-12">
-                                <span class="text-warning">Field is required!</span>
-                            </div>
-                        }
-                        else if (!_isValidPhoneNumber(@Content.Phone1))
-                        {
-                            <div class="col-12">
-                                <span class="text-warning">Invalid Phone!</span>
-                            </div>
-                        }
-                    }
-                </div>
-            
-                <!-- Phone 2 -->
-                <div class="col-xl-4 col-lg-4">
-                    <div class="col-12">
-                        <FluentTextField Style="width:100%; margin:4px;"
-                                         @bind-Value="@Content.Phone2">
-                            Phone2
-                        </FluentTextField>
-                    </div>
-                    @if (!validPhone2)
-                    {
-                        @if (!_isValidPhoneNumber(@Content.Phone2) && !string.IsNullOrEmpty(@Content.Phone2))
-                        {
-                            <div class="col-12">
-                                <span class="text-warning">Invalid Phone!</span>
-                            </div>
-                        }
-                    }
-                </div>
-
-                <!-- Phone 3 -->
-                <div class="col-xl-4 col-lg-4">
-                    <div class="col-12">
-                        <FluentTextField Style="width:100%; margin:4px;"
-                                            @bind-Value="@Content.Phone3">
-                            Phone3
-                        </FluentTextField>
-                    </div>
-                    @if (!validPhone3)
-                    {
-                        @if (!_isValidPhoneNumber(@Content.Phone3) && !string.IsNullOrEmpty(@Content.Phone3))
-                        {
-                            <div class="col-12">
-                                <span class="text-warning">Invalid Phone!</span>
-                            </div>
-                        }
-                    }
-                </div>
-        
-            </div>
-
-            <div class="col-12 row" style="margin: 0 auto;">
-            
-                <!-- Proxy Address -->
+                <!-- Name -->
                 <div class="col-xl-6 col-lg-6">
-                    <div class="col-12">
+                    <div>
                         <FluentTextField Style="width:100%; margin:4px;"
-                                         Value="@Content.ProxyAddress"
-                                         @oninput="@((e) => _onProxyAddressChange(e))">
-                            ProxyAddress<span class="text-danger">*</span>
-                        </FluentTextField>
+                                         @bind-Value="@Content.Name">Name<span class="text-danger">*</span></FluentTextField>
                     </div>
-                    @if (!validProxyAddress)
+                    @if (!validName)
                     {
-                        @if (string.IsNullOrEmpty(@Content.ProxyAddress))
+                        @if (string.IsNullOrEmpty(@Content.Name))
                         {
-                            <div class="col-12">
+                            <div>
                                 <span class="text-warning">Field is required!</span>
-                            </div>
-                        }
-                        else if (!_isValidEmail(@Content.ProxyAddress))
-                        {
-                            <div class="col-12">
-                                <span class="text-warning">No valid proxy address!</span>
                             </div>
                         }
                     }
                 </div>
-            
+
+                <!-- Phone -->
+                <div class="col-xl-6 col-lg-6">
+                    <div>
+                        <FluentTextField Style="width:100%; margin:4px;"
+                                         @bind-Value="@Content.Phone">
+                            Phone<span class="text-danger">*</span>
+                        </FluentTextField>
+                    </div>
+                    @if (!validPhone)
+                    {
+                        @if (string.IsNullOrEmpty(@Content.Phone))
+                        {
+                            <div>
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                        else if (!_isValidPhoneNumber(@Content.Phone))
+                        {
+                            <div>
+                                <span class="text-warning">Invalid Phone!</span>
+                            </div>
+                        }
+                    }
+                </div>
+
+            </div>
+
+            <!-- Company / Description-->
+            <div class="col-12 row" style="margin: 0 auto;">
+
                 <!-- Company Name -->
                 <div class="col-xl-6 col-lg-6">
                     <div class="col-12">
@@ -200,14 +108,17 @@
                         }
                     }
                 </div>
-        
-            </div>
 
-            <!-- Description -->
-            <div class="col-12 row" style="margin: 0 auto;">
-                <div class="col-12">
-                    <FluentTextArea Style="width:100%; margin:4px;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+                <!-- Description -->
+                <div class="col-xl-6 col-lg-6">
+                    <FluentTextArea Style="width:100%; margin:4px;"
+                                    @bind-Value="@Content.Description"
+                                    Rows="3"
+                                    Resize="TextAreaResize.Vertical">
+                        Description:
+                    </FluentTextArea>
                 </div>
+
             </div>
 
         </div>

@@ -61,13 +61,13 @@ public partial class OfferDetailed
         {
             var clientDto = Mapping.Mapper.Map<ClientDto>(Content.Client);
             Client = _mapper.Map<ClientVM>(clientDto);
-            _clientCombo.Value = $"{Client.CompanyName} - {Client.FullName}";
+            _clientCombo.Value = $"{Client.CompanyName} - {Client.Name}";
             _clientCombo.SelectedOption = Client;
         }
         else if (Content.ClientId != 0)
         {
             Client = _clients.FirstOrDefault(c => c.Id == Content.ClientId);
-            _clientCombo.Value = $"{Client.CompanyName} - {Client.FullName}";
+            _clientCombo.Value = $"{Client.CompanyName} - {Client.Name}";
             _clientCombo.SelectedOption = Client;
         }
 

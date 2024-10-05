@@ -1,9 +1,10 @@
-﻿using EmpiriaBMS.Models.Enum;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
-public class ClientVM : UserVM
+public class ClientVM : BaseVM
 {
     // Not Mapped
     private TimeSpan _time = TimeSpan.Zero;
@@ -42,6 +43,32 @@ public class ClientVM : UserVM
                 return;
             _name = value;
             NotifyPropertyChanged(nameof(Name));
+        }
+    }
+
+    private string _phone;
+    public string Phone
+    {
+        get => _phone;
+        set
+        {
+            if (value == _phone)
+                return;
+            _phone = value;
+            NotifyPropertyChanged(nameof(Phone));
+        }
+    }
+
+    private string _description;
+    public string Description
+    {
+        get => _description;
+        set
+        {
+            if (value == _description)
+                return;
+            _description = value;
+            NotifyPropertyChanged(nameof(Description));
         }
     }
 
@@ -116,6 +143,7 @@ public class ClientVM : UserVM
 
     public string AddressFormated => Address != null ? Address.FormattedAddress : "";
 
-    public string FullName => $"{LastName} {MidName} {FirstName}";
+    public ICollection<User>? Users { get; set; }
 
+    public ICollection<Email>? Emails { get; set; }
 }

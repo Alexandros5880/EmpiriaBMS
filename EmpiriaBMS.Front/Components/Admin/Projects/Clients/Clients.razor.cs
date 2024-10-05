@@ -14,7 +14,7 @@ public partial class Clients
     #region Data Grid
     private List<ClientVM> _records = new List<ClientVM>();
     private string _filterString = string.Empty;
-    IQueryable<ClientVM>? FilteredItems => _records?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ClientVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
     private ClientVM _selectedRecord = new ClientVM();
@@ -97,7 +97,7 @@ public partial class Clients
     {
         DialogParameters parameters = new()
         {
-            Title = $"Edit {record.FullName}",
+            Title = $"Edit {record.Name}",
             PrimaryActionEnabled = true,
             SecondaryActionEnabled = true,
             PrimaryAction = "Save",
@@ -143,7 +143,7 @@ public partial class Clients
 
     private async Task _delete(ClientVM record)
     {
-        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the client {record.FullName}?", "Yes", "No", "Deleting record...");
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the client {record.Name}?", "Yes", "No", "Deleting record...");
 
         DialogResult result = await dialog.Result;
 

@@ -161,11 +161,60 @@ public class UserVM : BaseVM
         }
     }
 
+    private int? _clientId;
+    public int? ClientId
+    {
+        get => _clientId;
+        set
+        {
+            if (value == _clientId)
+                return;
+            _clientId = value;
+            NotifyPropertyChanged(nameof(ClientId));
+        }
+    }
+
+    private Client _client;
+    public Client Client
+    {
+        get => _client;
+        set
+        {
+            if (value == _client)
+                return;
+            _client = value;
+            NotifyPropertyChanged(nameof(Client));
+        }
+    }
+
+    public ICollection<Email>? Emails { get; set; }
+
+    public ICollection<Project>? PMProjects { get; set; }
+
+    public ICollection<Discipline>? Disciplines { get; set; }
+
+    public ICollection<UserRole>? UserRoles { get; set; }
+
+    public ICollection<DeliverableEmployee>? DeliverablesEmployees { get; set; }
+
+    public ICollection<SupportiveWorkEmployee>? SupportiveWorksEmployees { get; set; }
+
+    public ICollection<DisciplineEngineer>? DisciplinesEngineers { get; set; }
+
+    public ICollection<DailyTime>? DailyTime { get; set; }
+
+    public ICollection<DailyTime>? PersonalTime { get; set; }
+
+    public ICollection<DailyTime>? TrainingTime { get; set; }
+
+    public ICollection<DailyTime>? CorporateEventTime { get; set; }
+
+    public ICollection<Issue>? MyIssues { get; set; }
+
+    public ICollection<SubConstructor>? SubConstructors { get; set; }
+
+    [NotMapped]
     public string FullName => $"{LastName} {MidName} {FirstName}";
-
-    public ICollection<Email> Emails { get; set; }
-
-    public List<SubConstructor> ProjectsSubConstructors { get; set; }
 
     [NotMapped]
     public ICollection<int>? MyRolesIds { get; set; }

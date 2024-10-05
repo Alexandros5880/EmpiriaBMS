@@ -1,24 +1,29 @@
 ﻿using EmpiriaBMS.Core.Dtos.Base;
 using EmpiriaBMS.Models.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Core.Dtos;
 
 public class UserDto : EntityDto
 {
-    public string ProxyAddress { get; set; }
+    // MicrosoftTeams Email
+    public string? ProxyAddress { get; set; }
 
     public string? PasswordHash { get; set; }
 
-    public string LastName { get; set; }
+    [Required]
+    public string? LastName { get; set; }
 
-    public string FirstName { get; set; }
+    [Required]
+    public string? FirstName { get; set; }
 
     public string? MidName { get; set; }
 
     public string? TeamsObjectId { get; set; }
 
-    public string Phone1 { get; set; }
+    [Required]
+    public string? Phone1 { get; set; }
 
     public string? Phone2 { get; set; }
 
@@ -26,9 +31,38 @@ public class UserDto : EntityDto
 
     public string? Description { get; set; }
 
-    public ICollection<Email> Emails { get; set; }
+    public int? ClientId { get; set; }
+    public Client? Client { get; set; }
 
+    public ICollection<Email>? Emails { get; set; }
+
+    public ICollection<Project>? PMProjects { get; set; }
+
+    public ICollection<Discipline>? Disciplines { get; set; }
+
+    public ICollection<UserRole>? UserRoles { get; set; }
+
+    public ICollection<DeliverableEmployee>? DeliverablesEmployees { get; set; }
+
+    public ICollection<SupportiveWorkEmployee>? SupportiveWorksEmployees { get; set; }
+
+    public ICollection<DisciplineEngineer>? DisciplinesEngineers { get; set; }
+
+    public ICollection<DailyTime>? DailyTime { get; set; }
+
+    public ICollection<DailyTime>? PersonalTime { get; set; }
+
+    public ICollection<DailyTime>? TrainingTime { get; set; }
+
+    public ICollection<DailyTime>? CorporateEventTime { get; set; }
+
+    public ICollection<Issue>? MyIssues { get; set; }
+
+    public ICollection<SubConstructor>? SubConstructors { get; set; }
+
+    [NotMapped]
+    public string FullName => $"{LastName} {MidName} {FirstName}";
+
+    [NotMapped]
     public ICollection<RoleDto> Roles { get; set; }
-
-    public ICollection<SubConstructor> ProjectsSubConstructors { get; set; }
 }
