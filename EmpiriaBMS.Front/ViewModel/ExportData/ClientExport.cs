@@ -11,23 +11,11 @@ public class ClientExport : IInport<ClientVM>
 
     public string Address { get; set; }
 
-    public string ProxyAddress { get; set; }
 
-    public string PasswordHash { get; set; }
+    public string Name { get; set; }
 
-    public string LastName { get; set; }
 
-    public string FirstName { get; set; }
-
-    public string MidName { get; set; }
-
-    public string TeamsObjectId { get; set; }
-
-    public string Phone1 { get; set; }
-
-    public string Phone2 { get; set; }
-
-    public string Phone3 { get; set; }
+    public string Phone { get; set; }
 
     public string Description { get; set; }
 
@@ -36,15 +24,8 @@ public class ClientExport : IInport<ClientVM>
         CompanyName = model.CompanyName;
         AddressId = model.AddressId ?? 0;
         Address = model.Address?.FormattedAddress ?? "";
-        ProxyAddress = model.ProxyAddress;
-        PasswordHash = model.PasswordHash ?? "";
-        LastName = model.LastName;
-        MidName = model.MidName ?? "";
-        FirstName = model.FirstName;
-        TeamsObjectId = model.TeamsObjectId ?? "";
-        Phone1 = model.Phone1;
-        Phone2 = model.Phone2 ?? "";
-        Phone3 = model.Phone3 ?? "";
+        Name = model.Name;
+        Phone = model.Phone;
         Description = model.Description ?? "";
     }
 
@@ -57,15 +38,9 @@ public class ClientExport : IInport<ClientVM>
     {
         CompanyName = CompanyName,
         AddressId = AddressId,
-        ProxyAddress = ProxyAddress,
-        PasswordHash = PasswordHash,
-        LastName = LastName,
-        MidName = MidName,
-        FirstName = FirstName,
-        TeamsObjectId = TeamsObjectId,
-        Phone1 = Phone1,
-        Phone2 = Phone2,
-        Phone3 = Phone3,
-        Description = Description,
+        Name = Name,
+        Phone = Phone,
+        Description = Description
     };
+
 }

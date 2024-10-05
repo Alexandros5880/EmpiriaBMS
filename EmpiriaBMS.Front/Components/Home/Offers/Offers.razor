@@ -58,7 +58,7 @@
                                         Items="@_clients"
                                         TOption="ClientVM"
                                         OptionValue="@((t) => t.Id.ToString())"
-                                        OptionText="@(c => $"{c.CompanyName} - {c.FullName}")"
+                                        OptionText="@(c => $"{c.CompanyName} - {c.Name}")"
                                         OptionSelected="@(i => i.Id == _selectedClient?.Id)"
                                         SelectedOptionChanged="@(async (o) => await _onClientSelectionChanged(o))" />
                     </div>

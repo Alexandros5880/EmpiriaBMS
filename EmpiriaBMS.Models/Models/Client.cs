@@ -4,12 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmpiriaBMS.Models.Models;
 
-public class Client : User
+public class Client : Entity
 {
     [Required]
-    public string CompanyName { get; set; }
+    public string? CompanyName { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
+
+    public string? Phone { get; set; }
+
+    public string? Description { get; set; }
 
     public int? AddressId { get; set; }
     public Address? Address { get; set; }
@@ -26,6 +30,7 @@ public class Client : User
 
     public ICollection<Offer>? Offers { get; set; }
 
-    [NotMapped]
-    public new string FullName => $"{LastName} {MidName} {FirstName}";
+    public ICollection<User>? Users { get; set; }
+
+    public ICollection<Email>? Emails { get; set; }
 }

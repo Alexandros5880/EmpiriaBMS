@@ -15,7 +15,6 @@ public class TenderDataDto
     public double ProjectPrice { get; set; } // Sum of offers OfferPrice
     public double ProjectPudgedPrice { get; set; } // Sum of offers PudgedPrice
     public string ClientCompanyName { get; set; }
-    public string ClientFullName { get; set; }
+    public string ClientName { get; set; }
     public string ClientPhone { get; set; }
-    public string ClientEmail { get; set; }
 }
