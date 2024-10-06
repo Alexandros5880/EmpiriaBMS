@@ -57,7 +57,7 @@ public partial class SubConstructorDetailed
             {
                 _emails.ForEach(e => e.SubConstructorId = added.Id);
                 emailsDtos.ForEach(e => e.SubConstructorId = added.Id);
-                await _dataProvider.SubConstructors.AddEmailsRange(emailsDtos);
+                await _dataProvider.SubConstructors.UpsertEmails(added.Id, emailsDtos);
             }
             added.Emails = _emails;
             await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(added));
@@ -67,7 +67,7 @@ public partial class SubConstructorDetailed
             var updated = await _dataProvider.SubConstructors.Update(dto);
             _emails.ForEach(e => e.SubConstructorId = updated.Id);
             emailsDtos.ForEach(e => e.SubConstructorId = updated.Id);
-            await _dataProvider.SubConstructors.UpdateEmails(dto.Id, emailsDtos);
+            await _dataProvider.SubConstructors.UpsertEmails(updated.Id, emailsDtos);
             updated.Emails = _emails;
             await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(updated));
         }

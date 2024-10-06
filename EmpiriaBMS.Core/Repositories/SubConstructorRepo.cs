@@ -31,13 +31,53 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
                                  .ToListAsync();
     }
 
-    public async Task UpdateEmails(int subconstructorId, List<EmailDto> emails)
+    public async Task UpsertEmails(int subconstructorId, List<EmailDto> emails)
     {
-        if (subconstructorId == 0)
-            return;
+        try
+        {
+            if (subconstructorId == 0)
+                return;
 
-        await RemoveEmailsAll(subconstructorId, true);
-        await AddEmailsRange(emails);
+            List<Email> prevEmails;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                prevEmails = await _context.Set<Email>()
+                        .Where(e => e.SubConstructorId == subconstructorId)
+                        .ToListAsync();
+            }
+
+            var updatedIds = emails.Select(e => e.Id).ToList();
+
+            // Updated the existed
+            foreach (var prevEmail in prevEmails)
+            {
+                if (!updatedIds.Contains(prevEmail.Id))
+                {
+                    await DeleteEmail(prevEmail.Id);
+                } else
+                {
+                    var updated = emails.FirstOrDefault(e => e.Id == prevEmail.Id);
+
+                    if (updated == null)
+                        continue;
+
+                    using (var _context = _dbContextFactory.CreateDbContext())
+                    {
+                        _context.Entry(prevEmail).CurrentValues.SetValues(Mapping.Mapper.Map<Email>(updated));
+                        await SaveChangesAsync();
+                    }
+
+                    emails.Remove(updated);
+                }
+            }
+
+            await AddEmailsRange(emails);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On SubConstructorRepo.UpdateEmails(int subconstructorId, List<EmailDto> emails): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
     }
 
     public async Task RemoveEmailsAll(int subconstructorId, bool definitely = false)
@@ -81,7 +121,6 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                emails.ToList().ForEach(e => e.Id = 0);
                 var data = Mapping.Mapper.Map<List<Email>>(emails);
                 await _context.Set<Email>().AddRangeAsync(data);
                 await _context.SaveChangesAsync();
@@ -97,8 +136,8 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
     {
         try
         {
-            if (emailId == null)
-                throw new ArgumentNullException(nameof(emailId));
+            if (emailId == 0)
+                throw new ArgumentException($"{nameof(emailId)} == 0");
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {

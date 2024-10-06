@@ -124,13 +124,54 @@ public class ClientRepo : Repository<ClientDto, Client>
                                  .ToListAsync();
     }
 
-    public async Task UpdateEmails(int clientId, List<EmailDto> emails)
+    public async Task UpsertEmails(int clientId, List<EmailDto> emails)
     {
-        if (clientId == 0)
-            return;
+        try
+        {
+            if (clientId == 0)
+                return;
 
-        await RemoveEmailsAll(clientId, true);
-        await AddEmailsRange(emails);
+            List<Email> prevEmails;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                prevEmails = await _context.Set<Email>()
+                        .Where(e => e.ClientId == clientId)
+                        .ToListAsync();
+            }
+
+            var updatedIds = emails.Select(e => e.Id).ToList();
+
+            // Updated the existed
+            foreach (var prevEmail in prevEmails)
+            {
+                if (!updatedIds.Contains(prevEmail.Id))
+                {
+                    await DeleteEmail(prevEmail.Id);
+                }
+                else
+                {
+                    var updated = emails.FirstOrDefault(e => e.Id == prevEmail.Id);
+
+                    if (updated == null)
+                        continue;
+
+                    using (var _context = _dbContextFactory.CreateDbContext())
+                    {
+                        _context.Entry(prevEmail).CurrentValues.SetValues(Mapping.Mapper.Map<Email>(updated));
+                        await SaveChangesAsync();
+                    }
+
+                    emails.Remove(updated);
+                }
+            }
+
+            await AddEmailsRange(emails);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.UpdateEmails(int clientId, List<EmailDto> emails): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
     }
 
     public async Task RemoveEmailsAll(int clientId, bool definitely = false)
@@ -174,7 +215,6 @@ public class ClientRepo : Repository<ClientDto, Client>
         {
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                emails.ToList().ForEach(e => e.Id = 0);
                 var data = Mapping.Mapper.Map<List<Email>>(emails);
                 await _context.Set<Email>().AddRangeAsync(data);
                 await _context.SaveChangesAsync();
