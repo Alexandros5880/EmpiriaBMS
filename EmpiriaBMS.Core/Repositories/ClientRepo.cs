@@ -124,36 +124,65 @@ public class ClientRepo : Repository<ClientDto, Client>
                                  .ToListAsync();
     }
 
-    public async Task RemoveEmailsAll(int clientId)
+    public async Task UpdateEmails(int clientId, List<EmailDto> emails)
+    {
+        if (clientId == 0)
+            return;
+
+        await RemoveEmailsAll(clientId, true);
+        await AddEmailsRange(emails);
+    }
+
+    public async Task RemoveEmailsAll(int clientId, bool definitely = false)
     {
         if (clientId == 0)
             return;
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var prevEmails = await _context.Set<Email>()
-                .Where(r => !r.IsDeleted)
-                .Where(e => e.ClientId == clientId)
-                .ToListAsync();
-            foreach (var e in prevEmails)
+            try
             {
-                if (e == null)
-                    continue;
-                await DeleteEmail(e.Id);
+                var prevEmails = await _context.Set<Email>()
+                    .Where(r => !r.IsDeleted)
+                    .Where(e => e.ClientId == clientId)
+                    .ToListAsync();
+                if (definitely)
+                {
+                    _context.Set<Email>().RemoveRange(prevEmails);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    foreach (var e in prevEmails)
+                    {
+                        if (e == null)
+                            continue;
+                        await DeleteEmail(e.Id);
+                    }
+                }
             }
-            //_context.Set<Email>().RemoveRange(prevEmails);
-            //await _context.SaveChangesAsync();
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception On ClientRepo.RemoveEmailsAll(emailId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            }
         }
     }
 
     public async Task AddEmailsRange(IList<EmailDto> emails)
     {
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            emails.ToList().ForEach(e => e.Id = 0);
-            var data = Mapping.Mapper.Map<List<Email>>(emails);
-            await _context.Set<Email>().AddRangeAsync(data);
-            await _context.SaveChangesAsync();
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                emails.ToList().ForEach(e => e.Id = 0);
+                var data = Mapping.Mapper.Map<List<Email>>(emails);
+                await _context.Set<Email>().AddRangeAsync(data);
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.AddEmailsRange(emailId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 

@@ -46,15 +46,17 @@ public partial class SubConstructorDetailed
         if (!valid) return;
 
         SubConstructorDto dto = _mapper.Map<SubConstructorDto>(Content);
+
         dto.Emails = null;
+        var emailsDtos = Mapping.Mapper.Map<List<EmailDto>>(_emails);
 
         if (Content.Id == 0)
         {
             var added = await _dataProvider.SubConstructors.Add(dto);
             if (added != null)
             {
-                _emails.ForEach(e => e.ClientId = added.Id);
-                var emailsDtos = Mapping.Mapper.Map<List<EmailDto>>(_emails);
+                _emails.ForEach(e => e.SubConstructorId = added.Id);
+                emailsDtos.ForEach(e => e.SubConstructorId = added.Id);
                 await _dataProvider.SubConstructors.AddEmailsRange(emailsDtos);
             }
             added.Emails = _emails;
@@ -63,9 +65,9 @@ public partial class SubConstructorDetailed
         else
         {
             var updated = await _dataProvider.SubConstructors.Update(dto);
-            await _dataProvider.SubConstructors.RemoveEmailsAll(dto.Id);
-            var emailsDtos = Mapping.Mapper.Map<List<EmailDto>>(_emails);
-            await _dataProvider.SubConstructors.AddEmailsRange(emailsDtos);
+            _emails.ForEach(e => e.SubConstructorId = updated.Id);
+            emailsDtos.ForEach(e => e.SubConstructorId = updated.Id);
+            await _dataProvider.SubConstructors.UpdateEmails(dto.Id, emailsDtos);
             updated.Emails = _emails;
             await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(updated));
         }
