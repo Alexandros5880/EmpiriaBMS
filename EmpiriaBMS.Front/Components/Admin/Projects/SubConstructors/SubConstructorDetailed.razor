@@ -1,0 +1,66 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
+@using EmpiriaBMS.Models.Models
+@using EmpiriaBMS.Front.Services
+
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
+@inject IDialogService _dialogService
+@inject Logging.LoggerManager Logger
+
+<div class="row" style="margin: 0 auto;">
+
+    @if (DisplayTitle)
+    {
+        @* Header *@
+        <div class="col-12">
+            <FluentLabel Typo="Typography.PaneHeader">
+                @if (Content.Id == 0)
+                {
+                    <h3>Add SubConstructor</h3>
+                }
+                else
+                {
+                    <h3>Edit SubConstructor</h3>
+                }
+            </FluentLabel>
+        </div>
+    }
+
+    @* Body *@
+    <div class="col-12 row" style="margin: 0 auto;">
+
+        <!-- Name -->
+        <div class="col-xl-6 col-lg-6">
+            <div>
+                <FluentTextField Style="width:100%; margin:4px;"
+                                 @bind-Value="@Content.Name">Name<span class="text-danger">*</span></FluentTextField>
+            </div>
+            @if (!validName)
+            {
+                @if (string.IsNullOrEmpty(@Content.Name))
+                {
+                    <div>
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            }
+        </div>
+
+    </div>
+
+    @if (DisplayActions)
+    {
+        @* Footer *@
+        <div class="col-12 row" style="margin: 0 auto;">
+            <div class="col-12 row" style="margin: 0 auto;">
+                <FluentFooter>
+                    <div class="w-100 d-flex justify-content-between">
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+                    </div>
+                </FluentFooter>
+            </div>
+        </div>
+    }
+
+</div>
