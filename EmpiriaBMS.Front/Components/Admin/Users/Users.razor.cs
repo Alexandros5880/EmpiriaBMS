@@ -65,20 +65,7 @@ public partial class Users
         if (result.Data is not null)
         {
             UserVM vm = result.Data as UserVM;
-            var emails = Mapping.Mapper.Map<List<EmailDto>>(vm.Emails);
-            emails.ForEach(e => e.User = null);
-            vm.Emails = null;
-            var myRolesIds = vm.MyRolesIds;
-            var dto = Mapper.Map<UserDto>(vm);
-            var added = await DataProvider.Users.Add(dto);
-            if (added != null)
-            {
-                if (myRolesIds != null)
-                    await DataProvider.Users.UpdateRoles(added.Id, myRolesIds);
-                emails.ForEach(e => e.UserId = added.Id);
-                await DataProvider.Users.AddEmailsRange(emails);
-                await _getRecords();
-            }
+            _records.Insert(0, vm);
         }
     }
 
@@ -87,8 +74,8 @@ public partial class Users
         DialogParameters parameters = new()
         {
             Title = $"Edit {record.FullName}",
-            PrimaryActionEnabled = false,
-            SecondaryActionEnabled = false,
+            PrimaryActionEnabled = true,
+            SecondaryActionEnabled = true,
             PrimaryAction = "Save",
             SecondaryAction = "Cancel",
             TrapFocus = true,
@@ -104,20 +91,10 @@ public partial class Users
         if (result.Data is not null)
         {
             UserVM vm = result.Data as UserVM;
-            // Update Password Hash
-            var password = vm.Password;
-            vm.PasswordHash = password != null ? PasswordHasher.HashPassword(password) : record.PasswordHash;
-            var emails = Mapping.Mapper.Map<List<EmailDto>>(vm.Emails);
-            emails.ForEach(e => e.User = null);
-            vm.Emails = null;
-            var myRolesIds = vm.MyRolesIds;
-            var dto = Mapper.Map<UserDto>(vm);
-            await DataProvider.Users.Update(dto);
-            if (myRolesIds != null)
-                await DataProvider.Users.UpdateRoles(dto.Id, myRolesIds);
-            await DataProvider.Users.RemoveEmailsAll(dto.Id);
-            await DataProvider.Users.AddEmailsRange(emails);
-            await _getRecords();
+            var old = _records.FirstOrDefault(r => r.Id == vm.Id);
+            var index = _records.IndexOf(old);
+            _records.Remove(old);
+            _records.Insert(index, vm);
         }
     }
 

@@ -7,7 +7,7 @@
 @inject IDialogService _dialogService
 @inject Logging.LoggerManager Logger
 
-<div class="row" style="width: 94% !important; height: 96% !important; margin: 0 auto; margin-bottom: 4px;">
+<div class="row">
 
     <!-- Header-->
     @if (Title != null)
@@ -24,7 +24,7 @@
 
     <!-- Body-->
     <div class="col-12">
-        <div class="row" style="height: @((Height != null ? Height : "84%")); width: 100%; overflow-y: auto; overflow-x: hidden;">
+        <div class="row" style="height: min(70vh, 800px); overflow-y: auto;">
 
             <!-- Names -->
             <div class="col-12 row">
@@ -180,123 +180,122 @@
                 </div>
             </div>
 
-            <div class="col-12 row">
-                <!-- Roles-->
-                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))" style="margin-top: 4px;">
-                    <div class="row">
+            <!-- Roles-->
+            <div class="col12" style="margin-top: 4px;">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Select Roles:</h4>
+                    </div>
+                    <div class="col-12 row">
                         <div class="col-12">
-                            <h4>Select Roles:</h4>
+                            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-left: 10px;">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterRoleString"
+                                              Placeholder="Search..."
+                                              @oninput="@HandleRoleFilter" />
+                            </FluentStack>
                         </div>
-                        <div class="col-12 row">
-                            <div class="col-12">
-                                <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-left: 10px;">
-                                    <FluentSearch type="search"
-                                                  Autofocus=true
-                                                  @bind-Value="@_filterRoleString"
-                                                  Placeholder="Search..."
-                                                  @oninput="@HandleRoleFilter" />
-                                </FluentStack>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <FluentDataGrid Items="@FilteredRoles"
-                                        ResizableColumns=true
-                                        Pagination="@paginationRoles"
-                                        TGridItem="RoleVM"
-                                        GridTemplateColumns="100px auto"
-                                        Style="height: 240px;">
-
-                            <TemplateColumn Title="Selected">
-                                <FluentCheckbox TValue="bool"
-                                                ValueChanged="@((val) => _onRoleSelectionChange(context.Id, val))"
-                                                Value="@context.IsSelected" />
-                            </TemplateColumn>
-
-                            <PropertyColumn Property="@(p => p.Name)" Sortable="true" Title="Name" Align="@Align.Start" />
-
-                        </FluentDataGrid>
-                    </div>
-                    <div style="min-width: 50%;">
-                        <FluentPaginator State="@paginationRoles">
-                            <SummaryTemplate>
-                                <strong>@(paginationRoles.TotalItemCount ?? 0)</strong> rows
-                            </SummaryTemplate>
-                            <PaginationTextTemplate>
-                                <strong>@(paginationRoles.CurrentPageIndex + 1)</strong> / <strong>@(paginationRoles.LastPageIndex + 1)</strong>
-                            </PaginationTextTemplate>
-                        </FluentPaginator>
                     </div>
                 </div>
-                <!-- Emails -->
-                <div class="@((!Vertical ? "col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" : "col-12"))" style="margin-top: 4px;">
-                    <div class="row">
-                        <div class="col-12">
-                            <h4>Emails</h4>
-                            @if (!validEmails)
-                            {
-                                <span class="text-warning">At least one email required!</span>
-                            }
+                <div>
+                    <FluentDataGrid Items="@FilteredRoles"
+                                    ResizableColumns=true
+                                    Pagination="@paginationRoles"
+                                    TGridItem="RoleVM"
+                                    GridTemplateColumns="100px auto"
+                                    Style="height: 240px;">
+
+                        <TemplateColumn Title="Selected">
+                            <FluentCheckbox TValue="bool"
+                                            ValueChanged="@((val) => _onRoleSelectionChange(context.Id, val))"
+                                            Value="@context.IsSelected" />
+                        </TemplateColumn>
+
+                        <PropertyColumn Property="@(p => p.Name)" Sortable="true" Title="Name" Align="@Align.Start" />
+
+                    </FluentDataGrid>
+                </div>
+                <div style="min-width: 50%;">
+                    <FluentPaginator State="@paginationRoles">
+                        <SummaryTemplate>
+                            <strong>@(paginationRoles.TotalItemCount ?? 0)</strong> rows
+                        </SummaryTemplate>
+                        <PaginationTextTemplate>
+                            <strong>@(paginationRoles.CurrentPageIndex + 1)</strong> / <strong>@(paginationRoles.LastPageIndex + 1)</strong>
+                        </PaginationTextTemplate>
+                    </FluentPaginator>
+                </div>
+            </div>
+
+            <!-- Emails -->
+            <div class="col-12" style="margin-top: 4px;">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Emails</h4>
+                        @if (!validEmails)
+                        {
+                            <span class="text-warning">At least one email required!</span>
+                        }
+                    </div>
+                    <div class="col-12 row">
+                        <div class="col-6">
+                            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-left: 10px;">
+                                <FluentSearch type="search"
+                                              Autofocus=true
+                                              @bind-Value="@_filterEmailString"
+                                              Placeholder="Search..."
+                                              @oninput="@HandleEmailsFilter" />
+                            </FluentStack>
                         </div>
-                        <div class="col-12 row">
-                            <div class="col-6">
-                                <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-left: 10px;">
-                                    <FluentSearch type="search"
-                                                  Autofocus=true
-                                                  @bind-Value="@_filterEmailString"
-                                                  Placeholder="Search..."
-                                                  @oninput="@HandleEmailsFilter" />
-                                </FluentStack>
-                            </div>
-                            <div class="col-6">
-                                <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
-                                    <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _addEmail())">Add</FluentButton>
-                                </FluentStack>
-                            </div>
+                        <div class="col-6">
+                            <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                                <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _addEmail())">Add</FluentButton>
+                            </FluentStack>
                         </div>
                     </div>
-                    <div>
-                        <FluentDataGrid @ref="@myEmailsGrid"
-                                        Items="@FilteredEmails"
-                                        ResizableColumns=true
-                                        Pagination="@paginationEmails"
-                                        TGridItem="Email"
-                                        GridTemplateColumns="auto 100px"
-                                        Style="height: 240px;">
+                </div>
+                <div>
+                    <FluentDataGrid @ref="@myEmailsGrid"
+                                    Items="@FilteredEmails"
+                                    ResizableColumns=true
+                                    Pagination="@paginationEmails"
+                                    TGridItem="Email"
+                                    GridTemplateColumns="auto 100px"
+                                    Style="height: 240px;">
 
-                            <TemplateColumn Title="Address" Sortable="true" Style="text-wrap: wrap;">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <FluentTextField Value="@context.Address"
-                                                         TextFieldType="TextFieldType.Email"
-                                                         @oninput="@((e) => _onEmailAddressChange(context.Address, e))"
-                                                         Style="width: 300px;" />
-                                    </div>
-                                    <div class="col-12">
-                                        @if (!_isValidEmail(@context.Address))
-                                        {
-                                            <span class="text-warning">No valid email!</span>
-                                        }
-                                    </div>
+                        <TemplateColumn Title="Address" Sortable="true" Style="text-wrap: wrap;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <FluentTextField Value="@context.Address"
+                                                     TextFieldType="TextFieldType.Email"
+                                                     @oninput="@((e) => _onEmailAddressChange(context.Address, e))"
+                                                     Style="width: 300px;" />
                                 </div>
-                            </TemplateColumn>
+                                <div class="col-12">
+                                    @if (!_isValidEmail(@context.Address))
+                                    {
+                                        <span class="text-warning">No valid email!</span>
+                                    }
+                                </div>
+                            </div>
+                        </TemplateColumn>
 
-                            <TemplateColumn Title="Actions" Align="@Align.End">
-                                <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _deleteEmail(context))" />
-                            </TemplateColumn>
+                        <TemplateColumn Title="Actions" Align="@Align.End">
+                            <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _deleteEmail(context))" />
+                        </TemplateColumn>
 
-                        </FluentDataGrid>
-                    </div>
-                    <div style="min-width: 50%;">
-                        <FluentPaginator State="@paginationEmails">
-                            <SummaryTemplate>
-                                <strong>@(paginationEmails.TotalItemCount ?? 0)</strong> rows
-                            </SummaryTemplate>
-                            <PaginationTextTemplate>
-                                <strong>@(paginationEmails.CurrentPageIndex + 1)</strong> / <strong>@(paginationEmails.LastPageIndex + 1)</strong>
-                            </PaginationTextTemplate>
-                        </FluentPaginator>
-                    </div>
+                    </FluentDataGrid>
+                </div>
+                <div style="min-width: 50%;">
+                    <FluentPaginator State="@paginationEmails">
+                        <SummaryTemplate>
+                            <strong>@(paginationEmails.TotalItemCount ?? 0)</strong> rows
+                        </SummaryTemplate>
+                        <PaginationTextTemplate>
+                            <strong>@(paginationEmails.CurrentPageIndex + 1)</strong> / <strong>@(paginationEmails.LastPageIndex + 1)</strong>
+                        </PaginationTextTemplate>
+                    </FluentPaginator>
                 </div>
             </div>
 
@@ -304,11 +303,14 @@
     </div>
 
     <!-- Footer-->
-    <div class="col-12">
-        <FluentStack VerticalAlignment="VerticalAlignment.Center">
-            <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
-            <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
-        </FluentStack>
-    </div>
+    @if (DisplayActions)
+    {
+        <div class="col-12">
+            <FluentStack VerticalAlignment="VerticalAlignment.Center">
+                <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+                <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+            </FluentStack>
+        </div>
+    }
 
 </div>

@@ -16,9 +16,6 @@ public partial class ClientDetailed
     public ClientVM Content { get; set; } = default!;
 
     [Parameter]
-    public EventCallback<ClientVM> OnSave { get; set; }
-
-    [Parameter]
     public EventCallback OnCancel { get; set; }
 
     [Parameter]
@@ -77,7 +74,6 @@ public partial class ClientDetailed
                 await _dataProvider.Clients.UpsertEmails(added.Id, emailsDtos);
             }
             added.Emails = _emails;
-            await OnSave.InvokeAsync(_mapper.Map<ClientVM>(added));
         }
         else
         {
@@ -86,7 +82,6 @@ public partial class ClientDetailed
             emailsDtos.ForEach(e => e.ClientId = updated.Id);
             await _dataProvider.Clients.UpsertEmails(updated.Id, emailsDtos);
             updated.Emails = _emails;
-            await OnSave.InvokeAsync(_mapper.Map<ClientVM>(updated));
         }
 
         Content.Emails = _emails;
