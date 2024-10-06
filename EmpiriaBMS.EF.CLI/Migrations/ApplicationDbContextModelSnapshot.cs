@@ -561,12 +561,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("SubConstructorId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("SubConstructorId");
 
                     b.HasIndex("UserId");
 
@@ -1276,6 +1281,10 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1283,6 +1292,10 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1699,12 +1712,19 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("EmpiriaBMS.Models.Models.SubConstructor", "SubConstructor")
+                        .WithMany("Emails")
+                        .HasForeignKey("SubConstructorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("EmpiriaBMS.Models.Models.User", "User")
                         .WithMany("Emails")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Client");
+
+                    b.Navigation("SubConstructor");
 
                     b.Navigation("User");
                 });
@@ -2139,6 +2159,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SubConstructor", b =>
                 {
+                    b.Navigation("Emails");
+
                     b.Navigation("ProjectsSubConstructors");
                 });
 

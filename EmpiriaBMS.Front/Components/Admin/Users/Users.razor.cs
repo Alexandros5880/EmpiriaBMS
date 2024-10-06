@@ -76,7 +76,7 @@ public partial class Users
                 if (myRolesIds != null)
                     await DataProvider.Users.UpdateRoles(added.Id, myRolesIds);
                 emails.ForEach(e => e.UserId = added.Id);
-                await DataProvider.Emails.AddRange(emails);
+                await DataProvider.Users.AddEmailsRange(emails);
                 await _getRecords();
             }
         }
@@ -115,8 +115,8 @@ public partial class Users
             await DataProvider.Users.Update(dto);
             if (myRolesIds != null)
                 await DataProvider.Users.UpdateRoles(dto.Id, myRolesIds);
-            await DataProvider.Emails.RemoveAll(dto.Id);
-            await DataProvider.Emails.AddRange(emails);
+            await DataProvider.Users.RemoveEmailsAll(dto.Id);
+            await DataProvider.Users.AddEmailsRange(emails);
             await _getRecords();
         }
     }

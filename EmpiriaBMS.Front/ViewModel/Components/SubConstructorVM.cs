@@ -33,6 +33,32 @@ public class SubConstructorVM : BaseVM
         }
     }
 
+    private string _phone;
+    public string Phone
+    {
+        get => _phone;
+        set
+        {
+            if (value == _phone)
+                return;
+            _phone = value;
+            NotifyPropertyChanged(nameof(Phone));
+        }
+    }
+
+    private string _description;
+    public string Description
+    {
+        get => _description;
+        set
+        {
+            if (value == _description)
+                return;
+            _description = value;
+            NotifyPropertyChanged(nameof(Description));
+        }
+    }
+
     private int? _userId;
     public int? UserId
     {
@@ -60,4 +86,6 @@ public class SubConstructorVM : BaseVM
     }
 
     public ICollection<ProjectSubConstractor>? ProjectsSubConstructors { get; set; }
+
+    public ICollection<Email>? Emails { get; set; }
 }

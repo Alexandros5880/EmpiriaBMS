@@ -67,7 +67,7 @@ public partial class Clients
 
             // Get Emails
             var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
-            emails.ForEach(e => e.User = null);
+            emails.ForEach(e => e.Client = null);
             dto.Emails = null;
 
             // If Addrees Then Save Address
@@ -86,8 +86,8 @@ public partial class Clients
             var added = await DataProvider.Clients.Add(dto);
             if (added != null)
             {
-                emails.ForEach(e => e.UserId = added.Id);
-                await DataProvider.Emails.AddRange(emails);
+                emails.ForEach(e => e.ClientId = added.Id);
+                await DataProvider.Clients.AddEmailsRange(emails);
                 await _getRecords();
             }
         }
@@ -118,7 +118,7 @@ public partial class Clients
 
             // Get Emails
             var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
-            emails.ForEach(e => e.User = null);
+            emails.ForEach(e => e.Client = null);
             dto.Emails = null;
 
             // If Addrees Then Save Address
@@ -135,8 +135,8 @@ public partial class Clients
             }
 
             await DataProvider.Clients.Update(dto);
-            await DataProvider.Emails.RemoveAll(dto.Id);
-            await DataProvider.Emails.AddRange(emails);
+            await DataProvider.Clients.RemoveEmailsAll(dto.Id);
+            await DataProvider.Clients.AddEmailsRange(emails);
             await _getRecords();
         }
     }

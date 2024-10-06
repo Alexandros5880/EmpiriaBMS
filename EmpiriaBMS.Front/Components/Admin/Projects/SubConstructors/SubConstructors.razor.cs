@@ -6,6 +6,8 @@ using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Models.Models;
+using Humanizer;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 
@@ -62,10 +64,7 @@ public partial class SubConstructors
 
         if (result.Data is not null)
         {
-            SubConstructorVM newObj = result.Data as SubConstructorVM;
-            var dto = Mapper.Map<SubConstructorDto>(newObj);
-            var added = await DataProvider.SubConstructors.Add(dto);
-            var vm = Mapper.Map<SubConstructorVM>(added);
+            SubConstructorVM vm = result.Data as SubConstructorVM;
             _records.Insert(0, vm);
         }
     }
@@ -90,10 +89,7 @@ public partial class SubConstructors
 
         if (result.Data is not null)
         {
-            SubConstructorVM newObj = result.Data as SubConstructorVM;
-            var dto = Mapper.Map<SubConstructorDto>(newObj);
-            var updated = await DataProvider.SubConstructors.Update(dto);
-            var vm = Mapper.Map<SubConstructorVM>(updated);
+            SubConstructorVM vm = result.Data as SubConstructorVM;
             var old = _records.FirstOrDefault(r => r.Id == vm.Id);
             var index = _records.IndexOf(old);
             _records.Remove(old);
@@ -103,12 +99,13 @@ public partial class SubConstructors
 
     private async Task _delete(SubConstructorVM record)
     {
-        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the sub constructor {record.Name}?", "Yes", "No", "Deleting record...");
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the SubConstructor {record.Name}?", "Yes", "No", "Deleting record...");
 
         DialogResult result = await dialog.Result;
 
         if (!result.Cancelled)
         {
+            await DataProvider.SubConstructors.RemoveEmailsAll(record.Id);
             await DataProvider.SubConstructors.Delete(record.Id);
         }
 

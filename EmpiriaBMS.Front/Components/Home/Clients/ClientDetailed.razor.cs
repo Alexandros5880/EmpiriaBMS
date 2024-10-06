@@ -143,7 +143,7 @@ public partial class ClientDetailed
             if (added != null)
             {
                 emails.ForEach(e => e.ClientId = added.Id);
-                await _dataProvider.Emails.AddRange(emails);
+                await _dataProvider.Clients.AddEmailsRange(emails);
                 await _getRecords();
             }
             added.Emails = _emails;
@@ -152,8 +152,8 @@ public partial class ClientDetailed
         else
         {
             var updated = await _dataProvider.Clients.Update(dto);
-            await _dataProvider.Emails.RemoveAll(dto.Id);
-            await _dataProvider.Emails.AddRange(emails);
+            await _dataProvider.Clients.RemoveEmailsAll(dto.Id);
+            await _dataProvider.Clients.AddEmailsRange(emails);
             updated.Emails = _emails;
             await OnSave.InvokeAsync(_mapper.Map<ClientVM>(updated));
         }
@@ -163,7 +163,7 @@ public partial class ClientDetailed
 
     public async Task CancelAsync() => await OnCancel.InvokeAsync();
 
-    #region Data Grid
+    #region Emails Data Grid
     FluentDataGrid<Email> myGrid;
     private List<Email> _emails = new List<Email>();
     private string _filterString = string.Empty;

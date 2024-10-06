@@ -18,8 +18,7 @@ public partial class SubConstructorDetailedDialog : IDialogContentComponent<SubC
 
     private async Task SaveAsync()
     {
-        var valid = _compoment.Validate();
-        if (!valid) return;
+        await _compoment.SaveAsync();
 
         await Dialog.CloseAsync(Content);
     }
