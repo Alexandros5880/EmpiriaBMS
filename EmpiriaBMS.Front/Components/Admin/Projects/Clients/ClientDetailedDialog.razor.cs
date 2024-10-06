@@ -18,9 +18,7 @@ public partial class ClientDetailedDialog : IDialogContentComponent<ClientVM>
 
     private async Task SaveAsync()
     {
-        var valid = _compoment.Validate();
-        if (!valid) return;
-
+        await _compoment.SaveAsync();
         await Dialog.CloseAsync(Content);
     }
 

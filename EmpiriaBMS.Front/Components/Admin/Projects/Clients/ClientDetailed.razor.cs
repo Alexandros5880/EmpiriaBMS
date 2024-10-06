@@ -48,13 +48,11 @@ public partial class ClientDetailed
         var valid = Validate();
         if (!valid) return;
 
-        Content.Emails = _emails;
+
         ClientDto dto = _mapper.Map<ClientDto>(Content);
 
-        // Get Emails
-        var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
-        emails.ForEach(e => e.Client = null);
         dto.Emails = null;
+        var emailsDtos = Mapping.Mapper.Map<List<EmailDto>>(_emails);
 
         // If Addres Then Save Address
         if (dto?.Address != null && !(await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
@@ -74,9 +72,9 @@ public partial class ClientDetailed
             var added = await _dataProvider.Clients.Add(dto);
             if (added != null)
             {
-                emails.ForEach(e => e.ClientId = added.Id);
-                await _dataProvider.Clients.AddEmailsRange(emails);
-                await _getRecords();
+                _emails.ForEach(e => e.ClientId = added.Id);
+                emailsDtos.ForEach(e => e.ClientId = added.Id);
+                await _dataProvider.Clients.UpsertEmails(added.Id, emailsDtos);
             }
             added.Emails = _emails;
             await OnSave.InvokeAsync(_mapper.Map<ClientVM>(added));
@@ -84,8 +82,9 @@ public partial class ClientDetailed
         else
         {
             var updated = await _dataProvider.Clients.Update(dto);
-            await _dataProvider.Clients.RemoveEmailsAll(dto.Id);
-            await _dataProvider.Clients.AddEmailsRange(emails);
+            _emails.ForEach(e => e.ClientId = updated.Id);
+            emailsDtos.ForEach(e => e.ClientId = updated.Id);
+            await _dataProvider.Clients.UpsertEmails(updated.Id, emailsDtos);
             updated.Emails = _emails;
             await OnSave.InvokeAsync(_mapper.Map<ClientVM>(updated));
         }

@@ -63,33 +63,7 @@ public partial class Clients
         if (result.Data is not null)
         {
             ClientVM vm = result.Data as ClientVM;
-            var dto = Mapper.Map<ClientDto>(vm);
-
-            // Get Emails
-            var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
-            emails.ForEach(e => e.Client = null);
-            dto.Emails = null;
-
-            // If Addrees Then Save Address
-            if (dto?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
-            {
-                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
-                var address = await DataProvider.Address.Add(addressDto);
-                dto.AddressId = address.Id;
-            }
-            else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
-            {
-                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
-                var address = await DataProvider.Address.Update(addressDto);
-            }
-
-            var added = await DataProvider.Clients.Add(dto);
-            if (added != null)
-            {
-                emails.ForEach(e => e.ClientId = added.Id);
-                await DataProvider.Clients.AddEmailsRange(emails);
-                await _getRecords();
-            }
+            _records.Insert(0, vm);
         }
     }
 
@@ -114,30 +88,10 @@ public partial class Clients
         if (result.Data is not null)
         {
             ClientVM vm = result.Data as ClientVM;
-            var dto = Mapper.Map<ClientDto>(vm);
-
-            // Get Emails
-            var emails = Mapping.Mapper.Map<List<EmailDto>>(dto.Emails);
-            emails.ForEach(e => e.Client = null);
-            dto.Emails = null;
-
-            // If Addrees Then Save Address
-            if (dto?.Address != null && !(await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
-            {
-                var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
-                var address = await DataProvider.Address.Add(addressDto);
-                dto.AddressId = address.Id;
-            }
-            else if (dto?.Address != null && (await DataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
-            {
-                var address = await DataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
-                dto.AddressId = address.Id;
-            }
-
-            await DataProvider.Clients.Update(dto);
-            await DataProvider.Clients.RemoveEmailsAll(dto.Id);
-            await DataProvider.Clients.AddEmailsRange(emails);
-            await _getRecords();
+            var old = _records.FirstOrDefault(r => r.Id == vm.Id);
+            var index = _records.IndexOf(old);
+            _records.Remove(old);
+            _records.Insert(index, vm);
         }
     }
 
