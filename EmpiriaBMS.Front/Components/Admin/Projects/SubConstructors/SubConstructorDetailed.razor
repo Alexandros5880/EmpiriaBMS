@@ -159,13 +159,14 @@
     @if (DisplayActions)
     {
         @* Footer *@
-        <div class="col-12 row" style="margin: 0 auto;">
+        <div class="col-12 row mb-2" style="margin: 0 auto;">
             <div class="col-12 row" style="margin: 0 auto;">
                 <FluentFooter>
-                    <div class="w-100 d-flex justify-content-between">
-                        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+                    <FluentStack Orientation="Orientation.Horizontal"
+                                 HorizontalAlignment="HorizontalAlignment.End">
                         <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
-                    </div>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+                    </FluentStack>
                 </FluentFooter>
             </div>
         </div>

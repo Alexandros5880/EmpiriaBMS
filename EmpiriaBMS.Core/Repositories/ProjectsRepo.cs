@@ -102,60 +102,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task UpsertSubConstructors(int projectId, List<int> subConstructorsIds)
-    {
-        try
-        {
-            if (projectId == 0)
-                throw new ArgumentException($"{nameof(projectId)} == 0");
-
-            if (subConstructorsIds == null || !subConstructorsIds.Any())
-                return;
-
-            using (var _context = _dbContextFactory.CreateDbContext())
-            {
-                var existingSubConstructors = _context.Set<ProjectSubConstractor>()
-                                                            .Where(r => r.ProjectId == projectId);
-
-                var existingIds = existingSubConstructors.Select(sc => sc.SubConstructorId);
-
-                var idsToRemove = existingSubConstructors
-                                    .Where(sc => !subConstructorsIds.Contains(sc.SubConstructorId));
-
-                var idsToAdd = subConstructorsIds
-                                    .Where(id => !existingIds.Contains(id))
-                                    .ToList();
-
-                // Remove old relationships
-                if (idsToRemove.Any())
-                    _context.Set<ProjectSubConstractor>().RemoveRange(idsToRemove);
-
-                // Add new relationships
-                foreach (var id in idsToAdd)
-                {
-                    ProjectSubConstractor newPs = new ProjectSubConstractor()
-                    {
-                        CreatedDate = DateTime.Now.ToUniversalTime(),
-                        LastUpdatedDate = DateTime.Now.ToUniversalTime(),
-                        ProjectId = projectId,
-                        SubConstructorId = id,
-                        IsDeleted = false
-                    };
-                    await _context.Set<ProjectSubConstractor>().AddAsync(newPs);
-                }
-
-                // Save changes if there were any additions or removals
-                if (idsToRemove.Any() || idsToAdd.Any())
-                    await _context.SaveChangesAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Exception On ProjectsRepo.UpsertSubConstructors(ProjectId: {projectId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
-        }
-    }
-
     public new async Task<ProjectDto?> Get(int id)
     {
         if (id == 0)
@@ -553,6 +499,61 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
+    #region Sub Constructors
+    public async Task UpsertSubConstructors(int projectId, List<int> subConstructorsIds)
+    {
+        try
+        {
+            if (projectId == 0)
+                throw new ArgumentException($"{nameof(projectId)} == 0");
+
+            if (subConstructorsIds == null || !subConstructorsIds.Any())
+                return;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var existingSubConstructors = _context.Set<ProjectSubConstractor>()
+                                                            .Where(r => r.ProjectId == projectId);
+
+                var existingIds = existingSubConstructors.Select(sc => sc.SubConstructorId);
+
+                var idsToRemove = existingSubConstructors
+                                    .Where(sc => !subConstructorsIds.Contains(sc.SubConstructorId));
+
+                var idsToAdd = subConstructorsIds
+                                    .Where(id => !existingIds.Contains(id))
+                                    .ToList();
+
+                // Remove old relationships
+                if (idsToRemove.Any())
+                    _context.Set<ProjectSubConstractor>().RemoveRange(idsToRemove);
+
+                // Add new relationships
+                foreach (var id in idsToAdd)
+                {
+                    ProjectSubConstractor newPs = new ProjectSubConstractor()
+                    {
+                        CreatedDate = DateTime.Now.ToUniversalTime(),
+                        LastUpdatedDate = DateTime.Now.ToUniversalTime(),
+                        ProjectId = projectId,
+                        SubConstructorId = id,
+                        IsDeleted = false
+                    };
+                    await _context.Set<ProjectSubConstractor>().AddAsync(newPs);
+                }
+
+                // Save changes if there were any additions or removals
+                if (idsToRemove.Any() || idsToAdd.Any())
+                    await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.UpsertSubConstructors(ProjectId: {projectId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
     public async Task<ICollection<SubConstructorDto>> GetSubConstructors(int projectId)
     {
         try
@@ -623,6 +624,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             throw;
         }
     }
+    #endregion
 
     public async Task<ICollection<IssueDto>> GetComplains(int projectId)
     {

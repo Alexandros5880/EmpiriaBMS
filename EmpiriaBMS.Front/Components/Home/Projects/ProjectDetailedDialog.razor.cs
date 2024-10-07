@@ -7,6 +7,8 @@ using Microsoft.Fast.Components.FluentUI;
 using System;
 using System.Collections.ObjectModel;
 using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Front.Components.Admin.Projects.SubCategories;
+using EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 
 namespace EmpiriaBMS.Front.Components.Home.Projects;
 public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
@@ -88,6 +90,30 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         await Dialog.CancelAsync();
     }
 
+    #region Sub Constractors
+    private SubConstructorDetailed _subConstructionDetailComp;
+    private bool _addSubConstructorMode = false;
+
+    private void _addSubConstructor()
+    {
+        _addSubConstructorMode = true;
+        //StateHasChanged();
+    }
+
+    private void _onSubConstructorSave(SubConstructorVM updated)
+    {
+        _subConstructors.Insert(0, updated);
+        _addSubConstructorMode = false;
+        //StateHasChanged();
+    }
+
+    private void _onSubConstructorCancel()
+    {
+        _addSubConstructorMode = false;
+        //StateHasChanged();
+    }
+    #endregion
+
     #region Validation
     private bool validOffer = true;
     private bool validName = true;
@@ -141,14 +167,16 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     #endregion
 
     #region Get Related Records
-    private bool _loadSubConstructors = true;
+    private bool _loadRecords = true;
 
     private async Task _getRecords()
     {
+        _loadRecords = true;
         await _getOffers();
         await _getStages();
         await _getProjectManagers();
         await _getSubConstructors();
+        _loadRecords = false;
     }
 
     private async Task _getStages()
@@ -183,7 +211,9 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 
     private async Task _getSubConstructors()
     {
-        _loadSubConstructors = true;
+        if (Content.Id == 0)
+            return;
+
         var dtos = await DataProvider.SubConstructors.GetAll();
         var vms = Mapper.Map<List<SubConstructorVM>>(dtos);
 
@@ -195,7 +225,6 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
             s.IsSelected = mySubConstructorsIds.Contains(s.Id);
             _subConstructors.Add(s);
         });
-        _loadSubConstructors = false;
     }
     #endregion
 

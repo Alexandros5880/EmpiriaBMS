@@ -12,7 +12,10 @@ namespace EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 public partial class SubConstructorDetailed
 {
     [Parameter]
-    public SubConstructorVM Content { get; set; } = default!;
+    public SubConstructorVM Content { get; set; } = new SubConstructorVM()
+    {
+        Id = 0
+    };
 
     [Parameter]
     public EventCallback<SubConstructorVM> OnSave { get; set; }
@@ -58,8 +61,9 @@ public partial class SubConstructorDetailed
                 _emails.ForEach(e => e.SubConstructorId = added.Id);
                 emailsDtos.ForEach(e => e.SubConstructorId = added.Id);
                 await _dataProvider.SubConstructors.UpsertEmails(added.Id, emailsDtos);
+                added.Emails = _emails;
             }
-            added.Emails = _emails;
+            
             await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(added));
         }
         else
