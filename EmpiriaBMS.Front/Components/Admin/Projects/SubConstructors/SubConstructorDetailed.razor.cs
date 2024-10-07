@@ -29,6 +29,12 @@ public partial class SubConstructorDetailed
     [Parameter]
     public bool DisplayActions { get; set; } = true;
 
+    [Parameter]
+    public string AcceptActionText { get; set; } = "Save";
+
+    [Parameter]
+    public string CancelActionText { get; set; } = "Cancel";
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);

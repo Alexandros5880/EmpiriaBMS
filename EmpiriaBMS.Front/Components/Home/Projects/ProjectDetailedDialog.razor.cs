@@ -97,20 +97,17 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     private void _addSubConstructor()
     {
         _addSubConstructorMode = true;
-        //StateHasChanged();
     }
 
     private void _onSubConstructorSave(SubConstructorVM updated)
     {
         _subConstructors.Insert(0, updated);
         _addSubConstructorMode = false;
-        //StateHasChanged();
     }
 
     private void _onSubConstructorCancel()
     {
         _addSubConstructorMode = false;
-        //StateHasChanged();
     }
     #endregion
 
