@@ -7,7 +7,7 @@
 @inject GooglePlacesService GooglePlacesService
 @inject Logging.LoggerManager Logger
 
-<div class="row">
+<div class="row" style="margin: 0 auto;">
     <div class="col-12">
         @if (AutoCompeteId != null)
         {
@@ -41,7 +41,9 @@
         @if (Id != null)
         {
             <!-- Map -->
-            <div id="@Id" class="@((hasAddress && IsMapVisible ? "visible" : "unvisible"))"></div>
+            <div id="@Id"
+                 class="@((hasAddress && IsMapVisible ? "visible" : "unvisible"))"
+                 style="margin: 0 auto;"></div>
         }
     </div>
 </div>
