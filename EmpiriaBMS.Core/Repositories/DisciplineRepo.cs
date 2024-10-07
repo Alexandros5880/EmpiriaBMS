@@ -408,6 +408,20 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
+    public async Task<ICollection<int>> GetEngineersIds(int disciplineId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var usersIds = await _context.Set<DisciplineEngineer>()
+                                      .Where(r => !r.IsDeleted)
+                                      .Where(de => de.DisciplineId == disciplineId)
+                                      .Select(de => de.EngineerId)
+                                      .ToListAsync();
+
+            return usersIds;
+        }
+    }
+
     public async Task AddEngineers(int disciplineId, ICollection<UserDto> engineers)
     {
         try

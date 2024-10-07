@@ -4,21 +4,22 @@ using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Clients;
+namespace EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 
-public partial class ClientDetailedDialog : IDialogContentComponent<ClientVM>
+public partial class SubConstructorDetailedDialog : IDialogContentComponent<SubConstructorVM>
 {
     [Parameter]
-    public ClientVM Content { get; set; } = default!;
+    public SubConstructorVM Content { get; set; } = default!;
 
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
 
-    private ClientDetailed _compoment;
+    private SubConstructorDetailed _compoment;
 
     private async Task SaveAsync()
     {
         await _compoment.SaveAsync();
+
         await Dialog.CloseAsync(Content);
     }
 

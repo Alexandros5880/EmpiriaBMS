@@ -6,18 +6,20 @@ using EmpiriaBMS.Front.ViewModel.ExportData;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Fast.Components.FluentUI;
+using EmpiriaBMS.Models.Models;
+using Humanizer;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Clients;
+namespace EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 
-public partial class Clients
+public partial class SubConstructors
 {
     #region Data Grid
-    private List<ClientVM> _records = new List<ClientVM>();
+    private List<SubConstructorVM> _records = new List<SubConstructorVM>();
     private string _filterString = string.Empty;
-    IQueryable<ClientVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<SubConstructorVM>? FilteredItems => _records?.AsQueryable().Where(x => x.Name.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private ClientVM _selectedRecord = new ClientVM();
+    private SubConstructorVM _selectedRecord = new SubConstructorVM();
 
     private void HandleFilter(ChangeEventArgs args)
     {
@@ -31,15 +33,15 @@ public partial class Clients
         }
     }
 
-    private void HandleRowFocus(FluentDataGridRow<ClientVM> row)
+    private void HandleRowFocus(FluentDataGridRow<SubConstructorVM> row)
     {
-        _selectedRecord = row.Item as ClientVM;
+        _selectedRecord = row.Item as SubConstructorVM;
     }
 
     private async Task _getRecords()
     {
-        var dtos = await DataProvider.Clients.GetAll();
-        _records = Mapper.Map<List<ClientVM>>(dtos);
+        var dtos = await DataProvider.SubConstructors.GetAll();
+        _records = Mapper.Map<List<SubConstructorVM>>(dtos);
     }
 
     private async Task _add()
@@ -57,17 +59,17 @@ public partial class Clients
             Width = "min(80%, 700px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(new ClientVM(), parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<SubConstructorDetailedDialog>(new SubConstructorVM(), parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            ClientVM vm = result.Data as ClientVM;
+            SubConstructorVM vm = result.Data as SubConstructorVM;
             _records.Insert(0, vm);
         }
     }
 
-    private async Task _edit(ClientVM record)
+    private async Task _edit(SubConstructorVM record)
     {
         DialogParameters parameters = new()
         {
@@ -82,12 +84,12 @@ public partial class Clients
             Width = "min(80%, 700px);"
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(record, parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<SubConstructorDetailedDialog>(record, parameters);
         DialogResult? result = await dialog.Result;
 
         if (result.Data is not null)
         {
-            ClientVM vm = result.Data as ClientVM;
+            SubConstructorVM vm = result.Data as SubConstructorVM;
             var old = _records.FirstOrDefault(r => r.Id == vm.Id);
             var index = _records.IndexOf(old);
             _records.Remove(old);
@@ -95,15 +97,16 @@ public partial class Clients
         }
     }
 
-    private async Task _delete(ClientVM record)
+    private async Task _delete(SubConstructorVM record)
     {
-        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the client {record.Name}?", "Yes", "No", "Deleting record...");
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete the SubConstructor {record.Name}?", "Yes", "No", "Deleting record...");
 
         DialogResult result = await dialog.Result;
 
         if (!result.Cancelled)
         {
-            await DataProvider.Clients.Delete(record.Id);
+            await DataProvider.SubConstructors.RemoveEmailsAll(record.Id);
+            await DataProvider.SubConstructors.Delete(record.Id);
         }
 
         await dialog.CloseAsync();
@@ -127,8 +130,8 @@ public partial class Clients
     private async Task ExportToCSV()
     {
         var date = DateTime.Today;
-        var fileName = $"Clients-{date.ToEuropeFormat()}.csv";
-        var data = FilteredItems.Select(c => new ClientExport(c)).ToList();
+        var fileName = $"SubConstructors-{date.ToEuropeFormat()}.csv";
+        var data = FilteredItems.Select(c => new SubConstructorExport(c)).ToList();
         if (data.Count > 0)
         {
             string csvContent = Data.GetCsvContent(data);
@@ -147,24 +150,24 @@ public partial class Clients
             try
             {
                 Stream stream = file.OpenReadStream();
-                List<ClientExport> data = await Data.ImportDataFromCsv<ClientExport>(stream);
+                List<SubConstructorExport> data = await Data.ImportDataFromCsv<SubConstructorExport>(stream);
                 if (data != null && data.Count > 0)
                 {
                     foreach (var item in data)
                     {
                         var vm = item.Get();
-                        var dto = Mapper.Map<ClientDto>(vm);
-                        var added = await DataProvider.Clients.Add(dto);
+                        var dto = Mapper.Map<SubConstructorDto>(vm);
+                        var added = await DataProvider.SubConstructors.Add(dto);
                         if (added == null)
                             continue;
-                        var addedDto = Mapper.Map<ClientVM>(added);
+                        var addedDto = Mapper.Map<SubConstructorVM>(added);
                         _records.Add(addedDto);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Exception Clients.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+                Logger.LogError($"Exception SubConstructors.ImportFromCSV(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
             }
         }
     }

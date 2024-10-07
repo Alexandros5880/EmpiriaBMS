@@ -6,7 +6,9 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 public class ProjectVM : BaseVM
 {
     // Not Mapped
+    [NotMapped]
     private TimeSpan _time = TimeSpan.Zero;
+    [NotMapped]
     public TimeSpan Time
     {
         get => _time;
@@ -19,8 +21,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _name;
-    public string? Name
+    private string _name;
+    public string Name
     {
         get => _name;
         set
@@ -32,8 +34,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _description;
-    public string? Description
+    private string _description;
+    public string Description
     {
         get => _description;
         set
@@ -45,8 +47,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private string? _code;
-    public string? Code
+    private string _code;
+    public string Code
     {
         get => _code;
         set
@@ -149,32 +151,6 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private float _estimatedCompleted;
-    public float EstimatedCompleted
-    {
-        get => _estimatedCompleted;
-        set
-        {
-            if (value == _estimatedCompleted)
-                return;
-            _estimatedCompleted = value;
-            NotifyPropertyChanged(nameof(EstimatedCompleted));
-        }
-    }
-
-    private float _declaredCompleted;
-    public float DeclaredCompleted
-    {
-        get => _declaredCompleted;
-        set
-        {
-            if (value == _declaredCompleted)
-                return;
-            _declaredCompleted = value;
-            NotifyPropertyChanged(nameof(DeclaredCompleted));
-        }
-    }
-
     private int? _projectManagerId;
     public int? ProjectManagerId
     {
@@ -188,8 +164,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private User? _projectManager;
-    public User? ProjectManager
+    private User _projectManager;
+    public User ProjectManager
     {
         get => _projectManager;
         set
@@ -214,8 +190,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private Offer? _offer;
-    public Offer? Offer
+    private Offer _offer;
+    public Offer Offer
     {
         get => _offer;
         set
@@ -261,7 +237,7 @@ public class ProjectVM : BaseVM
 
     public ICollection<Issue> Complains { get; set; }
 
-    public ICollection<SubConstructor> ProjectsSubConstructors { get; set; }
+    public ICollection<ProjectSubConstractor>? ProjectsSubConstructors { get; set; }
 
     public ProjectVM()
     {
@@ -273,11 +249,10 @@ public class ProjectVM : BaseVM
         Active = true;
         EstimatedMandays = 0;
         EstimatedHours = 0;
-        EstimatedCompleted = 0;
-        _declaredCompleted = 0;
     }
 
     // Extra Hellping Properties
+    [NotMapped]
     private string? _pmName;
     [NotMapped]
     public string? PmName
@@ -297,4 +272,7 @@ public class ProjectVM : BaseVM
 
     [NotMapped]
     public string ClientFullName => Offer?.Client?.Name ?? "";
+
+    [NotMapped]
+    public List<int> SubConstructorsIds { get; set; }
 }

@@ -18,7 +18,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         _invoiceRepo = new InvoiceRepo(DbFactory, logger);
     }
 
-    public async new Task<ProjectDto> Add(ProjectDto entity, bool update = false)
+    public async Task<ProjectDto> Add(ProjectDto entity, bool update = false, List<int>? subConstructorsIds = null)
     {
         try
         {
@@ -41,18 +41,24 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                 project = result.Entity as Project;
             }
 
+            if (subConstructorsIds != null)
+                await UpsertSubConstructors(project.Id, subConstructorsIds);
+
             var dto = await Get(project.Id);
+
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
 
             return dto;
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ProjectsRepo.Add(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(ProjectDto)!;
         }
     }
 
-    public async new Task<ProjectDto> Update(ProjectDto entity)
+    public async Task<ProjectDto> Update(ProjectDto entity, List<int>? subConstructorsIds = null)
     {
         try
         {
@@ -61,9 +67,11 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
             entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
 
+            Project project;
+
             using (var _context = _dbContextFactory.CreateDbContext())
             {
-                var project = await _context.Set<Project>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                project = await _context.Set<Project>().FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (project != null)
                 {
                     entity.ProjectManager = null;
@@ -72,16 +80,25 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                     _context.Entry(project).CurrentValues.SetValues(Mapping.Mapper.Map<Project>(entity));
                     await _context.SaveChangesAsync();
                 }
-
-                var dto = await Get(project.Id);
-
-                return dto;
             }
+
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+            if (subConstructorsIds != null)
+                await UpsertSubConstructors(project.Id, subConstructorsIds);
+
+            var dto = await Get(project.Id);
+
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
+            return dto;
         }
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ProjectsRepo.Update(Project): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(ProjectDto)!;
         }
     }
 
@@ -92,7 +109,9 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
 
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            var offers = await _context.Set<Offer>()
+            try
+            {
+                var offers = await _context.Set<Offer>()
                     .Include(o => o.Category)
                     .Include(o => o.SubCategory)
                     .Include(o => o.Client)
@@ -100,30 +119,36 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                     .Where(r => !r.IsDeleted)
                     .ToListAsync();
 
-            var project = await _context
-                             .Set<Project>()
-                             .Where(r => !r.IsDeleted)
-                             .Include(r => r.Invoices)
-                             .Include(p => p.Stage)
-                             .Include(p => p.Offer)
-                             .ThenInclude(o => o.Category)
-                             .Include(p => p.Offer)
-                             .ThenInclude(o => o.SubCategory)
-                             .Include(p => p.Offer)
-                             .ThenInclude(o => o.Client)
-                             .ThenInclude(l => l.Address)
-                             .Include(p => p.Offer)
-                             .ThenInclude(o => o.Client)
-                             .Include(p => p.ProjectManager)
-                             .Include(p => p.ProjectsSubConstructors)
-                             .Include(p => p.Address)
-                             .FirstOrDefaultAsync(r => r.Id == id);
+                var project = await _context
+                                 .Set<Project>()
+                                 .Where(r => !r.IsDeleted)
+                                 .Include(r => r.Invoices)
+                                 .Include(p => p.Stage)
+                                 .Include(p => p.Offer)
+                                 .ThenInclude(o => o.Category)
+                                 .Include(p => p.Offer)
+                                 .ThenInclude(o => o.SubCategory)
+                                 .Include(p => p.Offer)
+                                 .ThenInclude(o => o.Client)
+                                 .ThenInclude(l => l.Address)
+                                 .Include(p => p.Offer)
+                                 .ThenInclude(o => o.Client)
+                                 .Include(p => p.ProjectManager)
+                                 .Include(p => p.ProjectsSubConstructors)
+                                 .Include(p => p.Address)
+                                 .FirstOrDefaultAsync(r => r.Id == id);
 
-            project.Offer = offers.FirstOrDefault(o => o.Id == project.OfferId);
+                project.Offer = offers.FirstOrDefault(o => o.Id == project.OfferId);
 
-            var dto = Mapping.Mapper.Map<ProjectDto>(project);
+                var dto = Mapping.Mapper.Map<ProjectDto>(project);
 
-            return dto;
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception On ProjectsRepo.Get(int id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+                throw;
+            }
         }
     }
 
@@ -473,6 +498,133 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             return Mapping.Mapper.Map<UserDto>(pm);
         }
     }
+
+    #region Sub Constructors
+    public async Task UpsertSubConstructors(int projectId, List<int> subConstructorsIds)
+    {
+        try
+        {
+            if (projectId == 0)
+                throw new ArgumentException($"{nameof(projectId)} == 0");
+
+            if (subConstructorsIds == null || !subConstructorsIds.Any())
+                return;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var existingSubConstructors = _context.Set<ProjectSubConstractor>()
+                                                            .Where(r => r.ProjectId == projectId);
+
+                var existingIds = existingSubConstructors.Select(sc => sc.SubConstructorId);
+
+                var idsToRemove = existingSubConstructors
+                                    .Where(sc => !subConstructorsIds.Contains(sc.SubConstructorId));
+
+                var idsToAdd = subConstructorsIds
+                                    .Where(id => !existingIds.Contains(id))
+                                    .ToList();
+
+                // Remove old relationships
+                if (idsToRemove.Any())
+                    _context.Set<ProjectSubConstractor>().RemoveRange(idsToRemove);
+
+                // Add new relationships
+                foreach (var id in idsToAdd)
+                {
+                    ProjectSubConstractor newPs = new ProjectSubConstractor()
+                    {
+                        CreatedDate = DateTime.Now.ToUniversalTime(),
+                        LastUpdatedDate = DateTime.Now.ToUniversalTime(),
+                        ProjectId = projectId,
+                        SubConstructorId = id,
+                        IsDeleted = false
+                    };
+                    await _context.Set<ProjectSubConstractor>().AddAsync(newPs);
+                }
+
+                // Save changes if there were any additions or removals
+                if (idsToRemove.Any() || idsToAdd.Any())
+                    await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.UpsertSubConstructors(ProjectId: {projectId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
+    public async Task<ICollection<SubConstructorDto>> GetSubConstructors(int projectId)
+    {
+        try
+        {
+            if (projectId == 0)
+                throw new ArgumentException(nameof(projectId));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var subConstructorsIds = _context.Set<ProjectSubConstractor>()
+                                .Where(r => !r.IsDeleted)
+                                .Where(r => r.ProjectId == projectId)
+                                .Select(r => r.SubConstructorId);
+
+                if (subConstructorsIds == null)
+                    throw new NullReferenceException(nameof(subConstructorsIds));
+
+                if (!subConstructorsIds.Any())
+                    return default(List<SubConstructorDto>)!;
+
+                var subConstructors = await _context.Set<SubConstructor>()
+                    .Where(s => !s.IsDeleted)
+                    .Where(s => subConstructorsIds.Contains(s.Id))
+                    .ToListAsync();
+
+                return Mapping.Mapper.Map<List<SubConstructorDto>>(subConstructors);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.GetSubConstructors(int projectId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
+    public async Task<ICollection<int>> GetSubConstructorsIds(int projectId)
+    {
+        try
+        {
+            if (projectId == 0)
+                throw new ArgumentException(nameof(projectId));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var subConstructorsIds = _context.Set<ProjectSubConstractor>()
+                                .Where(r => !r.IsDeleted)
+                                .Where(r => r.ProjectId == projectId)
+                                .Select(r => r.SubConstructorId);
+
+                if (subConstructorsIds == null)
+                    throw new NullReferenceException(nameof(subConstructorsIds));
+
+                if (!subConstructorsIds.Any())
+                    return default(List<int>)!;
+
+                var subConstructors = await _context.Set<SubConstructor>()
+                    .Where(s => !s.IsDeleted)
+                    .Where(s => subConstructorsIds.Contains(s.Id))
+                    .Select(s => s.Id)
+                    .ToListAsync();
+
+                return subConstructors;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.GetSubConstructorsIds(int projectId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+    #endregion
 
     public async Task<ICollection<IssueDto>> GetComplains(int projectId)
     {

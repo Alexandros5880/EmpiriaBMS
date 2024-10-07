@@ -1,0 +1,175 @@
+﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
+@using EmpiriaBMS.Models.Models
+@using EmpiriaBMS.Front.Services
+
+@inject IDataProvider _dataProvider
+@inject IMapper _mapper
+@inject IDialogService _dialogService
+@inject Logging.LoggerManager Logger
+
+<div class="row" style="margin: 0 auto;">
+
+    @if (DisplayTitle)
+    {
+        @* Header *@
+        <div class="col-12">
+            <FluentLabel Typo="Typography.PaneHeader">
+                @if (Content.Id == 0)
+                {
+                    <h3>Add SubConstructor</h3>
+                }
+                else
+                {
+                    <h3>Edit SubConstructor</h3>
+                }
+            </FluentLabel>
+        </div>
+    }
+
+    @* Body *@
+    <div class="col-12 row" style="margin: 0 auto;">
+
+        <!-- Name -->
+        <div class="col-xl-6 col-lg-6">
+            <div>
+                <FluentTextField Style="width:100%; margin:4px;"
+                                 @bind-Value="@Content.Name">Name<span class="text-danger">*</span></FluentTextField>
+            </div>
+            @if (!validName)
+            {
+                @if (string.IsNullOrEmpty(@Content.Name))
+                {
+                    <div>
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Phone -->
+        <div class="col-xl-6 col-lg-6">
+            <div>
+                <FluentTextField Style="width:100%; margin:4px;"
+                                 @bind-Value="@Content.Phone">
+                    Phone<span class="text-danger">*</span>
+                </FluentTextField>
+            </div>
+            @if (!validPhone)
+            {
+                @if (string.IsNullOrEmpty(@Content.Phone))
+                {
+                    <div>
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+                else if (!_isValidPhoneNumber(@Content.Phone))
+                {
+                    <div>
+                        <span class="text-warning">Invalid Phone!</span>
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Description -->
+        <div class="col-12" style="margin: 0 auto;">
+            <FluentTextArea Style="width:100%; margin:4px;"
+                            @bind-Value="@Content.Description"
+                            Rows="3"
+                            Resize="TextAreaResize.Vertical">
+                Description:
+            </FluentTextArea>
+        </div>
+
+        <!-- Emails -->
+        <div class="col-12 row border rounded" style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
+            <div class="row">
+                <div class="col-12">
+                    <h4>Emails</h4>
+                    <span class="text-warning">At least one email required!</span>
+                </div>
+                <div class="col-12 row">
+                    <div class="col-6">
+                        <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.Start" Style="margin-left: 10px;">
+                            <FluentSearch type="search"
+                                          Autofocus=true
+                                          @bind-Value="@_filterString"
+                                          Placeholder="Search..."
+                                          @oninput="@HandleFilter" />
+                        </FluentStack>
+                    </div>
+                    <div class="col-6">
+                        <FluentStack Class="mt-2" HorizontalAlignment="HorizontalAlignment.End" Style="margin-right: 10px;">
+                            <FluentButton aria-label="Add" IconEnd="@(new Icons.Regular.Size16.Add())" OnClick="@(() => _addEmail())">Add</FluentButton>
+                        </FluentStack>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="12">
+                    <FluentDataGrid @ref="@myGrid"
+                                    Items="@FilteredEmails"
+                                    ResizableColumns=true
+                                    Pagination="@pagination"
+                                    TGridItem="Email"
+                                    GridTemplateColumns="auto 100px">
+
+                        <TemplateColumn Title="Address" Sortable="true" Style="text-wrap: wrap;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <FluentTextField Value="@context.Address"
+                                                     Style="width: 300px;"
+                                                     TextFieldType="TextFieldType.Email"
+                                                     @oninput="@((e) => _onEmailAddressChange(context.Address, e))" />
+                                </div>
+                                <div class="col-12">
+                                    @if (!_isValidEmail(@context.Address))
+                                    {
+                                        <span class="text-warning">No valid email!</span>
+                                    }
+                                </div>
+                            </div>
+                        </TemplateColumn>
+
+                        <TemplateColumn Title="Actions" Align="@Align.End">
+                            <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _deleteEmail(context.Id))" />
+                        </TemplateColumn>
+
+                    </FluentDataGrid>
+                </div>
+            </div>
+            <div class="row" style="min-width: 50%;">
+                <div class="row">
+                    <FluentPaginator State="@pagination">
+                        <SummaryTemplate>
+                            There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                        </SummaryTemplate>
+                        <PaginationTextTemplate>
+                            This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                        </PaginationTextTemplate>
+                    </FluentPaginator>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    
+
+    @if (DisplayActions)
+    {
+        @* Footer *@
+        <div class="col-12 row mb-2" style="margin: 0 auto;">
+            <div class="col-12 row" style="margin: 0 auto;">
+                <FluentFooter>
+                    <FluentStack Orientation="Orientation.Horizontal"
+                                 HorizontalAlignment="HorizontalAlignment.End">
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+                    </FluentStack>
+                </FluentFooter>
+            </div>
+        </div>
+    }
+
+</div>

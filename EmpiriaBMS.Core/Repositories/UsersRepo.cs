@@ -277,18 +277,6 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<ICollection<Email>> GetEmails(int userId = 0)
-    {
-        if (userId == 0)
-            return new List<Email>();
-
-        using (var _context = _dbContextFactory.CreateDbContext())
-            return await _context.Set<Email>()
-                                 .Where(r => !r.IsDeleted)
-                                 .Where(r => userId == 0 ? true : r.UserId == userId)
-                                 .ToListAsync();
-    }
-
     public async Task<ICollection<UserDto>> GetProjectManagers()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -540,4 +528,146 @@ public class UsersRepo : Repository<UserDto, User>
             return null;
         }
     }
+
+    #region Email
+    public async Task<ICollection<Email>> GetEmails(int userId = 0)
+    {
+        if (userId == 0)
+            return new List<Email>();
+
+        using (var _context = _dbContextFactory.CreateDbContext())
+            return await _context.Set<Email>()
+                                 .Where(r => !r.IsDeleted)
+                                 .Where(r => userId == 0 ? true : r.UserId == userId)
+                                 .ToListAsync();
+    }
+
+    public async Task UpsertEmails(int userId, List<EmailDto> emails)
+    {
+        try
+        {
+            if (userId == 0)
+                return;
+
+            List<Email> prevEmails;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                prevEmails = await _context.Set<Email>()
+                        .Where(e => e.UserId == userId)
+                        .ToListAsync();
+            }
+
+            var updatedIds = emails.Select(e => e.Id).ToList();
+
+            // Updated the existed
+            foreach (var prevEmail in prevEmails)
+            {
+                if (!updatedIds.Contains(prevEmail.Id))
+                {
+                    await DeleteEmail(prevEmail.Id);
+                }
+                else
+                {
+                    var updated = emails.FirstOrDefault(e => e.Id == prevEmail.Id);
+
+                    if (updated == null)
+                        continue;
+
+                    using (var _context = _dbContextFactory.CreateDbContext())
+                    {
+                        _context.Entry(prevEmail).CurrentValues.SetValues(Mapping.Mapper.Map<Email>(updated));
+                        await SaveChangesAsync();
+                    }
+
+                    emails.Remove(updated);
+                }
+            }
+
+            await AddEmailsRange(emails);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On UsersRepo.UpdateEmails(int userId, List<EmailDto> emails): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    public async Task RemoveEmailsAll(int userId, bool definitely = false)
+    {
+        try
+        {
+            if (userId == 0)
+                return;
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var prevEmails = await _context.Set<Email>()
+                    .Where(r => !r.IsDeleted)
+                    .Where(e => e.UserId == userId)
+                    .ToListAsync();
+                if (definitely)
+                {
+                    _context.Set<Email>().RemoveRange(prevEmails);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    foreach (var e in prevEmails)
+                    {
+                        if (e == null)
+                            continue;
+                        await DeleteEmail(e.Id);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.RemoveEmailsAll(emailId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    public async Task AddEmailsRange(IList<EmailDto> emails)
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var data = Mapping.Mapper.Map<List<Email>>(emails);
+                await _context.Set<Email>().AddRangeAsync(data);
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.AddEmailsRange(emailId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    public async Task<Email> DeleteEmail(int emailId)
+    {
+        try
+        {
+            if (emailId == null)
+                throw new ArgumentNullException(nameof(emailId));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<Email>().FirstOrDefaultAsync(x => x.Id == emailId);
+                if (entry != null)
+                {
+                    entry.IsDeleted = true;
+                    await _context.SaveChangesAsync();
+                }
+
+                return entry;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.DeleteEmail(emailId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return default(Email)!;
+        }
+    }
+    #endregion
 }
