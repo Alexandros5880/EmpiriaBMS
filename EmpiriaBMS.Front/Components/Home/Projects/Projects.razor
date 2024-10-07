@@ -74,7 +74,7 @@ else
                 <FluentStack HorizontalAlignment="HorizontalAlignment.End">
                     @if (IsWorkingMode && editProject)
                     {
-                        @if (_selectedProject != null)
+                        @if (_selectedProject != null && _selectedProject.Id != 0)
                         {
                             <span class="navigate-outline my-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Navigate To"
                                   style="display: @((_selectedProject?.Address != null ? "block" : "none" ));"
@@ -147,10 +147,11 @@ else
                             {
                                 <span class="icon-missed-deadline"></span>
                             }
-                            else if (project.EstimatedCompleted >= 100 || !project.Active)
+                            // TODO: Project Column Display
+                            @* else if (project.EstimatedCompleted >= 100 || !project.Active)
                             {
                                 <span class="icon-estimation-completion-passed"></span>
-                            }
+                            } *@
                             else
                             {
                                 <span class="icon-all-ok"></span>

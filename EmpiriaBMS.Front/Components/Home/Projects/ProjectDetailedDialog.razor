@@ -126,6 +126,29 @@
         </div>
 
         <div class="col-12 row gx-2">
+            <!-- Project Manager -->
+            <div class="col-lg-6 col-md-12">
+                <div class="col-12">
+                    Project Manager<span class="text-danger">*</span>
+                </div>
+                <div class="col-12">
+                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                    Placeholder="Select PM..."
+                                    Items="@_pms"
+                                    Height="200px"
+                                    Width="100%"
+                                    TOption="UserVM"
+                                    OptionText="@(c => c.FullName)"
+                                    OptionValue="@(c => c.Id.ToString())"
+                                    @bind-SelectedOption="@Pm" />
+                </div>
+                @if (!validPm)
+                {
+                    <div class="col-12">
+                        <span class="text-warning">Field is required!</span>
+                    </div>
+                }
+            </div>
             <!-- Stage -->
             <div class="col-lg-6 col-md-12">
                 <div class="col-12">
@@ -154,65 +177,43 @@
                     EstimatedHours<span class="text-danger">*</span>
                 </FluentNumberField>
             </div>
-        </div>
-
-        <div class="col-12 row gx-2">
-            <!-- Project Manager -->
+            <!-- SubConstructors -->
             <div class="col-lg-6 col-md-12">
-                <div class="col-12">
-                    Project Manager<span class="text-danger">*</span>
-                </div>
-                <div class="col-12">
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                    Placeholder="Select PM..."
-                                    Items="@_pms"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="UserVM"
-                                    OptionText="@(c => c.FullName)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Pm" />
-                </div>
-                @if (!validPm)
-                {
+                <div class="row border rounded m-2"
+                        style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
                     <div class="col-12">
-                        <span class="text-warning">Field is required!</span>
+                        <h4>Sub Constructors</h4>
                     </div>
-                }
-            </div>
-            <!-- Empty -->
-            <div class="col-lg-6 col-md-12">
-
-            </div>
-        </div>
-
-        <!-- SubConstructors -->
-        @if (_subConstructors.Any())
-        {
-            <div class="col-12 row gx-2">
-                <div class="table-responsive p-1 w-100 h-100"
-                     style="max-height: 300px !important; overflow-y: auto;">
-                    <table class="bg-transparent">
-                        <tbody>
-                            @foreach (var subConstructor in _subConstructors)
-                            {
-                                <tr clss="align-middle d-flex" @key="subConstructor.Id">
-                                    <td class="align-middle">
-                                        <FluentCheckbox Class="big-checkbox mt-2"
-                                                        @bind-Value="@subConstructor.IsSelected" />
-                                    </td>
-                                    <td class="align-middle">
-                                        <div class="ms-3 mt-2">
-                                            @subConstructor.Name
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                    <div class="table-responsive p-1 w-100 h-100"
+                            style="max-height: 300px !important; overflow-y: auto;">
+                        @if (!_loadSubConstructors)
+                        {
+                            <table class="bg-transparent">
+                                <tbody>
+                                    @foreach (var subConstructor in _subConstructors)
+                                    {
+                                        <tr clss="align-middle d-flex" @key="subConstructor.Id">
+                                            <td class="align-middle">
+                                                <FluentCheckbox Class="big-checkbox mt-2"
+                                                                @bind-Value="@subConstructor.IsSelected" />
+                                            </td>
+                                            <td class="align-middle">
+                                                <div class="ms-3 mt-2">
+                                                    @subConstructor.Name
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        } else
+                        {
+                            <FluentProgressRing Style="margin: 0 auto;" />
+                        }
+                    </div>
                 </div>
             </div>
-        }
+        </div>
 
         <!-- Address -->
         <div class="col-12 row border rounded m-2"

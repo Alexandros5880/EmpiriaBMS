@@ -78,6 +78,8 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         if (!valid)
             return;
 
+        Content.SubConstructorsIds = _subConstructors.Where(r => r.IsSelected).Select(s => s.Id).ToList();
+
         await Dialog.CloseAsync(Content);
     }
 
@@ -139,6 +141,8 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
     #endregion
 
     #region Get Related Records
+    private bool _loadSubConstructors = true;
+
     private async Task _getRecords()
     {
         await _getOffers();
@@ -179,10 +183,12 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
 
     private async Task _getSubConstructors()
     {
+        _loadSubConstructors = true;
         var dtos = await DataProvider.SubConstructors.GetAll();
         var vms = Mapper.Map<List<SubConstructorVM>>(dtos);
         _subConstructors.Clear();
         vms.ForEach(_subConstructors.Add);
+        _loadSubConstructors = false;
     }
     #endregion
 
