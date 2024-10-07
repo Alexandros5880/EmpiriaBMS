@@ -170,7 +170,7 @@ public partial class Disciplines
             if (engineers == null)
                 throw new NullReferenceException(nameof(engineers));
 
-            var myEngineersIds = (await _dataProvider.Disciplines.GetEngineers(_selectedDiscipline.Id)).Select(d => d.Id);
+            var myEngineersIds = (await _dataProvider.Disciplines.GetEngineersIds(_selectedDiscipline.Id));
 
             var engineersVM = Mapper.Map<List<UserVM>>(engineers);
             _engineers.Clear();

@@ -26,13 +26,7 @@ public partial class UsersDetailedDialog : IDialogContentComponent<UserVM>
 
     private async Task SaveAsync()
     {
-        var valid = _uersDetailedComp.Validate();
-        if (!valid) return;
-
-        Content.PasswordHash = Content.Password != null ? PasswordHasher.HashPassword(Content.Password) : null;
-        Content.Emails = _uersDetailedComp.Emails;
-        Content.MyRolesIds = _uersDetailedComp.Roles.Where(r => r.IsSelected).Select(r => r.Id).ToList();
-
+        await _uersDetailedComp.SaveAsync();
         await Dialog.CloseAsync(Content);
     }
 

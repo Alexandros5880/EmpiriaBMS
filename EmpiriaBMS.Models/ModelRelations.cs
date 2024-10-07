@@ -199,6 +199,13 @@ public static class ModelRelations
                .HasForeignKey(e => e.UserId)
                .OnDelete(DeleteBehavior.Cascade);
 
+        // SubConstructor Emails
+        builder.Entity<Email>()
+               .HasOne(e => e.SubConstructor)
+               .WithMany(u => u.Emails)
+               .HasForeignKey(e => e.SubConstructorId)
+               .OnDelete(DeleteBehavior.Cascade);
+
         // Project Disciplines
         builder.Entity<Project>()
                .HasMany(p => p.Disciplines)

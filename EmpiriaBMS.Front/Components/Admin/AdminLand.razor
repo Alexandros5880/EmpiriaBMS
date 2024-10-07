@@ -112,6 +112,11 @@
                                Class="@((tabs[7] ? "active-nav-link" : ""))">
                     Clients
                 </FluentNavLink>
+                <FluentNavLink Icon="@(new Icons.Regular.Size24.BuildingFactory())"
+                               OnClick="@(() => TabMenuClick(22))"
+                               Class="@((tabs[22] ? "active-nav-link" : ""))">
+                    SubConstractors
+                </FluentNavLink>
                 <FluentNavLink Icon="@(new MyIcons.Size24.Issues())"
                                OnClick="@(() => TabMenuClick(8))"
                                Class="@((tabs[8] ? "active-nav-link" : ""))">
@@ -212,6 +217,12 @@
         {
             <div style="padding: 10px;">
                 <EmpiriaBMS.Front.Components.Admin.Projects.Clients.Clients />
+            </div>
+        }
+        else if (tabs[22])
+        {
+            <div style="padding: 10px;">
+                <EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors.SubConstructors />
             </div>
         }
         else if (tabs[8])

@@ -26,10 +26,6 @@ public class ProjectExport : IInport<ProjectVM>
 
     public string DeadLine { get; set; }
 
-    public float EstimatedCompleted { get; set; }
-
-    public float DeclaredCompleted { get; set; }
-
     public int ProjectManagerId { get; set; }
 
     public string ProjectManagerName { get; set; }
@@ -59,8 +55,6 @@ public class ProjectExport : IInport<ProjectVM>
         Active = model.Active;
         StartDate = model.StartDate?.ToEuropeFormat() ?? "";
         DeadLine = model.DeadLine?.ToEuropeFormat() ?? "";
-        EstimatedCompleted = model.EstimatedCompleted;
-        DeclaredCompleted = model.DeclaredCompleted;
         ProjectManagerId = model.ProjectManagerId ?? 0;
         ProjectManagerName = model.ProjectManager?.FullName ?? "";
         OfferId = model.OfferId ?? 0;
@@ -113,8 +107,6 @@ public class ProjectExport : IInport<ProjectVM>
             Active = Active,
             StartDate = startDate,
             DeadLine = deadLine,
-            EstimatedCompleted = EstimatedCompleted,
-            DeclaredCompleted = DeclaredCompleted,
             ProjectManagerId = ProjectManagerId,
             OfferId = OfferId
         };

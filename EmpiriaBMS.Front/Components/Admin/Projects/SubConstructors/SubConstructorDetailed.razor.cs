@@ -7,13 +7,18 @@ using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
+namespace EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Clients;
-
-public partial class ClientDetailed
+public partial class SubConstructorDetailed
 {
     [Parameter]
-    public ClientVM Content { get; set; } = default!;
+    public SubConstructorVM Content { get; set; } = new SubConstructorVM()
+    {
+        Id = 0
+    };
+
+    [Parameter]
+    public EventCallback<SubConstructorVM> OnSave { get; set; }
 
     [Parameter]
     public EventCallback OnCancel { get; set; }
@@ -30,11 +35,9 @@ public partial class ClientDetailed
 
         if (firstRender)
         {
-            await _getRecords();
+            await _getEmails();
 
-            Validate("Emails");
-
-            await RefreshMap();
+            Validate("SubConstructors");
 
             StateHasChanged();
         }
@@ -45,51 +48,38 @@ public partial class ClientDetailed
         var valid = Validate();
         if (!valid) return;
 
-
-        ClientDto dto = _mapper.Map<ClientDto>(Content);
+        SubConstructorDto dto = _mapper.Map<SubConstructorDto>(Content);
 
         dto.Emails = null;
         var emailsDtos = Mapping.Mapper.Map<List<EmailDto>>(_emails);
 
-        // If Addres Then Save Address
-        if (dto?.Address != null && !(await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
-        {
-            var addressDto = Mapping.Mapper.Map<AddressDto>(dto.Address);
-            var address = await _dataProvider.Address.Add(addressDto);
-            dto.AddressId = address.Id;
-        }
-        else if (dto?.Address != null && (await _dataProvider.Address.Any(a => a.PlaceId.Equals(dto.Address.PlaceId))))
-        {
-            var address = await _dataProvider.Address.GetByPlaceId(dto.Address.PlaceId);
-            dto.AddressId = address.Id;
-        }
-
         if (Content.Id == 0)
         {
-            var added = await _dataProvider.Clients.Add(dto);
+            var added = await _dataProvider.SubConstructors.Add(dto);
             if (added != null)
             {
-                _emails.ForEach(e => e.ClientId = added.Id);
-                emailsDtos.ForEach(e => e.ClientId = added.Id);
-                await _dataProvider.Clients.UpsertEmails(added.Id, emailsDtos);
+                _emails.ForEach(e => e.SubConstructorId = added.Id);
+                emailsDtos.ForEach(e => e.SubConstructorId = added.Id);
+                await _dataProvider.SubConstructors.UpsertEmails(added.Id, emailsDtos);
+                added.Emails = _emails;
             }
-            added.Emails = _emails;
+            
+            await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(added));
         }
         else
         {
-            var updated = await _dataProvider.Clients.Update(dto);
-            _emails.ForEach(e => e.ClientId = updated.Id);
-            emailsDtos.ForEach(e => e.ClientId = updated.Id);
-            await _dataProvider.Clients.UpsertEmails(updated.Id, emailsDtos);
+            var updated = await _dataProvider.SubConstructors.Update(dto);
+            _emails.ForEach(e => e.SubConstructorId = updated.Id);
+            emailsDtos.ForEach(e => e.SubConstructorId = updated.Id);
+            await _dataProvider.SubConstructors.UpsertEmails(updated.Id, emailsDtos);
             updated.Emails = _emails;
+            await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(updated));
         }
-
-        Content.Emails = _emails;
     }
 
     public async Task CancelAsync() => await OnCancel.InvokeAsync();
 
-    #region Emails Data Grid
+    #region SubConstructors Data Grid
     FluentDataGrid<Email> myGrid;
     private List<Email> _emails = new List<Email>();
     private string _filterString = string.Empty;
@@ -108,9 +98,9 @@ public partial class ClientDetailed
         }
     }
 
-    private async Task _getRecords()
+    private async Task _getEmails()
     {
-        var emails = await _dataProvider.Clients.GetEmails(Content.Id);
+        var emails = await _dataProvider.SubConstructors.GetEmails(Content.Id);
         _emails = emails.ToList();
         Content.Emails = emails;
     }
@@ -134,13 +124,11 @@ public partial class ClientDetailed
             _emails.Add(new Email()
             {
                 Address = newEmailAddress,
-                ClientId = Content.Id,
+                SubConstructorId = Content.Id,
             });
         }
 
-        var valid = Validate("Emails");
-        if (valid)
-            Content.Emails = _emails;
+        Validate("SubConstructors");
     }
 
     private async Task _addEmail()
@@ -148,56 +136,51 @@ public partial class ClientDetailed
         _emails.Add(new Email()
         {
             Address = string.Empty,
-            ClientId = Content.Id
+            SubConstructorId = Content.Id
         });
         await myGrid.RefreshDataAsync();
     }
 
-    private async Task _deleteEmail(Email email)
+    private async Task _deleteEmail(int emailId)
     {
+        var email = _emails.FirstOrDefault(e => e.Id == emailId);
         _emails.Remove(email);
         await myGrid.RefreshDataAsync();
     }
     #endregion
 
     #region Validation
-    private bool validEmails = true;
+    private bool validSubConstructors = true;
     private bool validName = true;
     private bool validPhone = true;
-    private bool validCompanyName = true;
 
     public bool Validate(string fieldname = null)
     {
         if (fieldname == null)
         {
-            validEmails = _emails?.Any() ?? false;
+            validSubConstructors = _emails?.Any() ?? false;
             validName = !string.IsNullOrEmpty(Content.Name);
             validPhone = !string.IsNullOrEmpty(Content.Phone) && _isValidPhoneNumber(Content.Phone);
-            validCompanyName = !string.IsNullOrEmpty(Content.CompanyName);
 
-            return validEmails && validName && validPhone && validCompanyName;
+            return validSubConstructors && validName && validPhone;
         }
         else
         {
-            validEmails = true;
+            validSubConstructors = true;
             validName = true;
             validPhone = true;
-            validCompanyName = true;
 
             switch (fieldname)
             {
-                case "Emails":
-                    validEmails = _emails?.Any() ?? false;
-                    return validEmails;
+                case "SubConstructors":
+                    validSubConstructors = _emails?.Any() ?? false;
+                    return validSubConstructors;
                 case "Name":
                     validName = !string.IsNullOrEmpty(Content.Name);
                     return validName;
                 case "Phone":
                     validPhone = !string.IsNullOrEmpty(Content.Phone) && _isValidPhoneNumber(Content.Phone);
                     return validPhone;
-                case "CompanyName":
-                    validCompanyName = !string.IsNullOrEmpty(Content.CompanyName);
-                    return validCompanyName;
                 default:
                     return true;
             }
@@ -207,24 +190,5 @@ public partial class ClientDetailed
 
     private bool _isValidEmail(string email) => GeneralValidator.IsValidEmail(email);
     private bool _isValidPhoneNumber(string phone) => GeneralValidator.IsValidPhoneNumber(phone);
-    #endregion
-
-    #region Map Address
-    private Map _map;
-
-    public async Task RefreshMap()
-    {
-        if (Content.Id != 0 && Content.Address != null)
-        {
-            await _map.SetAddress(Content.Address);
-        }
-    }
-
-    private void _onSearchAddressChange()
-    {
-        var address = _map.GetAddress();
-        if (address != null)
-            Content.Address = address;
-    }
     #endregion
 }

@@ -2,6 +2,7 @@
 @using EmpiriaBMS.Front.Services
 @using Color = Microsoft.Fast.Components.FluentUI.Color
 @using EmpiriaBMS.Front.Components.Admin.Projects.Clients
+@using EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 
 @implements IDialogContentComponent<ProjectVM>
 
@@ -28,216 +29,239 @@
 
 @* Body *@
 <FluentDialogBody>
+
+    @if (_loadRecords)
+    {
+        <div class="overlay">
+            <FluentProgressRing Style="margin: auto;" />
+        </div>
+    }
+    
     <div class="row gy-1"
-         style="height: 100%; overflow-y: auto; overflow-x: hidden;">
+             style="height: 100%; overflow-y: auto; overflow-x: hidden;">
 
-        <div class="col-12 row gx-2">
-            <!-- Offer -->
-            <div class="col-lg-6 col-md-12">
-                <div>
-                    Offer<span class="text-danger">*</span>
-                </div>
-                <div>
-                    <FluentCombobox Placeholder="Select Offer..."
-                                    Items="@_offers"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="OfferVM"
-                                    OptionText="@(c => c.Code)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Offer" />
-                </div>
-                @if (!validOffer)
-                {
-                    <div>
-                        <span class="text-warning">Field is required!</span>
-                    </div>
-                }
-            </div>
-        </div>
-
-        <div class="col-12 row gx-2">
-            <!-- Name -->
-            <div class="col-lg-6 col-md-12">
-                <div class="col-12">
-                    <FluentTextField Style="width: 100%;" @bind-Value="@Content.Name">
-                        Name<span class="text-danger">*</span>
-                    </FluentTextField>
-                </div>
-                @if (!validName)
-                {
-                    @if (string.IsNullOrEmpty(@Content?.Name))
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
-                }
-            </div>
-            <!-- Code-->
-            <div class="col-lg-6 col-md-12">
-                <div class="col-12">
-                    <FluentTextField Style="width: 100%;" @bind-Value="@Content.Code">
-                        Code<span class="text-danger">*</span>
-                    </FluentTextField>
-                </div>
-                @if (!validCode)
-                {
-                    @if (string.IsNullOrEmpty(@Content?.Code))
-                    {
-                        <div class="col-12">
-                            <span class="text-warning">Field is required!</span>
-                        </div>
-                    }
-                }
-            </div>
-        </div>
-
-        <div class="col-12 row gx-2">
-            <!-- Category -->
-            <div class="col-lg-6 col-md-12">
-                <div class="col-12">
-                    Category
-                </div>
-                <div class="col-12">
-                    <span>@(Offer?.Category?.Name ?? "--")</span>
-                </div>
-            </div>
-            <!-- SubCategory-->
-            <div class="col-lg-6 col-md-12">
-                <div class="col-12">
-                    SubCategory
-                </div>
-                <div class="col-12">
-                    <span>@(Offer?.SubCategory?.Name ?? "--")</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 row gx-2">
-            <!-- StartDate -->
-            <div class="col-lg-6 col-md-12">
-                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.StartDate" Label="Start Date" />
-            </div>
-            <!-- DeadLine-->
-            <div class="col-lg-6 col-md-12">
-                <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.DeadLine" Label="DeadLine" />
-            </div>
-        </div>
-
-        <div class="col-12 row gx-2">
-            <!-- Stage -->
-            <div class="col-lg-6 col-md-12">
-                <div class="col-12">
-                    Stage<span class="text-danger">*</span>
-                </div>
-                <div class="col-12">
-                    <FluentCombobox Placeholder="Select Stage..."
-                                    Items="@_stages"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="ProjectStageVM"
-                                    OptionText="@(c => c.Name)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Stage" />
-                </div>
-                @if (!validStage)
-                {
-                    <div class="col-12">
-                        <span class="text-warning">Field is required!</span>
-                    </div>
-                }
-            </div>
-            <!-- EstimatedHours -->
-            <div class="col-lg-6 col-md-12">
-                <FluentNumberField Style="width: 100%;" @bind-Value="@Content.EstimatedHours" Min="0">
-                    EstimatedHours<span class="text-danger">*</span>
-                </FluentNumberField>
-            </div>
-        </div>
-
-        <div class="col-12 row gx-2">
-            <!-- Project Manager -->
-            <div class="col-lg-6 col-md-12">
-                <div class="col-12">
-                    Project Manager<span class="text-danger">*</span>
-                </div>
-                <div class="col-12">
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                    Placeholder="Select PM..."
-                                    Items="@_pms"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="UserVM"
-                                    OptionText="@(c => c.FullName)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Pm" />
-                </div>
-                @if (!validPm)
-                {
-                    <div class="col-12">
-                        <span class="text-warning">Field is required!</span>
-                    </div>
-                }
-            </div>
-            <!-- Empty -->
-            <div class="col-lg-6 col-md-12">
-
-            </div>
-        </div>
-
-        <!-- SubConstructors -->
-        @if (_subConstructors.Any())
-        {
             <div class="col-12 row gx-2">
-                <div class="table-responsive p-1 w-100 h-100"
-                     style="max-height: 300px !important; overflow-y: auto;">
-                    <table class="bg-transparent">
-                        <tbody>
-                            @foreach (var subConstructor in _subConstructors)
-                            {
-                                <tr clss="align-middle d-flex" @key="subConstructor.Id">
-                                    <td class="align-middle">
-                                        <FluentCheckbox Class="big-checkbox mt-2"
-                                                        @bind-Value="@subConstructor.IsSelected" />
-                                    </td>
-                                    <td class="align-middle">
-                                        <div class="ms-3 mt-2">
-                                            @subConstructor.Name
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <!-- Offer -->
+                <div class="col-lg-6 col-md-12">
+                    <div>
+                        Offer<span class="text-danger">*</span>
+                    </div>
+                    <div>
+                        <FluentCombobox Placeholder="Select Offer..."
+                                        Items="@_offers"
+                                        Height="200px"
+                                        Width="100%"
+                                        TOption="OfferVM"
+                                        OptionText="@(c => c.Code)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Offer" />
+                    </div>
+                    @if (!validOffer)
+                    {
+                        <div>
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
                 </div>
             </div>
-        }
 
-        <!-- Address -->
-        <div class="col-12 row border rounded m-2"
-             style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
-            <div class="col-12">
-                <h4>Address</h4>
-            </div>
-            <!-- Search Address / (Map) -->
-            <div class="col-12 row">
-                <div class="row mt-3 mb-3">
+            <div class="col-12 row gx-2">
+                <!-- Name -->
+                <div class="col-lg-6 col-md-12">
                     <div class="col-12">
-                        <Map @ref="@_map"
-                             Id="adminClientMap"
-                             AutoCompeteId="autocompeteAdminClientMap"
-                             OnFindAddress="@(() => _onSearchAddressChange())"
-                             IsMapVisible="false" />
+                        <FluentTextField Style="width: 100%;" @bind-Value="@Content.Name">
+                            Name<span class="text-danger">*</span>
+                        </FluentTextField>
+                    </div>
+                    @if (!validName)
+                    {
+                        @if (string.IsNullOrEmpty(@Content?.Name))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                    }
+                </div>
+                <!-- Code-->
+                <div class="col-lg-6 col-md-12">
+                    <div class="col-12">
+                        <FluentTextField Style="width: 100%;" @bind-Value="@Content.Code">
+                            Code<span class="text-danger">*</span>
+                        </FluentTextField>
+                    </div>
+                    @if (!validCode)
+                    {
+                        @if (string.IsNullOrEmpty(@Content?.Code))
+                        {
+                            <div class="col-12">
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="col-12 row gx-2">
+                <!-- Category -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="col-12">
+                        Category
+                    </div>
+                    <div class="col-12">
+                        <span>@(Offer?.Category?.Name ?? "--")</span>
+                    </div>
+                </div>
+                <!-- SubCategory-->
+                <div class="col-lg-6 col-md-12">
+                    <div class="col-12">
+                        SubCategory
+                    </div>
+                    <div class="col-12">
+                        <span>@(Offer?.SubCategory?.Name ?? "--")</span>
                     </div>
                 </div>
             </div>
+
+            <div class="col-12 row gx-2">
+                <!-- StartDate -->
+                <div class="col-lg-6 col-md-12">
+                    <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.StartDate" Label="Start Date" />
+                </div>
+                <!-- DeadLine-->
+                <div class="col-lg-6 col-md-12">
+                    <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.DeadLine" Label="DeadLine" />
+                </div>
+            </div>
+
+            <div class="col-12 row gx-2">
+                <div class="col-lg-6 col-md-12">
+                    <!-- Project Manager -->
+                    <div>
+                        <div>
+                            Project Manager<span class="text-danger">*</span>
+                        </div>
+                        <div>
+                            <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                            Placeholder="Select PM..."
+                                            Items="@_pms"
+                                            Height="200px"
+                                            Width="100%"
+                                            TOption="UserVM"
+                                            OptionText="@(c => c.FullName)"
+                                            OptionValue="@(c => c.Id.ToString())"
+                                            @bind-SelectedOption="@Pm" />
+                        </div>
+                        @if (!validPm)
+                        {
+                            <div>
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                    </div>
+                    <!-- Stage -->
+                    <div class="mt-2">
+                        <div>
+                            Stage<span class="text-danger">*</span>
+                        </div>
+                        <div>
+                            <FluentCombobox Placeholder="Select Stage..."
+                                            Items="@_stages"
+                                            Height="200px"
+                                            Width="100%"
+                                            TOption="ProjectStageVM"
+                                            OptionText="@(c => c.Name)"
+                                            OptionValue="@(c => c.Id.ToString())"
+                                            @bind-SelectedOption="@Stage" />
+                        </div>
+                        @if (!validStage)
+                        {
+                            <div>
+                                <span class="text-warning">Field is required!</span>
+                            </div>
+                        }
+                    </div>
+                    <!-- EstimatedHours -->
+                    <div class="mt-2">
+                        <FluentNumberField Style="width: 100%;" @bind-Value="@Content.EstimatedHours" Min="0">
+                            EstimatedHours<span class="text-danger">*</span>
+                        </FluentNumberField>
+                    </div>
+                </div>
+                <!-- SubConstructors -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="row border rounded m-2"
+                         style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
+                        <div class="col-12 d-flex justify-content-between">
+                            <h4>Sub Constructors</h4>
+                            <FluentButton IconEnd="@(new Icons.Regular.Size16.Add())"
+                                          OnClick="@_addSubConstructor"
+                                          Class="mt-2">
+                                Add
+                            </FluentButton>
+                        </div>
+                        <div class="table-responsive p-1 w-100 h-100"
+                             style="max-height: 300px !important; overflow-y: auto;">
+                            <table class="bg-transparent">
+                                <tbody>
+                                    @foreach (var subConstructor in _subConstructors)
+                                    {
+                                        <tr clss="align-middle d-flex" @key="subConstructor.Id">
+                                            <td class="align-middle">
+                                                <FluentCheckbox Class="big-checkbox mt-2"
+                                                                @bind-Value="@subConstructor.IsSelected" />
+                                            </td>
+                                            <td class="align-middle">
+                                                <div class="ms-3 mt-2">
+                                                    @subConstructor.Name
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Sub Constructor -->
+            @if (_addSubConstructorMode)
+            {
+                <div class="col-12 row border rounded m-2"
+                     style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
+                    <SubConstructorDetailed @ref="@_subConstructionDetailComp"
+                                            OnSave="@_onSubConstructorSave"
+                                            OnCancel="@_onSubConstructorCancel"
+                                            DisplayActions="true" />
+                </div>
+            }
+
+            <!-- Address -->
+            <div class="col-12 row border rounded m-2"
+                 style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
+                <div class="col-12">
+                    <h4>Address</h4>
+                </div>
+                <!-- Search Address / (Map) -->
+                <div class="col-12 row">
+                    <div class="row mt-3 mb-3">
+                        <div class="col-12">
+                            <Map @ref="@_map"
+                                 Id="adminClientMap"
+                                 AutoCompeteId="autocompeteAdminClientMap"
+                                 OnFindAddress="@(() => _onSearchAddressChange())"
+                                 IsMapVisible="false" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+                <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
+            </div>
+
         </div>
 
-        <!-- Description -->
-        <div class="col-12">
-            <FluentTextArea Style="width:100%;" @bind-Value="@Content.Description" Rows="3" Resize="TextAreaResize.Vertical">Description:</FluentTextArea>
-        </div>
-
-    </div>
 </FluentDialogBody>

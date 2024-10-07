@@ -2,6 +2,7 @@
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.Components.Admin.Projects;
+using EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 using EmpiriaBMS.Front.Components.Home.Issues;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
 using System.Collections.ObjectModel;
+using EmpiriaBMS.Models.Models;
 
 namespace EmpiriaBMS.Front.Components.Home.Projects;
 
@@ -240,6 +242,7 @@ public partial class Projects
         if (result.Data is not null)
         {
             ProjectVM vm = result.Data as ProjectVM;
+            var subConstructorsIds = vm.SubConstructorsIds;
             var dto = Mapper.Map<ProjectDto>(vm);
 
             // If Addres Then Save Address
@@ -258,7 +261,7 @@ public partial class Projects
             dto.Address = null;
 
             // Save Project
-            var updatedDto = await _dataProvider.Projects.Add(dto);
+            var updatedDto = await _dataProvider.Projects.Add(dto, false, subConstructorsIds);
             var updateVm = Mapper.Map<ProjectVM>(updatedDto);
 
             var pm = await _dataProvider.Projects.GetProjectManager(updateVm.Id);
@@ -299,6 +302,7 @@ public partial class Projects
         if (result.Data is not null)
         {
             ProjectVM vm = result.Data as ProjectVM;
+            var subConstructorsIds = vm.SubConstructorsIds;
             var dto = Mapper.Map<ProjectDto>(vm);
 
             // If Addres Then Save Address
@@ -317,7 +321,7 @@ public partial class Projects
             dto.Address = null;
 
             // Save Project
-            var updatedDto = await _dataProvider.Projects.Update(dto);
+            var updatedDto = await _dataProvider.Projects.Update(dto, subConstructorsIds);
             var updateVm = Mapper.Map<ProjectVM>(updatedDto);
 
             var pm = await _dataProvider.Projects.GetProjectManager(updateVm.Id);
@@ -325,14 +329,11 @@ public partial class Projects
 
             // Remove the old record (if it exists) based on a unique identifier like ProjectId
             var oldRecord = _data.FirstOrDefault(p => p.Id == updateVm.Id);
+            var index = _data.IndexOf(oldRecord);
             if (oldRecord != null)
                 _data.Remove(oldRecord);
-
-            _data.Insert(0, updateVm);
-
-            // Clear _data and assign the new sorted collection
-            //_data.Clear();
-            //_data = new ObservableCollection<ProjectVM>(oldRecord);
+            
+            _data.Insert(index, updateVm);
 
             _selectedProject = updateVm;
             StateHasChanged();

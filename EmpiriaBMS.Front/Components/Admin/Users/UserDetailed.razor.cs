@@ -1,6 +1,10 @@
-﻿using EmpiriaBMS.Core.Hellpers;
+﻿using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Core.Hellpers;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
 
@@ -21,10 +25,10 @@ public partial class UserDetailed
     public bool Vertical { get; set; } = false;
 
     [Parameter]
-    public EventCallback<UserVM> OnSave { get; set; } = default!;
+    public EventCallback OnCancel { get; set; } = default!;
 
     [Parameter]
-    public EventCallback OnCancel { get; set; } = default!;
+    public bool DisplayActions { get; set; } = true;
 
     private FluentTextField _firstNameField;
 
@@ -50,15 +54,45 @@ public partial class UserDetailed
         await _getRoles();
     }
 
-    private async Task SaveAsync()
+    public async Task SaveAsync()
     {
         var valid = Validate();
         if (!valid) return;
 
         Content.PasswordHash = Content.Password != null ? PasswordHasher.HashPassword(Content.Password) : null;
-        Content.Emails = Emails;
         Content.MyRolesIds = Roles.Where(r => r.IsSelected).Select(r => r.Id).ToList();
-        await OnSave.InvokeAsync(Content);
+
+        UserDto dto = _mapper.Map<UserDto>(Content);
+
+        var myRolesIds = Content.MyRolesIds;
+
+        dto.Emails = null;
+        var emailsDtos = Mapping.Mapper.Map<List<EmailDto>>(Emails);
+
+        if (Content.Id == 0)
+        {
+            var added = await _dataProvider.Users.Add(dto);
+            if (added != null)
+            {
+                Emails.ForEach(e => e.UserId = added.Id);
+                emailsDtos.ForEach(e => e.UserId = added.Id);
+                await _dataProvider.Users.UpsertEmails(added.Id, emailsDtos);
+            }
+            added.Emails = Emails;
+        }
+        else
+        {
+            var updated = await _dataProvider.Users.Update(dto);
+            Emails.ForEach(e => e.UserId = updated.Id);
+            emailsDtos.ForEach(e => e.UserId = updated.Id);
+            await _dataProvider.Users.UpsertEmails(updated.Id, emailsDtos);
+            updated.Emails = Emails;
+        }
+
+        if (myRolesIds != null)
+            await _dataProvider.Users.UpdateRoles(dto.Id, myRolesIds);
+
+        Content.Emails = Emails;
     }
 
     private async Task CancelAsync()
