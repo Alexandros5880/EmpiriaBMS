@@ -125,57 +125,59 @@
             </div>
         </div>
 
-        <div class="col-12 row gx-2">
-            <!-- Project Manager -->
-            <div class="col-lg-6 col-md-12">
+        <div class="col-12 row">
+            <div class="col-lg-6 col-md-12 row">
+                <!-- Project Manager -->
                 <div class="col-12">
-                    Project Manager<span class="text-danger">*</span>
-                </div>
-                <div class="col-12">
-                    <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
-                                    Placeholder="Select PM..."
-                                    Items="@_pms"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="UserVM"
-                                    OptionText="@(c => c.FullName)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Pm" />
-                </div>
-                @if (!validPm)
-                {
-                    <div class="col-12">
-                        <span class="text-warning">Field is required!</span>
+                    <div>
+                        Project Manager<span class="text-danger">*</span>
                     </div>
-                }
-            </div>
-            <!-- Stage -->
-            <div class="col-lg-6 col-md-12">
-                <div class="col-12">
-                    Stage<span class="text-danger">*</span>
-                </div>
-                <div class="col-12">
-                    <FluentCombobox Placeholder="Select Stage..."
-                                    Items="@_stages"
-                                    Height="200px"
-                                    Width="100%"
-                                    TOption="ProjectStageVM"
-                                    OptionText="@(c => c.Name)"
-                                    OptionValue="@(c => c.Id.ToString())"
-                                    @bind-SelectedOption="@Stage" />
-                </div>
-                @if (!validStage)
-                {
-                    <div class="col-12">
-                        <span class="text-warning">Field is required!</span>
+                    <div>
+                        <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
+                                        Placeholder="Select PM..."
+                                        Items="@_pms"
+                                        Height="200px"
+                                        Width="100%"
+                                        TOption="UserVM"
+                                        OptionText="@(c => c.FullName)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Pm" />
                     </div>
-                }
-            </div>
-            <!-- EstimatedHours -->
-            <div class="col-lg-6 col-md-12">
-                <FluentNumberField Style="width: 100%;" @bind-Value="@Content.EstimatedHours" Min="0">
-                    EstimatedHours<span class="text-danger">*</span>
-                </FluentNumberField>
+                    @if (!validPm)
+                    {
+                        <div>
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                </div>
+                <!-- Stage -->
+                <div class="col-12">
+                    <div>
+                        Stage<span class="text-danger">*</span>
+                    </div>
+                    <div>
+                        <FluentCombobox Placeholder="Select Stage..."
+                                        Items="@_stages"
+                                        Height="200px"
+                                        Width="100%"
+                                        TOption="ProjectStageVM"
+                                        OptionText="@(c => c.Name)"
+                                        OptionValue="@(c => c.Id.ToString())"
+                                        @bind-SelectedOption="@Stage" />
+                    </div>
+                    @if (!validStage)
+                    {
+                        <div>
+                            <span class="text-warning">Field is required!</span>
+                        </div>
+                    }
+                </div>
+                <!-- EstimatedHours -->
+                <div class="col-12">
+                    <FluentNumberField Style="width: 100%;" @bind-Value="@Content.EstimatedHours" Min="0">
+                        EstimatedHours<span class="text-danger">*</span>
+                    </FluentNumberField>
+                </div>
             </div>
             <!-- SubConstructors -->
             <div class="col-lg-6 col-md-12">
@@ -208,7 +210,7 @@
                             </table>
                         } else
                         {
-                            <FluentProgressRing Style="margin: 0 auto;" />
+                            <FluentProgressRing Style="margin: 0 auto;"/>
                         }
                     </div>
                 </div>

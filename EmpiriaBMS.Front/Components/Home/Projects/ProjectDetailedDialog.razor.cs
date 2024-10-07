@@ -186,8 +186,15 @@ public partial class ProjectDetailedDialog : IDialogContentComponent<ProjectVM>
         _loadSubConstructors = true;
         var dtos = await DataProvider.SubConstructors.GetAll();
         var vms = Mapper.Map<List<SubConstructorVM>>(dtos);
+
+        var mySubConstructorsIds = (await DataProvider.Projects.GetSubConstructorsIds(Content.Id));
+
         _subConstructors.Clear();
-        vms.ForEach(_subConstructors.Add);
+        vms.ForEach(s =>
+        {
+            s.IsSelected = mySubConstructorsIds.Contains(s.Id);
+            _subConstructors.Add(s);
+        });
         _loadSubConstructors = false;
     }
     #endregion

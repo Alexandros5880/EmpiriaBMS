@@ -156,7 +156,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-
     public new async Task<ProjectDto?> Get(int id)
     {
         if (id == 0)
@@ -551,6 +550,77 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             var pm = await _context.Set<User>().Where(r => !r.IsDeleted).FirstOrDefaultAsync(u => u.Id == pmId);
 
             return Mapping.Mapper.Map<UserDto>(pm);
+        }
+    }
+
+    public async Task<ICollection<SubConstructorDto>> GetSubConstructors(int projectId)
+    {
+        try
+        {
+            if (projectId == 0)
+                throw new ArgumentException(nameof(projectId));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var subConstructorsIds = _context.Set<ProjectSubConstractor>()
+                                .Where(r => !r.IsDeleted)
+                                .Where(r => r.ProjectId == projectId)
+                                .Select(r => r.SubConstructorId);
+
+                if (subConstructorsIds == null)
+                    throw new NullReferenceException(nameof(subConstructorsIds));
+
+                if (!subConstructorsIds.Any())
+                    return default(List<SubConstructorDto>)!;
+
+                var subConstructors = await _context.Set<SubConstructor>()
+                    .Where(s => !s.IsDeleted)
+                    .Where(s => subConstructorsIds.Contains(s.Id))
+                    .ToListAsync();
+
+                return Mapping.Mapper.Map<List<SubConstructorDto>>(subConstructors);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.GetSubConstructors(int projectId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
+    public async Task<ICollection<int>> GetSubConstructorsIds(int projectId)
+    {
+        try
+        {
+            if (projectId == 0)
+                throw new ArgumentException(nameof(projectId));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var subConstructorsIds = _context.Set<ProjectSubConstractor>()
+                                .Where(r => !r.IsDeleted)
+                                .Where(r => r.ProjectId == projectId)
+                                .Select(r => r.SubConstructorId);
+
+                if (subConstructorsIds == null)
+                    throw new NullReferenceException(nameof(subConstructorsIds));
+
+                if (!subConstructorsIds.Any())
+                    return default(List<int>)!;
+
+                var subConstructors = await _context.Set<SubConstructor>()
+                    .Where(s => !s.IsDeleted)
+                    .Where(s => subConstructorsIds.Contains(s.Id))
+                    .Select(s => s.Id)
+                    .ToListAsync();
+
+                return subConstructors;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ProjectsRepo.GetSubConstructorsIds(int projectId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
         }
     }
 
