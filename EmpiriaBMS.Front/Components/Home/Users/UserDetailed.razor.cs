@@ -7,6 +7,7 @@ using EmpiriaBMS.Models.Models;
 using Humanizer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EmpiriaBMS.Front.Components.Home.Users;
 
@@ -95,6 +96,8 @@ public partial class UserDetailed
 
             if (myRolesIds != null)
                 await _dataProvider.Users.UpdateRoles(added.Id, myRolesIds);
+
+            await OnSave.InvokeAsync(added);
         }
         else
         {
@@ -106,13 +109,11 @@ public partial class UserDetailed
 
             if (myRolesIds != null)
                 await _dataProvider.Users.UpdateRoles(updated.Id, myRolesIds);
+
+            await OnSave.InvokeAsync(updated);
         }
 
-        
-
         Content.Emails = Emails;
-
-        await OnSave.InvokeAsync(Content);
     }
 
     private async Task CancelAsync()

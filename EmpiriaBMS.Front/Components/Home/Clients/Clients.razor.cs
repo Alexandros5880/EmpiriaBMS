@@ -98,7 +98,7 @@ public partial class Clients
             Modal = true,
             PreventScroll = true,
             Width = "min(max(50vw, 500px), 1000px)",
-            Height = "min(max(70vh, 800px), 1000px)"
+            Height = "min(max(70vh, 700px), 1000px)"
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<ClientDetailedDialog>(record, parameters);
