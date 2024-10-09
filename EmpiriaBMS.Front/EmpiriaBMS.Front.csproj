@@ -46,13 +46,17 @@
 
   <ItemGroup>
     <ProjectCapability Include="TeamsFx" />
+    <Compile Remove="Components\WorkingHours\**" />
 	<Compile Remove="TeamsFx-Auth/**/*" />
 	<None Include="TeamsFx-Auth/**/*" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="build/**/*" />
+    <None Remove="Components\WorkingHours\**" />
     <Content Remove="build/**/*" />
+    <Content Remove="Components\WorkingHours\**" />
+    <EmbeddedResource Remove="Components\WorkingHours\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -109,10 +113,6 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Components\WorkingHours\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties apppackage_4manifest_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
