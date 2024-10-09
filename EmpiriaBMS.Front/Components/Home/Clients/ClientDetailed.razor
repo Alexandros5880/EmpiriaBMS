@@ -1,6 +1,7 @@
 ﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
 @using EmpiriaBMS.Models.Models
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Home.Users
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
@@ -214,6 +215,56 @@
                 </div>
             </div>
         </div>
+
+        <!-- Users -->
+        @if (Content.Id != 0)
+        {
+            <div class="col-12 row border rounded m-2"
+                 style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
+                <div class="col-12 d-flex justify-content-between">
+                    <h4>Users</h4>
+                    <FluentButton IconEnd="@(new Icons.Regular.Size16.Add())"
+                                  OnClick="@_addUser"
+                                  Class="mt-2">
+                        Add
+                    </FluentButton>
+                </div>
+                <div class="table-responsive p-1 w-100 h-100"
+                     style="max-height: 300px !important; overflow-y: auto;">
+                    <table class="bg-transparent">
+                        <tbody>
+                            @foreach (var user in _users)
+                            {
+                                <tr clss="align-middle d-flex" @key="user.Id">
+                                    <td class="align-middle">
+                                        <div class="ms-3 mt-2">
+                                            @user.FullName
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+        <!-- User Detailed -->
+        @if (_addUserMode)
+            {
+                <div class="col-12 row border rounded m-2"
+                     style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
+
+                <UserDetailed @ref="@_userDetailComp"
+                              OnSave="@_onUserSave"
+                              OnCancel="@_onUserCancel"
+                              DisplayActions="true"
+                              AcceptActionText="Add User"
+                              Title="Add User"
+                              Content="@_newUser" />
+                    
+                </div>
+            }
 
     </div>
 

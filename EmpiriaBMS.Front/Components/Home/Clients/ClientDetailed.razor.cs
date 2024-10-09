@@ -1,6 +1,8 @@
-﻿using EmpiriaBMS.Core.Config;
+﻿using AutoMapper;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -8,8 +10,10 @@ using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using EmpiriaBMS.Front.Components.Home.Users;
 
 
 namespace EmpiriaBMS.Front.Components.Home.Clients;
@@ -163,6 +167,57 @@ public partial class ClientDetailed
 
     public async Task CancelAsync() => await OnCancel.InvokeAsync();
 
+    private async Task _getRecords()
+    {
+        await _getEmails();
+        await _getUsers();
+    }
+
+    #region Users DatGrid
+    ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
+    private UserVM _newUser;
+    private UserDetailed _userDetailComp;
+    private bool _addUserMode = false;
+
+    private async Task _getUsers()
+    {
+        if (Content == null || Content.Id == 0)
+            return;
+
+        var dtos = await _dataProvider.Clients.GetUsers(Content.Id);
+        var vms = _mapper.Map<List<UserVM>>(dtos);
+
+        _users.Clear();
+        vms.ForEach(_users.Add);
+    }
+
+    private void _addUser()
+    {
+        _newUser = new UserVM()
+        {
+            ClientId = Content.Id
+        };
+
+        _addUserMode = true;
+    }
+
+    private void _onUserSave(UserVM updated)
+    {
+        _users.Insert(0, updated);
+        _addUserMode = false;
+    }
+
+    private void _onUserCancel()
+    {
+        _addUserMode = false;
+    }
+
+    private async void _deleteUser(int userId)
+    {
+        await _dataProvider.Clients.RemoveUser(userId);
+    }
+    #endregion
+
     #region Emails Data Grid
     FluentDataGrid<Email> myGrid;
     private List<Email> _emails = new List<Email>();
@@ -180,13 +235,6 @@ public partial class ClientDetailed
         {
             _filterString = string.Empty;
         }
-    }
-
-    private async Task _getRecords()
-    {
-        var emails = await _dataProvider.Clients.GetEmails(Content.Id);
-        _emails = emails.ToList();
-        Content.Emails = emails;
     }
 
     private void _onEmailAddressChange(string preEmailAddress, ChangeEventArgs e)
@@ -215,6 +263,17 @@ public partial class ClientDetailed
         var valid = Validate("Emails");
         if (valid)
             Content.Emails = _emails;
+    }
+
+    private async Task _getEmails()
+    {
+        if (Content == null || Content.Id == 0)
+            return;
+
+        var emails = await _dataProvider.Clients.GetEmails(Content.Id);
+        _emails = emails.ToList();
+
+        Content.Emails = emails;
     }
 
     private async Task _addEmail()

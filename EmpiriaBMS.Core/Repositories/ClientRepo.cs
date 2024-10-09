@@ -12,6 +12,7 @@ public class ClientRepo : Repository<ClientDto, Client>
     private readonly OfferRepo _offerRepo;
     private readonly ProjectsRepo _projectRep;
     private readonly InvoiceRepo _invoiceRepo;
+    private readonly UsersRepo _userRepo;
 
     public ClientRepo(
         IDbContextFactory<AppDbContext> DbFactory,
@@ -21,6 +22,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         _projectRep = new ProjectsRepo(DbFactory, logger);
         _offerRepo = new OfferRepo(DbFactory, logger);
         _invoiceRepo = new InvoiceRepo(DbFactory, logger);
+        _userRepo = new UsersRepo(DbFactory, logger);
     }
 
     public async Task<ClientDto> Add(ClientDto entity, bool update = false)
@@ -51,7 +53,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ClientRepo.Add(Client): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            throw;
         }
     }
 
@@ -111,7 +113,65 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    #region Email
+    #region Users
+    public async Task<ICollection<UserDto>> GetUsers(int clientId)
+    {
+        try
+        {
+            if (clientId == 0)
+                return new List<UserDto>();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var users = await _context.Set<User>()
+                                     .Where(r => !r.IsDeleted)
+                                     .Where(r => r.ClientId == clientId)
+                                     .ToListAsync();
+
+                return Mapping.Mapper.Map<List<UserDto>>(users);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.GetUsers(int clientId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
+    public async Task RemoveUser(int userId)
+    {
+        try
+        {
+            if (userId == 0)
+                return;
+
+            await _userRepo.Delete(userId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.RemoveUser(int userId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
+    public async Task AddUser(UserDto user)
+    {
+        try
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            await _userRepo.Add(user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On ClientRepo.AddUser(int userId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+    #endregion
+
+    #region Emails
     public async Task<ICollection<Email>> GetEmails(int clientId)
     {
         if (clientId == 0)
