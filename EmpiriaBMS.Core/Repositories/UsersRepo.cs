@@ -10,10 +10,15 @@ using System.Linq.Expressions;
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>
 {
+
+    private readonly EmailRepo _emailRepo;
     public UsersRepo(
         IDbContextFactory<AppDbContext> DbFactory,
         Logging.LoggerManager logger
-    ) : base(DbFactory, logger) { }
+    ) : base(DbFactory, logger)
+    {
+        _emailRepo = new EmailRepo(DbFactory, logger);
+    }
 
     public async Task<bool> Exists(string email)
     {
@@ -574,11 +579,7 @@ public class UsersRepo : Repository<UserDto, User>
                     if (updated == null)
                         continue;
 
-                    using (var _context = _dbContextFactory.CreateDbContext())
-                    {
-                        _context.Entry(prevEmail).CurrentValues.SetValues(Mapping.Mapper.Map<Email>(updated));
-                        await SaveChangesAsync();
-                    }
+                    await _emailRepo.Update(updated);
 
                     emails.Remove(updated);
                 }

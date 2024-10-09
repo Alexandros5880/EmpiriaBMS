@@ -176,8 +176,8 @@ public partial class ClientDetailed
         await _getUsers();
     }
 
-    #region Users DatGrid
-    IQueryable<UserVM>? FilteredUsers => _users?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    #region Users Data Grid
+    IQueryable<UserVM> FilteredUsers => _users?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
     PaginationState _usersPagination = new PaginationState { ItemsPerPage = 5 };
     ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
     private UserVM _selectedUser = new UserVM();
