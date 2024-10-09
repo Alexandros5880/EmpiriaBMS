@@ -151,5 +151,10 @@ public partial class Dashboard
         }
 
     }
+
+    private void _onPaymentChanged()
+    {
+        StateHasChanged();
+    }
     #endregion
 }

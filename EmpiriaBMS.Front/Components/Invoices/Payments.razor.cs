@@ -17,6 +17,9 @@ public partial class Payments : ComponentBase
     [Parameter]
     public bool IsWorkingMode { get; set; } = false;
 
+    [Parameter]
+    public EventCallback OnChanged { get; set; }
+
     #region Data Grid
     private List<PaymentVM> _records = new List<PaymentVM>();
     private string _filterString = string.Empty;
@@ -81,6 +84,7 @@ public partial class Payments : ComponentBase
             var dto = Mapper.Map<PaymentDto>(vm);
             await DataProvider.Payments.Add(dto);
             await _getRecords(Invoice.Id);
+            await OnChanged.InvokeAsync();
         }
     }
 
@@ -114,6 +118,7 @@ public partial class Payments : ComponentBase
             var dto = Mapper.Map<PaymentDto>(vm);
             await DataProvider.Payments.Update(dto);
             await _getRecords(Invoice.Id);
+            await OnChanged.InvokeAsync();
         }
     }
 
@@ -130,6 +135,7 @@ public partial class Payments : ComponentBase
 
         await dialog.CloseAsync();
         await _getRecords(Invoice.Id);
+        await OnChanged.InvokeAsync();
     }
     #endregion
 
