@@ -97,7 +97,8 @@ public partial class UserDetailed
             if (myRolesIds != null)
                 await _dataProvider.Users.UpdateRoles(added.Id, myRolesIds);
 
-            await OnSave.InvokeAsync(added);
+            var vm = _mapper.Map<UserVM>(added);
+            await OnSave.InvokeAsync(vm);
         }
         else
         {
@@ -109,8 +110,9 @@ public partial class UserDetailed
 
             if (myRolesIds != null)
                 await _dataProvider.Users.UpdateRoles(updated.Id, myRolesIds);
-
-            await OnSave.InvokeAsync(updated);
+            
+            var vm = _mapper.Map<UserVM>(updated);
+            await OnSave.InvokeAsync(vm);
         }
 
         Content.Emails = Emails;

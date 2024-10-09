@@ -13,10 +13,10 @@ namespace EmpiriaBMS.Front.Components.Admin.Users;
 public partial class UserDetailed
 {
     [Parameter]
-    public UserVM Content { get; set; } = default!;
+    public UserVM Content { get; set; }
 
     [Parameter]
-    public string Title { get; set; } = null;
+    public string Title { get; set; } = "Create Users";
 
     [Parameter]
     public string Height { get; set; } = null;
@@ -25,10 +25,22 @@ public partial class UserDetailed
     public bool Vertical { get; set; } = false;
 
     [Parameter]
-    public EventCallback OnCancel { get; set; } = default!;
+    public EventCallback<UserVM> OnSave { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public bool DisplayTitle { get; set; } = true;
 
     [Parameter]
     public bool DisplayActions { get; set; } = true;
+
+    [Parameter]
+    public string AcceptActionText { get; set; } = "Save";
+
+    [Parameter]
+    public string CancelActionText { get; set; } = "Cancel";
 
     private FluentTextField _firstNameField;
 
@@ -79,6 +91,12 @@ public partial class UserDetailed
                 await _dataProvider.Users.UpsertEmails(added.Id, emailsDtos);
             }
             added.Emails = Emails;
+
+            if (myRolesIds != null)
+                await _dataProvider.Users.UpdateRoles(added.Id, myRolesIds);
+
+            var vm = _mapper.Map<UserVM>(added);
+            await OnSave.InvokeAsync(vm);
         }
         else
         {
@@ -87,10 +105,13 @@ public partial class UserDetailed
             emailsDtos.ForEach(e => e.UserId = updated.Id);
             await _dataProvider.Users.UpsertEmails(updated.Id, emailsDtos);
             updated.Emails = Emails;
-        }
 
-        if (myRolesIds != null)
-            await _dataProvider.Users.UpdateRoles(dto.Id, myRolesIds);
+            if (myRolesIds != null)
+                await _dataProvider.Users.UpdateRoles(updated.Id, myRolesIds);
+
+            var vm = _mapper.Map<UserVM>(updated);
+            await OnSave.InvokeAsync(vm);
+        }
 
         Content.Emails = Emails;
     }

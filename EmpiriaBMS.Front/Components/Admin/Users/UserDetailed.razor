@@ -302,14 +302,19 @@
         </div>
     </div>
 
-    <!-- Footer-->
     @if (DisplayActions)
     {
-        <div class="col-12">
-            <FluentStack VerticalAlignment="VerticalAlignment.Center">
-                <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
-                <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
-            </FluentStack>
+        @* Footer *@
+        <div class="row mb-2" style="margin: 0 auto;">
+            <div class="col-12 row" style="margin: 0 auto;">
+                <FluentFooter>
+                    <FluentStack Orientation="Orientation.Horizontal"
+                                 HorizontalAlignment="HorizontalAlignment.End">
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">@AcceptActionText</FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">@CancelActionText</FluentButton>
+                    </FluentStack>
+                </FluentFooter>
+            </div>
         </div>
     }
 
