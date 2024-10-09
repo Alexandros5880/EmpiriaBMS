@@ -34,6 +34,9 @@ public class UserDto : EntityDto
     public int? ClientId { get; set; }
     public Client? Client { get; set; }
 
+    public int? SubConstructorId { get; set; }
+    public SubConstructor? SubConstructor { get; set; }
+
     public ICollection<Email>? Emails { get; set; }
 
     public ICollection<Project>? PMProjects { get; set; }
@@ -57,8 +60,6 @@ public class UserDto : EntityDto
     public ICollection<DailyTime>? CorporateEventTime { get; set; }
 
     public ICollection<Issue>? MyIssues { get; set; }
-
-    public ICollection<SubConstructor>? SubConstructors { get; set; }
 
     [NotMapped]
     public string FullName => $"{LastName} {MidName} {FirstName}";

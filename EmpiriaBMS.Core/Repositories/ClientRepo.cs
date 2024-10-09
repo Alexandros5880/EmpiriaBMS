@@ -13,6 +13,7 @@ public class ClientRepo : Repository<ClientDto, Client>
     private readonly ProjectsRepo _projectRep;
     private readonly InvoiceRepo _invoiceRepo;
     private readonly UsersRepo _userRepo;
+    private readonly EmailRepo _emailRepo;
 
     public ClientRepo(
         IDbContextFactory<AppDbContext> DbFactory,
@@ -23,6 +24,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         _offerRepo = new OfferRepo(DbFactory, logger);
         _invoiceRepo = new InvoiceRepo(DbFactory, logger);
         _userRepo = new UsersRepo(DbFactory, logger);
+        _emailRepo = new EmailRepo(DbFactory, logger);
     }
 
     public async Task<ClientDto> Add(ClientDto entity, bool update = false)
@@ -216,11 +218,7 @@ public class ClientRepo : Repository<ClientDto, Client>
                     if (updated == null)
                         continue;
 
-                    using (var _context = _dbContextFactory.CreateDbContext())
-                    {
-                        _context.Entry(prevEmail).CurrentValues.SetValues(Mapping.Mapper.Map<Email>(updated));
-                        await SaveChangesAsync();
-                    }
+                    await _emailRepo.Update(updated);
 
                     emails.Remove(updated);
                 }

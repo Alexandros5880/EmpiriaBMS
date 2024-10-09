@@ -13,10 +13,75 @@ namespace EmpiriaBMS.Core.Repositories;
 
 public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
 {
+    private readonly UsersRepo _userRepo;
+    private readonly EmailRepo _emailRepo;
+
     public SubConstructorRepo(
         IDbContextFactory<AppDbContext> DbFactory,
         Logging.LoggerManager logger
-    ) : base(DbFactory, logger) { }
+    ) : base(DbFactory, logger)
+    {
+        _userRepo = new UsersRepo(DbFactory, logger);
+        _emailRepo = new EmailRepo(DbFactory, logger);
+    }
+
+    #region Users
+    public async Task<ICollection<UserDto>> GetUsers(int subConstructorId)
+    {
+        try
+        {
+            if (subConstructorId == 0)
+                return new List<UserDto>();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var users = await _context.Set<User>()
+                                     .Where(r => !r.IsDeleted)
+                                     .Where(r => r.SubConstructorId == subConstructorId)
+                                     .ToListAsync();
+
+                return Mapping.Mapper.Map<List<UserDto>>(users);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On SubConstructorRepo.GetUsers(int subConstructorId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
+    public async Task RemoveUser(int userId)
+    {
+        try
+        {
+            if (userId == 0)
+                return;
+
+            await _userRepo.Delete(userId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On SubConstructorRepo.RemoveUser(int userId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
+    public async Task AddUser(UserDto user)
+    {
+        try
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            await _userRepo.Add(user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On SubConstructorRepo.AddUser(int userId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+    #endregion
 
     #region Email
     public async Task<ICollection<Email>> GetEmails(int subconstructorId)
@@ -62,11 +127,7 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
                     if (updated == null)
                         continue;
 
-                    using (var _context = _dbContextFactory.CreateDbContext())
-                    {
-                        _context.Entry(prevEmail).CurrentValues.SetValues(Mapping.Mapper.Map<Email>(updated));
-                        await SaveChangesAsync();
-                    }
+                    await _emailRepo.Update(updated);
 
                     emails.Remove(updated);
                 }

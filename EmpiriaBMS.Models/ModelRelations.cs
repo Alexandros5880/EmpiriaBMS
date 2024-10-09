@@ -115,11 +115,11 @@ public static class ModelRelations
                .HasForeignKey(u => u.ClientId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // SubConstructors User
-        builder.Entity<SubConstructor>()
-               .HasOne(i => i.User)
-               .WithMany(p => p.SubConstructors)
-               .HasForeignKey(i => i.UserId)
+        // Users SubConstructor
+        builder.Entity<User>()
+               .HasOne(i => i.SubConstructor)
+               .WithMany(p => p.Users)
+               .HasForeignKey(i => i.SubConstructorId)
                .OnDelete(DeleteBehavior.NoAction);
 
         // Invoices Project

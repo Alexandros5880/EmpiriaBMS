@@ -187,6 +187,32 @@ public class UserVM : BaseVM
         }
     }
 
+    private int? _subConstructorId;
+    public int? SubConstructorId
+    {
+        get => _subConstructorId;
+        set
+        {
+            if (value == _subConstructorId)
+                return;
+            _subConstructorId = value;
+            NotifyPropertyChanged(nameof(SubConstructorId));
+        }
+    }
+
+    private SubConstructor _subConstructor;
+    public SubConstructor SubConstructor
+    {
+        get => _subConstructor;
+        set
+        {
+            if (value == _subConstructor)
+                return;
+            _subConstructor = value;
+            NotifyPropertyChanged(nameof(SubConstructor));
+        }
+    }
+
     public ICollection<Email>? Emails { get; set; }
 
     public ICollection<Project>? PMProjects { get; set; }
@@ -210,8 +236,6 @@ public class UserVM : BaseVM
     public ICollection<DailyTime>? CorporateEventTime { get; set; }
 
     public ICollection<Issue>? MyIssues { get; set; }
-
-    public ICollection<SubConstructor>? SubConstructors { get; set; }
 
     [NotMapped]
     public string FullName => $"{LastName} {MidName} {FirstName}";
