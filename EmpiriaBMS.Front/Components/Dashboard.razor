@@ -103,7 +103,8 @@
                                     <div class="col mt-4">
                                         <Payments @ref="@_invoiceIncomePaymentsRef"
                                                   Invoice="@_selectedIncomeInvoice"
-                                                  IsWorkingMode="@_isWorkingMode" />
+                                                  IsWorkingMode="@_isWorkingMode"
+                                                  OnChanged="@_onPaymentChanged" />
                                     </div>
                                 }
                             </div>
@@ -146,7 +147,8 @@
                                     <div class="col mt-4">
                                         <Payments @ref="@_invoiceExpensePaymentsRef"
                                                   Invoice="@_selectedExpenseInvoice"
-                                                  IsWorkingMode="@_isWorkingMode" />
+                                                  IsWorkingMode="@_isWorkingMode"
+                                                  OnChanged="@_onPaymentChanged" />
                                     </div>
                                 }
                             </div>
