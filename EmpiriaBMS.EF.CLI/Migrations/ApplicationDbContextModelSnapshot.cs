@@ -1297,12 +1297,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("SubConstructor");
                 });
@@ -1479,12 +1474,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<string>("ProxyAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SubConstructorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("TeamsObjectId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("SubConstructorId");
 
                     b.ToTable("Users");
                 });
@@ -1939,16 +1939,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("EmpiriaBMS.Models.Models.SubConstructor", b =>
-                {
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "User")
-                        .WithMany("SubConstructors")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SupportiveWork", b =>
                 {
                     b.HasOne("EmpiriaBMS.Models.Models.Discipline", "Discipline")
@@ -1994,7 +1984,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("EmpiriaBMS.Models.Models.SubConstructor", "SubConstructor")
+                        .WithMany("Users")
+                        .HasForeignKey("SubConstructorId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("Client");
+
+                    b.Navigation("SubConstructor");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.UserRole", b =>
@@ -2160,6 +2157,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("Emails");
 
                     b.Navigation("ProjectsSubConstructors");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SupportiveWork", b =>
@@ -2193,8 +2192,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Navigation("PMProjects");
 
                     b.Navigation("PersonalTime");
-
-                    b.Navigation("SubConstructors");
 
                     b.Navigation("SupportiveWorksEmployees");
 
