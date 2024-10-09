@@ -8,6 +8,7 @@
 @inject IDialogService _dialogService
 @inject Logging.LoggerManager Logger
 @inject MicrosoftTeams MicrosoftTeams
+@inject IDialogService DialogService
 
 <div class="row" style="margin: 0 auto; overflow-y: auto; height: 100%;">
     
@@ -154,7 +155,7 @@
                     <FluentDataGrid @ref="@myGrid"
                                     Items="@FilteredEmails"
                                     ResizableColumns=true
-                                    Pagination="@pagination"
+                                    Pagination="@emailsPeginator"
                                     TGridItem="Email"
                                     GridTemplateColumns="auto 100px">
 
@@ -184,12 +185,12 @@
             </div>
             <div class="row" style="min-width: 50%;">
                 <div class="row">
-                    <FluentPaginator State="@pagination">
+                    <FluentPaginator State="@emailsPeginator">
                         <SummaryTemplate>
-                            There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                            There are <strong>@(emailsPeginator.TotalItemCount ?? 0)</strong> rows
                         </SummaryTemplate>
                         <PaginationTextTemplate>
-                            This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                            This is page <strong>@(emailsPeginator.CurrentPageIndex + 1)</strong> out of a total of <strong>@(emailsPeginator.LastPageIndex + 1)</strong> pages
                         </PaginationTextTemplate>
                     </FluentPaginator>
                 </div>
@@ -229,23 +230,59 @@
                         Add
                     </FluentButton>
                 </div>
-                <div class="table-responsive p-1 w-100 h-100"
-                     style="max-height: 300px !important; overflow-y: auto;">
-                    <table class="bg-transparent">
-                        <tbody>
-                            @foreach (var user in _users)
-                            {
-                                <tr clss="align-middle d-flex" @key="user.Id">
-                                    <td class="align-middle">
-                                        <div class="ms-3 mt-2">
-                                            @user.FullName
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+
+                <div class="mt-2 m-2" style="height: 280px;">
+                    <FluentDataGrid Items="@FilteredUsers"
+                                    ResizableColumns=true
+                                    Pagination="@_usersPagination"
+                                    TGridItem="UserVM"
+                                    OnRowFocus="HandleUsersRowFocus"
+                                    GridTemplateColumns="2fr 2fr 100px"
+                                    style="height: 280px; overflow:auto;">
+
+
+
+                        <TemplateColumn Title="Name"
+                                        Sortable="true"
+                                        InitialSortDirection=SortDirection.Descending
+                                        IsDefaultSortColumn=true>
+                            <ColumnOptions>
+                                <div class="search-box">
+                                    <FluentSearch type="search"
+                                                  Autofocus=true
+                                                  @bind-Value="@_filterString"
+                                                  Placeholder="Name..."
+                                                  @oninput="@HandleUsersFilter" />
+                                </div>
+                            </ColumnOptions>
+                            <ChildContent>
+                                @(context.FullName)
+                            </ChildContent>
+                        </TemplateColumn>
+
+                        <PropertyColumn Property="@(p => p.ProxyAddress)" Sortable="true" Title="ProxyAddress" Align="@Align.Start" />
+
+                        <TemplateColumn Title="Actions" Align="@Align.End">
+                            <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _editUser(context))" />
+                            <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _deleteUser(context))" />
+                        </TemplateColumn>
+
+                    </FluentDataGrid>
                 </div>
+
+                <div style="min-width: 50%;">
+                    <FluentPaginator State="@_usersPagination">
+                        <SummaryTemplate>
+                            There are <strong>@(_usersPagination.TotalItemCount ?? 0)</strong> rows
+                        </SummaryTemplate>
+                        <PaginationTextTemplate>
+                            This is page <strong>@(_usersPagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(_usersPagination.LastPageIndex + 1)</strong> pages
+                        </PaginationTextTemplate>
+                    </FluentPaginator>
+                </div>
+
+
+
             </div>
         }
 
@@ -260,8 +297,8 @@
                               OnCancel="@_onUserCancel"
                               DisplayActions="true"
                               AcceptActionText="Add User"
-                              Title="Add User"
-                              Content="@_newUser" />
+                              Title="@_detailedUserTitle"
+                              Content="@_selectedUser" />
                     
                 </div>
             }
