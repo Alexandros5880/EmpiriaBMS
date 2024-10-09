@@ -20,8 +20,7 @@ public class SubConstructorDto : EntityDto
 
     public ICollection<Email>? Emails { get; set; }
 
-    public int? UserId { get; set; }
-    public User? User { get; set; }
+    public ICollection<User>? Users { get; set; }
 
     public ICollection<ProjectSubConstractor>? ProjectsSubConstructors { get; set; }
 }

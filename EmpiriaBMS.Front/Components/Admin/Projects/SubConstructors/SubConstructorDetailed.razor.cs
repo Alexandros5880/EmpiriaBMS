@@ -6,6 +6,8 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using System.Collections.ObjectModel;
+using EmpiriaBMS.Front.Components.Admin.Users;
 
 namespace EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 
@@ -42,6 +44,7 @@ public partial class SubConstructorDetailed
         if (firstRender)
         {
             await _getEmails();
+            await _getUsers();
 
             Validate("SubConstructors");
 
@@ -68,24 +71,28 @@ public partial class SubConstructorDetailed
                 emailsDtos.ForEach(e => e.SubConstructorId = added.Id);
                 await _dataProvider.SubConstructors.UpsertEmails(added.Id, emailsDtos);
                 added.Emails = _emails;
+                await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(added));
+                Content = _mapper.Map<SubConstructorVM>(added);
             }
-            
-            await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(added));
         }
         else
         {
             var updated = await _dataProvider.SubConstructors.Update(dto);
-            _emails.ForEach(e => e.SubConstructorId = updated.Id);
-            emailsDtos.ForEach(e => e.SubConstructorId = updated.Id);
-            await _dataProvider.SubConstructors.UpsertEmails(updated.Id, emailsDtos);
-            updated.Emails = _emails;
-            await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(updated));
+            if (updated != null)
+            {
+                _emails.ForEach(e => e.SubConstructorId = updated.Id);
+                emailsDtos.ForEach(e => e.SubConstructorId = updated.Id);
+                await _dataProvider.SubConstructors.UpsertEmails(updated.Id, emailsDtos);
+                updated.Emails = _emails;
+                await OnSave.InvokeAsync(_mapper.Map<SubConstructorVM>(updated));
+                Content = _mapper.Map<SubConstructorVM>(updated);
+            }
         }
     }
 
     public async Task CancelAsync() => await OnCancel.InvokeAsync();
 
-    #region SubConstructors Data Grid
+    #region Emails Data Grid
     FluentDataGrid<Email> myGrid;
     private List<Email> _emails = new List<Email>();
     private string _filterString = string.Empty;
@@ -134,7 +141,7 @@ public partial class SubConstructorDetailed
             });
         }
 
-        Validate("SubConstructors");
+        Validate("Email");
     }
 
     private async Task _addEmail()
@@ -155,8 +162,109 @@ public partial class SubConstructorDetailed
     }
     #endregion
 
+    #region Users Data Grid
+    IQueryable<UserVM> FilteredUsers => _users?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState _usersPagination = new PaginationState { ItemsPerPage = 5 };
+    ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
+    private UserVM _selectedUser = new UserVM();
+    private string _detailedUserTitle = "";
+    private string _detailedUserAcceptButtonText = "";
+    private UserDetailed _userDetailComp;
+    private bool _addUserMode = false;
+
+    private void HandleUsersFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        {
+            _filterString = string.Empty;
+        }
+    }
+
+    private void HandleUsersRowFocus(FluentDataGridRow<UserVM> row)
+    {
+        _selectedUser = row.Item as UserVM;
+    }
+
+    private async Task _deleteUser(UserVM record)
+    {
+        var dialog = await _dialogService.ShowConfirmationAsync($"Are you sure you want to delete this user {record.FullName}?", "Yes", "No", "Deleting user...");
+
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+            await _dataProvider.SubConstructors.RemoveUser(record.Id);
+
+        var forDelete = _users.FirstOrDefault(x => x.Id == record.Id);
+        _users.Remove(forDelete);
+
+        await dialog.CloseAsync();
+    }
+
+    private async Task _getUsers()
+    {
+        if (Content == null || Content.Id == 0)
+            return;
+
+        var dtos = await _dataProvider.SubConstructors.GetUsers(Content.Id);
+        var vms = _mapper.Map<List<UserVM>>(dtos);
+
+        _users.Clear();
+        vms.ForEach(_users.Add);
+    }
+
+    private void _addUser()
+    {
+        _detailedUserTitle = "Add User";
+        _detailedUserAcceptButtonText = "Add User";
+
+        _selectedUser = new UserVM()
+        {
+            SubConstructorId = Content.Id
+        };
+
+        _addUserMode = true;
+    }
+
+    private void _editUser(UserVM record)
+    {
+        _detailedUserTitle = "Edit User";
+        _detailedUserAcceptButtonText = "Edit User";
+
+        _selectedUser = record;
+
+        _addUserMode = true;
+    }
+
+    private void _onUserSave(UserVM updated)
+    {
+        var exists = _users.Any(u => u.Id == updated.Id);
+        if (exists)
+        {
+            var old = _users.FirstOrDefault(u => u.Id == updated.Id);
+            var index = _users.IndexOf(old);
+            _users.Remove(old);
+            _users.Insert(index, updated);
+        }
+        else
+        {
+            _users.Insert(0, updated);
+        }
+
+        _addUserMode = false;
+    }
+
+    private void _onUserCancel()
+    {
+        _addUserMode = false;
+    }
+    #endregion
+
     #region Validation
-    private bool validSubConstructors = true;
+    private bool validEmails = true;
     private bool validName = true;
     private bool validPhone = true;
 
@@ -164,23 +272,23 @@ public partial class SubConstructorDetailed
     {
         if (fieldname == null)
         {
-            validSubConstructors = _emails?.Any() ?? false;
+            validEmails = _emails?.Any() ?? false;
             validName = !string.IsNullOrEmpty(Content.Name);
             validPhone = !string.IsNullOrEmpty(Content.Phone) && _isValidPhoneNumber(Content.Phone);
 
-            return validSubConstructors && validName && validPhone;
+            return validEmails && validName && validPhone;
         }
         else
         {
-            validSubConstructors = true;
+            validEmails = true;
             validName = true;
             validPhone = true;
 
             switch (fieldname)
             {
-                case "SubConstructors":
-                    validSubConstructors = _emails?.Any() ?? false;
-                    return validSubConstructors;
+                case "Emails":
+                    validEmails = _emails?.Any() ?? false;
+                    return validEmails;
                 case "Name":
                     validName = !string.IsNullOrEmpty(Content.Name);
                     return validName;
