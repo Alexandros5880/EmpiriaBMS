@@ -7,11 +7,13 @@ using EmpiriaBMS.Models.Models;
 using Humanizer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace EmpiriaBMS.Front.Components.Admin.Users;
+namespace EmpiriaBMS.Front.Components.Home.Users;
 
 public partial class UserDetailed
 {
+
     [Parameter]
     public UserVM Content { get; set; }
 
@@ -108,7 +110,7 @@ public partial class UserDetailed
 
             if (myRolesIds != null)
                 await _dataProvider.Users.UpdateRoles(updated.Id, myRolesIds);
-
+            
             var vm = _mapper.Map<UserVM>(updated);
             await OnSave.InvokeAsync(vm);
         }
@@ -308,4 +310,5 @@ public partial class UserDetailed
     private bool _isValidEmail(string email) => GeneralValidator.IsValidEmail(email);
     private bool _isValidPhoneNumber(string phone) => GeneralValidator.IsValidPhoneNumber(phone);
     #endregion
+
 }

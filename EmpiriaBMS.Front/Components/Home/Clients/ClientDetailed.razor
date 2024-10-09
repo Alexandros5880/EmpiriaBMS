@@ -1,12 +1,14 @@
 ﻿@using EmpiriaBMS.Front.ViewModel.Interfaces
 @using EmpiriaBMS.Models.Models
 @using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Home.Users
 
 @inject IDataProvider _dataProvider
 @inject IMapper _mapper
 @inject IDialogService _dialogService
 @inject Logging.LoggerManager Logger
 @inject MicrosoftTeams MicrosoftTeams
+@inject IDialogService DialogService
 
 <div class="row" style="margin: 0 auto; overflow-y: auto; height: 100%;">
     
@@ -153,7 +155,7 @@
                     <FluentDataGrid @ref="@myGrid"
                                     Items="@FilteredEmails"
                                     ResizableColumns=true
-                                    Pagination="@pagination"
+                                    Pagination="@emailsPeginator"
                                     TGridItem="Email"
                                     GridTemplateColumns="auto 100px">
 
@@ -183,12 +185,12 @@
             </div>
             <div class="row" style="min-width: 50%;">
                 <div class="row">
-                    <FluentPaginator State="@pagination">
+                    <FluentPaginator State="@emailsPeginator">
                         <SummaryTemplate>
-                            There are <strong>@(pagination.TotalItemCount ?? 0)</strong> rows
+                            There are <strong>@(emailsPeginator.TotalItemCount ?? 0)</strong> rows
                         </SummaryTemplate>
                         <PaginationTextTemplate>
-                            This is page <strong>@(pagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(pagination.LastPageIndex + 1)</strong> pages
+                            This is page <strong>@(emailsPeginator.CurrentPageIndex + 1)</strong> out of a total of <strong>@(emailsPeginator.LastPageIndex + 1)</strong> pages
                         </PaginationTextTemplate>
                     </FluentPaginator>
                 </div>
@@ -214,6 +216,92 @@
                 </div>
             </div>
         </div>
+
+        <!-- Users -->
+        @if (Content.Id != 0)
+        {
+            <div class="col-12 row border rounded m-2"
+                 style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
+                <div class="col-12 d-flex justify-content-between">
+                    <h4>Users</h4>
+                    <FluentButton IconEnd="@(new Icons.Regular.Size16.Add())"
+                                  OnClick="@_addUser"
+                                  Class="mt-2">
+                        Add
+                    </FluentButton>
+                </div>
+
+                <div class="mt-2 m-2" style="height: 280px;">
+                    <FluentDataGrid Items="@FilteredUsers"
+                                    ResizableColumns=true
+                                    Pagination="@_usersPagination"
+                                    TGridItem="UserVM"
+                                    OnRowFocus="HandleUsersRowFocus"
+                                    GridTemplateColumns="2fr 2fr 100px"
+                                    style="height: 280px; overflow:auto;">
+
+
+
+                        <TemplateColumn Title="Name"
+                                        Sortable="true"
+                                        InitialSortDirection=SortDirection.Descending
+                                        IsDefaultSortColumn=true>
+                            <ColumnOptions>
+                                <div class="search-box">
+                                    <FluentSearch type="search"
+                                                  Autofocus=true
+                                                  @bind-Value="@_filterString"
+                                                  Placeholder="Name..."
+                                                  @oninput="@HandleUsersFilter" />
+                                </div>
+                            </ColumnOptions>
+                            <ChildContent>
+                                @(context.FullName)
+                            </ChildContent>
+                        </TemplateColumn>
+
+                        <PropertyColumn Property="@(p => p.ProxyAddress)" Sortable="true" Title="ProxyAddress" Align="@Align.Start" />
+
+                        <TemplateColumn Title="Actions" Align="@Align.End">
+                            <FluentButton aria-label="Edit" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => _editUser(context))" />
+                            <FluentButton aria-label="Delete" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => _deleteUser(context))" />
+                        </TemplateColumn>
+
+                    </FluentDataGrid>
+                </div>
+
+                <div style="min-width: 50%;">
+                    <FluentPaginator State="@_usersPagination">
+                        <SummaryTemplate>
+                            There are <strong>@(_usersPagination.TotalItemCount ?? 0)</strong> rows
+                        </SummaryTemplate>
+                        <PaginationTextTemplate>
+                            This is page <strong>@(_usersPagination.CurrentPageIndex + 1)</strong> out of a total of <strong>@(_usersPagination.LastPageIndex + 1)</strong> pages
+                        </PaginationTextTemplate>
+                    </FluentPaginator>
+                </div>
+
+
+
+            </div>
+        }
+
+        <!-- User Detailed -->
+        @if (_addUserMode)
+            {
+                <div class="col-12 row border rounded m-2"
+                     style="margin: 0 auto !important; margin-top: 8px !important; margin-bottom: 8px !important;">
+
+                <UserDetailed @ref="@_userDetailComp"
+                              OnSave="@_onUserSave"
+                              OnCancel="@_onUserCancel"
+                              DisplayActions="true"
+                              AcceptActionText="@_detailedUserAcceptButtonText"
+                              Title="@_detailedUserTitle"
+                              Content="@_selectedUser" />
+                    
+                </div>
+            }
 
     </div>
 

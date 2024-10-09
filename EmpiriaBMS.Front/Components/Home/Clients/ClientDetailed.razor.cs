@@ -1,6 +1,8 @@
-﻿using EmpiriaBMS.Core.Config;
+﻿using AutoMapper;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Hellpers;
+using EmpiriaBMS.Front.Components.Admin.Projects.SubConstructors;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
@@ -8,8 +10,13 @@ using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Fast.Components.FluentUI;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using EmpiriaBMS.Front.Components.Home.Users;
+using EmpiriaBMS.Core;
+using System.Reflection;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace EmpiriaBMS.Front.Components.Home.Clients;
@@ -163,14 +170,23 @@ public partial class ClientDetailed
 
     public async Task CancelAsync() => await OnCancel.InvokeAsync();
 
-    #region Emails Data Grid
-    FluentDataGrid<Email> myGrid;
-    private List<Email> _emails = new List<Email>();
-    private string _filterString = string.Empty;
-    IQueryable<Email> FilteredEmails => _emails?.AsQueryable().Where(x => x.Address.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
-    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
+    private async Task _getRecords()
+    {
+        await _getEmails();
+        await _getUsers();
+    }
 
-    private void HandleFilter(ChangeEventArgs args)
+    #region Users DatGrid
+    IQueryable<UserVM>? FilteredUsers => _users?.AsQueryable().Where(x => x.FullName.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState _usersPagination = new PaginationState { ItemsPerPage = 5 };
+    ObservableCollection<UserVM> _users = new ObservableCollection<UserVM>();
+    private UserVM _selectedUser = new UserVM();
+    private string _detailedUserTitle = "";
+    private string _detailedUserAcceptButtonText = "";
+    private UserDetailed _userDetailComp;
+    private bool _addUserMode = false;
+
+    private void HandleUsersFilter(ChangeEventArgs args)
     {
         if (args.Value is string value)
         {
@@ -182,11 +198,102 @@ public partial class ClientDetailed
         }
     }
 
-    private async Task _getRecords()
+    private void HandleUsersRowFocus(FluentDataGridRow<UserVM> row)
     {
-        var emails = await _dataProvider.Clients.GetEmails(Content.Id);
-        _emails = emails.ToList();
-        Content.Emails = emails;
+        _selectedUser = row.Item as UserVM;
+    }
+
+    private async Task _deleteUser(UserVM record)
+    {
+        var dialog = await DialogService.ShowConfirmationAsync($"Are you sure you want to delete this user {record.FullName}?", "Yes", "No", "Deleting user...");
+
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+            await _dataProvider.Clients.RemoveUser(record.Id);
+
+        var forDelete = _users.FirstOrDefault(x => x.Id == record.Id);
+        _users.Remove(forDelete);
+
+        await dialog.CloseAsync();
+    }
+
+    private async Task _getUsers()
+    {
+        if (Content == null || Content.Id == 0)
+            return;
+
+        var dtos = await _dataProvider.Clients.GetUsers(Content.Id);
+        var vms = _mapper.Map<List<UserVM>>(dtos);
+
+        _users.Clear();
+        vms.ForEach(_users.Add);
+    }
+
+    private void _addUser()
+    {
+        _detailedUserTitle = "Add User";
+        _detailedUserAcceptButtonText = "Add User";
+
+        _selectedUser = new UserVM()
+        {
+            ClientId = Content.Id
+        };
+
+        _addUserMode = true;
+    }
+
+    private void _editUser(UserVM record)
+    {
+        _detailedUserTitle = "Edit User";
+        _detailedUserAcceptButtonText = "Edit User";
+
+        _selectedUser = record;
+
+        _addUserMode = true;
+    }
+
+    private void _onUserSave(UserVM updated)
+    {
+        var exists = _users.Any(u => u.Id == updated.Id);
+        if (exists)
+        {
+            var old = _users.FirstOrDefault(u => u.Id == updated.Id);
+            var index = _users.IndexOf(old);
+            _users.Remove(old);
+            _users.Insert(index, updated);
+        }
+        else
+        {
+            _users.Insert(0, updated);
+        }
+        
+        _addUserMode = false;
+    }
+
+    private void _onUserCancel()
+    {
+        _addUserMode = false;
+    }
+    #endregion
+
+    #region Emails Data Grid
+    FluentDataGrid<Email> myGrid;
+    private List<Email> _emails = new List<Email>();
+    private string _filterString = string.Empty;
+    IQueryable<Email> FilteredEmails => _emails?.AsQueryable().Where(x => x.Address.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase));
+    PaginationState emailsPeginator = new PaginationState { ItemsPerPage = 5 };
+
+    private void HandleFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            _filterString = value;
+        }
+        else if (string.IsNullOrWhiteSpace(_filterString) || string.IsNullOrEmpty(_filterString))
+        {
+            _filterString = string.Empty;
+        }
     }
 
     private void _onEmailAddressChange(string preEmailAddress, ChangeEventArgs e)
@@ -215,6 +322,17 @@ public partial class ClientDetailed
         var valid = Validate("Emails");
         if (valid)
             Content.Emails = _emails;
+    }
+
+    private async Task _getEmails()
+    {
+        if (Content == null || Content.Id == 0)
+            return;
+
+        var emails = await _dataProvider.Clients.GetEmails(Content.Id);
+        _emails = emails.ToList();
+
+        Content.Emails = emails;
     }
 
     private async Task _addEmail()
