@@ -14,15 +14,14 @@
     </div>
 
     <div class="col-xl-7 col-lg-7 col-12">
-        <div class="ps-1 border rounded shadow-sm" style="height: 500px; overflow-x: auto;">
+        <div class="ps-1 border rounded shadow-sm">
             <div>
                 <FluentDataGrid Items="@FilteredItems"
                                 ResizableColumns=true
                                 Pagination="@pagination"
                                 TGridItem="TeamsRequestedUserVM"
                                 OnRowFocus="OnRowFocused"
-                                Style="height: 100%;"
-                                GridTemplateColumns="auto 260px 260px">
+                                Style="height: 450px; overflow-y: ayto;">
 
                     <TemplateColumn Title="DisplayName"
                                     Sortable="true"
