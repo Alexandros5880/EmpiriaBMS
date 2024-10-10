@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Front.Components.Home.Header.Hours;
+﻿using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.Home.Header.Hours;
 using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using EmpiriaBMS.Models.Enum;
@@ -35,11 +36,8 @@ public partial class HomeHeadComp : IDisposable
     private double _userTotalHoursThisMonth = 0;
     bool _refreshLoading = true;
     private bool _loading = false;
-
-    #region Lists    
+ 
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
-    private ObservableCollection<TeamsRequestedUserVM> _teamsRequestedUsers = new ObservableCollection<TeamsRequestedUserVM>();
-    #endregion
 
     #region Dialogs
     // Work End Dialog
@@ -79,7 +77,7 @@ public partial class HomeHeadComp : IDisposable
         if (firstRender)
         {
             _loading = true;
-            await _getTeamsRequestedUsers();
+            await _getTeamsRequestedUsersCount();
             await _getUserTotalHoursThisMonth();
 
             if (canApproveTimeRequests)
@@ -94,7 +92,7 @@ public partial class HomeHeadComp : IDisposable
     public async Task Refresh()
     {
         _refreshLoading = true;
-        await _getTeamsRequestedUsers();
+        await _getTeamsRequestedUsersCount();
         await _getUserTotalHoursThisMonth();
 
         if (canApproveTimeRequests)
@@ -263,7 +261,7 @@ public partial class HomeHeadComp : IDisposable
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception Dashboard._endWorkDialogAccept(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception HomeHeadComp._endWorkDialogAccept(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
 
         _loading = false;
@@ -327,7 +325,7 @@ public partial class HomeHeadComp : IDisposable
         {
             _displayTeamsRequestedUsersDialog.Hide();
             _isDisplayTeamsRequestedUsersDialogOdepened = false;
-            await _getTeamsRequestedUsers();
+            await _getTeamsRequestedUsersCount();
         }
     }
     #endregion
@@ -360,7 +358,7 @@ public partial class HomeHeadComp : IDisposable
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception Dashboard.BackUpDb(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception HomeHeadComp.BackUpDb(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
 
         _backUp_loading = false;
@@ -400,7 +398,7 @@ public partial class HomeHeadComp : IDisposable
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception Dashboard.RestoreDb(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception HomeHeadComp.RestoreDb(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
 
         _restore_loading = false;
@@ -427,7 +425,7 @@ public partial class HomeHeadComp : IDisposable
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception Dashboard._getIssues(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception HomeHeadComp._getIssues(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -442,18 +440,17 @@ public partial class HomeHeadComp : IDisposable
         _userTotalHoursThisMonth = await _dataProvider.Users.GetUserTotalHoursThisMonth(_sharedAuthData.LogedUser.Id);
     }
 
-    private async Task _getTeamsRequestedUsers()
+    private int _usersRequestCount = 0;
+    private async Task _getTeamsRequestedUsersCount()
     {
         try
         {
-            var requestedUsersDtos = await _dataProvider.TeamsRequestedUsers.GetAll();
-            var requestedUsersVms = Mapper.Map<List<TeamsRequestedUserVM>>(requestedUsersDtos);
-            _teamsRequestedUsers.Clear();
-            requestedUsersVms.ForEach(_teamsRequestedUsers.Add);
+            _usersRequestCount = await _dataProvider.TeamsRequestedUsers.Count();
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception Dashboard._getTeamsRequestedUsers(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception HomeHeadComp._getTeamsRequestedUsersCount(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            throw;
         }
     }
     #endregion

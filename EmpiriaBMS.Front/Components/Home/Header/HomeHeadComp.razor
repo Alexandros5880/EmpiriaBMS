@@ -166,7 +166,7 @@
                                         @if (seeTeamsRequestedUsers)
                                         {
                                             <div style="width: 50px;">
-                                                <FluentCounterBadge Count="@_teamsRequestedUsers.Count"
+                                                <FluentCounterBadge Count="@_usersRequestCount"
                                                                     ShowZero="true"
                                                                     Appearance="Appearance.Neutral"
                                                                     HorizontalPosition="-25"
@@ -382,7 +382,7 @@
             </div>
 
             <div class="col-12 justify-content-center">
-                <TeamsRequestedUsers Source="@_teamsRequestedUsers.ToList()" />
+                <TeamsRequestedUsers/>
             </div>
 
         </div>
