@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Models.Enum;
 
-public enum DailyTimeType
+public enum DailyTimeState
 {
     [Display(Name = "APPROVED")]
     APPROVED = 0,
     [Display(Name = "AWAITING")]
     AWAITING = 1,
     [Display(Name = "NOREQUEST")]
-    NOREQUEST = 2
+    NOREQUEST = 2,
+    [Display(Name = "REJECT")]
+    REJECT = 3
 }

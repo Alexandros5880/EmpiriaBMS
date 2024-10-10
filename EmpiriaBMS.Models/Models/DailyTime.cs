@@ -10,7 +10,7 @@ public class DailyTime : Entity
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
-    public DailyTimeType Type { get; set; }
+    public DailyTimeState State { get; set; }
 
     public bool IsEditByAdmin { get; set; }
 
@@ -61,7 +61,7 @@ public class DailyTime : Entity
         return new DailyTime()
         {
             Date = Date,
-            Type = Type,
+            State = State,
             Days = Days,
             Hours = Hours,
             Minutes = Minutes,
