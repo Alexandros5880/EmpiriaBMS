@@ -157,7 +157,7 @@ public partial class HomeHeadComp : IDisposable
         _isCorrectHoursDialogOdepened = true;
     }
 
-    private async Task _onCorrectHoursClose()
+    private void _onCorrectHoursClose()
     {
         if (_isCorrectHoursDialogOdepened)
         {

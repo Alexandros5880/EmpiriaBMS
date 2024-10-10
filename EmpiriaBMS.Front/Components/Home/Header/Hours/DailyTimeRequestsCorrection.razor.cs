@@ -10,12 +10,10 @@ namespace EmpiriaBMS.Front.Components.Home.Header.Hours;
 public partial class DailyTimeRequestsCorrection
 {
     [Parameter]
-    public int RequestCount { get; set; }
-
-    [Parameter]
     public EventCallback<DailyTime> OnChange { get; set; }
 
     private bool _loading = false;
+    private int _hoursCorrectionCount = 0;
     private Dictionary<DailyTimeTypes, List<DailyTime>> _dailyTimeRequest = new Dictionary<DailyTimeTypes, List<DailyTime>>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -25,6 +23,7 @@ public partial class DailyTimeRequestsCorrection
         if (firstRender)
         {
             _loading = true;
+            await _getHoursCorrectionRequestsAwaitingCount();
             await _getHoursCorrectionsAwaitingRequests();
             _loading = false;
             StateHasChanged();
@@ -38,12 +37,22 @@ public partial class DailyTimeRequestsCorrection
         return attribute?.Name ?? dailyTimeType.ToString();
     }
 
-    private async Task _onEnd(DailyTime request) =>
+    private async Task _onCardChanged(DailyTime request)
+    {
+        await _getHoursCorrectionRequestsAwaitingCount();
+        await _getHoursCorrectionsAwaitingRequests();
         await OnChange.InvokeAsync(request);
+    }
+        
 
     private async Task _getHoursCorrectionsAwaitingRequests()
     {
         _dailyTimeRequest.Clear();
         _dailyTimeRequest = await _dataProvider.WorkingTime.GetDailyTimeRequests(DailyTimeState.AWAITING);
+    }
+
+    private async Task _getHoursCorrectionRequestsAwaitingCount()
+    {
+        _hoursCorrectionCount = await _dataProvider.WorkingTime.GetDailyTimeRequestsCount(DailyTimeState.AWAITING);
     }
 }

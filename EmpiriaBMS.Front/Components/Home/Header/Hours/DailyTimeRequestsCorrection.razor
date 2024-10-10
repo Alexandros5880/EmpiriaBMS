@@ -14,11 +14,11 @@
 
 
 <!-- Header -->
-<div class="d-flex justify-content-between p-3 primary-bg-color rounded">
+<div class="mt-2 d-flex justify-content-between p-3 primary-bg-color rounded">
     <h3>Working time requests</h3>
     <div style="max-width: 340px;" class="d-flex justify-content-between">
         <h5>Requests Count: </h5>
-        <span class="text-danger ms-2">@RequestCount</span>
+        <span class="text-danger ms-2 mt-1">@_hoursCorrectionCount</span>
     </div>
 </div>
 
@@ -33,7 +33,7 @@
             <div class="col-3">
                 <DailyTimeRequestCard Request="request"
                                       Type="@key"
-                                      OnEnd="@(async (r) => await _onEnd(r))" />
+                                      OnEnd="@(async (r) => await _onCardChanged(r))" />
             </div>
         }
     }
