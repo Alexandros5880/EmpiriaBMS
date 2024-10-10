@@ -14,5 +14,7 @@ public enum DailyTimeState
     [Display(Name = "AWAITING")]
     AWAITING = 1,
     [Display(Name = "NOREQUEST")]
-    NOREQUEST = 2
+    NOREQUEST = 2,
+    [Display(Name = "REJECT")]
+    REJECT = 3
 }

@@ -277,7 +277,7 @@ public class WorkingTime : IDisposable
 
     public async Task RejectDailyTimeRequest(DailyTime request)
     {
-        request.State = DailyTimeState.APPROVED;
+        request.State = DailyTimeState.REJECT;
         await UpdateDailyTimeRequest(request);
     }
 
