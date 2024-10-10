@@ -200,7 +200,7 @@
         @{
             var pmSignatureSrc = @ImageHelper.GetImageUrl(@Content.PMSignature);
         }
-        @if (pmSignatureSrc != null)
+        @if (pmSignatureSrc != null && pmSignatureSrc.Length > 50)
         {
             <div class="col-lg-6 col-md-12">
                 <div>
@@ -225,7 +225,7 @@
         @{
             var verificatorSignatureSrc = @ImageHelper.GetImageUrl(Content.VerificatorSignature);
         }
-        @if (verificatorSignatureSrc != null)
+        @if (verificatorSignatureSrc != null && verificatorSignatureSrc.Length > 50)
         {
             <div class="col-lg-6 col-md-12">
                 <div>
