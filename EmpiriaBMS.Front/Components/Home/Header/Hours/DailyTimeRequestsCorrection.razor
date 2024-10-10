@@ -11,59 +11,30 @@
 @inject TimerService TimerService
 @inject Logging.LoggerManager Logger
 
-<style>
-    /* Vertical scroll container for rows */
-    .card-container {
-        max-height: min(60vh, 500px); /* Adjust the height as needed */
-        overflow-y: auto;
-        padding: 10px;
-    }
 
-    /* Horizontal scroll for each row */
-    .card-grid {
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    .card-row {
-        display: flex;
-        flex-direction: row;
-        gap: 10px; /* Adjust the gap between cards as needed */
-    }
-
-    .card-col {
-        flex: 0 0 auto;
-        width: auto; /* Adjust the width of the cards as needed */
-    }
-</style>
 
 <!-- Header -->
-<div class="d-flex justify-content-between p-3 primary-bg-color rounded">
+<div class="mt-2 d-flex justify-content-between p-3 primary-bg-color rounded">
     <h3>Working time requests</h3>
     <div style="max-width: 340px;" class="d-flex justify-content-between">
         <h5>Requests Count: </h5>
-        <span class="text-danger ms-2">@RequestCount</span>
+        <strong class="text-danger ms-2 mt-1">@_hoursCorrectionCount</strong>
     </div>
 </div>
 
-<div class="card-container mt-3">
-    @foreach (var key in DailyRequests.Keys.OrderBy(k => k))
+<div class="row g-3 mt-3" style="overflow-y: auto; height: 60vh;">
+    @foreach (var key in _dailyTimeRequest.Keys.OrderBy(k => k))
     {
-        var requests = DailyRequests[key];
-        <div class="mb-3">
-            <h4>@GetDisplayName(key)</h4>
-            <div class="card-grid">
-                <div class="card-row">
-                    @foreach (var request in requests)
-                    {
-                        <div class="card-col">
-                            <DailyTimeRequestCard Request="request"
-                                                  Type="@key"
-                                                  OnEnd="@(async (r) => await _onEnd(r))" />
-                        </div>
-                    }
-                </div>
+        var requests = _dailyTimeRequest[key];
+                
+        <h4>@GetDisplayName(key)</h4>
+        @foreach (var request in requests)
+        {
+            <div class="col-3">
+                <DailyTimeRequestCard Request="request"
+                                      Type="@key"
+                                      OnEnd="@(async (r) => await _onCardChanged(r))" />
             </div>
-        </div>
+        }
     }
 </div>

@@ -20,8 +20,8 @@ public class DailyHourVM : BaseVM
         }
     }
 
-    private DailyTimeType _type;
-    public DailyTimeType Type
+    private DailyTimeState _type;
+    public DailyTimeState Type
     {
         get => _type;
         set
@@ -33,8 +33,8 @@ public class DailyHourVM : BaseVM
         }
     }
 
-    private DailyTimeType _isEditByAdmin;
-    public DailyTimeType IsEditByAdmin
+    private DailyTimeState _isEditByAdmin;
+    public DailyTimeState IsEditByAdmin
     {
         get => _isEditByAdmin;
         set

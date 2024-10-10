@@ -39,7 +39,6 @@ public partial class HomeHeadComp : IDisposable
     #region Lists    
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
     private ObservableCollection<TeamsRequestedUserVM> _teamsRequestedUsers = new ObservableCollection<TeamsRequestedUserVM>();
-    private Dictionary<DailyTimeTypes, List<DailyTime>> _dailyTimeRequest = new Dictionary<DailyTimeTypes, List<DailyTime>>();
     #endregion
 
     #region Dialogs
@@ -85,8 +84,7 @@ public partial class HomeHeadComp : IDisposable
 
             if (canApproveTimeRequests)
             {
-                await _getHoursCorrectionsRequests();
-                await _getHoursCorrectionRequestsCount();
+                await _getHoursCorrectionRequestsAwaitingCount();
             }
             _loading = false;
             StateHasChanged();
@@ -101,8 +99,7 @@ public partial class HomeHeadComp : IDisposable
 
         if (canApproveTimeRequests)
         {
-            await _getHoursCorrectionsRequests();
-            await _getHoursCorrectionRequestsCount();
+            await _getHoursCorrectionRequestsAwaitingCount();
         }
         _refreshLoading = false;
         StateHasChanged();
@@ -160,7 +157,7 @@ public partial class HomeHeadComp : IDisposable
         _isCorrectHoursDialogOdepened = true;
     }
 
-    private async Task _onCorrectHoursClose()
+    private void _onCorrectHoursClose()
     {
         if (_isCorrectHoursDialogOdepened)
         {
@@ -171,8 +168,7 @@ public partial class HomeHeadComp : IDisposable
 
     private async Task _onHoursRequestChange()
     {
-        await _getHoursCorrectionsRequests();
-        await _getHoursCorrectionRequestsCount();
+        await _getHoursCorrectionRequestsAwaitingCount();
         await _getUserTotalHoursThisMonth();
     }
     #endregion
@@ -195,7 +191,7 @@ public partial class HomeHeadComp : IDisposable
         {
             _displayHoursCorrectionRequestsDialog.Hide();
             _isDisplayHoursCorrectionRequestsDialogOdepened = false;
-            await _getHoursCorrectionRequestsCount();
+            await _getHoursCorrectionRequestsAwaitingCount();
         }
     }
     #endregion
@@ -435,16 +431,10 @@ public partial class HomeHeadComp : IDisposable
         }
     }
 
-    private async Task _getHoursCorrectionsRequests()
-    {
-        _dailyTimeRequest.Clear();
-        _dailyTimeRequest = await _dataProvider.WorkingTime.GetDailyTimeRequests();
-    }
-
     private int _hoursCorrectionCount = 0;
-    private async Task _getHoursCorrectionRequestsCount()
+    private async Task _getHoursCorrectionRequestsAwaitingCount()
     {
-        _hoursCorrectionCount = await _dataProvider.WorkingTime.GetDailyTimeRequestsCount();
+        _hoursCorrectionCount = await _dataProvider.WorkingTime.GetDailyTimeRequestsCount(DailyTimeState.AWAITING);
     }
 
     private async Task _getUserTotalHoursThisMonth()

@@ -1,4 +1,5 @@
-﻿using EmpiriaBMS.Models.Enum;
+﻿using EmpiriaBMS.Front.Components.General;
+using EmpiriaBMS.Models.Enum;
 using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel.DataAnnotations;
@@ -9,13 +10,32 @@ namespace EmpiriaBMS.Front.Components.Home.Header.Hours;
 public partial class DailyTimeRequestsCorrection
 {
     [Parameter]
-    public int RequestCount { get; set; }
-
-    [Parameter]
     public EventCallback<DailyTime> OnChange { get; set; }
 
     [Parameter]
-    public Dictionary<DailyTimeTypes, List<DailyTime>> DailyRequests { get; set; }
+    public int RequestCount {
+        get => _hoursCorrectionCount;
+        set => _hoursCorrectionCount = value;
+    }
+
+    private bool _loading = false;
+    private int _hoursCorrectionCount = 0;
+    private Dictionary<DailyTimeTypes, List<DailyTime>> _dailyTimeRequest = new Dictionary<DailyTimeTypes, List<DailyTime>>();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            _loading = true;
+            if (_hoursCorrectionCount == 0)
+                await _getHoursCorrectionRequestsAwaitingCount();
+            await _getHoursCorrectionsAwaitingRequests();
+            _loading = false;
+            StateHasChanged();
+        }
+    }
 
     private string GetDisplayName(DailyTimeTypes dailyTimeType)
     {
@@ -24,6 +44,22 @@ public partial class DailyTimeRequestsCorrection
         return attribute?.Name ?? dailyTimeType.ToString();
     }
 
-    private async Task _onEnd(DailyTime request) =>
+    private async Task _onCardChanged(DailyTime request)
+    {
+        await _getHoursCorrectionRequestsAwaitingCount();
+        await _getHoursCorrectionsAwaitingRequests();
         await OnChange.InvokeAsync(request);
+    }
+        
+
+    private async Task _getHoursCorrectionsAwaitingRequests()
+    {
+        _dailyTimeRequest.Clear();
+        _dailyTimeRequest = await _dataProvider.WorkingTime.GetDailyTimeRequests(DailyTimeState.AWAITING);
+    }
+
+    private async Task _getHoursCorrectionRequestsAwaitingCount()
+    {
+        _hoursCorrectionCount = await _dataProvider.WorkingTime.GetDailyTimeRequestsCount(DailyTimeState.AWAITING);
+    }
 }
