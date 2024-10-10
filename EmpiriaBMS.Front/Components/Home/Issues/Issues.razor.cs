@@ -78,7 +78,7 @@ public partial class Issues : ComponentBase
         _selectedRecord = null;
     }
 
-    private async Task SaveDetailed()
+    private async Task _onSavedDetailed()
     {
         await OnSave.InvokeAsync(this);
     }
@@ -89,32 +89,6 @@ public partial class Issues : ComponentBase
         {
             var issuesDtos = await DataProvider.Users.GetOpenIssues((int)_sharedAuthData.LogedUser.Id);
             var issuesVms = Mapper.Map<List<IssueVM>>(issuesDtos);
-
-            // TODO: Only For Debug
-            var projectId = 145242947;
-            var project = await DataProvider.Projects.Get(projectId);
-
-            var discplayRoleId = 593933805;
-            var displayRole = await DataProvider.Roles.Get(discplayRoleId);
-
-            var creatorId = 428110306;
-            var creator = await DataProvider.Users.Get(creatorId);
-
-            for (int i = 0; i < 10; i++)
-            {
-                issuesVms.Add(new IssueVM()
-                {
-                    ComplaintDate = DateTime.Now,
-                    ProjectId = projectId,
-                    Project = Mapping.Mapper.Map<ModelsNameSpace.Project>(project),
-                    DisplayedRoleId = discplayRoleId,
-                    DisplayedRole = Mapping.Mapper.Map<Role>(displayRole),
-                    CreatorId = creatorId,
-                    Creator = Mapping.Mapper.Map<User>(creator),
-                    Description = "rwethwrjyht",
-                    IsClose = false
-                });
-            }
 
             _issues.Clear();
             issuesVms.ForEach(_issues.Add);

@@ -33,7 +33,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
     }
 
-    public async Task<ICollection<IssueDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public async new Task<ICollection<IssueDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -64,38 +64,124 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
     }
 
-    public async new Task<IssueDto> Add(IssueDto entity, List<DocumentDto> documents)
+    public async Task<IssueDto> Add(IssueDto entity, List<DocumentDto> documents)
     {
-        if (entity == null)
-            throw new ArgumentNullException(nameof(entity));
-
-        entity.CreatedDate = DateTime.Now.ToUniversalTime();
-        entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
-
-        using (var _context = _dbContextFactory.CreateDbContext())
+        try
         {
-            Issue issue = Mapping.Mapper.Map<Issue>(entity);
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.CreatedDate = DateTime.Now.ToUniversalTime();
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
             List<Document> docs = Mapping.Mapper.Map<List<Document>>(documents);
-            issue.DisplayedRole = null;
-            issue.Project = null;
-            issue.Creator = null;
-            var result = await _context.Set<Issue>().AddAsync(issue);
 
-            await _context.SaveChangesAsync();
-
-            foreach (var doc in docs)
+            using (var _context = _dbContextFactory.CreateDbContext())
             {
-                doc.IssueId = result.Entity.Id;
-                await _context.Set<Document>().AddAsync(doc);
+                Issue issue = Mapping.Mapper.Map<Issue>(entity);
+                issue.DisplayedRole = null;
+                issue.Project = null;
+                issue.Creator = null;
+                var result = await _context.Set<Issue>().AddAsync(issue);
+
+                await _context.SaveChangesAsync();
+
+                foreach (var doc in docs)
+                {
+                    doc.IssueId = result.Entity.Id;
+                    await _context.Set<Document>().AddAsync(doc);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Mapping.Mapper.Map<IssueDto>(result.Entity);
             }
-
-            await _context.SaveChangesAsync();
-
-            return Mapping.Mapper.Map<IssueDto>(result.Entity);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On IssueRepo.Add(IssueDto entity): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
         }
     }
 
-    public async Task<IssueDto> Add(IssueDto entity, bool update = false)
+    public async Task<IssueDto> Update(IssueDto entity, List<DocumentDto> documents)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            List<Document> docs = Mapping.Mapper.Map<List<Document>>(documents);
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<Issue>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Issue>(entity));
+                    await _context.SaveChangesAsync();
+
+                    foreach (var doc in docs)
+                    {
+                        doc.IssueId = entity.Id;
+
+                        var exists = _context.Set<Document>().Any(d => d.Id == doc.Id);
+                        if (exists)
+                        {
+                            var oldDoc = await _context.Set<Document>().FirstOrDefaultAsync(d => d.Id == doc.Id);
+                            if (oldDoc != null)
+                            {
+                                _context.Entry(oldDoc).CurrentValues.SetValues(doc);
+                            }
+                        }
+                        else
+                            await _context.Set<Document>().AddAsync(doc);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return Mapping.Mapper.Map<IssueDto>(entry);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On IssueRepo.Update(IssueDto entity, List<DocumentDto> documents): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
+    public async new Task<IssueDto> Update(IssueDto entity)
+    {
+        try
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.LastUpdatedDate = DateTime.Now.ToUniversalTime();
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                var entry = await _context.Set<Issue>().FirstOrDefaultAsync(x => x.Id == entity.Id);
+                if (entry != null)
+                {
+                    _context.Entry(entry).CurrentValues.SetValues(Mapping.Mapper.Map<Issue>(entity));
+                    await _context.SaveChangesAsync();
+                }
+
+                return Mapping.Mapper.Map<IssueDto>(entry);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On IssueRepo.Update(IssueDto entity): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            throw;
+        }
+    }
+
+    public async new Task<IssueDto> Add(IssueDto entity, bool update = false)
     {
         try
         {

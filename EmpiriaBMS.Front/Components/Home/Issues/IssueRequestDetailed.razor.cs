@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace EmpiriaBMS.Front.Components.Home.Issues;
 
-public partial class IssueDetailed : ComponentBase, IDisposable
+public partial class IssueRequestDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
 

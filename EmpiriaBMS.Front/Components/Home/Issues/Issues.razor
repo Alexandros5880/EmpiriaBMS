@@ -75,11 +75,11 @@
             @if (_selectedRecord != null)
             {
                 <!-- Detailed Selected Issues -->
-                <IssuesDetailed Content="@_selectedRecord"
+                <IssueApproveDetailed Content="@_selectedRecord"
                                 DisplayActions="true"
                                 CalledFromDash="true"
                                 OnCancel="_editOnCancel"
-                                OnSave="SaveDetailed" />
+                                OnSave="_onSavedDetailed" />
             }
         </div>
     </div>
