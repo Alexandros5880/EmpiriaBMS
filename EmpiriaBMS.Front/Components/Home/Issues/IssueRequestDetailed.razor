@@ -11,7 +11,7 @@
 @inject SharedAuthDataService _sharedAuthData
 @inject Logging.LoggerManager Logger
 
-<div class="h-100" style="max-height: 700px; max-height: 80vh; overflow-y: auto; overflow-x: hidden;">
+<div style="max-height: 500px; overflow-y: auto; overflow-x: hidden;">
     <h3>Create Issue</h3>
 
     <EditForm Model="@_issue" class="m-2">
@@ -36,66 +36,6 @@
         <div class="row mt-2">
             <div class="col-12">
                 <FluentTextArea Style="width:100%;" @bind-Value="@_issue.Description" Label="Description:" Rows="3" Resize="TextAreaResize.Vertical" />
-            </div>
-        </div>
-
-        <div class="row mt-2">
-            <div class="col-12">
-                <FluentSwitch @bind-Value="@_issue.IsClose">
-                    IsClose
-                </FluentSwitch>
-            </div>
-        </div>
-
-        <!-- Parrent Accordion -->
-        <FluentAccordion Class="mt-4">
-
-            <FluentAccordionItem Expanded="true" Heading="Iso2001">
-
-                <!-- Solution -->
-                <div class="row mt-1">
-                    <div class="col-12 mt-2">
-                        <FluentTextArea Style="width:100%;" @bind-Value="@_issue.Solution" Label="Solution:" Rows="3" Resize="TextAreaResize.Vertical" />
-                    </div>
-                    <div class="col-12 mt-2">
-                        <FluentDatePicker Style="width: 100%;" @bind-Value="@_issue.SolutionDate" Label="Solution Date" />
-                    </div>
-                </div>
-
-                <!-- Evaluation -->
-                <div class="row mt-1">
-                    <div class="col-12 mt-2">
-                        <FluentTextArea Style="width:100%;" @bind-Value="@_issue.Evaluation" Label="Evaluation:" Rows="3" Resize="TextAreaResize.Vertical" />
-                    </div>
-                </div>
-
-                <!-- Verification -->
-                <div class="row mt-1">
-                    <div class="col-12 mt-2">
-                        <FluentTextArea Style="width:100%;" @bind-Value="@_issue.Verification" Label="Verification:" Rows="3" Resize="TextAreaResize.Vertical" />
-                    </div>
-                    <div class="col-12 mt-2">
-                        <FluentDatePicker Style="width: 100%;" @bind-Value="@_issue.VerificationDate" Label="Verification Date" />
-                    </div>
-                    <div class="col-12 form-group mt-2">
-                        <label for="verificatorSignature">Verificator Signature:</label>
-                        <div style="height: 400px;">
-                            <SignaturePad @ref="verificatorSignature" Id="verificatorSignature" />
-                        </div>
-                    </div>
-                </div>
-
-            </FluentAccordionItem>
-
-        </FluentAccordion>
-
-        <!-- Submit -->
-        <div class="row mt-4">
-            <div class="col-12 form-group mt-2">
-                <label for="pMSignature">Project Manager Signature:</label>
-                <div style="height: 400px; padding: 8px;">
-                    <SignaturePad @ref="pMSignature" Id="pMSignature" />
-                </div>
             </div>
         </div>
 

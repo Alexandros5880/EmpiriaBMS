@@ -32,9 +32,6 @@ public partial class IssueRequestDetailed : ComponentBase, IDisposable
         VerificationDate = DateTime.Now
     };
 
-    SignaturePad verificatorSignature;
-    SignaturePad pMSignature;
-
     private List<DocumentVM> _documents = new List<DocumentVM>();
 
     public void Refresh()
@@ -87,8 +84,6 @@ public partial class IssueRequestDetailed : ComponentBase, IDisposable
         {
             var parentRole = _sharedAuthData.LoggedUserParentRole;
             _issue.DisplayedRoleId = parentRole.Id;
-            _issue.VerificatorSignature = verificatorSignature != null ? await verificatorSignature.GetImageData() : null;
-            _issue.PMSignature = pMSignature != null ? await pMSignature.GetImageData() : null;
             _issue.ProjectId = _project.Id;
             _issue.CreatorId = _sharedAuthData.LogedUser.Id;
             _issue.IsClose = false;

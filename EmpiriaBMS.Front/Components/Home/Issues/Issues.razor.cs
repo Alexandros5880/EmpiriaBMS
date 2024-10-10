@@ -14,9 +14,6 @@ namespace EmpiriaBMS.Front.Components.Home.Issues;
 
 public partial class Issues : ComponentBase
 {
-    [Parameter]
-    public EventCallback OnSave { get; set; }
-
     private bool _loading = false;
     private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
 
@@ -30,21 +27,6 @@ public partial class Issues : ComponentBase
             await _getIssues();
             _loading = false;
             StateHasChanged();
-        }
-    }
-
-    public async Task HandleValidSubmit()
-    {
-        try
-        {
-            List<IssueVM> vms = _issues.ToList();
-            List<IssueDto> dtos = Mapper.Map<List<IssueDto>>(vms);
-            await DataProvider.Issues.UpdateAll(dtos);
-            await OnSave.InvokeAsync();
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError($"Exception Issues.HandleValidSubmit(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -80,7 +62,9 @@ public partial class Issues : ComponentBase
 
     private async Task _onSavedDetailed()
     {
-        await OnSave.InvokeAsync(this);
+        await _getIssues();
+        _selectedRecord = null;
+        StateHasChanged();
     }
 
     private async Task _getIssues()
