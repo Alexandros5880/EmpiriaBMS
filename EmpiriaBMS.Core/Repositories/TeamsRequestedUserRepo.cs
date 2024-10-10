@@ -13,6 +13,35 @@ public class TeamsRequestedUserRepo : Repository<TeamsRequestedUserDto, TeamsReq
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
+    public async new Task<ICollection<TeamsRequestedUserDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            IQueryable<TeamsRequestedUser> query = _context
+                .Set<TeamsRequestedUser>()
+                .Where(r => !r.IsDeleted);
+
+            if (pageSize != 0 && pageIndex != 0)
+            {
+                query = query.Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize);
+            }
+
+            var items = await query.ToListAsync();
+
+            return Mapping.Mapper.Map<List<TeamsRequestedUserDto>>(items);
+        }
+    }
+
+    public async new Task<int> Count()
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            return await _context
+                .Set<TeamsRequestedUser>().CountAsync();
+        }
+    }
+
     public async Task<TeamsRequestedUserDto> GetByObjectId(string objectId)
     {
         if (objectId == null)

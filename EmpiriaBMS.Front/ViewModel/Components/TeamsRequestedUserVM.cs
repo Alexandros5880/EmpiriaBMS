@@ -1,6 +1,8 @@
-﻿namespace EmpiriaBMS.Front.ViewModel.Components;
+﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 
-public class TeamsRequestedUserVM : UserVM
+namespace EmpiriaBMS.Front.ViewModel.Components;
+
+public class TeamsRequestedUserVM : BaseVM
 {
     private string _displayName;
     public string DisplayName
