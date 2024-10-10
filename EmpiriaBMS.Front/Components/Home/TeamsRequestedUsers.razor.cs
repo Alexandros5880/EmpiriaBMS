@@ -104,7 +104,7 @@ public partial class TeamsRequestedUsers : ComponentBase
             {
                 requestedUsersDtos.Add(new TeamsRequestedUserDto()
                 {
-                    DisplayName = $"User - {i}",
+                    DisplayName = $"User - {i}",    
                     ProxyAddress = $"alexandrosplatanios{i}@gmail.com",
                     ObjectId = Guid.NewGuid().ToString()
                 });
