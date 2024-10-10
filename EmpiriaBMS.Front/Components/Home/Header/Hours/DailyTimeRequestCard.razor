@@ -47,8 +47,47 @@
     </div>
 
     <div class="card-body">
+
+        @if (Request.Project != null)
+        {
+            <div class="row">
+                <strong class="col-12 col-lg-5 me-2">Project: </strong>
+                <p class="col card-text">@Request.Project?.Name</p>
+            </div>
+        }
+
+        @if (Request.Discipline != null)
+        {
+            <div class="row">
+                <strong class="col-12 col-lg-5 me-2">Discipline: </strong>
+                <p class="col card-text">@Request.Discipline?.Type?.Name</p>
+            </div>
+        }
+
+        @if (Request.Deliverable != null)
+        {
+            <div class="row">
+                <strong class="col-12 col-lg-5 me-2">Deliverable: </strong>
+                <p class="col card-text">@Request.Deliverable?.Type?.Name</p>
+            </div>
+        }
+
+        @if (Request.SupportiveWork != null)
+        {
+            <div class="row">
+                <strong class="col-12 col-lg-5 me-2">Supp/Work: </strong>
+                <p class="col card-text">@Request.SupportiveWork?.Type?.Name</p>
+            </div>
+        }
         
-        <p class="card-text description-text">@Request.Description</p>
+        @if (!string.IsNullOrEmpty(Request.Description))
+        {
+            <div class="row">
+                <strong class="col-12 col-lg-5 me-2">Description: </strong>
+                <p class="col card-text description-text">@Request.Description</p>
+            </div>
+        }     
+
         <p class="card-text"><small class="text-muted">@FormatTimeSpan(Request)</small></p>
     
         <FluentStack Orientation="Orientation.Horizontal"
