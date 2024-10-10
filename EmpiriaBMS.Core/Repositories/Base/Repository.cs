@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Config;
+using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.Dtos.Base;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
@@ -52,7 +53,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On Repository.Add({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
+            return default(T)!;
         }
     }
 

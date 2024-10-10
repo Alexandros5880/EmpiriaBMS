@@ -46,7 +46,7 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On SubConstructorRepo.GetUsers(int subConstructorId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
+            return default(ICollection<UserDto>)!;
         }
     }
 
@@ -62,7 +62,6 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On SubConstructorRepo.RemoveUser(int userId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
         }
     }
 
@@ -78,7 +77,6 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On SubConstructorRepo.AddUser(int userId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
         }
     }
     #endregion

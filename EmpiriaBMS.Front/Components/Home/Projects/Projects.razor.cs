@@ -168,7 +168,7 @@ public partial class Projects
     // On Add Issue Dialog
     private FluentDialog _addIssueDialog;
     private bool _isAddIssueDialogOdepened = false;
-    private IssueDetailed issueCompoment;
+    private IssueRequestDetailed issueCompoment;
 
     // Add ProjectManager Dialog
     private FluentDialog _addPMDialog;

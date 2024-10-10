@@ -1,4 +1,6 @@
-﻿using EmpiriaBMS.Core.Config;
+﻿using AutoMapper;
+using EmpiriaBMS.Core;
+using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
@@ -6,9 +8,9 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Admin.Projects.Issues;
+namespace EmpiriaBMS.Front.Components.Home.Issues;
 
-public partial class IssuesDetailed
+public partial class IssueApproveDetailed
 {
     [Parameter]
     public string Title { get; set; } = null;
@@ -69,7 +71,22 @@ public partial class IssuesDetailed
         Content.PMSignature = pMSignature != null ? await pMSignature.GetImageData() : null;
         Content.VerificatorSignature = verificatorSignature != null ? await verificatorSignature.GetImageData() : null;
 
-        await OnSave.InvokeAsync(Content);
+        try
+        {
+            var dto = _mapper.Map<IssueDto>(Content);
+            var documentsDtos = _mapper.Map<List<DocumentDto>>(_documents);
+            var updated = await _dataProvider.Issues.Update(dto, documentsDtos);
+            Content = _mapper.Map<IssueVM>(updated);
+            await OnSave.InvokeAsync(Content);
+        }
+        catch (NullReferenceException nex)
+        {
+            Logger.LogError($"Exception IssueApproveDetailed.SaveAsync(): {nex.Message}, \n Inner Exception: {nex.InnerException}");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Exception IssueApproveDetailed.SaveAsync(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+        }
     }
 
     private async Task CancelAsync()

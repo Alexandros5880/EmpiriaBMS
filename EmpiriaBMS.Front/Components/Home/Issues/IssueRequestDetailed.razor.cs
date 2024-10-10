@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace EmpiriaBMS.Front.Components.Home.Issues;
 
-public partial class IssueDetailed : ComponentBase, IDisposable
+public partial class IssueRequestDetailed : ComponentBase, IDisposable
 {
     private bool disposedValue;
 
@@ -31,9 +31,6 @@ public partial class IssueDetailed : ComponentBase, IDisposable
         SolutionDate = DateTime.Now,
         VerificationDate = DateTime.Now
     };
-
-    SignaturePad verificatorSignature;
-    SignaturePad pMSignature;
 
     private List<DocumentVM> _documents = new List<DocumentVM>();
 
@@ -87,8 +84,6 @@ public partial class IssueDetailed : ComponentBase, IDisposable
         {
             var parentRole = _sharedAuthData.LoggedUserParentRole;
             _issue.DisplayedRoleId = parentRole.Id;
-            _issue.VerificatorSignature = verificatorSignature != null ? await verificatorSignature.GetImageData() : null;
-            _issue.PMSignature = pMSignature != null ? await pMSignature.GetImageData() : null;
             _issue.ProjectId = _project.Id;
             _issue.CreatorId = _sharedAuthData.LogedUser.Id;
             _issue.IsClose = false;

@@ -140,7 +140,7 @@
                                              Wrap="false">
 
                                     <!-- Issues Badge -->
-                                    <FluentCounterBadge Count="@_issues.Count"
+                                    <FluentCounterBadge Count="@_issuesCounter"
                                                         ShowZero="true"
                                                         Appearance="Appearance.Neutral"
                                                         HorizontalPosition="-25"
@@ -305,8 +305,7 @@
                   Hidden="@(!_isDisplayIssuesDialogOdepened || _loading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: min(98vw, 1300px) !important;
-                         --dialog-height: min(86vh, 1400px) !important;">
+                  style="--dialog-width: min(98vw, 1300px) !important;">
 
         <div class="modal-body row mb-1">
 
@@ -315,7 +314,7 @@
             </div>
 
             <div class="col-12 justify-content-center">
-                <Issues Source="@_issues.ToList()" OnSave="@(async() => await CloseIssuesClick())" />
+                <Issues/>
             </div>
 
         </div>

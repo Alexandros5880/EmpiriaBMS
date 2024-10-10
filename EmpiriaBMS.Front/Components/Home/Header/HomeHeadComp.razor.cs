@@ -36,8 +36,6 @@ public partial class HomeHeadComp : IDisposable
     private double _userTotalHoursThisMonth = 0;
     bool _refreshLoading = true;
     private bool _loading = false;
- 
-    private ObservableCollection<IssueVM> _issues = new ObservableCollection<IssueVM>();
 
     #region Dialogs
     // Work End Dialog
@@ -79,11 +77,9 @@ public partial class HomeHeadComp : IDisposable
             _loading = true;
             await _getTeamsRequestedUsersCount();
             await _getUserTotalHoursThisMonth();
-
             if (canApproveTimeRequests)
-            {
                 await _getHoursCorrectionRequestsAwaitingCount();
-            }
+            await _countIssues();
             _loading = false;
             StateHasChanged();
         }
@@ -302,7 +298,7 @@ public partial class HomeHeadComp : IDisposable
         {
             _displayIssuesDialog.Hide();
             _isDisplayIssuesDialogOdepened = false;
-            await _getIssues();
+            await _countIssues();
         }
     }
     #endregion
@@ -414,18 +410,16 @@ public partial class HomeHeadComp : IDisposable
     #endregion
 
     #region Get Records
-    private async Task _getIssues()
+    private int _issuesCounter = 0;
+    private async Task _countIssues()
     {
         try
         {
-            var issuesDtos = await _dataProvider.Users.GetOpenIssues((int)_sharedAuthData.LogedUser.Id);
-            var issuesVms = Mapper.Map<List<IssueVM>>(issuesDtos);
-            _issues.Clear();
-            issuesVms.ForEach(_issues.Add);
+            _issuesCounter = await _dataProvider.Users.CountOpenIssues((int)_sharedAuthData.LogedUser.Id);
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception HomeHeadComp._getIssues(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception HomeHeadComp._countIssues(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
     }
 
@@ -450,7 +444,6 @@ public partial class HomeHeadComp : IDisposable
         catch (Exception ex)
         {
             Logger.LogError($"Exception HomeHeadComp._getTeamsRequestedUsersCount(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-            throw;
         }
     }
     #endregion

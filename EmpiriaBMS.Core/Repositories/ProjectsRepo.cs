@@ -147,7 +147,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
             catch (Exception ex)
             {
                 _logger.LogError($"Exception On ProjectsRepo.Get(int id): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-                throw;
+                return default(ProjectDto)!;
             }
         }
     }
@@ -550,7 +550,6 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ProjectsRepo.UpsertSubConstructors(ProjectId: {projectId}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
         }
     }
 
@@ -585,7 +584,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ProjectsRepo.GetSubConstructors(int projectId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
+            return default(ICollection<SubConstructorDto>)!;
         }
     }
 
@@ -621,7 +620,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ProjectsRepo.GetSubConstructorsIds(int projectId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
+            return default(ICollection<int>)!;
         }
     }
     #endregion

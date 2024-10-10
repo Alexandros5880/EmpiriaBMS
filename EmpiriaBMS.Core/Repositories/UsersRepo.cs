@@ -478,6 +478,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
+    #region Issues
     public async Task<ICollection<IssueDto>> GetOpenIssues(int userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -502,6 +503,28 @@ public class UsersRepo : Repository<UserDto, User>
             return Mapping.Mapper.Map<List<Issue>, List<IssueDto>>(issues);
         }
     }
+
+    public async Task<int> CountOpenIssues(int userId)
+    {
+        using (var _context = _dbContextFactory.CreateDbContext())
+        {
+            var rolesIds = await _context.Set<UserRole>()
+                                 .Where(r => !r.IsDeleted)
+                                 .Where(ur => ur.UserId == userId)
+                                 .Include(ur => ur.Role)
+                                 .Select(ur => ur.RoleId)
+                                 .ToListAsync();
+
+            var count = await _context.Set<Issue>()
+                                .Where(r => !r.IsDeleted)
+                                .Where(i => rolesIds.Contains(i.DisplayedRoleId))
+                                .Where(i => i.IsClose == false)
+                                .CountAsync();
+
+            return count;
+        }
+    }
+    #endregion
 
     public async Task<UserRole> DeleteUserRole(UserRole entity)
     {
