@@ -1,5 +1,6 @@
 ﻿using EmpiriaBMS.Core.Config;
 using EmpiriaBMS.Core.Dtos;
+using EmpiriaBMS.Front.Components.General;
 using EmpiriaBMS.Front.Interop.TeamsSDK;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
@@ -26,6 +27,9 @@ public partial class IssuesDetailed
 
     [Parameter]
     public EventCallback OnCancel { get; set; } = default!;
+
+    SignaturePad verificatorSignature;
+    SignaturePad pMSignature;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -61,6 +65,9 @@ public partial class IssuesDetailed
     {
         var valid = Validate();
         if (!valid) return;
+
+        Content.PMSignature = pMSignature != null ? await pMSignature.GetImageData() : null;
+        Content.VerificatorSignature = verificatorSignature != null ? await verificatorSignature.GetImageData() : null;
 
         await OnSave.InvokeAsync(Content);
     }

@@ -197,36 +197,54 @@
         </div>
 
         <!-- PMSignature -->
-        <div class="col-lg-6 col-md-12">
-            @{
-                var pmSignatureSrc = @ImageHelper.GetImageUrl(@Content.PMSignature);
-            }
-            @if (pmSignatureSrc != null)
-            {
+        @{
+            var pmSignatureSrc = @ImageHelper.GetImageUrl(@Content.PMSignature);
+        }
+        @if (pmSignatureSrc != null)
+        {
+            <div class="col-lg-6 col-md-12">
                 <div>
                     Project Manager Signature
                 </div>
                 <div>
                     <img src="@pmSignatureSrc" alt="Project Manager Signature">
                 </div>
-            }
-        </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group mt-2">
+                <label for="pMSignature">Project Manager Signature:</label>
+                <div style="height: 400px; padding: 8px;">
+                    <SignaturePad @ref="pMSignature" Id="pMSignature" />
+                </div>
+            </div>
+        }
         
         <!-- VerificatorSignature -->
-        <div class="col-lg-6 col-md-12">
-            @{
-                var verificatorSignatureSrc = @ImageHelper.GetImageUrl(Content.VerificatorSignature);
-            }
-            @if (verificatorSignatureSrc != null)
-            {
+        @{
+            var verificatorSignatureSrc = @ImageHelper.GetImageUrl(Content.VerificatorSignature);
+        }
+        @if (verificatorSignatureSrc != null)
+        {
+            <div class="col-lg-6 col-md-12">
                 <div>
                     Project Manager Signature
                 </div>
                 <div>
                     <img src="@verificatorSignatureSrc" alt="Verificator Signature">
                 </div>
-            }
-        </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group mt-2">
+                <label for="verificatorSignature">Verificator Signature:</label>
+                <div style="height: 400px;">
+                    <SignaturePad @ref="verificatorSignature" Id="verificatorSignature" />
+                </div>
+            </div>
+        }
 
         <!-- Documents -->
         @if (_documents != null && _documents.Any())
