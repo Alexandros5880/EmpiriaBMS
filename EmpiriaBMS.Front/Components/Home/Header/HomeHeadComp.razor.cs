@@ -77,11 +77,9 @@ public partial class HomeHeadComp : IDisposable
             _loading = true;
             await _getTeamsRequestedUsersCount();
             await _getUserTotalHoursThisMonth();
-
             if (canApproveTimeRequests)
-            {
                 await _getHoursCorrectionRequestsAwaitingCount();
-            }
+            await _countIssues();
             _loading = false;
             StateHasChanged();
         }
