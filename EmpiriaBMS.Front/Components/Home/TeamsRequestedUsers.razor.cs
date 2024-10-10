@@ -58,11 +58,10 @@ public partial class TeamsRequestedUsers : ComponentBase
         if (record == null)
             return;
         _selectedRecord = record;
-        var names = record.DisplayName.Split(' ');
         _selectedUser = new UserVM()
         {
-            FirstName = names[0],
-            LastName = names[1],
+            FirstName = string.Empty,
+            LastName = string.Empty,
             ProxyAddress = record.ProxyAddress,
             TeamsObjectId = record.ObjectId,
         };
@@ -72,18 +71,15 @@ public partial class TeamsRequestedUsers : ComponentBase
     public async Task OnCreateUser(UserVM user)
     {
         _teamsRequestedUsers.Remove(_selectedRecord);
-        var dto = Mapper.Map<UserDto>(user);
-        var added = await DataProvider.Users.Add(dto);
-        if (added != null)
+        var record = _teamsRequestedUsers.FirstOrDefault();
+        _selectedUser = new UserVM()
         {
-            await DataProvider.TeamsRequestedUsers.DeleteByObjectId(user.TeamsObjectId);
-
-            _selectedRecord = null;
-            _selectedUser = null;
-        }
-
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            ProxyAddress = record.ProxyAddress,
+            TeamsObjectId = record.ObjectId,
+        };
         StateHasChanged();
-
         await OnSave.InvokeAsync(user);
     }
 
