@@ -12,14 +12,6 @@
 @inject Logging.LoggerManager Logger
 
 <style>
-    .card {
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 20px;
-        margin: 10px;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
     .description-text {
         width: 100%;
         height: 50px;
@@ -29,8 +21,9 @@
 </style>
 
 <div class="card">
-    <div class="card-body">
-        <h5 class="card-title">@Request.Date.ToShortDateString()</h5>
+
+    <div class="card-title m-2">
+        <h5>@Request.Date.ToShortDateString()</h5>
         <div>
             <h5>
                 @if (Type == DailyTimeTypes.PersonalUser)
@@ -51,6 +44,10 @@
                 }
             </h5>
         </div>
+    </div>
+
+    <div class="card-body">
+        
         <p class="card-text description-text">@Request.Description</p>
         <p class="card-text"><small class="text-muted">@FormatTimeSpan(Request)</small></p>
     
@@ -67,4 +64,5 @@
             </FluentButton>
         </FluentStack>
     </div>
+
 </div>

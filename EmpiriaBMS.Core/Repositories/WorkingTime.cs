@@ -20,7 +20,7 @@ public class WorkingTime : IDisposable
     }
 
     #region Time Correction Requests
-    public async Task<Dictionary<DailyTimeTypes, List<DailyTime>>> GetDailyTimeRequests()
+    public async Task<Dictionary<DailyTimeTypes, List<DailyTime>>> GetDailyTimeRequests(DailyTimeState state)
     {
         try
         {
@@ -28,7 +28,7 @@ public class WorkingTime : IDisposable
             {
                 var requests = await _context.Set<DailyTime>()
                                              .Where(r => !r.IsDeleted)
-                                             .Where(r => r.Type  == DailyTimeType.APPROVED)
+                                             .Where(r => r.State  == DailyTimeState.AWAITING)
                                              .Include(r => r.DailyUser)
                                              .Include(r => r.PersonalUser)
                                              .Include(r => r.TrainingUser)
@@ -67,7 +67,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task<int> GetDailyTimeRequestsCount()
+    public async Task<int> GetDailyTimeRequestsCount(DailyTimeState state)
     {
         try
         {
@@ -75,7 +75,7 @@ public class WorkingTime : IDisposable
             {
                 return await _context.Set<DailyTime>()
                     .Where(r => !r.IsDeleted)
-                    .Where(r => r.Type == DailyTimeType.APPROVED)
+                    .Where(r => r.State == state)
                     .CountAsync();
             }
         }
@@ -262,7 +262,7 @@ public class WorkingTime : IDisposable
                 TimeSpan timespan = dailyTime.ToTimeSpan();
                 TimeSpan timeSpan = new TimeSpan((int)timespan.Days, (int)timespan.Hours, (int)timespan.Minutes, (int)timespan.Seconds);
 
-                request.Type = DailyTimeType.APPROVED;
+                request.State = DailyTimeState.APPROVED;
                 await UpdateDailyTimeRequest(request);
             }
         }
@@ -274,7 +274,7 @@ public class WorkingTime : IDisposable
 
     public async Task RejectDailyTimeRequest(DailyTime request)
     {
-        request.Type = DailyTimeType.APPROVED;
+        request.State = DailyTimeState.APPROVED;
         await UpdateDailyTimeRequest(request);
     }
 
@@ -430,7 +430,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -538,7 +538,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -646,7 +646,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -755,7 +755,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -828,7 +828,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -918,7 +918,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -992,7 +992,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -1069,7 +1069,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -1147,7 +1147,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -1225,7 +1225,7 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        Type = DailyTimeType.AWAITING
+                        State = DailyTimeState.AWAITING
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }

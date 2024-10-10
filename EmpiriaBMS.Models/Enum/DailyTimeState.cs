@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EmpiriaBMS.Models.Enum;
 
-public enum DailyTimeType
+public enum DailyTimeState
 {
     [Display(Name = "APPROVED")]
     APPROVED = 0,

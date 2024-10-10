@@ -268,13 +268,13 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<long>("Seconds")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SupportiveWorkId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TrainingUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
