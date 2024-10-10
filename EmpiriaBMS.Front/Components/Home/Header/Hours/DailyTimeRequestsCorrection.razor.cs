@@ -12,6 +12,12 @@ public partial class DailyTimeRequestsCorrection
     [Parameter]
     public EventCallback<DailyTime> OnChange { get; set; }
 
+    [Parameter]
+    public int RequestCount {
+        get => _hoursCorrectionCount;
+        set => _hoursCorrectionCount = value;
+    }
+
     private bool _loading = false;
     private int _hoursCorrectionCount = 0;
     private Dictionary<DailyTimeTypes, List<DailyTime>> _dailyTimeRequest = new Dictionary<DailyTimeTypes, List<DailyTime>>();
@@ -23,7 +29,8 @@ public partial class DailyTimeRequestsCorrection
         if (firstRender)
         {
             _loading = true;
-            await _getHoursCorrectionRequestsAwaitingCount();
+            if (_hoursCorrectionCount == 0)
+                await _getHoursCorrectionRequestsAwaitingCount();
             await _getHoursCorrectionsAwaitingRequests();
             _loading = false;
             StateHasChanged();
