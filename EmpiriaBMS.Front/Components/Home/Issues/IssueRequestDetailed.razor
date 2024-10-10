@@ -1,0 +1,43 @@
+﻿@page "/issuedetailed"
+
+@using EmpiriaBMS.Core.Config;
+@using EmpiriaBMS.Core.Dtos;
+@using System.Text.Json;
+@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.General
+
+@inject IMapper Mapper
+@inject IDataProvider DataProvider
+@inject SharedAuthDataService _sharedAuthData
+@inject Logging.LoggerManager Logger
+
+<div style="max-height: 500px; overflow-y: auto; overflow-x: hidden;">
+    <h3>Create Issue</h3>
+
+    <EditForm Model="@_issue" class="m-2">
+
+        <div class="row">
+            <div class="col form-group">
+                <label for="projectId">Project:</label> <br />
+                <strong id="projectId">@_project?.Name</strong>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-6">
+                <FluentDatePicker Style="width: 100%;" @bind-Value="@_issue.ComplaintDate" Label="Issue Date" />
+            </div>
+            <div class="col-6 form-group">
+                <label for="documents">Relative Documents:</label>
+                <InputFile id="documents" OnChange="@HandleFileUploadDoc" multiple />
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12">
+                <FluentTextArea Style="width:100%;" @bind-Value="@_issue.Description" Label="Description:" Rows="3" Resize="TextAreaResize.Vertical" />
+            </div>
+        </div>
+
+    </EditForm>
+</div>

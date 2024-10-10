@@ -27,7 +27,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         _emailRepo = new EmailRepo(DbFactory, logger);
     }
 
-    public async Task<ClientDto> Add(ClientDto entity, bool update = false)
+    public async new Task<ClientDto> Add(ClientDto entity, bool update = false)
     {
         try
         {
@@ -55,7 +55,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ClientRepo.Add(Client): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
+            return default(ClientDto)!;
         }
     }
 
@@ -136,7 +136,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ClientRepo.GetUsers(int clientId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
+            return default(ICollection<UserDto>)!;
         }
     }
 
@@ -152,7 +152,6 @@ public class ClientRepo : Repository<ClientDto, Client>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ClientRepo.RemoveUser(int userId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
         }
     }
 
@@ -168,7 +167,6 @@ public class ClientRepo : Repository<ClientDto, Client>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On ClientRepo.AddUser(int userId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
         }
     }
     #endregion

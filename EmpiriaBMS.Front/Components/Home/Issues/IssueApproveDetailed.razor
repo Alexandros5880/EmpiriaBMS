@@ -63,7 +63,7 @@
                 }
             }
         </div>
-        
+
         <!-- Visible To Role -->
         <div class="col-xl-6 col-lg-6 col-12">
             @if (CalledFromDash)
@@ -79,7 +79,7 @@
                     Visible To Role<span class="text-danger">*</span>
                 </div>
                 <div>
-                
+
                     <FluentCombobox Autocomplete="ComboboxAutocomplete.Both"
                                     Placeholder="Select Role..."
                                     Items="_roles"
@@ -90,7 +90,7 @@
                                     OptionText="@(c => c.Name)"
                                     OptionValue="@(c => c.Id.ToString())"
                                     @bind-SelectedOption="@Role" />
-                
+
                 </div>
                 @if (!validRole)
                 {
@@ -111,7 +111,7 @@
                 </FluentLabel>
             }
             else
-                {
+            {
                 <div>
                     Creator<span class="text-danger">*</span>
                 </div>
@@ -134,7 +134,7 @@
                 }
             }
         </div>
-        
+
         <!-- ComplaintDate-->
         <div class="col-xl-6 col-lg-6 col-12">
             <FluentDatePicker Class="float-end"
@@ -150,11 +150,11 @@
                 Description<span class="text-danger">*</span>
             </div>
             <div>
-            <FluentTextArea Style="width:100%;"
-                            @bind-Value="@Content.Description"
-                            Rows="3"
-                            Resize="TextAreaResize.Vertical"
-                            Disabled="@CalledFromDash"/>
+                <FluentTextArea Style="width:100%;"
+                                @bind-Value="@Content.Description"
+                                Rows="3"
+                                Resize="TextAreaResize.Vertical"
+                                Disabled="@CalledFromDash" />
             </div>
             @if (!validProject)
             {
@@ -183,7 +183,7 @@
         <div class="col-lg-6 col-md-12">
             <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.SolutionDate" Label="Solution Date" />
         </div>
-        
+
         <!-- VerificationDate-->
         <div class="col-lg-6 col-md-12">
             <FluentDatePicker Style="width: 100%;" @bind-Value="@Content.VerificationDate" Label="Verification Date" />
@@ -200,7 +200,7 @@
         @{
             var pmSignatureSrc = @ImageHelper.GetImageUrl(@Content.PMSignature);
         }
-        @if (pmSignatureSrc != null)
+        @if (pmSignatureSrc != null && pmSignatureSrc.Length > 50)
         {
             <div class="col-lg-6 col-md-12">
                 <div>
@@ -220,12 +220,12 @@
                 </div>
             </div>
         }
-        
+
         <!-- VerificatorSignature -->
         @{
             var verificatorSignatureSrc = @ImageHelper.GetImageUrl(Content.VerificatorSignature);
         }
-        @if (verificatorSignatureSrc != null)
+        @if (verificatorSignatureSrc != null && verificatorSignatureSrc.Length > 50)
         {
             <div class="col-lg-6 col-md-12">
                 <div>
