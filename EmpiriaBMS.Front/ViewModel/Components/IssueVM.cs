@@ -19,7 +19,7 @@ public class IssueVM : BaseVM
     }
 
     private int _projectId;
-    public int ProjectId
+    public int ProjectId 
     {
         get => _projectId;
         set
@@ -31,8 +31,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private Project? _project;
-    public Project? Project
+    private Project _project;
+    public Project Project
     {
         get => _project;
         set
@@ -59,8 +59,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private Role? _displayedRole;
-    public Role? DisplayedRole
+    private Role _displayedRole;
+    public Role DisplayedRole
     {
         get => _displayedRole;
         set
@@ -87,8 +87,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private User? _creator;
-    public User? Creator
+    private User _creator;
+    public User Creator
     {
         get => _creator;
         set
@@ -117,8 +117,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string? _solution;
-    public string? Solution
+    private string _solution;
+    public string Solution
     {
         get => _solution;
         set
@@ -143,8 +143,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string? _evaluation;
-    public string? Evaluation
+    private string _evaluation;
+    public string Evaluation
     {
         get => _evaluation;
         set
@@ -156,8 +156,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private string? _verification;
-    public string? Verification
+    private string _verification;
+    public string Verification
     {
         get => _verification;
         set
@@ -182,8 +182,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private byte[]? _verificatorSignature;
-    public byte[]? VerificatorSignature
+    private byte[] _verificatorSignature;
+    public byte[] VerificatorSignature
     {
         get => _verificatorSignature;
         set
@@ -195,8 +195,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private byte[]? _pMSignature;
-    public byte[]? PMSignature
+    private byte[] _pMSignature;
+    public byte[] PMSignature
     {
         get => _pMSignature;
         set

@@ -140,7 +140,7 @@
                                              Wrap="false">
 
                                     <!-- Issues Badge -->
-                                    <FluentCounterBadge Count="@_issues.Count"
+                                    <FluentCounterBadge Count="@_issuesCounter"
                                                         ShowZero="true"
                                                         Appearance="Appearance.Neutral"
                                                         HorizontalPosition="-25"
@@ -315,7 +315,7 @@
             </div>
 
             <div class="col-12 justify-content-center">
-                <Issues Source="@_issues.ToList()" OnSave="@(async() => await CloseIssuesClick())" />
+                <Issues OnSave="@(async() => await CloseIssuesClick())" />
             </div>
 
         </div>

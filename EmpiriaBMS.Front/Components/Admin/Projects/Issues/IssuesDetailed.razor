@@ -34,7 +34,10 @@
         <div class="col-xl-6 col-lg-6 col-12">
             @if (CalledFromDash)
             {
-                <FluentLabel>Project: <span class="fs-6">@Content.ProjectName</span></FluentLabel>
+                <FluentLabel>
+                    <strong>Project: </strong>
+                    <span class="fs-6 text-decoration-underline text-info">@Content.ProjectName</span>
+                </FluentLabel>
             }
             else
             {
@@ -65,7 +68,10 @@
         <div class="col-xl-6 col-lg-6 col-12">
             @if (CalledFromDash)
             {
-                <FluentLabel>Visible To Role: <span class="fs-6">@Content.DisplayedRoleName</span></FluentLabel>
+                <FluentLabel>
+                    <strong>Visible To Role: </strong>
+                    <span class="fs-6 text-decoration-underline text-info">@Content.DisplayedRoleName</span>
+                </FluentLabel>
             }
             else
             {
@@ -99,7 +105,10 @@
         <div class="col-xl-6 col-lg-6 col-12">
             @if (CalledFromDash)
             {
-                <FluentLabel>Creator: <span class="fs-6">@Content.CreatorName</span></FluentLabel>
+                <FluentLabel>
+                    <strong>Creator: </strong>
+                    <span class="fs-6 text-decoration-underline text-info">@Content.CreatorName</span>
+                </FluentLabel>
             }
             else
                 {
@@ -220,35 +229,38 @@
         </div>
 
         <!-- Documents -->
-        <div class="col-12">
-            <div>
-                <h3>Documents</h3>
-            </div>
-            <div>
-                <ul>
-                    @foreach (var document in _documents)
-                    {
-                        <li>
-                            <FluentStack Width="100%">
-                                @document.FileName
+        @if (_documents != null && _documents.Any())
+        {
+            <div class="col-12">
+                <div>
+                    <h3>Documents</h3>
+                </div>
+                <div>
+                    <ul>
+                        @foreach (var document in _documents)
+                        {
+                            <li>
+                                <FluentStack Width="100%">
+                                    @document.FileName
 
-                                <FluentButton IconEnd="@(new MyIcons.Size32.Download())"
-                                              Title="Globe"
-                                              OnClick="@(() => DownloadFile(document))" />
-
-                                @if (!CalledFromDash)
-                                {
-                                    <FluentButton IconEnd="@(new Icons.Regular.Size32.Delete())"
+                                    <FluentButton IconEnd="@(new MyIcons.Size32.Download())"
                                                   Title="Globe"
-                                                  OnClick="@(() => DeleteFile(document))" />
-                                }
+                                                  OnClick="@(() => DownloadFile(document))" />
 
-                            </FluentStack>
-                        </li>
-                    }
-                </ul>
+                                    @if (!CalledFromDash)
+                                    {
+                                        <FluentButton IconEnd="@(new Icons.Regular.Size32.Delete())"
+                                                      Title="Globe"
+                                                      OnClick="@(() => DeleteFile(document))" />
+                                    }
+
+                                </FluentStack>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
-        </div>
+        }
 
         <!-- Deleted Documents -->
         @if (_deletedDocuments.Count > 0)

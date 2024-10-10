@@ -4,6 +4,7 @@
 @inject IMapper Mapper
 @inject IDialogService DialogService
 @inject Logging.LoggerManager Logger
+@inject SharedAuthDataService _sharedAuthData
 
 <div class="row gx-5 pb-1" style="height: min(78vh, 1200px); overflow-y: auto;">
 
@@ -12,15 +13,14 @@
     </div>
 
     <div class="col-xl-7 col-lg-7 col-12">
-        <div class="ps-1 border rounded shadow-sm" style="height: 500px; overflow-x: auto;">
+        <div class="ps-1 border rounded shadow-sm">
             <div>
                 <FluentDataGrid Items="@FilteredItems"
                                 ResizableColumns=true
                                 Pagination="@pagination"
                                 TGridItem="IssueVM"
                                 OnRowFocus="OnRowFocused"
-                                Style="height: 100%;"
-                                GridTemplateColumns="auto 160 120px 120px 120px 120px 120px">
+                                Style="height: 450px; overflow-y: ayto;">
 
                     <TemplateColumn Title="Name"
                                     Sortable="true"

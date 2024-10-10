@@ -95,17 +95,6 @@ public partial class TeamsRequestedUsers : ComponentBase
         {
             var requestedUsersDtos = await DataProvider.TeamsRequestedUsers.GetAll();
 
-            // TODO: Only For Debug
-            for (int i = 0; i < 10; i++)
-            {
-                requestedUsersDtos.Add(new TeamsRequestedUserDto()
-                {
-                    DisplayName = $"User - {i}",    
-                    ProxyAddress = $"alexandrosplatanios{i}@gmail.com",
-                    ObjectId = Guid.NewGuid().ToString()
-                });
-            }
-
             var requestedUsersVms = Mapper.Map<List<TeamsRequestedUserVM>>(requestedUsersDtos);
             _teamsRequestedUsers.Clear();
             requestedUsersVms.ForEach(_teamsRequestedUsers.Add);
