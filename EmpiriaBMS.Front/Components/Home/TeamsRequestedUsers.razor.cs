@@ -102,7 +102,6 @@ public partial class TeamsRequestedUsers : ComponentBase
         catch (Exception ex)
         {
             Logger.LogError($"Exception TeamsRequestedUsers._getTeamsRequestedUsersCount(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-            throw;
         }
     }
 

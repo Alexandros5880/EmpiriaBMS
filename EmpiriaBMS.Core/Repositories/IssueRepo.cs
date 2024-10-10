@@ -100,7 +100,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On IssueRepo.Add(IssueDto entity): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
+            return default(IssueDto)!;
         }
     }
 
@@ -149,7 +149,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On IssueRepo.Update(IssueDto entity, List<DocumentDto> documents): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
+            return default(IssueDto)!;
         }
     }
 
@@ -177,7 +177,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         catch (Exception ex)
         {
             _logger.LogError($"Exception On IssueRepo.Update(IssueDto entity): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            throw;
+            return default(IssueDto)!;
         }
     }
 

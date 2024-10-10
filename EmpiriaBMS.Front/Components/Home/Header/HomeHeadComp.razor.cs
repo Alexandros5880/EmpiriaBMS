@@ -444,7 +444,6 @@ public partial class HomeHeadComp : IDisposable
         catch (Exception ex)
         {
             Logger.LogError($"Exception HomeHeadComp._getTeamsRequestedUsersCount(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
-            throw;
         }
     }
     #endregion
