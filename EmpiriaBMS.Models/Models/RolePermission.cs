@@ -3,9 +3,9 @@ namespace EmpiriaBMS.Models.Models;
 
 public class RolePermission : Entity
 {
-    public int RoleId { get; set; }
+    public long RoleId { get; set; }
     public Role? Role { get; set; }
 
-    public int PermissionId { get; set; }
+    public long PermissionId { get; set; }
     public Permission? Permission { get; set; }
 }

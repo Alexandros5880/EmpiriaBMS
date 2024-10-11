@@ -13,7 +13,7 @@ public class Role : Entity
     public bool IsEditable { get; set; }
 
     // Parent Roles
-    public int? ParentRoleId { get; set; }
+    public long? ParentRoleId { get; set; }
     public Role? ParentRole { get; set; }
 
     // Child Roles

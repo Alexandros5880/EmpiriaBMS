@@ -18,8 +18,8 @@ public class IssueVM : BaseVM
         }
     }
 
-    private int _projectId;
-    public int ProjectId 
+    private long _projectId;
+    public long ProjectId 
     {
         get => _projectId;
         set
@@ -46,8 +46,8 @@ public class IssueVM : BaseVM
 
     public string ProjectName => Project != null ? Project.Name : "";
 
-    private int _displayedRoleId;
-    public int DisplayedRoleId
+    private long _displayedRoleId;
+    public long DisplayedRoleId
     {
         get => _displayedRoleId;
         set
@@ -74,8 +74,8 @@ public class IssueVM : BaseVM
 
     public string DisplayedRoleName => DisplayedRole != null ? DisplayedRole.Name : "";
 
-    private int _creatorId;
-    public int CreatorId
+    private long _creatorId;
+    public long CreatorId
     {
         get => _creatorId;
         set

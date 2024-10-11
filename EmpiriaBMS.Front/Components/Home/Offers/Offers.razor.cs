@@ -126,7 +126,7 @@ public partial class Offers
         vms.ForEach(_projects.Add);
     }
 
-    private async Task _getOffers(int? projectId, int? stateId = 0, int? typeId = 0, int? clientId = 0, OfferResult? result = null, bool refresh = false)
+    private async Task _getOffers(long? projectId, long? stateId = 0, long? typeId = 0, long? clientId = 0, OfferResult? result = null, bool refresh = false)
     {
         var dtos = await _dataProvider.Offers.GetAll(projectId: projectId, stateId: stateId, typeId: typeId, clientId: clientId, result: result);
         var vms = Mapper.Map<List<OfferVM>>(dtos);

@@ -484,7 +484,7 @@ public partial class EditUsersHours
     #endregion
 
     #region When Records Selected
-    private async Task OnSelectUser(int userId)
+    private async Task OnSelectUser(long userId)
     {
         if (userId == 0 || userId == _selectedUser?.Id) return;
 
@@ -510,7 +510,7 @@ public partial class EditUsersHours
         StateHasChanged();
     }
 
-    private async Task OnSelectClient(int ledId)
+    private async Task OnSelectClient(long ledId)
     {
         if (ledId == 0 || ledId == _selectedClient?.Id) return;
 
@@ -534,7 +534,7 @@ public partial class EditUsersHours
         StateHasChanged();
     }
 
-    private async Task OnSelectOffer(int offerId)
+    private async Task OnSelectOffer(long offerId)
     {
         if (offerId == 0 || offerId == _selectedOffer?.Id) return;
 
@@ -555,7 +555,7 @@ public partial class EditUsersHours
         StateHasChanged();
     }
 
-    private async Task OnSelectProject(int projectId)
+    private async Task OnSelectProject(long projectId)
     {
         if (projectId == 0 || projectId == _selectedProject?.Id) return;
 
@@ -581,7 +581,7 @@ public partial class EditUsersHours
         StateHasChanged();
     }
 
-    private async Task OnSelectDiscipline(int disciplineId)
+    private async Task OnSelectDiscipline(long disciplineId)
     {
         if (disciplineId == 0 || disciplineId == _selectedDiscipline?.Id) return;
 

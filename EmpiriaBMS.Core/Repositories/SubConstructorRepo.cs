@@ -26,7 +26,7 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
     }
 
     #region Users
-    public async Task<ICollection<UserDto>> GetUsers(int subConstructorId)
+    public async Task<ICollection<UserDto>> GetUsers(long subConstructorId)
     {
         try
         {
@@ -50,7 +50,7 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
         }
     }
 
-    public async Task RemoveUser(int userId)
+    public async Task RemoveUser(long userId)
     {
         try
         {
@@ -82,7 +82,7 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
     #endregion
 
     #region Email
-    public async Task<ICollection<Email>> GetEmails(int subconstructorId)
+    public async Task<ICollection<Email>> GetEmails(long subconstructorId)
     {
         if (subconstructorId == 0)
             return new List<Email>();
@@ -94,7 +94,7 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
                                  .ToListAsync();
     }
 
-    public async Task UpsertEmails(int subconstructorId, List<EmailDto> emails)
+    public async Task UpsertEmails(long subconstructorId, List<EmailDto> emails)
     {
         try
         {
@@ -139,7 +139,7 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
         }
     }
 
-    public async Task RemoveEmailsAll(int subconstructorId, bool definitely = false)
+    public async Task RemoveEmailsAll(long subconstructorId, bool definitely = false)
     {
         try
         {
@@ -191,7 +191,7 @@ public class SubConstructorRepo : Repository<SubConstructorDto, SubConstructor>
         }
     }
 
-    public async Task<Email> DeleteEmail(int emailId)
+    public async Task<Email> DeleteEmail(long emailId)
     {
         try
         {

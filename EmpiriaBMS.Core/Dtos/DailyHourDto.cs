@@ -19,34 +19,34 @@ public class DailyHourDto : EntityDto
 
     public bool IsEditByAdmin { get; set; }
 
-    public int? DailyUserId { get; set; }
+    public long? DailyUserId { get; set; }
     public User? DailyUser { get; set; }
 
-    public int? PersonalUserId { get; set; }
+    public long? PersonalUserId { get; set; }
     public User? PersonalUser { get; set; }
 
-    public int? TrainingUserId { get; set; }
+    public long? TrainingUserId { get; set; }
     public User? TrainingUser { get; set; }
 
-    public int? CorporateUserId { get; set; }
+    public long? CorporateUserId { get; set; }
     public User? CorporateUser { get; set; }
 
-    public int? DeliverableId { get; set; }
+    public long? DeliverableId { get; set; }
     public Deliverable? Deliverable { get; set; }
 
-    public int? SupportiveWorkId { get; set; }
+    public long? SupportiveWorkId { get; set; }
     public SupportiveWork? SupportiveWork { get; set; }
 
-    public int? DisciplineId { get; set; }
+    public long? DisciplineId { get; set; }
     public Discipline? Discipline { get; set; }
 
-    public int? ProjectId { get; set; }
+    public long? ProjectId { get; set; }
     public Project? Project { get; set; }
 
-    public int? ClientId { get; set; }
+    public long? ClientId { get; set; }
     public Client? Client { get; set; }
 
-    public int? OfferId { get; set; }
+    public long? OfferId { get; set; }
     public Offer? Offer { get; set; }
 
     public string? Description { get; set; }

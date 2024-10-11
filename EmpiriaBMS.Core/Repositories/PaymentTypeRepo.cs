@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class PaymentTypeRepo : Repository<PaymentTypeDto, PaymentType>, IDisposable
+public class PaymentTypeRepo : Repository<PaymentTypeDto, PaymentType>
 {
     public PaymentTypeRepo(
         IDbContextFactory<AppDbContext> DbFactory,

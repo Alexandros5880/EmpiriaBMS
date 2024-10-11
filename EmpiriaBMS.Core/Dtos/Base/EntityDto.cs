@@ -10,7 +10,7 @@ namespace EmpiriaBMS.Core.Dtos.Base;
 
 public class EntityDto : IEntityDto
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime LastUpdatedDate { get; set; }
     public bool IsDeleted { get; set; }

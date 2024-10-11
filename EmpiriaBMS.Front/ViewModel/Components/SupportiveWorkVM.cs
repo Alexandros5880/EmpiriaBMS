@@ -6,8 +6,8 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class SupportiveWorkVM : BaseVM
 {
-    private int? _typeId;
-    public int? TypeId
+    private long? _typeId;
+    public long? TypeId
     {
         get => _typeId;
         set
@@ -61,8 +61,8 @@ public class SupportiveWorkVM : BaseVM
         }
     }
 
-    private int? __disciplineId;
-    public int? DisciplineId
+    private long? __disciplineId;
+    public long? DisciplineId
     {
         get => __disciplineId;
         set

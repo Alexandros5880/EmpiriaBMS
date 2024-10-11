@@ -11,7 +11,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
     where T : class, IEntityDto
     where U : class, IEntity
 {
-    private bool disposedValue;
+    protected bool disposedValue;
     protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
     protected readonly Logging.LoggerManager _logger;
 
@@ -57,7 +57,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         }
     }
 
-    public async Task<T> Delete(int id)
+    public async Task<T> Delete(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -103,11 +103,11 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         catch (Exception ex)
         {
             _logger.LogError($"Exception On Repository.Update({Mapping.Mapper.Map<U>(entity).GetType()}): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
+            return default(T)!;
         }
     }
 
-    public async Task<T?> Get(int id)
+    public async Task<T?> Get(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -175,7 +175,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         }
     }
 
-    public async Task<int> Count()
+    public async Task<long> Count()
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -183,7 +183,7 @@ public class Repository<T, U> : IRepository<T, U>, IDisposable
         }
     }
 
-    public async Task<int> Count(Expression<Func<U, bool>> expresion)
+    public async Task<long> Count(Expression<Func<U, bool>> expresion)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
             return await _context.Set<U>().Where(r => !r.IsDeleted).Where(expresion).CountAsync();

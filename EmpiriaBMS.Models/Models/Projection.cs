@@ -11,7 +11,7 @@ namespace EmpiriaBMS.Models.Models;
 
 public class Projection : Entity
 {
-    public int ClientId { get; set; }
+    public long ClientId { get; set; }
     public Client? Client { get; set; }
 
     public double ProjectFee { get; set; }

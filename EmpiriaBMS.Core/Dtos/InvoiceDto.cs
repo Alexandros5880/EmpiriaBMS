@@ -22,13 +22,13 @@ public class InvoiceDto : EntityDto
 
     public string? Mark { get; set; }
 
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
     public InvoiceTypeDto? Type { get; set; }
 
-    public int? ExpensesTypeId { get; set; }
+    public long? ExpensesTypeId { get; set; }
     public ExpensesType? ExpensesType { get; set; }
 
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
     public ProjectDto? Project { get; set; }
 
     public ICollection<PaymentDto>? Payments { get; set; }

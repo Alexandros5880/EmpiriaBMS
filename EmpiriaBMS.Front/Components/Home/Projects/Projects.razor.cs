@@ -33,7 +33,7 @@ public partial class Projects
     public bool IsWorkingMode { get; set; }
 
     [Parameter]
-    public EventCallback<int> OnSelect { get; set; }
+    public EventCallback<long> OnSelect { get; set; }
 
     [Parameter]
     public EventCallback OnEdit { get; set; }
@@ -48,7 +48,7 @@ public partial class Projects
 
     private ObservableCollection<OfferVM> _offers = new ObservableCollection<OfferVM>();
 
-    private int _selectedPmId;
+    private long _selectedPmId;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -99,7 +99,7 @@ public partial class Projects
         _selectedProject = selected;
     }
 
-    public async Task GetRecords(int offerId = 0, bool? active = null)
+    public async Task GetRecords(long offerId = 0, bool? active = null)
     {
         await _getOffers();
 
@@ -129,7 +129,7 @@ public partial class Projects
 
     public void ResetChanges() => _dataChanged.Clear();
 
-    private async Task OnRowSelect(int projectId)
+    private async Task OnRowSelect(long projectId)
     {
         if (projectId == 0)
             return;
@@ -141,7 +141,7 @@ public partial class Projects
         StateHasChanged();
     }
 
-    private long GetProjectMenHours(int projecId) =>
+    private long GetProjectMenHours(long projecId) =>
         _dataProvider.Projects.GetMenHours(projecId);
 
     public async Task _getOffers()
@@ -408,7 +408,7 @@ public partial class Projects
     #endregion
 
     #region Projects Managers Assign Actions (Project Assign)
-    private async Task<int> GetRoleId(string roleName)
+    private async Task<long> GetRoleId(string roleName)
     {
         try
         {

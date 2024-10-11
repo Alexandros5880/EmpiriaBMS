@@ -13,11 +13,11 @@ public class DisciplineExport : IInport<DisciplineVM>
 
     public float DeclaredCompleted { get; set; }
 
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
 
     public string ProjectName { get; set; }
 
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
 
     public string TypeName { get; set; }
 

@@ -5,11 +5,11 @@ namespace EmpiriaBMS.Models.Models;
 public class SupportiveWork : Entity
 {
     [Required]
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
     public SupportiveWorkType? Type { get; set; }
 
     [Required]
-    public int DisciplineId { get; set; }
+    public long DisciplineId { get; set; }
     public Discipline? Discipline { get; set; }
 
     public ICollection<DailyTime>? DailyTime { get; set; }

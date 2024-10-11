@@ -19,8 +19,8 @@ public class PaymentTypeVM : BaseVM, ITypeVM
         }
     }
 
-    private string? _description;
-    public string? Description
+    private string _description;
+    public string Description
     {
         get => _description;
         set

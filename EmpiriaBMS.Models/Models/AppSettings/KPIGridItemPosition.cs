@@ -7,7 +7,7 @@ namespace EmpiriaBMS.Front.Components.KPIS.Helper;
 public class KPIGridItemPosition : Entity
 {
     [Required]
-    public int KPIGridItemId { get; set; }
+    public long KPIGridItemId { get; set; }
     public KPIGridItem? KPIGridItem { get; set; }
 
     public int X { get; set; }

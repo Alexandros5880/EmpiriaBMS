@@ -12,7 +12,7 @@ public class DisciplineTypeRepo : Repository<DisciplineTypeDto, DisciplineType>,
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<bool> HasDisciplineTypesSelections(int projectId)
+    public async Task<bool> HasDisciplineTypesSelections(long projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {

@@ -9,10 +9,10 @@ public class Invoice : Entity
     public InvoiceCategory Category { get; set; }
 
     [Required]
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
     public InvoiceType? Type { get; set; }
 
-    public int? ExpensesTypeId { get; set; }
+    public long? ExpensesTypeId { get; set; }
     public ExpensesType? ExpensesType { get; set; }
 
     public int Vat { get; set; }
@@ -31,7 +31,7 @@ public class Invoice : Entity
 
     public string? Mark { get; set; }
 
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
 
     public Project? Project { get; set; }
 

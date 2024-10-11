@@ -311,7 +311,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task<DailyTime?> GetDayliTymeRequest(int id)
+    public async Task<DailyTime?> GetDayliTymeRequest(long id)
     {
         try
         {
@@ -338,7 +338,7 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region User General Time
-    public async Task<DailyTime> AddDailyTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
+    public async Task<DailyTime> AddDailyTime(long userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
         try
         {
@@ -409,7 +409,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task AddDailyTimeRequest(int userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task AddDailyTimeRequest(long userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -447,7 +447,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task<DailyTime> AddPersonalTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
+    public async Task<DailyTime> AddPersonalTime(long userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
         try
         {
@@ -517,7 +517,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task AddPersonaTimeRequest(int userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task AddPersonaTimeRequest(long userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -555,7 +555,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task<DailyTime> AddTraningTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
+    public async Task<DailyTime> AddTraningTime(long userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
         try
         {
@@ -625,7 +625,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task AddTraningTimeRequest(int userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task AddTraningTimeRequest(long userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -663,7 +663,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task<DailyTime> AddCorporateEventTime(int userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
+    public async Task<DailyTime> AddCorporateEventTime(long userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
         try
         {
@@ -734,7 +734,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task AddCorporateEventTimeRequest(int userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task AddCorporateEventTimeRequest(long userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -774,7 +774,7 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Client Time
-    public async Task ClientAddTime(int userId, int clientId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task ClientAddTime(long userId, long clientId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         try
         {
@@ -810,7 +810,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task ClientAddTimeRequest(int userId, int clientId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task ClientAddTimeRequest(long userId, long clientId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -849,7 +849,7 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Project Time
-    public async Task ProjectAddTime(int userId, int projectId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task ProjectAddTime(long userId, long projectId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         try
         {
@@ -885,7 +885,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task ProjectAddTimeRequest(int userId, int projectId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task ProjectAddTimeRequest(long userId, long projectId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -924,7 +924,7 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Offer Time
-    public async Task OfferAddTime(int userId, int offerId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task OfferAddTime(long userId, long offerId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         try
         {
@@ -960,7 +960,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task OfferAddTimeRequest(int userId, int offerId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task OfferAddTimeRequest(long userId, long offerId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -999,7 +999,7 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Discipline Time
-    public async Task DisciplineAddTime(int userId, int projectId, int disciplineId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task DisciplineAddTime(long userId, long projectId, long disciplineId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         try
         {
@@ -1036,7 +1036,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task DisciplineAddTimeRequest(int userId, int projectId, int disciplineId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task DisciplineAddTimeRequest(long userId, long projectId, long disciplineId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -1076,7 +1076,7 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Deliverable Time
-    public async Task DeliverableAddTime(int userId, int projectId, int disciplineId, int drawId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task DeliverableAddTime(long userId, long projectId, long disciplineId, long drawId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         try
         {
@@ -1114,7 +1114,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task DeliverableAddTimeRequest(int userId, int projectId, int disciplineId, int drawId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task DeliverableAddTimeRequest(long userId, long projectId, long disciplineId, long drawId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {
@@ -1155,7 +1155,7 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region SupportiveWork Time
-    public async Task SupportiveWorkAddTime(int userId, int projectId, int disciplineId, int otherId, TimeSpan timespan, bool isEditByAdmin = false)
+    public async Task SupportiveWorkAddTime(long userId, long projectId, long disciplineId, long otherId, TimeSpan timespan, bool isEditByAdmin = false)
     {
         try
         {
@@ -1193,7 +1193,7 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task SupportiveWorkAddTimeRequest(int userId, int projectId, int disciplineId, int otherId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task SupportiveWorkAddTimeRequest(long userId, long projectId, long disciplineId, long otherId, TimeSpan timespan, string description, bool isEditByAdmin = false)
     {
         try
         {

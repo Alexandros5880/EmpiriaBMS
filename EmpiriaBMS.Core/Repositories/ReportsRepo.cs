@@ -110,7 +110,7 @@ public class ReportsRepo : IDisposable
         {
             if (disposing)
             {
-
+                _projectsRepo?.Dispose();
             }
             disposedValue = true;
         }

@@ -8,9 +8,9 @@ namespace EmpiriaBMS.Models.Models;
 
 public class ProjectSubConstractor : Entity
 {
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
     public Project Project { get; set; }
 
-    public int SubConstructorId { get; set; }
+    public long SubConstructorId { get; set; }
     public SubConstructor SubConstructor { get; set; }
 }

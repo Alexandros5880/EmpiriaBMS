@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Front.ViewModel.Components.Base;
 using EmpiriaBMS.Models.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 namespace EmpiriaBMS.Front.ViewModel.Components;
 
@@ -20,8 +21,8 @@ public class DeliverableVM : BaseVM
         }
     }
 
-    private int? _typeId;
-    public int? TypeId
+    private long? _typeId;
+    public long? TypeId
     {
         get => _typeId;
         set
@@ -75,15 +76,15 @@ public class DeliverableVM : BaseVM
         }
     }
 
-    private int? __disciplineId;
-    public int? DisciplineId
+    private long? _disciplineId;
+    public long? DisciplineId
     {
-        get => __disciplineId;
+        get => _disciplineId;
         set
         {
-            if (value == __disciplineId)
+            if (value == _disciplineId)
                 return;
-            __disciplineId = value;
+            _disciplineId = value;
             NotifyPropertyChanged(nameof(DisciplineId));
         }
     }

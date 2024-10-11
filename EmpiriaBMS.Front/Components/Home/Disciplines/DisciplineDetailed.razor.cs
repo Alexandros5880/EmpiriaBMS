@@ -13,7 +13,7 @@ public partial class DisciplineDetailed : ComponentBase, IDisposable
     private bool isNew = false;
 
     [Parameter]
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
 
     List<DisciplineTypeDto> _disciplineTypes = new List<DisciplineTypeDto>();
     private DisciplineVM _discipline = new DisciplineVM();

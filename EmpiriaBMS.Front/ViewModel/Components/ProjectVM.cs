@@ -86,8 +86,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _stageId;
-    public int? StageId
+    private long? _stageId;
+    public long? StageId
     {
         get => _stageId;
         set
@@ -151,8 +151,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _projectManagerId;
-    public int? ProjectManagerId
+    private long? _projectManagerId;
+    public long? ProjectManagerId
     {
         get => _projectManagerId;
         set
@@ -177,8 +177,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _offerId;
-    public int? OfferId
+    private long? _offerId;
+    public long? OfferId
     {
         get => _offerId;
         set
@@ -203,8 +203,8 @@ public class ProjectVM : BaseVM
         }
     }
 
-    private int? _addressId;
-    public int? AddressId
+    private long? _addressId;
+    public long? AddressId
     {
         get => _addressId;
         set
@@ -274,5 +274,5 @@ public class ProjectVM : BaseVM
     public string ClientFullName => Offer?.Client?.Name ?? "";
 
     [NotMapped]
-    public List<int> SubConstructorsIds { get; set; }
+    public List<long> SubConstructorsIds { get; set; }
 }

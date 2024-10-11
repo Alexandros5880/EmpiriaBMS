@@ -14,6 +14,6 @@ public class DocumentDto : EntityDto
     public string ContentType { get; set; }
     public byte[] Content { get; set; }
 
-    public int IssueId { get; set; }
+    public long IssueId { get; set; }
     public IssueDto Issue { get; set; }
 }

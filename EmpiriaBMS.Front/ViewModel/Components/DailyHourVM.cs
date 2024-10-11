@@ -46,8 +46,8 @@ public class DailyHourVM : BaseVM
         }
     }
 
-    private int _userId;
-    public int UserId
+    private long _userId;
+    public long UserId
     {
         get => _userId;
         set

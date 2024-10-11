@@ -14,7 +14,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<InvoiceDto> Add(InvoiceDto entity, bool update = false)
+    public async new Task<InvoiceDto> Add(InvoiceDto entity, bool update = false)
     {
         try
         {
@@ -44,7 +44,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public async Task<InvoiceDto> Update(InvoiceDto entity)
+    public async new Task<InvoiceDto> Update(InvoiceDto entity)
     {
         try
         {
@@ -77,7 +77,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public new async Task<InvoiceDto?> Get(int id)
+    public new async Task<InvoiceDto?> Get(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -134,7 +134,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public async Task<ICollection<InvoiceDto>> GetAllByProject(int projectId = 0)
+    public async Task<ICollection<InvoiceDto>> GetAllByProject(long projectId = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -194,7 +194,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public async Task<ICollection<PaymentDto>> GetProjectsPayments(int projectId)
+    public async Task<ICollection<PaymentDto>> GetProjectsPayments(long projectId)
     {
         if (projectId == 0)
             throw new ArgumentNullException(nameof(projectId));
@@ -217,7 +217,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public async Task<double> GetSumOfPayedFee(int invoiceId)
+    public async Task<double> GetSumOfPayedFee(long invoiceId)
     {
         try
         {
@@ -241,7 +241,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public async Task<double> GetSumOfPotencialFee(int invoiceId)
+    public async Task<double> GetSumOfPotencialFee(long invoiceId)
     {
         try
         {
@@ -274,7 +274,7 @@ public class InvoiceRepo : Repository<InvoiceDto, Invoice>
         }
     }
 
-    public async Task<bool> IsClosed(int invoiceId)
+    public async Task<bool> IsClosed(long invoiceId)
     {
         try
         {

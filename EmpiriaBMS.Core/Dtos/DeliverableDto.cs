@@ -10,13 +10,13 @@ namespace EmpiriaBMS.Core.Dtos;
 
 public class DeliverableDto : EntityDto
 {
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
     public DeliverableType Type { get; set; }
 
     public float CompletionEstimation { get; set; }
 
     public DateTime? CompletionDate { get; set; }
 
-    public int DisciplineId { get; set; }
+    public long DisciplineId { get; set; }
     public Discipline Discipline { get; set; }
 }

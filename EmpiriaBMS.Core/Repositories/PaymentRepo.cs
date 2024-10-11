@@ -14,7 +14,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<PaymentDto> Add(PaymentDto entity, bool update = false)
+    public async new Task<PaymentDto> Add(PaymentDto entity, bool update = false)
     {
         try
         {
@@ -46,7 +46,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         }
     }
 
-    public new async Task<PaymentDto?> Get(int id)
+    public new async Task<PaymentDto?> Get(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -143,7 +143,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         }
     }
 
-    public new async Task<ICollection<PaymentDto>> GetAllByInvoice(int invoiceId)
+    public async Task<ICollection<PaymentDto>> GetAllByInvoice(long invoiceId)
     {
         if (invoiceId == 0)
             throw new ArgumentNullException(nameof(invoiceId));
@@ -164,7 +164,7 @@ public class PaymentRepo : Repository<PaymentDto, Payment>, IDisposable
         }
     }
 
-    public new async Task<ICollection<PaymentDto>> GetAllByInvoices(int[] invoiceIds)
+    public async Task<ICollection<PaymentDto>> GetAllByInvoices(long[] invoiceIds)
     {
         if (invoiceIds.Length == 0)
             throw new ArgumentException(nameof(invoiceIds));
