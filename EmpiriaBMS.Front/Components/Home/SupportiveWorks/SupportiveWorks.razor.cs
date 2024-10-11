@@ -17,7 +17,7 @@ public partial class SupportiveWorks
     [Parameter]
     public bool IsWorkingMode { get; set; }
 
-    private int _disciplineId { get; set; }
+    private long _disciplineId { get; set; }
 
     private ObservableCollection<SupportiveWorkVM> _data = new ObservableCollection<SupportiveWorkVM>();
 
@@ -63,7 +63,7 @@ public partial class SupportiveWorks
         _selectedSupportiveWork = selected;
     }
 
-    public async Task GetRecords(int discId)
+    public async Task GetRecords(long discId)
     {
         if (discId == 0)
             return;
@@ -112,7 +112,7 @@ public partial class SupportiveWorks
         StateHasChanged();
     }
     
-    private long GetMenHours(int otherId) =>
+    private long GetMenHours(long otherId) =>
         _dataProvider.SupportiveWorks.GetMenHours(otherId);
 
     #region Delete Dialog

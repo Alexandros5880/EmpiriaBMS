@@ -8,17 +8,17 @@ public class IssueExport : IInport<IssueVM>
 {
     public string ComplaintDate { get; set; }
 
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
 
     public string ProjectName { get; set; }
 
     public string ProjectCode { get; set; }
 
-    public int DisplayedRoleId { get; set; }
+    public long DisplayedRoleId { get; set; }
 
     public string DisplayedRole { get; set; }
 
-    public int CreatorId { get; set; }
+    public long CreatorId { get; set; }
 
     public string Creator { get; set; }
 

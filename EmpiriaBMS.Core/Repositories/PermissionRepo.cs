@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class PermissionRepo : Repository<PermissionDto, Permission>, IDisposable
+public class PermissionRepo : Repository<PermissionDto, Permission>
 {
     public PermissionRepo(
         IDbContextFactory<AppDbContext> DbFactory,

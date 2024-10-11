@@ -59,7 +59,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task<ClientDto?> Get(int id)
+    public async Task<ClientDto?> Get(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -101,7 +101,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public new async Task<ICollection<ClientDto>> GetByResult(ClientResult result = ClientResult.WAITING)
+    public async Task<ICollection<ClientDto>> GetByResult(ClientResult result = ClientResult.WAITING)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -116,7 +116,7 @@ public class ClientRepo : Repository<ClientDto, Client>
     }
 
     #region Users
-    public async Task<ICollection<UserDto>> GetUsers(int clientId)
+    public async Task<ICollection<UserDto>> GetUsers(long clientId)
     {
         try
         {
@@ -140,7 +140,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task RemoveUser(int userId)
+    public async Task RemoveUser(long userId)
     {
         try
         {
@@ -172,7 +172,7 @@ public class ClientRepo : Repository<ClientDto, Client>
     #endregion
 
     #region Emails
-    public async Task<ICollection<Email>> GetEmails(int clientId)
+    public async Task<ICollection<Email>> GetEmails(long clientId)
     {
         if (clientId == 0)
             return new List<Email>();
@@ -184,7 +184,7 @@ public class ClientRepo : Repository<ClientDto, Client>
                                  .ToListAsync();
     }
 
-    public async Task UpsertEmails(int clientId, List<EmailDto> emails)
+    public async Task UpsertEmails(long clientId, List<EmailDto> emails)
     {
         try
         {
@@ -230,7 +230,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task RemoveEmailsAll(int clientId, bool definitely = false)
+    public async Task RemoveEmailsAll(long clientId, bool definitely = false)
     {
         if (clientId == 0)
             return;
@@ -282,12 +282,12 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task<Email> DeleteEmail(int emailId)
+    public async Task<Email> DeleteEmail(long emailId)
     {
         try
         {
-            if (emailId == null)
-                throw new ArgumentNullException(nameof(emailId));
+            if (emailId == 0)
+                throw new ArgumentException(nameof(emailId));
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -391,14 +391,14 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task<double> GetSumOfPayedFee(int clientId)
+    public async Task<double> GetSumOfPayedFee(long clientId)
     {
         try
         {
             if (clientId == 0)
                 throw new ArgumentNullException(nameof(clientId));
 
-            List<int> projectIds;
+            List<long> projectIds;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -436,14 +436,14 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task<double> GetSumOfPotencialFee(int clientId)
+    public async Task<double> GetSumOfPotencialFee(long clientId)
     {
         try
         {
             if (clientId == 0)
                 throw new ArgumentNullException(nameof(clientId));
 
-            List<int> projectIds;
+            List<long> projectIds;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -482,14 +482,14 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task<bool> IsClosed(int clientId)
+    public async Task<bool> IsClosed(long clientId)
     {
         try
         {
             if (clientId == 0)
                 throw new ArgumentNullException(nameof(clientId));
 
-            List<int> projectIds;
+            List<long> projectIds;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -528,4 +528,20 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
     #endregion
+
+    protected override void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                _offerRepo?.Dispose();
+                _projectRep?.Dispose();
+                _invoiceRepo?.Dispose();
+                _userRepo?.Dispose();
+                _emailRepo?.Dispose();
+            }
+            disposedValue = true;
+        }
+    }
 }

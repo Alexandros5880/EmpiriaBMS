@@ -7,23 +7,23 @@ namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
 public class OfferExport : IInport<OfferVM>
 {
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
 
     public string TypeName { get; set; }
 
-    public int StateId { get; set; }
+    public long StateId { get; set; }
 
     public string StateName { get; set; }
 
-    public int CategoryId { get; set; }
+    public long CategoryId { get; set; }
 
     public string CategoryName { get; set; }
 
-    public int SubCategoryId { get; set; }
+    public long SubCategoryId { get; set; }
 
     public string SubCategoryName { get; set; }
 
-    public int ClientId { get; set; }
+    public long ClientId { get; set; }
 
     public string ClientName { get; set; }
 

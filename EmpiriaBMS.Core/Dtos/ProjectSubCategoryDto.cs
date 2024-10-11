@@ -7,7 +7,7 @@ public class ProjectSubCategoryDto : EntityDto
 {
     public string? Name { get; set; }
     public string? Description { get; set; }
-    public int? CategoryId { get; set; }
+    public long? CategoryId { get; set; }
     public ProjectCategory Category { get; set; }
 
     public ICollection<Project> Projects { get; set; }

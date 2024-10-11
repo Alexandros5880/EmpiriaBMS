@@ -94,7 +94,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<RoleDto>> GetAll(int pageSize = 0, int pageIndex = 0)
+    public async new Task<ICollection<RoleDto>> GetAll(int pageSize = 0, int pageIndex = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -125,7 +125,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<RoleDto>> GetAll(
+    public async new Task<ICollection<RoleDto>> GetAll(
         Expression<Func<Role, bool>> expresion,
         int pageSize = 0,
         int pageIndex = 0
@@ -162,7 +162,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<UserDto>> GetUsers(int roleId)
+    public async Task<ICollection<UserDto>> GetUsers(long roleId)
     {
         if (roleId == 0)
             throw new NullReferenceException($"No Role Id Specified!");
@@ -183,7 +183,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<RoleDto>> GetRoles(int userId)
+    public async Task<ICollection<RoleDto>> GetRoles(long userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -205,7 +205,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<RoleDto> GetParentRole(int userId)
+    public async Task<RoleDto> GetParentRole(long userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -273,7 +273,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<PermissionDto>> GetPermissions(int userId)
+    public async Task<ICollection<PermissionDto>> GetPermissions(long userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -292,7 +292,7 @@ public class RolesRepo : Repository<RoleDto, Role>
                                             .Select(rp => rp.PermissionId)
                                             .ToListAsync();
 
-            var permissionsIdsUnique = new HashSet<int>(permissionsIdsAll);
+            var permissionsIdsUnique = new HashSet<long>(permissionsIdsAll);
 
             var permissions = await _context.Set<Permission>()
                                             .Where(r => !r.IsDeleted)
@@ -329,7 +329,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<RoleDto>> GetEmplyeeRoles(int userId)
+    public async Task<ICollection<RoleDto>> GetEmplyeeRoles(long userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -343,7 +343,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<RoleDto>> GetCustomerRoles(int userId)
+    public async Task<ICollection<RoleDto>> GetCustomerRoles(long userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -357,7 +357,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<PermissionDto>> GetMyPermissions(int roleId)
+    public async Task<ICollection<PermissionDto>> GetMyPermissions(long roleId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -375,7 +375,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task<ICollection<PermissionDto>> GetOtherPermissions(int roleId)
+    public async Task<ICollection<PermissionDto>> GetOtherPermissions(long roleId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -393,7 +393,7 @@ public class RolesRepo : Repository<RoleDto, Role>
         }
     }
 
-    public async Task UpdatePermissions(int roleId, IEnumerable<int> permissionsIds)
+    public async Task UpdatePermissions(long roleId, IEnumerable<long> permissionsIds)
     {
         if (roleId == 0)
             throw new ArgumentNullException(nameof(roleId));

@@ -15,7 +15,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public new async Task<DeliverableDto?> Get(int id)
+    public new async Task<DeliverableDto?> Get(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -178,7 +178,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
     }
 
-    public async Task<long> GetMenHoursAsync(int drwaingId)
+    public async Task<long> GetMenHoursAsync(long drwaingId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -190,7 +190,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
     }
 
-    public long GetMenHours(int drwaingId)
+    public long GetMenHours(long drwaingId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -202,7 +202,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
     }
 
-    public async Task UpdateCompleted(int projectId, int disciplineId, int drawId, float completed)
+    public async Task UpdateCompleted(long projectId, long disciplineId, long drawId, float completed)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -218,7 +218,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
     }
 
-    public async Task<ICollection<UserDto>> GetDesigners(int drwaingId)
+    public async Task<ICollection<UserDto>> GetDesigners(long drwaingId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -233,7 +233,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
     }
 
-    public async Task AddDesigners(int drawingId, ICollection<UserDto> designers)
+    public async Task AddDesigners(long drawingId, ICollection<UserDto> designers)
     {
         try
         {
@@ -278,7 +278,7 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
     }
 
-    public async Task RemoveDesigners(int drawingId, ICollection<int> designersIds)
+    public async Task RemoveDesigners(long drawingId, ICollection<long> designersIds)
     {
         try
         {

@@ -17,8 +17,8 @@ public class RoleVM : BaseVM
         }
     }
 
-    private string? _name;
-    public string? Name
+    private string _name;
+    public string Name
     {
         get => _name;
         set
@@ -56,8 +56,8 @@ public class RoleVM : BaseVM
         }
     }
 
-    private int? _parentRoleId;
-    public int? ParentRoleId
+    private long? _parentRoleId;
+    public long? ParentRoleId
     {
         get => _parentRoleId;
         set
@@ -69,8 +69,8 @@ public class RoleVM : BaseVM
         }
     }
 
-    private Role? _parentRole;
-    public Role? ParentRole
+    private Role _parentRole;
+    public Role ParentRole
     {
         get => _parentRole;
         set

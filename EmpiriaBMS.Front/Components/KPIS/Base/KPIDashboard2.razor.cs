@@ -375,7 +375,7 @@ public partial class KPIDashboard2
     }
 
 
-    private async Task _onSelectionChanged(bool val, int id)
+    private async Task _onSelectionChanged(bool val, long id)
     {
         var data = new List<KPIGridItem>(kpiCompoments);
         

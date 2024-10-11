@@ -10,7 +10,7 @@ public partial class SupportiveWorksDetailed : ComponentBase, IDisposable
     private bool isNew = false;
 
     [Parameter]
-    public int DisciplineId { get; set; }
+    public long DisciplineId { get; set; }
 
     List<SupportiveWorkTypeDto> _otherTypes = new List<SupportiveWorkTypeDto>();
     private SupportiveWorkVM _other = new SupportiveWorkVM();

@@ -44,8 +44,8 @@ public class DocumentVM : BaseVM
         }
     }
 
-    private int _issueId;
-    public int IssueId
+    private long _issueId;
+    public long IssueId
     {
         get => _issueId;
         set

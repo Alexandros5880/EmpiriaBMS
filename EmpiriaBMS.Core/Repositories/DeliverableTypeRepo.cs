@@ -13,7 +13,7 @@ public class DeliverableTypeRepo : Repository<DeliverableTypeDto, DeliverableTyp
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<List<DeliverableTypeDto>> GetDrawingTypesSelections(int disciplineId)
+    public async Task<List<DeliverableTypeDto>> GetDrawingTypesSelections(long disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -63,7 +63,7 @@ public class DeliverableTypeRepo : Repository<DeliverableTypeDto, DeliverableTyp
         }
     }
 
-    public async Task<bool> HasDeliverableTypesSelections(int disciplineId)
+    public async Task<bool> HasDeliverableTypesSelections(long disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {

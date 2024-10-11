@@ -3,7 +3,7 @@ namespace EmpiriaBMS.Models.Models
 {
     public interface IEntity
     {
-        int Id { get; set; }
+        long Id { get; set; }
         DateTime CreatedDate { get; set; }
         DateTime LastUpdatedDate { get; set; }
 

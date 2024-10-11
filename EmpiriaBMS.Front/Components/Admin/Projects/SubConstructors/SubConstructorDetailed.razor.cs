@@ -154,7 +154,7 @@ public partial class SubConstructorDetailed
         await myGrid.RefreshDataAsync();
     }
 
-    private async Task _deleteEmail(int emailId)
+    private async Task _deleteEmail(long emailId)
     {
         var email = _emails.FirstOrDefault(e => e.Id == emailId);
         _emails.Remove(email);

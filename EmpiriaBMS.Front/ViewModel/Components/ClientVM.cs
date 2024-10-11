@@ -72,8 +72,8 @@ public class ClientVM : BaseVM
         }
     }
 
-    private int? _addressId;
-    public int? AddressId
+    private long? _addressId;
+    public long? AddressId
     {
         get => _addressId;
         set

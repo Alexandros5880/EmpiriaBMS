@@ -7,8 +7,8 @@ namespace EmpiriaBMS.Core.Services;
 
 public class SeedData
 {
-    private List<int> permissionsIds = new List<int>();
-    private List<int> rolesIds = new List<int>();
+    private List<long> permissionsIds = new List<long>();
+    private List<long> rolesIds = new List<long>();
     private List<ProjectCategory> projectCategories = new List<ProjectCategory>();
     private List<ProjectSubCategory> projectSubCategories = new List<ProjectSubCategory>();
     private List<ProjectStage> projectStages = new List<ProjectStage>();
@@ -2354,7 +2354,7 @@ public class SeedData
         foreach (var item in ProjectSubCatsNameCat)
         {
             string subCatName = item.Key;
-            int catId = item.Value.Id;
+            long catId = item.Value.Id;
 
             var project_sub_category_id = 57 + counter;
             ProjectSubCategory project_sub_category = new ProjectSubCategory()

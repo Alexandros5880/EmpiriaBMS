@@ -17,7 +17,7 @@ public class ClientDto : EntityDto
 
     public string? Description { get; set; }
 
-    public int? AddressId { get; set; }
+    public long? AddressId { get; set; }
     public Address? Address { get; set; }
 
     public double PotencialFee { get; set; }

@@ -24,11 +24,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("ComponentTypeName")
                         .HasColumnType("nvarchar(max)");
@@ -53,8 +53,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PositionId")
-                        .HasColumnType("int");
+                    b.Property<long>("PositionId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -63,11 +63,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItemPosition", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -78,8 +78,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("KPIGridItemId")
-                        .HasColumnType("int");
+                    b.Property<long>("KPIGridItemId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
@@ -103,11 +103,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Address", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -159,14 +159,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Client", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
+                    b.Property<long?>("AddressId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
@@ -208,23 +208,23 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DailyTime", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ClientId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("CorporateUserId")
-                        .HasColumnType("int");
+                    b.Property<long?>("CorporateUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DailyUserId")
-                        .HasColumnType("int");
+                    b.Property<long?>("DailyUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -232,14 +232,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<long>("Days")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("DeliverableId")
-                        .HasColumnType("int");
+                    b.Property<long?>("DeliverableId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DisciplineId")
-                        .HasColumnType("int");
+                    b.Property<long?>("DisciplineId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("Hours")
                         .HasColumnType("bigint");
@@ -256,14 +256,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<long>("Minutes")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("OfferId")
-                        .HasColumnType("int");
+                    b.Property<long?>("OfferId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("PersonalUserId")
-                        .HasColumnType("int");
+                    b.Property<long?>("PersonalUserId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ProjectId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("Seconds")
                         .HasColumnType("bigint");
@@ -271,11 +271,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SupportiveWorkId")
-                        .HasColumnType("int");
+                    b.Property<long?>("SupportiveWorkId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("TrainingUserId")
-                        .HasColumnType("int");
+                    b.Property<long?>("TrainingUserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -304,11 +304,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Deliverable", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime?>("CompletionDate")
                         .HasColumnType("datetime2");
@@ -319,8 +319,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DisciplineId")
-                        .HasColumnType("int");
+                    b.Property<long>("DisciplineId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -328,8 +328,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<long>("TypeId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -342,20 +342,20 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DeliverableEmployee", b =>
                 {
-                    b.Property<int>("DeliverableId")
-                        .HasColumnType("int");
+                    b.Property<long>("DeliverableId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -372,11 +372,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DeliverableType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -401,11 +401,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Discipline", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -422,14 +422,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
+                    b.Property<long>("ProjectId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<long>("TypeId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -444,20 +444,20 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DisciplineEngineer", b =>
                 {
-                    b.Property<int>("DisciplineId")
-                        .HasColumnType("int");
+                    b.Property<long>("DisciplineId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("EngineerId")
-                        .HasColumnType("int");
+                    b.Property<long>("EngineerId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -474,11 +474,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.DisciplineType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -503,11 +503,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Document", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<byte[]>("Content")
                         .HasColumnType("varbinary(max)");
@@ -524,8 +524,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("IssueId")
-                        .HasColumnType("int");
+                    b.Property<long>("IssueId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
@@ -539,18 +539,18 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Email", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ClientId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -561,11 +561,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("SubConstructorId")
-                        .HasColumnType("int");
+                    b.Property<long?>("SubConstructorId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -580,11 +580,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.ExpensesType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -609,11 +609,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Invoice", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("ActualPayment")
                         .HasColumnType("datetime2");
@@ -627,8 +627,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime?>("EstimatedPayment")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ExpensesTypeId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ExpensesTypeId")
+                        .HasColumnType("bigint");
 
                     b.Property<double>("Fee")
                         .HasColumnType("float");
@@ -645,11 +645,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<string>("Mark")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
+                    b.Property<long>("ProjectId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<long>("TypeId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Vat")
                         .HasColumnType("int");
@@ -667,11 +667,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.InvoiceType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -696,11 +696,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Issue", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("ComplaintDate")
                         .HasColumnType("datetime2");
@@ -708,14 +708,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
+                    b.Property<long>("CreatorId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DisplayedRoleId")
-                        .HasColumnType("int");
+                    b.Property<long>("DisplayedRoleId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Evaluation")
                         .HasColumnType("nvarchar(max)");
@@ -732,8 +732,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<byte[]>("PMSignature")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
+                    b.Property<long>("ProjectId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Solution")
                         .HasColumnType("nvarchar(max)");
@@ -763,17 +763,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Offer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<long?>("CategoryId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ClientId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -803,14 +803,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<double?>("OfferPrice")
                         .HasColumnType("float");
 
-                    b.Property<int?>("ProjectCategoryId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ProjectCategoryId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ProjectId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("ProjectSubCategoryId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ProjectSubCategoryId")
+                        .HasColumnType("bigint");
 
                     b.Property<double?>("PudgetPrice")
                         .HasColumnType("float");
@@ -818,17 +818,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<int>("Result")
                         .HasColumnType("int");
 
-                    b.Property<int>("StateId")
-                        .HasColumnType("int");
+                    b.Property<long>("StateId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("SubCategoryId")
-                        .HasColumnType("int");
+                    b.Property<long?>("SubCategoryId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("TeamText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<long>("TypeId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -855,11 +855,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.OfferState", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -884,11 +884,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.OfferType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -913,11 +913,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Payment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Bank")
                         .HasColumnType("nvarchar(max)");
@@ -931,8 +931,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<double>("Fee")
                         .HasColumnType("float");
 
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
+                    b.Property<long>("InvoiceId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -943,8 +943,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<long>("TypeId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -957,11 +957,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.PaymentType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -986,11 +986,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Permission", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -1015,17 +1015,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Project", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
+                    b.Property<long?>("AddressId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -1055,14 +1055,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OfferId")
-                        .HasColumnType("int");
+                    b.Property<long?>("OfferId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("ProjectManagerId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ProjectManagerId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("StageId")
-                        .HasColumnType("int");
+                    b.Property<long>("StageId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
@@ -1080,11 +1080,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.ProjectCategory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -1109,11 +1109,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.ProjectStage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -1137,14 +1137,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.ProjectSubCategory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<long?>("CategoryId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -1161,8 +1161,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectCategoryId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ProjectCategoryId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -1175,20 +1175,20 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.ProjectSubConstractor", b =>
                 {
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
+                    b.Property<long>("ProjectId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("SubConstructorId")
-                        .HasColumnType("int");
+                    b.Property<long>("SubConstructorId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1205,11 +1205,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -1230,8 +1230,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentRoleId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ParentRoleId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -1242,20 +1242,20 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.RolePermission", b =>
                 {
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int");
+                    b.Property<long>("PermissionId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1272,11 +1272,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SubConstructor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -1304,17 +1304,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SupportiveWork", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DisciplineId")
-                        .HasColumnType("int");
+                    b.Property<long>("DisciplineId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1322,8 +1322,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<long>("TypeId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -1336,20 +1336,20 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SupportiveWorkEmployee", b =>
                 {
-                    b.Property<int>("SupportiveWorkId")
-                        .HasColumnType("int");
+                    b.Property<long>("SupportiveWorkId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1366,11 +1366,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.SupportiveWorkType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -1395,11 +1395,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.TeamsRequestedUser", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -1426,14 +1426,14 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<long?>("ClientId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -1474,8 +1474,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<string>("ProxyAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SubConstructorId")
-                        .HasColumnType("int");
+                    b.Property<long?>("SubConstructorId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("TeamsObjectId")
                         .HasColumnType("nvarchar(max)");
@@ -1491,20 +1491,20 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.UserRole", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1524,7 +1524,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItem", "KPIGridItem")
                         .WithOne("Position")
                         .HasForeignKey("EmpiriaBMS.Front.Components.KPIS.Helper.KPIGridItemPosition", "KPIGridItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("KPIGridItem");
@@ -1544,52 +1544,52 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
                         .WithMany("ClientDailyTime")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "CorporateUser")
                         .WithMany("CorporateEventTime")
                         .HasForeignKey("CorporateUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "DailyUser")
                         .WithMany("DailyTime")
                         .HasForeignKey("DailyUserId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.Deliverable", "Deliverable")
                         .WithMany("DailyTime")
                         .HasForeignKey("DeliverableId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.Discipline", "Discipline")
                         .WithMany("DailyTime")
                         .HasForeignKey("DisciplineId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.Offer", "Offer")
                         .WithMany("DailyTime")
                         .HasForeignKey("OfferId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "PersonalUser")
                         .WithMany("PersonalTime")
                         .HasForeignKey("PersonalUserId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.Project", "Project")
                         .WithMany("DailyTime")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.SupportiveWork", "SupportiveWork")
                         .WithMany("DailyTime")
                         .HasForeignKey("SupportiveWorkId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "TrainingUser")
                         .WithMany("TrainingTime")
                         .HasForeignKey("TrainingUserId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.Navigation("Client");
 
@@ -1617,13 +1617,13 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Discipline", "Discipline")
                         .WithMany("Deliverables")
                         .HasForeignKey("DisciplineId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EmpiriaBMS.Models.Models.DeliverableType", "Type")
                         .WithMany("Deliverables")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Discipline");
@@ -1655,13 +1655,13 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Project", "Project")
                         .WithMany("Disciplines")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EmpiriaBMS.Models.Models.DisciplineType", "Type")
                         .WithMany("Disciplines")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", null)
@@ -1697,7 +1697,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Issue", "Issue")
                         .WithMany("Documents")
                         .HasForeignKey("IssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Issue");
@@ -1708,17 +1708,17 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
                         .WithMany("Emails")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.SubConstructor", "SubConstructor")
                         .WithMany("Emails")
                         .HasForeignKey("SubConstructorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.User", "User")
                         .WithMany("Emails")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Client");
 
@@ -1737,13 +1737,13 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Project", "Project")
                         .WithMany("Invoices")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EmpiriaBMS.Models.Models.InvoiceType", "Type")
                         .WithMany("Invoices")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ExpensesType");
@@ -1758,19 +1758,19 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.User", "Creator")
                         .WithMany("MyIssues")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EmpiriaBMS.Models.Models.Role", "DisplayedRole")
                         .WithMany("Issues")
                         .HasForeignKey("DisplayedRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EmpiriaBMS.Models.Models.Project", "Project")
                         .WithMany("Complains")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Creator");
@@ -1790,7 +1790,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
                         .WithMany("Offers")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.ProjectCategory", null)
                         .WithMany("Offers")
@@ -1799,7 +1799,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Project", "Project")
                         .WithOne("Offer")
                         .HasForeignKey("EmpiriaBMS.Models.Models.Offer", "ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.ProjectSubCategory", null)
                         .WithMany("Offers")
@@ -1808,7 +1808,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.OfferState", "State")
                         .WithMany("Offers")
                         .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EmpiriaBMS.Models.Models.ProjectSubCategory", "SubCategory")
@@ -1819,7 +1819,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.OfferType", "Type")
                         .WithMany("Offers")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -1840,13 +1840,13 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Invoice", "Invoice")
                         .WithMany("Payments")
                         .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EmpiriaBMS.Models.Models.PaymentType", "Type")
                         .WithMany("Payments")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Invoice");
@@ -1868,7 +1868,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.ProjectStage", "Stage")
                         .WithMany("Projects")
                         .HasForeignKey("StageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Address");
@@ -1944,13 +1944,13 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Discipline", "Discipline")
                         .WithMany("SupportiveWorks")
                         .HasForeignKey("DisciplineId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EmpiriaBMS.Models.Models.SupportiveWorkType", "Type")
                         .WithMany("SupportiveWorks")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Discipline");
@@ -1982,7 +1982,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.HasOne("EmpiriaBMS.Models.Models.Client", "Client")
                         .WithMany("Users")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EmpiriaBMS.Models.Models.SubConstructor", "SubConstructor")
                         .WithMany("Users")

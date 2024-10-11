@@ -25,11 +25,11 @@ public partial class Disciplines
     public bool IsWorkingMode { get; set; }
 
     [Parameter]
-    public EventCallback<int> OnSelect { get; set; }
+    public EventCallback<long> OnSelect { get; set; }
 
     private DisciplineVM _selectedDiscipline { get; set; }
 
-    public int _projectId { get; set; }
+    public long _projectId { get; set; }
 
     #region Dialogs
     // Add Engineer Dialog
@@ -91,7 +91,7 @@ public partial class Disciplines
         _selectedDiscipline = selected;
     }
 
-    public async Task GetRecords(int projId)
+    public async Task GetRecords(long projId)
     {
         if (projId == 0)
             return;
@@ -126,7 +126,7 @@ public partial class Disciplines
 
     public void ResetChanges() => _dataChanged.Clear();
 
-    private async Task OnSelectDiscipline(int disciplineId)
+    private async Task OnSelectDiscipline(long disciplineId)
     {
         if (disciplineId == 0 || disciplineId == _selectedDiscipline?.Id)
             return;
@@ -140,10 +140,10 @@ public partial class Disciplines
         StateHasChanged();
     }
 
-    private long GetMenHours(int disciplineId) =>
+    private long GetMenHours(long disciplineId) =>
         _dataProvider.Disciplines.GetMenHours(disciplineId);
 
-    private async Task<int> GetRoleId(string roleName)
+    private async Task<long> GetRoleId(string roleName)
     {
         try
         {

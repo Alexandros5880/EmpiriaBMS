@@ -57,8 +57,8 @@ public class PaymentVM : BaseVM
         }
     }
 
-    private int _typeId { get; set; }
-    public int TypeId
+    private long _typeId { get; set; }
+    public long TypeId
     {
         get => _typeId;
         set
@@ -85,8 +85,8 @@ public class PaymentVM : BaseVM
 
     public string TypeName => Type != null ? Type.Name : "";
 
-    private int _invoiceId { get; set; }
-    public int InvoiceId
+    private long _invoiceId { get; set; }
+    public long InvoiceId
     {
         get => _invoiceId;
         set

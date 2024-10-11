@@ -13,10 +13,10 @@ public class PaymentDto : EntityDto
 
     public string? Description { get; set; }
 
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
     public PaymentType Type { get; set; }
 
-    public int InvoiceId { get; set; }
+    public long InvoiceId { get; set; }
 
     public Invoice Invoice { get; set; }
 }

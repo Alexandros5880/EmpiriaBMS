@@ -18,7 +18,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         _invoiceRepo = new InvoiceRepo(DbFactory, logger);
     }
 
-    public async Task<ProjectDto> Add(ProjectDto entity, bool update = false, List<int>? subConstructorsIds = null)
+    public async Task<ProjectDto> Add(ProjectDto entity, bool update = false, List<long>? subConstructorsIds = null)
     {
         try
         {
@@ -58,7 +58,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ProjectDto> Update(ProjectDto entity, List<int>? subConstructorsIds = null)
+    public async Task<ProjectDto> Update(ProjectDto entity, List<long>? subConstructorsIds = null)
     {
         try
         {
@@ -102,7 +102,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public new async Task<ProjectDto?> Get(int id)
+    public new async Task<ProjectDto?> Get(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -196,7 +196,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<ProjectDto>> GetAll(int userId, int offerId = 0, bool? active = null, TimeSpan? period = null)
+    public async Task<ICollection<ProjectDto>> GetAll(long userId, long offerId = 0, bool? active = null, TimeSpan? period = null)
     {
         try
         {
@@ -338,7 +338,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<List<ProjectDto>> GetProjectsWithFallback(int userId, int offerId, bool? active)
+    public async Task<List<ProjectDto>> GetProjectsWithFallback(long userId, long offerId, bool? active)
     {
         try
         {
@@ -372,7 +372,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<ProjectDto>> GetOffersProjects(int? offerId)
+    public async Task<ICollection<ProjectDto>> GetOffersProjects(long? offerId)
     {
         if (offerId == null || offerId == 0)
             return new List<ProjectDto>();
@@ -404,7 +404,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<long> GetMenHoursAsync(int projectId)
+    public async Task<long> GetMenHoursAsync(long projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -416,7 +416,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public long GetMenHours(int projectId)
+    public long GetMenHours(long projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -428,7 +428,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<DisciplineDto>> GetDisciplines(int projectId, int userId, bool all)
+    public async Task<ICollection<DisciplineDto>> GetDisciplines(long projectId, long userId, bool all)
     {
         if (projectId == 0)
             throw new ArgumentNullException(nameof(projectId));
@@ -471,7 +471,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<int> CountDiscipline(int id)
+    public async Task<int> CountDiscipline(long id)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
             return await _context.Set<Discipline>()
@@ -480,7 +480,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                                  .CountAsync();
     }
 
-    public async Task<UserDto> GetProjectManager(int projectId)
+    public async Task<UserDto> GetProjectManager(long projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -500,7 +500,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     }
 
     #region Sub Constructors
-    public async Task UpsertSubConstructors(int projectId, List<int> subConstructorsIds)
+    public async Task UpsertSubConstructors(long projectId, List<long> subConstructorsIds)
     {
         try
         {
@@ -553,7 +553,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<SubConstructorDto>> GetSubConstructors(int projectId)
+    public async Task<ICollection<SubConstructorDto>> GetSubConstructors(long projectId)
     {
         try
         {
@@ -588,7 +588,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<int>> GetSubConstructorsIds(int projectId)
+    public async Task<ICollection<long>> GetSubConstructorsIds(long projectId)
     {
         try
         {
@@ -606,7 +606,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
                     throw new NullReferenceException(nameof(subConstructorsIds));
 
                 if (!subConstructorsIds.Any())
-                    return default(List<int>)!;
+                    return default(List<long>)!;
 
                 var subConstructors = await _context.Set<SubConstructor>()
                     .Where(s => !s.IsDeleted)
@@ -619,13 +619,13 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On ProjectsRepo.GetSubConstructorsIds(int projectId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return default(ICollection<int>)!;
+            _logger.LogError($"Exception On ProjectsRepo.GetSubConstructorsIds(long projectId): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return default(ICollection<long>)!;
         }
     }
     #endregion
 
-    public async Task<ICollection<IssueDto>> GetComplains(int projectId)
+    public async Task<ICollection<IssueDto>> GetComplains(long projectId)
     {
         if (projectId == 0)
             throw new ArgumentNullException(nameof(projectId));
@@ -641,7 +641,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<ICollection<InvoiceDto>> GetInvoices(int projectId)
+    public async Task<ICollection<InvoiceDto>> GetInvoices(long projectId)
     {
         if (projectId == 0)
             throw new ArgumentNullException(nameof(projectId));
@@ -661,14 +661,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<double> GetSumOfPayedFee(int projectId)
+    public async Task<double> GetSumOfPayedFee(long projectId)
     {
         try
         {
             if (projectId == 0)
                 throw new ArgumentNullException(nameof(projectId));
 
-            List<int> invoiceIds;
+            List<long> invoiceIds;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -698,14 +698,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<double> GetSumOfPotencialFee(int projectId)
+    public async Task<double> GetSumOfPotencialFee(long projectId)
     {
         try
         {
             if (projectId == 0)
                 throw new ArgumentNullException(nameof(projectId));
 
-            List<int> invoiceIds;
+            List<long> invoiceIds;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -735,7 +735,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<float> GetEstimatedCompleted(int id)
+    public async Task<float> GetEstimatedCompleted(long id)
     {
         try
         {
@@ -790,7 +790,7 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<float> GetDeclaredCompleted(int id)
+    public async Task<float> GetDeclaredCompleted(long id)
     {
         try
         {
@@ -830,14 +830,14 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
-    public async Task<bool> IsClosed(int projectId)
+    public async Task<bool> IsClosed(long projectId)
     {
         try
         {
             if (projectId == 0)
                 throw new ArgumentNullException(nameof(projectId));
 
-            List<int> invoiceIds;
+            List<long> invoiceIds;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {

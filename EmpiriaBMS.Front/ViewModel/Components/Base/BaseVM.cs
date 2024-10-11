@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace EmpiriaBMS.Front.ViewModel.Components.Base;
 public class BaseVM : BNotifyPropertyChanged, ICloneable
 {
-    private int _id;
-    public int Id
+    private long _id;
+    public long Id
     {
         get => _id;
         set

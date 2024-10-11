@@ -21,8 +21,8 @@ public class OfferVM : BaseVM
     }
 
     // Type
-    private int _typeId;
-    public int TypeId
+    private long _typeId;
+    public long TypeId
     {
         get => _typeId;
         set
@@ -50,8 +50,8 @@ public class OfferVM : BaseVM
     public string TypeName => Type != null ? Type.Name : "";
 
     // State
-    private int _stateId;
-    public int StateId
+    private long _stateId;
+    public long StateId
     {
         get => _stateId;
         set
@@ -79,8 +79,8 @@ public class OfferVM : BaseVM
     public string StateName => State != null ? State.Name : "";
 
     // Project Category
-    private int? _categoryId;
-    public int? CategoryId
+    private long? _categoryId;
+    public long? CategoryId
     {
         get => _categoryId;
         set
@@ -108,8 +108,8 @@ public class OfferVM : BaseVM
     public string ProjectCategoryName => Category != null ? Category.Name : "";
 
     // Project SubCategory
-    private int? _subCategoryId;
-    public int? SubCategoryId
+    private long? _subCategoryId;
+    public long? SubCategoryId
     {
         get => _subCategoryId;
         set
@@ -137,8 +137,8 @@ public class OfferVM : BaseVM
     public string ProjectSubCategoryName => SubCategory != null ? SubCategory.Name : "";
 
     // Led
-    private int? _clientId;
-    public int? ClientId
+    private long? _clientId;
+    public long? ClientId
     {
         get => _clientId;
         set
@@ -150,8 +150,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private Client? _client;
-    public Client? Client
+    private Client _client;
+    public Client Client
     {
         get => _client;
         set
@@ -166,8 +166,8 @@ public class OfferVM : BaseVM
     public string ClientName => Client != null ? Client.CompanyName : "";
 
     // Project
-    private int? _projectId;
-    public int? ProjectId
+    private long? _projectId;
+    public long? ProjectId
     {
         get => _projectId;
         set
@@ -179,8 +179,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private Project? _project;
-    public Project? Project
+    private Project _project;
+    public Project Project
     {
         get => _project;
         set
@@ -264,8 +264,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private string? _observations;
-    public string? Observations
+    private string _observations;
+    public string Observations
     {
         get => _observations;
         set
@@ -277,8 +277,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private string? _teamText;
-    public string? TeamText
+    private string _teamText;
+    public string TeamText
     {
         get => _teamText;
         set
@@ -290,8 +290,8 @@ public class OfferVM : BaseVM
         }
     }
 
-    private string? _comments;
-    public string? Comments
+    private string _comments;
+    public string Comments
     {
         get => _comments;
         set

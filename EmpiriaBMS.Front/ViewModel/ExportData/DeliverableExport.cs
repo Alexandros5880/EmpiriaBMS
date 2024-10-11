@@ -6,15 +6,15 @@ namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
 public class DeliverableExport : IInport<DeliverableVM>
 {
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
 
     public string TypeName { get; set; }
 
-    public int DisciplineId { get; set; }
+    public long DisciplineId { get; set; }
 
     public string DisciplineType { get; set; }
 
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
 
     public string ProjectName { get; set; }
 

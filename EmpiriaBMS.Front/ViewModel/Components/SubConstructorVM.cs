@@ -59,8 +59,8 @@ public class SubConstructorVM : BaseVM
         }
     }
 
-    private int? _userId;
-    public int? UserId
+    private long? _userId;
+    public long? UserId
     {
         get => _userId;
         set
@@ -85,7 +85,7 @@ public class SubConstructorVM : BaseVM
         }
     }
 
-    public ICollection<ProjectSubConstractor>? ProjectsSubConstructors { get; set; }
+    public ICollection<ProjectSubConstractor> ProjectsSubConstructors { get; set; }
 
-    public ICollection<Email>? Emails { get; set; }
+    public ICollection<Email> Emails { get; set; }
 }

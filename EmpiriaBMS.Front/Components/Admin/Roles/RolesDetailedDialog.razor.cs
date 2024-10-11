@@ -50,7 +50,7 @@ public partial class RolesDetailedDialog : IDialogContentComponent<RoleVM>
         _records = permissions.OrderByDescending(p => p.IsSelected).ToList();
     }
 
-    private void _onSelectionChange(int permissionId, bool val)
+    private void _onSelectionChange(long permissionId, bool val)
     {
         var permission = _records.FirstOrDefault(r => r.Id == permissionId);
         var index = _records.IndexOf(permission);
