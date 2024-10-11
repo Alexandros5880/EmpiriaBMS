@@ -12,6 +12,7 @@ using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Models.Models;
 using Logging;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Fast.Components.FluentUI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -103,7 +104,11 @@ builder.Services.AddServerSideBlazor()
     .AddHubOptions(options =>
     {
         options.MaximumReceiveMessageSize = 102400; // 100KB limit for large messages
+        options.ClientTimeoutInterval = TimeSpan.FromMinutes(2);
+        options.KeepAliveInterval = TimeSpan.FromSeconds(10);
     });
+
+
 
 
 var app = builder.Build();
