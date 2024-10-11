@@ -4085,6 +4085,27 @@ public class AppDbContext : DbContext
         }
     }
 
+    public void BackupDatabase(string backupFilePath)
+    {
+        var sql = $"BACKUP DATABASE [{Database.GetDbConnection().Database}] TO DISK = '{backupFilePath}'";
+
+        Database.ExecuteSqlRaw(sql);
+    }
+
+    public void RestoreDatabase(string backupFilePath)
+    {
+        var dbName = Database.GetDbConnection().Database;
+
+        var sql = $@"
+        USE master;
+        ALTER DATABASE [{dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+        RESTORE DATABASE [{dbName}] FROM DISK = '{backupFilePath}' WITH REPLACE;
+        ALTER DATABASE [{dbName}] SET MULTI_USER;
+    ";
+        
+        Database.ExecuteSqlRaw(sql);
+    }
+
     public async Task<Dictionary<string, List<object>>> GetAllDbSets()
     {
         Dictionary<string, List<object>> allEntities = new Dictionary<string, List<object>>();
